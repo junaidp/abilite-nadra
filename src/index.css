@@ -1,0 +1,325 @@
+/* @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap"); */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+html,
+body {
+  height: 100%;
+  font-family: "Poppins", sans-serif !important;
+}
+
+body {
+  margin: 0;
+  /* font-family: 'Poppins', sans-serif !important; */
+  overflow-x: hidden;
+}
+.Toastify__toast-body > div:last-child {
+  font-family: "Poppins", sans-serif !important;
+
+}
+
+.heading {
+  font-size: 18px;
+  font-weight: bold;
+  color: #0a7386;
+}
+
+.form-control {
+  font-size: 11px !important;
+}
+
+.sr-col {
+  width: 46px !important;
+}
+
+input::placeholder {
+  font-size: 11px; /* Standard */
+}
+
+textarea::placeholder {
+  font-size: 11px; /* Standard */
+}
+
+.form-select {
+  font-size: 11px !important;
+}
+
+.nav-link {
+  padding: 10px !important;
+  font-size: 14px !important;
+}
+
+.btn {
+  font-size: 12px !important;
+}
+
+button {
+  font-size: 12px !important;
+}
+
+h6 {
+  font-size: 12px !important;
+}
+
+.label-text {
+  font-size: 12px !important;
+}
+
+.sub-heading {
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+}
+
+.btn {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.sub-text {
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}
+
+.accordion-button {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
+.sidebar-item {
+  cursor: pointer;
+}
+.mat-mdc-form-field-subscript-wrapper {
+  height: 0px !important;
+}
+#sidebarnav {
+  padding-left: 0px;
+}
+
+.card-title {
+  text-decoration: none;
+}
+
+.sidebar-nav ul .sidebar-item .submenu a:hover {
+  background-color: #0a7ea4;
+  color: #fff !important;
+  border-radius: 7px;
+}
+
+:root {
+  --bs-primary-rgb: #0a7386 !important;
+  --bs-primary-bg-subtle: #0a738621 !important;
+}
+
+a {
+  text-decoration: none !important;
+  cursor: pointer !important;
+}
+
+/* Accordion general styles */
+.accordion-item {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden; /* For rounded corners */
+}
+
+.accordion-header {
+  margin: 0; /* Reset default margin */
+}
+
+/* Accordion button styles */
+.accordion-button {
+  background-color: #f7f7f7;
+  color: #333;
+  font-weight: bold;
+  padding: 15px 20px;
+  border: none;
+  outline: none;
+  text-align: left;
+  position: relative;
+  transition: background-color 0.3s ease;
+}
+
+.accordion-button:focus {
+  box-shadow: none;
+}
+
+.accordion-button:not(.collapsed) {
+  color: #007bff;
+  background-color: #e7f1ff;
+}
+
+/* Hover effect */
+.accordion-button:hover {
+  background-color: #e2e6ea;
+}
+
+/* Accordion body styles */
+.accordion-body {
+  padding: 20px;
+  line-height: 1.5;
+  background-color: #f8f9fa;
+}
+
+.custom-file-input:lang(en)::after {
+  content: "";
+}
+
+table th {
+  font-size: 12px !important; /* Adjust based on your specific design */
+  font-weight: bold;
+  text-align: start;
+  background-color: #f4f4f4; /* Optional: for better header distinction */
+  padding: 8px; /* Adjust padding as needed */
+}
+
+table td {
+  font-size: 11px !important;
+}
+.accordion-collapse {
+  transition: height 0.3s ease;
+}
+label {
+  font-size: 12px;
+  font-weight: bold;
+}
+/*td{*/
+/*  text-align: center;*/
+/*}*/
+/*th{*/
+/*  text-align: center;*/
+/*}*/
+.word-limit-info {
+  font-size: 11px;
+  color: #666;
+  font-weight: normal !important;
+  margin-top: 5px; /* Adjust as needed */
+}
+
+/* Additional styles for other elements */
+.label {
+  font-weight: bold;
+}
+.job-name-column {
+  width: 300px !important;
+  min-width: 300px; /* Ensures that the width does not go below 250px */
+  max-width: 300px; /* Ensures that the width does not go above 250px */
+}
+.dynamic-cls {
+  width: 100px !important;
+  min-width: 100px; /* Ensures that the width does not go below 250px */
+  max-width: 100px; /* Ensures that the width does not go above 250px */
+}
+.link-underline-muted {
+  color: #007bff;
+  transition: color 0.3s ease;
+}
+
+.link-underline-muted:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+.form-control {
+  border-radius: 4px;
+  border: 1px solid #ced4da;
+  transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #80bdff;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.btn {
+  text-transform: capitalize !important;
+}
+
+.main-content {
+  overflow-x: hidden;
+}
+
+li {
+  cursor: pointer !important;
+}
+/* Targeting mat-form-field directly within your component's CSS */
+mat-form-field {
+  background: rgba(
+    255,
+    255,
+    255,
+    0.7
+  ); /* Semi-transparent white for glass effect */
+  border-radius: 4px; /* Rounded corners */
+  border: 1px solid rgba(255, 255, 255, 0.5); /* Light white border for a subtle glass edge */
+  /*box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); !* Soft shadow for depth *!*/
+  padding: 5px; /* Padding around the input field */
+}
+
+/* Style for the input inside the mat-form-field */
+mat-form-field .mat-input-element {
+  border: none; /* Remove default borders */
+  background-color: transparent; /* Ensure the input background is transparent */
+}
+
+/* Style for the mat-form-field label */
+mat-form-field .mat-form-field-label {
+  color: rgba(
+    0,
+    0,
+    0,
+    0.6
+  ); /* Slightly dimmed label color for better contrast */
+}
+
+/* Style for the mat-form-field when it is focused */
+mat-form-field.mat-focused .mat-form-field-ripple {
+  background-color: rgba(
+    100,
+    100,
+    255,
+    0.5
+  ); /* Light blue ripple effect when focused */
+}
+
+.css-1t1j96h-MuiPaper-root-MuiDialog-paper {
+  width: 1100px !important;
+}
+
+element {
+}
+.css-1t1j96h-MuiPaper-root-MuiDialog-paper {
+  background-color: #fff;
+
+  color: rgba(0, 0, 0, 0.87);
+
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+
+  border-radius: 4px;
+
+  box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2),
+    0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12);
+
+  margin: 32px;
+
+  position: relative;
+
+  overflow-y: auto;
+
+  display: flex;
+
+  flex-direction: column;
+
+  max-height: calc(100% - 64px);
+
+  width: 1200px !important;
+}
+
+/* .css-pdct74-MuiTablePagination-selectLabel{
+  margin-top: 17px !important;
+}
+.css-levciy-MuiTablePagination-displayedRows{
+  margin-top: 17px !important;
+} */
