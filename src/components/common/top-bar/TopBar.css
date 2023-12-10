@@ -1,0 +1,26 @@
+.navbar-toggler {
+  cursor: pointer !important;
+}
+
+.user-profile-dropdown {
+  position: absolute;
+  left: -302px;
+  z-index: 10p;
+  background: white;
+  top: 71px;
+  border: 1px solid lightgray;
+  border-radius: 9px;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+  height: 340px;
+}
+
+.notification-wrap {
+  position: absolute;
+  left: -302px;
+  z-index: 10p;
+  background: white;
+  top: 71px;
+  border: 1px solid lightgray;
+  border-radius: 9px;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+}
