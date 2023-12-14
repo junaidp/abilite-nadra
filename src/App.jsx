@@ -1,7 +1,14 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useSearchParams,
+} from "react-router-dom";
 import Register from "./pages/auth/register/Register";
+import { Helmet } from "react-helmet";
 import Login from "./pages/auth/login/Login";
+import logo from "./assets/favicon.ico";
 import Home from "./pages/home/Home";
 import ForgetPassword from "./pages/auth/forget-password/ForgetPassword";
 import DashboardHomePage from "./pages/dashboard/home/DashboardHome";
@@ -35,13 +42,28 @@ import FollowUpParticularsPage from "./pages/dashboard/reporting-follow-up/follo
 import AuditSettingsPage from "./pages/dashboard/audit-settings/AuditSettings";
 import InternalAuditReportPage from "./pages/dashboard/report/internal-audit-report/InternalAuditReport";
 import GenerateInternalAuditReportPage from "./pages/dashboard/report/internal-audit-report/generate-internal-audit-report/GenerateInternalAuditReport";
+import CompaniesPage from "./pages/dashboard/companies/Companies";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
+import { changeAuthUser } from "./global-redux/reducers/auth/slice";
+import { useDispatch, useSelector } from "react-redux";
 
 const App = () => {
+  let { user } = useSelector((state) => state.auth);
+  let dispatch = useDispatch();
+  React.useEffect(() => {
+    let authUser = JSON.parse(localStorage.getItem("user"));
+    if (authUser) {
+      dispatch(changeAuthUser(authUser));
+    }
+  }, []);
   return (
     <div>
+      <Helmet>
+        <title>Abilite</title>
+        <link rel="icon" href={logo} />
+      </Helmet>
       <ToastContainer />
       <BrowserRouter>
         <Routes>
@@ -144,6 +166,7 @@ const App = () => {
             element={<FollowUpParticularsPage />}
           />
           <Route path="/audit/audit-settings" element={<AuditSettingsPage />} />
+          <Route path="/audit/companies" element={<CompaniesPage />} />
           <Route
             path="/audit/internal-audit-report"
             element={<InternalAuditReportPage />}
