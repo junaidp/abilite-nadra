@@ -20,7 +20,7 @@ import JobPrioritizationPage from "./pages/dashboard/planing/job-prioritization/
 import JobSechedulingPage from "./pages/dashboard/planing/job-scheduling/JobSecheduling";
 import AuditPlanSummaryPage from "./pages/dashboard/planing/audit-plan-summary/AuditPlanSummary";
 import AuditEngagementPage from "./pages/dashboard/audit-engagement/AuditEngagement";
-import ReportingFollowUpPage from "./pages/dashboard/reporting-follow-up/Reporting";
+import ReportingFollowUpPage from "./pages/dashboard/reporting-follow-up/ReportingFollowUp";
 import ViewRiskAssessmentPage from "./pages/dashboard/planing/risk-assessments/view-risk-assessment/ViewRiskAssessment";
 import PlaningReportPage from "./pages/dashboard/report/planing-report/PlaningReport";
 import ViewJobschedulePage from "./pages/dashboard/planing/job-scheduling/view-job-schedule/ViewJobschedule";
@@ -46,7 +46,10 @@ import CompaniesPage from "./pages/dashboard/companies/Companies";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
-import { changeAuthUser } from "./global-redux/reducers/auth/slice";
+import {
+  changeAuthUser,
+} from "./global-redux/reducers/auth/slice";
+import {setupGetCompanies}  from "./global-redux/reducers/company/slice"
 import { useDispatch, useSelector } from "react-redux";
 
 const App = () => {
@@ -57,6 +60,7 @@ const App = () => {
     if (authUser) {
       dispatch(changeAuthUser(authUser));
     }
+    dispatch(setupGetCompanies());
   }, []);
   return (
     <div>
