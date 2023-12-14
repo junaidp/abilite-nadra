@@ -1,0 +1,11 @@
+.MuiTablePagination-root {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.css-pdct74-MuiTablePagination-selectLabel {
+  margin-top: 17px !important;
+}
+.css-levciy-MuiTablePagination-displayedRows {
+  margin-top: 17px !important;
+}
