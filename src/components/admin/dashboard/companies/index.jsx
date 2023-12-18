@@ -12,7 +12,7 @@ import {
 } from "../../../../global-redux/reducers/company/slice";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-const AuditSettings = () => {
+const Companies = () => {
   let [data, setData] = React.useState({
     companyname: "",
     companypackage: "",
@@ -71,7 +71,6 @@ const AuditSettings = () => {
     dispatch(setupGetCompanies());
   }, [registerCompanySuccess]);
 
-  console.log(companies);
   return (
     <div>
       <TopBar />
@@ -255,4 +254,4 @@ const AuditSettings = () => {
   );
 };
 
-export default AuditSettings;
+export default Companies;

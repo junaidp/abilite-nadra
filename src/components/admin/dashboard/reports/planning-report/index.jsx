@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Pagination from "../../../../common/pagination/Pagination";
 
-const Reports = () => {
+const PlanningReport = () => {
   let { showSidebar } = useSelector((state) => state.common);
   let navigate = useNavigate();
 
@@ -126,4 +126,4 @@ const Reports = () => {
   );
 };
 
-export default Reports;
+export default PlanningReport;

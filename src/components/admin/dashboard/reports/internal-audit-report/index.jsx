@@ -5,7 +5,7 @@ import "./index.css";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-const Reports = () => {
+const InternalAuditReport = () => {
   let { showSidebar } = useSelector((state) => state.common);
   let navigate = useNavigate();
   return (
@@ -119,4 +119,4 @@ const Reports = () => {
   );
 };
 
-export default Reports;
+export default InternalAuditReport;

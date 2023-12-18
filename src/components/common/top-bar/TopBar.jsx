@@ -95,10 +95,18 @@ const TopBar = () => {
                 })}
               </select>
 
-              <a class="nav-link" style={{ fontSize: "20px" }}>
+              <a
+                class="nav-link"
+                style={{ fontSize: "20px" }}
+                onClick={() => {
+                  navigate("/audit/audit-settings");
+                  dispatch(changeShowSidebar(false));
+                }}
+              >
                 <i class="fa fa-gear"></i>
-                {/* <div class="notification bg-primary rounded-circle"></div> */}
+                <div class="notification bg-primary rounded-circle"></div>
               </a>
+
               <li
                 className="nav-item dropdown"
                 onClick={() => {

@@ -122,13 +122,13 @@ let menuItems = [
       },
     ],
   },
-  {
-    id: "li-audit-settings",
-    label: "Settings",
-    icon: "bi bi-gear",
-    route: "/audit/audit-settings",
-    active: false,
-  },
+  // {
+  //   id: "li-audit-settings",
+  //   label: "Settings",
+  //   icon: "bi bi-gear",
+  //   route: "/audit/audit-settings",
+  //   active: false,
+  // },
 ];
 
 const initialState = {
