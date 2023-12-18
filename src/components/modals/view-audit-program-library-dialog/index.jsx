@@ -1,6 +1,6 @@
 import React from "react";
 
-const index = ({ setViewAuditProgramLibraryDialog }) => {
+const ViewAuditProgramLibraryDialog = ({ setViewAuditProgramLibraryDialog }) => {
   return (
     <div className="mx-5">
       <header className="section-header mt-3  px-4  text-start d-flex align-items-center justify-content-between">
@@ -18,11 +18,7 @@ const index = ({ setViewAuditProgramLibraryDialog }) => {
                   <th>Controls</th>
                   <th>Audit Programs</th>
                   <th>
-                    <input
-                      id="rememberMe"
-                      type="checkbox"
-                      formControlName="rememberMe"
-                    />
+                    <input id="rememberMe" type="checkbox" />
                   </th>
                 </tr>
               </thead>
@@ -47,11 +43,7 @@ const index = ({ setViewAuditProgramLibraryDialog }) => {
                     ></textarea>
                   </td>
                   <td>
-                    <input
-                      id="rememberMe"
-                      type="checkbox"
-                      formControlName="rememberMe"
-                    />
+                    <input id="rememberMe" type="checkbox" />
                   </td>
                 </tr>
                 <tr>
@@ -75,11 +67,7 @@ const index = ({ setViewAuditProgramLibraryDialog }) => {
                     ></textarea>
                   </td>
                   <td>
-                    <input
-                      id="rememberMe"
-                      type="checkbox"
-                      formControlName="rememberMe"
-                    />
+                    <input id="rememberMe" type="checkbox" />
                   </td>
                 </tr>
               </tbody>
@@ -90,9 +78,8 @@ const index = ({ setViewAuditProgramLibraryDialog }) => {
       <div className="row py-4 px-4">
         <div className="col-lg-12 text-end">
           <button
-            mat-dialog-close
             className="btn btn-danger float-end"
-            onClick={()=>setViewAuditProgramLibraryDialog(false)}
+            onClick={() => setViewAuditProgramLibraryDialog(false)}
           >
             Close
           </button>
@@ -102,4 +89,4 @@ const index = ({ setViewAuditProgramLibraryDialog }) => {
   );
 };
 
-export default index;
+export default ViewAuditProgramLibraryDialog;

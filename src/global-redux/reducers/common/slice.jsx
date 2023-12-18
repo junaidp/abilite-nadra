@@ -78,7 +78,6 @@ let menuItems = [
     id: "li-reporting-and-followup",
     label: "Reporting & Followup",
     icon: "fa fa-comments",
-    // route: "/audit/reporting-and-followup",
     active: false,
     open: false,
     subMenu: [
@@ -102,7 +101,6 @@ let menuItems = [
     id: "li-reports",
     label: "Reports",
     icon: "fa fa-file-alt me-1",
-    // route: "/audit/planning-report",
     active: false,
     open: false,
     subMenu: [
@@ -122,13 +120,6 @@ let menuItems = [
       },
     ],
   },
-  // {
-  //   id: "li-audit-settings",
-  //   label: "Settings",
-  //   icon: "bi bi-gear",
-  //   route: "/audit/audit-settings",
-  //   active: false,
-  // },
 ];
 
 const initialState = {
@@ -157,6 +148,11 @@ export const slice = createSlice({
     },
     changeKickOffRequest: (state, action) => {
       state.kickOffRequest = action.payload;
+    },
+    InitialLoadSidebarActiveLink: (state, action) => {
+      state.menuItems = state.menuItems.map((item) =>
+        item?.id === action.payload ? { ...item, open: true } : item
+      );
     },
     changeExpanded: (state, action) => {
       state.activeExpandId = action.payload;
@@ -188,6 +184,7 @@ export const {
   showBusinessObjectiveDialog,
   changeExpanded,
   changeKickOffRequest,
+  InitialLoadSidebarActiveLink
 } = slice.actions;
 
 export default slice.reducer;

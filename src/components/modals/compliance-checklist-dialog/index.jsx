@@ -1,6 +1,6 @@
 import React from "react";
 
-const index = ({ setShowComplianceCheckListDialog }) => {
+const ComplianceCheckListDialog = ({ setShowComplianceCheckListDialog }) => {
   return (
     <div className="p-3">
       <div className="row">
@@ -99,4 +99,4 @@ const index = ({ setShowComplianceCheckListDialog }) => {
   );
 };
 
-export default index;
+export default ComplianceCheckListDialog;

@@ -1,6 +1,6 @@
 import React from "react";
 import ViewResource from "../../../../../components/admin/dashboard/planing/job-scheduling/view-resource/index";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 const ViewResourcePage = () => {
   return (

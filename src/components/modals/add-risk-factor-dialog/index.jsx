@@ -1,6 +1,6 @@
 import React from "react";
 
-const index = ({ setShowAddRiskFactorDialog }) => {
+const AddRiskFactorDialog = ({ setShowAddRiskFactorDialog }) => {
   return (
     <div className="container p-3">
       <div className="d-flex justify-content-between">
@@ -10,13 +10,12 @@ const index = ({ setShowAddRiskFactorDialog }) => {
         <button
           type="button"
           className="btn-close"
-          mat-dialog-close
           onClick={() => setShowAddRiskFactorDialog(false)}
         ></button>
       </div>
 
       <div className="my-3 px-2">
-        <label for="labeltext" className="form-label label-text">
+        <label htmlFor="labeltext" className="form-label label-text">
           Add New Risk Factor
         </label>
         <div className="d-flex">
@@ -28,7 +27,6 @@ const index = ({ setShowAddRiskFactorDialog }) => {
           />
           <button
             className="btn btn-primary ms-2"
-            mat-dialog-close
             onClick={() => setShowAddRiskFactorDialog(false)}
           >
             Save
@@ -44,7 +42,6 @@ const index = ({ setShowAddRiskFactorDialog }) => {
             </div>
             <button
               className="btn btn-primary"
-              mat-dialog-close
               onClick={() => setShowAddRiskFactorDialog(false)}
             >
               Select
@@ -56,7 +53,6 @@ const index = ({ setShowAddRiskFactorDialog }) => {
             </div>
             <button
               className="btn btn-primary"
-              mat-dialog-close
               onClick={() => setShowAddRiskFactorDialog(false)}
             >
               Select
@@ -68,4 +64,4 @@ const index = ({ setShowAddRiskFactorDialog }) => {
   );
 };
 
-export default index;
+export default AddRiskFactorDialog;

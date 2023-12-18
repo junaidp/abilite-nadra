@@ -1,6 +1,6 @@
 import React from "react";
 import BusinessProcess from "../../../../../components/admin/dashboard/planing/business-objective/business-process/index";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 const BusinessProcessPage = () => {
   return (

@@ -1,6 +1,6 @@
 import React from "react";
 
-const index = ({ setShowObjectiveListDialog }) => {
+const ObjectiveListDialog = ({ setShowObjectiveListDialog }) => {
   return (
     <div className="p-3">
       <p>objective-list-dialog works!</p>
@@ -14,7 +14,6 @@ const index = ({ setShowObjectiveListDialog }) => {
       </label>
 
       <button
-        mat-dialog-close
         className="btn btn-primary mt-3"
         onClick={() => setShowObjectiveListDialog(false)}
       >
@@ -24,4 +23,4 @@ const index = ({ setShowObjectiveListDialog }) => {
   );
 };
 
-export default index;
+export default ObjectiveListDialog;

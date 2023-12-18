@@ -2,7 +2,7 @@ import React from "react";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
 
-const index = ({ setPerformRiskAssessmentModal }) => {
+const PerformanceRiskAssessment = ({ setPerformRiskAssessmentModal }) => {
   let navigate = useNavigate();
   return (
     <div className="container  p-3">
@@ -14,7 +14,6 @@ const index = ({ setPerformRiskAssessmentModal }) => {
           <button
             type="button"
             className="btn-close"
-            mat-dialog-close
             data-bs-dismiss="modal"
             aria-label="Close"
             onClick={() => setPerformRiskAssessmentModal(false)}
@@ -26,7 +25,7 @@ const index = ({ setPerformRiskAssessmentModal }) => {
               <a
                 className="w-100 "
                 type="button"
-                mat-dialog-close
+                
                 onClick={() => navigate("/audit/specific-risk-approach")}
               >
                 <div className="card p-0 border-0">
@@ -64,7 +63,7 @@ const index = ({ setPerformRiskAssessmentModal }) => {
               <a
                 className="w-100 "
                 type="button"
-                mat-dialog-close
+                
                 onClick={() => navigate("/audit/risk-factor-approach")}
               >
                 <div className="card p-0 border-0">
@@ -103,7 +102,7 @@ const index = ({ setPerformRiskAssessmentModal }) => {
           <button
             type="button"
             className="btn btn-secondary"
-            mat-dialog-close
+            
             data-bs-dismiss="modal"
             onClick={() => setPerformRiskAssessmentModal(false)}
           >
@@ -115,4 +114,4 @@ const index = ({ setPerformRiskAssessmentModal }) => {
   );
 };
 
-export default index;
+export default PerformanceRiskAssessment;

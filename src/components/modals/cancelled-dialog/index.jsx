@@ -1,6 +1,6 @@
 import React from "react";
 
-const index = ({ setShowCancelModal }) => {
+const CancelledDialog = ({ setShowCancelModal }) => {
   return (
     <div className="container px-4 pb-2 pt-4">
       <div className="row mb-3">
@@ -52,7 +52,6 @@ const index = ({ setShowCancelModal }) => {
           <button
             type="button"
             className="btn btn-danger"
-            mat-dialog-close
             onClick={() => setShowCancelModal(false)}
           >
             Close
@@ -63,4 +62,4 @@ const index = ({ setShowCancelModal }) => {
   );
 };
 
-export default index;
+export default CancelledDialog;

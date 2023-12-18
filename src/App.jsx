@@ -1,12 +1,7 @@
 import React from "react";
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  useSearchParams,
-} from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Register from "./pages/auth/register/Register";
-import { Helmet } from "react-helmet";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 import Login from "./pages/auth/login/Login";
 import logo from "./assets/favicon.ico";
 import Home from "./pages/home/Home";
@@ -46,15 +41,18 @@ import CompaniesPage from "./pages/dashboard/companies/Companies";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
-import {
-  changeAuthUser,
-} from "./global-redux/reducers/auth/slice";
-import {setupGetCompanies}  from "./global-redux/reducers/company/slice"
+import { changeAuthUser } from "./global-redux/reducers/auth/slice";
+import { setupGetCompanies } from "./global-redux/reducers/company/slice";
 import { useDispatch, useSelector } from "react-redux";
+import Layout from "./components/common/layout/Layout";
+import {
+  InitialLoadSidebarActiveLink,
+  changeActiveLink,
+} from "./global-redux/reducers/common/slice";
 
 const App = () => {
-  let { user } = useSelector((state) => state.auth);
   let dispatch = useDispatch();
+  let { menuItems } = useSelector((state) => state.common);
   React.useEffect(() => {
     let authUser = JSON.parse(localStorage.getItem("user"));
     if (authUser) {
@@ -62,8 +60,30 @@ const App = () => {
     }
     dispatch(setupGetCompanies());
   }, []);
+
+  React.useEffect(() => {
+    let mainActiveLink = menuItems?.find(
+      (item) => item?.route === window.location.pathname
+    );
+    if (mainActiveLink) {
+      dispatch(changeActiveLink(mainActiveLink?.id));
+    }
+    if (!mainActiveLink) {
+      let filteredItems = menuItems?.filter((item) => item?.subMenu);
+      filteredItems.forEach((element) => {
+        element?.subMenu?.map((subItem) => {
+          if (subItem.route === window.location.pathname) {
+            dispatch(changeActiveLink(subItem.id));
+            dispatch(InitialLoadSidebarActiveLink(element?.id));
+          }
+        });
+      });
+    }
+    dispatch(InitialLoadSidebarActiveLink());
+  }, []);
+
   return (
-    <div>
+    <HelmetProvider>
       <Helmet>
         <title>Abilite</title>
         <link rel="icon" href={logo} />
@@ -72,116 +92,97 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgetPassword />} />
-          <Route path="/audit/dashboard" element={<DashboardHomePage />} />
-          <Route
-            path="/audit/report-audit-planning-and-scheduling"
-            element={<PLaningHomePage />}
-          />
-          <Route
-            path="/audit/business-objective"
-            element={<BusinessObjectivePage />}
-          />
-          <Route
-            path="/audit/risk-assessment"
-            element={<RiskAssessmentsPage />}
-          />
-          <Route
-            path="/audit/auditable-unit"
-            element={<AuditableUnitsPage />}
-          />
-          <Route
-            path="/audit/prioritization-and-finalization"
-            element={<JobPrioritizationPage />}
-          />
-          <Route
-            path="/audit/job-scheduling"
-            element={<JobSechedulingPage />}
-          />
-          <Route
-            path="/audit/audit-plan-summary"
-            element={<AuditPlanSummaryPage />}
-          />
-          <Route
-            path="/audit/audit-engagement"
-            element={<AuditEngagementPage />}
-          />
-          <Route
-            path="/audit/reporting-and-followup"
-            element={<ReportingFollowUpPage />}
-          />
-          <Route
-            path="/audit/planning-report"
-            element={<PlaningReportPage />}
-          />
-          <Route
-            path="/audit/view-risk-assesment"
-            element={<ViewRiskAssessmentPage />}
-          />
-          <Route
-            path="/audit/view-job-scheduling"
-            element={<ViewJobschedulePage />}
-          />
-          <Route path="/audit/view-resource" element={<ViewResourcePage />} />
-          <Route
-            path="/audit/generate-planning-report"
-            element={<GeneratePlanningReportPage />}
-          />
-          <Route
-            path="/audit/start-scheduling"
-            element={<StartSchedulingPage />}
-          />
-          <Route
-            path="/audit/business-objectives-redirect"
-            element={<BusinessObjectiveRedirectPage />}
-          />
-          <Route
-            path="/audit/business-process"
-            element={<BusinessProcessPage />}
-          />
-          <Route
-            path="/audit/special-project-audit"
-            element={<SpecialProjectAuditPage />}
-          />
-          <Route
-            path="/audit/compliance-checklist-card"
-            element={<ComplianceCheckListCardPage />}
-          />
-          <Route path="/audit/kick-off" element={<KickOffPage />} />
-          <Route
-            path="/audit/specific-risk-approach"
-            element={<SpecificRiskApproachPage />}
-          />
-          <Route
-            path="/audit/risk-factor-approach"
-            element={<RiskFactorApproachPage />}
-          />
-          <Route
-            path="/audit/reporting-particulars"
-            element={<AuditParticularsPage />}
-          />
-          <Route path="/audit/follow-up" element={<FollowUpPage />} />
-          <Route path="/audit/reportings" element={<ReportingPage />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          <Route
-            path="/audit/follow-up-particulars"
-            element={<FollowUpParticularsPage />}
-          />
-          <Route path="/audit/audit-settings" element={<AuditSettingsPage />} />
-          <Route path="/audit/companies" element={<CompaniesPage />} />
-          <Route
-            path="/audit/internal-audit-report"
-            element={<InternalAuditReportPage />}
-          />
-          <Route
-            path="/audit/generate-internal-audit-report"
-            element={<GenerateInternalAuditReportPage />}
-          />
+          <Route path="/audit" element={<Layout />}>
+            <Route path="dashboard" element={<DashboardHomePage />} />
+            <Route
+              path="report-audit-planning-and-scheduling"
+              element={<PLaningHomePage />}
+            />
+            <Route
+              path="business-objective"
+              element={<BusinessObjectivePage />}
+            />
+            <Route path="risk-assessment" element={<RiskAssessmentsPage />} />
+            <Route path="auditable-unit" element={<AuditableUnitsPage />} />
+            <Route
+              path="prioritization-and-finalization"
+              element={<JobPrioritizationPage />}
+            />
+            <Route path="job-scheduling" element={<JobSechedulingPage />} />
+            <Route
+              path="audit-plan-summary"
+              element={<AuditPlanSummaryPage />}
+            />
+            <Route path="audit-engagement" element={<AuditEngagementPage />} />
+            <Route
+              path="reporting-and-followup"
+              element={<ReportingFollowUpPage />}
+            />
+            <Route path="planning-report" element={<PlaningReportPage />} />
+            <Route
+              path="view-risk-assesment"
+              element={<ViewRiskAssessmentPage />}
+            />
+            <Route
+              path="view-job-scheduling"
+              element={<ViewJobschedulePage />}
+            />
+            <Route path="view-resource" element={<ViewResourcePage />} />
+            <Route
+              path="generate-planning-report"
+              element={<GeneratePlanningReportPage />}
+            />
+            <Route path="start-scheduling" element={<StartSchedulingPage />} />
+            <Route
+              path="business-objectives-redirect"
+              element={<BusinessObjectiveRedirectPage />}
+            />
+            <Route path="business-process" element={<BusinessProcessPage />} />
+            <Route
+              path="special-project-audit"
+              element={<SpecialProjectAuditPage />}
+            />
+            <Route
+              path="compliance-checklist-card"
+              element={<ComplianceCheckListCardPage />}
+            />
+            <Route path="kick-off" element={<KickOffPage />} />
+            <Route
+              path="specific-risk-approach"
+              element={<SpecificRiskApproachPage />}
+            />
+            <Route
+              path="risk-factor-approach"
+              element={<RiskFactorApproachPage />}
+            />
+            <Route
+              path="reporting-particulars"
+              element={<AuditParticularsPage />}
+            />
+            <Route path="follow-up" element={<FollowUpPage />} />
+            <Route path="reportings" element={<ReportingPage />} />
+            <Route
+              path="follow-up-particulars"
+              element={<FollowUpParticularsPage />}
+            />
+            <Route path="audit-settings" element={<AuditSettingsPage />} />
+            <Route path="companies" element={<CompaniesPage />} />
+            <Route
+              path="internal-audit-report"
+              element={<InternalAuditReportPage />}
+            />
+            <Route
+              path="generate-internal-audit-report"
+              element={<GenerateInternalAuditReportPage />}
+            />
+          </Route>
         </Routes>
       </BrowserRouter>
-    </div>
+    </HelmetProvider>
   );
 };
 

@@ -30,7 +30,7 @@ export const slice = createSlice({
       state.error = action.payload;
     },
     changeCompanyRegisterSuccess: (state, action) => {
-      state.error = action.payload;
+      state.registerCompanySuccess = action.payload;
     },
   },
   extraReducers: {

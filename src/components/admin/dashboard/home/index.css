@@ -17,3 +17,15 @@
   margin-top: 10px;
   transition: all 0.5s linear;
 }
+
+.dashboard-charts-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+@media screen and (max-width:1100px) {
+  .dashboard-charts-wrapper {
+    grid-template-columns: 1fr;
+  }
+}

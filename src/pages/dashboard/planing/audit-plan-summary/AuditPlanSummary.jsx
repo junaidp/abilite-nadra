@@ -1,6 +1,6 @@
 import React from "react";
 import AuditPlanSummary from "../../../../components/admin/dashboard/planing/audit-plan-summary/index";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 const AuditPlanSummaryPage = () => {
   return (

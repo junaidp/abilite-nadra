@@ -1,6 +1,6 @@
 import React from "react";
 
-const index = ({ setShowAuditStepsDialog }) => {
+const AuditStepsDialog = ({ setShowAuditStepsDialog }) => {
   return (
     <div className="mx-5">
       <header className="section-header mt-3  text-start d-flex align-items-center justify-content-between">
@@ -23,7 +23,7 @@ const index = ({ setShowAuditStepsDialog }) => {
           <div>
             <label className="me-3   ">Perform Sampling</label>
             <select className="form-select" aria-label="Default select example">
-              <option selected>Yes</option>
+              <option>Yes</option>
               <option value="2">No</option>
             </select>
           </div>
@@ -33,7 +33,7 @@ const index = ({ setShowAuditStepsDialog }) => {
             <label className="me-3   ">Sampling Method</label>
             <select className="form-select" aria-label="Default select example">
               <option value="1">Simple Random Sampling</option>
-              <option selected>Systematic Sampling</option>
+              <option>Systematic Sampling</option>
               <option value="2">Cluster Samling</option>
             </select>
           </div>
@@ -46,7 +46,7 @@ const index = ({ setShowAuditStepsDialog }) => {
             <label className="me-3   ">Control Risk</label>
             <select className="form-select" aria-label="Default select example">
               <option value="1">Low</option>
-              <option selected>Medium</option>
+              <option>Medium</option>
               <option value="2">High</option>
             </select>
           </div>
@@ -56,10 +56,10 @@ const index = ({ setShowAuditStepsDialog }) => {
             <label className="me-3   ">Frequency</label>
             <select className="form-select" aria-label="Default select example">
               <option value="1">Annually</option>
-              <option selected>Bi-annyally</option>
+              <option>Bi-annyally</option>
               <option value="2">Quarterly</option>
               <option value="1">Monthly</option>
-              <option selected>Weekly</option>
+              <option>Weekly</option>
               <option value="2">Daily</option>
               <option value="2">Recurring</option>
             </select>
@@ -259,7 +259,6 @@ const index = ({ setShowAuditStepsDialog }) => {
       <div className="row py-4 px-4">
         <div className="col-lg-12 text-end">
           <button
-            mat-dialog-close
             className="btn btn-danger float-end"
             onClick={() => setShowAuditStepsDialog(false)}
           >
@@ -271,4 +270,4 @@ const index = ({ setShowAuditStepsDialog }) => {
   );
 };
 
-export default index;
+export default AuditStepsDialog;

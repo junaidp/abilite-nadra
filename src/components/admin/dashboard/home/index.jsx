@@ -1,46 +1,26 @@
 import React from "react";
-import TopBar from "../../../common/top-bar/TopBar";
-import Sidebar from "../../../common/sidebar/Sidebar";
 import "./index.css";
-import img from "../../../../assets/under.gif";
+// import img from "../../../../assets/under.gif";
 import { useSelector } from "react-redux";
-import {changeUserLoggedIn}  from "../../../../global-redux/reducers/auth/slice"
+import { changeUserLoggedIn } from "../../../../global-redux/reducers/auth/slice";
 import { useDispatch } from "react-redux";
+import AreaChart from "./components/area-chart/AreaChart";
+import BarChart from "./components/bar-chart/BarChart";
+import LineChart from "./components/line-chart/LineChart";
+import PieChart from "./components/pie-chart/PieChart";
 const DashboardHome = () => {
-  let { showSidebar } = useSelector((state) => state.common);
-  let dispatch=useDispatch()
+  let dispatch = useDispatch();
 
-  React.useEffect(()=>{
-    dispatch(changeUserLoggedIn(false))
-  },[])
+  React.useEffect(() => {
+    dispatch(changeUserLoggedIn(false));
+  }, []);
   return (
     <div>
-      <TopBar />
-      <div style={{ display: "flex" }}>
-        <Sidebar />
-        <div
-          className="row"
-          id={showSidebar ? "SideComponents" : "SideComponentsFullWidth"}
-        >
-          <div className="col-lg-12">
-            <div className="section-header my-3  text-start d-flex align-items-center justify-content-between">
-              <div className="mb-0 heading">Dashboard</div>
-            </div>
-
-            <div
-              className="row"
-              style={{
-                height: "70vh",
-                justifyContent: "center",
-                placeItems: "center",
-              }}
-            >
-              <div className="col-lg-12 text-center">
-                <img src={img} style={{ width: "300px" }} alt="gifImage" />
-              </div>
-            </div>
-          </div>
-        </div>
+      <div className="dashboard-charts-wrapper">
+        <AreaChart />
+        <BarChart />
+        <LineChart />
+        <PieChart />
       </div>
     </div>
   );

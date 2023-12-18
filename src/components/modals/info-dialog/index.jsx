@@ -1,6 +1,6 @@
 import React from "react";
 
-const index = () => {
+const InfoDialog = () => {
   return (
     <div className="p-3">
       <p>Information About Page</p>
@@ -20,4 +20,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default InfoDialog;

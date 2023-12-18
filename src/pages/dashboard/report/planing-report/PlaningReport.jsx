@@ -1,6 +1,6 @@
 import React from "react";
 import PlaningReport from "../../../../components/admin/dashboard/reports/planning-report/index";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 const PlaningReportPage = () => {
   return (

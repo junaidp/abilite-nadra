@@ -1,6 +1,6 @@
 import React from "react";
 import AuditableUnits from "../../../../components/admin/dashboard/planing/auditable-units/index";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 const AuditableUnitsPage = () => {
   return (

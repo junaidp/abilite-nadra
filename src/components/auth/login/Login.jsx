@@ -161,7 +161,7 @@ const Login = () => {
                             onClick={() => setShowPassword(true)}
                             style={{ cursor: "pointer" }}
                           >
-                            <i class="bi bi-eye-fill"></i>
+                            <i className="bi bi-eye-fill"></i>
                           </div>
                         )}
                         {showpassword && (
@@ -169,7 +169,7 @@ const Login = () => {
                             onClick={() => setShowPassword(false)}
                             style={{ cursor: "pointer" }}
                           >
-                            <i class="bi bi-eye-slash-fill"></i>
+                            <i className="bi bi-eye-slash-fill"></i>
                           </div>
                         )}
                       </div>

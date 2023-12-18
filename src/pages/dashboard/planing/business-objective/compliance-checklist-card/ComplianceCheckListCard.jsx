@@ -1,6 +1,6 @@
 import React from "react";
 import ComplianceCheckListCard from "../../../../../components/admin/dashboard/planing/business-objective/compliance-checklist-card/index";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 const ComplianceCheckListCardPage = () => {
   return (

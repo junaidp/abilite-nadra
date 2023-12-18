@@ -1,6 +1,6 @@
 import React from "react";
 import PlaningHome from "../../../../components/admin/dashboard/planing/home/index";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 const PlaningHomePage = () => {
   return (

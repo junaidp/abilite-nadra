@@ -1,6 +1,6 @@
 import React from "react";
 import BusinessObjective from "../../../../components/admin/dashboard/planing/business-objective/index";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 const BusinessObjectivePage = () => {
   return (

@@ -1,6 +1,6 @@
 import React from "react";
 
-const index = ({ setShowViewLibrary }) => {
+const ViewRiskControlMatrixLibraryDialog = ({ setShowViewLibrary }) => {
   return (
     <div className="mx-5">
       <header className="section-header mt-3  px-4  text-start d-flex align-items-center justify-content-between">
@@ -21,11 +21,7 @@ const index = ({ setShowViewLibrary }) => {
                   <th>Risk</th>
                   <th>Controls</th>
                   <th>
-                    <input
-                      id="rememberMe"
-                      type="checkbox"
-                      formControlName="rememberMe"
-                    />
+                    <input id="rememberMe" type="checkbox" const index />
                   </th>
                 </tr>
               </thead>
@@ -56,7 +52,7 @@ const index = ({ setShowViewLibrary }) => {
                         className="form-select w-50 mb-2"
                         aria-label="Default select example"
                       >
-                        <option selected>high</option>
+                        <option>high</option>
                         <option value="2">Medium</option>
                         <option value="2">Low</option>
                       </select>
@@ -76,7 +72,7 @@ const index = ({ setShowViewLibrary }) => {
                         className="form-select w-50 mb-2"
                         aria-label="Default select example"
                       >
-                        <option selected>high</option>
+                        <option>high</option>
                         <option value="2">Medium</option>
                         <option value="2">Low</option>
                       </select>
@@ -90,11 +86,7 @@ const index = ({ setShowViewLibrary }) => {
                     ></textarea>
                   </td>
                   <td>
-                    <input
-                      id="rememberMe"
-                      type="checkbox"
-                      formControlName="rememberMe"
-                    />
+                    <input id="rememberMe" type="checkbox" const index />
                   </td>
                 </tr>
                 <tr>
@@ -123,7 +115,7 @@ const index = ({ setShowViewLibrary }) => {
                         className="form-select w-50  mb-2"
                         aria-label="Default select example"
                       >
-                        <option selected>high</option>
+                        <option>high</option>
                         <option value="2">Medium</option>
                         <option value="2">Low</option>
                       </select>
@@ -143,7 +135,7 @@ const index = ({ setShowViewLibrary }) => {
                         className="form-select w-50  mb-2"
                         aria-label="Default select example"
                       >
-                        <option selected>high</option>
+                        <option>high</option>
                         <option value="2">Medium</option>
                         <option value="2">Low</option>
                       </select>
@@ -158,7 +150,7 @@ const index = ({ setShowViewLibrary }) => {
                   </td>
 
                   <td>
-                    <input type="checkbox" formControlName="rememberMe" />
+                    <input type="checkbox" const index />
                   </td>
                 </tr>
               </tbody>
@@ -170,7 +162,6 @@ const index = ({ setShowViewLibrary }) => {
       <div className="row py-4 px-4">
         <div className="col-lg-12 text-end">
           <button
-            mat-dialog-close
             className="btn btn-danger float-end"
             onClick={() => setShowViewLibrary(false)}
           >
@@ -182,4 +173,4 @@ const index = ({ setShowViewLibrary }) => {
   );
 };
 
-export default index;
+export default ViewRiskControlMatrixLibraryDialog;

@@ -1,6 +1,6 @@
 import React from "react";
 import GenerateInternalAuditReport from "../../../../../components/admin/dashboard/reports/internal-audit-report/generate-internal-audit-report/index";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 const GenerateInternalAuditReportPage = () => {
   return (

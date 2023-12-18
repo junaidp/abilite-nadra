@@ -1,6 +1,6 @@
 import React from "react";
 
-const index = () => {
+const JobSchedulingInfoDialog = () => {
   return (
     <div className="p-3">
       <p>job-scheduling-info-dialog works!</p>
@@ -20,4 +20,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default JobSchedulingInfoDialog;

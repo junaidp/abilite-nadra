@@ -1,6 +1,6 @@
 import React from "react";
 
-const index = () => {
+const RatingDialog = () => {
   return (
     <div className="p-3">
       <div className="row">
@@ -86,4 +86,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default RatingDialog;

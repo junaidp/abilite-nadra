@@ -1,6 +1,6 @@
 import React from "react";
 import RiskFactorApproach from "../../../../../components/admin/dashboard/planing/risk-assessments/risk-factor-approach/index";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 const RiskFactorApproachPage = () => {
   return (

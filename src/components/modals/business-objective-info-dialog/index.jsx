@@ -1,6 +1,6 @@
 import React from "react";
 
-const index = () => {
+const BusinessObjectiveInfoDialog = () => {
   return (
     <div className="p-3">
       <p>business-objective-info-dialog works!</p>
@@ -20,4 +20,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default BusinessObjectiveInfoDialog;

@@ -1,6 +1,6 @@
 import React from "react";
 import ViewJobSchedule from "../../../../../components/admin/dashboard/planing/job-scheduling/view-job-schedule/index";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 const ViewJobSchedulePage = () => {
   return (

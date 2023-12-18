@@ -1,6 +1,6 @@
 import React from "react";
 import KinkOff from "../../../../components/admin/dashboard/audit-engagement/kick-off/index";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 const KickOffPage = () => {
   return (
     <div>

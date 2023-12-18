@@ -1,16 +1,16 @@
 import React from "react";
 import DashboardHome from "../../../components/admin/dashboard/home/index";
-import { Helmet } from "react-helmet";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
 const DashboardHomePage = () => {
   return (
-    <div>
+    <HelmetProvider>
       <Helmet>
         <title>Dashboard Home</title>
         <meta name="description" content="Nested component" />
       </Helmet>
       <DashboardHome />
-    </div>
+    </HelmetProvider>
   );
 };
 

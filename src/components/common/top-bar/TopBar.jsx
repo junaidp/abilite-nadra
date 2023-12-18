@@ -86,25 +86,29 @@ const TopBar = () => {
             ></a>
             <ul className="navbar-nav flex-row ms-auto align-items-center justify-content-center">
               <select
-                class="form-select me-4 "
+                className="form-select me-4 "
                 style={{ height: "40px" }}
                 aria-label="Default select example"
               >
-                {companies?.map((item) => {
-                  return <option selected>{item?.companyName}</option>;
+                {companies?.map((item, i) => {
+                  return (
+                    <option  key={i}>
+                      {item?.companyName}
+                    </option>
+                  );
                 })}
               </select>
 
               <a
-                class="nav-link"
+                className="nav-link"
                 style={{ fontSize: "20px" }}
                 onClick={() => {
                   navigate("/audit/audit-settings");
                   dispatch(changeShowSidebar(false));
                 }}
               >
-                <i class="fa fa-gear"></i>
-                <div class="notification bg-primary rounded-circle"></div>
+                <i className="fa fa-gear"></i>
+                <div className="notification bg-primary rounded-circle"></div>
               </a>
 
               <li

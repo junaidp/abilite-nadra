@@ -218,8 +218,12 @@ const Register = () => {
                       className="form-select"
                       aria-label="Default select example"
                     >
-                      {companies?.map((item) => {
-                        return <option value="1">{item?.companyName}</option>;
+                      {companies?.map((item, i) => {
+                        return (
+                          <option value="1" key={i}>
+                            {item?.companyName}
+                          </option>
+                        );
                       })}
                     </select>
                   </div>

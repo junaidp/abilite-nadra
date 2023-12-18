@@ -1,6 +1,6 @@
 import React from "react";
 
-const index = ({ setShowPostPonedModal }) => {
+const PostponedDialog = ({ setShowPostPonedModal }) => {
   return (
     <div className="container px-4 pb-2 pt-4">
       <div className="row mb-3">
@@ -52,7 +52,6 @@ const index = ({ setShowPostPonedModal }) => {
           <button
             type="button"
             className="btn btn-danger"
-            mat-dialog-close
             onClick={() => setShowPostPonedModal(false)}
           >
             Close
@@ -63,4 +62,4 @@ const index = ({ setShowPostPonedModal }) => {
   );
 };
 
-export default index;
+export default PostponedDialog;
