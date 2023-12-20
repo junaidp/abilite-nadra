@@ -872,6 +872,9 @@ const KickOff = () => {
                                   <a
                                     className="fw-bold  text-primary  px-3 py-1"
                                     style={{ fontSize: "10px" }}
+                                    onClick={() =>
+                                      setShowComplianceCheckListDialog(true)
+                                    }
                                   >
                                     Location Name 1
                                   </a>
@@ -885,6 +888,9 @@ const KickOff = () => {
                                   <a
                                     className="fw-bold  text-primary px-3 py-1"
                                     style={{ fontSize: "10px" }}
+                                    onClick={() =>
+                                      setShowComplianceCheckListDialog(true)
+                                    }
                                   >
                                     Location Name 2
                                   </a>
