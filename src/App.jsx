@@ -17,6 +17,7 @@ import AuditPlanSummaryPage from "./pages/dashboard/planing/audit-plan-summary/A
 import AuditEngagementPage from "./pages/dashboard/audit-engagement/AuditEngagement";
 import ReportingFollowUpPage from "./pages/dashboard/reporting-follow-up/ReportingFollowUp";
 import ViewRiskAssessmentPage from "./pages/dashboard/planing/risk-assessments/view-risk-assessment/ViewRiskAssessment";
+import RichTextPage from "./pages/dashboard/rich-text/RichText";
 import PlaningReportPage from "./pages/dashboard/report/planing-report/PlaningReport";
 import ViewJobschedulePage from "./pages/dashboard/planing/job-scheduling/view-job-schedule/ViewJobschedule";
 import ViewResourcePage from "./pages/dashboard/planing/job-scheduling/view-resource/ViewResource";
@@ -169,6 +170,7 @@ const App = () => {
               path="follow-up-particulars"
               element={<FollowUpParticularsPage />}
             />
+            <Route path="rich-text" element={<RichTextPage />} />
             <Route path="audit-settings" element={<AuditSettingsPage />} />
             <Route path="companies" element={<CompaniesPage />} />
             <Route

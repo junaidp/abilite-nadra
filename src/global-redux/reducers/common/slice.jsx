@@ -120,6 +120,13 @@ let menuItems = [
       },
     ],
   },
+  {
+    id: "li-audit-rich-text-editor",
+    label: "Rich Text Editor",
+    icon: "bi bi-card-text",
+    route: "/audit/rich-text",
+    active: false,
+  },
 ];
 
 const initialState = {
@@ -184,7 +191,7 @@ export const {
   showBusinessObjectiveDialog,
   changeExpanded,
   changeKickOffRequest,
-  InitialLoadSidebarActiveLink
+  InitialLoadSidebarActiveLink,
 } = slice.actions;
 
 export default slice.reducer;

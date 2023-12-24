@@ -8,45 +8,38 @@ const JobScheduling = () => {
   let data = [
     {
       no: "1",
-      objective:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-      rating: "53",
+      objective: "Lorem Ipsum 1",
+      year: "Year 1",
     },
     {
       no: "1",
-      objective:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-      rating: "53",
+      objective: "Lorem Ipsum 1",
+      year: "Year 2",
     },
     {
       no: "1",
-      objective:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-      rating: "53",
+      objective: "Lorem Ipsum 1",
+      year: "Year 3",
     },
     {
       no: "1",
-      objective:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-      rating: "53",
+      objective: "Lorem Ipsum 1",
+      year: "Year 4",
     },
     {
       no: "1",
-      objective:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-      rating: "53",
+      objective: "Lorem Ipsum 1",
+      year: "Year 5",
     },
     {
       no: "1",
-      objective:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-      rating: "53",
+      objective: "Lorem Ipsum 1",
+      year: "Year 6",
     },
     {
       no: "1",
-      objective:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-      rating: "53",
+      objective: "Lorem Ipsum 1",
+      year: "Year 7",
     },
   ];
   return (
@@ -109,14 +102,13 @@ const JobScheduling = () => {
                     <tr style={{ height: "40px" }} key={index}>
                       <td>{item?.no}</td>
                       <td>{item?.objective}</td>
-                      <td>{item?.rating}</td>
+                      <td>{item?.year}</td>
                       <td>
                         <div
                           className="btn btn-outline-light text-primary  px-3 shadow"
                           onClick={() => navigate("/audit/start-scheduling")}
                         >
                           <span className="btn-label me-2">
-                            {" "}
                             <i className="fa fa-play"></i>
                           </span>
                           Start Scheduling
