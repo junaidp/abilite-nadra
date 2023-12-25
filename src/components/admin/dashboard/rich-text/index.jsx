@@ -1,35 +1,36 @@
-import React from "react";
-import { useState } from "react";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import React, { useState, useRef } from "react";
+import JoditEditor from "jodit-react";
 
-const RichText = () => {
-  const modules = React.useMemo(
-    () => ({
-      toolbar: {
-        container: [
-          [{ header: [1, 2, 3, 4, 5, 6, false] }],
-          ["bold", "italic", "underline", "strike"],
-          [
-            { list: "ordered" },
-            { list: "bullet" },
-            { indent: "-1" },
-            { indent: "+1" },
-          ],
-          [{ align: [] }],
-          ["image", "table"],
-        ],
-      },
-    }),
-    []
-  );
+const Example = () => {
+  const editor = useRef(null);
+  const [content, setContent] = useState("");
 
-  const [value, setValue] = useState("");
+  const config = {
+    // readonly: false,
+    buttons: [
+      "bold",
+      "italic",
+      "underline",
+      "|",
+      "align",
+      "ul",
+      "ol",
+      "|",
+      "image",
+      "table",
+    ],
+  };
+
   return (
-    <div>
-      <ReactQuill modules={modules} value={value} onChange={setValue} />
-    </div>
+    <JoditEditor
+      ref={editor}
+      value={content}
+      config={config}
+      tabIndex={1}
+      onBlur={(newContent) => setContent(newContent)}
+      onChange={(newContent) => {}}
+    />
   );
 };
 
-export default RichText;
+export default Example;
