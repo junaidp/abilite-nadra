@@ -1,5 +1,5 @@
 import React from "react";
-import AuditEngagement from "../../../components/admin/dashboard/audit-engagement";
+import AuditEngagement from "../../../components/dashboard/audit-engagement";
 import { Helmet } from "react-helmet-async";
 
 const AuditEngagementPage = () => {

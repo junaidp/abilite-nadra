@@ -1,0 +1,73 @@
+.settings-form {
+  height: 200px;
+  border: 2px dashed #c7c7c7;
+}
+.settings-form p {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  line-height: 170px;
+  color: black;
+}
+.settings-form input {
+  height: 200px;
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  top: 0px;
+  right: 0px;
+  outline: none;
+  opacity: 0;
+}
+.settings-form button:hover {
+  background: black;
+  color: #0c5645;
+}
+.settings-form button:active {
+  border: 0;
+}
+
+.active-settings-btn{
+    background-color: #0A7386 !important;
+    color: white !important;
+}
+.form-switch input{
+  width: 60px;
+}
+
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active{
+  color: white !important;
+}
+
+.form-switch .form-check-input{
+  width: 50px !important;
+}
+
+.audit-settings-modal {
+  position: fixed;
+  z-index: 100;
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0px;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.model-wrap {
+  width: 75%;
+  background-color: white;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  position: relative;
+  top: -90px;
+  border-radius: 10px;
+}
+
+
+

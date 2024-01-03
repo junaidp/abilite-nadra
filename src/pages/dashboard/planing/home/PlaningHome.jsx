@@ -1,5 +1,5 @@
 import React from "react";
-import PlaningHome from "../../../../components/admin/dashboard/planing/home/index";
+import PlaningHome from "../../../../components/dashboard/planing/home/index";
 import { Helmet } from "react-helmet-async";
 
 const PlaningHomePage = () => {

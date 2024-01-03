@@ -1,5 +1,5 @@
 import React from "react";
-import InternalAuditReport from "../../../../components/admin/dashboard/reports/internal-audit-report/index";
+import InternalAuditReport from "../../../../components/dashboard/reports/internal-audit-report/index";
 import { Helmet } from "react-helmet-async";
 
 const InternalAuditReportPage = () => {

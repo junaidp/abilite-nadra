@@ -1,5 +1,5 @@
 import React from "react";
-import StartScheduling from "../../../../../components/admin/dashboard/planing/job-scheduling/start-scheduling/index";
+import StartScheduling from "../../../../../components/dashboard/planing/job-scheduling/start-scheduling/index";
 import { Helmet } from "react-helmet-async";
 
 const StartSchedulingPage = () => {

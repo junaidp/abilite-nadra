@@ -1,5 +1,5 @@
 import React from "react";
-import JobPrioritization from "../../../../components/admin/dashboard/planing/job-prioritization";
+import JobPrioritization from "../../../../components/dashboard/planing/job-prioritization";
 import { Helmet } from "react-helmet-async";
 
 const JobPrioritizationPage = () => {

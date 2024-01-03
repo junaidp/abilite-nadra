@@ -1,5 +1,5 @@
 import React from "react";
-import RiskAssessments from "../../../../components/admin/dashboard/planing/risk-assessments/index";
+import RiskAssessments from "../../../../components/dashboard/planing/risk-assessments/index";
 import { Helmet } from "react-helmet-async";
 
 const RiskAssessmentsPage = () => {

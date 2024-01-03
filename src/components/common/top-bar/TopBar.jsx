@@ -91,12 +91,19 @@ const TopBar = () => {
                 aria-label="Default select example"
               >
                 {companies?.map((item, i) => {
-                  return (
-                    <option  key={i}>
-                      {item?.companyName}
-                    </option>
-                  );
+                  return <option key={i}>{item?.companyName}</option>;
                 })}
+              </select>
+
+              <select
+                className="form-select me-4 "
+                style={{ height: "40px" }}
+                aria-label="Default select example"
+              >
+                <option>Year</option>
+                <option>2023</option>
+                <option>2024</option>
+                <option>2021</option>
               </select>
 
               <a
@@ -322,8 +329,8 @@ const TopBar = () => {
                         className="message-body d-grid"
                         style={{ overflow: "hidden" }}
                       >
-                        <a
-                          href="page-user-profile.html"
+                        <Link
+                          to="/audit/user/profile"
                           className="py-8 px-7 mt-8 d-flex align-items-center"
                         >
                           <span className="d-flex align-items-center justify-content-center bg-light rounded-1 p-6">
@@ -343,7 +350,7 @@ const TopBar = () => {
                               Account Settings
                             </span>
                           </div>
-                        </a>
+                        </Link>
                         <button
                           className="btn btn-outline-primary w-75 my-3"
                           style={{ justifySelf: "center", margin: "auto" }}

@@ -2,10 +2,6 @@
   transition: 0.1s;
 }
 
-.page-wrapper {
-  /* z-index: 99; */
-}
-
 .submenu {
   max-height: 500px; /* Adjust based on content size */
   opacity: 1;
@@ -191,8 +187,3 @@
 .cheveron-icon {
   margin-left: 5px;
 }
-
-/* #sidebarnav{
-  position: relative;
-  top: -24px;
-} */

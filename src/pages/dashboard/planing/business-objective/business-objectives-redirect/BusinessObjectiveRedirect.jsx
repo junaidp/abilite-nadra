@@ -1,5 +1,5 @@
 import React from "react";
-import BusinessObjectiveRedirect from "../../../../../components/admin/dashboard/planing/business-objective/business-objective-redirect/index";
+import BusinessObjectiveRedirect from "../../../../../components/dashboard/planing/business-objective/business-objective-redirect/index";
 import { Helmet } from "react-helmet-async";
 
 const BusinessObjectiveRedirectPage = () => {

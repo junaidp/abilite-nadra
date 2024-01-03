@@ -1,5 +1,5 @@
 import React from "react";
-import JobScheduling from "../../../../components/admin/dashboard/planing/job-scheduling/index";
+import JobScheduling from "../../../../components/dashboard/planing/job-scheduling/index";
 import { Helmet } from "react-helmet-async";
 
 const JobSehedulingPage = () => {

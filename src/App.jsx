@@ -1,13 +1,15 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Register from "./pages/auth/register/Register";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import Login from "./pages/auth/login/Login";
+import { ToastContainer } from "react-toastify";
+import "./App.css";
 import logo from "./assets/favicon.ico";
+import Login from "./pages/auth/login/Login";
+import Register from "./pages/auth/register/Register";
 import Home from "./pages/home/Home";
 import ForgetPassword from "./pages/auth/forget-password/ForgetPassword";
 import DashboardHomePage from "./pages/dashboard/home/DashboardHome";
-import PLaningHomePage from "./pages/dashboard/planing/home/PlaningHome";
+import PlaningHomePage from "./pages/dashboard/planing/home/PlaningHome";
 import BusinessObjectivePage from "./pages/dashboard/planing/business-objective/BusinessObjective";
 import RiskAssessmentsPage from "./pages/dashboard/planing/risk-assessments/RiskAssessments";
 import AuditableUnitsPage from "./pages/dashboard/planing/auditable-units/AuditableUnits";
@@ -17,7 +19,6 @@ import AuditPlanSummaryPage from "./pages/dashboard/planing/audit-plan-summary/A
 import AuditEngagementPage from "./pages/dashboard/audit-engagement/AuditEngagement";
 import ReportingFollowUpPage from "./pages/dashboard/reporting-follow-up/ReportingFollowUp";
 import ViewRiskAssessmentPage from "./pages/dashboard/planing/risk-assessments/view-risk-assessment/ViewRiskAssessment";
-import RichTextPage from "./pages/dashboard/rich-text/RichText";
 import PlaningReportPage from "./pages/dashboard/report/planing-report/PlaningReport";
 import ViewJobschedulePage from "./pages/dashboard/planing/job-scheduling/view-job-schedule/ViewJobschedule";
 import ViewResourcePage from "./pages/dashboard/planing/job-scheduling/view-resource/ViewResource";
@@ -27,6 +28,7 @@ import BusinessObjectiveRedirectPage from "./pages/dashboard/planing/business-ob
 import BusinessProcessPage from "./pages/dashboard/planing/business-objective/business-process/Business-Process";
 import SpecialProjectAuditPage from "./pages/dashboard/planing/business-objective/special-project-audit/SpecialProjectAudit";
 import ComplianceCheckListCardPage from "./pages/dashboard/planing/business-objective/compliance-checklist-card/ComplianceCheckListCard";
+import UserProfile from "./components/user/UserProfile";
 import KickOffPage from "./pages/dashboard/audit-engagement/kick-off/KickOff";
 import SpecificRiskApproachPage from "./pages/dashboard/planing/risk-assessments/specific-risk-approach/SpecificRiskApproach";
 import RiskFactorApproachPage from "./pages/dashboard/planing/risk-assessments/risk-factor-approach/RiskFactorApproach";
@@ -37,15 +39,13 @@ import AuditParticularsPage from "./pages/dashboard/reporting-follow-up/reportin
 import FollowUpParticularsPage from "./pages/dashboard/reporting-follow-up/follow-up/follow-up-particulars/FollowUpParticulars";
 import AuditSettingsPage from "./pages/dashboard/audit-settings/AuditSettings";
 import InternalAuditReportPage from "./pages/dashboard/report/internal-audit-report/InternalAuditReport";
+import Layout from "./components/common/layout/Layout";
 import GenerateInternalAuditReportPage from "./pages/dashboard/report/internal-audit-report/generate-internal-audit-report/GenerateInternalAuditReport";
 import CompaniesPage from "./pages/dashboard/companies/Companies";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import "./App.css";
 import { changeAuthUser } from "./global-redux/reducers/auth/slice";
 import { setupGetCompanies } from "./global-redux/reducers/company/slice";
 import { useDispatch, useSelector } from "react-redux";
-import Layout from "./components/common/layout/Layout";
+import "react-toastify/dist/ReactToastify.css";
 import {
   InitialLoadSidebarActiveLink,
   changeActiveLink,
@@ -101,7 +101,7 @@ const App = () => {
             <Route path="dashboard" element={<DashboardHomePage />} />
             <Route
               path="report-audit-planning-and-scheduling"
-              element={<PLaningHomePage />}
+              element={<PlaningHomePage />}
             />
             <Route
               path="business-objective"
@@ -109,6 +109,7 @@ const App = () => {
             />
             <Route path="risk-assessment" element={<RiskAssessmentsPage />} />
             <Route path="auditable-unit" element={<AuditableUnitsPage />} />
+            <Route path="user/profile" element={<UserProfile />} />
             <Route
               path="prioritization-and-finalization"
               element={<JobPrioritizationPage />}
@@ -170,7 +171,6 @@ const App = () => {
               path="follow-up-particulars"
               element={<FollowUpParticularsPage />}
             />
-            <Route path="rich-text" element={<RichTextPage />} />
             <Route path="audit-settings" element={<AuditSettingsPage />} />
             <Route path="companies" element={<CompaniesPage />} />
             <Route

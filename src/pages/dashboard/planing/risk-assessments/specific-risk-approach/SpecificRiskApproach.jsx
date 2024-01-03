@@ -1,5 +1,5 @@
 import React from "react";
-import SpecificRiskApproach from "../../../../../components/admin/dashboard/planing/risk-assessments/specific-risk-approach/index";
+import SpecificRiskApproach from "../../../../../components/dashboard/planing/risk-assessments/specific-risk-approach/index";
 import { Helmet } from "react-helmet-async";
 
 const SpecificRiskApproachPage = () => {

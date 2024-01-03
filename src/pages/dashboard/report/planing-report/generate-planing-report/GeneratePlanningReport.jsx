@@ -1,5 +1,5 @@
 import React from "react";
-import GeneratePlanningReport from "../../../../../components/admin/dashboard/reports/planning-report/generate-planning-report/index";
+import GeneratePlanningReport from "../../../../../components/dashboard/reports/planning-report/generate-planning-report/index";
 import { Helmet } from "react-helmet-async";
 
 const GeneratePlanningReportPage = () => {

@@ -25,7 +25,7 @@ let menuItems = [
       },
       {
         id: "li-business-objective",
-        label: "Business Objective",
+        label: "Engagement",
         icon: "fa fa-bullseye pe-2",
         route: "/audit/business-objective",
         active: false,
@@ -120,11 +120,12 @@ let menuItems = [
       },
     ],
   },
+
   {
-    id: "li-audit-rich-text-editor",
-    label: "Rich Text Editor",
-    icon: "bi bi-card-text",
-    route: "/audit/rich-text",
+    id: "li-audit-settings",
+    label: "Settings",
+    icon: "fa fa-gear",
+    route: "/audit/audit-settings",
     active: false,
   },
 ];

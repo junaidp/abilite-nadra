@@ -1,5 +1,5 @@
 import React from "react";
-import AuditSettings from "../../../components/admin/dashboard/audit-settings/index";
+import AuditSettings from "../../../components/dashboard/audit-settings/index";
 import { Helmet } from "react-helmet-async";
 
 const AuditSettingsPage = () => {

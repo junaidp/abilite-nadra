@@ -1,5 +1,5 @@
 import React from "react";
-import Reporting from "../../../../components/admin/dashboard/reporting-follow-up/reporting/index";
+import Reporting from "../../../../components/dashboard/reporting-follow-up/reporting/index";
 import { Helmet } from "react-helmet-async";
 
 const ReportingPage = () => {

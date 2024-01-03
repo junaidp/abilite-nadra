@@ -1,5 +1,5 @@
 import React from "react";
-import ViewRiskAssessment from "../../../../../components/admin/dashboard/planing/risk-assessments/view-risk-assessment/index";
+import ViewRiskAssessment from "../../../../../components/dashboard/planing/risk-assessments/view-risk-assessment/index";
 import { Helmet } from "react-helmet-async";
 
 const ViewRiskAssessmentPage = () => {
