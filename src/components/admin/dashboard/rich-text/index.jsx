@@ -6,19 +6,46 @@ const Example = () => {
   const [content, setContent] = useState("");
 
   const config = {
-    // readonly: false,
+    uploader: {
+      insertImageAsBase64URI: true, // Converts the image to base64 and embeds it
+    },
+    controls: {
+      font: {
+        list: {
+          Serif: "Sans Serif",
+          Garamond: "Garamond",
+        },
+      },
+    },
+    spellcheck: true,
     buttons: [
       "bold",
-      "italic",
+      "|",
+      "strikethrough",
+      "|",
       "underline",
       "|",
-      "align",
+      "italic",
+      "|",
       "ul",
+      "|",
       "ol",
       "|",
       "image",
+      "|",
       "table",
+      "|",
+      "font",
+      "|",
+      "fontsize",
+      "|",
+      "paragraph",
+      "|",
+      "fullsize",
     ],
+
+    events: {},
+    textIcons: false,
   };
 
   return (

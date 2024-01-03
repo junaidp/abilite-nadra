@@ -326,6 +326,9 @@ element {
 .quill {
   min-height: 80vh !important;
 }
+.jodit-status-bar a.jodit-status-bar-link {
+  display: none !important;
+}
 .ql-toolbar.ql-snow + .ql-container.ql-snow {
   min-height: 70vh !important;
 }
@@ -333,3 +336,28 @@ element {
 .jodit-container:not(.jodit_inline) .jodit-workplace {
   min-height: 70vh !important;
 }
+
+
+.jodit-popup__content {
+  min-width: 180px !important;
+}
+
+.jodit-toolbar-button__trigger:nth-child(2){
+  /* display: none !important; */
+}
+
+#myjoditEditor, #mySecondJoditEditor ul{
+  list-style: inside !important;
+}
+
+.jodit-wysiwyg ul{
+  list-style: inside !important;
+}
+
+span[aria-label="Insert Unordered List"] .jodit-toolbar-button__trigger{
+  display: none !important;
+}
+span[aria-label="Insert Ordered List"] .jodit-toolbar-button__trigger{
+  display: none !important;
+}
+
