@@ -67,8 +67,7 @@ const JobScheduling = () => {
             View Job schedule
           </div>
           <i
-            className="fa fa-info-circle ps-3 text-secondary"
-            style={{ cursor: "pointer" }}
+            className="fa fa-info-circle ps-3 text-secondary cursor-pointer"
             title="Info"
           ></i>
         </div>
@@ -99,7 +98,7 @@ const JobScheduling = () => {
               <tbody>
                 {data?.map((item, index) => {
                   return (
-                    <tr style={{ height: "40px" }} key={index}>
+                    <tr className="h-40" key={index}>
                       <td>{item?.no}</td>
                       <td>{item?.objective}</td>
                       <td>{item?.year}</td>

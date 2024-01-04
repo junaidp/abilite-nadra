@@ -19,8 +19,7 @@ const InternalAuditReport = () => {
             Generate Report
           </div>
           <i
-            className="fa fa-info-circle ps-3 text-secondary"
-            style={{ cursor: "pointer" }}
+            className="fa fa-info-circle ps-3 text-secondary cursor-pointer"
             title="Info"
           ></i>
         </div>
@@ -32,7 +31,7 @@ const InternalAuditReport = () => {
             <table className="table table-bordered  table-hover rounded">
               <thead className="bg-secondary text-white">
                 <tr>
-                  <th style={{ width: "80px" }}>Sr No.</th>
+                  <th className="w-80">Sr No.</th>
                   <th>Job Name</th>
                   <th>Report Date</th>
                   <th>Prepared By</th>

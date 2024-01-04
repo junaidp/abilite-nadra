@@ -78,7 +78,7 @@ const AddCheckListManagementDialog = ({ setCheckListManagementDialog }) => {
           className="col-lg-12 text-end"
           onClick={() => setCheckListManagementDialog(false)}
         >
-          <button mat-dialog-close className="btn btn-primary float-end">
+          <button  className="btn btn-primary float-end">
             Save
           </button>
         </div>

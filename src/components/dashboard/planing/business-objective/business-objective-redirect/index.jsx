@@ -9,10 +9,10 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
 const BusinessObjectiveRedirect = () => {
-  let navigate = useNavigate();
-  let [domain, setDomain] = React.useState("");
-  let [showObjectiveListDialog, setShowObjectiveListDialog] =
+  const [domain, setDomain] = React.useState("");
+  const [showObjectiveListDialog, setShowObjectiveListDialog] =
     React.useState(false);
+  const navigate = useNavigate();
   function handleClose() {
     setShowObjectiveListDialog(false);
   }
@@ -65,8 +65,7 @@ const BusinessObjectiveRedirect = () => {
 
                       <a
                         href="#"
-                        className="link-underline-muted"
-                        style={{ textDecoration: "none" }}
+                        className="link-underline-muted decoration-none"
                       >
                         AI Generate
                       </a>
@@ -113,8 +112,7 @@ const BusinessObjectiveRedirect = () => {
 
                     <a
                       href="#"
-                      className="link-underline-muted"
-                      style={{ textDecoration: "none" }}
+                      className="link-underline-muted decoration-none"
                     >
                       AI Generate
                     </a>
@@ -271,8 +269,7 @@ const BusinessObjectiveRedirect = () => {
             <div className="accordion-item">
               <h2 className="accordion-header">
                 <button
-                  style={{ borderRadius: "8px" }}
-                  className="accordion-button collapsed"
+                  className="accordion-button collapsed br-8"
                   type="button"
                   data-bs-toggle="collapse"
                   data-bs-target="#flush-collapseFive"
@@ -336,8 +333,7 @@ const BusinessObjectiveRedirect = () => {
               </div>
               <i
                 title="Info"
-                className="fa fa-info-circle ps-3 text-secondary"
-                style={{ cursor: "pointer" }}
+                className="fa fa-info-circle ps-3 text-secondary cursor-pointer"
               ></i>
             </header>
 
@@ -345,8 +341,7 @@ const BusinessObjectiveRedirect = () => {
             <div className="accordion-item">
               <h2 className="accordion-header">
                 <button
-                  style={{ borderRadius: "8px" }}
-                  className="accordion-button collapsed"
+                  className="accordion-button collapsed br-8"
                   type="button"
                   data-bs-toggle="collapse"
                   data-bs-target="#flush-collapseSix"

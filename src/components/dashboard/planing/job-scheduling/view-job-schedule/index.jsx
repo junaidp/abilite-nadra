@@ -47,7 +47,7 @@ const ViewJobSchedule = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr style={{ height: "50px" }}>
+                <tr className="h-50">
                   <td>1</td>
                   <td>
                     Lorem Ipsum is simply dummy text of the printing and
@@ -103,8 +103,7 @@ const ViewJobSchedule = () => {
         <div className="col-2 d-flex align-items-center">
           <label className="me-2 label-text fw-bold">View Entries</label>
           <select
-            style={{ width: "70px" }}
-            className="form-select"
+            className="form-select w-70"
             aria-label="Default select example"
           >
             <option>10</option>

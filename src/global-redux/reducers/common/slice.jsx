@@ -17,13 +17,6 @@ let menuItems = [
     open: false,
     subMenu: [
       {
-        id: "li-company-details",
-        label: "Company Details",
-        icon: "fa fa-bullseye pe-2",
-        route: "/audit/companies",
-        active: false,
-      },
-      {
         id: "li-business-objective",
         label: "Engagement",
         icon: "fa fa-bullseye pe-2",

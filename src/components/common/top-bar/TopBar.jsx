@@ -15,19 +15,20 @@ import { useNavigate } from "react-router-dom";
 import { changeAuthUser } from "../../../global-redux/reducers/auth/slice";
 
 const TopBar = () => {
-  let dispatch = useDispatch();
-  let navigate = useNavigate();
-  let { showSidebar } = useSelector((state) => state.common);
-  let { companies } = useSelector((state) => state.company);
-  let [showUserProfile, setShowUserProfile] = React.useState(false);
-  let [shownotification, setShowNotification] = React.useState(false);
+  const [showUserProfile, setShowUserProfile] = React.useState(false);
+  const [shownotification, setShowNotification] = React.useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   let { user } = useSelector((state) => state.auth);
+  const { showSidebar } = useSelector((state) => state.common);
+  const { companies } = useSelector((state) => state.company);
   const notificationRef = useDetectClickOutside({
     onTriggered: closeNotficationDropDown,
   });
   const userRef = useDetectClickOutside({
     onTriggered: closeUserProfileDropDown,
   });
+
   function closeNotficationDropDown() {
     setShowNotification(false);
   }
@@ -57,8 +58,7 @@ const TopBar = () => {
           id="navbarNav"
         >
           <button
-            style={{ marginLeft: "100px" }}
-            className="btn btn-light"
+            className="btn btn-light ml-100"
             onClick={() => dispatch(changeShowSidebar(!showSidebar))}
           >
             <svg
@@ -86,8 +86,7 @@ const TopBar = () => {
             ></a>
             <ul className="navbar-nav flex-row ms-auto align-items-center justify-content-center">
               <select
-                className="form-select me-4 "
-                style={{ height: "40px" }}
+                className="form-select me-4 h-40"
                 aria-label="Default select example"
               >
                 {companies?.map((item, i) => {
@@ -96,8 +95,7 @@ const TopBar = () => {
               </select>
 
               <select
-                className="form-select me-4 "
-                style={{ height: "40px" }}
+                className="form-select me-4 h-40"
                 aria-label="Default select example"
               >
                 <option>Year</option>
@@ -107,8 +105,7 @@ const TopBar = () => {
               </select>
 
               <a
-                className="nav-link"
-                style={{ fontSize: "20px" }}
+                className="nav-link f-20"
                 onClick={() => {
                   navigate("/audit/audit-settings");
                   dispatch(changeShowSidebar(false));
@@ -294,9 +291,8 @@ const TopBar = () => {
                 </a>
                 {showUserProfile && (
                   <div
-                    className="px-4 content-dd dropdown-menu-end  dropdown-menu-animate-up user-profile-dropdown"
+                    className="px-4 content-dd dropdown-menu-end  dropdown-menu-animate-up user-profile-dropdown absolute"
                     aria-labelledby="drop1"
-                    style={{ position: "absolute" }}
                   >
                     <div data-simplebar="">
                       <div className="py-3 px-7 pb-0">
@@ -326,8 +322,7 @@ const TopBar = () => {
                         </div>
                       </div>
                       <div
-                        className="message-body d-grid"
-                        style={{ overflow: "hidden" }}
+                        className="message-body d-grid hidden"
                       >
                         <Link
                           to="/audit/user/profile"
@@ -352,8 +347,7 @@ const TopBar = () => {
                           </div>
                         </Link>
                         <button
-                          className="btn btn-outline-primary w-75 my-3"
-                          style={{ justifySelf: "center", margin: "auto" }}
+                          className="btn btn-outline-primary w-75 my-3 logoutOut-btn"
                           onClick={handleLogout}
                         >
                           {" "}

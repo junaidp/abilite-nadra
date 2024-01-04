@@ -13,7 +13,7 @@ const InfoDialog = () => {
         dolorem ipsum ("pain itself").
       </label>
 
-      <button mat-dialog-close className="btn btn-danger mt-3">
+      <button  className="btn btn-danger mt-3">
         Close
       </button>
     </div>

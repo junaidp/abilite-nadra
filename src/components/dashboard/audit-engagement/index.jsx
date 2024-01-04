@@ -10,10 +10,10 @@ import CancelledDialog from "../../../components/modals/cancelled-dialog/index";
 import PostponedDialog from "../../../components/modals/postponed-dialog/index";
 import Modal from "@mui/material/Modal";
 const AuditEngagement = () => {
-  let { kickOffRequest } = useSelector((state) => state.common);
-  let navigate = useNavigate();
-  let [showPostPonedModal, setShowPostPonedModal] = React.useState(false);
-  let [showCancelModal, setShowCancelModal] = React.useState(false);
+  const [showPostPonedModal, setShowPostPonedModal] = React.useState(false);
+  const [showCancelModal, setShowCancelModal] = React.useState(false);
+  const { kickOffRequest } = useSelector((state) => state.common);
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     if (kickOffRequest === "Kick-Off") {
@@ -24,6 +24,10 @@ const AuditEngagement = () => {
       setShowCancelModal(false);
     }
     if (kickOffRequest === "Cancelled") {
+      setShowCancelModal(true);
+      setShowPostPonedModal(false);
+    }
+    if (kickOffRequest === "None") {
       setShowCancelModal(true);
       setShowPostPonedModal(false);
     }
@@ -67,7 +71,7 @@ const AuditEngagement = () => {
                   <table className="table table-bordered  table-hover rounded">
                     <thead className="bg-secondary text-white">
                       <tr>
-                        <th style={{ width: "80px" }}>Sr No.</th>
+                        <th className="w-80">Sr No.</th>
                         <th>job Name</th>
                         <th>planned Start Date </th>
                         <th>planned End Date </th>

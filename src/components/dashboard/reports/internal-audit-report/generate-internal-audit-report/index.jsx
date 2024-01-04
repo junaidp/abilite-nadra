@@ -24,8 +24,7 @@ const GenerateInternalAuditReport = () => {
             Add Section
           </div>
           <i
-            className="fa fa-info-circle ps-3 text-secondary"
-            style={{ cursor: "pointer" }}
+            className="fa fa-info-circle ps-3 text-secondary cursor-pointer" 
             title="Info"
           ></i>
         </div>
@@ -244,8 +243,7 @@ const GenerateInternalAuditReport = () => {
               <span className="btn-label"></span>View
             </div>
             <i
-              className="fa fa-eye ps-3 text-secondary"
-              style={{ cursor: "pointer" }}
+              className="fa fa-eye ps-3 text-secondary cursor-pointer"
               title="Info"
             ></i>
           </div>
@@ -354,7 +352,7 @@ const GenerateInternalAuditReport = () => {
               <table className="table table-bordered  table-hover rounded">
                 <thead className="bg-secondary text-white">
                   <tr>
-                    <th style={{ width: "80px" }}>Sr No.</th>
+                    <th className="w-80">Sr No.</th>
                     <th>File Name</th>
                     <th>Action</th>
                   </tr>
@@ -388,8 +386,7 @@ const GenerateInternalAuditReport = () => {
               <span className="btn-label"></span>View
             </div>
             <i
-              className="fa fa-eye ps-3 text-secondary"
-              style={{ cursor: "pointer" }}
+              className="fa fa-eye ps-3 text-secondary cursor-pointer"
               title="Info"
             ></i>
           </div>
@@ -498,7 +495,7 @@ const GenerateInternalAuditReport = () => {
               <table className="table table-bordered  table-hover rounded">
                 <thead className="bg-secondary text-white">
                   <tr>
-                    <th style={{ width: "80px" }}>Sr No.</th>
+                    <th className="w-80">Sr No.</th>
                     <th>File Name</th>
                     <th>Action</th>
                   </tr>
@@ -576,8 +573,7 @@ const GenerateInternalAuditReport = () => {
           <div className="col-lg-12">
             <label htmlFor="fileInput">Add Attachment:</label>
             <input
-              className="ms-3"
-              style={{ fontSize: "10px" }}
+              className="ms-3 f-10"
               type="file"
               id="fileInput"
             />
@@ -586,7 +582,7 @@ const GenerateInternalAuditReport = () => {
               <table className="table table-bordered  table-hover rounded">
                 <thead className="bg-secondary text-white">
                   <tr>
-                    <th style={{ width: "80px" }}>Sr No.</th>
+                    <th className="w-80">Sr No.</th>
                     <th>File Name</th>
                     <th>Action</th>
                   </tr>
@@ -622,8 +618,7 @@ const GenerateInternalAuditReport = () => {
       <div className="row my-3">
         <div className="col-lg-12 d-flex justify-content-between">
           <div
-            className="btn btn-labeled btn-primary px-3 shadow"
-            style={{ height: "fitContent" }}
+            className="btn btn-labeled btn-primary px-3 shadow fitContent"
           >
             <span className="btn-label me-2">
               <i className="fa fa-file-pdf f-18"></i>
@@ -631,8 +626,7 @@ const GenerateInternalAuditReport = () => {
             Download PDF
           </div>
           <div
-            className="btn btn-labeled btn-primary px-3 shadow me-3"
-            style={{ height: "fitContent" }}
+            className="btn btn-labeled btn-primary px-3 shadow me-3 fitContent"
           >
             <span className="btn-label me-2">
               <i className="fa fa-check-circle f-18"></i>

@@ -3,8 +3,8 @@ import "./index.css";
 import { useNavigate } from "react-router-dom";
 
 const ViewRiskAssessment = () => {
-  let [activeBar, setActiveBar] = React.useState("riskApproach");
-  let navigate = useNavigate();
+  const [activeBar, setActiveBar] = React.useState("riskApproach");
+  const navigate = useNavigate();
   return (
     <div>
       <div className="row">
@@ -147,14 +147,13 @@ const ViewRiskAssessment = () => {
                   <tbody>
                     <tr>
                       <td>1</td>
-                      <td style={{ width: "300px" }}>
+                      <td className="w-300">
                         Lorem ipsum is simply dummy text of the printing and
                         typesetting industry.
                       </td>
-                      <td style={{ width: "45px" }}>
+                      <td className="w-45">
                         <select
-                          className="form-select"
-                          style={{ width: "45px", padding: "0px 6px" }}
+                          className="form-select w-45 p-0-6"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -162,10 +161,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -173,21 +171,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          aria-label="Default select example"
-                          style={{ width: "50px", padding: "0px 6px" }}
-                        >
-                          <option>1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                        </select>
-                      </td>
-                      <td style={{ width: "50px" }}>
-                        <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -195,10 +181,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -206,10 +191,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -217,10 +201,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -228,10 +211,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -239,10 +221,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -250,10 +231,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -261,21 +241,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          aria-label="Default select example"
-                          style={{ width: "50px", padding: "0px 6px" }}
-                        >
-                          <option>1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                        </select>
-                      </td>
-                      <td style={{ width: "50px" }}>
-                        <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -283,10 +251,19 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
                           className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          aria-label="Default select example p-0-6 width-50"
+                        >
+                          <option>1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                        </select>
+                      </td>
+                      <td className="width-50">
+                        <select
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -294,10 +271,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -305,7 +281,17 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td className="fw-bold" style={{ width: "50px" }}>
+                      <td className="width-50">
+                        <select
+                          className="form-select p-0-6 width-50"
+                          aria-label="Default select example"
+                        >
+                          <option>1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                        </select>
+                      </td>
+                      <td className="fw-bold width-50">
                         40
                       </td>
                       <td
@@ -322,14 +308,13 @@ const ViewRiskAssessment = () => {
 
                     <tr>
                       <td>2</td>
-                      <td style={{ width: "300px" }}>
+                      <td className="w-300">
                         Lorem ipsum is simply dummy text of the printing and
                         typesetting industry.
                       </td>
-                      <td style={{ width: "45px" }}>
+                      <td className="w-45">
                         <select
-                          className="form-select"
-                          style={{ width: "45px", padding: "0px 6px" }}
+                          className="form-select w-45 p-0-6"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -337,10 +322,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -348,10 +332,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -359,10 +342,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -370,10 +352,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -381,10 +362,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -392,10 +372,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -403,10 +382,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -414,10 +392,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -425,10 +402,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -436,10 +412,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -447,10 +422,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -458,10 +432,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -469,10 +442,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -480,7 +452,7 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td className="fw-bold" style={{ width: "50px" }}>
+                      <td className="fw-bold width-50">
                         30
                       </td>
                       <td
@@ -493,14 +465,13 @@ const ViewRiskAssessment = () => {
 
                     <tr>
                       <td>2</td>
-                      <td style={{ width: "300px" }}>
+                      <td className="w-300">
                         Lorem ipsum is simply dummy text of the printing and
                         typesetting industry.
                       </td>
-                      <td style={{ width: "45px" }}>
+                      <td className="w-45">
                         <select
-                          className="form-select"
-                          style={{ width: "45px", padding: "0px 6px" }}
+                          className="form-select w-45 p-0-6"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -508,10 +479,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -519,10 +489,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -530,10 +499,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -541,10 +509,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -552,10 +519,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -563,10 +529,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -574,10 +539,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -585,10 +549,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -596,10 +559,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -607,10 +569,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -618,10 +579,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -629,10 +589,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -640,10 +599,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -651,7 +609,7 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td className="fw-bold" style={{ width: "50px" }}>
+                      <td className="fw-bold width-50">
                         50
                       </td>
                       <td
@@ -668,14 +626,13 @@ const ViewRiskAssessment = () => {
 
                     <tr>
                       <td>2</td>
-                      <td style={{ width: "300px" }}>
+                      <td className="w-300">
                         Lorem ipsum is simply dummy text of the printing and
                         typesetting industry.
                       </td>
-                      <td style={{ width: "45px" }}>
+                      <td className="w-45">
                         <select
-                          className="form-select"
-                          style={{ width: "45px", padding: "0px 6px" }}
+                          className="form-select w-45 p-0-6"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -683,10 +640,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -694,10 +650,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -705,10 +660,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -716,10 +670,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -727,10 +680,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px  6px" }}
+                          className="form-select width-50 p-0-6"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -738,10 +690,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -749,10 +700,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px  6px" }}
+                          className="form-select width-50 p-0-6"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -760,10 +710,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -771,10 +720,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -782,10 +730,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -793,10 +740,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -804,10 +750,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -815,10 +760,9 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td style={{ width: "50px" }}>
+                      <td className="width-50">
                         <select
-                          className="form-select"
-                          style={{ width: "50px", padding: "0px 6px" }}
+                          className="form-select p-0-6 width-50"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -826,7 +770,7 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td className="fw-bold" style={{ width: "50px" }}>
+                      <td className="fw-bold width-50">
                         60
                       </td>
                       <td
@@ -934,8 +878,7 @@ const ViewRiskAssessment = () => {
                       </td>
                       <td>
                         <select
-                          className="form-select border-2"
-                          style={{ width: "60px", padding: "0px 6px" }}
+                          className="form-select border-2 w-60 p-0-6"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -952,8 +895,7 @@ const ViewRiskAssessment = () => {
                       </td>
                       <td>
                         <select
-                          className="form-select border-2"
-                          style={{ width: "60px", padding: "0px 6px" }}
+                          className="form-select border-2 w-60 p-0-6"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -973,8 +915,7 @@ const ViewRiskAssessment = () => {
                       </td>
                       <td>
                         <select
-                          className="form-select border-2"
-                          style={{ width: "60px", padding: "0px 6px" }}
+                          className="form-select border-2 w-60 p-0-6"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -991,8 +932,7 @@ const ViewRiskAssessment = () => {
                       </td>
                       <td>
                         <select
-                          className="form-select border-2"
-                          style={{ width: "60px", padding: "0px 6px" }}
+                          className="form-select border-2 w-60 p-0-6"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -1009,8 +949,7 @@ const ViewRiskAssessment = () => {
                       </td>
                       <td>
                         <select
-                          className="form-select border-2"
-                          style={{ width: "60px", padding: "0px 6px" }}
+                          className="form-select border-2 w-60 p-0-6"
                           aria-label="Default select example"
                         >
                           <option>1</option>
@@ -1027,8 +966,7 @@ const ViewRiskAssessment = () => {
                       </td>
                       <td>
                         <select
-                          className="form-select border-2"
-                          style={{ width: "60px", padding: "0px 6px" }}
+                          className="form-select border-2 w-60 p-0-6"
                           aria-label="Default select example"
                         >
                           <option>1</option>

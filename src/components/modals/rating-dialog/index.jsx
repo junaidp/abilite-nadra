@@ -50,7 +50,7 @@ const RatingDialog = () => {
             <div className="col-lg-12">
               <label>Job Type</label>
               <select className="form-select" aria-label="Default select example">
-                <option selected>Review</option>
+                <option >Review</option>
                 <option value="1">Compliance Checklist</option>
                 <option value="2">Special Audit</option>
                 <option value="3">Fraud & Investigation</option>
@@ -63,7 +63,7 @@ const RatingDialog = () => {
             <div className="col-lg-6">
               <label>Process</label>
               <select className="form-select" aria-label="Default select example">
-                <option selected>loram</option>
+                <option >loram</option>
                 <option value="1">Loram 2</option>
               </select>
             </div>
@@ -71,7 +71,7 @@ const RatingDialog = () => {
             <div className="col-lg-6">
               <label>Sub-Process</label>
               <select className="form-select" aria-label="Default select example">
-                <option selected>loram</option>
+                <option >loram</option>
                 <option value="1">Loram 2</option>
               </select>
             </div>
@@ -79,7 +79,7 @@ const RatingDialog = () => {
         </div>
       </div>
 
-      <button className="btn btn-danger mb-4 mt-5 float-end" mat-dialog-close>
+      <button className="btn btn-danger mb-4 mt-5 float-end">
         Close
       </button>
     </div>

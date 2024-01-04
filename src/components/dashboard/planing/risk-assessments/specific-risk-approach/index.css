@@ -18,49 +18,12 @@
   transition: all 0.5s linear;
 }
 
-.add-risk-factor-dialog {
-  background-color: white;
-  border-radius: 7px;
-  width: 80%;
-  margin: auto;
+table td {
+  padding: 8px;
 }
 
-.dialog-risk-factor-main {
-  width: 40%;
-  margin: auto;
-}
-
-.modal-objective-factor {
-  /* display: none;  */
-  position: fixed;
-  z-index: 100;
-  padding-top: 100px; /* Location of the box */
-  left: 0;
-  top: 0px;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0, 0, 0); /* Fallback color */
-  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-.model-wrap-factor {
-  width: 40%;
-  background-color: white;
-  margin-left: 50%;
-  transform: translateX(-50%);
-  position: relative;
-  top: 10px;
-  border-radius: 10px;
-}
-
-@media screen and (max-width: 900px) {
-  .dialog-risk-factor-main {
-    width: 100%;
-  }
-  .model-wrap-factor {
-    width: 90%;
-  }
+.btn-wrap-special-risk-factor{
+  display: flex;
+  justify-content: flex-end;
+  width: 50%;
 }

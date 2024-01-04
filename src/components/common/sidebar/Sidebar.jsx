@@ -44,7 +44,7 @@ const Sidebar = () => {
       data-header-position="fixed"
     >
       <div className="left-sidebar">
-        <div style={{ minHeight: "100vh" }}>
+        <div className="min-h-100">
           <nav
             className="sidebar-nav scroll-sidebar mt-4 pt-4"
             data-simplebar=""

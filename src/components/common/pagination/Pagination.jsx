@@ -3,18 +3,13 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import "./Pagination.css"
 const Pagination = () => {
   return (
     <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "flex-end",
-        alignContent: "center",
-        gap: "20px",
-      }}
+      className="pagination-wrap"
     >
-      <p style={{ marginTop: "13px" }}>Items per page:</p>
+      <p className="mt-13">Items per page:</p>
 
       <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
         <InputLabel id="demo-select-small-label">Page</InputLabel>
@@ -31,7 +26,7 @@ const Pagination = () => {
           <MenuItem value={3}>3</MenuItem>
         </Select>
       </FormControl>
-      <p style={{ marginTop: "13px" }}>1 – 5 of 6</p>
+      <p className="mt-13">1 – 5 of 6</p>
     </div>
   );
 };

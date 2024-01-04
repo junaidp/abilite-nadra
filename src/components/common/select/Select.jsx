@@ -26,9 +26,7 @@ export default function SelectLabels() {
           label="Age"
           onChange={handleChange}
         >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
+          <MenuItem value="None">None</MenuItem>
           <MenuItem value="Postponed">Postponed</MenuItem>
           <MenuItem value="Cancelled">Cancelled</MenuItem>
           <MenuItem value="Completed">Completed</MenuItem>

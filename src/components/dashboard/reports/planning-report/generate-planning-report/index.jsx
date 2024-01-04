@@ -6,7 +6,7 @@ import GeneratePlaningReportDialog from "../../../../modals/generate-planing-rep
 const GeneratePlanningReport = () => {
   const [generatePlaningReportDialog, setGeneratePlaningReportDialog] =
     React.useState(false);
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   return (
     <div>
       {generatePlaningReportDialog && (
@@ -56,8 +56,7 @@ const GeneratePlanningReport = () => {
             <div className="col-lg-4 d-flex text-end justify-content-end">
               <div className="mb-3">
                 <div
-                  className="btn btn-labeled btn-primary px-3 shadow"
-                  style={{ height: "fitContent" }}
+                  className="btn btn-labeled btn-primary px-3 shadow fitContent"
                   onClick={() => setGeneratePlaningReportDialog(true)}
                 >
                   <span className="btn-label me-2">
@@ -67,8 +66,7 @@ const GeneratePlanningReport = () => {
                 </div>
               </div>
               <i
-                className="fa fa-info-circle ps-3 text-secondary mt-2"
-                style={{ cursor: "pointer" }}
+                className="fa fa-info-circle ps-3 text-secondary mt-2 cursor-pointer"
                 title="Info"
               ></i>
             </div>
@@ -229,25 +227,25 @@ const GeneratePlanningReport = () => {
             <tbody>
               <tr>
                 <td>1</td>
-                <td style={{ width: "300px" }}>
+                <td className="w-300">
                   Lorem ipsum is simply dummy text of the printing and
                   typesetting industry.
                 </td>
-                <td style={{ width: "45px" }}>2</td>
-                <td style={{ width: "45px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td className="fw-bold" style={{ width: "50px" }}>
+                <td className="w-45">2</td>
+                <td className="w-45">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="fw-bold width-50" >
                   40
                 </td>
                 <td
@@ -264,25 +262,25 @@ const GeneratePlanningReport = () => {
 
               <tr>
                 <td>2</td>
-                <td style={{ width: "300px" }}>
+                <td className="w-300">
                   Lorem ipsum is simply dummy text of the printing and
                   typesetting industry.
                 </td>
-                <td style={{ width: "45px" }}>2</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td className="fw-bold" style={{ width: "50px" }}>
+                <td className="w-45">2</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="fw-bold width-50">
                   30
                 </td>
                 <td
@@ -295,25 +293,25 @@ const GeneratePlanningReport = () => {
 
               <tr>
                 <td>2</td>
-                <td style={{ width: "300px" }}>
+                <td className="w-300">
                   Lorem ipsum is simply dummy text of the printing and
                   typesetting industry.
                 </td>
-                <td style={{ width: "45px" }}>2</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td className="fw-bold" style={{ width: "50px" }}>
+                <td className="w-45">2</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="fw-bold width-50">
                   50
                 </td>
                 <td
@@ -330,25 +328,25 @@ const GeneratePlanningReport = () => {
 
               <tr>
                 <td>2</td>
-                <td style={{ width: "300px" }}>
+                <td className="w-300">
                   Lorem ipsum is simply dummy text of the printing and
                   typesetting industry.
                 </td>
-                <td style={{ width: "45px" }}>2</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td style={{ width: "50px" }}>3</td>
-                <td className="fw-bold" style={{ width: "50px" }}>
+                <td className="w-45">2</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="width-50">3</td>
+                <td className="fw-bold width-50">
                   60
                 </td>
                 <td
@@ -483,7 +481,7 @@ const GeneratePlanningReport = () => {
                     <a href="#">Loram File will be displayed here</a>
                   </td>
 
-                  <td style={{ width: "130px" }}>
+                  <td className="w-130">
                     <i className="fa fa-eye text-primary f-18"></i>
                     <i className="fa fa-edit mx-3 text-secondary f-18"></i>
                     <i className="fa fa-trash text-danger f-18"></i>
@@ -498,8 +496,7 @@ const GeneratePlanningReport = () => {
       <div className="row mb-3">
         <div className="col-lg-12 d-flex justify-content-between">
           <div
-            className="btn btn-labeled btn-primary px-3 shadow"
-            style={{ height: "fitContent" }}
+            className="btn btn-labeled btn-primary px-3 shadow fitContent"
           >
             <span className="btn-label me-2">
               <i className="fa fa-file-pdf f-18"></i>
@@ -507,8 +504,7 @@ const GeneratePlanningReport = () => {
             Download PDF
           </div>
           <div
-            className="btn btn-labeled btn-primary px-3 shadow me-3"
-            style={{ height: "fitContent" }}
+            className="btn btn-labeled btn-primary px-3 shadow me-3 fitContent"
           >
             <span className="btn-label me-2">
               <i className="fa fa-check-circle f-18"></i>

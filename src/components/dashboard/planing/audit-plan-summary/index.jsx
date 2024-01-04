@@ -157,7 +157,7 @@ const AuditPlanSummary = () => {
                 </tr>
                 <tr>
                   <td>2</td>
-                  <td style={{ width: "250px" }}>
+                  <td className="w-250">
                     Lorem Ipsum is simply dummy text of the printing and
                     typesetting industry.
                   </td>
@@ -268,8 +268,7 @@ const AuditPlanSummary = () => {
         <div className="col-2 d-flex align-items-center">
           <label className="me-2 label-text fw-bold">View Entries</label>
           <select
-            style={{ width: "70px" }}
-            className="form-select"
+            className="form-select w-70"
             aria-label="Default select example"
           >
             <option>10</option>

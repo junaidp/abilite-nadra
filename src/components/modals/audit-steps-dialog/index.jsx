@@ -87,14 +87,12 @@ const AuditStepsDialog = ({ setShowAuditStepsDialog }) => {
             <label className="form-label me-3 mb-3">Attach files</label>
 
             <input
-              style={{ fontSize: "10px", width: "180px" }}
               type="file"
               id="fileInput"
+              className="f-10 w-180"
             />
             <a
-              className="form-label label-text "
-              href="#"
-              style={{ textDecoration: "underline" }}
+              className="form-label label-text underline"
             >
               View Sample
             </a>
@@ -136,7 +134,7 @@ const AuditStepsDialog = ({ setShowAuditStepsDialog }) => {
         <div className="col-lg-12">
           <label className="form-label me-3 mb-3">Attach files</label>
 
-          <input style={{ fontSize: "10px" }} type="file" id="fileInpu" />
+          <input className="f-10" type="file" id="fileInpu" />
 
           <div className="table-responsive">
             <table className="table table-bordered  table-hover rounded">
@@ -153,10 +151,10 @@ const AuditStepsDialog = ({ setShowAuditStepsDialog }) => {
                   <td>
                     <a href="#">Loram File will be displayed here</a>
                   </td>
-                  <td style={{ width: "130px" }}>
-                    <i className="fa fa-eye text-primary"></i>
-                    <i className="fa fa-edit mx-3 text-secondary"></i>
-                    <i className="fa fa-trash text-danger"></i>
+                  <td className="w-130">
+                    <i className="fa fa-eye text-primary f-18"></i>
+                    <i className="fa fa-edit mx-3 text-secondary f-18"></i>
+                    <i className="fa fa-trash text-danger f-18"></i>
                   </td>
                 </tr>
                 <tr>
@@ -164,10 +162,10 @@ const AuditStepsDialog = ({ setShowAuditStepsDialog }) => {
                   <td>
                     <a href="#">Loram File will be displayed here</a>
                   </td>
-                  <td style={{ width: "130px" }}>
-                    <i className="fa fa-eye text-primary"></i>
-                    <i className="fa fa-edit mx-3 text-secondary"></i>
-                    <i className="fa fa-trash text-danger"></i>
+                  <td className="w-130">
+                    <i className="fa fa-eye text-primary f-18"></i>
+                    <i className="fa fa-edit mx-3 text-secondary f-18"></i>
+                    <i className="fa fa-trash text-danger f-18"></i>
                   </td>
                 </tr>
               </tbody>
@@ -195,7 +193,7 @@ const AuditStepsDialog = ({ setShowAuditStepsDialog }) => {
           <div className="d-flex justify-content-between align-items-center">
             <label className="form-label me-3">1</label>
             <div className="">
-              <a href="#" style={{ fontSize: "12px" }}>
+              <a href="#"  className="f-10">
                 + Attach file
               </a>
               <i className="ms-4 text-danger fa fa-trash"></i>
@@ -219,7 +217,7 @@ const AuditStepsDialog = ({ setShowAuditStepsDialog }) => {
         <div className="col-lg-12">
           <label className="form-label me-3 mb-3">Attach files</label>
 
-          <input style={{ fontSize: "10px" }} type="file" id="fileInpu" />
+          <input type="file" id="fileInpu" className="f-10" />
 
           <div className="table-responsive">
             <table className="table table-bordered  table-hover rounded">
@@ -234,20 +232,20 @@ const AuditStepsDialog = ({ setShowAuditStepsDialog }) => {
                   <td>
                     <a href="#">Loram File will be displayed here</a>
                   </td>
-                  <td style={{ width: "130px" }}>
-                    <i className="fa fa-eye text-primary"></i>
-                    <i className="fa fa-edit mx-3 text-secondary"></i>
-                    <i className="fa fa-trash text-danger"></i>
+                  <td className="w-130">
+                    <i className="fa fa-eye text-primary f-18"></i>
+                    <i className="fa fa-edit mx-3 text-secondary f-18"></i>
+                    <i className="fa fa-trash text-danger f-18"></i>
                   </td>
                 </tr>
                 <tr>
                   <td>
                     <a href="#">Loram File will be displayed here</a>
                   </td>
-                  <td style={{ width: "130px" }}>
-                    <i className="fa fa-eye text-primary"></i>
-                    <i className="fa fa-edit mx-3 text-secondary"></i>
-                    <i className="fa fa-trash text-danger"></i>
+                  <td className="w-130">
+                    <i className="fa fa-eye text-primary f-18"></i>
+                    <i className="fa fa-edit mx-3 text-secondary f-18"></i>
+                    <i className="fa fa-trash text-danger f-18"></i>
                   </td>
                 </tr>
               </tbody>

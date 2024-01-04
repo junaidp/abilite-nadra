@@ -11,7 +11,7 @@ const AuditSettings = () => {
     React.useState(false);
   const [userManagementDialog, setUserManagementDialog] = React.useState(false);
   const [addCompanyDialog, setAddCompantDialog] = React.useState(false);
-  let dispatch = useDispatch();
+  const dispatch = useDispatch();
   React.useEffect(() => {
     dispatch(changeUserLoggedIn(false));
   }, []);
@@ -47,7 +47,7 @@ const AuditSettings = () => {
 
         <div className="row">
           <div className="col-lg-2">
-            <nav className="mt-4" style={{ paddingBottom: "10px" }}>
+            <nav className="mt-4 pb-10">
               <div
                 className="nav d-grid nav-tabs glass-effect border-0"
                 id="nav-tab"
@@ -234,10 +234,10 @@ const AuditSettings = () => {
                       <table className="table table-bordered   rounded">
                         <thead className="bg-secondary text-white">
                           <tr>
-                            <th style={{ width: "80px" }}>Sr No.</th>
+                            <th className="w-80">Sr No.</th>
                             <th>File Name</th>
                             <th>File Location</th>
-                            <th style={{ width: "180px" }}>Action</th>
+                            <th className="w-180">Action</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -368,7 +368,7 @@ const AuditSettings = () => {
                                   <table className="table table-bordered  table-hover rounded">
                                     <thead className="bg-secondary text-white">
                                       <tr>
-                                        <th style={{ width: "80px" }}>
+                                        <th className="w-80">
                                           Sr No.
                                         </th>
                                         <th>Particulars</th>
@@ -464,7 +464,7 @@ const AuditSettings = () => {
                                   <table className="table table-bordered  table-hover rounded">
                                     <thead className="bg-secondary text-white">
                                       <tr>
-                                        <th style={{ width: "80px" }}>
+                                        <th className="w-80">
                                           Sr No.
                                         </th>
                                         <th>Particulars</th>
@@ -549,7 +549,7 @@ const AuditSettings = () => {
                       <table className="table table-bordered  table-hover rounded">
                         <thead className="bg-secondary text-white">
                           <tr>
-                            <th style={{ width: "80px" }}>Sr No.</th>
+                            <th className="w-80">Sr No.</th>
                             <th>Particulars</th>
                             <th>Actions</th>
                           </tr>
@@ -605,12 +605,11 @@ const AuditSettings = () => {
                         role="tablist"
                       >
                         <button
-                          className={`nav-link active shadow-sm  rounded-0 me-3 ${
+                          className={`nav-link active shadow-sm w-300 rounded-0 me-3 ${
                             activeEmailTab === "systemEmail" &&
                             "active-settings-btn"
                           }`}
                           id="nav-home-tab"
-                          style={{ width: "300px" }}
                           data-bs-toggle="tab"
                           data-bs-target="#nav-home"
                           type="button"
@@ -622,12 +621,11 @@ const AuditSettings = () => {
                           Default Notification Email Body
                         </button>
                         <button
-                          className={`nav-link active shadow-sm  rounded-0 me-3 ${
+                          className={`nav-link active shadow-sm w-300 rounded-0 me-3 ${
                             activeEmailTab === "userEmail" &&
                             "active-settings-btn"
                           }`}
                           id="nav-home-tab"
-                          style={{ width: "300px" }}
                           data-bs-toggle="tab"
                           data-bs-target="#nav-home"
                           type="button"
@@ -809,7 +807,7 @@ const AuditSettings = () => {
                                     <table className="table table-bordered  table-hover rounded">
                                       <thead className="bg-secondary text-white">
                                         <tr>
-                                          <th style={{ width: "80px" }}>
+                                          <th className="w-80">
                                             Sr No.
                                           </th>
                                           <th>Area</th>
@@ -925,7 +923,7 @@ const AuditSettings = () => {
                                     <table className="table table-bordered  table-hover rounded">
                                       <thead className="bg-secondary text-white">
                                         <tr>
-                                          <th style={{ width: "80px" }}>
+                                          <th className="w-80">
                                             Sr No.
                                           </th>
                                           <th>Area</th>
@@ -1019,7 +1017,7 @@ const AuditSettings = () => {
                       <table className="table table-bordered  table-hover rounded">
                         <thead className="bg-secondary text-white">
                           <tr>
-                            <th style={{ width: "80px" }}>Sr No.</th>
+                            <th className="w-80">Sr No.</th>
                             <th>Enable all Notification</th>
                             <th>Email Notification</th>
                             <th>System Notification</th>
@@ -2120,7 +2118,7 @@ const AuditSettings = () => {
                       <table className="table table-bordered  table-hover rounded">
                         <thead className="bg-secondary text-white">
                           <tr>
-                            <th style={{ width: "10px" }}>Sr No.</th>
+                            <th className="w-10">Sr No.</th>
                             <th>Username</th>
                             <th>Designation</th>
                             <th>Email ID</th>
@@ -2244,7 +2242,7 @@ const AuditSettings = () => {
                       <table className="table table-bordered  table-hover rounded">
                         <thead className="bg-secondary text-white">
                           <tr>
-                            <th style={{ width: "80px" }}>Sr No.</th>
+                            <th className="w-80">Sr No.</th>
                             <th>Name of Company</th>
                             <th>Audit Planning & Scheduling</th>
                             <th>Audit Engagement</th>
@@ -2353,26 +2351,26 @@ const AuditSettings = () => {
                       <table className="table table-bordered overflow-x-auto table-hover rounded">
                         <thead className="bg-secondary text-white">
                           <tr>
-                            <th style={{ minWidth: "50px" }}>Sr No.</th>
-                            <th style={{ width: "130px" }}>Company Name</th>
-                            <th style={{ width: "130px" }}>Legal Name</th>
-                            <th style={{ width: "100px" }}>Company ID</th>
-                            <th style={{ width: "100px" }}>Email ID</th>
-                            <th style={{ width: "190px" }}>
+                            <th className="min-w-50">Sr No.</th>
+                            <th className="w-130">Company Name</th>
+                            <th className="w-130">Legal Name</th>
+                            <th className="w-100">Company ID</th>
+                            <th className="w-100">Email ID</th>
+                            <th className="w-190">
                               Contact Person Name
                             </th>
-                            <th style={{ width: "190px" }}>
+                            <th className="w-190">
                               Contact Person No.
                             </th>
-                            <th style={{ width: "180px" }}>
+                            <th className="w-180">
                               Fiscal Year From:
                             </th>
-                            <th style={{ width: "180px" }}>Fiscal Year To:</th>
-                            <th style={{ width: "180px" }}>Logo</th>
-                            <th style={{ width: "180px" }}>Header Image</th>
-                            <th style={{ width: "180px" }}>Package</th>
+                            <th className="w-180">Fiscal Year To:</th>
+                            <th className="w-180">Logo</th>
+                            <th className="w-180">Header Image</th>
+                            <th className="w-180">Package</th>
 
-                            <th style={{ width: "80px" }}>Actions</th>
+                            <th className="w-80">Actions</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -2402,16 +2400,7 @@ const AuditSettings = () => {
                   </div>
                 </div>
 
-                <div className="row mb-3">
-                  <div className="col-lg-12 text-end">
-                    <button className="btn btn-labeled btn-primary px-3 mt-3 shadow">
-                      <span className="btn-label me-2">
-                        <i className="fa fa-save"></i>
-                      </span>
-                      Save
-                    </button>
-                  </div>
-                </div>
+                
               </div>
 
               <div
@@ -2509,7 +2498,7 @@ const AuditSettings = () => {
                                   <table className="table table-bordered  table-hover rounded">
                                     <thead className="bg-secondary text-white">
                                       <tr>
-                                        <th style={{ width: "80px" }}>
+                                        <th className="w-80">
                                           Sr No.
                                         </th>
                                         <th>Particulars</th>
@@ -2599,7 +2588,7 @@ const AuditSettings = () => {
                                   <table className="table table-bordered  table-hover rounded">
                                     <thead className="bg-secondary text-white">
                                       <tr>
-                                        <th style={{ width: "80px" }}>
+                                        <th className="w-80">
                                           Sr No.
                                         </th>
                                         <th>Particulars</th>

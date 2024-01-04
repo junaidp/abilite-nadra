@@ -1,6 +1,7 @@
 import React from "react";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
+import RickTextEditor from "../../../../common/rich-text/index";
 
 const SpecialProjectAudit = () => {
   let navigate = useNavigate();
@@ -95,8 +96,7 @@ const SpecialProjectAudit = () => {
                   <div className="accordion-item">
                     <h2 className="accordion-header">
                       <button
-                        style={{ borderRadius: "8px" }}
-                        className="accordion-button collapsed"
+                        className="accordion-button collapsed br-8"
                         type="button"
                         data-bs-toggle="collapse"
                         data-bs-target="#flush-collapseFive"
@@ -119,12 +119,8 @@ const SpecialProjectAudit = () => {
                           >
                             Rich text field to document the meeting of minutes
                           </label>
-                          <textarea
-                            className="form-control"
-                            placeholder="Enter Here"
-                            id="exampleFormControlTextarea1"
-                            rows="3"
-                          ></textarea>
+
+                          <RickTextEditor />
                           <p className="word-limit-info mb-0">
                             Maximum 1500 words
                           </p>

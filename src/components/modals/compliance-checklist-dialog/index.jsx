@@ -41,11 +41,10 @@ const ComplianceCheckListDialog = ({ setShowComplianceCheckListDialog }) => {
                       </td>
                       <td>
                         <select
-                          className="form-select mb-2"
-                          style={{ width: "80px" }}
+                          className="form-select mb-2 w-80"
                           aria-label="Default select example"
                         >
-                          <option selected>Yes</option>
+                          <option>Yes</option>
                           <option value="2">No</option>
                           <option value="2">Not Applicable</option>
                           <option value="2">Partially Complied</option>
@@ -87,7 +86,6 @@ const ComplianceCheckListDialog = ({ setShowComplianceCheckListDialog }) => {
       <div className="row py-4 px-4">
         <div className="col-lg-12 text-end">
           <button
-            mat-dialog-close
             className="btn btn-danger float-end"
             onClick={() => setShowComplianceCheckListDialog(false)}
           >

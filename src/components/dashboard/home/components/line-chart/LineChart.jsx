@@ -56,7 +56,7 @@ const data = [
 
 const LineChartComponent = () => {
   return (
-    <div style={{ width: "100%" }}>
+    <div className="w-full">
       <LineChart
         width={500}
         height={300}

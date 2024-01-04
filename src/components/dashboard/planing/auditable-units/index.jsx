@@ -1,9 +1,12 @@
 import React from "react";
 import "./index.css";
 import Pagination from "../../../common/pagination/Pagination";
+import AuditableUnitRatingDialog from "../../../modals/auditable-unit-rating-dialog/index";
 
 const AuditableUnits = () => {
-  let data = [
+  const [auditableUnitRatingDialog, setAuditableUnitRatingDialog] =
+    React.useState(false);
+  const data = [
     {
       no: "1",
       objective:
@@ -13,6 +16,15 @@ const AuditableUnits = () => {
   ];
   return (
     <div>
+      {auditableUnitRatingDialog && (
+        <div className="dashboard-modal">
+          <div className="model-wrap">
+            <AuditableUnitRatingDialog
+              setAuditableUnitRatingDialog={setAuditableUnitRatingDialog}
+            />
+          </div>
+        </div>
+      )}
       <header className="section-header my-3 text-start d-flex align-items-center justify-content-between">
         <div className="mb-0 heading">Auditable Units</div>
       </header>
@@ -32,7 +44,7 @@ const AuditableUnits = () => {
             <table className="table table-bordered  table-hover rounded">
               <thead className="bg-secondary text-white">
                 <tr>
-                  <th style={{ width: "80px" }}>Sr. #</th>
+                  <th className="w-80">Sr. #</th>
                   <th>Business Objective</th>
                   <th>Risk Rating</th>
                 </tr>
@@ -40,9 +52,14 @@ const AuditableUnits = () => {
               <tbody>
                 {data?.map((item, index) => {
                   return (
-                    <tr style={{ height: "40px" }} key={index}>
+                    <tr className="h-40" key={index}>
                       <td>{item?.no}</td>
-                      <td>{item?.objective}</td>
+                      <td
+                        onClick={() => setAuditableUnitRatingDialog(true)}
+                        className="cursor-pointer"
+                      >
+                        {item?.objective}
+                      </td>
                       <td>{item?.rating}</td>
                     </tr>
                   );

@@ -9,3 +9,12 @@
 .css-levciy-MuiTablePagination-displayedRows {
   margin-top: 17px !important;
 }
+
+.pagination-wrap{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 20px;
+}
+

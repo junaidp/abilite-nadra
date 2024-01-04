@@ -51,8 +51,7 @@ const Reporting = () => {
                     </td>
                     <td>
                       <a
-                        className=" text-primary  fw-bold "
-                        style={{ fontSize: "12px" }}
+                        className=" text-primary  fw-bold f-12"
                         onClick={() => navigate("/audit/reporting-particulars")}
                       >
                         Lorem Ipsum is simply dummy text of the printing and
@@ -69,8 +68,7 @@ const Reporting = () => {
                     </td>
                     <td>
                       <a
-                        className=" text-primary  fw-bold "
-                        style={{ fontSize: "12px" }}
+                        className=" text-primary  fw-bold f-12"
                         onClick={() => navigate("/audit/reporting-particulars")}
                       >
                         Lorem Ipsum is simply dummy text of the printing and

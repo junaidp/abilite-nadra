@@ -5,7 +5,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
 const SelectComponent = () => {
-  let [year, setYear] = React.useState();
+  const [year, setYear] = React.useState();
   return (
     <FormControl variant="filled" sx={{ m: 1, minWidth: 180 }}>
       <InputLabel id="demo-simple-select-filled-label">Year</InputLabel>

@@ -11,7 +11,7 @@ const Layout = () => {
   return (
     <React.Fragment>
       <TopBar />
-      <div style={{ display: "flex" }}>
+      <div className="flex">
         <Sidebar />
         <div
           className="row"

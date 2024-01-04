@@ -13,7 +13,7 @@ const BusinessObjectiveInfoDialog = () => {
         dolorem ipsum ("pain itself").
       </label>
 
-      <button mat-dialog-close className="btn btn-primary mt-3">
+      <button  className="btn btn-primary mt-3">
         Close
       </button>
     </div>

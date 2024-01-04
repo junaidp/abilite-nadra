@@ -1,9 +1,9 @@
 import React, { useState, useRef } from "react";
 import JoditEditor from "jodit-react";
 
-const Example = () => {
-  const editor = useRef(null);
+const RichTextEditor = () => {
   const [content, setContent] = useState("");
+  const editor = useRef(null);
 
   const config = {
     uploader: {
@@ -60,4 +60,4 @@ const Example = () => {
   );
 };
 
-export default Example;
+export default RichTextEditor;

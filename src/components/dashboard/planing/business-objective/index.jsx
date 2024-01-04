@@ -37,10 +37,7 @@ const BusinessObjective = () => {
                   Add Engagement
                 </div>
                 <i
-                  className="fa fa-info-circle ps-3 text-secondary
-          "
-                  style={{ cursor: "pointer" }}
-                  title="Info"
+                  className="fa fa-info-circle ps-3 text-secondary cursor-pointer"                  title="Info"
                 ></i>
               </div>
             </header>
@@ -51,7 +48,7 @@ const BusinessObjective = () => {
                   <table className="table table-bordered  table-hover rounded">
                     <thead className="bg-secondary text-white">
                       <tr>
-                        <th style={{ width: "80px" }}>Sr No.</th>
+                        <th className="w-80">Sr No.</th>
                         <th>Engagement Name</th>
                         <th>Nature Through</th>
                         <th>Initiated By</th>

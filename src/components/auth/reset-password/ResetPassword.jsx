@@ -12,16 +12,16 @@ import {
 import { useSearchParams } from "react-router-dom";
 
 const ResetPassword = () => {
-  let dispatch = useDispatch();
+  const [password, setPassword] = React.useState("");
+  const [confirmPassword, setConfirmPassword] = React.useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  let email = searchParams.get("email");
-  let token = searchParams.get("token");
-  let { resetPasswordResponseSuccess, authError } = useSelector(
+  const email = searchParams.get("email");
+  const token = searchParams.get("token");
+  const { resetPasswordResponseSuccess, authError } = useSelector(
     (state) => state.auth
   );
-  let navigate = useNavigate();
-  let [password, setPassword] = React.useState("");
-  let [confirmPassword, setConfirmPassword] = React.useState("");
 
   function handleResetPassword(event) {
     event.preventDefault();

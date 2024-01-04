@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom";
 import Pagination from "../../../common/pagination/Pagination";
 import RiskAssessmentModal from "../../../../components/modals/perform-risk-assessment-dialog/index";
 const RiskAssessments = () => {
-  let [performRiskAssessmentModal, setPerformRiskAssessmentModal] =
+  const [performRiskAssessmentModal, setPerformRiskAssessmentModal] =
     React.useState(false);
-  let navigate = useNavigate();
-  let data = [
+  const navigate = useNavigate();
+  const data = [
     {
       no: "1",
       objective: "Lorem Ipsum...",
@@ -58,8 +58,7 @@ const RiskAssessments = () => {
             View Risk Assessment
           </div>
           <i
-            className="fa fa-info-circle ps-3 text-secondary"
-            style={{ cursor: "pointer" }}
+            className="fa fa-info-circle ps-3 text-secondary cursor-pointer"
             title="Info"
           ></i>
         </div>
@@ -80,37 +79,23 @@ const RiskAssessments = () => {
             <table className="table table-bordered  table-hover rounded">
               <thead className="bg-secondary text-white">
                 <tr>
-                  <th style={{ width: "80px" }}>Sr. #</th>
+                  <th className="w-80">Sr. #</th>
                   <th>Business Objective</th>
                   <th>Risk Approach</th>
                   <th>Risk Rating</th>
-                  <th>Risk Rating</th>
-                  <th>Actions</th>
+                  <th>Perform Risk Assessment</th>
+                  <th>Delete</th>
                 </tr>
               </thead>
               <tbody>
                 {data?.map((item, index) => {
                   return (
-                    <tr style={{ height: "40px" }} key={index}>
+                    <tr className="h-40" key={index}>
                       <td>{item?.no}</td>
                       <td>{item?.objective}</td>
                       <td>{item?.approach}</td>
                       <td>{item?.rating}</td>
-                      <td className="text-center pt-3">
-                        <i
-                          className="fa fa-eye text-primary"
-                          style={{ fontSize: "16px" }}
-                        ></i>
-                        <i
-                          className="fa fa-edit mx-3 text-secondary"
-                          style={{ fontSize: "16px" }}
-                        ></i>
-                        <i
-                          className="fa fa-trash text-danger"
-                          style={{ fontSize: "16px" }}
-                        ></i>
-                      </td>
-                      <td className="text-center" style={{ width: "200px" }}>
+                      <td className="text-center w-200">
                         <div
                           className="btn btn-outline-light text-primary shadow"
                           style={{ height: "32px", width: "180px" }}
@@ -121,6 +106,13 @@ const RiskAssessments = () => {
                           </span>
                           Perform Risk
                         </div>
+                      </td>
+                      <td className="text-center pt-3">
+                        
+                        <i
+                          className="fa fa-trash text-danger"
+                          style={{ fontSize: "16px" }}
+                        ></i>
                       </td>
                     </tr>
                   );

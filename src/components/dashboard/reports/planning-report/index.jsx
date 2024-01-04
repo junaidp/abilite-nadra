@@ -74,7 +74,7 @@ const PlanningReport = () => {
             <table className="table table-bordered  table-hover rounded">
               <thead className="bg-secondary text-white">
                 <tr>
-                  <th style={{ width: "80px" }}>Sr. #</th>
+                  <th className="w-80">Sr. #</th>
                   <th>Job Name</th>
                   <th>Report Date</th>
                   <th>Prepared by</th>
@@ -86,7 +86,7 @@ const PlanningReport = () => {
               <tbody>
                 {data?.map((item, index) => {
                   return (
-                    <tr style={{ height: "40px" }} key={index}>
+                    <tr className="h-40" key={index}>
                       <td>{item?.no}</td>
                       <td>{item?.objective}</td>
                       <td>{item?.reportDate}</td>

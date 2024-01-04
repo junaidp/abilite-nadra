@@ -45,16 +45,16 @@ const JobPrioritization = () => {
           <tbody>
             <tr>
               <td>1</td>
-              <td style={{ width: "200px" }}>
+              <td className="w-200">
                 Lorem Ipsum is simply dummy text of the printing and typesetting
                 industry.
               </td>
-              <td style={{ width: "200px" }}>
+              <td className="w-200">
                 Lorem Ipsum is simply dummy text of the printing and typesetting
                 industry.
               </td>
               <td className="moderate">Moderate</td>
-              <td style={{ width: "200px" }}>
+              <td className="w-200">
                 <div className="form-check">
                   <input
                     className="form-check-input"
@@ -98,8 +98,7 @@ const JobPrioritization = () => {
           <div className="col-2 d-flex align-items-center">
             <label className="me-2 label-text fw-bold">View Entries</label>
             <select
-              style={{ width: "70px" }}
-              className="form-select"
+              className="form-select w-70"
               aria-label="Default select example"
             >
               <option>10</option>

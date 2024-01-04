@@ -11,17 +11,18 @@ import {
   changeUserLoggedIn,
 } from "../../../global-redux/reducers/auth/slice";
 const Register = () => {
-  let { userLoggedIn, authError } = useSelector((state) => state.auth);
-  let { companies } = useSelector((state) => state.company);
-  let dispatch = useDispatch();
-  let [data, setData] = React.useState({
+  const [data, setData] = React.useState({
     firstname: "",
     lastname: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
-  let navigate = useNavigate();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { userLoggedIn, authError } = useSelector((state) => state.auth);
+  const { companies } = useSelector((state) => state.company);
+
   function handleChange(event) {
     setData((pre) => {
       return {
@@ -211,7 +212,7 @@ const Register = () => {
                       />
                     </div>
                   </div>
-                  <div className="col-lg-12" style={{ marginBottom: "20px" }}>
+                  <div className="col-lg-12 mb-20">
                     <label>Comapny Name</label>
 
                     <select

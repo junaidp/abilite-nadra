@@ -1,3 +1,4 @@
+// Not Using Right Now
 import React from "react";
 import "./index.css";
 import { useSelector } from "react-redux";
@@ -10,16 +11,16 @@ import {
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 const Companies = () => {
-  let [data, setData] = React.useState({
+  const [data, setData] = React.useState({
     companyname: "",
     companypackage: "",
     usersAllowed: "",
   });
-  let { companies, registerCompanySuccess, error } = useSelector(
+  const [activeTab, setActiveTab] = React.useState("supportingDoc");
+  const { companies, registerCompanySuccess, error } = useSelector(
     (state) => state.company
   );
-  let [activeTab, setActiveTab] = React.useState("supportingDoc");
-  let dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   function handleChange(e) {
     setData((pre) => {
@@ -78,11 +79,10 @@ const Companies = () => {
             role="tablist"
           >
             <button
-              className={`nav-link active shadow-sm  rounded-0 me-3 ${
+              className={`nav-link active shadow-sm  rounded-0 me-3 w-200 ${
                 activeTab === "supportingDoc" && "active-settings-btn"
               }`}
               id="nav-home-tab"
-              style={{ width: "200px" }}
               data-bs-toggle="tab"
               data-bs-target="#nav-home"
               type="button"
@@ -94,11 +94,10 @@ const Companies = () => {
               Add Company
             </button>
             <button
-              className={`nav-link shadow-sm  rounded-0 ${
+              className={`nav-link shadow-sm w-200  rounded-0 ${
                 activeTab === "location" && "active-settings-btn"
               }`}
               id="nav-profile-tab"
-              style={{ width: "200px" }}
               data-bs-toggle="tab"
               data-bs-target="#nav-profile"
               type="button"
@@ -195,9 +194,8 @@ const Companies = () => {
                         <div className="custom-file">
                           <input
                             type="file"
-                            className="custom-file-input hidden "
+                            className="custom-file-input hidden visibility-hidden"
                             id="inputGroupFile01"
-                            style={{ visibility: "hidden" }}
                           />
                         </div>
                       </div>

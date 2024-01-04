@@ -10,15 +10,14 @@ import {
 } from "../../../global-redux/reducers/auth/slice";
 
 const Login = () => {
-  let [showpassword, setShowPassword] = React.useState(false);
-  let { userLoggedIn, authError, user } = useSelector((state) => state.auth);
-  let dispatch = useDispatch();
-  const navigate = useNavigate();
-  let [data, setData] = React.useState({
+  const [showpassword, setShowPassword] = React.useState(false);
+  const [data, setData] = React.useState({
     email: "",
     password: "",
   });
-
+  const { userLoggedIn, authError, user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   function handleChange(event) {
     setData((pre) => {
@@ -136,8 +135,7 @@ const Login = () => {
                   </div>
                   <div className="col-12">
                     <div
-                      className="form-group"
-                      style={{ position: "relative" }}
+                      className="form-group relative"
                     >
                       <input
                         id="password"
@@ -150,16 +148,12 @@ const Login = () => {
                         onChange={handleChange}
                       />
                       <div
-                        style={{
-                          position: "absolute",
-                          top: "12px",
-                          right: "12px",
-                        }}
+                        className="t-12 r-12 absolute"
                       >
                         {!showpassword && (
                           <div
                             onClick={() => setShowPassword(true)}
-                            style={{ cursor: "pointer" }}
+                            className="cursor-pointer"
                           >
                             <i className="bi bi-eye-fill"></i>
                           </div>
@@ -167,16 +161,13 @@ const Login = () => {
                         {showpassword && (
                           <div
                             onClick={() => setShowPassword(false)}
-                            style={{ cursor: "pointer" }}
+                            className="cursor-pointer"
                           >
                             <i className="bi bi-eye-slash-fill"></i>
                           </div>
                         )}
                       </div>
-                      {/* <i
-                        toggle="#password"
-                        className="fa fa-fw fa-eye toggle-password field-icon"
-                      ></i> */}
+                      
                     </div>
                   </div>
                   <div className="col-12">

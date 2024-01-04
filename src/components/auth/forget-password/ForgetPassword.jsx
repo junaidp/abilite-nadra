@@ -11,12 +11,12 @@ import {
 } from "../../../global-redux/reducers/auth/slice";
 
 const ForgetPassword = () => {
-  let dispatch = useDispatch();
-  let { forgotPasswordResponseSuccess, authError } = useSelector(
+  const [email, setEmail] = React.useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { forgotPasswordResponseSuccess, authError } = useSelector(
     (state) => state.auth
   );
-  let navigate = useNavigate();
-  let [email, setEmail] = React.useState("");
 
   function handleForgetPassword(event) {
     event.preventDefault();

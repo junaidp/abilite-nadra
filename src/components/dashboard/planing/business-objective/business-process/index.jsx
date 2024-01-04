@@ -190,8 +190,7 @@ const BusinessProcess = () => {
                   <div className="accordion-item">
                     <h2 className="accordion-header">
                       <button
-                        style={{ borderRadius: "8px" }}
-                        className="accordion-button collapsed"
+                        className="accordion-button collapsed br-8"
                         type="button"
                         data-bs-toggle="collapse"
                         data-bs-target="#flush-collapseFive"

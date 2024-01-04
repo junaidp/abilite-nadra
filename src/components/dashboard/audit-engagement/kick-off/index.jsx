@@ -10,17 +10,17 @@ import AuditStepsDialog from "../../../modals/audit-steps-dialog/index";
 import ComplianceCheckListDialog from "../../../modals/compliance-checklist-dialog/index";
 
 const KickOff = () => {
-  let dispatch = useDispatch();
-  let navigate = useNavigate();
+  const [showViewLibrary, setShowViewLibrary] = React.useState(false);
+  let [showComplianceCheckListDialog, setShowComplianceCheckListDialog] =
+    React.useState(false);
+  const [viewAuditProgramLibraryDialog, setViewAuditProgramLibraryDialog] =
+    React.useState(false);
+  const [showAuditStepsDialog, setShowAuditStepsDialog] = React.useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   React.useEffect(() => {
     dispatch(changeKickOffRequest(""));
   }, []);
-  let [showViewLibrary, setShowViewLibrary] = React.useState(false);
-  let [showComplianceCheckListDialog, setShowComplianceCheckListDialog] =
-    React.useState(false);
-  let [viewAuditProgramLibraryDialog, setViewAuditProgramLibraryDialog] =
-    React.useState(false);
-  let [showAuditStepsDialog, setShowAuditStepsDialog] = React.useState(false);
   return (
     <div>
       {showViewLibrary && (
@@ -97,7 +97,7 @@ const KickOff = () => {
               >
                 <div className="accordion-body">
                   <div className="container">
-                    <div className="row mb-3" style={{ fontSize: "13px" }}>
+                    <div className="row mb-3 f-13">
                       <div className="col-lg-6 px-3 d-flex justify-content-between">
                         <div className="fw-bold">Planned Start Date:</div>
                         <div className="">28-03-2023</div>
@@ -108,7 +108,7 @@ const KickOff = () => {
                       </div>
                     </div>
 
-                    <div className="row mb-3" style={{ fontSize: "13px" }}>
+                    <div className="row mb-3 f-13">
                       <div className="col-lg-6 px-3 d-flex justify-content-between">
                         <div className="fw-bold">Planned End Date:</div>
                         <div className="">28-03-2023</div>
@@ -119,14 +119,14 @@ const KickOff = () => {
                       </div>
                     </div>
 
-                    <div className="row mb-3" style={{ fontSize: "13px" }}>
+                    <div className="row mb-3 f-13">
                       <div className="col-lg-6 px-3 d-flex justify-content-between">
                         <div className="fw-bold">Job Type:</div>
                         <div className="">Job type will display here</div>
                       </div>
                     </div>
 
-                    <div className="row mb-3" style={{ fontSize: "13px" }}>
+                    <div className="row mb-3 f-13">
                       <div className="col-lg-6 px-3 d-flex justify-content-between">
                         <div className="fw-bold">
                           Department/Division/ Location:
@@ -137,7 +137,7 @@ const KickOff = () => {
                       </div>
                     </div>
 
-                    <div className="row mb-3" style={{ fontSize: "13px" }}>
+                    <div className="row mb-3 f-13">
                       <div className="col-lg-6 px-3 d-flex justify-content-between">
                         <div className="fw-bold">
                           Sub-Department/Sub-Division/Sub-Location
@@ -175,7 +175,7 @@ const KickOff = () => {
                     <div className="row mb-3">
                       <div className="col-lg-12">
                         <div className="d-flex mb-2 align-items-center">
-                          <label className="me-3" style={{ width: "80px" }}>
+                          <label className="me-3 w-80" >
                             To
                           </label>
                           <input
@@ -185,7 +185,7 @@ const KickOff = () => {
                           />
                         </div>
                         <div className="d-flex mb-2  align-items-center">
-                          <label className="me-3" style={{ width: "80px" }}>
+                          <label className="me-3 w-80">
                             CC
                           </label>
                           <input
@@ -195,7 +195,7 @@ const KickOff = () => {
                           />
                         </div>
                         <div className="d-flex mb-2  align-items-center">
-                          <label className="me-3" style={{ width: "80px" }}>
+                          <label className="me-3 w-80">
                             Subject
                           </label>
                           <input
@@ -206,8 +206,7 @@ const KickOff = () => {
                         </div>
                         <div className="d-flex mb-2  align-items-center">
                           <label
-                            className="me-3"
-                            style={{ width: "80px" }}
+                            className="me-3 w-80"
                           ></label>
                           <textarea
                             className="form-control"
@@ -221,8 +220,7 @@ const KickOff = () => {
                           <div className="ms-5 ps-5">
                             <label htmlFor="fileInput">Add Attachment:</label>
                             <input
-                              className="ms-3"
-                              style={{ fontSize: "10px" }}
+                              className="ms-3 f-10"
                               type="file"
                               id="fileInput"
                             />
@@ -387,10 +385,10 @@ const KickOff = () => {
                                   </a>
                                 </td>
 
-                                <td style={{ fontSize: "130px" }}>
-                                  <i className="fa fa-eye text-primary"></i>
-                                  <i className="fa fa-edit mx-3 text-secondary"></i>
-                                  <i className="fa fa-trash text-danger"></i>
+                                <td className="f-130">
+                                  <i className="fa fa-eye text-primary f-18"></i>
+                                  <i className="fa fa-edit mx-3 text-secondary f-18"></i>
+                                  <i className="fa fa-trash text-danger f-18"></i>
                                 </td>
                               </tr>
                             </tbody>
@@ -443,8 +441,7 @@ const KickOff = () => {
                           <span>Objective</span>
                           <a href="" className="text-white add-btn">
                             <span
-                              className="float-end"
-                              style={{ fontSize: "10px" }}
+                              className="float-end f-10"
                             >
                               <i className="fa fa-plus me-2"></i>Add Objective
                             </span>
@@ -480,8 +477,7 @@ const KickOff = () => {
                           <span>Risk</span>
                           <a href="" className="text-white add-btn">
                             <span
-                              className="float-end"
-                              style={{ fontSize: "10px" }}
+                              className="float-end f-10"
                             >
                               <i className="fa fa-plus me-2"></i>Add Risk
                             </span>
@@ -541,8 +537,7 @@ const KickOff = () => {
                           <span>Controls</span>
                           <a href="" className="text-white add-btn">
                             <span
-                              className="float-end"
-                              style={{ fontSize: "10px" }}
+                              className="float-end f-10"
                             >
                               <i className="fa fa-plus me-2"></i>Add Control
                             </span>
@@ -600,12 +595,7 @@ const KickOff = () => {
 
                     <div className="row">
                       <div className="col-lg-12">
-                        <button className="btn btn-labeled btn-primary px-3 mt-3 shadow">
-                          <span className="btn-label me-2">
-                            <i className="fa fa-print"></i>
-                          </span>
-                          Print
-                        </button>
+                        
                         <button className="btn btn-labeled float-end btn-primary px-3 mt-3 shadow">
                           <span className="btn-label me-2">
                             <i className="fa fa-save"></i>
@@ -622,8 +612,7 @@ const KickOff = () => {
             <div className="accordion-item">
               <h2 className="accordion-header">
                 <button
-                  style={{ borderRadius: "8px" }}
-                  className="accordion-button collapsed"
+                  className="accordion-button collapsed br-8"
                   type="button"
                   data-bs-toggle="collapse"
                   data-bs-target="#flush-collapseFive"
@@ -708,21 +697,14 @@ const KickOff = () => {
                                 <td>
                                   <span className="action-buttons">
                                     <i
-                                      className="bi bi-trash danger"
-                                      style={{
-                                        fontSize: "20px",
-                                        marginRight: "10px",
-                                        color: "red",
-                                      }}
+                                      className="bi bi-trash danger trash-styles red"
+                                      
                                     ></i>
                                   </span>
                                   <span className="action-buttons">
                                     <i
-                                      className="bi bi-x-circle-fill"
-                                      style={{
-                                        fontSize: "20px",
-                                        marginRight: "10px",
-                                      }}
+                                      className="bi bi-x-circle-fill trash-styles"
+                                      
                                     ></i>
                                   </span>
                                 </td>
@@ -777,7 +759,7 @@ const KickOff = () => {
                           <table className="table table-bordered  table-hover rounded">
                             <thead className="bg-secondary text-white">
                               <tr>
-                                <th style={{ fontSize: "80px" }}>Sr No.</th>
+                                <th className="f-80">Sr No.</th>
                                 <th>Program Name</th>
                                 <th>Actions</th>
                               </tr>
@@ -790,15 +772,14 @@ const KickOff = () => {
                                     onClick={() =>
                                       setShowAuditStepsDialog(true)
                                     }
-                                    className="fw-bold  text-primary  px-3 py-1"
-                                    style={{ fontSize: "10px" }}
+                                    className="fw-bold  text-primary  px-3 py-1 f-10"
                                   >
                                     loram ipsum is simply dummay text of the
                                     prinitng and type settings industry
                                   </a>{" "}
                                 </td>
                                 <td>
-                                  <i className="fa fa-times-circle text-danger"></i>
+                                  <i className="fa fa-times-circle text-danger f-18"></i>
                                 </td>
                               </tr>
                               <tr>
@@ -808,15 +789,14 @@ const KickOff = () => {
                                     onClick={() =>
                                       setShowAuditStepsDialog(true)
                                     }
-                                    className="fw-bold  text-primary  px-3 py-1"
-                                    style={{ fontSize: "10px" }}
+                                    className="fw-bold  text-primary  px-3 py-1 f-10"
                                   >
                                     loram ipsum is simply dummay text of the
                                     prinitng and type settings industry
                                   </a>
                                 </td>
                                 <td>
-                                  <i className="fa fa-check-circle text-success"></i>
+                                  <i className="fa fa-check-circle text-success f-18"></i>
                                 </td>
                               </tr>
                             </tbody>
@@ -859,7 +839,7 @@ const KickOff = () => {
                           <table className="table table-bordered  table-hover rounded">
                             <thead className="bg-secondary text-white">
                               <tr>
-                                <th style={{ fontSize: "80px" }}>Sr No.</th>
+                                <th className="f-80">Sr No.</th>
                                 <th>Location Name</th>
                                 <th>Status</th>
                                 <th>Change Request</th>
@@ -870,8 +850,7 @@ const KickOff = () => {
                                 <td>1</td>
                                 <td>
                                   <a
-                                    className="fw-bold  text-primary  px-3 py-1"
-                                    style={{ fontSize: "10px" }}
+                                    className="fw-bold  text-primary  px-3 py-1 f-10"
                                     onClick={() =>
                                       setShowComplianceCheckListDialog(true)
                                     }
@@ -886,8 +865,7 @@ const KickOff = () => {
                                 <td>2</td>
                                 <td>
                                   <a
-                                    className="fw-bold  text-primary px-3 py-1"
-                                    style={{ fontSize: "10px" }}
+                                    className="fw-bold  text-primary px-3 py-1 f-10"
                                     onClick={() =>
                                       setShowComplianceCheckListDialog(true)
                                     }

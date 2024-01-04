@@ -68,3 +68,11 @@
   overflow-y: auto;
   height: 100%;
 }
+
+.trash-styles{
+  font-size: 20px !important;
+  margin-right: 10px !important;
+}
+.red{
+  color: red !important;
+}

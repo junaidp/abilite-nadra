@@ -90,8 +90,7 @@ const FollowUpParticulars = () => {
                     <div className="accordion-body">
                       <p>
                         <label
-                          className="label-text"
-                          style={{ fontSize: "14px" }}
+                          className="label-text f-14"
                         >
                           Observation No. 1
                         </label>
@@ -128,8 +127,7 @@ const FollowUpParticulars = () => {
                       <div className="d-flex mb-3 align-items-center">
                         <label className="pe-4">Implication Rating:</label>
                         <select
-                          className="form-select mb-2"
-                          style={{ width: "150px" }}
+                          className="form-select mb-2 w-150"
                           aria-label="Default select example"
                         >
                           <option>high</option>
@@ -176,25 +174,23 @@ const FollowUpParticulars = () => {
                       </label>
 
                       <div className="d-flex mb-3 align-items-center">
-                        <label className="pe-4" style={{ width: "250px" }}>
+                        <label className="pe-4 w-250">
                           Implementation Date:
                         </label>
                         <input
                           type="date"
-                          className="form-control"
-                          style={{ width: "150px" }}
+                          className="form-control w-150"
                           id="exampleFormControlInput1"
                           placeholder="DD/MM/YYYY"
                         />
                       </div>
 
                       <div className="d-flex mb-3 align-items-center">
-                        <label className="pe-4" style={{ width: "250px" }}>
+                        <label className="pe-4 w-250">
                           Auditee:
                         </label>
                         <select
-                          className="form-select mb-2"
-                          style={{ width: "150px" }}
+                          className="form-select mb-2 w-150"
                           aria-label="Default select example"
                         >
                           <option>high</option>
@@ -204,12 +200,11 @@ const FollowUpParticulars = () => {
                       </div>
 
                       <div className="d-flex mb-3 align-items-center">
-                        <label className="pe-4" style={{ width: "250px" }}>
+                        <label className="pe-4 w-250">
                           Recommendations Implemented:
                         </label>
                         <select
-                          className="form-select mb-2"
-                          style={{ width: "150px" }}
+                          className="form-select mb-2 w-150"
                           aria-label="Default select example"
                         >
                           <option>high</option>
@@ -231,8 +226,7 @@ const FollowUpParticulars = () => {
                       <br />
                       <label htmlFor="fileInput">Add Attachment:</label>
                       <input
-                        className="ms-3"
-                        style={{ fontSize: "10px" }}
+                        className="ms-3 f-10"
                         type="file"
                         id="fileInput"
                       />
@@ -248,8 +242,7 @@ const FollowUpParticulars = () => {
                             <tr>
                               <td>
                                 <a
-                                  className=" text-primary  fw-bold "
-                                  style={{ fontSize: "12px" }}
+                                  className=" text-primary  fw-bold f-12"
                                 >
                                   File Attachment 1
                                 </a>
@@ -261,8 +254,7 @@ const FollowUpParticulars = () => {
                             <tr>
                               <td>
                                 <a
-                                  className=" text-primary  fw-bold "
-                                  style={{ fontSize: "12px" }}
+                                  className=" text-primary  fw-bold f-12"
                                 >
                                   File Attachment 2
                                 </a>
@@ -278,12 +270,11 @@ const FollowUpParticulars = () => {
                       <div className="row">
                         <div className="col-lg-6">
                           <div className="d-flex mb-3 align-items-center">
-                            <label className="pe-4" style={{ width: "250px" }}>
+                            <label className="pe-4 w-250">
                               Recommendations Implemented:
                             </label>
                             <select
-                              className="form-select mb-2"
-                              style={{ width: "150px" }}
+                              className="form-select mb-2 w-150"
                               aria-label="Default select example"
                             >
                               <option>high</option>
@@ -322,8 +313,7 @@ const FollowUpParticulars = () => {
                     <div className="accordion-body">
                       <p>
                         <label
-                          className="label-text"
-                          style={{ fontSize: "14px" }}
+                          className="label-text f-14"
                         >
                           Observation No. 1
                         </label>
@@ -360,8 +350,7 @@ const FollowUpParticulars = () => {
                       <div className="d-flex mb-3 align-items-center">
                         <label className="pe-4">Implication Rating:</label>
                         <select
-                          className="form-select mb-2"
-                          style={{ width: "150px" }}
+                          className="form-select mb-2 w-150"
                           aria-label="Default select example"
                         >
                           <option>high</option>
@@ -408,25 +397,23 @@ const FollowUpParticulars = () => {
                       </label>
 
                       <div className="d-flex mb-3 align-items-center">
-                        <label className="pe-4" style={{ width: "250px" }}>
+                        <label className="pe-4 w-250">
                           Implementation Date:
                         </label>
                         <input
                           type="date"
-                          className="form-control"
-                          style={{ width: "150px" }}
+                          className="form-control w-150"
                           id="exampleFormControlInput1"
                           placeholder="DD/MM/YYYY"
                         />
                       </div>
 
                       <div className="d-flex mb-3 align-items-center">
-                        <label className="pe-4" style={{ width: "250px" }}>
+                        <label className="pe-4 w-250">
                           Auditee:
                         </label>
                         <select
-                          className="form-select mb-2"
-                          style={{ width: "150px" }}
+                          className="form-select mb-2 w-150"
                           aria-label="Default select example"
                         >
                           <option>high</option>
@@ -436,12 +423,11 @@ const FollowUpParticulars = () => {
                       </div>
 
                       <div className="d-flex mb-3 align-items-center">
-                        <label className="pe-4" style={{ width: "250px" }}>
+                        <label className="pe-4 w-250">
                           Recommendations Implemented:
                         </label>
                         <select
-                          className="form-select mb-2"
-                          style={{ width: "150px" }}
+                          className="form-select mb-2 w-150"
                           aria-label="Default select example"
                         >
                           <option>high</option>
@@ -463,8 +449,7 @@ const FollowUpParticulars = () => {
                       <br />
                       <label htmlFor="fileInput">Add Attachment:</label>
                       <input
-                        className="ms-3"
-                        style={{ fontSize: "10px" }}
+                        className="ms-3 f-10"
                         type="file"
                         id="fileInput"
                       />
@@ -480,8 +465,7 @@ const FollowUpParticulars = () => {
                             <tr>
                               <td>
                                 <a
-                                  className=" text-primary  fw-bold "
-                                  style={{ fontSize: "12px" }}
+                                  className=" text-primary  fw-bold f-12"
                                 >
                                   File Attachment 1
                                 </a>
@@ -493,8 +477,7 @@ const FollowUpParticulars = () => {
                             <tr>
                               <td>
                                 <a
-                                  className=" text-primary  fw-bold "
-                                  style={{ fontSize: "12px" }}
+                                  className=" text-primary  fw-bold f-12"
                                 >
                                   File Attachment 2
                                 </a>
@@ -510,12 +493,11 @@ const FollowUpParticulars = () => {
                       <div className="row">
                         <div className="col-lg-6">
                           <div className="d-flex mb-3 align-items-center">
-                            <label className="pe-4" style={{ width: "250px" }}>
+                            <label className="pe-4 w-250">
                               Recommendations Implemented:
                             </label>
                             <select
-                              className="form-select mb-2"
-                              style={{ width: "150px" }}
+                              className="form-select mb-2 w-150"
                               aria-label="Default select example"
                             >
                               <option>high</option>
@@ -540,8 +522,7 @@ const FollowUpParticulars = () => {
               >
                 <a
                   href="#"
-                  className="underline text-primary pt-3 me-4 label-text"
-                  style={{ textDecoration: "underline" }}
+                  className="underline text-primary pt-3 me-4 label-text underline"
                 >
                   Feedback
                 </a>

@@ -10,6 +10,167 @@ body {
   margin: 0;
   overflow-x: hidden;
 }
+
+.h-40{
+  height: 40px !important;
+}
+.h-50{
+  height: 50px !important;
+}
+
+
+.pb-10{
+  padding-bottom: 10px !important;
+}
+
+.min-h-100{
+  min-height: 100vh !important;
+}
+
+.w-10{
+  width: 10px !important;
+}
+.w-18{
+  width: 18px !important;
+}
+
+.w-45{
+  width: 45px !important;
+}
+
+.width-50{
+  width: 50px !important;
+}
+.min-width-50{
+  min-width: 50px !important;
+}
+.w-60{
+  width: 60px !important;
+}
+.w-70{
+  width: 70px !important;
+}
+.w-80{
+  width: 80px !important;
+}
+.w-100{
+  width: 100px !important;
+}
+.w-130{
+  width: 130px !important;
+}
+.w-150{
+  width: 150px !important;
+}
+.w-190{
+  width: 190px !important;
+}
+.w-180{
+  width: 180px !important;
+}
+.w-200{
+  width: 200px !important;
+}
+.w-250{
+  width: 250px !important;
+}
+.w-300{
+  width: 300px !important;
+}
+
+.f-10{
+  font-size: 10px !important;
+}
+.f-12{
+  font-size: 12px !important;
+}
+.f-13{
+  font-size: 13px !important;
+}
+.f-14{
+  font-size: 14px !important;
+}
+.f-20{
+  font-size: 20px !important;
+}
+.f-80{
+  font-size: 80px;
+}
+.f-130{
+  font-size: 130px !important;
+}
+
+.p-0-6{
+  padding: 0px 6px !important;
+}
+
+.cursor-pointer{
+  cursor: pointer !important;
+}
+
+.decoration-none{
+  text-decoration: none !important;
+}
+
+.flex{
+  display: flex !important;
+}
+
+.hidden{
+  display: hidden;
+}
+.visibility-hidden{
+  visibility: hidden;
+}
+
+.w-full{
+  width: 100%;
+}
+
+.fitContent{
+  height: fit-content;
+}
+
+.br-8{
+  border-radius: 8px !important;
+}
+
+.mt-13{
+  margin-top: 13px !important;
+}
+
+.ml-100{
+  margin-left: 100px !important;
+}
+
+.bold{
+  font-weight: bold !important;
+}
+
+.relative{
+  position:  relative !important;
+}
+
+.t-12{
+  top: 12px !important;
+}
+.r-12{
+  right: 12px !important;
+}
+
+.absolute{
+  position: absolute !important;
+}
+
+.mb-20{
+  margin:20px !important
+}
+
+.underline{
+  text-decoration: underline !important;
+}
+
+
 .Toastify__toast-body > div:last-child {
   font-family: "Poppins", sans-serif !important;
 }
@@ -319,7 +480,7 @@ element {
 }
 
 .jodit-container:not(.jodit_inline) .jodit-workplace {
-  min-height: 70vh !important;
+  min-height: 30vh !important;
 }
 
 .jodit-popup__content {
@@ -346,6 +507,47 @@ span[aria-label="Insert Ordered List"] .jodit-toolbar-button__trigger {
   color: #0a7386 !important;
 }
 
-.f-18{
+.f-18 {
   font-size: 18px !important;
+}
+
+.dashboard-modal {
+  position: fixed;
+  z-index: 100;
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0px;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.model-wrap {
+  width: 75%;
+  background-color: white;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  position: relative;
+  top: -90px;
+  border-radius: 10px;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.flex {
+  display: flex !important;
+}
+
+.flex-end {
+  justify-content: flex-end !important;
+}
+
+.w-full {
+  width: 100% !important;
 }

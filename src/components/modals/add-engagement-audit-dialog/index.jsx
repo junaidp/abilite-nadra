@@ -16,19 +16,16 @@ const AddEngagementAuditDialog = () => {
         <button
           type="button"
           className="btn-close"
-          // mat-dialog-close
           onClick={() => dispatch(showBusinessObjectiveDialog(false))}
         ></button>
       </div>
 
-      {/* mat-dialog-close */}
 
       <div className="row pt-5">
         <div className="col-lg-4">
           <a
             className="w-100"
             type="button"
-            // mat-dialog-close
             onClick={() => navigate("/audit/business-objectives-redirect")}
           >
             <div className="card card p-0 border-0">
@@ -64,7 +61,6 @@ const AddEngagementAuditDialog = () => {
           <a
             className="w-100 "
             type="button"
-            // mat-dialog-close
             onClick={() => navigate("/audit/business-process")}
           >
             <div className="card card p-0 border-0">
@@ -102,7 +98,6 @@ const AddEngagementAuditDialog = () => {
           <a
             className="w-100 "
             type="button"
-            // mat-dialog-close
             onClick={() => navigate("/audit/special-project-audit")}
           >
             <div className="card card p-0 border-0">
@@ -141,7 +136,6 @@ const AddEngagementAuditDialog = () => {
           <a
             className="w-100 "
             type="button"
-            // mat-dialog-close
             onClick={() => navigate("/audit/compliance-checklist-card")}
           >
             <div className="card p-0 border-0">
@@ -178,7 +172,6 @@ const AddEngagementAuditDialog = () => {
         <button
           type="button"
           className="btn btn-danger"
-          // mat-dialog-close
           onClick={() => dispatch(showBusinessObjectiveDialog(false))}
           style={{ position: "relative", top: "-40px" }}
         >

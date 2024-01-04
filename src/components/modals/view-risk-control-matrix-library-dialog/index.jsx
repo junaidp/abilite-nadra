@@ -27,11 +27,11 @@ const ViewRiskControlMatrixLibraryDialog = ({ setShowViewLibrary }) => {
               </thead>
               <tbody>
                 <tr>
-                  <td style={{ width: "250px" }}>
+                  <td className="w-250">
                     Lorem Ipsum is simply dummy text of the printing and
                     typesetting industry.
                   </td>
-                  <td style={{ width: "250px" }}>
+                  <td className="w-250">
                     Lorem Ipsum is simply dummy text of the printing and
                     typesetting industry.{" "}
                   </td>
@@ -47,9 +47,9 @@ const ViewRiskControlMatrixLibraryDialog = ({ setShowViewLibrary }) => {
                   </td>
                   <td>
                     <div className="d-flex justify-content-between align-items-center">
-                      <label className="w-50 mb-2">Risk Rating</label>
+                      <label className="width-50 mb-2">Risk Rating</label>
                       <select
-                        className="form-select w-50 mb-2"
+                        className="form-select width-50 mb-2"
                         aria-label="Default select example"
                       >
                         <option>high</option>
@@ -67,9 +67,9 @@ const ViewRiskControlMatrixLibraryDialog = ({ setShowViewLibrary }) => {
                   </td>
                   <td>
                     <div className="d-flex justify-content-between align-items-center">
-                      <label className="w-50 mb-2">Control Risk</label>
+                      <label className="width-50 mb-2">Control Risk</label>
                       <select
-                        className="form-select w-50 mb-2"
+                        className="form-select width-50 mb-2"
                         aria-label="Default select example"
                       >
                         <option>high</option>
@@ -90,11 +90,11 @@ const ViewRiskControlMatrixLibraryDialog = ({ setShowViewLibrary }) => {
                   </td>
                 </tr>
                 <tr>
-                  <td style={{ width: "250px" }}>
+                  <td className="w-250">
                     Lorem Ipsum is simply dummy text of the printing and
                     typesetting industry.{" "}
                   </td>
-                  <td style={{ width: "250px" }}>
+                  <td className="w-250">
                     Lorem Ipsum is simply dummy text of the printing and
                     typesetting industry.{" "}
                   </td>
@@ -110,9 +110,9 @@ const ViewRiskControlMatrixLibraryDialog = ({ setShowViewLibrary }) => {
                   </td>
                   <td>
                     <div className="d-flex justify-content-between align-items-center">
-                      <label className="w-50 mb-2">Risk Rating</label>
+                      <label className="width-50 mb-2">Risk Rating</label>
                       <select
-                        className="form-select w-50  mb-2"
+                        className="form-select width-50  mb-2"
                         aria-label="Default select example"
                       >
                         <option>high</option>
@@ -130,9 +130,9 @@ const ViewRiskControlMatrixLibraryDialog = ({ setShowViewLibrary }) => {
                   </td>
                   <td>
                     <div className="d-flex justify-content-between align-items-center">
-                      <label className="w-50 mb-2">Control Risk</label>
+                      <label className="width-50 mb-2">Control Risk</label>
                       <select
-                        className="form-select w-50  mb-2"
+                        className="form-select width-50  mb-2"
                         aria-label="Default select example"
                       >
                         <option>high</option>
