@@ -71,7 +71,7 @@ const RiskAssessments = () => {
               <input
                 placeholder="Filter"
                 id="inputField"
-                style={{ borderBottom: "1px solid black" }}
+                className="border-bottom"
               />
             </div>
           </div>
@@ -97,8 +97,7 @@ const RiskAssessments = () => {
                       <td>{item?.rating}</td>
                       <td className="text-center w-200">
                         <div
-                          className="btn btn-outline-light text-primary shadow"
-                          style={{ height: "32px", width: "180px" }}
+                          className="btn btn-outline-light text-primary shadow h-32 w-180"
                           onClick={() => setPerformRiskAssessmentModal(true)}
                         >
                           <span className="btn-label me-2">
@@ -108,10 +107,8 @@ const RiskAssessments = () => {
                         </div>
                       </td>
                       <td className="text-center pt-3">
-                        
                         <i
-                          className="fa fa-trash text-danger"
-                          style={{ fontSize: "16px" }}
+                          className="fa fa-trash text-danger f-18"
                         ></i>
                       </td>
                     </tr>

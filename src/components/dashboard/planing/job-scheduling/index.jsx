@@ -78,7 +78,7 @@ const JobScheduling = () => {
           <input
             placeholder="Filter"
             id="inputField"
-            style={{ borderBottom: "1px solid black" }}
+            className="input-border-bottom"
           />
         </div>
       </div>

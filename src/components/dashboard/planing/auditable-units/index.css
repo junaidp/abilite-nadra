@@ -35,3 +35,7 @@ th,
 td {
   max-width: 220px;
 }
+
+.input-border-bottom{
+  border-bottom: 1px solid black !important;
+}

@@ -66,7 +66,7 @@ const PlanningReport = () => {
               <input
                 placeholder="Filter"
                 id="inputField"
-                style={{ borderBottom: "1px solid black" }}
+                className="border-bottom-black"
               />
             </div>
           </div>

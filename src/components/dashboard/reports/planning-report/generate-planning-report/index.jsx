@@ -160,7 +160,7 @@ const GeneratePlanningReport = () => {
             <thead>
               <tr>
                 <th>Sr. #</th>
-                <th style={{ width: "220px" }}>Business Objective</th>
+                <th className="w-220">Business Objective</th>
                 <th>Inherent Level of Risk</th>
                 <th>Control Effectiveness</th>
                 <th>Residual Level of Risk</th>
@@ -245,17 +245,8 @@ const GeneratePlanningReport = () => {
                 <td className="width-50">3</td>
                 <td className="width-50">3</td>
                 <td className="width-50">3</td>
-                <td className="fw-bold width-50" >
-                  40
-                </td>
-                <td
-                  className=" text-white"
-                  style={{
-                    width: "50px",
-                    background: "#d9d900",
-                    textAlign: "center",
-                  }}
-                >
+                <td className="fw-bold width-50">40</td>
+                <td className=" text-white width-50 text-center bg-lightYellow">
                   M
                 </td>
               </tr>
@@ -280,13 +271,8 @@ const GeneratePlanningReport = () => {
                 <td className="width-50">3</td>
                 <td className="width-50">3</td>
                 <td className="width-50">3</td>
-                <td className="fw-bold width-50">
-                  30
-                </td>
-                <td
-                  className="bg-success  text-white"
-                  style={{ width: "50px", textAlign: "center" }}
-                >
+                <td className="fw-bold width-50">30</td>
+                <td className="bg-success  text-white width-50 text-center">
                   L
                 </td>
               </tr>
@@ -311,17 +297,8 @@ const GeneratePlanningReport = () => {
                 <td className="width-50">3</td>
                 <td className="width-50">3</td>
                 <td className="width-50">3</td>
-                <td className="fw-bold width-50">
-                  50
-                </td>
-                <td
-                  className=" text-white"
-                  style={{
-                    width: "50px",
-                    textAlign: "center",
-                    background: "#FFBF00",
-                  }}
-                >
+                <td className="fw-bold width-50">50</td>
+                <td className=" text-white bg-orange text-center width-50">
                   H
                 </td>
               </tr>
@@ -346,17 +323,8 @@ const GeneratePlanningReport = () => {
                 <td className="width-50">3</td>
                 <td className="width-50">3</td>
                 <td className="width-50">3</td>
-                <td className="fw-bold width-50">
-                  60
-                </td>
-                <td
-                  className="bg-danger text-white"
-                  style={{
-                    width: "50px",
-                    textAlign: "center",
-                    background: "#FFBF00",
-                  }}
-                >
+                <td className="fw-bold width-50">60</td>
+                <td className="bg-danger text-white bg-orange text-center width-50">
                   E
                 </td>
               </tr>
@@ -495,17 +463,13 @@ const GeneratePlanningReport = () => {
 
       <div className="row mb-3">
         <div className="col-lg-12 d-flex justify-content-between">
-          <div
-            className="btn btn-labeled btn-primary px-3 shadow fitContent"
-          >
+          <div className="btn btn-labeled btn-primary px-3 shadow fitContent">
             <span className="btn-label me-2">
               <i className="fa fa-file-pdf f-18"></i>
             </span>
             Download PDF
           </div>
-          <div
-            className="btn btn-labeled btn-primary px-3 shadow me-3 fitContent"
-          >
+          <div className="btn btn-labeled btn-primary px-3 shadow me-3 fitContent">
             <span className="btn-label me-2">
               <i className="fa fa-check-circle f-18"></i>
             </span>

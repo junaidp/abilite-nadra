@@ -157,9 +157,8 @@ const BusinessObjectiveRedirect = () => {
                         <div className="custom-file">
                           <input
                             type="file"
-                            className="custom-file-input hidden "
+                            className="custom-file-input hidden visibility-hidden"
                             id="inputGroupFile01"
-                            style={{ visibility: "hidden" }}
                           />
                           <label
                             className="btn btn-primary p-2 px-3"

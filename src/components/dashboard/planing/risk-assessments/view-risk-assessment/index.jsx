@@ -42,10 +42,6 @@ const ViewRiskAssessment = () => {
                 type="button"
                 role="tab"
                 aria-controls="home"
-                // aria-="true"
-                style={{
-                  color: activeBar === "riskApproach" ? "white" : "black",
-                }}
               >
                 <i className="fa fa-chart-pie me-2"></i>
                 Specific Risk Approach
@@ -66,10 +62,6 @@ const ViewRiskAssessment = () => {
                 type="button"
                 role="tab"
                 aria-controls="profile"
-                // aria-="false"
-                style={{
-                  color: activeBar === "factorApproach" ? "white" : "black",
-                }}
               >
                 <i className="fa fa-chart-line me-2"></i>
                 Risk Factor Approach
@@ -90,10 +82,6 @@ const ViewRiskAssessment = () => {
                 type="button"
                 role="tab"
                 aria-controls="contact"
-                // aria-="false"
-                style={{
-                  color: activeBar === "residualRisk" ? "white" : "black",
-                }}
               >
                 <i className="fa fa-balance-scale me-2"></i>
                 Determination of Residual Risk
@@ -291,17 +279,8 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td className="fw-bold width-50">
-                        40
-                      </td>
-                      <td
-                        className=" text-white"
-                        style={{
-                          width: "50px",
-                          background: "#d9d900",
-                          textAlign: "center",
-                        }}
-                      >
+                      <td className="fw-bold width-50">40</td>
+                      <td className=" text-white w-50 text-center bg-lightYellow">
                         M
                       </td>
                     </tr>
@@ -452,13 +431,8 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td className="fw-bold width-50">
-                        30
-                      </td>
-                      <td
-                        className="bg-success  text-white"
-                        style={{ width: "50px", textAlign: "center" }}
-                      >
+                      <td className="fw-bold width-50">30</td>
+                      <td className="bg-success  text-white w-50 text-center">
                         L
                       </td>
                     </tr>
@@ -609,17 +583,8 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td className="fw-bold width-50">
-                        50
-                      </td>
-                      <td
-                        className=" text-white"
-                        style={{
-                          width: "50px",
-                          textAlign: "center",
-                          background: "#FFBF00",
-                        }}
-                      >
+                      <td className="fw-bold width-50">50</td>
+                      <td className=" text-white w-50 text-center bg-orange">
                         H
                       </td>
                     </tr>
@@ -770,17 +735,8 @@ const ViewRiskAssessment = () => {
                           <option value="3">3</option>
                         </select>
                       </td>
-                      <td className="fw-bold width-50">
-                        60
-                      </td>
-                      <td
-                        className="bg-danger text-white"
-                        style={{
-                          width: "50px",
-                          textAlign: "center",
-                          background: "#FFBF00",
-                        }}
-                      >
+                      <td className="fw-bold width-50">60</td>
+                      <td className="bg-danger text-white w-50 text-center bg-orange">
                         E
                       </td>
                     </tr>
@@ -800,18 +756,12 @@ const ViewRiskAssessment = () => {
                     </div>
                   </div>
                   <div className="col-lg-3">
-                    <div
-                      className="px-3 py-2 border-0 card mb-0 label-text text-white"
-                      style={{ background: "#d9d900" }}
-                    >
+                    <div className="px-3 py-2 border-0 card mb-0 label-text text-white bg-yellow">
                       Moderate(M) = 33 to 45
                     </div>
                   </div>
                   <div className="col-lg-3">
-                    <div
-                      className="px-3 py-2 border-0 card mb-0 label-text  text-white"
-                      style={{ background: "#FFBF00" }}
-                    >
+                    <div className="px-3 py-2 border-0 card mb-0 label-text  text-white bg-orange">
                       High(H) = 46 to 59
                     </div>
                   </div>
@@ -1000,18 +950,12 @@ const ViewRiskAssessment = () => {
                     </div>
                   </div>
                   <div className="col-lg-3">
-                    <div
-                      className="px-3 py-2 border-0 card mb-0 label-text text-white"
-                      style={{ background: "#d9d900" }}
-                    >
+                    <div className="px-3 py-2 border-0 card mb-0 label-text text-white  bg-yellow">
                       4.1 to 6.5 = Moderate
                     </div>
                   </div>
                   <div className="col-lg-3">
-                    <div
-                      className="px-3 py-2 border-0 card mb-0  label-text text-white"
-                      style={{ background: "#FFBF00" }}
-                    >
+                    <div className="px-3 py-2 border-0 card mb-0  label-text text-white bg-orange">
                       6.6 to 8.5 = High
                     </div>
                   </div>
@@ -1034,7 +978,7 @@ const ViewRiskAssessment = () => {
                   <thead>
                     <tr>
                       <th>Sr. #</th>
-                      <th style={{ width: "220px" }}>Business Objective</th>
+                      <th className="w-220">Business Objective</th>
                       <th>Inherent Level of Risk</th>
                       <th>Control Effectiveness</th>
                       <th>Residual Level of Risk</th>

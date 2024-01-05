@@ -19,13 +19,7 @@ const AuditableUnitRatingDialog = ({ setAuditableUnitRatingDialog }) => {
             </div>
             <div className=" col-lg-3 text-end">
               <div
-                className="text-white bg-danger float-end  px-2 py-3 rounded shadow"
-                style={{
-                  fontSize: "11px",
-                  height: "15px",
-                  lineHeight: "0px",
-                  width: "fit-content",
-                }}
+                className="text-white bg-danger float-end  px-2 py-3 rounded shadow risk-rating-btn" 
               >
                 Risks Rating: 65
               </div>

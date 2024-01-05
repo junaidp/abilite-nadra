@@ -17,13 +17,12 @@ const SpecificRiskApproach = () => {
           Specific Risk Approach with Total Risk Score
         </div>
         <div className="btn-wrap-special-risk-factor">
-
-        <div className="btn btn-labeled btn-primary px-3 shadow">
-          <span className="btn-label me-2">
-            <i className="fa fa-plus-circle"></i>
-          </span>
-          Add New Risk Factor
-        </div>
+          <div className="btn btn-labeled btn-primary px-3 shadow">
+            <span className="btn-label me-2">
+              <i className="fa fa-plus-circle"></i>
+            </span>
+            Add New Risk Factor
+          </div>
         </div>
       </header>
 
@@ -252,17 +251,13 @@ const SpecificRiskApproach = () => {
                 </div>
               </div>
               <div className="col-lg-3">
-                <div
-                  className="px-3 py-2 border-0 card mb-0 label-text text-white"
-                  style={{ background: "#d9d900" }}
-                >
+                <div className="px-3 py-2 border-0 card mb-0 label-text text-white bg-yellow">
                   4.1 to 6.5 = Moderate
                 </div>
               </div>
               <div className="col-lg-3">
                 <div
-                  className="px-3 py-2 border-0 card mb-0  label-text text-white"
-                  style={{ background: "#FFBF00" }}
+                  className="px-3 py-2 border-0 card mb-0  label-text text-white bg-orange"
                 >
                   6.6 to 8.5 = High
                 </div>
@@ -280,15 +275,14 @@ const SpecificRiskApproach = () => {
 
             <h6 className="mt-2">Risk factor Approach with Total Risk Score</h6>
 
-            
-             <div className="table-responsive overflow-x-hidden">
+            <div className="table-responsive overflow-x-hidden">
               <table className="table w-100 table-bordered table-hover rounded equal-columns">
                 <thead>
                   <tr>
                     <th className="sr-col">Sr. #</th>
                     <th>Criteria for Risk Management and Control Processes</th>
-                    <th style={{ width: "100px" }}>Remarks</th>
-                    <th style={{ width: "100px" }}>Comments</th>
+                    <th className="width-100">Remarks</th>
+                    <th className="width-100">Comments</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -300,15 +294,14 @@ const SpecificRiskApproach = () => {
                     </td>
                     <td>
                       <select
-                        className="form-select border-2"
-                        style={{ width: "60px", padding: "0px 6px" }}
+                        className="form-select border-2 "
                         aria-label="Default select example"
                       >
                         <option>Yes</option>
                         <option value="2">No</option>
                       </select>
                     </td>
-                    <td style={{ width: "400px" }}>
+                    <td className="w-400">
                       <textarea
                         className="form-control"
                         placeholder="Enter Reason"

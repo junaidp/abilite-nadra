@@ -36,11 +36,10 @@ const FollowUpParticulars = () => {
         <textarea
           type="text"
           id="fname"
-          className="form-control mb-4"
+          className="form-control mb-4 h-200"
           name="fname"
           placeholder="Add detail here"
           required="required"
-          style={{ height: "200px" }}
         ></textarea>
         <div className="row py-3">
           <div className="col-lg-12 text-end">
@@ -517,8 +516,7 @@ const FollowUpParticulars = () => {
           <div className="row">
             <div className="col-lg-12 text-end ">
               <div
-                className="d-flex align-items-center"
-                style={{ placeContent: "end" }}
+                className="d-flex align-items-center place-end"
               >
                 <a
                   href="#"

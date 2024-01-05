@@ -72,15 +72,14 @@ const AuditPlanSummary = () => {
               <tbody>
                 <tr>
                   <td>1</td>
-                  <td style={{ minWidth: "300px" }}>
+                  <td className="min-w-300">
                     Lorem Ipsum is simply dummy text of the printing and
                     typesetting industry.
                   </td>
                   <td className="normal-text">4.5</td>
                   <td>
                     <select
-                      style={{ width: "95px" }}
-                      className="form-select"
+                      className="form-select w-95"
                       aria-label="Default select example"
                     >
                       <option>High</option>
@@ -133,12 +132,8 @@ const AuditPlanSummary = () => {
                   <td className="normal-text">15</td>
                   <td className="normal-text">30</td>
                   <td className="normal-text">45</td>
-                  <td className="full-audit" style={{ width: "20px" }}>
-                    20
-                  </td>
-                  <td className="full-audit" style={{ width: "20px" }}>
-                    15
-                  </td>
+                  <td className="full-audit w-20">20</td>
+                  <td className="full-audit w-20">15</td>
                   <td className="normal-text"></td>
                   <td className="normal-text"></td>
                   <td className="normal-text"></td>
@@ -164,8 +159,7 @@ const AuditPlanSummary = () => {
                   <td className="normal-text">4.5</td>
                   <td>
                     <select
-                      style={{ width: "95px" }}
-                      className="form-select"
+                      className="form-select w-95"
                       aria-label="Default select example"
                     >
                       <option>High</option>
@@ -280,7 +274,7 @@ const AuditPlanSummary = () => {
 
         <div className="col-10 d-flex align-items-center justify-content-end">
           <a href="#" className="text-secondary">
-            <i className="fa fa-print me-3" style={{ fontSize: "18px" }}></i>
+            <i className="fa fa-print me-3 f-18"></i>
           </a>
 
           <nav aria-label="Page navigation example">

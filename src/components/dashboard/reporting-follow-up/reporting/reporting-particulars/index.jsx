@@ -478,8 +478,7 @@ const ReportingParticulars = () => {
           <div className="row">
             <div className="col-lg-12 text-end ">
               <div
-                className="d-flex align-items-center"
-                style={{ placeContent: "end" }}
+                className="d-flex align-items-center place-end"
               >
                 <a
                   href="#"

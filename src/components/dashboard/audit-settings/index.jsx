@@ -594,10 +594,7 @@ const AuditSettings = () => {
                   <div className="card p-3 shadow-sm setting-tab">
                     <h2 className="text-center heading p-3">Email Settings</h2>
                     <nav
-                      style={{
-                        borderBottom: "1px solid #c7c7c7",
-                        padding: "10px",
-                      }}
+                    className="email-settings-btn"
                     >
                       <div
                         className="nav settings-nav-tabs glass-effect border-0"

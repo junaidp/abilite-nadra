@@ -18,15 +18,7 @@ const RatingDialog = () => {
               industry.
             </div>
             <div className=" col-lg-3 text-end">
-              <div
-                className="text-white bg-danger float-end  px-2 py-3 rounded shadow"
-                style={{
-                  fontSize: "11px",
-                  height: "15px",
-                  lineHeight: "0px",
-                  width: "fitContent",
-                }}
-              >
+              <div className="text-white bg-danger float-end  px-2 py-3 rounded shadow risk-rating-btn">
                 Risks Rating: 65
               </div>
             </div>
@@ -49,8 +41,11 @@ const RatingDialog = () => {
           <div className="row mb-3">
             <div className="col-lg-12">
               <label>Job Type</label>
-              <select className="form-select" aria-label="Default select example">
-                <option >Review</option>
+              <select
+                className="form-select"
+                aria-label="Default select example"
+              >
+                <option>Review</option>
                 <option value="1">Compliance Checklist</option>
                 <option value="2">Special Audit</option>
                 <option value="3">Fraud & Investigation</option>
@@ -62,16 +57,22 @@ const RatingDialog = () => {
           <div className="row">
             <div className="col-lg-6">
               <label>Process</label>
-              <select className="form-select" aria-label="Default select example">
-                <option >loram</option>
+              <select
+                className="form-select"
+                aria-label="Default select example"
+              >
+                <option>loram</option>
                 <option value="1">Loram 2</option>
               </select>
             </div>
 
             <div className="col-lg-6">
               <label>Sub-Process</label>
-              <select className="form-select" aria-label="Default select example">
-                <option >loram</option>
+              <select
+                className="form-select"
+                aria-label="Default select example"
+              >
+                <option>loram</option>
                 <option value="1">Loram 2</option>
               </select>
             </div>
@@ -79,9 +80,7 @@ const RatingDialog = () => {
         </div>
       </div>
 
-      <button className="btn btn-danger mb-4 mt-5 float-end">
-        Close
-      </button>
+      <button className="btn btn-danger mb-4 mt-5 float-end">Close</button>
     </div>
   );
 };

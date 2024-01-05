@@ -25,11 +25,10 @@ const GeneratePlaningReportDialog = ({ setGeneratePlaningReportDialog }) => {
             <textarea
               type="text"
               id="fname"
-              className="form-control"
+              className="form-control h-400"
               name="fname"
               placeholder="Add detail here"
               required="required"
-              style={{ height: "400px" }}
             ></textarea>
           </div>
         </div>

@@ -69,5 +69,10 @@
   border-radius: 10px;
 }
 
+.email-settings-btn{
+  padding: 10px;
+  border-bottom: 1px solid #c7c7c7;
+}
+
 
 

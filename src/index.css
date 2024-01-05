@@ -71,6 +71,9 @@ body {
 .w-200{
   width: 200px !important;
 }
+.w-220{
+  width: 220px !important;
+}
 .w-250{
   width: 250px !important;
 }
@@ -111,6 +114,47 @@ body {
 .decoration-none{
   text-decoration: none !important;
 }
+.bg-orange{
+  background-color: #FFBF00 !important;
+}
+
+.bg-lightYellow{
+  background-color: #d9d900 !important;
+}
+
+
+.width-50{
+  width: 50px !important;
+}
+
+.h-200{
+  height: 200px !important;
+}
+
+
+.risk-rating-btn{
+  font-size: 11px !important;
+  height: 15px !important;
+  line-height: 0px !important;
+  width: fit-content !important;
+}
+
+.top-nagative-40{
+  top: -40px !important;
+}
+
+
+.border-bottom-black{
+  border-bottom: 1px solid black !important;
+}
+
+.place-end{
+  place-content: end !important;
+}
+
+.h-400{
+  height: 400px !important;
+}
 
 .flex{
   display: flex !important;
@@ -143,12 +187,20 @@ body {
   margin-left: 100px !important;
 }
 
+.bg-yellow{
+   background-color: #d9d900 !important;
+}
+
 .bold{
   font-weight: bold !important;
 }
 
 .relative{
   position:  relative !important;
+}
+
+.text-center{
+  align-items: center !important;
 }
 
 .t-12{

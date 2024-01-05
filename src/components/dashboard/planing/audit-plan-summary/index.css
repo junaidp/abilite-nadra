@@ -37,10 +37,19 @@ th {
 .normal-text {
   width: 58px;
 }
-/*.limited-audit:hover {*/
-/*  background-color: #fff; !* Replace #yourColor with the color you want *!*/
-/*}*/
 
-/*.full-audit:hover {*/
-/*  background-color: #fff; !* Replace #yourColor with the color you want *!*/
-/*}*/
+.min-w-300{
+  min-width: 300px;
+}
+
+.w-20{
+  width: 20px;
+}
+
+.w-95{
+  width: 95px;
+}
+
+.f-18{
+  font-size: 18px;
+}

@@ -115,7 +115,7 @@ const ViewJobSchedule = () => {
 
         <div className="col-10 d-flex align-items-center justify-content-end">
           <a href="#" className="text-secondary">
-            <i className="fa fa-print me-3" style={{ fontSize: "18px" }}></i>
+            <i className="fa fa-print me-3 f-18"></i>
           </a>
 
           <nav aria-label="Page navigation example">

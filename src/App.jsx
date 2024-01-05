@@ -9,7 +9,6 @@ import Register from "./pages/auth/register/Register";
 import Home from "./pages/home/Home";
 import ForgetPassword from "./pages/auth/forget-password/ForgetPassword";
 import DashboardHomePage from "./pages/dashboard/home/DashboardHome";
-import PlaningHomePage from "./pages/dashboard/planing/home/PlaningHome";
 import BusinessObjectivePage from "./pages/dashboard/planing/business-objective/BusinessObjective";
 import RiskAssessmentsPage from "./pages/dashboard/planing/risk-assessments/RiskAssessments";
 import AuditableUnitsPage from "./pages/dashboard/planing/auditable-units/AuditableUnits";
@@ -17,7 +16,6 @@ import JobPrioritizationPage from "./pages/dashboard/planing/job-prioritization/
 import JobSechedulingPage from "./pages/dashboard/planing/job-scheduling/JobSecheduling";
 import AuditPlanSummaryPage from "./pages/dashboard/planing/audit-plan-summary/AuditPlanSummary";
 import AuditEngagementPage from "./pages/dashboard/audit-engagement/AuditEngagement";
-import ReportingFollowUpPage from "./pages/dashboard/reporting-follow-up/ReportingFollowUp";
 import ViewRiskAssessmentPage from "./pages/dashboard/planing/risk-assessments/view-risk-assessment/ViewRiskAssessment";
 import PlaningReportPage from "./pages/dashboard/report/planing-report/PlaningReport";
 import ViewJobschedulePage from "./pages/dashboard/planing/job-scheduling/view-job-schedule/ViewJobschedule";
@@ -28,7 +26,7 @@ import BusinessObjectiveRedirectPage from "./pages/dashboard/planing/business-ob
 import BusinessProcessPage from "./pages/dashboard/planing/business-objective/business-process/Business-Process";
 import SpecialProjectAuditPage from "./pages/dashboard/planing/business-objective/special-project-audit/SpecialProjectAudit";
 import ComplianceCheckListCardPage from "./pages/dashboard/planing/business-objective/compliance-checklist-card/ComplianceCheckListCard";
-import UserProfile from "./components/user/UserProfile";
+import UserProfile from "./components/user/user-profile/UserProfile";
 import KickOffPage from "./pages/dashboard/audit-engagement/kick-off/KickOff";
 import SpecificRiskApproachPage from "./pages/dashboard/planing/risk-assessments/specific-risk-approach/SpecificRiskApproach";
 import RiskFactorApproachPage from "./pages/dashboard/planing/risk-assessments/risk-factor-approach/RiskFactorApproach";
@@ -41,7 +39,6 @@ import AuditSettingsPage from "./pages/dashboard/audit-settings/AuditSettings";
 import InternalAuditReportPage from "./pages/dashboard/report/internal-audit-report/InternalAuditReport";
 import Layout from "./components/common/layout/Layout";
 import GenerateInternalAuditReportPage from "./pages/dashboard/report/internal-audit-report/generate-internal-audit-report/GenerateInternalAuditReport";
-import CompaniesPage from "./pages/dashboard/companies/Companies";
 import { changeAuthUser } from "./global-redux/reducers/auth/slice";
 import { setupGetCompanies } from "./global-redux/reducers/company/slice";
 import { useDispatch, useSelector } from "react-redux";
@@ -100,10 +97,6 @@ const App = () => {
           <Route path="/audit" element={<Layout />}>
             <Route path="dashboard" element={<DashboardHomePage />} />
             <Route
-              path="report-audit-planning-and-scheduling"
-              element={<PlaningHomePage />}
-            />
-            <Route
               path="business-objective"
               element={<BusinessObjectivePage />}
             />
@@ -120,10 +113,6 @@ const App = () => {
               element={<AuditPlanSummaryPage />}
             />
             <Route path="audit-engagement" element={<AuditEngagementPage />} />
-            <Route
-              path="reporting-and-followup"
-              element={<ReportingFollowUpPage />}
-            />
             <Route path="planning-report" element={<PlaningReportPage />} />
             <Route
               path="view-risk-assesment"
@@ -172,7 +161,6 @@ const App = () => {
               element={<FollowUpParticularsPage />}
             />
             <Route path="audit-settings" element={<AuditSettingsPage />} />
-            <Route path="companies" element={<CompaniesPage />} />
             <Route
               path="internal-audit-report"
               element={<InternalAuditReportPage />}

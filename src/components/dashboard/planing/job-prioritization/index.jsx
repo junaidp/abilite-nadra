@@ -79,7 +79,7 @@ const JobPrioritization = () => {
                   Maximum 1500 words
                 </label>
               </td>
-              <td style={{ width: "100px" }}>
+              <td className="width-100">
                 <select
                   className="form-select"
                   aria-label="Default select example"
@@ -110,7 +110,7 @@ const JobPrioritization = () => {
 
           <div className="col-10 d-flex align-items-center justify-content-end">
             <a href="#" className="text-secondary">
-              <i className="fa fa-print me-3" style={{ width: "18px" }}></i>
+              <i className="fa fa-print me-3 w-18"></i>
             </a>
 
             <nav aria-label="Page navigation example">

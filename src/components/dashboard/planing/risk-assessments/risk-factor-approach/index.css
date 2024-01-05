@@ -2,6 +2,10 @@
   margin-left: 900px;
 }
 
+.w-400{
+  width: 400px;
+}
+
 #SideComponents {
   width: 76%;
   height: 100%;
@@ -63,3 +67,7 @@
     width: 90%;
   }
 }
+/* 
+.bg-yellow{
+  background-color: #d9d900 !important;
+} */

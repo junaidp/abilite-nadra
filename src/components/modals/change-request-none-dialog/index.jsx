@@ -1,6 +1,6 @@
 import React from "react";
 
-const ChangeRequestNoneModal = ({ setShowCancelModal }) => {
+const ChangeRequestNoneDialog = ({ setShowCancelModal }) => {
   return (
     <div className="container px-4 pb-2 pt-4">
       <div className="row mb-3">
@@ -8,7 +8,6 @@ const ChangeRequestNoneModal = ({ setShowCancelModal }) => {
           <div className="heading">Cancelled Reason</div>
         </div>
       </div>
-
       <div className="row mb-3">
         <div className="col-lg-6">
           <label className="label-text">Planned Start Date</label>
@@ -62,4 +61,4 @@ const ChangeRequestNoneModal = ({ setShowCancelModal }) => {
   );
 };
 
-export default ChangeRequestNoneModal;
+export default ChangeRequestNoneDialog;

@@ -12,7 +12,7 @@ let menuItems = [
     id: "li-audit",
     label: "Audit Planning & Scheduling",
     icon: "fa fa-calendar-check me-1",
-    route: "/audit/report-audit-planning-and-scheduling",
+    // route: "/audit/report-audit-planning-and-scheduling",
     active: false,
     open: false,
     subMenu: [

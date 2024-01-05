@@ -171,9 +171,8 @@ const AddEngagementAuditDialog = () => {
       <div className="modal-footer px-2">
         <button
           type="button"
-          className="btn btn-danger"
+          className="btn btn-danger relative top-nagative-40"
           onClick={() => dispatch(showBusinessObjectiveDialog(false))}
-          style={{ position: "relative", top: "-40px" }}
         >
           Close
         </button>

@@ -1,5 +1,5 @@
 import React from "react";
-import UserProfileDialog from "../modals/user-profile-dialog/index";
+import UserProfileDialog from "../../modals/user-profile-dialog/index";
 import "./UserProfile.css";
 
 const UserProfile = () => {

@@ -214,16 +214,14 @@ const RiskFactorApproach = () => {
               </div>
               <div className="col-lg-3">
                 <div
-                  className="px-3 py-2 border-0 card shadow text-white label-text  label-text  label-text "
-                  style={{ background: "#d9d900" }}
+                  className="px-3 py-2 border-0 card shadow text-white label-text  label-text  label-text bg-yellow"
                 >
                   Moderate(M) = 33 to 45
                 </div>
               </div>
               <div className="col-lg-3">
                 <div
-                  className="px-3 py-2 border-0 card shadow  text-white label-text"
-                  style={{ background: "#FFBF00" }}
+                  className="px-3 py-2 border-0 card shadow  text-white label-text bg-orange"
                 >
                   High(H) = 46 to 59
                 </div>
@@ -235,21 +233,20 @@ const RiskFactorApproach = () => {
               </div>
             </div>
 
-           
-<div className="table-responsive overflow-x-hidden">
+            <div className="table-responsive overflow-x-hidden">
               <table className="table w-100 table-bordered table-hover rounded equal-columns">
                 <thead>
                   <tr>
                     <th className="sr-col">Sr. #</th>
                     <th>Criteria for Risk Management and Control Processes</th>
-                    <th style={{ width: "100px" }}>Remarks</th>
-                    <th style={{ width: "100px" }}>Comments</th>
+                    <th className="width-100">Remarks</th>
+                    <th className="width-100">Comments</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td>1</td>
-                    <td style={{ width: "400px" }}>
+                    <td className="w-400">
                       Lorem ipsum is simply dummy text of the printing and
                       typesetting industry.
                     </td>
@@ -257,13 +254,12 @@ const RiskFactorApproach = () => {
                       <select
                         className="form-select border-2"
                         aria-label="Default select example"
-                        style={{ width: "60px", padding: "0px 6px" }}
                       >
                         <option>Yes</option>
                         <option value="2">No</option>
                       </select>
                     </td>
-                    <td style={{ width: "300px" }}>
+                    <td className="w-300">
                       <textarea
                         className="form-control"
                         placeholder="Enter Reason"
