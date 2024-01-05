@@ -6,69 +6,65 @@ import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setupResetPassword,
-  changeResetPasswordResponseSuccess,
-  changeAuthErrorResponse,
+  resetResetPasswordSuccess,
+  changeAuthState
 } from "../../../global-redux/reducers/auth/slice";
 import { useSearchParams } from "react-router-dom";
 
 const ResetPassword = () => {
-  const [password, setPassword] = React.useState("");
-  const [confirmPassword, setConfirmPassword] = React.useState("");
+  let { resetPassword, resetConfirmPassword, resetPasswordSuccess, loading } =
+    useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const email = searchParams.get("email");
   const token = searchParams.get("token");
-  const { resetPasswordResponseSuccess, authError } = useSelector(
-    (state) => state.auth
-  );
+
+  function handleChange(event) {
+    dispatch(
+      changeAuthState({
+        name: event?.target?.name,
+        value: event?.target?.value,
+      })
+    );
+  }
 
   function handleResetPassword(event) {
     event.preventDefault();
-    if (password === "" || confirmPassword === "") {
-      toast.error("Provide  all fields");
-    }
-    if (password !== "" && confirmPassword !== "") {
-      if (password !== confirmPassword) {
-        toast.error("new password and confirm password must be same");
+    if (!loading) {
+      if (resetPassword === "" || resetConfirmPassword === "") {
+        toast.error("Please provide all the fields");
+      }
+      if (resetPassword !== "" && resetConfirmPassword !== "") {
+        if (resetPassword !== resetConfirmPassword) {
+          toast.error("new password and confirm password must be same");
+        }
+      }
+
+      if (
+        resetPassword !== "" &&
+        resetConfirmPassword !== "" &&
+        resetPassword === resetConfirmPassword
+      ) {
+        dispatch(
+          setupResetPassword({
+            newPassword: resetPassword,
+            email: email,
+            token: token,
+          })
+        );
       }
     }
-
-    if (
-      password !== "" &&
-      confirmPassword !== "" &&
-      password === confirmPassword
-    ) {
-      dispatch(
-        setupResetPassword({
-          newPassword: password,
-          email: email,
-          token: token,
-        })
-      );
-    }
   }
-  React.useEffect(() => {
-    if (resetPasswordResponseSuccess) {
-      toast.success("Password Reset Successfully");
-      setPassword("");
-      setConfirmPassword("");
-    }
-    setTimeout(() => {
-      // navigate("/login");
-      dispatch(changeResetPasswordResponseSuccess(false));
-    }, 3000);
-  }, [resetPasswordResponseSuccess]);
 
   React.useEffect(() => {
-    if (authError === true) {
-      toast.error("An Error Has Accoured");
+    if (resetPasswordSuccess) {
+      dispatch(resetResetPasswordSuccess());
       setTimeout(() => {
-        dispatch(changeAuthErrorResponse(false));
-      }, 3000);
+        navigate("/login");
+      }, 500);
     }
-  }, [authError]);
-
+  }, [resetPasswordSuccess]);
   return (
     <section className="fxt-template-animation fxt-template-layout31">
       <span className="fxt-shape fxt-animation-active"></span>
@@ -113,11 +109,11 @@ const ResetPassword = () => {
                         type="password"
                         id="password"
                         className="form-control"
-                        name="password"
+                        name="resetPassword"
                         placeholder="Your New Password"
                         required="required"
-                        value={password}
-                        onChange={(event) => setPassword(event.target.value)}
+                        value={resetPassword}
+                        onChange={handleChange}
                       />
                     </div>
                   </div>
@@ -128,13 +124,11 @@ const ResetPassword = () => {
                         type="password"
                         id="confirmPassword"
                         className="form-control"
-                        name="confirmPassword"
+                        name="resetConfirmPassword"
                         placeholder="Confirm Password"
                         required="required"
-                        value={confirmPassword}
-                        onChange={(event) =>
-                          setConfirmPassword(event.target.value)
-                        }
+                        value={resetConfirmPassword}
+                        onChange={handleChange}
                       />
                     </div>
                   </div>
@@ -142,10 +136,10 @@ const ResetPassword = () => {
                     <div className="form-group">
                       <button
                         type="submit"
-                        className="fxt-btn-fill"
+                        className={`fxt-btn-fill ${loading && "disabled"}`}
                         onClick={handleResetPassword}
                       >
-                        Submit
+                        {loading ? "Loading" : "Submit"}
                       </button>
                     </div>
                   </div>

@@ -6,71 +6,53 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import {
   setupLoginUser,
-  changeAuthErrorResponse,
+  changeAuthState,
 } from "../../../global-redux/reducers/auth/slice";
 
 const Login = () => {
   const [showpassword, setShowPassword] = React.useState(false);
-  const [data, setData] = React.useState({
-    email: "",
-    password: "",
-  });
-  const { userLoggedIn, authError, user } = useSelector((state) => state.auth);
+  const { user, loginEmail, loginPassword, loading, authSuccess } = useSelector(
+    (state) => state.auth
+  );
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   function handleChange(event) {
-    setData((pre) => {
-      return {
-        ...pre,
-        [event.target.name]: event.target.value,
-      };
-    });
+    dispatch(
+      changeAuthState({ name: event.target.name, value: event.target.value })
+    );
   }
-
   function handleLogin(event) {
     event.preventDefault();
-    if (data?.email === "" || data?.password === "") {
-      toast.error("Provide all values");
-    }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const isValid = emailRegex.test(data?.email);
-    if (!isValid && data?.email !== "") {
-      toast.error("Email is Incorrect");
-    }
-
-    if (data?.email !== "" && data?.password !== "" && isValid) {
-      dispatch(
-        setupLoginUser({
-          data: { password: data?.password, email: data?.email },
-        })
-      );
+    if (!loading) {
+      if (loginEmail === "" || loginPassword === "") {
+        toast.error("Provide all values");
+      }
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const isValid = emailRegex.test(loginEmail);
+      if (!isValid && loginEmail !== "") {
+        toast.error("Email is Incorrect");
+      }
+      if (loginEmail !== "" && loginPassword !== "" && isValid) {
+        dispatch(
+          setupLoginUser({
+            data: { password: loginPassword, email: loginEmail },
+          })
+        );
+      }
     }
   }
-
-  React.useEffect(() => {
-    if (userLoggedIn) {
-      toast.success("Login Success! Redirecting to dashboard");
-      setTimeout(() => {
-        navigate("/audit/dashboard");
-      }, 2000);
-    }
-  }, [userLoggedIn]);
-
-  React.useEffect(() => {
-    if (authError === true) {
-      toast.error("An Error Has Accoured");
-      setTimeout(() => {
-        dispatch(changeAuthErrorResponse(false));
-      }, 3000);
-    }
-  }, [authError]);
 
   React.useEffect(() => {
     if (user) {
       localStorage.setItem("user", JSON.stringify(user));
     }
   }, [user]);
+
+  React.useEffect(() => {
+    if (authSuccess) {
+      navigate("/audit/dashboard");
+    }
+  }, [authSuccess]);
 
   return (
     <section className="fxt-template-animation fxt-template-layout31">
@@ -127,29 +109,25 @@ const Login = () => {
                         className="form-control"
                         placeholder="Email"
                         required="required"
-                        name="email"
-                        value={data?.email}
+                        name="loginEmail"
+                        value={loginEmail}
                         onChange={handleChange}
                       />
                     </div>
                   </div>
                   <div className="col-12">
-                    <div
-                      className="form-group relative"
-                    >
+                    <div className="form-group relative">
                       <input
                         id="password"
                         type={showpassword ? "password" : "string"}
                         className="form-control"
                         placeholder="********"
                         required="required"
-                        name="password"
-                        value={data?.password}
+                        name="loginPassword"
+                        value={loginPassword}
                         onChange={handleChange}
                       />
-                      <div
-                        className="t-12 r-12 absolute"
-                      >
+                      <div className="t-12 r-12 absolute">
                         {!showpassword && (
                           <div
                             onClick={() => setShowPassword(true)}
@@ -167,7 +145,6 @@ const Login = () => {
                           </div>
                         )}
                       </div>
-                      
                     </div>
                   </div>
                   <div className="col-12">
@@ -190,10 +167,10 @@ const Login = () => {
                     <div className="form-group">
                       <button
                         type="submit"
-                        className="btn fxt-btn-fill"
+                        className={`btn fxt-btn-fill ${loading && "disabled"}`}
                         onClick={handleLogin}
                       >
-                        Log in
+                        {loading ? "Loading" : "Log in"}
                       </button>
                     </div>
                   </div>

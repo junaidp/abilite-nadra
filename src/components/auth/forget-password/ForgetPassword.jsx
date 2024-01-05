@@ -6,51 +6,41 @@ import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setupForgetPassword,
-  changeForgotPasswordResponseSuccess,
-  changeAuthErrorResponse,
+  changeAuthState,
 } from "../../../global-redux/reducers/auth/slice";
 
 const ForgetPassword = () => {
-  const [email, setEmail] = React.useState("");
+  let { forgetPasswordEmail, loading } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { forgotPasswordResponseSuccess, authError } = useSelector(
-    (state) => state.auth
-  );
+
+  function handleChange(event) {
+    dispatch(
+      changeAuthState({
+        name: event?.target?.name,
+        value: event?.target?.value,
+      })
+    );
+  }
 
   function handleForgetPassword(event) {
     event.preventDefault();
-    if (email === "") {
-      toast.error("Provide the email");
-    }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const isValid = emailRegex.test(email);
-    if (!isValid && email !== "") {
-      toast.error("Email is Incorrect");
-    }
+    if (!loading) {
+      if (forgetPasswordEmail === "") {
+        toast.error("Provide the email");
+      }
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const isValid = emailRegex.test(forgetPasswordEmail);
+      if (!isValid && forgetPasswordEmail !== "") {
+        toast.error("Email is Incorrect");
+      }
 
-    if (email !== "" && isValid) {
-      dispatch(setupForgetPassword({ email: email }));
+      if (forgetPasswordEmail !== "" && isValid) {
+        dispatch(setupForgetPassword({ email: forgetPasswordEmail }));
+      }
     }
   }
-  React.useEffect(() => {
-    if (forgotPasswordResponseSuccess) {
-      toast.success("Password Reset Link is Send");
-      setEmail("");
-    }
-    setTimeout(() => {
-      dispatch(changeForgotPasswordResponseSuccess(false));
-    }, 3000);
-  }, [forgotPasswordResponseSuccess]);
 
-  React.useEffect(() => {
-    if (authError === true) {
-      toast.error("An Error Has Accoured");
-      setTimeout(() => {
-        dispatch(changeAuthErrorResponse(false));
-      }, 3000);
-    }
-  }, [authError]);
   return (
     <section className="fxt-template-animation fxt-template-layout31">
       <span className="fxt-shape fxt-animation-active"></span>
@@ -95,11 +85,11 @@ const ForgetPassword = () => {
                         type="email"
                         id="email"
                         className="form-control"
-                        name="email"
+                        name="forgetPasswordEmail"
                         placeholder="Your email Address"
                         required="required"
-                        value={email}
-                        onChange={(event) => setEmail(event.target.value)}
+                        value={forgetPasswordEmail}
+                        onChange={handleChange}
                       />
                     </div>
                   </div>
@@ -108,10 +98,10 @@ const ForgetPassword = () => {
                     <div className="form-group">
                       <button
                         type="submit"
-                        className="fxt-btn-fill"
+                        className={`fxt-btn-fill ${loading && "disabled"}`}
                         onClick={handleForgetPassword}
                       >
-                        Submit
+                        {loading ? "Loading" : "Submit"}
                       </button>
                     </div>
                   </div>

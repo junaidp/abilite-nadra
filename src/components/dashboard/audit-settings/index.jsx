@@ -1,5 +1,4 @@
 import React from "react";
-import { changeUserLoggedIn } from "../../../global-redux/reducers/auth/slice";
 import AddCheckListManagementDialog from "../../modals/add-checklist-management-dialog/index";
 import UserManagementDialog from "../../modals/add-user-dialog/index";
 import { useDispatch } from "react-redux";
@@ -12,9 +11,6 @@ const AuditSettings = () => {
   const [userManagementDialog, setUserManagementDialog] = React.useState(false);
   const [addCompanyDialog, setAddCompantDialog] = React.useState(false);
   const dispatch = useDispatch();
-  React.useEffect(() => {
-    dispatch(changeUserLoggedIn(false));
-  }, []);
   return (
     <div>
       {checkListManagementDialog && (

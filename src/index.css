@@ -11,220 +11,219 @@ body {
   overflow-x: hidden;
 }
 
-.h-40{
+.h-40 {
   height: 40px !important;
 }
-.h-50{
+.h-50 {
   height: 50px !important;
 }
 
-
-.pb-10{
+.pb-10 {
   padding-bottom: 10px !important;
 }
 
-.min-h-100{
+.min-h-100 {
   min-height: 100vh !important;
 }
 
-.w-10{
+.w-10 {
   width: 10px !important;
 }
-.w-18{
+.w-18 {
   width: 18px !important;
 }
 
-.w-45{
+.w-45 {
   width: 45px !important;
 }
 
-.width-50{
+.width-50 {
   width: 50px !important;
 }
-.min-width-50{
+.min-width-50 {
   min-width: 50px !important;
 }
-.w-60{
+.w-60 {
   width: 60px !important;
 }
-.w-70{
+.w-70 {
   width: 70px !important;
 }
-.w-80{
+.w-80 {
   width: 80px !important;
 }
-.w-100{
+.w-100 {
   width: 100px !important;
 }
-.w-130{
+.w-130 {
   width: 130px !important;
 }
-.w-150{
+.w-150 {
   width: 150px !important;
 }
-.w-190{
+.w-190 {
   width: 190px !important;
 }
-.w-180{
+.w-180 {
   width: 180px !important;
 }
-.w-200{
+.w-200 {
   width: 200px !important;
 }
-.w-220{
+.w-220 {
   width: 220px !important;
 }
-.w-250{
+.w-250 {
   width: 250px !important;
 }
-.w-300{
+.w-300 {
   width: 300px !important;
 }
 
-.f-10{
+.f-10 {
   font-size: 10px !important;
 }
-.f-12{
+.f-12 {
   font-size: 12px !important;
 }
-.f-13{
+.f-13 {
   font-size: 13px !important;
 }
-.f-14{
+.f-14 {
   font-size: 14px !important;
 }
-.f-20{
+.f-20 {
   font-size: 20px !important;
 }
-.f-80{
+.f-80 {
   font-size: 80px;
 }
-.f-130{
+.f-130 {
   font-size: 130px !important;
 }
 
-.p-0-6{
+.p-0-6 {
   padding: 0px 6px !important;
 }
 
-.cursor-pointer{
+.cursor-pointer {
   cursor: pointer !important;
 }
 
-.decoration-none{
+.decoration-none {
   text-decoration: none !important;
 }
-.bg-orange{
-  background-color: #FFBF00 !important;
+.bg-orange {
+  background-color: #ffbf00 !important;
 }
 
-.bg-lightYellow{
+.bg-lightYellow {
   background-color: #d9d900 !important;
 }
 
-
-.width-50{
+.width-50 {
   width: 50px !important;
 }
 
-.h-200{
+.h-200 {
   height: 200px !important;
 }
 
-
-.risk-rating-btn{
+.risk-rating-btn {
   font-size: 11px !important;
   height: 15px !important;
   line-height: 0px !important;
   width: fit-content !important;
 }
 
-.top-nagative-40{
+.top-nagative-40 {
   top: -40px !important;
 }
 
-
-.border-bottom-black{
+.border-bottom-black {
   border-bottom: 1px solid black !important;
 }
 
-.place-end{
+.place-end {
   place-content: end !important;
 }
 
-.h-400{
+.h-400 {
   height: 400px !important;
 }
 
-.flex{
+.flex {
   display: flex !important;
 }
 
-.hidden{
+.hidden {
   display: hidden;
 }
-.visibility-hidden{
+.visibility-hidden {
   visibility: hidden;
 }
 
-.w-full{
+.w-full {
   width: 100%;
 }
 
-.fitContent{
+.fitContent {
   height: fit-content;
 }
 
-.br-8{
+.br-8 {
   border-radius: 8px !important;
 }
 
-.mt-13{
+.mt-13 {
   margin-top: 13px !important;
 }
 
-.ml-100{
+.ml-100 {
   margin-left: 100px !important;
 }
 
-.bg-yellow{
-   background-color: #d9d900 !important;
+.bg-yellow {
+  background-color: #d9d900 !important;
 }
 
-.bold{
+.bold {
   font-weight: bold !important;
 }
 
-.relative{
-  position:  relative !important;
+.relative {
+  position: relative !important;
 }
 
-.text-center{
+.text-center {
   align-items: center !important;
 }
 
-.t-12{
+.t-12 {
   top: 12px !important;
 }
-.r-12{
+.r-12 {
   right: 12px !important;
 }
 
-.absolute{
+.absolute {
   position: absolute !important;
 }
 
-.mb-20{
-  margin:20px !important
+.mb-20 {
+  margin: 20px !important;
 }
 
-.underline{
+.underline {
   text-decoration: underline !important;
 }
 
-
 .Toastify__toast-body > div:last-child {
   font-family: "Poppins", sans-serif !important;
+}
+
+.disabled {
+  cursor: not-allowed !important;
 }
 
 .heading {

@@ -4,103 +4,95 @@ import "./Register.css";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { setupGetCompanies } from "../../../global-redux/reducers/company/slice";
+// import { setupGetCompanies } from "../../../global-redux/reducers/company/slice";
 import {
   setupRegisterUser,
-  changeAuthErrorResponse,
-  changeUserLoggedIn,
+  changeAuthState,
+  resetRegisterSuccess,
 } from "../../../global-redux/reducers/auth/slice";
 const Register = () => {
-  const [data, setData] = React.useState({
-    firstname: "",
-    lastname: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { userLoggedIn, authError } = useSelector((state) => state.auth);
-  const { companies } = useSelector((state) => state.company);
-
+  // const { companies } = useSelector((state) => state.company);
+  const {
+    registerFirstName,
+    registerLastName,
+    registerEmail,
+    registerPassword,
+    registerConfirmPassword,
+    loading,
+    registerSuccess,
+  } = useSelector((state) => state.auth);
   function handleChange(event) {
-    setData((pre) => {
-      return {
-        ...pre,
-        [event?.target?.name]: event?.target?.value,
-      };
-    });
+    dispatch(
+      changeAuthState({
+        name: event?.target?.name,
+        value: event?.target?.value,
+      })
+    );
   }
 
   function handleRegister(event) {
     event.preventDefault();
-    if (
-      data?.firstname === "" ||
-      data?.lastname === "" ||
-      data?.email === "" ||
-      data?.password === "" ||
-      data?.confirmPassword === ""
-    ) {
-      toast.error("Provide all the fields");
-    }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const isValid = emailRegex.test(data?.email);
-    if (!isValid && data?.email !== "") {
-      toast.error("Email is Incorrect");
-    }
-    if (
-      data?.password !== data?.confirmPassword &&
-      data?.password !== "" &&
-      data?.confirmPassword !== ""
-    ) {
-      toast.error("password and confirm Password must be same");
-    }
+    if (!loading) {
+      if (
+        registerFirstName === "" ||
+        registerLastName === "" ||
+        registerEmail === "" ||
+        registerPassword === "" ||
+        registerConfirmPassword === ""
+      ) {
+        toast.error("Provide all the fields");
+      }
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const isValid = emailRegex.test(registerEmail);
+      if (!isValid && registerEmail !== "") {
+        toast.error("Email is Incorrect");
+      }
+      if (
+        registerPassword !== registerConfirmPassword &&
+        registerPassword !== "" &&
+        registerConfirmPassword !== ""
+      ) {
+        toast.error("password and confirm Password must be same");
+      }
 
-    if (
-      data?.firstname !== "" &&
-      data?.lastname !== "" &&
-      data?.email !== "" &&
-      data?.password !== "" &&
-      data?.confirmPassword !== "" &&
-      isValid &&
-      data?.password === data?.confirmPassword
-    ) {
-      dispatch(
-        setupRegisterUser({
-          data: {
-            firstname: data.firstname,
-            lastname: data.lastname,
-            email: data.email,
-            password: data.password,
-            roles: ["admin"],
-          },
-        })
-      );
+      if (
+        registerFirstName !== "" &&
+        registerLastName !== "" &&
+        registerEmail !== "" &&
+        registerPassword !== "" &&
+        registerConfirmPassword !== "" &&
+        isValid &&
+        registerPassword === registerConfirmPassword
+      ) {
+        dispatch(
+          setupRegisterUser({
+            data: {
+              firstname: registerFirstName,
+              lastname: registerLastName,
+              email: registerEmail,
+              password: registerPassword,
+              roles: ["admin"],
+            },
+          })
+        );
+      }
     }
   }
 
+  // React.useEffect(() => {
+  //   dispatch(setupGetCompanies());
+  // }, []);
+
   React.useEffect(() => {
-    if (userLoggedIn) {
-      toast.success("Register Success! Redirecting to the Login page");
-      dispatch(changeUserLoggedIn(false));
+    if (registerSuccess) {
+      dispatch(resetRegisterSuccess());
       setTimeout(() => {
         navigate("/login");
-      }, 2000);
+      }, 500);
     }
-  }, [userLoggedIn]);
-
-  React.useEffect(() => {
-    if (authError === true) {
-      toast.error("An Error Has Accoured");
-      setTimeout(() => {
-        dispatch(changeAuthErrorResponse(false));
-      }, 3000);
-    }
-  }, [authError]);
-
-  React.useEffect(() => {
-    dispatch(setupGetCompanies());
-  }, []);
+  }, [registerSuccess]);
   return (
     <section className="fxt-template-animation fxt-template-layout31">
       <span className="fxt-shape fxt-animation-active"></span>
@@ -150,9 +142,9 @@ const Register = () => {
                         className="form-control"
                         placeholder="First Name"
                         required="required"
-                        name="firstname"
-                        value={data?.firstname}
-                        onChange={(event) => handleChange(event)}
+                        name="registerFirstName"
+                        value={registerFirstName}
+                        onChange={handleChange}
                       />
                     </div>
                   </div>
@@ -164,9 +156,9 @@ const Register = () => {
                         className="form-control"
                         placeholder="Last Name"
                         required="required"
-                        name="lastname"
-                        value={data?.lastname}
-                        onChange={(event) => handleChange(event)}
+                        name="registerLastName"
+                        value={registerLastName}
+                        onChange={handleChange}
                       />
                     </div>
                   </div>
@@ -178,9 +170,9 @@ const Register = () => {
                         className="form-control"
                         placeholder="Your email Address"
                         required="required"
-                        name="email"
-                        value={data?.email}
-                        onChange={(event) => handleChange(event)}
+                        name="registerEmail"
+                        value={registerEmail}
+                        onChange={handleChange}
                       />
                     </div>
                   </div>
@@ -192,9 +184,9 @@ const Register = () => {
                         className="form-control"
                         placeholder="Password"
                         required="required"
-                        name="password"
-                        value={data?.password}
-                        onChange={(event) => handleChange(event)}
+                        name="registerPassword"
+                        value={registerPassword}
+                        onChange={handleChange}
                       />
                     </div>
                   </div>
@@ -206,13 +198,13 @@ const Register = () => {
                         className="form-control"
                         placeholder="Confirm Password"
                         required="required"
-                        name="confirmPassword"
-                        value={data?.confirmPassword}
-                        onChange={(event) => handleChange(event)}
+                        name="registerConfirmPassword"
+                        value={registerConfirmPassword}
+                        onChange={handleChange}
                       />
                     </div>
                   </div>
-                  <div className="col-lg-12 mb-20">
+                  {/* <div className="col-lg-12 mb-20">
                     <label>Comapny Name</label>
 
                     <select
@@ -227,15 +219,15 @@ const Register = () => {
                         );
                       })}
                     </select>
-                  </div>
+                  </div> */}
                   <div className="col-12">
                     <div className="form-group">
                       <button
                         type="submit"
-                        className="fxt-btn-fill btn"
+                        className={`fxt-btn-fill btn ${loading && "disabled"}`}
                         onClick={handleRegister}
                       >
-                        Register
+                        {loading ? "Loading" : "Register"}
                       </button>
                     </div>
                   </div>
