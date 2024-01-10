@@ -73,7 +73,7 @@
   height: 40px;
   cursor: pointer;
   border-radius: 6px;
-  gap: 1px;
+  gap: 10px;
   margin-bottom: 4px;
 }
 
@@ -85,10 +85,14 @@
   height: 40px;
   cursor: pointer;
   border-radius: 6px;
-  gap: 1px;
+  gap: 10px;
   background-color: #0a7386 !important;
   color: white !important;
   margin-bottom: 4px;
+}
+
+.link-wrap-active span i {
+  font-size: 12px !important;
 }
 
 .link-wrap ul li {
@@ -108,7 +112,7 @@
 }
 
 .link-wrap i {
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 400;
 }
 
@@ -120,22 +124,22 @@
 }
 
 .link-wrap ul li a span {
-  color: #2a3547;
-  font-size: 14px !important;
+  color: #2a3547 !important;
+  font-size: 13px !important;
   white-space: nowrap !important;
   line-height: 25px !important;
   font-weight: 400 !important;
 }
 .link-wrap ul li a span:hover {
-  color: white;
-  font-size: 14px !important;
+  color: white !important;
+  font-size: 13px !important;
   white-space: nowrap !important;
   line-height: 25px !important;
   font-weight: 400 !important;
 }
 
 .link-wrap-active ul li a span {
-  font-size: 14px;
+  font-size: 13px;
   white-space: nowrap;
   line-height: 25px;
   font-weight: 400;

@@ -65,14 +65,14 @@ const ForgetPassword = () => {
                   Login
                 </a>
               </li>
-              <li>
+              {/* <li>
                 <a
                   type="submit"
                   className="fxt-switcher-btn active shadow border-start-0 border-0 rounded shadow"
                 >
                   Register
                 </a>
-              </li>
+              </li> */}
             </ul>
           </div>
           <div className="fxt-main-form">

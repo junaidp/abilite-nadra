@@ -87,14 +87,14 @@ const Login = () => {
                   Login
                 </a>
               </li>
-              <li>
+              {/* <li>
                 <a
                   className="fxt-switcher-btn border-0 rounded shadow"
                   onClick={() => navigate("/register")}
                 >
                   Register
                 </a>
-              </li>
+              </li> */}
             </ul>
           </div>
           <div className="fxt-main-form">
@@ -176,7 +176,7 @@ const Login = () => {
                   </div>
                 </div>
               </form>
-              <div className="fxt-switcher-description">
+              {/* <div className="fxt-switcher-description">
                 Don't have an account?
                 <a
                   className="fxt-switcher-text ms-1"
@@ -184,7 +184,7 @@ const Login = () => {
                 >
                   Register
                 </a>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

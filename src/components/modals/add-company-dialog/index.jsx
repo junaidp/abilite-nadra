@@ -14,12 +14,12 @@ const AddCompanyDialog = ({ setAddCompantDialog }) => {
   );
   const [initialState, setInitialState] = React.useState({
     companyName: "",
-    fiscalYearFrom: "",
+    fiscalYearForm: "",
     fiscalYearTo: "",
     legalName: "",
     id: 1,
     clientId: {
-      clientPackage: "Trial",
+      clientpackage: "",
       managementAccounts: "",
       name: "",
       status: 1,
@@ -32,16 +32,16 @@ const AddCompanyDialog = ({ setAddCompantDialog }) => {
     initialValues: initialState,
     validationSchema: Yup.object({
       companyName: Yup.string().required("Company Name is required"),
-      fiscalYearFrom: Yup.date().required("Fiscal Year From is required"),
+      fiscalYearForm: Yup.date().required("Fiscal Year From is required"),
       fiscalYearTo: Yup.date()
         .required("Fiscal Year To is required")
         .min(
-          Yup.ref("fiscalYearFrom"),
+          Yup.ref("fiscalYearForm"),
           "Fiscal Year To must be after Fiscal Year From"
         ),
       legalName: Yup.string().required("Legal Name is required"),
       clientId: Yup.object().shape({
-        clientPackage: Yup.string().required("Client Package is required"),
+        clientpackage: Yup.string().required("Client Package is required"),
         managementAccounts: Yup.number().required(
           "Management Accounts is required"
         ),
@@ -61,13 +61,17 @@ const AddCompanyDialog = ({ setAddCompantDialog }) => {
     setAddCompantDialog(false);
     setInitialState({
       companyName: "",
-      fiscalYearFrom: "",
+      fiscalYearForm: "",
       fiscalYearTo: "",
       legalName: "",
       clientId: {
-        clientPackage: "Trial",
+        clientpackage: "",
         managementAccounts: "",
         name: "",
+        status: 1,
+        id: 1,
+        numberOfUsers: "",
+        createdDate: new Date().toDateString(),
       },
     });
   }
@@ -76,13 +80,17 @@ const AddCompanyDialog = ({ setAddCompantDialog }) => {
       setTimeout(() => {
         setInitialState({
           companyName: "",
-          fiscalYearFrom: "",
+          fiscalYearForm: "",
           fiscalYearTo: "",
           legalName: "",
           clientId: {
-            clientPackage: "Trial",
+            clientpackage: "",
             managementAccounts: "",
             name: "",
+            status: 1,
+            id: 1,
+            numberOfUsers: "",
+            createdDate: new Date().toDateString(),
           },
         });
         dispatch(resetCompanyRegisterSuccess());
@@ -119,18 +127,18 @@ const AddCompanyDialog = ({ setAddCompantDialog }) => {
         <div className="row">
           {/* Fiscal Year From */}
           <div className="col-lg-6 mt-2">
-            <label htmlFor="fiscalYearFrom">Fiscal Year From:</label>
+            <label htmlFor="fiscalYearForm">Fiscal Year From:</label>
             <input
-              id="fiscalYearFrom"
-              name="fiscalYearFrom"
+              id="fiscalYearForm"
+              name="fiscalYearForm"
               type="date"
               className="form-control w-100"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.fiscalYearFrom}
+              value={formik.values.fiscalYearForm}
             />
-            {formik.touched.fiscalYearFrom && formik.errors.fiscalYearFrom ? (
-              <div className="error">{formik.errors.fiscalYearFrom}</div>
+            {formik.touched.fiscalYearForm && formik.errors.fiscalYearForm ? (
+              <div className="error">{formik.errors.fiscalYearForm}</div>
             ) : null}
           </div>
 
@@ -172,22 +180,22 @@ const AddCompanyDialog = ({ setAddCompantDialog }) => {
         {/* Client ID */}
         {/* Client Package */}
         <div className="col-lg-12 mt-2">
-          <label htmlFor="clientId.clientPackage">Client Package:</label>
+          <label htmlFor="clientId.clientpackage">Client Package:</label>
           <select
-            id="clientId.clientPackage"
-            name="clientId.clientPackage"
+            id="clientId.clientpackage"
+            name="clientId.clientpackage"
             className="form-select w-100"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.clientId.clientPackage}
+            value={formik.values.clientId.clientpackage}
           >
             <option value="Trial">Trial</option>
             <option value="Standard">Standard</option>
             <option value="Premium">Premium</option>
           </select>
-          {formik.touched.clientId?.clientPackage &&
-          formik.errors.clientId?.clientPackage ? (
-            <div className="error">{formik.errors.clientId.clientPackage}</div>
+          {formik.touched.clientId?.clientpackage &&
+          formik.errors.clientId?.clientpackage ? (
+            <div className="error">{formik.errors.clientId.clientpackage}</div>
           ) : null}
         </div>
 

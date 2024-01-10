@@ -1,0 +1,223 @@
+import React from "react";
+
+const Process = () => {
+  return (
+    <div
+      className="tab-pane fade"
+      id="nav-process"
+      role="tabpanel"
+      aria-labelledby="nav-profile-tab"
+    >
+      <div className="row">
+        <div className="col-lg-12">
+          <div className="sub-heading  fw-bold">
+            Processs & Sub Process Management
+          </div>
+          <label className="fw-light">
+            Create and manage your dropdown list for your organisation Process &
+            Sub Process
+          </label>
+        </div>
+      </div>
+
+      <div className="row mt-3">
+        <div className="col-lg-6">
+          <label>Add Process</label>
+          <input
+            className="form-control w-100"
+            placeholder="Enter Text here"
+            type="text"
+          />
+        </div>
+        <div className="col-lg-6 text-end float-end align-self-end">
+          <div className="btn btn-labeled btn-primary px-3 shadow">
+            <span className="btn-label me-2">
+              <i className="fa fa-plus"></i>
+            </span>
+            Add
+          </div>
+        </div>
+      </div>
+
+      <div className="row mt-3">
+        <div className="col-lg-12">
+          <div className="accordion" id="accordionProcessExample">
+            <div className="accordion-item">
+              <h2 className="accordion-header" id="heading5">
+                <button
+                  className="accordion-button collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#flush-collapseFive"
+                  aria-expanded="false"
+                  aria-controls="flush-collapseFive"
+                >
+                  <div className="d-flex w-100 me-3 align-items-center justify-content-between">
+                    <div className=" d-flex align-items-center">
+                      1. Show Process
+                    </div>
+                    <div>
+                      <i className="fa fa-edit  px-3 f-18"></i>
+
+                      <i className="fa fa-trash text-danger f-18"></i>
+                    </div>
+                  </div>
+                </button>
+              </h2>
+              <div
+                id="flush-collapseFive"
+                className="accordion-collapse collapse"
+                data-bs-parent="#accordionProcessExample"
+              >
+                <div className="accordion-body">
+                  <div className="row mt-3 mb-3">
+                    <div className="col-lg-6">
+                      <label className="w-100 ">Add SubProcess:</label>
+                      <input
+                        className="form-control w-100"
+                        placeholder="Enter"
+                        type="text"
+                      />
+                    </div>
+                    <div className="col-lg-6 text-end float-end align-self-end">
+                      <div className="btn btn-labeled btn-primary px-3 shadow">
+                        <span className="btn-label me-2">
+                          <i className="fa fa-plus"></i>
+                        </span>
+                        Add
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    <div className="col-lg-12">
+                      <div className="table-responsive">
+                        <table className="table table-bordered  table-hover rounded">
+                          <thead className="bg-secondary text-white">
+                            <tr>
+                              <th className="w-80">Sr No.</th>
+                              <th>Particulars</th>
+                              <th>Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>1</td>
+                              <td>Show Sub-Process</td>
+                              <td>
+                                <i className="fa fa-edit  px-3 f-18"></i>
+
+                                <i className="fa fa-trash text-danger f-18"></i>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>2</td>
+                              <td>Show Sub-Process</td>
+                              <td>
+                                <i className="fa fa-edit  px-3 f-18"></i>
+
+                                <i className="fa fa-trash text-danger f-18"></i>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="accordion-item">
+              <h2 className="accordion-header" id="heading6">
+                <button
+                  className="accordion-button collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#flush-collapseSix"
+                  aria-expanded="false"
+                  aria-controls="flush-collapseSix"
+                >
+                  <div className="d-flex w-100 me-3 align-items-center justify-content-between">
+                    <div className=" d-flex align-items-center">
+                      2. Show Process
+                    </div>
+                    <div>
+                      <i className="fa fa-edit  px-3 f-18"></i>
+
+                      <i className="fa fa-trash text-danger f-18"></i>
+                    </div>
+                  </div>
+                </button>
+              </h2>
+              <div
+                id="flush-collapseSix"
+                className="accordion-collapse collapse"
+                data-bs-parent="#accordionProcessExample"
+              >
+                <div className="accordion-body">
+                  <div className="row mt-3 mb-3">
+                    <div className="col-lg-6">
+                      <label className="w-100 ">Add SubProcess:</label>
+                      <input
+                        className="form-control w-100"
+                        placeholder="Enter"
+                        type="text"
+                      />
+                    </div>
+                    <div className="col-lg-6 text-end float-end align-self-end">
+                      <div className="btn btn-labeled btn-primary px-3 shadow">
+                        <span className="btn-label me-2">
+                          <i className="fa fa-plus"></i>
+                        </span>
+                        Add
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    <div className="col-lg-12">
+                      <div className="table-responsive">
+                        <table className="table table-bordered  table-hover rounded">
+                          <thead className="bg-secondary text-white">
+                            <tr>
+                              <th className="w-80">Sr No.</th>
+                              <th>Particulars</th>
+                              <th>Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>1</td>
+                              <td>Show Sub-Process</td>
+                              <td>
+                                <i className="fa fa-edit  px-3 f-18"></i>
+
+                                <i className="fa fa-trash text-danger f-18"></i>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>2</td>
+                              <td>Show Sub-Process</td>
+                              <td>
+                                <i className="fa fa-edit  px-3 f-18"></i>
+
+                                <i className="fa fa-trash text-danger f-18"></i>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Process;

@@ -101,11 +101,13 @@ export const slice = createSlice({
     [setupRegisterUser.fulfilled]: (state) => {
       state.loading = false;
       state.registerSuccess = true;
-      state.registerFirstName = "";
-      state.registerLastName = "";
+      state.registerName=""
       state.registerEmail = "";
       state.registerPassword = "";
       state.registerConfirmPassword = "";
+      state.registerDesignation=""
+      state.registerReportingToEmail=""
+      state.registerCreatedByEmail=""
       toast.success("Register success please login");
     },
     [setupRegisterUser.rejected]: (state, { payload }) => {
