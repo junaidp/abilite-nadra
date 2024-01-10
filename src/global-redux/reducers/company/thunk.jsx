@@ -1,12 +1,10 @@
 import axios from "axios";
 import { baseUrl } from "../../../constants/index";
+import { setupGetCompanies } from "./slice";
 export const registerCompany = async (data, thunkAPI) => {
   try {
-    let props = await axios.post(`${baseUrl}/Company/saveCompany`, {
-      ...data,
-      logopath: "path",
-      usersAllowed: Number(data?.usersAllowed),
-    });
+    let props = await axios.post(`${baseUrl}/Company/saveCompany`, data);
+    thunkAPI.dispatch(setupGetCompanies());
     return props.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);

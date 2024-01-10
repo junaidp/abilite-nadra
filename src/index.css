@@ -599,6 +599,24 @@ span[aria-label="Insert Ordered List"] .jodit-toolbar-button__trigger {
   justify-content: flex-end !important;
 }
 
+.h-0 {
+  height: 0px !important;
+}
+
+.error{
+  color: rgb(238, 137, 137);
+  font-size: 13px;
+}
+
+.border-none{
+  border: none !important;
+}
+
 .w-full {
   width: 100% !important;
+}
+
+.jodit-container:not(.jodit_inline) .jodit-wysiwyg img{
+  display: block !important;
+  margin: 0 auto !important
 }

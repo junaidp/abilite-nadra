@@ -41,3 +41,17 @@ export const resetPassword = async (data, thunkAPI) => {
     return thunkAPI.rejectWithValue(error);
   }
 };
+
+export const internalResetPassword = async (data, thunkAPI) => {
+  try {
+    let props = await axios.post(`${baseUrl}/account/internalPasswordReset`, {
+      email: data?.email,
+      oldPassword: data?.oldPassword,
+      newPassword: data?.newPassword,
+      confirmNewPassword: data?.confirmNewPassword,
+    });
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};

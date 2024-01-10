@@ -3,6 +3,7 @@ import {
   loginUser,
   forgetPassword,
   resetPassword,
+  internalResetPassword,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
@@ -12,11 +13,13 @@ const initialState = {
   loginEmail: "",
   loginPassword: "",
   // Register States
-  registerFirstName: "",
-  registerLastName: "",
+  registerName: "",
   registerEmail: "",
   registerPassword: "",
   registerConfirmPassword: "",
+  registerDesignation: "",
+  registerCreatedByEmail: "",
+  registerReportingToEmail: "",
   registerSuccess: false,
   // Forget Password State
   forgetPasswordEmail: "",
@@ -28,6 +31,8 @@ const initialState = {
   loading: false,
   user: [],
   authSuccess: false,
+  // Internal Reset Password
+  internalResetPasswordSuccess: false,
 };
 
 export const setupRegisterUser = createAsyncThunk(
@@ -58,6 +63,13 @@ export const setupResetPassword = createAsyncThunk(
   }
 );
 
+export const setupInternalResetPassword = createAsyncThunk(
+  "auth/internalResetPassword",
+  async (data, thunkAPI) => {
+    return internalResetPassword(data, thunkAPI);
+  }
+);
+
 export const slice = createSlice({
   name: "auth",
   initialState,
@@ -76,6 +88,9 @@ export const slice = createSlice({
     },
     resetResetPasswordSuccess: (state) => {
       state.resetPasswordSuccess = false;
+    },
+    resetInternalResetPasswordSuccess: (state) => {
+      state.internalResetPasswordSuccess = false;
     },
   },
   extraReducers: {
@@ -113,8 +128,6 @@ export const slice = createSlice({
       state.user = [
         {
           token: payload?.data?.jwt,
-          firstname: payload?.data?.firstname,
-          lastname: payload?.data?.lastname,
           email: payload?.data?.email,
         },
       ];
@@ -152,10 +165,27 @@ export const slice = createSlice({
     },
     [setupResetPassword.fulfilled]: (state) => {
       state.loading = false;
-      state.resetPasswordSuccess=true
-      toast.success("Password reset successfully please login")
+      state.resetPasswordSuccess = true;
+      toast.success("Password reset successfully please login");
     },
     [setupResetPassword.rejected]: (state, { payload }) => {
+      state.loading = false;
+      if (payload?.response?.data?.message) {
+        toast.error(payload?.response?.data?.message);
+      } else {
+        toast.error("An Error has accoured");
+      }
+    },
+    // Internal Reset Password
+    [setupInternalResetPassword.pending]: (state) => {
+      state.loading = true;
+    },
+    [setupInternalResetPassword.fulfilled]: (state) => {
+      state.loading = false;
+      state.internalResetPasswordSuccess = true;
+      toast.success("Password reset successfully");
+    },
+    [setupInternalResetPassword.rejected]: (state, { payload }) => {
       state.loading = false;
       if (payload?.response?.data?.message) {
         toast.error(payload?.response?.data?.message);
@@ -171,7 +201,8 @@ export const {
   changeAuthState,
   resetAuthValues,
   resetRegisterSuccess,
-  resetResetPasswordSuccess
+  resetResetPasswordSuccess,
+  resetInternalResetPasswordSuccess,
 } = slice.actions;
 
 export default slice.reducer;

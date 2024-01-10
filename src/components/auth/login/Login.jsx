@@ -150,10 +150,10 @@ const Login = () => {
                   <div className="col-12">
                     <div className="form-group">
                       <div className="fxt-checkbox-wrap">
-                        <div className="fxt-checkbox-box mr-3">
+                        {/* <div className="fxt-checkbox-box mr-3">
                           <input id="checkbox1" type="checkbox" />
                           <label className="ps-4">Keep me logged in</label>
-                        </div>
+                        </div> */}
                         <a
                           className="fxt-switcher-text"
                           onClick={() => navigate("/forgot-password")}

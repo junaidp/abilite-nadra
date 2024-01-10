@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import { registerCompany, getCompanies } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -29,8 +30,8 @@ export const slice = createSlice({
     changeCompanyErrorState: (state, action) => {
       state.error = action.payload;
     },
-    changeCompanyRegisterSuccess: (state, action) => {
-      state.registerCompanySuccess = action.payload;
+    resetCompanyRegisterSuccess: (state, action) => {
+      state.registerCompanySuccess = false;
     },
   },
   extraReducers: {
@@ -41,11 +42,16 @@ export const slice = createSlice({
     [setupRegisterCompany.fulfilled]: (state) => {
       state.loading = false;
       state.registerCompanySuccess = true;
+      toast.success("Company registered successfully");
     },
     [setupRegisterCompany.rejected]: (state, { payload }) => {
       state.loading = false;
       state.registerCompanySuccess = false;
-      state.error = true;
+      if (payload?.response?.data?.message) {
+        toast.error(payload?.response?.data?.message);
+      } else {
+        toast.error("An Error has accoured");
+      }
     },
     // Get Comapanies
     [setupGetCompanies.pending]: (state) => {
@@ -62,7 +68,7 @@ export const slice = createSlice({
   },
 });
 
-export const { changeCompanyErrorState, changeCompanyRegisterSuccess } =
+export const { changeCompanyErrorState, resetCompanyRegisterSuccess } =
   slice.actions;
 
 export default slice.reducer;

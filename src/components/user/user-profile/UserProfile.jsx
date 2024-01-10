@@ -1,9 +1,11 @@
 import React from "react";
 import UserProfileDialog from "../../modals/user-profile-dialog/index";
 import "./UserProfile.css";
+import { useSelector } from "react-redux";
 
 const UserProfile = () => {
   const [updateUserDialog, setUpdateUserDialog] = React.useState(false);
+  let { user } = useSelector((state) => state.auth);
   return (
     <div>
       {updateUserDialog && (
@@ -13,7 +15,7 @@ const UserProfile = () => {
           </div>
         </div>
       )}
-      <div className="row mb-4 mt-4">
+      {/* <div className="row mb-4 mt-4">
         <div className="col-lg-2 label-text">Password:</div>
         <div className="col-lg-10">
           <div className="form-group">
@@ -27,7 +29,7 @@ const UserProfile = () => {
             />
           </div>
         </div>
-      </div>
+      </div> */}
       <div className="row mb-4 mt-4">
         <div className="col-lg-2 label-text">Email:</div>
         <div className="col-lg-10">
@@ -39,11 +41,12 @@ const UserProfile = () => {
               name="fname"
               placeholder="john@gmail.com"
               required="required"
+              value={user[0]?.email}
             />
           </div>
         </div>
       </div>
-      <div className="row mb-4 mt-4">
+      {/* <div className="row mb-4 mt-4">
         <div className="col-lg-2 label-text">2 Factor Authentication:</div>
         <div className="col-lg-10">
           <div className="form-group">
@@ -72,12 +75,12 @@ const UserProfile = () => {
             />
           </div>
         </div>
-      </div>
+      </div> */}
       <button
         className="btn btn-labeled btn-primary px-3  shadow col-lg-2"
         onClick={() => setUpdateUserDialog(true)}
       >
-        Update
+        Reset Password
       </button>
     </div>
   );

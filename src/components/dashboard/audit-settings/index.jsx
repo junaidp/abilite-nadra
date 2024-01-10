@@ -1,15 +1,51 @@
 import React from "react";
 import AddCheckListManagementDialog from "../../modals/add-checklist-management-dialog/index";
 import UserManagementDialog from "../../modals/add-user-dialog/index";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import * as XLSX from "xlsx";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid } from "recharts";
 import "./index.css";
 import AddCompanyDialog from "../../modals/add-company-dialog/index";
+import { toast } from "react-toastify";
 const AuditSettings = () => {
+  const { companies } = useSelector((state) => state.company);
   const [activeEmailTab, setActiveEmailTab] = React.useState("systemEmail");
   const [checkListManagementDialog, setCheckListManagementDialog] =
     React.useState(false);
+  const [excelData, setExcelData] = React.useState(null);
   const [userManagementDialog, setUserManagementDialog] = React.useState(false);
   const [addCompanyDialog, setAddCompantDialog] = React.useState(false);
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+
+    if (!file) {
+      toast.error("Please select a file.");
+      return;
+    }
+
+    const fileType = file.name.slice(
+      ((file.name.lastIndexOf(".") - 1) >>> 0) + 2
+    );
+
+    if (fileType !== "xls" && fileType !== "xlsx") {
+      toast.error("Invalid file type. Please upload an Excel file.");
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      const data = new Uint8Array(event.target.result);
+      const workbook = XLSX.read(data, { type: "array" });
+      const sheetName = workbook.SheetNames[0];
+      const sheet = workbook.Sheets[sheetName];
+      const jsonData = XLSX.utils.sheet_to_json(sheet);
+
+      setExcelData(jsonData);
+    };
+
+    reader.readAsArrayBuffer(file);
+  };
   const dispatch = useDispatch();
   return (
     <div>
@@ -194,14 +230,15 @@ const AuditSettings = () => {
 
                 <div className="row position-relative">
                   <div className="col-lg-12 text-center settings-form">
-                    <form action="upload.php" method="POST">
-                      <input type="file" multiple />
+                    <form>
+                      <input type="file" onChange={handleFileUpload} />
                       <p className="mb-0">
                         Drag your files here or click in this area.
                       </p>
                     </form>
                   </div>
                 </div>
+
                 <div className="row my-3">
                   <div className="col-lg-12 text-end">
                     <button className="btn btn-labeled btn-primary px-3 mt-3 shadow">
@@ -213,6 +250,46 @@ const AuditSettings = () => {
                   </div>
                 </div>
 
+                <div>
+                  {excelData && (
+                    <div>
+                      <LineChart width={700} height={400} data={excelData}>
+                        <XAxis dataKey={Object.keys(excelData[0])[1]} />
+                        <YAxis />
+                        <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
+                        {Object.keys(excelData[0]).map((item, i) => {
+                          return (
+                            <Line
+                              type="monotone"
+                              dataKey={item}
+                              stroke={`#8884d${i}`}
+                            />
+                          );
+                        })}
+                      </LineChart>
+                    </div>
+                  )}
+                </div>
+                {excelData && (
+                  <div className="my-3">
+                    <div className="flex">
+                      <div>
+                        <i
+                          className="fa fa-trash text-danger f-18 px-3"
+                          onClick={() => setExcelData(null)}
+                        ></i>
+                      </div>
+                      <div className="row position-relative">
+                        <div className="col-lg-12 text-center settings-form h-0 border-none">
+                          <form>
+                            <input type="file" onChange={handleFileUpload} />
+                            <i class="bi bi-pencil-square f-18 cursor-pointer"></i>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
                 <div className="row mb-3">
                   <div className="col-lg-6">
                     <label className="w-100">Search File Name:</label>
@@ -307,8 +384,7 @@ const AuditSettings = () => {
 
                 <div className="row mt-3">
                   <div className="col-lg-12">
-                    <div className="accordion" id="accordionLocationExample"
-                    >
+                    <div className="accordion" id="accordionLocationExample">
                       <div className="accordion-item">
                         <h2 className="accordion-header" id="heading1">
                           <button
@@ -364,9 +440,7 @@ const AuditSettings = () => {
                                   <table className="table table-bordered  table-hover rounded">
                                     <thead className="bg-secondary text-white">
                                       <tr>
-                                        <th className="w-80">
-                                          Sr No.
-                                        </th>
+                                        <th className="w-80">Sr No.</th>
                                         <th>Particulars</th>
                                         <th>Actions</th>
                                       </tr>
@@ -460,9 +534,7 @@ const AuditSettings = () => {
                                   <table className="table table-bordered  table-hover rounded">
                                     <thead className="bg-secondary text-white">
                                       <tr>
-                                        <th className="w-80">
-                                          Sr No.
-                                        </th>
+                                        <th className="w-80">Sr No.</th>
                                         <th>Particulars</th>
                                         <th>Actions</th>
                                       </tr>
@@ -589,9 +661,7 @@ const AuditSettings = () => {
                 <div>
                   <div className="card p-3 shadow-sm setting-tab">
                     <h2 className="text-center heading p-3">Email Settings</h2>
-                    <nav
-                    className="email-settings-btn"
-                    >
+                    <nav className="email-settings-btn">
                       <div
                         className="nav settings-nav-tabs glass-effect border-0"
                         id="nav-tab"
@@ -800,9 +870,7 @@ const AuditSettings = () => {
                                     <table className="table table-bordered  table-hover rounded">
                                       <thead className="bg-secondary text-white">
                                         <tr>
-                                          <th className="w-80">
-                                            Sr No.
-                                          </th>
+                                          <th className="w-80">Sr No.</th>
                                           <th>Area</th>
                                           <th>Subject</th>
                                           <th>Particulars</th>
@@ -916,9 +984,7 @@ const AuditSettings = () => {
                                     <table className="table table-bordered  table-hover rounded">
                                       <thead className="bg-secondary text-white">
                                         <tr>
-                                          <th className="w-80">
-                                            Sr No.
-                                          </th>
+                                          <th className="w-80">Sr No.</th>
                                           <th>Area</th>
                                           <th>Subject</th>
                                           <th>Particulars</th>
@@ -2348,52 +2414,38 @@ const AuditSettings = () => {
                             <th className="w-130">Company Name</th>
                             <th className="w-130">Legal Name</th>
                             <th className="w-100">Company ID</th>
-                            <th className="w-100">Email ID</th>
-                            <th className="w-190">
-                              Contact Person Name
-                            </th>
-                            <th className="w-190">
-                              Contact Person No.
-                            </th>
-                            <th className="w-180">
-                              Fiscal Year From:
-                            </th>
+                            <th className="w-180">Fiscal Year From:</th>
                             <th className="w-180">Fiscal Year To:</th>
-                            <th className="w-180">Logo</th>
-                            <th className="w-180">Header Image</th>
                             <th className="w-180">Package</th>
-
-                            <th className="w-80">Actions</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td>1</td>
-                            <td>xxxxxxxx</td>
-                            <td>xxxxxxxx</td>
-                            <td>xxxxxxxx</td>
-                            <td>xxxxxxxx</td>
-                            <td>+9209078601</td>
-                            <td>Admin</td>
-                            <td className="highlight-orange">DD:MM:YYYY</td>
-                            <td className="highlight-orange">DD:MM:YYYY</td>
-                            <td>Logo</td>
-                            <td>Header Image</td>
-                            <td className="highlight-yellow">Gold</td>
-
-                            <td>
-                              <i className="fa fa-edit  f-18"></i>
-
-                              <i className="fa fa-trash text-danger mx-1 f-18"></i>
-                            </td>
-                          </tr>
+                          {companies?.map((item, i) => {
+                            return (
+                              <tr key={i}>
+                                <td>{i + 1}</td>
+                                <td>{item?.companyName}</td>
+                                <td>{item?.legalName}</td>
+                                <td>{item?.id}</td>
+                                <td>
+                                  {new Date(
+                                    item?.fiscalYearFormnew
+                                  ).toLocaleString()}
+                                </td>
+                                <td>
+                                  {new Date(
+                                    item?.fiscalYearTo
+                                  ).toLocaleString()}
+                                </td>
+                                <td>{item?.clientId?.clientpackage}</td>
+                              </tr>
+                            );
+                          })}
                         </tbody>
                       </table>
                     </div>
                   </div>
                 </div>
-
-                
               </div>
 
               <div
@@ -2491,9 +2543,7 @@ const AuditSettings = () => {
                                   <table className="table table-bordered  table-hover rounded">
                                     <thead className="bg-secondary text-white">
                                       <tr>
-                                        <th className="w-80">
-                                          Sr No.
-                                        </th>
+                                        <th className="w-80">Sr No.</th>
                                         <th>Particulars</th>
                                         <th>Actions</th>
                                       </tr>
@@ -2581,9 +2631,7 @@ const AuditSettings = () => {
                                   <table className="table table-bordered  table-hover rounded">
                                     <thead className="bg-secondary text-white">
                                       <tr>
-                                        <th className="w-80">
-                                          Sr No.
-                                        </th>
+                                        <th className="w-80">Sr No.</th>
                                         <th>Particulars</th>
                                         <th>Actions</th>
                                       </tr>

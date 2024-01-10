@@ -53,11 +53,7 @@ const TopBar = () => {
           </Link>
         </div>
 
-        <div
-          className="collapse navbar-collapse justify-content-between"
-          id="navbarNav"
-        >
-          <button
+        <button
             className="btn btn-light ml-100"
             onClick={() => dispatch(changeShowSidebar(!showSidebar))}
           >
@@ -76,6 +72,12 @@ const TopBar = () => {
             </svg>
           </button>
 
+
+        <div
+          className="collapse navbar-collapse justify-content-end"
+          id="navbarNav"
+        >
+        
           <div className="d-flex align-items-center justify-content-between">
             <a
               className="nav-link d-flex d-lg-none align-items-center justify-content-center"

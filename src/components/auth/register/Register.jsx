@@ -15,10 +15,12 @@ const Register = () => {
   const navigate = useNavigate();
   // const { companies } = useSelector((state) => state.company);
   const {
-    registerFirstName,
-    registerLastName,
+    registerName,
     registerEmail,
     registerPassword,
+    registerDesignation,
+    registerCreatedByEmail,
+    registerReportingToEmail,
     registerConfirmPassword,
     loading,
     registerSuccess,
@@ -36,11 +38,12 @@ const Register = () => {
     event.preventDefault();
     if (!loading) {
       if (
-        registerFirstName === "" ||
-        registerLastName === "" ||
+        registerName === "" ||
+        registerDesignation === "" ||
         registerEmail === "" ||
         registerPassword === "" ||
-        registerConfirmPassword === ""
+        registerConfirmPassword === "" ||
+        registerCreatedByEmail === ""
       ) {
         toast.error("Provide all the fields");
       }
@@ -58,22 +61,25 @@ const Register = () => {
       }
 
       if (
-        registerFirstName !== "" &&
-        registerLastName !== "" &&
+        registerName !== "" &&
+        registerDesignation !== "" &&
         registerEmail !== "" &&
         registerPassword !== "" &&
         registerConfirmPassword !== "" &&
+        registerCreatedByEmail !== "" &&
         isValid &&
         registerPassword === registerConfirmPassword
       ) {
         dispatch(
           setupRegisterUser({
             data: {
-              firstname: registerFirstName,
-              lastname: registerLastName,
+              name: registerName,
               email: registerEmail,
               password: registerPassword,
-              roles: ["admin"],
+              roles: 1,
+              designation: registerDesignation,
+              createdByEmail: registerCreatedByEmail,
+              reportingToEmail: registerReportingToEmail,
             },
           })
         );
@@ -140,10 +146,10 @@ const Register = () => {
                         type="text"
                         id="fname"
                         className="form-control"
-                        placeholder="First Name"
+                        placeholder="Name"
                         required="required"
-                        name="registerFirstName"
-                        value={registerFirstName}
+                        name="registerName"
+                        value={registerName}
                         onChange={handleChange}
                       />
                     </div>
@@ -154,10 +160,10 @@ const Register = () => {
                         type="text"
                         id="lname"
                         className="form-control"
-                        placeholder="Last Name"
+                        placeholder="Designation"
                         required="required"
-                        name="registerLastName"
-                        value={registerLastName}
+                        name="registerDesignation"
+                        value={registerDesignation}
                         onChange={handleChange}
                       />
                     </div>
@@ -204,6 +210,34 @@ const Register = () => {
                       />
                     </div>
                   </div>
+                  <div className="col-xl-12">
+                    <div className="form-group">
+                      <input
+                        type="text"
+                        id="cpassword"
+                        className="form-control"
+                        placeholder="CreatedByEmail"
+                        required="required"
+                        name="registerCreatedByEmail"
+                        value={registerCreatedByEmail}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </div>
+                  {/* <div className="col-xl-6">
+                    <div className="form-group">
+                      <input
+                        type="text"
+                        id="cpassword"
+                        className="form-control"
+                        placeholder="ReportingToEmail"
+                        required="required"
+                        name="registerReportingToEmail"
+                        value={registerReportingToEmail}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </div> */}
                   {/* <div className="col-lg-12 mb-20">
                     <label>Comapny Name</label>
 
