@@ -132,6 +132,7 @@ const initialState = {
   isExpandedReportsOpen: false,
   menuItems: menuItems,
   kickOffRequest: "",
+  company:localStorage.getItem("company") || ""
 };
 
 export const slice = createSlice({
@@ -140,6 +141,9 @@ export const slice = createSlice({
   reducers: {
     changeShowSidebar: (state, action) => {
       state.showSidebar = action.payload;
+    },
+    changeCompany:(state,action)=>{
+      state.company=action.payload
     },
     changeActiveLink: (state, action) => {
       state.activeLink = action.payload;
@@ -186,6 +190,7 @@ export const {
   changeExpanded,
   changeKickOffRequest,
   InitialLoadSidebarActiveLink,
+  changeCompany
 } = slice.actions;
 
 export default slice.reducer;

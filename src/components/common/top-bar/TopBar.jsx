@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import { useNavigate } from "react-router-dom";
 import { changeAuthUser } from "../../../global-redux/reducers/auth/slice";
+import { changeCompany } from "../../../global-redux/reducers/common/slice";
 
 const TopBar = () => {
   const [showUserProfile, setShowUserProfile] = React.useState(false);
@@ -20,7 +21,7 @@ const TopBar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   let { user } = useSelector((state) => state.auth);
-  const { showSidebar } = useSelector((state) => state.common);
+  const { showSidebar, company } = useSelector((state) => state.common);
   const { companies } = useSelector((state) => state.company);
   const notificationRef = useDetectClickOutside({
     onTriggered: closeNotficationDropDown,
@@ -42,6 +43,10 @@ const TopBar = () => {
     navigate("/login");
   }
 
+  React.useEffect(() => {
+    localStorage.setItem("company", company);
+  }, [company]);
+
   return (
     <header className="app-header shadow-sm mb-3 px-0 ">
       <nav className="navbar navbar-expand-lg navbar-light px-5">
@@ -54,30 +59,28 @@ const TopBar = () => {
         </div>
 
         <button
-            className="btn btn-light ml-100"
-            onClick={() => dispatch(changeShowSidebar(!showSidebar))}
+          className="btn btn-light ml-100"
+          onClick={() => dispatch(changeShowSidebar(!showSidebar))}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            className="bi bi-list"
+            viewBox="0 0 16 16"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              className="bi bi-list"
-              viewBox="0 0 16 16"
-            >
-              <path
-                // fill-rule="evenodd"
-                d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"
-              />
-            </svg>
-          </button>
-
+            <path
+              // fill-rule="evenodd"
+              d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"
+            />
+          </svg>
+        </button>
 
         <div
           className="collapse navbar-collapse justify-content-end"
           id="navbarNav"
         >
-        
           <div className="d-flex align-items-center justify-content-between">
             <a
               className="nav-link d-flex d-lg-none align-items-center justify-content-center"
@@ -88,14 +91,21 @@ const TopBar = () => {
             ></a>
             <ul className="navbar-nav flex-row ms-auto align-items-center justify-content-center">
               <select
-                className="form-select me-4 h-40"
+                className="form-select me-4 h-40 w-200"
                 aria-label="Default select example"
+                value={company}
+                onChange={(e) => dispatch(changeCompany(e?.target?.value))}
               >
+                <option value="">select company</option>
                 {companies?.map((item, i) => {
-                  return <option key={i}>{item?.companyName}</option>;
+                  return (
+                    <option value={item?.companyName}>
+                      {item?.companyName}
+                    </option>
+                  );
                 })}
               </select>
-
+              {/* 
               <select
                 className="form-select me-4 h-40"
                 aria-label="Default select example"
@@ -104,7 +114,7 @@ const TopBar = () => {
                 <option>2023</option>
                 <option>2024</option>
                 <option>2021</option>
-              </select>
+              </select> */}
 
               <a
                 className="nav-link f-20"
@@ -113,7 +123,7 @@ const TopBar = () => {
                   dispatch(changeShowSidebar(false));
                 }}
               >
-                <i className="fa fa-gear"></i>
+                <i className="fa fa-gear f-18"></i>
                 <div className="notification bg-primary rounded-circle"></div>
               </a>
 
@@ -323,9 +333,7 @@ const TopBar = () => {
                           </p>
                         </div>
                       </div>
-                      <div
-                        className="message-body d-grid hidden"
-                      >
+                      <div className="message-body d-grid hidden">
                         <Link
                           to="/audit/user/profile"
                           className="py-8 px-7 mt-8 d-flex align-items-center"

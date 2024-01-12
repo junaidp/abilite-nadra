@@ -1,16 +1,13 @@
 import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import {
-  setupAddCheckListItem,
-  resetAddCheckListSuccess,
-} from "../../../global-redux/reducers/settings/check-list/slice";
+import { setupEditCheckListItem } from "../../../global-redux/reducers/settings/check-list/slice";
 import { useSelector, useDispatch } from "react-redux";
 
-const AddCheckListManagementDialog = ({ setCheckListManagementDialog }) => {
+const EditCheckListItemDialog = ({ setShowEditCheckListItemDialog }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  const { subCheckListAddSuccess, loading, checkListId } = useSelector(
+  const { subCheckListAddSuccess, loading } = useSelector(
     (state) => state.setttingsCheckList
   );
   const initialState = {
@@ -31,10 +28,10 @@ const AddCheckListManagementDialog = ({ setCheckListManagementDialog }) => {
     onSubmit: (values) => {
       if (!loading) {
         dispatch(
-          setupAddCheckListItem({
+          setupEditCheckListItem({
             ...values,
             userEmail: user[0]?.email,
-            checklistId: checkListId,
+            checklistId: 123,
           })
         );
       }
@@ -42,14 +39,14 @@ const AddCheckListManagementDialog = ({ setCheckListManagementDialog }) => {
   });
 
   function handleClose() {
-    setCheckListManagementDialog(false);
+    setShowEditCheckListItemDialog(false);
     formik.resetForm({ values: initialState });
   }
 
   React.useEffect(() => {
     if (subCheckListAddSuccess) {
       setTimeout(() => {
-        setCheckListManagementDialog(false);
+        setShowEditCheckListItemDialog(false);
         formik.resetForm({ values: initialState });
       }, 500);
     }
@@ -58,7 +55,7 @@ const AddCheckListManagementDialog = ({ setCheckListManagementDialog }) => {
     <div className="px-4 py-4">
       <header className="section-header my-3    text-start d-flex align-items-center justify-content-between">
         <div className="mb-0 heading d-flex align-items-center">
-          <h2 className=" heading">Check List Management</h2>
+          <h2 className=" heading">Edit Check List Item</h2>
         </div>
       </header>
       <form onSubmit={formik.handleSubmit}>
@@ -152,7 +149,7 @@ const AddCheckListManagementDialog = ({ setCheckListManagementDialog }) => {
           type="submit"
           className={`btn btn-primary ${loading && "disabled"}`}
         >
-          {loading ? "Loading" : "Submit"}
+          {loading ? "Loading" : "Edit"}
         </button>
       </form>
 
@@ -165,4 +162,4 @@ const AddCheckListManagementDialog = ({ setCheckListManagementDialog }) => {
   );
 };
 
-export default AddCheckListManagementDialog;
+export default EditCheckListItemDialog;

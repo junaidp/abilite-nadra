@@ -13,7 +13,7 @@ export const registerCompany = async (data, thunkAPI) => {
 
 export const getCompanies = async (data, thunkAPI) => {
   try {
-    let props = await axios.get(`${baseUrl}/Company/getAllCompanies`);
+    let props = await axios.get(`${baseUrl}/account/company/getAllCompanies`);
     return props.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);

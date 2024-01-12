@@ -107,7 +107,6 @@ const AddCompanyDialog = ({ setAddCompantDialog }) => {
         </div>
       </header>
       <form onSubmit={formik.handleSubmit}>
-        {/* Company Name */}
         <div className="col-lg-12 mt-2">
           <label htmlFor="companyName">Company Name:</label>
           <input
