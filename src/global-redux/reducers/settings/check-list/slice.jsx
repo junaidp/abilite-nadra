@@ -15,7 +15,9 @@ const initialState = {
   loading: false,
   subCheckListAddSuccess: false,
   checkList: [],
+  checkListItems: [],
   checkListId: "",
+  currentSubCheckListItem: {},
 };
 
 export const setupAddCheckList = createAsyncThunk(
@@ -77,6 +79,9 @@ export const slice = createSlice({
     },
     addCheckListId: (state, action) => {
       state.checkListId = action.payload;
+    },
+    changeCurrentSubListItem: (state, action) => {
+      state.currentSubCheckListItem = action.payload;
     },
   },
   extraReducers: {
@@ -165,6 +170,7 @@ export const slice = createSlice({
     },
     [setupGetAllCheckListItems.fulfilled]: (state, { payload }) => {
       state.loading = false;
+      state.checkListItems = payload?.data;
     },
     [setupGetAllCheckListItems.rejected]: (state, { payload }) => {
       state.loading = false;
@@ -193,6 +199,7 @@ export const {
   resetAddCheckListSuccess,
   resetAddSubCheckListSuccess,
   addCheckListId,
+  changeCurrentSubListItem,
 } = slice.actions;
 
 export default slice.reducer;

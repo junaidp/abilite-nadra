@@ -62,16 +62,18 @@ const EditCheckListDialog = ({ setShowEditCheckListDialog }) => {
             {loading ? "Loading" : "Edit"}
           </button>
         </div>
+      <div className="mb-4">
+        <button
+          className="btn btn-primary float-end"
+          onClick={() => {
+            setShowEditCheckListDialog(false);
+            setCheckListName("");
+          }}
+        >
+          Close
+        </button>
       </div>
-      <button
-        className="btn btn-primary float-end"
-        onClick={() => {
-          setShowEditCheckListDialog(false);
-          setCheckListName("");
-        }}
-      >
-        Close
-      </button>
+      </div>
     </div>
   );
 };

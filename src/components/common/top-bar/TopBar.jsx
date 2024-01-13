@@ -97,7 +97,7 @@ const TopBar = () => {
                 onChange={(e) => dispatch(changeCompany(e?.target?.value))}
               >
                 <option value="">select company</option>
-                {companies?.map((item, i) => {
+                {user[0]?.company?.map((item, i) => {
                   return (
                     <option value={item?.companyName}>
                       {item?.companyName}
@@ -105,16 +105,16 @@ const TopBar = () => {
                   );
                 })}
               </select>
-              {/* 
+              
               <select
                 className="form-select me-4 h-40"
                 aria-label="Default select example"
               >
                 <option>Year</option>
-                <option>2023</option>
                 <option>2024</option>
-                <option>2021</option>
-              </select> */}
+                <option>2025</option>
+                <option>2026</option>
+              </select>
 
               <a
                 className="nav-link f-20"

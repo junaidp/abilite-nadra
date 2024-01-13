@@ -4,6 +4,7 @@ import {
   forgetPassword,
   resetPassword,
   internalResetPassword,
+  updateUserName,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
@@ -33,6 +34,8 @@ const initialState = {
   authSuccess: false,
   // Internal Reset Password
   internalResetPasswordSuccess: false,
+  // Internal Reset Password
+  userNameUpdateSuccess: false,
 };
 
 export const setupRegisterUser = createAsyncThunk(
@@ -70,6 +73,13 @@ export const setupInternalResetPassword = createAsyncThunk(
   }
 );
 
+export const setupUpdateUserName = createAsyncThunk(
+  "auth/updateUserName",
+  async (data, thunkAPI) => {
+    return updateUserName(data, thunkAPI);
+  }
+);
+
 export const slice = createSlice({
   name: "auth",
   initialState,
@@ -92,6 +102,12 @@ export const slice = createSlice({
     resetInternalResetPasswordSuccess: (state) => {
       state.internalResetPasswordSuccess = false;
     },
+    resetUpdateUserNameSuccess: (state) => {
+      state.userNameUpdateSuccess = false;
+    },
+    updateUserState:(state)=>{
+      state.user=[{...state?.user,name:action.payload}]
+    }
   },
   extraReducers: {
     // Register
@@ -101,13 +117,13 @@ export const slice = createSlice({
     [setupRegisterUser.fulfilled]: (state) => {
       state.loading = false;
       state.registerSuccess = true;
-      state.registerName=""
+      state.registerName = "";
       state.registerEmail = "";
       state.registerPassword = "";
       state.registerConfirmPassword = "";
-      state.registerDesignation=""
-      state.registerReportingToEmail=""
-      state.registerCreatedByEmail=""
+      state.registerDesignation = "";
+      state.registerReportingToEmail = "";
+      state.registerCreatedByEmail = "";
       toast.success("Register success please login");
     },
     [setupRegisterUser.rejected]: (state, { payload }) => {
@@ -129,8 +145,10 @@ export const slice = createSlice({
       state.loginPassword = "";
       state.user = [
         {
+          name: payload?.data?.userId?.name,
           token: payload?.data?.jwt,
           email: payload?.data?.email,
+          company: payload?.data?.userId?.company,
         },
       ];
       state.authSuccess = true;
@@ -195,6 +213,23 @@ export const slice = createSlice({
         toast.error("An Error has accoured");
       }
     },
+    // Update User Name
+    [setupUpdateUserName.pending]: (state) => {
+      state.loading = true;
+    },
+    [setupUpdateUserName.fulfilled]: (state) => {
+      state.loading = false;
+      state.userNameUpdateSuccess = true;
+      toast.success("User Name Updated successfully");
+    },
+    [setupUpdateUserName.rejected]: (state, { payload }) => {
+      state.loading = false;
+      if (payload?.response?.data?.message) {
+        toast.error(payload?.response?.data?.message);
+      } else {
+        toast.error("An Error has accoured");
+      }
+    },
   },
 });
 
@@ -205,6 +240,8 @@ export const {
   resetRegisterSuccess,
   resetResetPasswordSuccess,
   resetInternalResetPasswordSuccess,
+  updateUserState,
+  resetUpdateUserNameSuccess
 } = slice.actions;
 
 export default slice.reducer;

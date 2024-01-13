@@ -7,14 +7,13 @@ import { useSelector, useDispatch } from "react-redux";
 const EditCheckListItemDialog = ({ setShowEditCheckListItemDialog }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  const { subCheckListAddSuccess, loading } = useSelector(
-    (state) => state.setttingsCheckList
-  );
+  const { subCheckListAddSuccess, loading, currentSubCheckListItem } =
+    useSelector((state) => state.setttingsCheckList);
   const initialState = {
-    area: "",
-    subject: "",
-    particulars: "",
-    observation: "",
+    area: currentSubCheckListItem?.area,
+    subject: currentSubCheckListItem?.subject,
+    particulars: currentSubCheckListItem?.particulars,
+    observation: currentSubCheckListItem?.observation,
   };
 
   const formik = useFormik({
@@ -29,9 +28,11 @@ const EditCheckListItemDialog = ({ setShowEditCheckListItemDialog }) => {
       if (!loading) {
         dispatch(
           setupEditCheckListItem({
-            ...values,
-            userEmail: user[0]?.email,
-            checklistId: 123,
+            ...currentSubCheckListItem,
+            area: values?.area,
+            subject: values?.subject,
+            particulars: values?.particulars,
+            observation: values?.observation,
           })
         );
       }

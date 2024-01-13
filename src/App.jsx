@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { ToastContainer } from "react-toastify";
+import { changeCompany } from "./global-redux/reducers/common/slice";
 import "./App.css";
 import logo from "./assets/favicon.ico";
 import Login from "./pages/auth/login/Login";
@@ -51,12 +52,12 @@ import {
 const App = () => {
   let dispatch = useDispatch();
   let { menuItems } = useSelector((state) => state.common);
+  let { user } = useSelector((state) => state.auth);
   React.useEffect(() => {
     let authUser = JSON.parse(localStorage.getItem("user"));
     if (authUser) {
       dispatch(changeAuthUser(authUser));
     }
-    dispatch(setupGetCompanies());
   }, []);
 
   React.useEffect(() => {
@@ -79,6 +80,11 @@ const App = () => {
     }
     dispatch(InitialLoadSidebarActiveLink());
   }, []);
+  React.useEffect(() => {
+    if (user[0]?.company[0]?.companyName) {
+      dispatch(changeCompany(user[0]?.company[0]?.companyName));
+    }
+  }, [user]);
 
   return (
     <HelmetProvider>
