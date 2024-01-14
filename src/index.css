@@ -79,6 +79,13 @@ body {
 .w-300 {
   width: 300px !important;
 }
+.w-130 {
+  width: 130px !important;
+}
+
+.w-350 {
+  width: 350px !important;
+}
 
 .f-10 {
   font-size: 10px !important;
@@ -255,6 +262,10 @@ textarea::placeholder {
 .nav-link {
   padding: 10px !important;
   font-size: 12px !important;
+}
+.information-request-dialog-main-wrap {
+  height: 90vh !important;
+  overflow-y: auto !important;
 }
 
 .btn {
@@ -520,6 +531,12 @@ element {
   width: 1200px !important;
 }
 
+.add-task-management-dialog {
+  height: 90vh !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
 .quill {
   min-height: 80vh !important;
 }
@@ -562,6 +579,40 @@ span[aria-label="Insert Ordered List"] .jodit-toolbar-button__trigger {
   font-size: 18px !important;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.flex {
+  display: flex !important;
+}
+
+.flex-end {
+  justify-content: flex-end !important;
+}
+
+.h-0 {
+  height: 0px !important;
+}
+
+.error {
+  color: rgb(238, 137, 137);
+  font-size: 13px;
+}
+
+.border-none {
+  border: none !important;
+}
+
+.w-full {
+  width: 100% !important;
+}
+
+.jodit-container:not(.jodit_inline) .jodit-wysiwyg img {
+  display: block !important;
+  margin: 0 auto !important;
+}
+
 .dashboard-modal {
   position: fixed;
   z-index: 100;
@@ -585,38 +636,4 @@ span[aria-label="Insert Ordered List"] .jodit-toolbar-button__trigger {
   position: relative;
   top: -90px;
   border-radius: 10px;
-}
-
-.cursor-pointer {
-  cursor: pointer;
-}
-
-.flex {
-  display: flex !important;
-}
-
-.flex-end {
-  justify-content: flex-end !important;
-}
-
-.h-0 {
-  height: 0px !important;
-}
-
-.error{
-  color: rgb(238, 137, 137);
-  font-size: 13px;
-}
-
-.border-none{
-  border: none !important;
-}
-
-.w-full {
-  width: 100% !important;
-}
-
-.jodit-container:not(.jodit_inline) .jodit-wysiwyg img{
-  display: block !important;
-  margin: 0 auto !important
 }

@@ -13,7 +13,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import { useNavigate } from "react-router-dom";
 import { changeAuthUser } from "../../../global-redux/reducers/auth/slice";
-import { changeCompany } from "../../../global-redux/reducers/common/slice";
+import {
+  changeCompany,
+  changeYear,
+} from "../../../global-redux/reducers/common/slice";
 
 const TopBar = () => {
   const [showUserProfile, setShowUserProfile] = React.useState(false);
@@ -21,7 +24,7 @@ const TopBar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   let { user } = useSelector((state) => state.auth);
-  const { showSidebar, company } = useSelector((state) => state.common);
+  const { showSidebar, company, year } = useSelector((state) => state.common);
   const { companies } = useSelector((state) => state.company);
   const notificationRef = useDetectClickOutside({
     onTriggered: closeNotficationDropDown,
@@ -46,6 +49,12 @@ const TopBar = () => {
   React.useEffect(() => {
     localStorage.setItem("company", company);
   }, [company]);
+
+  React.useEffect(() => {
+    if (year) {
+      localStorage.setItem("year", year);
+    }
+  }, [year]);
 
   return (
     <header className="app-header shadow-sm mb-3 px-0 ">
@@ -105,15 +114,22 @@ const TopBar = () => {
                   );
                 })}
               </select>
-              
+
               <select
                 className="form-select me-4 h-40"
                 aria-label="Default select example"
+                value={year}
+                onChange={(e) => {
+                  if (e?.target?.value) {
+                    dispatch(changeYear(e?.target?.value));
+                  }
+                }}
               >
                 <option>Year</option>
-                <option>2024</option>
-                <option>2025</option>
-                <option>2026</option>
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+                <option value="2021">2021</option>
               </select>
 
               <a

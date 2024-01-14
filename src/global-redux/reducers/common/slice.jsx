@@ -121,6 +121,20 @@ let menuItems = [
     route: "/audit/audit-settings",
     active: false,
   },
+  {
+    id: "li-audit-information-request",
+    label: "Information Request",
+    icon: "fa fa-paper-plane",
+    route: "/audit/information-request",
+    active: false,
+  },
+  {
+    id: "li-audit-tasks-management",
+    label: "Tasks Management",
+    icon: "fa fa-tasks",
+    route: "/audit/task-management",
+    active: false,
+  },
 ];
 
 const initialState = {
@@ -132,7 +146,8 @@ const initialState = {
   isExpandedReportsOpen: false,
   menuItems: menuItems,
   kickOffRequest: "",
-  company:localStorage.getItem("company") || ""
+  company: localStorage.getItem("company") || "",
+  year: localStorage.getItem("year") || "",
 };
 
 export const slice = createSlice({
@@ -142,8 +157,11 @@ export const slice = createSlice({
     changeShowSidebar: (state, action) => {
       state.showSidebar = action.payload;
     },
-    changeCompany:(state,action)=>{
-      state.company=action.payload
+    changeCompany: (state, action) => {
+      state.company = action.payload;
+    },
+    changeYear: (state, action) => {
+      state.year = action.payload;
     },
     changeActiveLink: (state, action) => {
       state.activeLink = action.payload;
@@ -190,7 +208,8 @@ export const {
   changeExpanded,
   changeKickOffRequest,
   InitialLoadSidebarActiveLink,
-  changeCompany
+  changeCompany,
+  changeYear,
 } = slice.actions;
 
 export default slice.reducer;

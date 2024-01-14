@@ -24,7 +24,9 @@ import ViewResourcePage from "./pages/dashboard/planing/job-scheduling/view-reso
 import GeneratePlanningReportPage from "./pages/dashboard/report/planing-report/generate-planing-report/GeneratePlanningReport";
 import StartSchedulingPage from "./pages/dashboard/planing/job-scheduling/start-scheduling/StartScheduling";
 import BusinessObjectiveRedirectPage from "./pages/dashboard/planing/business-objective/business-objectives-redirect/BusinessObjectiveRedirect";
+import InformationRequestPage from "./pages/dashboard/information-request/InformationRequest";
 import BusinessProcessPage from "./pages/dashboard/planing/business-objective/business-process/Business-Process";
+import TaskManagementPage from "./pages/dashboard/task-management/TaskManagement";
 import SpecialProjectAuditPage from "./pages/dashboard/planing/business-objective/special-project-audit/SpecialProjectAudit";
 import ComplianceCheckListCardPage from "./pages/dashboard/planing/business-objective/compliance-checklist-card/ComplianceCheckListCard";
 import UserProfile from "./components/user/user-profile/UserProfile";
@@ -43,6 +45,7 @@ import GenerateInternalAuditReportPage from "./pages/dashboard/report/internal-a
 import { changeAuthUser } from "./global-redux/reducers/auth/slice";
 import { setupGetCompanies } from "./global-redux/reducers/company/slice";
 import { useDispatch, useSelector } from "react-redux";
+import { changeYear } from "./global-redux/reducers/common/slice";
 import "react-toastify/dist/ReactToastify.css";
 import {
   InitialLoadSidebarActiveLink,
@@ -51,7 +54,7 @@ import {
 
 const App = () => {
   let dispatch = useDispatch();
-  let { menuItems } = useSelector((state) => state.common);
+  let { menuItems, year } = useSelector((state) => state.common);
   let { user } = useSelector((state) => state.auth);
   React.useEffect(() => {
     let authUser = JSON.parse(localStorage.getItem("user"));
@@ -85,6 +88,12 @@ const App = () => {
       dispatch(changeCompany(user[0]?.company[0]?.companyName));
     }
   }, [user]);
+
+  React.useEffect(() => {
+    if (year === "") {
+      dispatch(changeYear("2024"));
+    }
+  }, []);
 
   return (
     <HelmetProvider>
@@ -124,6 +133,7 @@ const App = () => {
               path="view-risk-assesment"
               element={<ViewRiskAssessmentPage />}
             />
+            <Route path="task-management" element={<TaskManagementPage />} />
             <Route
               path="view-job-scheduling"
               element={<ViewJobschedulePage />}
@@ -132,6 +142,10 @@ const App = () => {
             <Route
               path="generate-planning-report"
               element={<GeneratePlanningReportPage />}
+            />
+            <Route
+              path="information-request"
+              element={<InformationRequestPage />}
             />
             <Route path="start-scheduling" element={<StartSchedulingPage />} />
             <Route

@@ -25,50 +25,130 @@ const AuditableUnits = () => {
           </div>
         </div>
       )}
-      <header className="section-header my-3 text-start d-flex align-items-center justify-content-between">
-        <div className="mb-0 heading">Auditable Units</div>
-      </header>
+      <div>
+        <section className="faq-section">
+          <div className="container" data-aos="fade-up">
+            <header className="section-header my-3 align-items-center  text-start d-flex ">
+              <a
+                className="text-primary"
+                onClick={() => navigate("/audit/business-objective")}
+              >
+                <i className="fa fa-arrow-left text-primary fs-5 pe-3"></i>
+              </a>
+              <h3 className="mb-0 fw-bold">Auditable Units</h3>
+            </header>
 
-      <div className="row">
-        <div className="col-lg-12">
-          <div className="example-header">
-            <div className="mb-2 w-100">
-              <input
-                placeholder="Filter"
-                id="inputField"
-                className="input-border-bottom"
-              />
+            <div className="row">
+              <div className="col-md-12">
+                <div className="accordion" id="accordionFlushExample">
+                  <div className="accordion-item">
+                    <h2 className="accordion-header">
+                      <button
+                        className="accordion-button collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#flush-collapseFour"
+                        aria-expanded="false"
+                        aria-controls="flush-collapseFour"
+                      >
+                        1st Autitable Unit
+                      </button>
+                    </h2>
+                    <div
+                      id="flush-collapseFour"
+                      className="accordion-collapse collapse"
+                      data-bs-parent="#accordionFlushExample"
+                    >
+                      <div className="accordion-body">
+                        <div className="table-responsive">
+                          <table className="table table-bordered  table-hover rounded">
+                            <thead className="bg-secondary text-white">
+                              <tr>
+                                <th className="w-80">Sr. #</th>
+                                <th>Business Objective</th>
+                                <th>Risk Rating</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {data?.map((item, index) => {
+                                return (
+                                  <tr className="h-40" key={index}>
+                                    <td>{item?.no}</td>
+                                    <td
+                                      onClick={() =>
+                                        setAuditableUnitRatingDialog(true)
+                                      }
+                                      className="cursor-pointer"
+                                    >
+                                      {item?.objective}
+                                    </td>
+                                    <td>{item?.rating}</td>
+                                  </tr>
+                                );
+                              })}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {/*  */}
+                  <div className="accordion-item">
+                    <h2 className="accordion-header">
+                      <button
+                        className="accordion-button collapsed br-8"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#flush-collapseFive"
+                        aria-expanded="false"
+                        aria-controls="flush-collapseFive"
+                      >
+                        2nd Autitable Unit
+                      </button>
+                    </h2>
+                    <div
+                      id="flush-collapseFive"
+                      className="accordion-collapse collapse"
+                      data-bs-parent="#accordionFlushExample"
+                    >
+                      <div className="accordion-body">
+                        <div className="table-responsive">
+                          <table className="table table-bordered  table-hover rounded">
+                            <thead className="bg-secondary text-white">
+                              <tr>
+                                <th className="w-80">Sr. #</th>
+                                <th>Business Objective</th>
+                                <th>Risk Rating</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {data?.map((item, index) => {
+                                return (
+                                  <tr className="h-40" key={index}>
+                                    <td>{item?.no}</td>
+                                    <td
+                                      onClick={() =>
+                                        setAuditableUnitRatingDialog(true)
+                                      }
+                                      className="cursor-pointer"
+                                    >
+                                      {item?.objective}
+                                    </td>
+                                    <td>{item?.rating}</td>
+                                  </tr>
+                                );
+                              })}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <div className="table-responsive">
-            <table className="table table-bordered  table-hover rounded">
-              <thead className="bg-secondary text-white">
-                <tr>
-                  <th className="w-80">Sr. #</th>
-                  <th>Business Objective</th>
-                  <th>Risk Rating</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data?.map((item, index) => {
-                  return (
-                    <tr className="h-40" key={index}>
-                      <td>{item?.no}</td>
-                      <td
-                        onClick={() => setAuditableUnitRatingDialog(true)}
-                        className="cursor-pointer"
-                      >
-                        {item?.objective}
-                      </td>
-                      <td>{item?.rating}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <Pagination />
+        </section>
       </div>
     </div>
   );
