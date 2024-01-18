@@ -98,7 +98,10 @@ const RiskAssessments = () => {
                       <td className="text-center w-200">
                         <div
                           className="btn btn-outline-light text-primary shadow h-32 w-180"
-                          onClick={() => setPerformRiskAssessmentModal(true)}
+                          // onClick={() => setPerformRiskAssessmentModal(true)}
+                          onClick={() =>
+                            navigate("/audit/risk-factor-approach")
+                          }
                         >
                           <span className="btn-label me-2">
                             <i className="fa fa-play"></i>
@@ -107,9 +110,7 @@ const RiskAssessments = () => {
                         </div>
                       </td>
                       <td className="text-center pt-3">
-                        <i
-                          className="fa fa-trash text-danger f-18"
-                        ></i>
+                        <i className="fa fa-trash text-danger f-18"></i>
                       </td>
                     </tr>
                   );

@@ -3,7 +3,13 @@ import "./index.css";
 import { useNavigate } from "react-router-dom";
 import ObjectiveListDialog from "../../../../modals/objective-list-dialog/index";
 import Dialog from "@mui/material/Dialog";
-import { setupSaveSpecialProjectAudit } from "../../../../../global-redux/reducers/planing/engagement/slice";
+import {
+  resetAddEngagementSuccess,
+  setupGetSingleSpecialProjectAuditObjective,
+  setupUpdateSpecialProjectAudit,
+  setupUpdateBusinessObjectiveAndMapProcessSpecialProjectOrAudit,
+  setupUpdateBusinessMinuteMeeting,
+} from "../../../../../global-redux/reducers/planing/engagement/slice";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
@@ -13,67 +19,27 @@ const SpecialProjectAudit = () => {
     React.useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const engagementId = searchParams.get("engagementId");
-  const { allEngagements } = useSelector((state) => state.planingEngagements);
+  const { planingEngagementSingleObject, engagementAddSuccess } = useSelector(
+    (state) => state.planingEngagements
+  );
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [object, setObject] = React.useState({
-    description: "",
-    domain: "",
+    engagementName: "",
     meetingDateTimeFrom: "",
     meetingDateTimeTo: "",
-    mapProcessDescription: "",
-    mapProcessDomain: "",
-    businessObjectiveAndMapProcessList: [],
+    strategicDocuments: [],
+    subLocation_Id: "",
+    location_Id: "",
+    businessObjectiveAndMapProcessList: [
+      {
+        description: "",
+        domain: "",
+        id: 1,
+      },
+    ],
   });
 
-  function handleSaveAll() {
-    const engagement = allEngagements.find(
-      (item) => item?.id === Number(engagementId)
-    );
-    dispatch(
-      setupSaveSpecialProjectAudit({
-        description: object?.description,
-        domain: object?.domain,
-        specialProjectOrAudit: {
-          meetingScheduleAndMinutes: {
-            meetingDateTimeFrom: object?.meetingDateTimeFrom,
-            meetingDateTimeTo: object?.meetingDateTimeTo,
-          },
-          businessObjectiveAndMapProcessList:
-            object?.businessObjectiveAndMapProcessList,
-          engagement: engagement,
-        },
-      })
-    );
-  }
-
-  function handleMapProcessSave() {
-    if (object?.mapProcessDomain && object?.mapProcessDescription) {
-      setObject((pre) => {
-        return {
-          ...pre,
-          businessObjectiveAndMapProcessList: [
-            ...pre?.businessObjectiveAndMapProcessList,
-            {
-              description: pre?.mapProcessDescription,
-              domain: pre?.mapProcessDomain,
-              id: uuidv4(),
-            },
-          ],
-        };
-      });
-
-      setTimeout(() => {
-        setObject((pre) => {
-          return {
-            ...pre,
-            mapProcessDomain: "",
-            mapProcessDescription: "",
-          };
-        });
-      }, 1000);
-    }
-  }
-  const navigate = useNavigate();
   function handleClose() {
     setShowObjectiveListDialog(false);
   }
@@ -87,7 +53,48 @@ const SpecialProjectAudit = () => {
     });
   }
 
-  function handleDeleteMapItem(id) {
+  function handleSaveMinuteMeetings() {
+    dispatch(
+      setupUpdateBusinessMinuteMeeting({
+        engagementId: engagementId,
+        location_Id: object?.location_Id,
+        subLocation_Id: object?.subLocation_Id,
+        meetingDateTimeFrom: object?.meetingDateTimeFrom,
+        meetingDateTimeTo: object?.meetingDateTimeTo,
+        meetingMinutes: "",
+      })
+    );
+  }
+
+  function handleSumMapProcess() {
+    setObject((pre) => {
+      return {
+        ...pre,
+        businessObjectiveAndMapProcessList: [
+          ...pre?.businessObjectiveAndMapProcessList,
+          {
+            description: pre?.mapProcessDescription,
+            domain: pre?.mapProcessDomain,
+            id: uuidv4(),
+          },
+        ],
+      };
+    });
+  }
+
+  function handleUpdateSpecialProjectAudit() {
+    dispatch(
+      setupUpdateSpecialProjectAudit({
+        ...planingEngagementSingleObject,
+        engagement: {
+          ...planingEngagementSingleObject?.engagement,
+          engagementName: object?.engagementName,
+        },
+      })
+    );
+  }
+
+  function handleDeleteSingleMapItem(id) {
     setObject((pre) => {
       return {
         ...pre,
@@ -98,6 +105,88 @@ const SpecialProjectAudit = () => {
       };
     });
   }
+
+  function handleChangeMapItemDescription(event, id) {
+    setObject((pre) => {
+      return {
+        ...pre,
+        businessObjectiveAndMapProcessList:
+          pre?.businessObjectiveAndMapProcessList.map((item) =>
+            item?.id === id
+              ? { ...item, description: event?.target?.value }
+              : item
+          ),
+      };
+    });
+  }
+
+  function handleChangeMapItemDemain(event, id) {
+    setObject((pre) => {
+      return {
+        ...pre,
+        businessObjectiveAndMapProcessList:
+          pre?.businessObjectiveAndMapProcessList.map((item) =>
+            item?.id === id ? { ...item, domain: event?.target?.value } : item
+          ),
+      };
+    });
+  }
+
+  function handleSaveBusinessObjectiveMapProcess() {
+    const businessObjectiveAndMapProcessListObject =
+      object?.businessObjectiveAndMapProcessList
+        .filter((item) => item?.description && item?.domain)
+        .map((all) => {
+          return {
+            description: all?.description,
+            domain: all?.domain,
+          };
+        });
+
+    if (businessObjectiveAndMapProcessListObject?.length !== 0) {
+      dispatch(
+        setupUpdateBusinessObjectiveAndMapProcessSpecialProjectOrAudit({
+          ...planingEngagementSingleObject,
+          businessObjectiveAndMapProcessList:
+            businessObjectiveAndMapProcessListObject,
+        })
+      );
+    }
+  }
+
+  React.useEffect(() => {
+    if (engagementAddSuccess) {
+      dispatch(resetAddEngagementSuccess());
+      dispatch(setupGetSingleSpecialProjectAuditObjective(engagementId));
+    }
+  }, [engagementAddSuccess]);
+
+  React.useEffect(() => {
+    setObject((pre) => {
+      return {
+        ...pre,
+        engagementName:
+          planingEngagementSingleObject?.engagement?.engagementName,
+        businessObjectiveAndMapProcessList:
+          planingEngagementSingleObject?.businessObjectiveAndMapProcessList,
+        location_Id:
+          planingEngagementSingleObject?.meetingScheduleAndMinutes?.location_Id,
+        meetingDateTimeFrom:
+          planingEngagementSingleObject?.meetingScheduleAndMinutes
+            ?.meetingDateTimeFrom,
+        meetingDateTimeTo:
+          planingEngagementSingleObject?.meetingScheduleAndMinutes
+            ?.meetingDateTimeTo,
+        subLocation_Id:
+          planingEngagementSingleObject?.meetingScheduleAndMinutes
+            ?.subLocation_Id,
+      };
+    });
+  }, [planingEngagementSingleObject]);
+
+  React.useEffect(() => {
+    dispatch(setupGetSingleSpecialProjectAuditObjective(engagementId));
+  }, [engagementId]);
 
   return (
     <div>
@@ -118,33 +207,19 @@ const SpecialProjectAudit = () => {
       </header>
 
       <div className="row px-4">
-        <div>
+        <div className="row">
           <div className="mb-4 col-lg-12">
-            <div className="col-lg-2 label-text w-100 mb-2">Description</div>
+            <div className="col-lg-2 label-text w-100 mb-2">
+              Engagement Name
+            </div>
             <div className="col-lg-12">
               <div className="form-group">
                 <input
                   type="text"
                   id="description"
-                  value={object?.description}
+                  value={object?.engagementName}
                   onChange={handleChange}
-                  name="description"
-                  className="form-control h-40"
-                  placeholder="Enter"
-                />
-              </div>
-            </div>
-          </div>
-          <div className="mb-4 col-lg-12">
-            <div className="col-lg-2 label-text mb-2">Domain</div>
-            <div className="col-lg-12">
-              <div className="form-group">
-                <input
-                  type="text"
-                  id="domain"
-                  value={object?.domain}
-                  onChange={handleChange}
-                  name="domain"
+                  name="engagementName"
                   className="form-control h-40"
                   placeholder="Enter"
                 />
@@ -152,6 +227,7 @@ const SpecialProjectAudit = () => {
             </div>
           </div>
         </div>
+        <div></div>
         <div className="col-md-12">
           <div className="accordion" id="accordionFlushExample">
             <div className="accordion-item">
@@ -173,6 +249,38 @@ const SpecialProjectAudit = () => {
                 data-bs-parent="#accordionFlushExample"
               >
                 <div className="accordion-body">
+                  <div className="row mb-3">
+                    <div className="col-lg-6">
+                      <label>Select Location</label>
+                      <select
+                        className="form-select"
+                        aria-label="Default select example"
+                        name="location_Id"
+                        value={object?.location_Id}
+                        onChange={handleChange}
+                      >
+                        <option>List of Locations</option>
+                        <option value="1">Location 1</option>
+                        <option value="2">Location 2</option>
+                        <option value="3">Location 3</option>
+                      </select>
+                    </div>
+                    <div className="col-lg-6">
+                      <label>Select Sub Location</label>
+                      <select
+                        className="form-select"
+                        aria-label="Default select example"
+                        name="subLocation_Id"
+                        onChange={handleChange}
+                        value={object?.subLocation_Id}
+                      >
+                        <option>List of Sub Locations</option>
+                        <option value="4">Sub Location 1</option>
+                        <option value="5">Sub Location 2</option>
+                        <option value="6">Sub Location 3</option>
+                      </select>
+                    </div>
+                  </div>
                   <div className="row">
                     <div className="col-lg-6">
                       <label className="w-100">From</label>
@@ -198,110 +306,9 @@ const SpecialProjectAudit = () => {
                     </div>
                   </div>
 
-                  <button className="btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow">
-                    <span className="btn-label me-2">
-                      <i className="fa fa-check-circle"></i>
-                    </span>
-                    Save
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div className="my-4 sub-heading"></div>
-            <div className="accordion-item">
-              <h2 className="accordion-header">
-                <button
-                  className="accordion-button collapsed br-8"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#flush-collapseSix"
-                  aria-expanded="false"
-                  aria-controls="flush-collapseSix"
-                >
-                  <div className="d-flex w-100 me-3 align-items-center justify-content-between">
-                    <div className=" d-flex align-items-center">
-                      <i className="fa fa-check-circle fs-3 text-success pe-3"></i>{" "}
-                      Define Business Objective and Map Process
-                    </div>
-                  </div>
-                </button>
-              </h2>
-              <div
-                id="flush-collapseSix"
-                className="accordion-collapse collapse"
-                data-bs-parent="#accordionFlushExample"
-              >
-                <div className="accordion-body">
-                  <table className="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">Sr No.</th>
-                        <th scope="col">Description</th>
-                        <th scope="col">Domain</th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {object?.businessObjectiveAndMapProcessList?.map(
-                        (item, index) => {
-                          return (
-                            <tr>
-                              <td>{index + 1}</td>
-                              <td>
-                                <a href="#">{item?.description}</a>
-                              </td>
-                              <td>
-                                <a href="#">{item?.domain}</a>
-                              </td>
-                              <td>
-                                {/* <i className="fa-eye fa pe-3"></i> */}
-                                <i
-                                  className="fa fa-trash text-danger f-18 cursor-pointer"
-                                  onClick={() => handleDeleteMapItem(item?.id)}
-                                ></i>
-                              </td>
-                            </tr>
-                          );
-                        }
-                      )}
-                    </tbody>
-                  </table>
-                  <div className="mb-3 w-100">
-                    <label
-                      htmlFor="exampleFormControlTextarea1"
-                      className="form-label"
-                    >
-                      Business Objective
-                    </label>
-                    <textarea
-                      className="form-control"
-                      placeholder="Enter Here"
-                      id="ds"
-                      rows="3"
-                      name="mapProcessDescription"
-                      value={object?.mapProcessDescription}
-                      onChange={handleChange}
-                    ></textarea>
-                    <p className="word-limit-info mb-0">Maximum 1500 words</p>
-                  </div>
-
-                  <div className="col-lg-12">
-                    <label> Select Domain</label>
-                    <select
-                      className="form-select"
-                      aria-label="Default select example"
-                      value={object?.mapProcessDomain}
-                      name="mapProcessDomain"
-                      onChange={handleChange}
-                    >
-                      <option value="strategic">strategic</option>
-                      <option value="operation">operation</option>
-                    </select>
-                  </div>
-
                   <button
                     className="btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow"
-                    onClick={handleMapProcessSave}
+                    onClick={handleSaveMinuteMeetings}
                   >
                     <span className="btn-label me-2">
                       <i className="fa fa-check-circle"></i>
@@ -311,10 +318,128 @@ const SpecialProjectAudit = () => {
                 </div>
               </div>
             </div>
+            <div className="my-4 sub-heading"></div>
+            <header className="section-header my-3 align-items-center text-start d-flex">
+              <div className="mb-0 sub-heading">
+                Define Business Objective and Map Process
+              </div>
+              <div
+                className="btn btn-labeled btn-primary ms-3 px-3 shadow"
+                onClick={handleSumMapProcess}
+              >
+                <span className="btn-label me-2">
+                  <i className="fa fa-plus-circle"></i>
+                </span>
+                Add
+              </div>
+              <div
+                className="btn btn-labeled btn-primary ms-3 px-3 shadow"
+                onClick={() => setShowObjectiveListDialog(true)}
+              >
+                <span className="btn-label me-2">
+                  <i className="fa fa-list"></i>
+                </span>
+                Objective List
+              </div>
+              <i
+                title="Info"
+                className="fa fa-info-circle ps-3 text-secondary cursor-pointer"
+              ></i>
+            </header>
+
+            {/*  */}
+            {object?.businessObjectiveAndMapProcessList?.map((item, index) => {
+              return (
+                <div>
+                  <div className="w-100 float-right">
+                    <i
+                      class="fa fa-trash text-danger f-18 px-3 cursor-pointer float-right w-100"
+                      onClick={() => handleDeleteSingleMapItem(item?.id)}
+                    ></i>
+                  </div>
+                  <div className="accordion-item">
+                    <h2 className="accordion-header">
+                      <button
+                        className="accordion-button collapsed br-8"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target={`#flush-collapse${index}`}
+                        aria-expanded="false"
+                        aria-controls={`flush-collapse${index}`}
+                      >
+                        <div className="d-flex w-100 me-3 align-items-center justify-content-between">
+                          <div className=" d-flex align-items-center">
+                            <i className="fa fa-check-circle fs-3 text-success pe-3"></i>{" "}
+                            Define Business Objective and Map Process
+                          </div>
+                        </div>
+                      </button>
+                    </h2>
+                    <div
+                      id={`flush-collapse${index}`}
+                      className="accordion-collapse collapse"
+                      data-bs-parent="#accordionFlushExample"
+                    >
+                      <div className="accordion-body">
+                        <div className="mb-3 w-100">
+                          <label
+                            htmlFor="exampleFormControlTextarea1"
+                            className="form-label"
+                          >
+                            Business Objective
+                          </label>
+                          <textarea
+                            className="form-control"
+                            placeholder="Enter Here"
+                            id="ds"
+                            rows="3"
+                            name="mapProcessDescription"
+                            value={index?.description}
+                            onChange={(event) =>
+                              handleChangeMapItemDescription(event, item?.id)
+                            }
+                          ></textarea>
+                          <p className="word-limit-info mb-0">
+                            Maximum 1500 words
+                          </p>
+                        </div>
+
+                        <div className="col-lg-12">
+                          <label> Select Domain</label>
+                          <select
+                            className="form-select"
+                            aria-label="Default select example"
+                            value={index?.domain}
+                            name="mapProcessDomain"
+                            onChange={(event) =>
+                              handleChangeMapItemDemain(event, item?.id)
+                            }
+                          >
+                            <option>Select</option>
+                            <option value="strategic">strategic</option>
+                            <option value="operation">operation</option>
+                          </select>
+                        </div>
+
+                        <button
+                          className="btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow"
+                          onClick={handleSaveBusinessObjectiveMapProcess}
+                        >
+                          <span className="btn-label me-2">
+                            <i className="fa fa-check-circle"></i>
+                          </span>
+                          Save
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
           <button
             className="btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow float-end"
-            onClick={handleSaveAll}
+            onClick={handleUpdateSpecialProjectAudit}
           >
             <span className="btn-label me-2">
               <i className="fa fa-check-circle"></i>

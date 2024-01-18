@@ -116,3 +116,53 @@ export const getSingleCheckListObjective = async (data, thunkAPI) => {
     return thunkAPI.rejectWithValue(error);
   }
 };
+
+export const getSingleSpecialProjectAuditObjective = async (data, thunkAPI) => {
+  try {
+    let props = await axios.get(
+      `${baseUrl}/auditPlanningAndScheduling/engagments/getSpecialProjectOrAudit?engagementId=${data}`
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
+export const updateBusinessMinuteMeeting = async (data, thunkAPI) => {
+  try {
+    let props = await axios.post(
+      `${baseUrl}/auditPlanningAndScheduling/engagments/updateMeetingScheduleAndMinutes`,
+      data
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
+export const updateSpecialProjectAudit = async (data, thunkAPI) => {
+  try {
+    let props = await axios.post(
+      `${baseUrl}/auditPlanningAndScheduling/engagments/updateSpecialProjectOrAudit`,
+      data
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
+export const updateBusinessObjectiveAndMapProcessSpecialProjectOrAudit = async (
+  data,
+  thunkAPI
+) => {
+  try {
+    let props = await axios.post(
+      `${baseUrl}/auditPlanningAndScheduling/engagments/saveOrupdateBusinessObjectiveAndMapProcessSpecialProjectOrAudit`,
+      data
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};

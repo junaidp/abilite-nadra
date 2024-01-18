@@ -71,7 +71,7 @@ const AddEngagementAuditDialog = ({ setBusinessObjectiveDialog }) => {
       </div>
 
       <div className="row pt-5">
-        <div className="col-lg-6">
+        <div className="col-lg-4">
           <a
             className="w-100"
             type="button"
@@ -148,7 +148,7 @@ const AddEngagementAuditDialog = ({ setBusinessObjectiveDialog }) => {
             </div>
           </a>
         </div> */}
-        <div className="col-lg-6">
+        <div className="col-lg-4">
           <a
             className="w-100 "
             type="button"
@@ -188,9 +188,6 @@ const AddEngagementAuditDialog = ({ setBusinessObjectiveDialog }) => {
             </div>
           </a>
         </div>
-      </div>
-
-      <div className="row justify-content-center align-items-center">
         <div className="col-lg-4">
           <a
             className="w-100 "
@@ -232,7 +229,8 @@ const AddEngagementAuditDialog = ({ setBusinessObjectiveDialog }) => {
           </a>
         </div>
       </div>
-      <div className="modal-footer px-2">
+
+      <div className="modal-footer px-2 mt-4">
         <button
           type="button"
           className="btn btn-danger relative top-nagative-40"

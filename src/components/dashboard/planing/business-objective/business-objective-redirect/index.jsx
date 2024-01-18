@@ -8,6 +8,7 @@ import {
   setupGetSingleEngagementObject,
   setupUpdateBusinessObjective,
   setupSaveMapProcessBusinessObjective,
+  setupUpdateBusinessMinuteMeeting,
 } from "../../../../../global-redux/reducers/planing/engagement/slice";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
@@ -31,6 +32,8 @@ const BusinessObjectiveRedirect = () => {
     meetingDateTimeFrom: "",
     meetingDateTimeTo: "",
     strategicDocuments: [],
+    subLocation_Id: "",
+    location_Id: "",
     businessObjectiveAndMapProcessList: [
       {
         description: "",
@@ -51,6 +54,19 @@ const BusinessObjectiveRedirect = () => {
         [event?.target?.name]: event?.target?.value,
       };
     });
+  }
+
+  function handleSaveMinuteMeetings() {
+    dispatch(
+      setupUpdateBusinessMinuteMeeting({
+        engagementId: engagementId,
+        location_Id: object?.location_Id,
+        subLocation_Id: object?.subLocation_Id,
+        meetingDateTimeFrom: object?.meetingDateTimeFrom,
+        meetingDateTimeTo: object?.meetingDateTimeTo,
+        meetingMinutes: "",
+      })
+    );
   }
 
   function handleDeleteFileItem(id) {
@@ -196,9 +212,21 @@ const BusinessObjectiveRedirect = () => {
         ...pre,
         industryUpdate: planingEngagementSingleObject?.industryUpdate,
         companyUpdate: planingEngagementSingleObject?.companyUpdate,
-        engagementName: planingEngagementSingleObject?.engagement?.engagementName,
+        engagementName:
+          planingEngagementSingleObject?.engagement?.engagementName,
         businessObjectiveAndMapProcessList:
-        planingEngagementSingleObject?.businessObjectiveAndMapProcessList,
+          planingEngagementSingleObject?.businessObjectiveAndMapProcessList,
+        location_Id:
+          planingEngagementSingleObject?.meetingScheduleAndMinutes?.location_Id,
+        meetingDateTimeFrom:
+          planingEngagementSingleObject?.meetingScheduleAndMinutes
+            ?.meetingDateTimeFrom,
+        meetingDateTimeTo:
+          planingEngagementSingleObject?.meetingScheduleAndMinutes
+            ?.meetingDateTimeTo,
+        subLocation_Id:
+          planingEngagementSingleObject?.meetingScheduleAndMinutes
+            ?.subLocation_Id,
       };
     });
   }, [planingEngagementSingleObject]);
@@ -206,6 +234,7 @@ const BusinessObjectiveRedirect = () => {
   React.useEffect(() => {
     dispatch(setupGetSingleEngagementObject(engagementId));
   }, [engagementId]);
+
 
   return (
     <div>
@@ -445,28 +474,38 @@ const BusinessObjectiveRedirect = () => {
                 data-bs-parent="#accordionFlushExample"
               >
                 <div className="accordion-body">
-                  {/* <div className="row mb-3">
+                  <div className="row mb-3">
                     <div className="col-lg-6">
-                      <label>Select Department</label>
+                      <label>Select Location</label>
                       <select
                         className="form-select"
                         aria-label="Default select example"
+                        name="location_Id"
+                        value={object?.location_Id}
+                        onChange={handleChange}
                       >
-                        <option>List of Department</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                        <option>List of Locations</option>
+                        <option value="1">Location 1</option>
+                        <option value="2">Location 2</option>
+                        <option value="3">Location 3</option>
                       </select>
                     </div>
                     <div className="col-lg-6">
-                      <label className="w-100">Meeting Date</label>
-                      <input
-                        className="form-control w-100"
-                        placeholder="Select Date"
-                        type="date"
-                      />
+                      <label>Select Sub Location</label>
+                      <select
+                        className="form-select"
+                        aria-label="Default select example"
+                        name="subLocation_Id"
+                        onChange={handleChange}
+                        value={object?.subLocation_Id}
+                      >
+                        <option>List of Sub Locations</option>
+                        <option value="4">Sub Location 1</option>
+                        <option value="5">Sub Location 2</option>
+                        <option value="6">Sub Location 3</option>
+                      </select>
                     </div>
-                  </div> */}
+                  </div>
                   <div className="row">
                     <div className="col-lg-6">
                       <label className="w-100">From</label>
@@ -492,7 +531,10 @@ const BusinessObjectiveRedirect = () => {
                     </div>
                   </div>
 
-                  <button className="btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow">
+                  <button
+                    className="btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow"
+                    onClick={handleSaveMinuteMeetings}
+                  >
                     <span className="btn-label me-2">
                       <i className="fa fa-check-circle"></i>
                     </span>

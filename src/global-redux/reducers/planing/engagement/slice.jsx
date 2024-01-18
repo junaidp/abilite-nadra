@@ -9,6 +9,10 @@ import {
   updateBusinessObjective,
   saveMapProcessBusinessObjective,
   getSingleCheckListObjective,
+  getSingleSpecialProjectAuditObjective,
+  updateBusinessMinuteMeeting,
+  updateSpecialProjectAudit,
+  updateBusinessObjectiveAndMapProcessSpecialProjectOrAudit,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
@@ -85,6 +89,36 @@ export const setupGetSingleCheckListObjective = createAsyncThunk(
     return getSingleCheckListObjective(data, thunkAPI);
   }
 );
+
+export const setupGetSingleSpecialProjectAuditObjective = createAsyncThunk(
+  "engagement/getSingleSpecialProjectAuditObjective",
+  async (data, thunkAPI) => {
+    return getSingleSpecialProjectAuditObjective(data, thunkAPI);
+  }
+);
+export const setupUpdateBusinessMinuteMeeting = createAsyncThunk(
+  "engagement/updateBusinessMinuteMeeting",
+  async (data, thunkAPI) => {
+    return updateBusinessMinuteMeeting(data, thunkAPI);
+  }
+);
+export const setupUpdateSpecialProjectAudit = createAsyncThunk(
+  "engagement/updateSpecialProjectAudit",
+  async (data, thunkAPI) => {
+    return updateSpecialProjectAudit(data, thunkAPI);
+  }
+);
+
+export const setupUpdateBusinessObjectiveAndMapProcessSpecialProjectOrAudit =
+  createAsyncThunk(
+    "engagement/updateBusinessObjectiveAndMapProcessSpecialProjectOrAudit",
+    async (data, thunkAPI) => {
+      return updateBusinessObjectiveAndMapProcessSpecialProjectOrAudit(
+        data,
+        thunkAPI
+      );
+    }
+  );
 
 export const slice = createSlice({
   name: "engagement",
@@ -189,7 +223,7 @@ export const slice = createSlice({
     [setupSaveCheckListObjective.fulfilled]: (state, { payload }) => {
       state.loading = false;
       state.engagementAddSuccess = true;
-      toast.success("Special Project Audit Edited Successfully");
+      toast.success("Checklist Objective Edited Successfully");
     },
     [setupSaveCheckListObjective.rejected]: (state, { payload }) => {
       state.loading = false;
@@ -263,6 +297,85 @@ export const slice = createSlice({
       state.planingEngagementSingleObject = payload?.data;
     },
     [setupGetSingleCheckListObjective.rejected]: (state, { payload }) => {
+      state.loading = false;
+      if (payload?.response?.data?.message) {
+        toast.error(payload?.response?.data?.message);
+      } else {
+        toast.error("An Error has accoured");
+      }
+    },
+    // Get Single Special Project Audit
+    [setupGetSingleSpecialProjectAuditObjective.pending]: (state) => {
+      state.loading = true;
+    },
+    [setupGetSingleSpecialProjectAuditObjective.fulfilled]: (
+      state,
+      { payload }
+    ) => {
+      state.loading = false;
+      state.planingEngagementSingleObject = payload?.data;
+    },
+    [setupGetSingleSpecialProjectAuditObjective.rejected]: (
+      state,
+      { payload }
+    ) => {
+      state.loading = false;
+      if (payload?.response?.data?.message) {
+        toast.error(payload?.response?.data?.message);
+      } else {
+        toast.error("An Error has accoured");
+      }
+    },
+    // Update Business Minute Meeting
+    [setupUpdateBusinessMinuteMeeting.pending]: (state) => {
+      state.loading = true;
+    },
+    [setupUpdateBusinessMinuteMeeting.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      toast.success("Meeting Updated Successfully");
+      state.engagementAddSuccess = true;
+    },
+    [setupUpdateBusinessMinuteMeeting.rejected]: (state, { payload }) => {
+      state.loading = false;
+      if (payload?.response?.data?.message) {
+        toast.error(payload?.response?.data?.message);
+      } else {
+        toast.error("An Error has accoured");
+      }
+    },
+    // Update Special Project Audit
+    [setupUpdateSpecialProjectAudit.pending]: (state) => {
+      state.loading = true;
+    },
+    [setupUpdateSpecialProjectAudit.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      toast.success("Special Project Audit Updated Successfully");
+      state.engagementAddSuccess = true;
+    },
+    [setupUpdateSpecialProjectAudit.rejected]: (state, { payload }) => {
+      state.loading = false;
+      if (payload?.response?.data?.message) {
+        toast.error(payload?.response?.data?.message);
+      } else {
+        toast.error("An Error has accoured");
+      }
+    },
+    // Update Special Project Audit Map Process
+    [setupUpdateBusinessObjectiveAndMapProcessSpecialProjectOrAudit.pending]: (
+      state
+    ) => {
+      state.loading = true;
+    },
+    [setupUpdateBusinessObjectiveAndMapProcessSpecialProjectOrAudit.fulfilled]:
+      (state, { payload }) => {
+        state.loading = false;
+        toast.success("Special Project Audit Map Process Updated Successfully");
+        state.engagementAddSuccess = true;
+      },
+    [setupUpdateBusinessObjectiveAndMapProcessSpecialProjectOrAudit.rejected]: (
+      state,
+      { payload }
+    ) => {
       state.loading = false;
       if (payload?.response?.data?.message) {
         toast.error(payload?.response?.data?.message);
