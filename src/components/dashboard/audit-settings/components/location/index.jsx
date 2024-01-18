@@ -1,6 +1,45 @@
 import React from "react";
+import {
+  setupAddLocation,
+  setupGetAllLocations,
+  resetLocationAddSuccess,
+} from "../../../../../global-redux/reducers/settings/location/slice";
+import { useSelector, useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
 const Location = () => {
+  const [locationDescription, setLoginDescription] = React.useState("");
+  const { loading, locationAddSuccess } = useSelector(
+    (state) => state.setttingsLocation
+  );
+  const { company } = useSelector((state) => state?.common);
+  const { user } = useSelector((state) => state?.auth);
+  const dispatch = useDispatch();
+
+  function handleSaveLocation() {
+    if (!loading) {
+      if (locationDescription === "") {
+        toast.error("Provide the location");
+      } else {
+        const selectedCompany = user[0]?.company?.find(
+          (item) => item?.companyName === company
+        );
+        dispatch(
+          setupAddLocation({
+            description: locationDescription,
+            companyObj: selectedCompany,
+          })
+        );
+      }
+    }
+  }
+
+  React.useEffect(() => {
+    if (locationAddSuccess) {
+      setLoginDescription("");
+      dispatch(resetLocationAddSuccess());
+    }
+  }, [locationAddSuccess]);
   return (
     <div
       className="tab-pane fade"
@@ -27,14 +66,22 @@ const Location = () => {
             className="form-control w-100"
             placeholder="Enter"
             type="text"
+            name="locationDescription"
+            value={locationDescription}
+            onChange={(e) => setLoginDescription(e?.target?.value)}
           />
         </div>
-        <div className="col-lg-6 text-end float-end align-self-end">
+        <div
+          className={`col-lg-6 text-end float-end align-self-end ${
+            loading && "disabled"
+          }`}
+          onClick={handleSaveLocation}
+        >
           <div className="btn btn-labeled btn-primary px-3 shadow">
             <span className="btn-label me-2">
               <i className="fa fa-plus"></i>
             </span>
-            Add
+            {loading ? "Loading" : "Add"}
           </div>
         </div>
       </div>

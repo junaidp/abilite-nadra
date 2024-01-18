@@ -124,6 +124,7 @@ const Login = () => {
                         placeholder="********"
                         required="required"
                         name="loginPassword"
+                        autoComplete="current-password"
                         value={loginPassword}
                         onChange={handleChange}
                       />

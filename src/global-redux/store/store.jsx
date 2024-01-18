@@ -3,6 +3,7 @@ import commonReducer from "../reducers/common/slice";
 import authReducer from "../reducers/auth/slice";
 import companyReducer from "../reducers/company/slice";
 import settingsCheckListReducer from "../reducers/settings/check-list/slice";
+import settingsLocationReducer from "../reducers/settings/location/slice"
 import planingEngagementsReducers from "../reducers/planing/engagement/slice";
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
     company: companyReducer,
     // settings
     setttingsCheckList: settingsCheckListReducer,
+    setttingsLocation: settingsLocationReducer,
     // planing
     planingEngagements: planingEngagementsReducers,
   },
