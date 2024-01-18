@@ -3,19 +3,209 @@ import "./index.css";
 import { useNavigate } from "react-router-dom";
 import ObjectiveListDialog from "../../../../modals/objective-list-dialog/index";
 import Dialog from "@mui/material/Dialog";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
+import {
+  resetAddEngagementSuccess,
+  setupGetSingleEngagementObject,
+  setupUpdateBusinessObjective,
+  setupSaveMapProcessBusinessObjective,
+} from "../../../../../global-redux/reducers/planing/engagement/slice";
+import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
 
 const BusinessObjectiveRedirect = () => {
-  const [domain, setDomain] = React.useState("");
   const [showObjectiveListDialog, setShowObjectiveListDialog] =
     React.useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const engagementId = searchParams.get("engagementId");
+  const { planingEngagementSingleObject, engagementAddSuccess } = useSelector(
+    (state) => state.planingEngagements
+  );
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [object, setObject] = React.useState({
+    engagementName: "",
+    industryUpdate: "",
+    companyUpdate: "",
+    meetingDateTimeFrom: "",
+    meetingDateTimeTo: "",
+    strategicDocuments: [],
+    businessObjectiveAndMapProcessList: [
+      {
+        description: "",
+        domain: "",
+        id: 1,
+      },
+    ],
+  });
+
   function handleClose() {
     setShowObjectiveListDialog(false);
   }
+
+  function handleChange(event) {
+    setObject((pre) => {
+      return {
+        ...pre,
+        [event?.target?.name]: event?.target?.value,
+      };
+    });
+  }
+
+  function handleDeleteFileItem(id) {
+    setObject((pre) => {
+      return {
+        ...pre,
+        strategicDocuments: pre.strategicDocuments.filter(
+          (all) => all?.id !== id
+        ),
+      };
+    });
+  }
+
+  // file Upload
+
+  const isImage = (file) => {
+    const acceptedImageTypes = ["image/jpeg", "image/png", "image/gif"];
+    return file && acceptedImageTypes.includes(file.type);
+  };
+
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    if (isImage(selectedFile)) {
+      toast.error("Selected file is an image. Please select a non-image file.");
+      return;
+    }
+    if (!isImage(selectedFile))
+      setObject((pre) => {
+        return {
+          ...pre,
+          strategicDocuments: [
+            ...pre.strategicDocuments,
+            {
+              fileName: selectedFile?.name,
+              location: selectedFile?.name,
+              id: uuidv4(),
+            },
+          ],
+        };
+      });
+  };
+
+  function handleSumMapProcess() {
+    setObject((pre) => {
+      return {
+        ...pre,
+        businessObjectiveAndMapProcessList: [
+          ...pre?.businessObjectiveAndMapProcessList,
+          {
+            description: pre?.mapProcessDescription,
+            domain: pre?.mapProcessDomain,
+            id: uuidv4(),
+          },
+        ],
+      };
+    });
+  }
+
+  function handleUpdateBusinessObjective() {
+    dispatch(
+      setupUpdateBusinessObjective({
+        ...planingEngagementSingleObject,
+        industryUpdate: object?.industryUpdate,
+        companyUpdate: object?.companyUpdate,
+        engagement: {
+          ...planingEngagementSingleObject?.engagement,
+          engagementName: object?.engagementName,
+        },
+      })
+    );
+  }
+
+  function handleDeleteSingleMapItem(id) {
+    setObject((pre) => {
+      return {
+        ...pre,
+        businessObjectiveAndMapProcessList:
+          pre.businessObjectiveAndMapProcessList.filter(
+            (all) => all?.id !== id
+          ),
+      };
+    });
+  }
+
+  function handleChangeMapItemDescription(event, id) {
+    setObject((pre) => {
+      return {
+        ...pre,
+        businessObjectiveAndMapProcessList:
+          pre?.businessObjectiveAndMapProcessList.map((item) =>
+            item?.id === id
+              ? { ...item, description: event?.target?.value }
+              : item
+          ),
+      };
+    });
+  }
+
+  function handleChangeMapItemDemain(event, id) {
+    setObject((pre) => {
+      return {
+        ...pre,
+        businessObjectiveAndMapProcessList:
+          pre?.businessObjectiveAndMapProcessList.map((item) =>
+            item?.id === id ? { ...item, domain: event?.target?.value } : item
+          ),
+      };
+    });
+  }
+
+  function handleSaveBusinessObjectiveMapProcess() {
+    const businessObjectiveAndMapProcessListObject =
+      object?.businessObjectiveAndMapProcessList
+        .filter((item) => item?.description && item?.domain)
+        .map((all) => {
+          return {
+            description: all?.description,
+            domain: all?.domain,
+          };
+        });
+
+    if (businessObjectiveAndMapProcessListObject?.length !== 0) {
+      dispatch(
+        setupSaveMapProcessBusinessObjective({
+          ...planingEngagementSingleObject,
+          businessObjectiveAndMapProcessList:
+            businessObjectiveAndMapProcessListObject,
+        })
+      );
+    }
+  }
+
+  React.useEffect(() => {
+    if (engagementAddSuccess) {
+      dispatch(resetAddEngagementSuccess());
+      dispatch(setupGetSingleEngagementObject(engagementId));
+    }
+  }, [engagementAddSuccess]);
+
+  React.useEffect(() => {
+    setObject((pre) => {
+      return {
+        ...pre,
+        industryUpdate: planingEngagementSingleObject?.industryUpdate,
+        companyUpdate: planingEngagementSingleObject?.companyUpdate,
+        engagementName: planingEngagementSingleObject?.engagement?.engagementName,
+        businessObjectiveAndMapProcessList:
+        planingEngagementSingleObject?.businessObjectiveAndMapProcessList,
+      };
+    });
+  }, [planingEngagementSingleObject]);
+
+  React.useEffect(() => {
+    dispatch(setupGetSingleEngagementObject(engagementId));
+  }, [engagementId]);
 
   return (
     <div>
@@ -36,6 +226,27 @@ const BusinessObjectiveRedirect = () => {
       </header>
 
       <div className="row px-4">
+        <div className="row">
+          <div className="mb-4 col-lg-12">
+            <div className="col-lg-2 label-text w-100 mb-2">
+              Engagement Name
+            </div>
+            <div className="col-lg-12">
+              <div className="form-group">
+                <input
+                  type="text"
+                  id="description"
+                  value={object?.engagementName}
+                  onChange={handleChange}
+                  name="engagementName"
+                  className="form-control h-40"
+                  placeholder="Enter"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div></div>
         <div className="col-md-12">
           <div className="accordion" id="accordionFlushExample">
             <div className="accordion-item">
@@ -74,10 +285,16 @@ const BusinessObjectiveRedirect = () => {
                       className="form-control w-100"
                       placeholder="Enter update"
                       type="textarea"
+                      name="industryUpdate"
+                      value={object?.industryUpdate}
+                      onChange={handleChange}
                     ></textarea>
                     <p className="word-limit-info mb-0">Maximum 1500 words</p>
 
-                    <button className="btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow">
+                    <button
+                      className="btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow"
+                      onClick={handleUpdateBusinessObjective}
+                    >
                       <span className="btn-label me-2">
                         <i className="fa fa-check-circle"></i>
                       </span>
@@ -121,9 +338,15 @@ const BusinessObjectiveRedirect = () => {
                     className="form-control w-100"
                     placeholder="Enter update"
                     type="textarea"
+                    name="companyUpdate"
+                    value={object?.companyUpdate}
+                    onChange={handleChange}
                   ></textarea>
                   <p className="word-limit-info mb-0">Maximum 1500 words</p>
-                  <button className="btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow">
+                  <button
+                    className="btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow"
+                    onClick={handleUpdateBusinessObjective}
+                  >
                     <span className="btn-label me-2">
                       <i className="fa fa-check-circle"></i>
                     </span>
@@ -159,6 +382,7 @@ const BusinessObjectiveRedirect = () => {
                             type="file"
                             className="custom-file-input hidden visibility-hidden"
                             id="inputGroupFile01"
+                            onChange={handleFileChange}
                           />
                           <label
                             className="btn btn-primary p-2 px-3"
@@ -173,21 +397,28 @@ const BusinessObjectiveRedirect = () => {
                       <thead>
                         <tr>
                           <th scope="col">Sr No.</th>
-                          <th scope="col">Documents</th>
+                          <th scope="col">Document Name</th>
                           <th>Actions</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td>1</td>
-                          <td>
-                            <a href="#">Detail Document loram</a>
-                          </td>
-                          <td>
-                            <i className="fa-eye fa pe-3"></i>
-                            <i className="fa fa-trash text-danger"></i>
-                          </td>
-                        </tr>
+                        {object?.strategicDocuments?.map((item, index) => {
+                          return (
+                            <tr>
+                              <td>{index + 1}</td>
+                              <td>
+                                <a href="#">{item?.fileName}</a>
+                              </td>
+                              <td>
+                                {/* <i className="fa-eye fa pe-3"></i> */}
+                                <i
+                                  className="fa fa-trash text-danger f-18 cursor-pointer"
+                                  onClick={() => handleDeleteFileItem(item?.id)}
+                                ></i>
+                              </td>
+                            </tr>
+                          );
+                        })}
                       </tbody>
                     </table>
                   </div>
@@ -214,7 +445,7 @@ const BusinessObjectiveRedirect = () => {
                 data-bs-parent="#accordionFlushExample"
               >
                 <div className="accordion-body">
-                  <div className="row mb-3">
+                  {/* <div className="row mb-3">
                     <div className="col-lg-6">
                       <label>Select Department</label>
                       <select
@@ -235,14 +466,17 @@ const BusinessObjectiveRedirect = () => {
                         type="date"
                       />
                     </div>
-                  </div>
+                  </div> */}
                   <div className="row">
                     <div className="col-lg-6">
                       <label className="w-100">From</label>
                       <input
                         className="form-control w-100"
                         placeholder="Select Date"
-                        type="time"
+                        type="date"
+                        name="meetingDateTimeFrom"
+                        value={object?.meetingDateTimeFrom}
+                        onChange={handleChange}
                       />
                     </div>
                     <div className="col-lg-6">
@@ -250,7 +484,10 @@ const BusinessObjectiveRedirect = () => {
                       <input
                         className="form-control w-100"
                         placeholder="Select Date"
-                        type="time"
+                        type="date"
+                        name="meetingDateTimeTo"
+                        value={object?.meetingDateTimeTo}
+                        onChange={handleChange}
                       />
                     </div>
                   </div>
@@ -265,7 +502,7 @@ const BusinessObjectiveRedirect = () => {
               </div>
             </div>
             {/*  */}
-            <div className="accordion-item">
+            {/* <div className="accordion-item">
               <h2 className="accordion-header">
                 <button
                   className="accordion-button collapsed br-8"
@@ -308,14 +545,17 @@ const BusinessObjectiveRedirect = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
             {/*  */}
             <div className="my-4 sub-heading"></div>
             <header className="section-header my-3 align-items-center text-start d-flex">
               <div className="mb-0 sub-heading">
                 Define Business Objective and Map Process
               </div>
-              <div className="btn btn-labeled btn-primary ms-3 px-3 shadow">
+              <div
+                className="btn btn-labeled btn-primary ms-3 px-3 shadow"
+                onClick={handleSumMapProcess}
+              >
                 <span className="btn-label me-2">
                   <i className="fa fa-plus-circle"></i>
                 </span>
@@ -337,76 +577,104 @@ const BusinessObjectiveRedirect = () => {
             </header>
 
             {/*  */}
-            <div className="accordion-item">
-              <h2 className="accordion-header">
-                <button
-                  className="accordion-button collapsed br-8"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#flush-collapseSix"
-                  aria-expanded="false"
-                  aria-controls="flush-collapseSix"
-                >
-                  <div className="d-flex w-100 me-3 align-items-center justify-content-between">
-                    <div className=" d-flex align-items-center">
-                      <i className="fa fa-check-circle fs-3 text-success pe-3"></i>{" "}
-                      Define Business Objective and Map Process
+            {object?.businessObjectiveAndMapProcessList?.map((item, index) => {
+              return (
+                <div>
+                  <div className="w-100 float-right">
+                    <i
+                      class="fa fa-trash text-danger f-18 px-3 cursor-pointer float-right w-100"
+                      onClick={() => handleDeleteSingleMapItem(item?.id)}
+                    ></i>
+                  </div>
+                  <div className="accordion-item">
+                    <h2 className="accordion-header">
+                      <button
+                        className="accordion-button collapsed br-8"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target={`#flush-collapse${index}`}
+                        aria-expanded="false"
+                        aria-controls={`flush-collapse${index}`}
+                      >
+                        <div className="d-flex w-100 me-3 align-items-center justify-content-between">
+                          <div className=" d-flex align-items-center">
+                            <i className="fa fa-check-circle fs-3 text-success pe-3"></i>{" "}
+                            Define Business Objective and Map Process
+                          </div>
+                        </div>
+                      </button>
+                    </h2>
+                    <div
+                      id={`flush-collapse${index}`}
+                      className="accordion-collapse collapse"
+                      data-bs-parent="#accordionFlushExample"
+                    >
+                      <div className="accordion-body">
+                        <div className="mb-3 w-100">
+                          <label
+                            htmlFor="exampleFormControlTextarea1"
+                            className="form-label"
+                          >
+                            Business Objective
+                          </label>
+                          <textarea
+                            className="form-control"
+                            placeholder="Enter Here"
+                            id="ds"
+                            rows="3"
+                            name="mapProcessDescription"
+                            value={index?.description}
+                            onChange={(event) =>
+                              handleChangeMapItemDescription(event, item?.id)
+                            }
+                          ></textarea>
+                          <p className="word-limit-info mb-0">
+                            Maximum 1500 words
+                          </p>
+                        </div>
+
+                        <div className="col-lg-12">
+                          <label> Select Domain</label>
+                          <select
+                            className="form-select"
+                            aria-label="Default select example"
+                            value={index?.domain}
+                            name="mapProcessDomain"
+                            onChange={(event) =>
+                              handleChangeMapItemDemain(event, item?.id)
+                            }
+                          >
+                            <option>Select</option>
+                            <option value="strategic">strategic</option>
+                            <option value="operation">operation</option>
+                          </select>
+                        </div>
+
+                        <button
+                          className="btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow"
+                          onClick={handleSaveBusinessObjectiveMapProcess}
+                        >
+                          <span className="btn-label me-2">
+                            <i className="fa fa-check-circle"></i>
+                          </span>
+                          Save
+                        </button>
+                      </div>
                     </div>
-
-                    <i className="fa fa-trash text-danger"></i>
                   </div>
-                </button>
-              </h2>
-              <div
-                id="flush-collapseSix"
-                className="accordion-collapse collapse"
-                data-bs-parent="#accordionFlushExample"
-              >
-                <div className="accordion-body">
-                  <div className="mb-3 w-100">
-                    <label
-                      htmlFor="exampleFormControlTextarea1"
-                      className="form-label"
-                    >
-                      Business Objective
-                    </label>
-                    <textarea
-                      className="form-control"
-                      placeholder="Enter Here"
-                      id="ds"
-                      rows="3"
-                    ></textarea>
-                    <p className="word-limit-info mb-0">Maximum 1500 words</p>
-                  </div>
-
-                  <FormControl variant="filled" sx={{ m: 1, minWidth: "100%" }}>
-                    <InputLabel id="demo-simple-select-filled-label">
-                      Select Domain
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-filled-label"
-                      id="demo-simple-select-filled"
-                      value={domain}
-                      onChange={(e) => setDomain(e.target.value)}
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      <MenuItem value={10}>strategic</MenuItem>
-                      <MenuItem value={20}>operation</MenuItem>
-                    </Select>
-                  </FormControl>
-
-                  <button className="btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow">
-                    <span className="btn-label me-2">
-                      <i className="fa fa-check-circle"></i>
-                    </span>
-                    Save
-                  </button>
                 </div>
-              </div>
-            </div>
+              );
+            })}
           </div>
+          <button
+            className="btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow float-end"
+            onClick={handleUpdateBusinessObjective}
+          >
+            <span className="btn-label me-2">
+              <i className="fa fa-check-circle"></i>
+            </span>
+            Save
+          </button>
         </div>
       </div>
     </div>

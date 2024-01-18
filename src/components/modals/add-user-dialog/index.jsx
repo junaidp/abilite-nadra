@@ -1,6 +1,6 @@
 import React from "react";
 
-const UserManagementDialog = ({setUserManagementDialog}) => {
+const UserManagementDialog = ({ setUserManagementDialog }) => {
   return (
     <div className="px-4 py-4">
       <header className="section-header my-3    text-start d-flex align-items-center justify-content-between">
@@ -183,7 +183,10 @@ const UserManagementDialog = ({setUserManagementDialog}) => {
 
       <div className="row py-3">
         <div className="col-lg-12 text-end">
-          <button  className="btn btn-primary float-end" onClick={()=>setUserManagementDialog(false)}>
+          <button
+            className="btn btn-primary float-end"
+            onClick={() => setUserManagementDialog(false)}
+          >
             Add
           </button>
         </div>

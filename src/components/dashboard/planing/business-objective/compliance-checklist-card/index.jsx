@@ -1,10 +1,74 @@
 import React from "react";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
-import RickTextEditor from "../../../../common/rich-text/index";
+import { toast } from "react-toastify";
+// import RickTextEditor from "../../../../common/rich-text/index";
+import { useDispatch, useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
+import {
+  setupSaveCheckListObjective,
+  setupGetSingleCheckListObjective,
+  resetAddEngagementSuccess,
+} from "../../../../../global-redux/reducers/planing/engagement/slice";
 
 const ComplianceCheckListCard = () => {
   let navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const engagementId = searchParams.get("engagementId");
+  const [object, setObject] = React.useState({
+    description: "",
+    defaultRemarks: "",
+  });
+  const { planingEngagementSingleObject, engagementAddSuccess } = useSelector(
+    (state) => state.planingEngagements
+  );
+  const dispatch = useDispatch();
+
+  function handleChange(event) {
+    setObject((pre) => {
+      return {
+        ...pre,
+        [event?.target?.name]: event?.target?.value,
+      };
+    });
+  }
+
+  function handleAdd() {
+    if (!object?.description || !object?.defaultRemarks) {
+      toast.error("Please provide all the fields");
+    }
+
+    if (object?.description && object?.defaultRemarks) {
+      dispatch(
+        setupSaveCheckListObjective({
+          ...planingEngagementSingleObject,
+          description: object?.description,
+          defaultRemarks: Number(object?.defaultRemarks),
+        })
+      );
+    }
+  }
+
+  console.log(object);
+
+  React.useEffect(() => {
+    dispatch(setupGetSingleCheckListObjective(engagementId));
+  }, [engagementId]);
+
+  React.useEffect(() => {
+    setObject({
+      description: planingEngagementSingleObject?.description,
+      defaultRemarks: planingEngagementSingleObject?.defaultRemarks,
+    });
+  }, [planingEngagementSingleObject]);
+
+  React.useEffect(() => {
+    if (engagementAddSuccess) {
+      dispatch(resetAddEngagementSuccess());
+      dispatch(setupGetSingleCheckListObjective(engagementId));
+    }
+  }, [engagementAddSuccess]);
+
   return (
     <div>
       <div>
@@ -20,7 +84,55 @@ const ComplianceCheckListCard = () => {
               <h3 className="mb-0 fw-bold">Compliance Check List</h3>
             </header>
 
-            <div className="row mt-3 mb-4">
+            <div>
+              <div className="mb-4 col-lg-12">
+                <div className="col-lg-2 label-text w-100 mb-2">
+                  Description
+                </div>
+                <div className="col-lg-12">
+                  <div className="form-group">
+                    <input
+                      type="text"
+                      id="description"
+                      name="description"
+                      className="form-control h-40"
+                      placeholder="Enter"
+                      value={object?.description}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="mb-4 col-lg-12">
+                <div className="col-lg-2 label-text mb-2">Default Remarks</div>
+                <div className="col-lg-12">
+                  <div className="form-group">
+                    <input
+                      type="text"
+                      id="domain"
+                      name="defaultRemarks"
+                      onChange={handleChange}
+                      value={object?.defaultRemarks}
+                      className="form-control h-40"
+                      placeholder="Enter"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div
+                className="col-lg-6 text-end float-end align-self-end"
+                onClick={handleAdd}
+              >
+                <div className="btn btn-labeled btn-primary px-3 shadow">
+                  <span className="btn-label me-2">
+                    <i className="fa fa-plus"></i>
+                  </span>
+                  Save
+                </div>
+              </div>
+            </div>
+
+            {/* <div className="row mt-3 mb-4">
               <div className="col-lg-6">
                 <label className="w-100">Add CheckList:</label>
                 <input
@@ -37,8 +149,8 @@ const ComplianceCheckListCard = () => {
                   Add
                 </div>
               </div>
-            </div>
-
+            </div> */}
+            {/* 
             <div className="row">
               <div className="col-md-12">
                 <div className="accordion" id="accordionFlushExample">
@@ -152,7 +264,7 @@ const ComplianceCheckListCard = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </section>
       </div>

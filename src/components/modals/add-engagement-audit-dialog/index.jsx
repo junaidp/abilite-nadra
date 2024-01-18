@@ -1,12 +1,62 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./index.css";
-import { showBusinessObjectiveDialog } from "../../../global-redux/reducers/common/slice";
-import { useDispatch } from "react-redux";
+import {
+  setupAddNewEngagement,
+  setupGetAllEngagements,
+  resetAddEngagementSuccess,
+} from "../../../global-redux/reducers/planing/engagement/slice";
+import { useDispatch, useSelector } from "react-redux";
 
-const AddEngagementAuditDialog = () => {
+const AddEngagementAuditDialog = ({ setBusinessObjectiveDialog }) => {
   let dispatch = useDispatch();
   let navigate = useNavigate();
+  const [route, setRoute] = React.useState("");
+  const {
+    engagementAddSuccess,
+    loading,
+    allEngagements,
+    planingEngagementSingleObject,
+  } = useSelector((state) => state.planingEngagements);
+  const { user } = useSelector((state) => state?.auth);
+  const { company } = useSelector((state) => state?.common);
+
+  function addEngagement(routeName, name) {
+    setRoute(routeName);
+    if (!loading) {
+      const companyId = user[0]?.company.find(
+        (item) => item?.companyName === company
+      )?.id;
+      const userId = user[0]?.id;
+      dispatch(
+        setupAddNewEngagement({
+          natureThrough: name,
+          engagementName: "",
+          initiatedBy: userId,
+          company: companyId,
+        })
+      );
+    }
+  }
+
+  React.useEffect(() => {
+    if (engagementAddSuccess) {
+      const companyId = user[0]?.company.find(
+        (item) => item?.companyName === company
+      )?.id;
+      dispatch(setupGetAllEngagements(companyId));
+    }
+  }, [engagementAddSuccess]);
+
+  React.useEffect(() => {
+    if (engagementAddSuccess) {
+      navigate(
+        `${route}?engagementId=${planingEngagementSingleObject?.engagement?.id}`
+      );
+      dispatch(resetAddEngagementSuccess());
+    }
+  }, [planingEngagementSingleObject]);
+
   return (
     <div className="container px-5 p-3">
       <div className="d-flex justify-content-between">
@@ -16,17 +66,21 @@ const AddEngagementAuditDialog = () => {
         <button
           type="button"
           className="btn-close"
-          onClick={() => dispatch(showBusinessObjectiveDialog(false))}
+          onClick={() => setBusinessObjectiveDialog(false)}
         ></button>
       </div>
 
-
       <div className="row pt-5">
-        <div className="col-lg-4">
+        <div className="col-lg-6">
           <a
             className="w-100"
             type="button"
-            onClick={() => navigate("/audit/business-objectives-redirect")}
+            onClick={() =>
+              addEngagement(
+                "/audit/business-objectives-redirect",
+                "Business Objective"
+              )
+            }
           >
             <div className="card card p-0 border-0">
               <div className="card-content">
@@ -57,7 +111,7 @@ const AddEngagementAuditDialog = () => {
             </div>
           </a>
         </div>
-        <div className="col-lg-4">
+        {/* <div className="col-lg-4">
           <a
             className="w-100 "
             type="button"
@@ -93,12 +147,17 @@ const AddEngagementAuditDialog = () => {
               <div className="card-hover-text">New Text on Hover</div>
             </div>
           </a>
-        </div>
-        <div className="col-lg-4">
+        </div> */}
+        <div className="col-lg-6">
           <a
             className="w-100 "
             type="button"
-            onClick={() => navigate("/audit/special-project-audit")}
+            onClick={() =>
+              addEngagement(
+                "/audit/special-project-audit",
+                "Special Project/Audit"
+              )
+            }
           >
             <div className="card card p-0 border-0">
               <div className="card-content">
@@ -136,7 +195,12 @@ const AddEngagementAuditDialog = () => {
           <a
             className="w-100 "
             type="button"
-            onClick={() => navigate("/audit/compliance-checklist-card")}
+            onClick={() =>
+              addEngagement(
+                "/audit/compliance-checklist-card",
+                "Compliance Checklist"
+              )
+            }
           >
             <div className="card p-0 border-0">
               <div className="card-content">
@@ -172,7 +236,7 @@ const AddEngagementAuditDialog = () => {
         <button
           type="button"
           className="btn btn-danger relative top-nagative-40"
-          onClick={() => dispatch(showBusinessObjectiveDialog(false))}
+          onClick={() => setBusinessObjectiveDialog(false)}
         >
           Close
         </button>

@@ -44,6 +44,8 @@ import Layout from "./components/common/layout/Layout";
 import GenerateInternalAuditReportPage from "./pages/dashboard/report/internal-audit-report/generate-internal-audit-report/GenerateInternalAuditReport";
 import { changeAuthUser } from "./global-redux/reducers/auth/slice";
 import { setupGetCompanies } from "./global-redux/reducers/company/slice";
+import { setupGetAllEngagements } from "./global-redux/reducers/planing/engagement/slice";
+
 import { useDispatch, useSelector } from "react-redux";
 import { changeYear } from "./global-redux/reducers/common/slice";
 import "react-toastify/dist/ReactToastify.css";
@@ -56,6 +58,7 @@ const App = () => {
   let dispatch = useDispatch();
   let { menuItems, year } = useSelector((state) => state.common);
   let { user } = useSelector((state) => state.auth);
+  let { company } = useSelector((state) => state.common);
   React.useEffect(() => {
     let authUser = JSON.parse(localStorage.getItem("user"));
     if (authUser) {
@@ -94,6 +97,15 @@ const App = () => {
       dispatch(changeYear("2024"));
     }
   }, []);
+
+  React.useEffect(() => {
+    const companyId = user[0]?.company?.find(
+      (item) => item?.companyName === company
+    )?.id;
+    if (companyId) {
+      dispatch(setupGetAllEngagements(companyId));
+    }
+  }, [user]);
 
   return (
     <HelmetProvider>

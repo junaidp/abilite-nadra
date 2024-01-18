@@ -149,6 +149,7 @@ export const slice = createSlice({
           token: payload?.data?.jwt,
           email: payload?.data?.email,
           company: payload?.data?.userId?.company,
+          id: payload?.data?.userId?.id
         },
       ];
       state.authSuccess = true;
