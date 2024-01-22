@@ -11,7 +11,7 @@ export const registerUser = async (data, thunkAPI) => {
 
 export const loginUser = async (data, thunkAPI) => {
   try {
-    let props = await axios.post(`${baseUrl}/account/login`, data?.data);
+    let props = await axios.post(`${baseUrl}/account/user/login`, data?.data);
     return props.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);

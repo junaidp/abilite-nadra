@@ -3,8 +3,14 @@ import { baseUrl } from "../../../../constants/index";
 
 export const getAllEngagements = async (data, thunkAPI) => {
   try {
+    const { user } = thunkAPI.getState().auth;
     let props = await axios.get(
-      `${baseUrl}/auditPlanningAndScheduling/engagments/getAllEngagement?companyId=${data}`
+      `${baseUrl}/auditPlanningAndScheduling/engagments/getAllByCompanyId?companyId=${data}`,
+      {
+        headers: {
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
     );
     return props.data;
   } catch (error) {
@@ -14,9 +20,15 @@ export const getAllEngagements = async (data, thunkAPI) => {
 
 export const addNewEngagement = async (data, thunkAPI) => {
   try {
+    const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
-      `${baseUrl}/auditPlanningAndScheduling/engagments/addNewEngagement`,
-      data
+      `${baseUrl}/auditPlanningAndScheduling/engagments/addNew`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
     );
     return props.data;
   } catch (error) {

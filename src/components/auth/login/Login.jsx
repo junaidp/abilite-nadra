@@ -82,11 +82,11 @@ const Login = () => {
           <div className="fxt-page-switcher">
             <h2 className="fxt-page-title mr-3">Login</h2>
             <ul className="fxt-switcher-wrap">
-              <li>
+              {/* <li>
                 <a className="fxt-switcher-btn active border-0 rounded shadow">
                   Login
                 </a>
-              </li>
+              </li> */}
               {/* <li>
                 <a
                   className="fxt-switcher-btn border-0 rounded shadow"

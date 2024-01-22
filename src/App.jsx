@@ -33,6 +33,7 @@ import UserProfile from "./components/user/user-profile/UserProfile";
 import KickOffPage from "./pages/dashboard/audit-engagement/kick-off/KickOff";
 import SpecificRiskApproachPage from "./pages/dashboard/planing/risk-assessments/specific-risk-approach/SpecificRiskApproach";
 import RiskFactorApproachPage from "./pages/dashboard/planing/risk-assessments/risk-factor-approach/RiskFactorApproach";
+import RegisterPage from "./pages/auth/register/Register"
 import ReportingPage from "./pages/dashboard/reporting-follow-up/reporting/Reporting";
 import FollowUpPage from "./pages/dashboard/reporting-follow-up/follow-up/FollowUp";
 import ResetPassword from "./components/auth/reset-password/ResetPassword";
