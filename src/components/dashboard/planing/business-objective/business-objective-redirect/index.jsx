@@ -18,6 +18,8 @@ import { v4 as uuidv4 } from "uuid";
 const BusinessObjectiveRedirect = () => {
   const [showObjectiveListDialog, setShowObjectiveListDialog] =
     React.useState(false);
+  const [domain, setDomain] = React.useState("");
+  const [description, setDescription] = React.useState("");
   const [searchParams, setSearchParams] = useSearchParams();
   const engagementId = searchParams.get("engagementId");
   const { planingEngagementSingleObject, engagementAddSuccess } = useSelector(
@@ -188,15 +190,22 @@ const BusinessObjectiveRedirect = () => {
           };
         });
 
-    if (businessObjectiveAndMapProcessListObject?.length !== 0) {
-      dispatch(
-        setupSaveMapProcessBusinessObjective({
-          ...planingEngagementSingleObject,
-          businessObjectiveAndMapProcessList:
-            businessObjectiveAndMapProcessListObject,
-        })
-      );
-    }
+    // if (businessObjectiveAndMapProcessListObject?.length !== 0) {
+    // dispatch(
+    //   setupSaveMapProcessBusinessObjective({
+    //     ...planingEngagementSingleObject,
+    //     businessObjectiveAndMapProcessList:
+    //       businessObjectiveAndMapProcessListObject,
+    //   })
+    // );
+    dispatch(
+      setupSaveMapProcessBusinessObjective({
+        businessObjective: planingEngagementSingleObject,
+        description,
+        domain,
+      })
+    );
+    // }
   }
 
   React.useEffect(() => {
@@ -234,7 +243,6 @@ const BusinessObjectiveRedirect = () => {
   React.useEffect(() => {
     dispatch(setupGetSingleEngagementObject(engagementId));
   }, [engagementId]);
-
 
   return (
     <div>
@@ -637,6 +645,10 @@ const BusinessObjectiveRedirect = () => {
                         data-bs-target={`#flush-collapse${index}`}
                         aria-expanded="false"
                         aria-controls={`flush-collapse${index}`}
+                        onClick={()=>{
+                          setDescription("")
+                          setDomain("")
+                        }}
                       >
                         <div className="d-flex w-100 me-3 align-items-center justify-content-between">
                           <div className=" d-flex align-items-center">
@@ -665,10 +677,14 @@ const BusinessObjectiveRedirect = () => {
                             id="ds"
                             rows="3"
                             name="mapProcessDescription"
-                            value={index?.description}
+                            value={description}
                             onChange={(event) =>
-                              handleChangeMapItemDescription(event, item?.id)
+                              setDescription(event?.target?.value)
                             }
+                            // value={index?.description}
+                            // onChange={(event) =>
+                            //   handleChangeMapItemDescription(event, item?.id)
+                            // }
                           ></textarea>
                           <p className="word-limit-info mb-0">
                             Maximum 1500 words
@@ -680,10 +696,14 @@ const BusinessObjectiveRedirect = () => {
                           <select
                             className="form-select"
                             aria-label="Default select example"
-                            value={index?.domain}
                             name="mapProcessDomain"
+                            // value={index?.domain}
+                            // onChange={(event) =>
+                            //   handleChangeMapItemDemain(event, item?.id)
+                            // }
+                            value={domain}
                             onChange={(event) =>
-                              handleChangeMapItemDemain(event, item?.id)
+                              setDomain(event?.target?.value)
                             }
                           >
                             <option>Select</option>

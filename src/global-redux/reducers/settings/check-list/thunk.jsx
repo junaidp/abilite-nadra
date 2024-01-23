@@ -2,7 +2,10 @@ import axios from "axios";
 import { baseUrl } from "../../../../constants/index";
 export const AddCheckList = async (data, thunkAPI) => {
   try {
-    let props = await axios.post(`${baseUrl}/configurations/checklist/addNewChecklist`, data);
+    let props = await axios.post(
+      `${baseUrl}/configurations/checklist/addNewChecklist`,
+      data
+    );
     return props.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
@@ -12,7 +15,7 @@ export const AddCheckList = async (data, thunkAPI) => {
 export const getAllCheckLists = async (data, thunkAPI) => {
   try {
     let props = await axios.get(
-      `${baseUrl}/configurations/checklist/getAllChecklists${data}`
+      `${baseUrl}/configurations/checklist/getAllByUserEmail${data}`
     );
     return props.data;
   } catch (error) {
@@ -68,7 +71,8 @@ export const getAllCheckListItems = async (data, thunkAPI) => {
 export const editCheckListItem = async (data, thunkAPI) => {
   try {
     let props = await axios.post(
-      `${baseUrl}/configurations/checklist/checklistitems/updateChecklistItems`,data
+      `${baseUrl}/configurations/checklist/checklistitems/updateChecklistItems`,
+      data
     );
     return props.data;
   } catch (error) {

@@ -45,11 +45,12 @@ const ComplianceCheckListCard = () => {
     }
   }, [user]);
 
-  function handleChange(event, id) {
+  function handleChange(event, id,remarks) {
     dispatch(
       setupSaveCheckListObjective({
         ...planingEngagementSingleObject,
         checklist_id: id,
+        defaultRemarks:remarks
       })
     );
   }
@@ -82,7 +83,7 @@ const ComplianceCheckListCard = () => {
                       type="checkbox"
                       id="flexCheckDefault"
                       value=""
-                      onChange={(e) => handleChange(e, item?.id)}
+                      onChange={(e) => handleChange(e, item?.id,item?.defaultRemarks)}
                     />
                     <label
                       class="form-check-label"

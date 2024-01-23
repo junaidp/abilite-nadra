@@ -2,7 +2,6 @@ import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
-  setupEditSingleEngagement,
   setupGetAllEngagements,
   resetAddEngagementSuccess,
 } from "../../../global-redux/reducers/planing/engagement/slice";
@@ -29,18 +28,7 @@ const EditSingleEngagementDialog = ({ setShowEditSingleEngagementDialog }) => {
     }),
     onSubmit: (values) => {
       if (!loading) {
-        // dispatch(
-        //   setupEditSingleEngagement(
-        //     `?id=${selectedSingleEngagementItem?.id}&engagementName=${values?.engagementName}&natureThrough=${values?.natureThrough}&initiatedBy=${selectedSingleEngagementItem?.initiatedBy}&company=${selectedSingleEngagementItem?.company}`
-        //   )
-        // );
-        dispatch(
-          setupEditSingleEngagement({
-            ...selectedSingleEngagementItem,
-            engagementName: values?.engagementName,
-            natureThrough: values?.natureThrough,
-          })
-        );
+       
       }
     },
   });

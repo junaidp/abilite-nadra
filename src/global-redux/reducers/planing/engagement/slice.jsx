@@ -1,9 +1,6 @@
 import {
   getAllEngagements,
   addNewEngagement,
-  editSingleEngagement,
-  saveBusinessObjective,
-  saveSpecialProjectAudit,
   saveCheckListObjective,
   getSingleEngagementObject,
   updateBusinessObjective,
@@ -35,26 +32,6 @@ export const setupAddNewEngagement = createAsyncThunk(
   "engagement/addNewEngagement",
   async (data, thunkAPI) => {
     return addNewEngagement(data, thunkAPI);
-  }
-);
-
-export const setupEditSingleEngagement = createAsyncThunk(
-  "engagement/editSingleEngagement",
-  async (data, thunkAPI) => {
-    return editSingleEngagement(data, thunkAPI);
-  }
-);
-
-export const setupSaveBusinessObjective = createAsyncThunk(
-  "engagement/saveBusinessObjective",
-  async (data, thunkAPI) => {
-    return saveBusinessObjective(data, thunkAPI);
-  }
-);
-export const setupSaveSpecialProjectAudit = createAsyncThunk(
-  "engagement/saveSpecialProjectAudit",
-  async (data, thunkAPI) => {
-    return saveSpecialProjectAudit(data, thunkAPI);
   }
 );
 
@@ -162,60 +139,7 @@ export const slice = createSlice({
         toast.error("An Error has accoured");
       }
     },
-    // Edit Single Engagements
-    [setupEditSingleEngagement.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupEditSingleEngagement.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.engagementAddSuccess = true;
-      toast.success("Engagement Edited Successfully");
-    },
-    [setupEditSingleEngagement.rejected]: (state, { payload }) => {
-      state.loading = false;
-      state.engagementAddSuccess = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
-    // Setup Save Business Objective
-    [setupSaveBusinessObjective.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupSaveBusinessObjective.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.engagementAddSuccess = true;
-      toast.success("Business Objective Edited Successfully");
-    },
-    [setupSaveBusinessObjective.rejected]: (state, { payload }) => {
-      state.loading = false;
-      state.engagementAddSuccess = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
-    // Setup Save Special Audit
-    [setupSaveSpecialProjectAudit.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupSaveSpecialProjectAudit.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.engagementAddSuccess = true;
-      toast.success("Special Project Audit Edited Successfully");
-    },
-    [setupSaveSpecialProjectAudit.rejected]: (state, { payload }) => {
-      state.loading = false;
-      state.engagementAddSuccess = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
+
     // Setup Save CheckList Objective
     [setupSaveCheckListObjective.pending]: (state) => {
       state.loading = true;

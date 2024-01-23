@@ -36,45 +36,11 @@ export const addNewEngagement = async (data, thunkAPI) => {
   }
 };
 
-export const editSingleEngagement = async (data, thunkAPI) => {
-  try {
-    let props = await axios.post(
-      `${baseUrl}/auditPlanningAndScheduling/engagments/updateEngagement`,
-      data
-    );
-    return props.data;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
-  }
-};
 
-export const saveBusinessObjective = async (data, thunkAPI) => {
-  try {
-    let props = await axios.post(
-      `${baseUrl}/auditPlanningAndScheduling/engagments/saveOrupdateBusinessObjectiveAndMapProcessBusinessObjective`,
-      data
-    );
-    return props.data;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
-  }
-};
-
-export const saveSpecialProjectAudit = async (data, thunkAPI) => {
-  try {
-    let props = await axios.post(
-      `${baseUrl}/auditPlanningAndScheduling/engagments/saveOrupdateBusinessObjectiveAndMapProcessSpecialProjectOrAudit`,
-      data
-    );
-    return props.data;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
-  }
-};
 export const saveCheckListObjective = async (data, thunkAPI) => {
   try {
     let props = await axios.post(
-      `${baseUrl}/auditPlanningAndScheduling/engagments/updateChecklistObjective`,
+      `${baseUrl}/auditPlanningAndScheduling/engagments/checklistObjective/update`,
       data
     );
     return props.data;
@@ -86,7 +52,7 @@ export const saveCheckListObjective = async (data, thunkAPI) => {
 export const getSingleEngagementObject = async (data, thunkAPI) => {
   try {
     let props = await axios.get(
-      `${baseUrl}/auditPlanningAndScheduling/engagments/getBusinessObjective?engagementId=${data}`
+      `${baseUrl}/auditPlanningAndScheduling/engagments/businessObjective/getByEngagementId?engagementId=${data}`
     );
     return props.data;
   } catch (error) {
@@ -97,7 +63,7 @@ export const getSingleEngagementObject = async (data, thunkAPI) => {
 export const updateBusinessObjective = async (data, thunkAPI) => {
   try {
     let props = await axios.post(
-      `${baseUrl}/auditPlanningAndScheduling/engagments/updateBusinessObjective`,
+      `${baseUrl}/auditPlanningAndScheduling/engagments/businessObjective/update`,
       data
     );
     return props.data;
@@ -109,7 +75,7 @@ export const updateBusinessObjective = async (data, thunkAPI) => {
 export const saveMapProcessBusinessObjective = async (data, thunkAPI) => {
   try {
     let props = await axios.post(
-      `${baseUrl}/auditPlanningAndScheduling/engagments/saveOrupdateBusinessObjectiveAndMapProcessBusinessObjective`,
+      `${baseUrl}/auditPlanningAndScheduling/engagments/businessObjective/saveOrupdateBusinessObjectiveAndMapProcess`,
       data
     );
     return props.data;
@@ -121,7 +87,7 @@ export const saveMapProcessBusinessObjective = async (data, thunkAPI) => {
 export const getSingleCheckListObjective = async (data, thunkAPI) => {
   try {
     let props = await axios.get(
-      `${baseUrl}/auditPlanningAndScheduling/engagments/getChecklistObjective?engagementId=${data}`
+      `${baseUrl}/auditPlanningAndScheduling/engagments/checklistObjective/getByEngagementId?engagementId=${data}`
     );
     return props.data;
   } catch (error) {
@@ -132,7 +98,7 @@ export const getSingleCheckListObjective = async (data, thunkAPI) => {
 export const getSingleSpecialProjectAuditObjective = async (data, thunkAPI) => {
   try {
     let props = await axios.get(
-      `${baseUrl}/auditPlanningAndScheduling/engagments/getSpecialProjectOrAudit?engagementId=${data}`
+      `${baseUrl}/auditPlanningAndScheduling/engagments/specialProjectOrAudit/getByEngagementId?engagementId=${data}`
     );
     return props.data;
   } catch (error) {
@@ -143,7 +109,7 @@ export const getSingleSpecialProjectAuditObjective = async (data, thunkAPI) => {
 export const updateBusinessMinuteMeeting = async (data, thunkAPI) => {
   try {
     let props = await axios.post(
-      `${baseUrl}/auditPlanningAndScheduling/engagments/updateMeetingScheduleAndMinutes`,
+      `${baseUrl}/auditPlanningAndScheduling/engagments/meetingScheduleAndMinutes/update`,
       data
     );
     return props.data;
@@ -155,7 +121,7 @@ export const updateBusinessMinuteMeeting = async (data, thunkAPI) => {
 export const updateSpecialProjectAudit = async (data, thunkAPI) => {
   try {
     let props = await axios.post(
-      `${baseUrl}/auditPlanningAndScheduling/engagments/updateSpecialProjectOrAudit`,
+      `${baseUrl}/auditPlanningAndScheduling/engagments/specialProjectOrAudit/update`,
       data
     );
     return props.data;
@@ -170,7 +136,7 @@ export const updateBusinessObjectiveAndMapProcessSpecialProjectOrAudit = async (
 ) => {
   try {
     let props = await axios.post(
-      `${baseUrl}/auditPlanningAndScheduling/engagments/saveOrupdateBusinessObjectiveAndMapProcessSpecialProjectOrAudit`,
+      `${baseUrl}/auditPlanningAndScheduling/engagments/specialProjectOrAudit/saveOrupdateBusinessObjectiveAndMapProcess`,
       data
     );
     return props.data;
