@@ -17,6 +17,8 @@ import { v4 as uuidv4 } from "uuid";
 const SpecialProjectAudit = () => {
   const [showObjectiveListDialog, setShowObjectiveListDialog] =
     React.useState(false);
+  const [domain, setDomain] = React.useState("");
+  const [description, setDescription] = React.useState("");
   const [searchParams, setSearchParams] = useSearchParams();
   const engagementId = searchParams.get("engagementId");
   const { planingEngagementSingleObject, engagementAddSuccess } = useSelector(
@@ -133,25 +135,33 @@ const SpecialProjectAudit = () => {
   }
 
   function handleSaveBusinessObjectiveMapProcess() {
-    const businessObjectiveAndMapProcessListObject =
-      object?.businessObjectiveAndMapProcessList
-        .filter((item) => item?.description && item?.domain)
-        .map((all) => {
-          return {
-            description: all?.description,
-            domain: all?.domain,
-          };
-        });
+    // const businessObjectiveAndMapProcessListObject =
+    //   object?.businessObjectiveAndMapProcessList
+    //     .filter((item) => item?.description && item?.domain)
+    //     .map((all) => {
+    //       return {
+    //         description: all?.description,
+    //         domain: all?.domain,
+    //       };
+    //     });
 
-    if (businessObjectiveAndMapProcessListObject?.length !== 0) {
-      dispatch(
-        setupUpdateBusinessObjectiveAndMapProcessSpecialProjectOrAudit({
-          ...planingEngagementSingleObject,
-          businessObjectiveAndMapProcessList:
-            businessObjectiveAndMapProcessListObject,
-        })
-      );
-    }
+    // if (businessObjectiveAndMapProcessListObject?.length !== 0) {
+    //   dispatch(
+    //     setupUpdateBusinessObjectiveAndMapProcessSpecialProjectOrAudit({
+    //       ...planingEngagementSingleObject,
+    //       businessObjectiveAndMapProcessList:
+    //         businessObjectiveAndMapProcessListObject,
+    //     })
+    //   );
+    // }
+
+    dispatch(
+      setupUpdateBusinessObjectiveAndMapProcessSpecialProjectOrAudit({
+        businessObjective: planingEngagementSingleObject,
+        domain,
+        description,
+      })
+    );
   }
 
   React.useEffect(() => {
@@ -366,6 +376,10 @@ const SpecialProjectAudit = () => {
                         data-bs-target={`#flush-collapse${index}`}
                         aria-expanded="false"
                         aria-controls={`flush-collapse${index}`}
+                        onClick={() => {
+                          setDescription("");
+                          setDomain("");
+                        }}
                       >
                         <div className="d-flex w-100 me-3 align-items-center justify-content-between">
                           <div className=" d-flex align-items-center">
@@ -394,10 +408,12 @@ const SpecialProjectAudit = () => {
                             id="ds"
                             rows="3"
                             name="mapProcessDescription"
-                            value={index?.description}
-                            onChange={(event) =>
-                              handleChangeMapItemDescription(event, item?.id)
-                            }
+                            // value={index?.description}
+                            // onChange={(event) =>
+                            //   handleChangeMapItemDescription(event, item?.id)
+                            // }
+                            value={description}
+                            onChange={(e) => setDescription(e?.target?.value)}
                           ></textarea>
                           <p className="word-limit-info mb-0">
                             Maximum 1500 words
@@ -409,11 +425,13 @@ const SpecialProjectAudit = () => {
                           <select
                             className="form-select"
                             aria-label="Default select example"
-                            value={index?.domain}
                             name="mapProcessDomain"
-                            onChange={(event) =>
-                              handleChangeMapItemDemain(event, item?.id)
-                            }
+                            // value={index?.domain}
+                            // onChange={(event) =>
+                            //   handleChangeMapItemDemain(event, item?.id)
+                            // }
+                            value={domain}
+                            onChange={(e) => setDomain(e?.target?.value)}
                           >
                             <option>Select</option>
                             <option value="strategic">strategic</option>

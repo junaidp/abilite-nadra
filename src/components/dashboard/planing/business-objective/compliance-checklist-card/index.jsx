@@ -45,12 +45,12 @@ const ComplianceCheckListCard = () => {
     }
   }, [user]);
 
-  function handleChange(event, id,remarks) {
+  function handleChange(id, remarks) {
     dispatch(
       setupSaveCheckListObjective({
         ...planingEngagementSingleObject,
         checklist_id: id,
-        defaultRemarks:remarks
+        defaultRemarks: remarks,
       })
     );
   }
@@ -74,22 +74,19 @@ const ComplianceCheckListCard = () => {
             {checkList?.map((item) => {
               return (
                 <div className="p-2 flex border bg-light ckecklist-item-wrap">
-                  <div className="col-lg-6">
+                  <div className="col-lg-6 mt-4">
                     <p>{item?.description}</p>
                   </div>
-                  <div class="form-check cursor-pointer">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      id="flexCheckDefault"
-                      value=""
-                      onChange={(e) => handleChange(e, item?.id,item?.defaultRemarks)}
-                    />
-                    <label
-                      class="form-check-label"
-                      for="flexCheckDefault"
-                    ></label>
-                  </div>
+
+                  <button
+                    className="btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow float-end"
+                    onClick={() => handleChange(item?.id, item?.defaultRemarks)}
+                  >
+                    <span className="btn-label me-2">
+                      <i className="fa fa-check-circle"></i>
+                    </span>
+                    Update
+                  </button>
                 </div>
               );
             })}
