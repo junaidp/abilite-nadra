@@ -40,6 +40,7 @@ export const addNewEngagement = async (data, thunkAPI) => {
 
 export const saveCheckListObjective = async (data, thunkAPI) => {
   try {
+    const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
       `${baseUrl}/auditPlanningAndScheduling/engagments/checklistObjective/update`,
       data,
@@ -58,6 +59,7 @@ export const saveCheckListObjective = async (data, thunkAPI) => {
 
 export const getSingleEngagementObject = async (data, thunkAPI) => {
   try {
+    const { user } = thunkAPI.getState().auth;
     let props = await axios.get(
       `${baseUrl}/auditPlanningAndScheduling/engagments/businessObjective/getByEngagementId?engagementId=${data}`,
       {
@@ -75,6 +77,7 @@ export const getSingleEngagementObject = async (data, thunkAPI) => {
 
 export const updateBusinessObjective = async (data, thunkAPI) => {
   try {
+    const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
       `${baseUrl}/auditPlanningAndScheduling/engagments/businessObjective/update`,
       data,
@@ -93,6 +96,7 @@ export const updateBusinessObjective = async (data, thunkAPI) => {
 
 export const saveMapProcessBusinessObjective = async (data, thunkAPI) => {
   try {
+    const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
       `${baseUrl}/auditPlanningAndScheduling/engagments/businessObjective/saveOrupdateBusinessObjectiveAndMapProcess`,
       data,
@@ -111,6 +115,7 @@ export const saveMapProcessBusinessObjective = async (data, thunkAPI) => {
 
 export const getSingleCheckListObjective = async (data, thunkAPI) => {
   try {
+    const { user } = thunkAPI.getState().auth;
     let props = await axios.get(
       `${baseUrl}/auditPlanningAndScheduling/engagments/checklistObjective/getByEngagementId?engagementId=${data}`,
       {
@@ -128,6 +133,7 @@ export const getSingleCheckListObjective = async (data, thunkAPI) => {
 
 export const getSingleSpecialProjectAuditObjective = async (data, thunkAPI) => {
   try {
+    const { user } = thunkAPI.getState().auth;
     let props = await axios.get(
       `${baseUrl}/auditPlanningAndScheduling/engagments/specialProjectOrAudit/getByEngagementId?engagementId=${data}`,
       {
@@ -145,6 +151,7 @@ export const getSingleSpecialProjectAuditObjective = async (data, thunkAPI) => {
 
 export const updateBusinessMinuteMeeting = async (data, thunkAPI) => {
   try {
+    const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
       `${baseUrl}/auditPlanningAndScheduling/engagments/meetingScheduleAndMinutes/update`,
       data,
@@ -163,6 +170,7 @@ export const updateBusinessMinuteMeeting = async (data, thunkAPI) => {
 
 export const updateSpecialProjectAudit = async (data, thunkAPI) => {
   try {
+    const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
       `${baseUrl}/auditPlanningAndScheduling/engagments/specialProjectOrAudit/update`,
       data,
@@ -184,6 +192,7 @@ export const updateBusinessObjectiveAndMapProcessSpecialProjectOrAudit = async (
   thunkAPI
 ) => {
   try {
+    const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
       `${baseUrl}/auditPlanningAndScheduling/engagments/specialProjectOrAudit/saveOrupdateBusinessObjectiveAndMapProcess`,
       data,

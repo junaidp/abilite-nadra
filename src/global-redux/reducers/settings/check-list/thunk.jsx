@@ -2,9 +2,16 @@ import axios from "axios";
 import { baseUrl } from "../../../../constants/index";
 export const AddCheckList = async (data, thunkAPI) => {
   try {
+    const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
       `${baseUrl}/configurations/checklist/addNewChecklist`,
-      data
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
     );
     return props.data;
   } catch (error) {
@@ -14,8 +21,15 @@ export const AddCheckList = async (data, thunkAPI) => {
 
 export const getAllCheckLists = async (data, thunkAPI) => {
   try {
+    const { user } = thunkAPI.getState().auth;
     let props = await axios.get(
-      `${baseUrl}/configurations/checklist/getAllByUserEmail${data}`
+      `${baseUrl}/configurations/checklist/getAllByUserEmail${data}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
     );
     return props.data;
   } catch (error) {
@@ -25,8 +39,15 @@ export const getAllCheckLists = async (data, thunkAPI) => {
 
 export const updateCheckListName = async (data, thunkAPI) => {
   try {
+    const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
-      `${baseUrl}/configurations/checklist/updateChecklistName${data}`
+      `${baseUrl}/configurations/checklist/updateChecklistName${data}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
     );
     return props.data;
   } catch (error) {
@@ -36,8 +57,15 @@ export const updateCheckListName = async (data, thunkAPI) => {
 
 export const updateCheckListRemarks = async (data, thunkAPI) => {
   try {
+    const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
-      `${baseUrl}/configurations/checklist/changeChecklistDefaultRemarks${data}`
+      `${baseUrl}/configurations/checklist/changeChecklistDefaultRemarks${data}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
     );
     return props.data;
   } catch (error) {
@@ -47,9 +75,16 @@ export const updateCheckListRemarks = async (data, thunkAPI) => {
 
 export const addCheckListItem = async (data, thunkAPI) => {
   try {
+    const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
       `${baseUrl}/configurations/checklist/checklistitems/addNewChecklistItems`,
-      data
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
     );
     return props.data;
   } catch (error) {
@@ -59,8 +94,15 @@ export const addCheckListItem = async (data, thunkAPI) => {
 
 export const getAllCheckListItems = async (data, thunkAPI) => {
   try {
+    const { user } = thunkAPI.getState().auth;
     let props = await axios.get(
-      `${baseUrl}/configurations/checklist/checklistitems/getAllChecklistItems${data}`
+      `${baseUrl}/configurations/checklist/checklistitems/getAllChecklistItems${data}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
     );
     return props.data;
   } catch (error) {
@@ -70,9 +112,16 @@ export const getAllCheckListItems = async (data, thunkAPI) => {
 
 export const editCheckListItem = async (data, thunkAPI) => {
   try {
+    const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
       `${baseUrl}/configurations/checklist/checklistitems/updateChecklistItems`,
-      data
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
     );
     return props.data;
   } catch (error) {
