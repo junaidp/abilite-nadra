@@ -21,9 +21,8 @@ const SpecialProjectAudit = () => {
   const [description, setDescription] = React.useState("");
   const [searchParams, setSearchParams] = useSearchParams();
   const engagementId = searchParams.get("engagementId");
-  const { planingEngagementSingleObject, engagementAddSuccess } = useSelector(
-    (state) => state.planingEngagements
-  );
+  const { planingEngagementSingleObject, engagementAddSuccess, loading } =
+    useSelector((state) => state.planingEngagements);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [object, setObject] = React.useState({
@@ -56,16 +55,18 @@ const SpecialProjectAudit = () => {
   }
 
   function handleSaveMinuteMeetings() {
-    dispatch(
-      setupUpdateBusinessMinuteMeeting({
-        engagementId: engagementId,
-        location_Id: object?.location_Id,
-        subLocation_Id: object?.subLocation_Id,
-        meetingDateTimeFrom: object?.meetingDateTimeFrom,
-        meetingDateTimeTo: object?.meetingDateTimeTo,
-        meetingMinutes: "",
-      })
-    );
+    if (!loading) {
+      dispatch(
+        setupUpdateBusinessMinuteMeeting({
+          engagementId: engagementId,
+          location_Id: object?.location_Id,
+          subLocation_Id: object?.subLocation_Id,
+          meetingDateTimeFrom: object?.meetingDateTimeFrom,
+          meetingDateTimeTo: object?.meetingDateTimeTo,
+          meetingMinutes: "",
+        })
+      );
+    }
   }
 
   function handleSumMapProcess() {
@@ -85,15 +86,17 @@ const SpecialProjectAudit = () => {
   }
 
   function handleUpdateSpecialProjectAudit() {
-    dispatch(
-      setupUpdateSpecialProjectAudit({
-        ...planingEngagementSingleObject,
-        engagement: {
-          ...planingEngagementSingleObject?.engagement,
-          engagementName: object?.engagementName,
-        },
-      })
-    );
+    if (!loading) {
+      dispatch(
+        setupUpdateSpecialProjectAudit({
+          ...planingEngagementSingleObject,
+          engagement: {
+            ...planingEngagementSingleObject?.engagement,
+            engagementName: object?.engagementName,
+          },
+        })
+      );
+    }
   }
 
   function handleDeleteSingleMapItem(id) {
@@ -108,60 +111,16 @@ const SpecialProjectAudit = () => {
     });
   }
 
-  function handleChangeMapItemDescription(event, id) {
-    setObject((pre) => {
-      return {
-        ...pre,
-        businessObjectiveAndMapProcessList:
-          pre?.businessObjectiveAndMapProcessList.map((item) =>
-            item?.id === id
-              ? { ...item, description: event?.target?.value }
-              : item
-          ),
-      };
-    });
-  }
-
-  function handleChangeMapItemDemain(event, id) {
-    setObject((pre) => {
-      return {
-        ...pre,
-        businessObjectiveAndMapProcessList:
-          pre?.businessObjectiveAndMapProcessList.map((item) =>
-            item?.id === id ? { ...item, domain: event?.target?.value } : item
-          ),
-      };
-    });
-  }
-
   function handleSaveBusinessObjectiveMapProcess() {
-    // const businessObjectiveAndMapProcessListObject =
-    //   object?.businessObjectiveAndMapProcessList
-    //     .filter((item) => item?.description && item?.domain)
-    //     .map((all) => {
-    //       return {
-    //         description: all?.description,
-    //         domain: all?.domain,
-    //       };
-    //     });
-
-    // if (businessObjectiveAndMapProcessListObject?.length !== 0) {
-    //   dispatch(
-    //     setupUpdateBusinessObjectiveAndMapProcessSpecialProjectOrAudit({
-    //       ...planingEngagementSingleObject,
-    //       businessObjectiveAndMapProcessList:
-    //         businessObjectiveAndMapProcessListObject,
-    //     })
-    //   );
-    // }
-
-    dispatch(
-      setupUpdateBusinessObjectiveAndMapProcessSpecialProjectOrAudit({
-        businessObjective: planingEngagementSingleObject,
-        domain,
-        description,
-      })
-    );
+    if (!loading) {
+      dispatch(
+        setupUpdateBusinessObjectiveAndMapProcessSpecialProjectOrAudit({
+          specialProjectOrAudit: planingEngagementSingleObject,
+          domain,
+          description,
+        })
+      );
+    }
   }
 
   React.useEffect(() => {
@@ -317,13 +276,15 @@ const SpecialProjectAudit = () => {
                   </div>
 
                   <button
-                    className="btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow"
+                    className={`btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow ${
+                      loading && "disabled"
+                    }`}
                     onClick={handleSaveMinuteMeetings}
                   >
                     <span className="btn-label me-2">
                       <i className="fa fa-check-circle"></i>
                     </span>
-                    Save
+                    {loading ? "loading..." : "Save"}
                   </button>
                 </div>
               </div>
@@ -377,8 +338,8 @@ const SpecialProjectAudit = () => {
                         aria-expanded="false"
                         aria-controls={`flush-collapse${index}`}
                         onClick={() => {
-                          setDescription("");
-                          setDomain("");
+                          setDescription(item?.description || "");
+                          setDomain(item?.domain || "");
                         }}
                       >
                         <div className="d-flex w-100 me-3 align-items-center justify-content-between">
@@ -408,10 +369,6 @@ const SpecialProjectAudit = () => {
                             id="ds"
                             rows="3"
                             name="mapProcessDescription"
-                            // value={index?.description}
-                            // onChange={(event) =>
-                            //   handleChangeMapItemDescription(event, item?.id)
-                            // }
                             value={description}
                             onChange={(e) => setDescription(e?.target?.value)}
                           ></textarea>
@@ -426,10 +383,6 @@ const SpecialProjectAudit = () => {
                             className="form-select"
                             aria-label="Default select example"
                             name="mapProcessDomain"
-                            // value={index?.domain}
-                            // onChange={(event) =>
-                            //   handleChangeMapItemDemain(event, item?.id)
-                            // }
                             value={domain}
                             onChange={(e) => setDomain(e?.target?.value)}
                           >
@@ -440,13 +393,15 @@ const SpecialProjectAudit = () => {
                         </div>
 
                         <button
-                          className="btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow"
+                          className={`btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow ${
+                            loading && "disabled"
+                          }`}
                           onClick={handleSaveBusinessObjectiveMapProcess}
                         >
                           <span className="btn-label me-2">
                             <i className="fa fa-check-circle"></i>
                           </span>
-                          Save
+                          {loading ? "loading..." : "Save"}
                         </button>
                       </div>
                     </div>
@@ -456,13 +411,15 @@ const SpecialProjectAudit = () => {
             })}
           </div>
           <button
-            className="btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow float-end"
+            className={`btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow float-end ${
+              loading && "disabled"
+            }`}
             onClick={handleUpdateSpecialProjectAudit}
           >
             <span className="btn-label me-2">
               <i className="fa fa-check-circle"></i>
             </span>
-            Save
+            {loading ? "loading..." : "Save"}
           </button>
         </div>
       </div>

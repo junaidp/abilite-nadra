@@ -14,9 +14,8 @@ const ComplianceCheckListCard = () => {
   let navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const engagementId = searchParams.get("engagementId");
-  const { planingEngagementSingleObject, engagementAddSuccess } = useSelector(
-    (state) => state.planingEngagements
-  );
+  const { planingEngagementSingleObject, engagementAddSuccess, loading } =
+    useSelector((state) => state.planingEngagements);
   const { user } = useSelector((state) => state?.auth);
   const { company } = useSelector((state) => state?.common);
   const { checkList } = useSelector((state) => state.setttingsCheckList);
@@ -46,13 +45,15 @@ const ComplianceCheckListCard = () => {
   }, [user]);
 
   function handleChange(id, remarks) {
-    dispatch(
-      setupSaveCheckListObjective({
-        ...planingEngagementSingleObject,
-        checklist_id: id,
-        defaultRemarks: remarks,
-      })
-    );
+    if (!loading) {
+      dispatch(
+        setupSaveCheckListObjective({
+          ...planingEngagementSingleObject,
+          checklist_id: id,
+          defaultRemarks: remarks,
+        })
+      );
+    }
   }
 
   return (
@@ -79,7 +80,9 @@ const ComplianceCheckListCard = () => {
                   </div>
 
                   <button
-                    className="btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow float-end"
+                    className={`btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow float-end ${
+                      loading && "disabled"
+                    }`}
                     onClick={() => handleChange(item?.id, item?.defaultRemarks)}
                   >
                     <span className="btn-label me-2">

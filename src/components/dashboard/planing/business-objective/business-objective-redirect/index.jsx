@@ -22,9 +22,8 @@ const BusinessObjectiveRedirect = () => {
   const [description, setDescription] = React.useState("");
   const [searchParams, setSearchParams] = useSearchParams();
   const engagementId = searchParams.get("engagementId");
-  const { planingEngagementSingleObject, engagementAddSuccess } = useSelector(
-    (state) => state.planingEngagements
-  );
+  const { planingEngagementSingleObject, engagementAddSuccess, loading } =
+    useSelector((state) => state.planingEngagements);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [object, setObject] = React.useState({
@@ -59,16 +58,18 @@ const BusinessObjectiveRedirect = () => {
   }
 
   function handleSaveMinuteMeetings() {
-    dispatch(
-      setupUpdateBusinessMinuteMeeting({
-        engagementId: engagementId,
-        location_Id: object?.location_Id,
-        subLocation_Id: object?.subLocation_Id,
-        meetingDateTimeFrom: object?.meetingDateTimeFrom,
-        meetingDateTimeTo: object?.meetingDateTimeTo,
-        meetingMinutes: "",
-      })
-    );
+    if (!loading) {
+      dispatch(
+        setupUpdateBusinessMinuteMeeting({
+          engagementId: engagementId,
+          location_Id: object?.location_Id,
+          subLocation_Id: object?.subLocation_Id,
+          meetingDateTimeFrom: object?.meetingDateTimeFrom,
+          meetingDateTimeTo: object?.meetingDateTimeTo,
+          meetingMinutes: "",
+        })
+      );
+    }
   }
 
   function handleDeleteFileItem(id) {
@@ -128,17 +129,19 @@ const BusinessObjectiveRedirect = () => {
   }
 
   function handleUpdateBusinessObjective() {
-    dispatch(
-      setupUpdateBusinessObjective({
-        ...planingEngagementSingleObject,
-        industryUpdate: object?.industryUpdate,
-        companyUpdate: object?.companyUpdate,
-        engagement: {
-          ...planingEngagementSingleObject?.engagement,
-          engagementName: object?.engagementName,
-        },
-      })
-    );
+    if (!loading) {
+      dispatch(
+        setupUpdateBusinessObjective({
+          ...planingEngagementSingleObject,
+          industryUpdate: object?.industryUpdate,
+          companyUpdate: object?.companyUpdate,
+          engagement: {
+            ...planingEngagementSingleObject?.engagement,
+            engagementName: object?.engagementName,
+          },
+        })
+      );
+    }
   }
 
   function handleDeleteSingleMapItem(id) {
@@ -153,59 +156,16 @@ const BusinessObjectiveRedirect = () => {
     });
   }
 
-  function handleChangeMapItemDescription(event, id) {
-    setObject((pre) => {
-      return {
-        ...pre,
-        businessObjectiveAndMapProcessList:
-          pre?.businessObjectiveAndMapProcessList.map((item) =>
-            item?.id === id
-              ? { ...item, description: event?.target?.value }
-              : item
-          ),
-      };
-    });
-  }
-
-  function handleChangeMapItemDemain(event, id) {
-    setObject((pre) => {
-      return {
-        ...pre,
-        businessObjectiveAndMapProcessList:
-          pre?.businessObjectiveAndMapProcessList.map((item) =>
-            item?.id === id ? { ...item, domain: event?.target?.value } : item
-          ),
-      };
-    });
-  }
-
   function handleSaveBusinessObjectiveMapProcess() {
-    const businessObjectiveAndMapProcessListObject =
-      object?.businessObjectiveAndMapProcessList
-        .filter((item) => item?.description && item?.domain)
-        .map((all) => {
-          return {
-            description: all?.description,
-            domain: all?.domain,
-          };
-        });
-
-    // if (businessObjectiveAndMapProcessListObject?.length !== 0) {
-    // dispatch(
-    //   setupSaveMapProcessBusinessObjective({
-    //     ...planingEngagementSingleObject,
-    //     businessObjectiveAndMapProcessList:
-    //       businessObjectiveAndMapProcessListObject,
-    //   })
-    // );
-    dispatch(
-      setupSaveMapProcessBusinessObjective({
-        businessObjective: planingEngagementSingleObject,
-        description,
-        domain,
-      })
-    );
-    // }
+    if (!loading) {
+      dispatch(
+        setupSaveMapProcessBusinessObjective({
+          businessObjective: planingEngagementSingleObject,
+          description,
+          domain,
+        })
+      );
+    }
   }
 
   React.useEffect(() => {
@@ -329,13 +289,15 @@ const BusinessObjectiveRedirect = () => {
                     <p className="word-limit-info mb-0">Maximum 1500 words</p>
 
                     <button
-                      className="btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow"
+                      className={`btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow ${
+                        loading && "disabled"
+                      }`}
                       onClick={handleUpdateBusinessObjective}
                     >
                       <span className="btn-label me-2">
                         <i className="fa fa-check-circle"></i>
                       </span>
-                      Save
+                      {loading ? "loading..." : "Save"}
                     </button>
                   </div>
                 </div>
@@ -381,13 +343,15 @@ const BusinessObjectiveRedirect = () => {
                   ></textarea>
                   <p className="word-limit-info mb-0">Maximum 1500 words</p>
                   <button
-                    className="btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow"
+                    className={`btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow ${
+                      loading && "disabled"
+                    }`}
                     onClick={handleUpdateBusinessObjective}
                   >
                     <span className="btn-label me-2">
                       <i className="fa fa-check-circle"></i>
                     </span>
-                    Save
+                    {loading ? "loading..." : "Save"}
                   </button>
                 </div>
               </div>
@@ -540,63 +504,19 @@ const BusinessObjectiveRedirect = () => {
                   </div>
 
                   <button
-                    className="btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow"
+                    className={`btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow ${
+                      loading && "disabled"
+                    }`}
                     onClick={handleSaveMinuteMeetings}
                   >
                     <span className="btn-label me-2">
                       <i className="fa fa-check-circle"></i>
                     </span>
-                    Save
+                    {loading ? "loading..." : "Save"}
                   </button>
                 </div>
               </div>
             </div>
-            {/*  */}
-            {/* <div className="accordion-item">
-              <h2 className="accordion-header">
-                <button
-                  className="accordion-button collapsed br-8"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#flush-collapseFive"
-                  aria-expanded="false"
-                  aria-controls="flush-collapseFive"
-                >
-                  Document Minutes of Meeting
-                </button>
-              </h2>
-              <div
-                id="flush-collapseFive"
-                className="accordion-collapse collapse"
-                data-bs-parent="#accordionFlushExample"
-              >
-                <div className="accordion-body">
-                  <div className="mb-3">
-                    <label
-                      htmlFor="exampleFormControlTextarea1"
-                      className="form-label"
-                    >
-                      Rich text field to document the meeting of minutes
-                    </label>
-                    <textarea
-                      className="form-control"
-                      placeholder="Enter Here"
-                      id="exampleFormControlTextarea1"
-                      rows="3"
-                    ></textarea>
-                    <p className="word-limit-info mb-0">Maximum 1500 words</p>
-
-                    <button className="btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow">
-                      <span className="btn-label me-2">
-                        <i className="fa fa-check-circle"></i>
-                      </span>
-                      Save
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div> */}
-            {/*  */}
             <div className="my-4 sub-heading"></div>
             <header className="section-header my-3 align-items-center text-start d-flex">
               <div className="mb-0 sub-heading">
@@ -645,9 +565,9 @@ const BusinessObjectiveRedirect = () => {
                         data-bs-target={`#flush-collapse${index}`}
                         aria-expanded="false"
                         aria-controls={`flush-collapse${index}`}
-                        onClick={()=>{
-                          setDescription("")
-                          setDomain("")
+                        onClick={() => {
+                          setDescription(item?.description || "");
+                          setDomain(item?.domain || "");
                         }}
                       >
                         <div className="d-flex w-100 me-3 align-items-center justify-content-between">
@@ -681,10 +601,6 @@ const BusinessObjectiveRedirect = () => {
                             onChange={(event) =>
                               setDescription(event?.target?.value)
                             }
-                            // value={index?.description}
-                            // onChange={(event) =>
-                            //   handleChangeMapItemDescription(event, item?.id)
-                            // }
                           ></textarea>
                           <p className="word-limit-info mb-0">
                             Maximum 1500 words
@@ -697,10 +613,6 @@ const BusinessObjectiveRedirect = () => {
                             className="form-select"
                             aria-label="Default select example"
                             name="mapProcessDomain"
-                            // value={index?.domain}
-                            // onChange={(event) =>
-                            //   handleChangeMapItemDemain(event, item?.id)
-                            // }
                             value={domain}
                             onChange={(event) =>
                               setDomain(event?.target?.value)
@@ -713,13 +625,15 @@ const BusinessObjectiveRedirect = () => {
                         </div>
 
                         <button
-                          className="btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow"
+                          className={`btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow ${
+                            loading && "disabled"
+                          }`}
                           onClick={handleSaveBusinessObjectiveMapProcess}
                         >
                           <span className="btn-label me-2">
                             <i className="fa fa-check-circle"></i>
                           </span>
-                          Save
+                          {loading ? "loading..." : "Save"}
                         </button>
                       </div>
                     </div>
@@ -729,13 +643,15 @@ const BusinessObjectiveRedirect = () => {
             })}
           </div>
           <button
-            className="btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow float-end"
+            className={`btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow float-end ${
+              loading && "disabled"
+            }`}
             onClick={handleUpdateBusinessObjective}
           >
             <span className="btn-label me-2">
               <i className="fa fa-check-circle"></i>
             </span>
-            Save
+            {loading ? "loading..." : "Save"}
           </button>
         </div>
       </div>
