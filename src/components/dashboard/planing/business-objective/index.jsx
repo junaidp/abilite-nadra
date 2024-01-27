@@ -1,19 +1,20 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./index.css";
 import { useSelector, useDispatch } from "react-redux";
 import BusinessObjectiveModal from "../../../modals/add-engagement-audit-dialog/index";
 import AddSingleEngagement from "../../../../components/modals/add-single-engagement-dialog";
 import EditSingleEngagementDialog from "../../../modals/edit-single-engagement-dialog";
-import {
-  changeSelectedEngagementDialog,
-} from "../../../../global-redux/reducers/planing/engagement/slice";
 import { useNavigate } from "react-router-dom";
 import Pagination from "@mui/material/Pagination";
+import { setupGetAllEngagements } from "../../../../global-redux/reducers/planing/engagement/slice";
+import { CircularProgress } from "@mui/material";
 
 const BusinessObjective = () => {
   const { allEngagements, loading } = useSelector(
     (state) => state.planingEngagements
   );
+  const { company } = useSelector((state) => state?.common);
+  const { user } = useSelector((state) => state?.auth);
   const [page, setPage] = React.useState(1);
   const handleChange = (event, value) => {
     setPage(value);
@@ -26,11 +27,6 @@ const BusinessObjective = () => {
   const [editSingleEngagementDialog, setShowEditSingleEngagementDialog] =
     React.useState(false);
   let dispatch = useDispatch();
-
-  function handleEditEngagement(item) {
-    setShowEditSingleEngagementDialog(true);
-    dispatch(changeSelectedEngagementDialog(item));
-  }
 
   function handleClickEngagement(id, name) {
     if (name === "Business Objective") {
@@ -46,6 +42,15 @@ const BusinessObjective = () => {
       dispatch(changeCurrentEngagementId(id));
     }
   }
+
+  React.useEffect(() => {
+    const companyId = user[0]?.company?.find(
+      (item) => item?.companyName === company
+    )?.id;
+    if (companyId) {
+      dispatch(setupGetAllEngagements(companyId));
+    }
+  }, [user]);
 
   return (
     <div>
@@ -87,9 +92,7 @@ const BusinessObjective = () => {
               <div className="">
                 <div
                   className="btn btn-labeled btn-primary px-3 shadow"
-                  // onClick={() => handleClickEngagement(item?.id)}
                   onClick={() => setBusinessObjectiveDialog(true)}
-                  // onClick={() => dispatch(setShowAddSingleEngagement(true))}
                 >
                   <span className="btn-label me-2">
                     <i className="fa fa-plus-circle"></i>
@@ -113,12 +116,13 @@ const BusinessObjective = () => {
                         <th>Engagement Name</th>
                         <th>Nature Through</th>
                         <th>Initiated By</th>
-                        {/* <th>Actions</th> */}
                       </tr>
                     </thead>
                     <tbody>
                       {loading ? (
-                        <p className="p-2">Loading...</p>
+                        <p className="p-2">
+                          <CircularProgress />
+                        </p>
                       ) : allEngagements?.length == 0 ? (
                         <p>No Engagement To Show</p>
                       ) : (

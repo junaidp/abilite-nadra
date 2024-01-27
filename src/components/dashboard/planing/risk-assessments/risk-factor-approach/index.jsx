@@ -2,11 +2,73 @@ import React from "react";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
 import AddRiskFactorDialog from "../../../../modals/add-risk-factor-dialog/index";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  setupPerformRiskAssessment,
+  resetRiskAssessment,
+} from "../../../../../global-redux/reducers/planing/risk-assessment/slice";
+import { useSearchParams } from "react-router-dom";
 
 const RiskFactorApproach = () => {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state?.auth);
+  const navigate = useNavigate();
+  const { performRiskAssessmentObject, riskAssessmentSuccess } = useSelector(
+    (state) => state?.planingRiskAssessments
+  );
+  const [searchParams, setSearchParams] = useSearchParams();
+  const riskAssessmentId = searchParams.get("riskAssessmentId");
   const [showAddRiskFactorDialog, setShowAddRiskFactorDialog] =
     React.useState(false);
-  const navigate = useNavigate();
+  const [data, setData] = React.useState({
+    residualLevelOfRisk: "",
+    controlEffectiveness: "",
+    riskAssessmentList: [],
+    riskAsssessmentCriteriaForRiskManagementCPList: [],
+  });
+
+  React.useEffect(() => {
+    setData((pre) => {
+      return {
+        ...pre,
+        residualLevelOfRisk:
+          performRiskAssessmentObject?.riskAssessments?.residualLevelOfRisk ||
+          "null",
+        controlEffectiveness:
+          performRiskAssessmentObject?.riskAssessments?.controlEffectiveness ||
+          "null",
+        riskAssessmentList:
+          performRiskAssessmentObject?.riskAssessmentList || [],
+        riskAsssessmentCriteriaForRiskManagementCPList:
+          performRiskAssessmentObject?.riskAssessments
+            ?.riskAsssessmentCriteriaForRiskManagementCPList || [],
+      };
+    });
+  }, [performRiskAssessmentObject]);
+
+  React.useEffect(() => {
+    if (riskAssessmentSuccess) {
+      dispatch(
+        setupPerformRiskAssessment({
+          riskAssessmentsid: riskAssessmentId,
+          approach: "Risk Factor Approach",
+        })
+      );
+      dispatch(resetRiskAssessment());
+    }
+  }, [riskAssessmentSuccess]);
+
+  React.useEffect(() => {
+    if (riskAssessmentId && user[0]?.token) {
+      dispatch(
+        setupPerformRiskAssessment({
+          riskAssessmentsid: riskAssessmentId,
+          approach: "Risk Factor Approach",
+        })
+      );
+    }
+  }, [riskAssessmentId, user]);
+
   return (
     <div>
       {showAddRiskFactorDialog && (
@@ -43,163 +105,169 @@ const RiskFactorApproach = () => {
         </div>
       </div>
       <div className="ps-3 sub-heading mb-2">
-        Lorem Ipsum is simply dummy text of the printing and typesetting
-        industry.
+        {performRiskAssessmentObject?.riskAssessments?.jobDescription}
       </div>
       <div className="container">
         <div className="row mb-5">
           <div className="col-lg-12">
-            <div className="table-responsive">
-              <table className="table w-100 table-bordered table-hover rounded equal-columns">
-                <thead className="bg-secondary text-white">
-                  <tr>
-                    <th className="sr-col">Sr. #</th>
-                    <th>Risk factors</th>
-                    <th>Likelihood</th>
-                    <th>Impact</th>
-                    <th>Score</th>
-                    <th>Comments</th>
-                    <th className="text-center">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>Risk 1</td>
-                    <td className="w-80">
-                      <select
-                        className="form-select"
-                        aria-label="Default select example"
-                      >
-                        <option>1</option>
-                        <option value="1">2</option>
-                        <option value="2">3</option>
-                        <option value="3">4</option>
-                      </select>
-                    </td>
-                    <td className="w-80">
-                      <select
-                        className="form-select"
-                        aria-label="Default select example"
-                      >
-                        <option>1</option>
-                        <option value="1">2</option>
-                        <option value="2">3</option>
-                        <option value="3">4</option>
-                      </select>
-                    </td>
-                    <td className="bold width-50">8</td>
-                    <td>
-                      <textarea
-                        className="form-control"
-                        placeholder="Enter Reason"
-                        id="exampleFormControlTextarea1"
-                        rows="3"
-                      ></textarea>
-                      <label className="word-limit-info label-text">
-                        Maximum 1500 words
-                      </label>
-                    </td>
-                    <td className="text-center justify-content-center pt-3">
-                      <i className="fa fa-trash text-danger f-18"></i>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>Risk 2</td>
-                    <td className="width-50">
-                      <select
-                        className="form-select"
-                        aria-label="Default select example"
-                      >
-                        <option>1</option>
-                        <option value="1">2</option>
-                        <option value="2">3</option>
-                        <option value="3">4</option>
-                      </select>
-                    </td>
-                    <td className="width-50">
-                      <select
-                        className="form-select"
-                        aria-label="Default select example"
-                      >
-                        <option>1</option>
-                        <option value="1">2</option>
-                        <option value="2">3</option>
-                        <option value="3">4</option>
-                      </select>
-                    </td>
-                    <td className="bold width-50">8</td>
-                    <td>
-                      <textarea
-                        className="form-control"
-                        placeholder="Enter Reason"
-                        id="exampleFormControlTextarea1"
-                        rows="3"
-                      ></textarea>
-                      <label className="word-limit-info label-text">
-                        Maximum 1500 words
-                      </label>
-                    </td>
-                    <td className="text-center justify-content-center pt-3">
-                      <i className="fa fa-trash text-danger f-18"></i>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>3</td>
-                    <td>Risk 3</td>
-                    <td className="width-50">
-                      <select
-                        className="form-select"
-                        aria-label="Default select example"
-                      >
-                        <option>1</option>
-                        <option value="1">2</option>
-                        <option value="2">3</option>
-                        <option value="3">4</option>
-                      </select>
-                    </td>
-                    <td className="width-50">
-                      <select
-                        className="form-select"
-                        aria-label="Default select example"
-                      >
-                        <option>1</option>
-                        <option value="1">2</option>
-                        <option value="2">3</option>
-                        <option value="3">4</option>
-                      </select>
-                    </td>
-                    <td className="bold width-50">8</td>
-                    <td>
-                      <textarea
-                        className="form-control"
-                        placeholder="Enter Reason"
-                        id="exampleFormControlTextarea1"
-                        rows="3"
-                      ></textarea>
-                      <label className="word-limit-info label-text">
-                        Maximum 1500 words
-                      </label>
-                    </td>
-                    <td className="text-center justify-content-center pt-3">
-                      <i className="fa fa-trash text-danger f-18"></i>
-                    </td>
-                  </tr>
+            {data?.riskAssessmentList.length !== 0 ? (
+              <div className="table-responsive">
+                <table className="table w-100 table-bordered table-hover rounded equal-columns">
+                  <thead className="bg-secondary text-white">
+                    <tr>
+                      <th className="sr-col">Sr. #</th>
+                      <th>Risk factors</th>
+                      <th>Likelihood</th>
+                      <th>Impact</th>
+                      <th>Score</th>
+                      <th>Comments</th>
+                      <th className="text-center">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>Risk 1</td>
+                      <td className="w-80">
+                        <select
+                          className="form-select"
+                          aria-label="Default select example"
+                        >
+                          <option>1</option>
+                          <option value="1">2</option>
+                          <option value="2">3</option>
+                          <option value="3">4</option>
+                        </select>
+                      </td>
+                      <td className="w-80">
+                        <select
+                          className="form-select"
+                          aria-label="Default select example"
+                        >
+                          <option>1</option>
+                          <option value="1">2</option>
+                          <option value="2">3</option>
+                          <option value="3">4</option>
+                        </select>
+                      </td>
+                      <td className="bold width-50">8</td>
+                      <td>
+                        <textarea
+                          className="form-control"
+                          placeholder="Enter Reason"
+                          id="exampleFormControlTextarea1"
+                          rows="3"
+                        ></textarea>
+                        <label className="word-limit-info label-text">
+                          Maximum 1500 words
+                        </label>
+                      </td>
+                      <td className="text-center justify-content-center pt-3">
+                        <i className="fa fa-trash text-danger f-18"></i>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>Risk 2</td>
+                      <td className="width-50">
+                        <select
+                          className="form-select"
+                          aria-label="Default select example"
+                        >
+                          <option>1</option>
+                          <option value="1">2</option>
+                          <option value="2">3</option>
+                          <option value="3">4</option>
+                        </select>
+                      </td>
+                      <td className="width-50">
+                        <select
+                          className="form-select"
+                          aria-label="Default select example"
+                        >
+                          <option>1</option>
+                          <option value="1">2</option>
+                          <option value="2">3</option>
+                          <option value="3">4</option>
+                        </select>
+                      </td>
+                      <td className="bold width-50">8</td>
+                      <td>
+                        <textarea
+                          className="form-control"
+                          placeholder="Enter Reason"
+                          id="exampleFormControlTextarea1"
+                          rows="3"
+                        ></textarea>
+                        <label className="word-limit-info label-text">
+                          Maximum 1500 words
+                        </label>
+                      </td>
+                      <td className="text-center justify-content-center pt-3">
+                        <i className="fa fa-trash text-danger f-18"></i>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td>Risk 3</td>
+                      <td className="width-50">
+                        <select
+                          className="form-select"
+                          aria-label="Default select example"
+                        >
+                          <option>1</option>
+                          <option value="1">2</option>
+                          <option value="2">3</option>
+                          <option value="3">4</option>
+                        </select>
+                      </td>
+                      <td className="width-50">
+                        <select
+                          className="form-select"
+                          aria-label="Default select example"
+                        >
+                          <option>1</option>
+                          <option value="1">2</option>
+                          <option value="2">3</option>
+                          <option value="3">4</option>
+                        </select>
+                      </td>
+                      <td className="bold width-50">8</td>
+                      <td>
+                        <textarea
+                          className="form-control"
+                          placeholder="Enter Reason"
+                          id="exampleFormControlTextarea1"
+                          rows="3"
+                        ></textarea>
+                        <label className="word-limit-info label-text">
+                          Maximum 1500 words
+                        </label>
+                      </td>
+                      <td className="text-center justify-content-center pt-3">
+                        <i className="fa fa-trash text-danger f-18"></i>
+                      </td>
+                    </tr>
 
-                  <tr>
-                    <th className="fw-bold" colSpan="4">
-                      Total Score
-                    </th>
-                    <th className="fw-bold" colSpan="1">
-                      24
-                    </th>
-                    <th></th>
-                    <th></th>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+                    <tr>
+                      <th className="fw-bold" colSpan="4">
+                        Total Score
+                      </th>
+                      <th className="fw-bold" colSpan="1">
+                        24
+                      </th>
+                      <th></th>
+                      <th></th>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <h4>
+                No Risk Assessment List To Show Right Now. Please add one from
+                the top
+              </h4>
+            )}
 
             <div className="row my-3">
               <div className="col-lg-12">
@@ -213,16 +281,12 @@ const RiskFactorApproach = () => {
                 </div>
               </div>
               <div className="col-lg-3">
-                <div
-                  className="px-3 py-2 border-0 card shadow text-white label-text  label-text  label-text bg-yellow"
-                >
+                <div className="px-3 py-2 border-0 card shadow text-white label-text  label-text  label-text bg-yellow">
                   Moderate(M) = 33 to 45
                 </div>
               </div>
               <div className="col-lg-3">
-                <div
-                  className="px-3 py-2 border-0 card shadow  text-white label-text bg-orange"
-                >
+                <div className="px-3 py-2 border-0 card shadow  text-white label-text bg-orange">
                   High(H) = 46 to 59
                 </div>
               </div>
@@ -232,8 +296,8 @@ const RiskFactorApproach = () => {
                 </div>
               </div>
             </div>
-
-            <div className="table-responsive overflow-x-hidden">
+            {data?.riskAsssessmentCriteriaForRiskManagementCPList?.length !==
+            0 ? (
               <table className="table w-100 table-bordered table-hover rounded equal-columns">
                 <thead>
                   <tr>
@@ -273,40 +337,37 @@ const RiskFactorApproach = () => {
                   </tr>
                 </tbody>
               </table>
-
+            ) : (
+              <h4>
+                No Management List to Show Right Now. Please add see one from
+                the top
+              </h4>
+            )}
+            <div className="table-responsive overflow-x-hidden">
               <div className="row">
-                <div className="col-lg-3">
-                  <label className="label-text" htmlFor="residualRisk">
+                <div className="col-lg-6">
+                  <label htmlFor="description" className="w-100">
                     Residual Level of Risk
                   </label>
+                  <input
+                    id="description"
+                    type="text"
+                    className="form-control w-100 h-40"
+                    name="residualLevelOfRisk"
+                    value={data?.residualLevelOfRisk}
+                  />
                 </div>
-                <div className="col-lg-3">
-                  <select
-                    id="residualRisk"
-                    className="form-select"
-                    aria-label="Default select example"
-                  >
-                    <option value="low">Low</option>
-                    <option value="moderate">Moderate</option>
-                    <option value="high">High</option>
-                    <option value="extreme">Extreme</option>
-                  </select>
-                </div>
-                <div className="col-lg-3">
-                  <label htmlFor="residualRiskkk" className="label-text">
+                <div className="col-lg-6">
+                  <label htmlFor="description" className="w-100">
                     Control Effectiveness
                   </label>
-                </div>
-                <div className="col-lg-3">
-                  <select
-                    id="residualRiskkk"
-                    className="form-select"
-                    aria-label="Default select example"
-                  >
-                    <option value="low">Adequate</option>
-                    <option value="moderate">Needs Improvement</option>
-                    <option value="high">Inadequate</option>
-                  </select>
+                  <input
+                    id="description"
+                    type="text"
+                    className="form-control w-100 h-40"
+                    name="controlEffectiveness"
+                    value={data?.controlEffectiveness}
+                  />
                 </div>
               </div>
 

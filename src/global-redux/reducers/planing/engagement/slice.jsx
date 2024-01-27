@@ -10,6 +10,7 @@ import {
   updateBusinessMinuteMeeting,
   updateSpecialProjectAudit,
   updateBusinessObjectiveAndMapProcessSpecialProjectOrAudit,
+  getCheckListItems,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
@@ -19,7 +20,8 @@ const initialState = {
   allEngagements: [],
   engagementAddSuccess: false,
   selectedSingleEngagementItem: {},
-  planingEngagementSingleObject: {},
+  planingEngagementSingleObject: [],
+  selectedCheckListItems:[]
 };
 
 export const setupGetAllEngagements = createAsyncThunk(
@@ -97,6 +99,13 @@ export const setupUpdateBusinessObjectiveAndMapProcessSpecialProjectOrAudit =
     }
   );
 
+export const setupGetCheckListItems = createAsyncThunk(
+  "engagement/getCheckListItems",
+  async (data, thunkAPI) => {
+    return getCheckListItems(data, thunkAPI);
+  }
+);
+
 export const slice = createSlice({
   name: "engagement",
   initialState,
@@ -150,6 +159,7 @@ export const slice = createSlice({
     [setupSaveCheckListObjective.fulfilled]: (state, { payload }) => {
       state.loading = false;
       state.engagementAddSuccess = true;
+      state.planingEngagementSingleObject=payload?.data
       toast.success("Checklist Objective Edited Successfully");
     },
     [setupSaveCheckListObjective.rejected]: (state, { payload }) => {
@@ -303,6 +313,22 @@ export const slice = createSlice({
       state,
       { payload }
     ) => {
+      state.loading = false;
+      if (payload?.response?.data?.message) {
+        toast.error(payload?.response?.data?.message);
+      } else {
+        toast.error("An Error has accoured");
+      }
+    },
+    // Setup get checklists
+    [setupGetCheckListItems.pending]: (state) => {
+      state.loading = true;
+    },
+    [setupGetCheckListItems.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.selectedCheckListItems=payload?.data
+    },
+    [setupGetCheckListItems.rejected]: (state, { payload }) => {
       state.loading = false;
       if (payload?.response?.data?.message) {
         toast.error(payload?.response?.data?.message);

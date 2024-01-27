@@ -587,6 +587,10 @@ span[aria-label="Insert Ordered List"] .jodit-toolbar-button__trigger {
   display: flex !important;
 }
 
+.css-18lrjg1-MuiCircularProgress-root{
+  color: #0a7386 !important;
+}
+
 .flex-end {
   justify-content: flex-end !important;
 }

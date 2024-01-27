@@ -22,6 +22,8 @@ const BusinessObjectiveRedirect = () => {
   const [description, setDescription] = React.useState("");
   const [searchParams, setSearchParams] = useSearchParams();
   const engagementId = searchParams.get("engagementId");
+  const { user } = useSelector((state) => state?.auth);
+
   const { planingEngagementSingleObject, engagementAddSuccess, loading } =
     useSelector((state) => state.planingEngagements);
   const navigate = useNavigate();
@@ -201,8 +203,10 @@ const BusinessObjectiveRedirect = () => {
   }, [planingEngagementSingleObject]);
 
   React.useEffect(() => {
-    dispatch(setupGetSingleEngagementObject(engagementId));
-  }, [engagementId]);
+    if (user[0]?.token) {
+      dispatch(setupGetSingleEngagementObject(engagementId));
+    }
+  }, [engagementId, user]);
 
   return (
     <div>
@@ -356,7 +360,7 @@ const BusinessObjectiveRedirect = () => {
                 </div>
               </div>
             </div>
-            <div className="accordion-item">
+            {/* <div className="accordion-item">
               <h2 className="accordion-header">
                 <button
                   className="accordion-button collapsed"
@@ -411,7 +415,6 @@ const BusinessObjectiveRedirect = () => {
                                 <a href="#">{item?.fileName}</a>
                               </td>
                               <td>
-                                {/* <i className="fa-eye fa pe-3"></i> */}
                                 <i
                                   className="fa fa-trash text-danger f-18 cursor-pointer"
                                   onClick={() => handleDeleteFileItem(item?.id)}
@@ -425,7 +428,7 @@ const BusinessObjectiveRedirect = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
             {/*  */}
             <div className="accordion-item">
               <h2 className="accordion-header">

@@ -23,6 +23,7 @@ const SpecialProjectAudit = () => {
   const engagementId = searchParams.get("engagementId");
   const { planingEngagementSingleObject, engagementAddSuccess, loading } =
     useSelector((state) => state.planingEngagements);
+  const { user } = useSelector((state) => state?.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [object, setObject] = React.useState({
@@ -154,8 +155,10 @@ const SpecialProjectAudit = () => {
   }, [planingEngagementSingleObject]);
 
   React.useEffect(() => {
-    dispatch(setupGetSingleSpecialProjectAuditObjective(engagementId));
-  }, [engagementId]);
+    if (user[0]?.token) {
+      dispatch(setupGetSingleSpecialProjectAuditObjective(engagementId));
+    }
+  }, [engagementId, user]);
 
   return (
     <div>

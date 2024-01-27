@@ -1,51 +1,39 @@
 import React from "react";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
-import Pagination from "../../../common/pagination/Pagination";
 import RiskAssessmentModal from "../../../../components/modals/perform-risk-assessment-dialog/index";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  setupGetAllRiskAssessments,
-  setupUpdateRiskAssessment,
-  resetRiskAssessment,
-} from "../../../../global-redux/reducers/planing/risk-assessment/slice";
+import Pagination from "@mui/material/Pagination";
+import { setupGetAllRiskAssessments } from "../../../../global-redux/reducers/planing/risk-assessment/slice";
+import { CircularProgress } from "@mui/material";
 const RiskAssessments = () => {
   const dispatch = useDispatch();
   const [performRiskAssessmentModal, setPerformRiskAssessmentModal] =
     React.useState(false);
+  const [page, setPage] = React.useState(1);
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
   const navigate = useNavigate();
-  const { allRiskAssessments, loading, riskAssessmentSuccess } = useSelector(
+  const { allRiskAssessments, loading } = useSelector(
     (state) => state?.planingRiskAssessments
   );
   const { company } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
 
   function handleUpdateRiskAssessment(item) {
-    if (!loading) {
-      dispatch(
-        setupUpdateRiskAssessment({
-          ...item,
-          riskApproach: "Risk Factor Approach",
-        })
-      );
-    }
+    navigate(`/audit/risk-factor-approach?riskAssessmentId=${item?.id}`);
   }
 
   React.useEffect(() => {
-    if (riskAssessmentSuccess) {
-      navigate("/audit/risk-factor-approach");
-      dispatch(resetRiskAssessment());
-    }
-  }, [riskAssessmentSuccess]);
-
-  React.useEffect(() => {
-    if (user) {
+    if (user[0]?.token) {
       let companyId = user[0]?.company.find(
         (all) => all?.companyName === company
       )?.id;
       dispatch(setupGetAllRiskAssessments(companyId));
     }
   }, [user]);
+
   return (
     <div>
       {performRiskAssessmentModal && (
@@ -102,43 +90,52 @@ const RiskAssessments = () => {
               </thead>
               <tbody>
                 {loading ? (
-                  "loading.."
+                  <p className="p-2">
+                    <CircularProgress />
+                  </p>
                 ) : allRiskAssessments?.length == 0 ? (
                   <p>No Risk Assessment to show</p>
                 ) : (
-                  allRiskAssessments?.map((item, index) => {
-                    return (
-                      <tr className="h-40" key={index}>
-                        <td>{item?.id}</td>
-                        <td>
-                          {item?.businessObjectiveMapProcess?.description || ""}
-                        </td>
-                        <td>{item?.riskApproach}</td>
-                        <td>{item?.riskRating}</td>
-                        <td className="text-center w-200">
-                          <div
-                            className={`btn btn-outline-light text-primary shadow h-32 w-180 ${
-                              loading && "disabled"
-                            }`}
-                            onClick={() => handleUpdateRiskAssessment(item)}
-                          >
-                            <span className="btn-label me-2">
-                              <i className="fa fa-play"></i>
-                            </span>
-                            Perform Risk
-                          </div>
-                        </td>
-                        <td className="text-center pt-3">
-                          <i className="fa fa-trash text-danger f-18"></i>
-                        </td>
-                      </tr>
-                    );
-                  })
+                  allRiskAssessments
+                    ?.slice((page - 1) * 5, page * 5)
+                    ?.map((item, index) => {
+                      return (
+                        <tr className="h-40" key={index}>
+                          <td>{item?.id}</td>
+                          <td>
+                            {item?.businessObjectiveMapProcess?.description ||
+                              ""}
+                          </td>
+                          <td>{item?.riskApproach}</td>
+                          <td>{item?.riskRating}</td>
+                          <td className="text-center w-200">
+                            <div
+                              className={`btn btn-outline-light text-primary shadow h-32 w-180 ${
+                                loading && "disabled"
+                              }`}
+                              onClick={() => handleUpdateRiskAssessment(item)}
+                            >
+                              <span className="btn-label me-2">
+                                <i className="fa fa-play"></i>
+                              </span>
+                              Perform Risk
+                            </div>
+                          </td>
+                          <td className="text-center pt-3">
+                            <i className="fa fa-trash text-danger f-18"></i>
+                          </td>
+                        </tr>
+                      );
+                    })
                 )}
               </tbody>
             </table>
           </div>
-          <Pagination />
+          <Pagination
+            count={Math.ceil(allRiskAssessments?.length / 5)}
+            page={page}
+            onChange={handleChange}
+          />
         </div>
       </div>
     </div>

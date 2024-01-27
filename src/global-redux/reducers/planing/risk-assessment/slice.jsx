@@ -1,4 +1,8 @@
-import { getAllRiskAssessments, updateRiskAssessment } from "./thunk";
+import {
+  getAllRiskAssessments,
+  updateRiskAssessment,
+  performRiskAssessment,
+} from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
@@ -6,6 +10,7 @@ const initialState = {
   loading: false,
   allRiskAssessments: [],
   riskAssessmentSuccess: false,
+  performRiskAssessmentObject: {},
 };
 
 export const setupGetAllRiskAssessments = createAsyncThunk(
@@ -19,6 +24,13 @@ export const setupUpdateRiskAssessment = createAsyncThunk(
   "riskAssessment/updateRiskAssessment",
   async (data, thunkAPI) => {
     return updateRiskAssessment(data, thunkAPI);
+  }
+);
+
+export const setupPerformRiskAssessment = createAsyncThunk(
+  "riskAssessment/performRiskAssessment",
+  async (data, thunkAPI) => {
+    return performRiskAssessment(data, thunkAPI);
   }
 );
 
@@ -59,6 +71,22 @@ export const slice = createSlice({
     [setupUpdateRiskAssessment.rejected]: (state, { payload }) => {
       state.loading = false;
       state.riskAssessmentSuccess = false;
+      if (payload?.response?.data?.message) {
+        toast.error(payload?.response?.data?.message);
+      } else {
+        toast.error("An Error has accoured");
+      }
+    },
+    // Update Risk Assessment
+    [setupPerformRiskAssessment.pending]: (state) => {
+      state.loading = true;
+    },
+    [setupPerformRiskAssessment.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.performRiskAssessmentObject=payload?.data
+    },
+    [setupPerformRiskAssessment.rejected]: (state, { payload }) => {
+      state.loading = false;
       if (payload?.response?.data?.message) {
         toast.error(payload?.response?.data?.message);
       } else {
