@@ -68,13 +68,13 @@ const RiskAssessments = () => {
       <div className="row">
         <div className="col-lg-12">
           <div className="example-header">
-            <div className="mb-2 w-100">
+            {/* <div className="mb-2 w-100">
               <input
                 placeholder="Filter"
                 id="inputField"
                 className="border-bottom"
               />
-            </div>
+            </div> */}
           </div>
           <div className="table-responsive">
             <table className="table table-bordered  table-hover rounded">
@@ -90,11 +90,15 @@ const RiskAssessments = () => {
               </thead>
               <tbody>
                 {loading ? (
-                  <p className="p-2">
-                    <CircularProgress />
-                  </p>
+                  <tr className="p-2">
+                    <td>
+                      <CircularProgress />
+                    </td>
+                  </tr>
                 ) : allRiskAssessments?.length == 0 ? (
-                  <p>No Risk Assessment to show</p>
+                  <tr>
+                    <td>No Risk Assessment to show</td>
+                  </tr>
                 ) : (
                   allRiskAssessments
                     ?.slice((page - 1) * 5, page * 5)

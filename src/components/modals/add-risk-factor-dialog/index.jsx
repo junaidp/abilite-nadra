@@ -1,6 +1,36 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setupAddRiskAssessment } from "../../../global-redux/reducers/planing/risk-assessment/slice";
+import { toast } from "react-toastify";
 
 const AddRiskFactorDialog = ({ setShowAddRiskFactorDialog }) => {
+  const dispatch = useDispatch();
+  const [description, setDescription] = React.useState("");
+  const { performRiskAssessmentObject, loading,riskAssessmentSuccess } = useSelector(
+    (state) => state?.planingRiskAssessments
+  );
+
+  function handleAddRiskAssessment() {
+    if (description === "") {
+      toast.error("Provide the description");
+    }
+    if (!loading && description !== "") {
+      dispatch(
+        setupAddRiskAssessment({
+          riskFactorApproachId: performRiskAssessmentObject?.id,
+          description,
+        })
+      );
+    }
+  }
+
+  React.useEffect(() => {
+    if (riskAssessmentSuccess) {
+      setDescription("");
+      setShowAddRiskFactorDialog(false);
+    }
+  }, [riskAssessmentSuccess]);
+
   return (
     <div className="container p-3">
       <div className="d-flex justify-content-between">
@@ -24,40 +54,15 @@ const AddRiskFactorDialog = ({ setShowAddRiskFactorDialog }) => {
             className="form-control"
             id="labeltext"
             placeholder="Enter Risk Factor"
+            value={description}
+            onChange={(e) => setDescription(e?.target?.value)}
           />
           <button
-            className="btn btn-primary ms-2"
-            onClick={() => setShowAddRiskFactorDialog(false)}
+            className={`btn btn-primary ms-2 ${loading && "disabled"}`}
+            onClick={handleAddRiskAssessment}
           >
-            Save
+            {loading ? "Loading.." : "Add"}
           </button>
-        </div>
-      </div>
-
-      <div className="row mt-5">
-        <div className="col-lg-12">
-          <div className="d-flex px-2 align-items-center mb-4 justify-content-between">
-            <div className="form-label  mb-0 label-text">
-              Risk Loram will be added here
-            </div>
-            <button
-              className="btn btn-primary"
-              onClick={() => setShowAddRiskFactorDialog(false)}
-            >
-              Select
-            </button>
-          </div>
-          <div className="d-flex px-2 align-items-center justify-content-between">
-            <div className="form-label mb-0 label-text">
-              Risk Loram will be added here
-            </div>
-            <button
-              className="btn btn-primary"
-              onClick={() => setShowAddRiskFactorDialog(false)}
-            >
-              Select
-            </button>
-          </div>
         </div>
       </div>
     </div>

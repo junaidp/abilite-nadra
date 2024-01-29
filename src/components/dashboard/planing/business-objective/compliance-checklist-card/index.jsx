@@ -10,6 +10,10 @@ import {
   setupSaveCheckListObjective,
   setupGetCheckListItems,
 } from "../../../../../global-redux/reducers/planing/engagement/slice";
+import {
+  changeActiveLink,
+  InitialLoadSidebarActiveLink,
+} from "../../../../../global-redux/reducers/common/slice";
 
 const ComplianceCheckListCard = () => {
   let navigate = useNavigate();
@@ -42,6 +46,11 @@ const ComplianceCheckListCard = () => {
       dispatch(setupGetSingleCheckListObjective(engagementId));
     }
   }, [engagementId, user]);
+
+  React.useEffect(() => {
+    dispatch(changeActiveLink("li-business-objective"));
+    dispatch(InitialLoadSidebarActiveLink("li-audit"));
+  }, []);
 
   return (
     <div>
@@ -116,12 +125,16 @@ const ComplianceCheckListCard = () => {
                                 </thead>
                                 <tbody>
                                   {loading ? (
-                                    <CircularProgress />
+                                    <tr>
+                                      <td>
+                                        <CircularProgress />
+                                      </td>
+                                    </tr>
                                   ) : selectedCheckListItems ? (
                                     selectedCheckListItems?.map(
                                       (checkItem, i) => {
                                         return (
-                                          <tr>
+                                          <tr key={i}>
                                             <td>{i + 1}</td>
                                             <td>{checkItem?.area}</td>
                                             <td>{checkItem?.subject}</td>
@@ -132,9 +145,9 @@ const ComplianceCheckListCard = () => {
                                       }
                                     )
                                   ) : (
-                                    <p className="w-300">
-                                      No CheckListItem to show
-                                    </p>
+                                    <tr className="w-300">
+                                      <td>No CheckListItem to show</td>
+                                    </tr>
                                   )}
                                 </tbody>
                               </table>
@@ -194,23 +207,29 @@ const ComplianceCheckListCard = () => {
                             </thead>
                             <tbody>
                               {loading ? (
-                                <CircularProgress />
+                                <tr>
+                                  <td>
+                                    <CircularProgress />
+                                  </td>
+                                </tr>
                               ) : selectedCheckListItems ? (
-                                selectedCheckListItems?.map((checkItem, i) => {
-                                  return (
-                                    <tr>
-                                      <td>{i + 1}</td>
-                                      <td>{checkItem?.area}</td>
-                                      <td>{checkItem?.subject}</td>
-                                      <td>{checkItem?.particulars}</td>
-                                      <td>{checkItem?.observation}</td>
-                                    </tr>
-                                  );
-                                })
+                                selectedCheckListItems?.map(
+                                  (checkItem, ind) => {
+                                    return (
+                                      <tr key={ind}>
+                                        <td>{ind + 1}</td>
+                                        <td>{checkItem?.area}</td>
+                                        <td>{checkItem?.subject}</td>
+                                        <td>{checkItem?.particulars}</td>
+                                        <td>{checkItem?.observation}</td>
+                                      </tr>
+                                    );
+                                  }
+                                )
                               ) : (
-                                <p className="w-300">
-                                  No CheckListItem to show
-                                </p>
+                                <tr className="w-300">
+                                  <td>No CheckListItem to show</td>
+                                </tr>
                               )}
                             </tbody>
                           </table>

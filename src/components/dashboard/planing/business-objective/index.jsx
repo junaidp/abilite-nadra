@@ -31,15 +31,12 @@ const BusinessObjective = () => {
   function handleClickEngagement(id, name) {
     if (name === "Business Objective") {
       navigate(`/audit/business-objectives-redirect?engagementId=${id}`);
-      dispatch(changeCurrentEngagementId(id));
     }
     if (name === "Special Project/Audit") {
       navigate(`/audit/special-project-audit?engagementId=${id}`);
-      dispatch(changeCurrentEngagementId(id));
     }
     if (name === "Compliance Checklist") {
       navigate(`/audit/compliance-checklist-card?engagementId=${id}`);
-      dispatch(changeCurrentEngagementId(id));
     }
   }
 
@@ -120,11 +117,15 @@ const BusinessObjective = () => {
                     </thead>
                     <tbody>
                       {loading ? (
-                        <p className="p-2">
-                          <CircularProgress />
-                        </p>
+                        <tr className="p-2">
+                          <td>
+                            <CircularProgress />
+                          </td>
+                        </tr>
                       ) : allEngagements?.length == 0 ? (
-                        <p>No Engagement To Show</p>
+                        <tr>
+                          <td>No Engagement To Show</td>
+                        </tr>
                       ) : (
                         allEngagements
                           ?.slice((page - 1) * 5, page * 5)

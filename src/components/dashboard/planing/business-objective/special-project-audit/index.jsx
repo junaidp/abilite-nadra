@@ -3,6 +3,11 @@ import "./index.css";
 import { useNavigate } from "react-router-dom";
 import ObjectiveListDialog from "../../../../modals/objective-list-dialog/index";
 import Dialog from "@mui/material/Dialog";
+import moment from "moment";
+import {
+  changeActiveLink,
+  InitialLoadSidebarActiveLink,
+} from "../../../../../global-redux/reducers/common/slice";
 import {
   resetAddEngagementSuccess,
   setupGetSingleSpecialProjectAuditObjective,
@@ -136,20 +141,26 @@ const SpecialProjectAudit = () => {
       return {
         ...pre,
         engagementName:
-          planingEngagementSingleObject?.engagement?.engagementName,
+          planingEngagementSingleObject?.engagement?.engagementName || "",
         businessObjectiveAndMapProcessList:
-          planingEngagementSingleObject?.businessObjectiveAndMapProcessList,
+          planingEngagementSingleObject?.businessObjectiveAndMapProcessList ||
+          [],
         location_Id:
-          planingEngagementSingleObject?.meetingScheduleAndMinutes?.location_Id,
+          planingEngagementSingleObject?.meetingScheduleAndMinutes
+            ?.location_Id || "",
         meetingDateTimeFrom:
-          planingEngagementSingleObject?.meetingScheduleAndMinutes
-            ?.meetingDateTimeFrom,
+          moment(
+            planingEngagementSingleObject?.meetingScheduleAndMinutes
+              ?.meetingDateTimeFrom
+          ).format("YYYY-MM-DD") || "",
         meetingDateTimeTo:
-          planingEngagementSingleObject?.meetingScheduleAndMinutes
-            ?.meetingDateTimeTo,
+          moment(
+            planingEngagementSingleObject?.meetingScheduleAndMinutes
+              ?.meetingDateTimeTo
+          ).format("YYYY-MM-DD") || "",
         subLocation_Id:
           planingEngagementSingleObject?.meetingScheduleAndMinutes
-            ?.subLocation_Id,
+            ?.subLocation_Id || "",
       };
     });
   }, [planingEngagementSingleObject]);
@@ -159,6 +170,11 @@ const SpecialProjectAudit = () => {
       dispatch(setupGetSingleSpecialProjectAuditObjective(engagementId));
     }
   }, [engagementId, user]);
+
+  React.useEffect(() => {
+    dispatch(changeActiveLink("li-business-objective"));
+    dispatch(InitialLoadSidebarActiveLink("li-audit"));
+  }, []);
 
   return (
     <div>
@@ -324,10 +340,10 @@ const SpecialProjectAudit = () => {
             {/*  */}
             {object?.businessObjectiveAndMapProcessList?.map((item, index) => {
               return (
-                <div>
+                <div key={index}>
                   <div className="w-100 float-right">
                     <i
-                      class="fa fa-trash text-danger f-18 px-3 cursor-pointer float-right w-100"
+                      className="fa fa-trash text-danger f-18 px-3 cursor-pointer float-right w-100"
                       onClick={() => handleDeleteSingleMapItem(item?.id)}
                     ></i>
                   </div>

@@ -8,6 +8,10 @@ import {
   resetRiskAssessment,
 } from "../../../../../global-redux/reducers/planing/risk-assessment/slice";
 import { useSearchParams } from "react-router-dom";
+import {
+  changeActiveLink,
+  InitialLoadSidebarActiveLink,
+} from "../../../../../global-redux/reducers/common/slice";
 
 const RiskFactorApproach = () => {
   const dispatch = useDispatch();
@@ -26,6 +30,21 @@ const RiskFactorApproach = () => {
     riskAssessmentList: [],
     riskAsssessmentCriteriaForRiskManagementCPList: [],
   });
+
+  function handleChangeSingleRiskAssessmentItem(event, id) {
+    setData((pre) => {
+      return {
+        ...pre,
+        riskAssessmentList: pre?.riskAssessmentList?.map((item) =>
+          item?.id === id
+            ? { ...item, [event?.target?.name]: event?.target?.value }
+            : item
+        ),
+      };
+    });
+  }
+
+  function handleCommentChange() {}
 
   React.useEffect(() => {
     setData((pre) => {
@@ -68,6 +87,11 @@ const RiskFactorApproach = () => {
       );
     }
   }, [riskAssessmentId, user]);
+
+  React.useEffect(() => {
+    dispatch(changeActiveLink("li-risk-assessments"));
+    dispatch(InitialLoadSidebarActiveLink("li-audit"));
+  }, []);
 
   return (
     <div>
@@ -125,140 +149,73 @@ const RiskFactorApproach = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>Risk 1</td>
-                      <td className="w-80">
-                        <select
-                          className="form-select"
-                          aria-label="Default select example"
-                        >
-                          <option>1</option>
-                          <option value="1">2</option>
-                          <option value="2">3</option>
-                          <option value="3">4</option>
-                        </select>
-                      </td>
-                      <td className="w-80">
-                        <select
-                          className="form-select"
-                          aria-label="Default select example"
-                        >
-                          <option>1</option>
-                          <option value="1">2</option>
-                          <option value="2">3</option>
-                          <option value="3">4</option>
-                        </select>
-                      </td>
-                      <td className="bold width-50">8</td>
-                      <td>
-                        <textarea
-                          className="form-control"
-                          placeholder="Enter Reason"
-                          id="exampleFormControlTextarea1"
-                          rows="3"
-                        ></textarea>
-                        <label className="word-limit-info label-text">
-                          Maximum 1500 words
-                        </label>
-                      </td>
-                      <td className="text-center justify-content-center pt-3">
-                        <i className="fa fa-trash text-danger f-18"></i>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td>Risk 2</td>
-                      <td className="width-50">
-                        <select
-                          className="form-select"
-                          aria-label="Default select example"
-                        >
-                          <option>1</option>
-                          <option value="1">2</option>
-                          <option value="2">3</option>
-                          <option value="3">4</option>
-                        </select>
-                      </td>
-                      <td className="width-50">
-                        <select
-                          className="form-select"
-                          aria-label="Default select example"
-                        >
-                          <option>1</option>
-                          <option value="1">2</option>
-                          <option value="2">3</option>
-                          <option value="3">4</option>
-                        </select>
-                      </td>
-                      <td className="bold width-50">8</td>
-                      <td>
-                        <textarea
-                          className="form-control"
-                          placeholder="Enter Reason"
-                          id="exampleFormControlTextarea1"
-                          rows="3"
-                        ></textarea>
-                        <label className="word-limit-info label-text">
-                          Maximum 1500 words
-                        </label>
-                      </td>
-                      <td className="text-center justify-content-center pt-3">
-                        <i className="fa fa-trash text-danger f-18"></i>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>3</td>
-                      <td>Risk 3</td>
-                      <td className="width-50">
-                        <select
-                          className="form-select"
-                          aria-label="Default select example"
-                        >
-                          <option>1</option>
-                          <option value="1">2</option>
-                          <option value="2">3</option>
-                          <option value="3">4</option>
-                        </select>
-                      </td>
-                      <td className="width-50">
-                        <select
-                          className="form-select"
-                          aria-label="Default select example"
-                        >
-                          <option>1</option>
-                          <option value="1">2</option>
-                          <option value="2">3</option>
-                          <option value="3">4</option>
-                        </select>
-                      </td>
-                      <td className="bold width-50">8</td>
-                      <td>
-                        <textarea
-                          className="form-control"
-                          placeholder="Enter Reason"
-                          id="exampleFormControlTextarea1"
-                          rows="3"
-                        ></textarea>
-                        <label className="word-limit-info label-text">
-                          Maximum 1500 words
-                        </label>
-                      </td>
-                      <td className="text-center justify-content-center pt-3">
-                        <i className="fa fa-trash text-danger f-18"></i>
-                      </td>
-                    </tr>
-
-                    <tr>
-                      <th className="fw-bold" colSpan="4">
-                        Total Score
-                      </th>
-                      <th className="fw-bold" colSpan="1">
-                        24
-                      </th>
-                      <th></th>
-                      <th></th>
-                    </tr>
+                    {data?.riskAssessmentList?.map((item, index) => {
+                      return (
+                        <tr key={index}>
+                          <td>{item?.id}</td>
+                          <td>{item?.description || ""}</td>
+                          <td className="w-80">
+                            <select
+                              className="form-select"
+                              aria-label="Default select example"
+                              name="likelihood"
+                              value={item?.likelihood}
+                              onChange={(event) =>
+                                handleChangeSingleRiskAssessmentItem(
+                                  event,
+                                  item?.id
+                                )
+                              }
+                            >
+                              <option value={0}>0</option>
+                              <option value={1}>1</option>
+                              <option value={2}>2</option>
+                              <option value={3}>3</option>
+                              <option value={4}>4</option>
+                            </select>
+                          </td>
+                          <td className="w-80">
+                            <select
+                              className="form-select"
+                              aria-label="Default select example"
+                              name="impact"
+                              value={item?.impact}
+                              onChange={(event) =>
+                                handleChangeSingleRiskAssessmentItem(
+                                  event,
+                                  item?.id
+                                )
+                              }
+                            >
+                              <option value={0}>0</option>
+                              <option value={1}>1</option>
+                              <option value={2}>2</option>
+                              <option value={3}>3</option>
+                              <option value={4}>4</option>
+                            </select>
+                          </td>
+                          <td className="bold width-50">
+                            {Number(item?.likelihood) + Number(item?.impact)}
+                          </td>
+                          <td>
+                            <textarea
+                              className="form-control"
+                              placeholder="Enter Reason"
+                              id="exampleFormControlTextarea1"
+                              rows="3"
+                              value={item?.comments || ""}
+                              onChange={handleCommentChange}
+                            ></textarea>
+                            <label className="word-limit-info label-text">
+                              Maximum 1500 words
+                            </label>
+                          </td>
+                          <td className="text-center justify-content-center pt-3">
+                            <i className="fa fa-trash text-danger f-18"></i>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
@@ -354,7 +311,7 @@ const RiskFactorApproach = () => {
                     type="text"
                     className="form-control w-100 h-40"
                     name="residualLevelOfRisk"
-                    value={data?.residualLevelOfRisk}
+                    defaultValue={data?.residualLevelOfRisk}
                   />
                 </div>
                 <div className="col-lg-6">
@@ -366,7 +323,7 @@ const RiskFactorApproach = () => {
                     type="text"
                     className="form-control w-100 h-40"
                     name="controlEffectiveness"
-                    value={data?.controlEffectiveness}
+                    defaultValue={data?.controlEffectiveness}
                   />
                 </div>
               </div>

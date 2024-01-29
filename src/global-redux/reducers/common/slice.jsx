@@ -12,21 +12,20 @@ let menuItems = [
     id: "li-audit",
     label: "Audit Planning & Scheduling",
     icon: "fa fa-calendar-check me-1",
-    // route: "/audit/report-audit-planning-and-scheduling",
     active: false,
     open: false,
     subMenu: [
       {
         id: "li-business-objective",
         label: "Engagement",
-        icon: "fa fa-bullseye pe-2",
+        icon: "bi bi-meta",
         route: "/audit/business-objective",
         active: false,
       },
       {
         id: "li-risk-assessments",
         label: "Risk Assessments",
-        icon: "fa fa-chart-line pe-2",
+        icon: "bi bi-code-slash",
         route: "/audit/risk-assessment",
         active: false,
       },
@@ -63,14 +62,14 @@ let menuItems = [
   {
     id: "li-audit-engagement",
     label: "Audit Engagement",
-    icon: "bi bi-chat-dots-fill",
+    icon: "bi bi-messenger",
     route: "/audit/audit-engagement",
     active: false,
   },
   {
     id: "li-reporting-and-followup",
     label: "Reporting & Followup",
-    icon: "fa fa-comments",
+    icon: "bi bi-file-code",
     active: false,
     open: false,
     subMenu: [

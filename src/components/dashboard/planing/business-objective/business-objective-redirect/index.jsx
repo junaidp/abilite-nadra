@@ -10,7 +10,11 @@ import {
   setupSaveMapProcessBusinessObjective,
   setupUpdateBusinessMinuteMeeting,
 } from "../../../../../global-redux/reducers/planing/engagement/slice";
-import { toast } from "react-toastify";
+import {
+  changeActiveLink,
+  InitialLoadSidebarActiveLink,
+} from "../../../../../global-redux/reducers/common/slice";
+import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
@@ -74,45 +78,45 @@ const BusinessObjectiveRedirect = () => {
     }
   }
 
-  function handleDeleteFileItem(id) {
-    setObject((pre) => {
-      return {
-        ...pre,
-        strategicDocuments: pre.strategicDocuments.filter(
-          (all) => all?.id !== id
-        ),
-      };
-    });
-  }
+  // function handleDeleteFileItem(id) {
+  //   setObject((pre) => {
+  //     return {
+  //       ...pre,
+  //       strategicDocuments: pre.strategicDocuments.filter(
+  //         (all) => all?.id !== id
+  //       ),
+  //     };
+  //   });
+  // }
 
   // file Upload
 
-  const isImage = (file) => {
-    const acceptedImageTypes = ["image/jpeg", "image/png", "image/gif"];
-    return file && acceptedImageTypes.includes(file.type);
-  };
+  // const isImage = (file) => {
+  //   const acceptedImageTypes = ["image/jpeg", "image/png", "image/gif"];
+  //   return file && acceptedImageTypes.includes(file.type);
+  // };
 
-  const handleFileChange = (event) => {
-    const selectedFile = event.target.files[0];
-    if (isImage(selectedFile)) {
-      toast.error("Selected file is an image. Please select a non-image file.");
-      return;
-    }
-    if (!isImage(selectedFile))
-      setObject((pre) => {
-        return {
-          ...pre,
-          strategicDocuments: [
-            ...pre.strategicDocuments,
-            {
-              fileName: selectedFile?.name,
-              location: selectedFile?.name,
-              id: uuidv4(),
-            },
-          ],
-        };
-      });
-  };
+  // const handleFileChange = (event) => {
+  //   const selectedFile = event.target.files[0];
+  //   if (isImage(selectedFile)) {
+  //     toast.error("Selected file is an image. Please select a non-image file.");
+  //     return;
+  //   }
+  //   if (!isImage(selectedFile))
+  //     setObject((pre) => {
+  //       return {
+  //         ...pre,
+  //         strategicDocuments: [
+  //           ...pre.strategicDocuments,
+  //           {
+  //             fileName: selectedFile?.name,
+  //             location: selectedFile?.name,
+  //             id: uuidv4(),
+  //           },
+  //         ],
+  //       };
+  //     });
+  // };
 
   function handleSumMapProcess() {
     setObject((pre) => {
@@ -181,23 +185,28 @@ const BusinessObjectiveRedirect = () => {
     setObject((pre) => {
       return {
         ...pre,
-        industryUpdate: planingEngagementSingleObject?.industryUpdate,
-        companyUpdate: planingEngagementSingleObject?.companyUpdate,
+        industryUpdate: planingEngagementSingleObject?.industryUpdate || "",
+        companyUpdate: planingEngagementSingleObject?.companyUpdate || "",
         engagementName:
-          planingEngagementSingleObject?.engagement?.engagementName,
+          planingEngagementSingleObject?.engagement?.engagementName || "",
         businessObjectiveAndMapProcessList:
-          planingEngagementSingleObject?.businessObjectiveAndMapProcessList,
+          planingEngagementSingleObject?.businessObjectiveAndMapProcessList || [],
         location_Id:
-          planingEngagementSingleObject?.meetingScheduleAndMinutes?.location_Id,
+          planingEngagementSingleObject?.meetingScheduleAndMinutes
+            ?.location_Id || "",
         meetingDateTimeFrom:
-          planingEngagementSingleObject?.meetingScheduleAndMinutes
-            ?.meetingDateTimeFrom,
+          moment(
+            planingEngagementSingleObject?.meetingScheduleAndMinutes
+              ?.meetingDateTimeFrom
+          ).format("YYYY-MM-DD") || "",
         meetingDateTimeTo:
-          planingEngagementSingleObject?.meetingScheduleAndMinutes
-            ?.meetingDateTimeTo,
+          moment(
+            planingEngagementSingleObject?.meetingScheduleAndMinutes
+              ?.meetingDateTimeTo
+          ).format("YYYY-MM-DD") || "",
         subLocation_Id:
           planingEngagementSingleObject?.meetingScheduleAndMinutes
-            ?.subLocation_Id,
+            ?.subLocation_Id || "",
       };
     });
   }, [planingEngagementSingleObject]);
@@ -207,6 +216,11 @@ const BusinessObjectiveRedirect = () => {
       dispatch(setupGetSingleEngagementObject(engagementId));
     }
   }, [engagementId, user]);
+
+  React.useEffect(() => {
+    dispatch(changeActiveLink("li-business-objective"));
+    dispatch(InitialLoadSidebarActiveLink("li-audit"));
+  }, []);
 
   return (
     <div>
@@ -552,10 +566,10 @@ const BusinessObjectiveRedirect = () => {
             {/*  */}
             {object?.businessObjectiveAndMapProcessList?.map((item, index) => {
               return (
-                <div>
+                <div key={index}>
                   <div className="w-100 float-right">
                     <i
-                      class="fa fa-trash text-danger f-18 px-3 cursor-pointer float-right w-100"
+                      className="fa fa-trash text-danger f-18 px-3 cursor-pointer float-right w-100"
                       onClick={() => handleDeleteSingleMapItem(item?.id)}
                     ></i>
                   </div>

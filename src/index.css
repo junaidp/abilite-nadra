@@ -537,6 +537,14 @@ element {
   overflow-x: hidden !important;
 }
 
+.link-wrap span i{
+  font-size: 18px !important;
+  /* color: #0a7386 !important; */
+}
+.link-wrap-active span i{
+  font-size: 18px !important;
+}
+
 .quill {
   min-height: 80vh !important;
 }

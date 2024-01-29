@@ -108,7 +108,7 @@ const TopBar = () => {
                 <option value="">select company</option>
                 {user[0]?.company?.map((item, i) => {
                   return (
-                    <option value={item?.companyName}>
+                    <option value={item?.companyName} key={i}>
                       {item?.companyName}
                     </option>
                   );
