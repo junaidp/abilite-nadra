@@ -8,6 +8,7 @@ import planingEngagementsReducers from "../reducers/planing/engagement/slice";
 import planingRiskAssessmentReducer from "../reducers/planing/risk-assessment/slice";
 import planingAuditableUnitReducer from "../reducers/planing/auditable-units/slice";
 import planingJobPrioritizationReducer from "../reducers/planing/job-prioritization/slice";
+import planingJobSchedulingReducer from "../reducers/planing/job-scheduling/slice";
 export const store = configureStore({
   reducer: {
     common: commonReducer,
@@ -21,5 +22,6 @@ export const store = configureStore({
     planingRiskAssessments: planingRiskAssessmentReducer,
     planingAuditableUnit: planingAuditableUnitReducer,
     planingJobPrioritization: planingJobPrioritizationReducer,
+    planingJobScheduling: planingJobSchedulingReducer,
   },
 });

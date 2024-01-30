@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { setupAddAuditableUnit } from "../../../global-redux/reducers/planing/auditable-units/slice";
+import { setupEditAuditableUnit } from "../../../global-redux/reducers/planing/auditable-units/slice";
 
 const AuditableUnitRatingDialog = ({
   setShowEditAuditableUnit,
@@ -12,6 +12,8 @@ const AuditableUnitRatingDialog = ({
   const { loading, auditableUnitAddSuccess, allAuditableUnits } = useSelector(
     (state) => state?.planingAuditableUnit
   );
+  const [auditableUnitName, setAuditableUnitName] = React.useState("");
+
   const [data, setData] = React.useState({
     reason: "",
     jobType: "",
@@ -26,18 +28,26 @@ const AuditableUnitRatingDialog = ({
     });
   }
 
-  function handleSave() {
+  function handleEdit() {
     if (data?.jobType === "" || data?.reason === "") {
       toast.error("Provide all value");
     } else {
       if (!loading) {
+        const currentAuditableUnit = allAuditableUnits?.find(
+          (all) => all?.id === selectedAuditableUnitId
+        );
         dispatch(
-          setupAddAuditableUnit({
-            reason: data?.reason,
-            jobType: data?.jobType,
-            processid: null,
-            subProcessid: null,
-            auditableUnitid: selectedAuditableUnitId,
+          setupEditAuditableUnit({
+            ...currentAuditableUnit,
+            unitList: [
+              {
+                id: selectedAuditableSubUnitId,
+                reason: data?.reason,
+                jobType: data?.jobType,
+                processid: null,
+                subProcessid: null,
+              },
+            ],
           })
         );
       }
@@ -59,6 +69,28 @@ const AuditableUnitRatingDialog = ({
       ?.find((all) => all?.id === selectedAuditableUnitId)
       ?.unitList.filter((unit) => unit.id === selectedAuditableSubUnitId)[0];
     setData({ reason: selectedItem?.reason, jobType: selectedItem?.jobType });
+
+    const selectedSingleItem = allAuditableUnits?.find(
+      (all) => all?.id === selectedAuditableUnitId
+    );
+    setAuditableUnitName(selectedSingleItem?.jobName);
+
+    if (selectedItem?.engagement?.natureThrough === "Compliance Checklist") {
+      setData((pre) => {
+        return {
+          ...pre,
+          jobType: "Compliance Checklist",
+        };
+      });
+    }
+    if (selectedItem?.engagement?.natureThrough === "Special Project/Audit") {
+      setData((pre) => {
+        return {
+          ...pre,
+          jobType: "Special Audit",
+        };
+      });
+    }
   }, []);
 
   return (
@@ -74,8 +106,7 @@ const AuditableUnitRatingDialog = ({
           <div className="row mb-3">
             <div className="col-lg-9 sub-heading">
               <span className="me-2 fw-bold">1.</span>
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry.
+              {auditableUnitName}
             </div>
             <div className=" col-lg-3 text-end">
               <div
@@ -108,31 +139,63 @@ const AuditableUnitRatingDialog = ({
           </div>
 
           <div className="row mb-3">
-            <div className="col-lg-12">
-              <label>Job Type</label>
-              <select
-                className="form-select"
-                aria-label="Default select example"
-                name="jobType"
-                value={data?.jobType}
-                onChange={handleChange}
-              >
-                <option>Review</option>
-                <option value="Compliance Checklist">
-                  Compliance Checklist
-                </option>
-                <option value="Special Audit">Special Audit</option>
-                <option value="Fraud & Investigation">
-                  Fraud & Investigation
-                </option>
-                <option value="Assurance and Compiance">
-                  Assurance and Compiance
-                </option>
-                <option value="Advisory and consulting">
-                  Advisory and consulting
-                </option>
-              </select>
-            </div>
+            {allAuditableUnits?.find(
+              (all) => all?.id === selectedAuditableUnitId
+            )?.engagement?.natureThrough === "Compliance Checklist" && (
+              <div className="col-lg-12">
+                <label>Job Type</label>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  name="jobType"
+                  defaultValue={data?.jobType}
+                >
+                  <option value="Compliance Checklist">
+                    Compliance Checklist
+                  </option>
+                </select>
+              </div>
+            )}
+            {allAuditableUnits?.find(
+              (all) => all?.id === selectedAuditableUnitId
+            )?.engagement?.natureThrough === "Special Project/Audit" && (
+              <div className="col-lg-12">
+                <label>Job Type</label>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  name="jobType"
+                  defaultValue={data?.jobType}
+                >
+                  <option value="Special Audit">Special Audit </option>
+                </select>
+              </div>
+            )}
+            {allAuditableUnits?.find(
+              (all) => all?.id === selectedAuditableUnitId
+            )?.engagement?.natureThrough === "Business Objective" && (
+              <div className="col-lg-12">
+                <label>Job Type</label>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  name="jobType"
+                  value={data?.jobType}
+                  onChange={handleChange}
+                >
+                  <option>Review</option>
+                  <option value="Fraud & Investigation">
+                    Fraud & Investigation
+                  </option>
+                  <option value="Assurance and Compiance">
+                    Assurance and Compiance
+                  </option>
+                  <option value="Advisory and consulting">
+                    Advisory and consulting
+                  </option>{" "}
+                </select>
+              </div>
+            )}
           </div>
           {/* <div className="row">
             <div className="col-lg-6">
@@ -162,8 +225,9 @@ const AuditableUnitRatingDialog = ({
       <div className="pb-4">
         <button
           className={`btn btn-danger   float-end ${loading && "disabled"}`}
+          onClick={handleEdit}
         >
-          {loading ? "Loading..." : "Add"}
+          {loading ? "Loading..." : "Edit"}
         </button>
       </div>
     </div>

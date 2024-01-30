@@ -1,47 +1,38 @@
 import React from "react";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
-import Pagination from "../../../common/pagination/Pagination";
+import Pagination from "@mui/material/Pagination";
+import { setupGetAllJobScheduling } from "../../../../global-redux/reducers/planing/job-scheduling/slice";
+import { useSelector, useDispatch } from "react-redux";
+import { CircularProgress } from "@mui/material";
 
 const JobScheduling = () => {
   let navigate = useNavigate();
-  let data = [
-    {
-      no: "1",
-      objective: "Lorem Ipsum 1",
-      year: "Year 1",
-    },
-    {
-      no: "1",
-      objective: "Lorem Ipsum 1",
-      year: "Year 2",
-    },
-    {
-      no: "1",
-      objective: "Lorem Ipsum 1",
-      year: "Year 3",
-    },
-    {
-      no: "1",
-      objective: "Lorem Ipsum 1",
-      year: "Year 4",
-    },
-    {
-      no: "1",
-      objective: "Lorem Ipsum 1",
-      year: "Year 5",
-    },
-    {
-      no: "1",
-      objective: "Lorem Ipsum 1",
-      year: "Year 6",
-    },
-    {
-      no: "1",
-      objective: "Lorem Ipsum 1",
-      year: "Year 7",
-    },
-  ];
+  const dispatch = useDispatch();
+  const [page, setPage] = React.useState(1);
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
+  const { allJobScheduling, loading } = useSelector(
+    (state) => state?.planingJobScheduling
+  );
+  const [searchValue, setSearchValue] = React.useState("");
+  const { company } = useSelector((state) => state?.common);
+  const { user } = useSelector((state) => state?.auth);
+
+  React.useEffect(() => {
+    const companyId = user[0]?.company?.find(
+      (item) => item?.companyName === company
+    )?.id;
+    if (companyId) {
+      dispatch(
+        setupGetAllJobScheduling(
+          `?companyId=${companyId}&currentYear=${Number("2024")}`
+        )
+      );
+    }
+  }, [user]);
+
   return (
     <div>
       <header className="section-header my-3  text-start d-flex align-items-center justify-content-between">
@@ -79,6 +70,8 @@ const JobScheduling = () => {
             placeholder="Filter"
             id="inputField"
             className="input-border-bottom"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e?.target?.value)}
           />
         </div>
       </div>
@@ -96,31 +89,58 @@ const JobScheduling = () => {
                 </tr>
               </thead>
               <tbody>
-                {data?.map((item, index) => {
-                  return (
-                    <tr className="h-40" key={index}>
-                      <td>{item?.no}</td>
-                      <td>{item?.objective}</td>
-                      <td>{item?.year}</td>
-                      <td>
-                        <div
-                          className="btn btn-outline-light text-primary  px-3 shadow"
-                          onClick={() => navigate("/audit/start-scheduling")}
-                        >
-                          <span className="btn-label me-2">
-                            <i className="fa fa-play"></i>
-                          </span>
-                          Start Scheduling
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
+                {loading ? (
+                  <tr>
+                    <td>
+                      <CircularProgress />
+                    </td>
+                  </tr>
+                ) : allJobScheduling?.length === 0 ? (
+                  <tr>
+                    <td>No data to show</td>
+                  </tr>
+                ) : (
+                  allJobScheduling
+                    ?.filter((all) =>
+                      all?.jobPrioritization?.unit?.reason
+                        ?.toLowerCase()
+                        .includes(searchValue?.toLowerCase())
+                    )
+                    ?.slice((page - 1) * 5, page * 5)
+                    ?.map((item, index) => {
+                      return (
+                        <tr className="h-40" key={index}>
+                          <td>{item?.id}</td>
+                          <td>{item?.jobPrioritization?.unit?.reason}</td>
+                          <td>{item?.jobPrioritization?.year}</td>
+                          <td>
+                            <div
+                              className="btn btn-outline-light text-primary  px-3 shadow"
+                              onClick={() =>
+                                navigate(
+                                  `/audit/start-scheduling?Id=${item?.id}`
+                                )
+                              }
+                            >
+                              <span className="btn-label me-2">
+                                <i className="fa fa-play"></i>
+                              </span>
+                              Start Scheduling
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })
+                )}
               </tbody>
             </table>
           </div>
         </div>
-        <Pagination />
+        <Pagination
+          count={Math.ceil(allJobScheduling?.length / 5)}
+          page={page}
+          onChange={handleChange}
+        />
       </div>
     </div>
   );

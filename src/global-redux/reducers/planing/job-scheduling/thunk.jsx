@@ -1,11 +1,11 @@
 import axios from "axios";
 import { baseUrl } from "../../../../constants/index";
 
-export const getAllJobPrioritization = async (data, thunkAPI) => {
+export const getAllJobScheduling = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.get(
-      `${baseUrl}/auditPlanningAndScheduling/jobPrioritization/getAllByCompanyId?companyId=${data}`,
+      `${baseUrl}/auditPlanningAndScheduling/jobScheduling/getAll${data}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -19,11 +19,11 @@ export const getAllJobPrioritization = async (data, thunkAPI) => {
   }
 };
 
-export const updateJobPrioritization = async (data, thunkAPI) => {
+export const updateJobScheduling = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
-      `${baseUrl}/auditPlanningAndScheduling/jobPrioritization/update`,
+      `${baseUrl}/auditPlanningAndScheduling/jobScheduling/update`,
       data,
       {
         headers: {

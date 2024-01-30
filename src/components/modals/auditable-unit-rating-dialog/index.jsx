@@ -8,13 +8,15 @@ const AuditableUnitRatingDialog = ({
   selectedAuditableUnitId,
 }) => {
   const dispatch = useDispatch();
-  const { loading, auditableUnitAddSuccess } = useSelector(
+  const { loading, auditableUnitAddSuccess, allAuditableUnits } = useSelector(
     (state) => state?.planingAuditableUnit
   );
+  const [auditableUnitName, setAuditableUnitName] = React.useState("");
   const [data, setData] = React.useState({
     reason: "",
     jobType: "",
   });
+
 
   function handleChange(event) {
     setData((pre) => {
@@ -53,6 +55,30 @@ const AuditableUnitRatingDialog = ({
     }
   }, [auditableUnitAddSuccess]);
 
+  React.useEffect(() => {
+    const selectedItem = allAuditableUnits?.find(
+      (all) => all?.id === selectedAuditableUnitId
+    );
+    setAuditableUnitName(selectedItem?.jobName);
+
+    if (selectedItem?.engagement?.natureThrough === "Compliance Checklist") {
+      setData((pre) => {
+        return {
+          ...pre,
+          jobType: "Compliance Checklist",
+        };
+      });
+    }
+    if (selectedItem?.engagement?.natureThrough === "Special Project/Audit") {
+      setData((pre) => {
+        return {
+          ...pre,
+          jobType: "Special Audit",
+        };
+      });
+    }
+  }, []);
+
   return (
     <div className="p-4">
       <div className="row mb-4">
@@ -66,12 +92,11 @@ const AuditableUnitRatingDialog = ({
           <div className="row mb-3">
             <div className="col-lg-9 sub-heading">
               <span className="me-2 fw-bold">1.</span>
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry.
+              {auditableUnitName}
             </div>
             <div className=" col-lg-3 text-end">
               <div
-                className="text-white bg-danger float-end  px-2 py-3 rounded shadow risk-rating-btn"
+                className="text-white bg-danger float-end  px-2 py-3 rounded shadow risk-rating-btn cursor-pointer"
                 onClick={() => {
                   setAuditableUnitRatingDialog(false);
                   setData({ jobType: "", reason: "" });
@@ -100,31 +125,63 @@ const AuditableUnitRatingDialog = ({
           </div>
 
           <div className="row mb-3">
-            <div className="col-lg-12">
-              <label>Job Type</label>
-              <select
-                className="form-select"
-                aria-label="Default select example"
-                name="jobType"
-                value={data?.jobType}
-                onChange={handleChange}
-              >
-                <option>Review</option>
-                <option value="Compliance Checklist">
-                  Compliance Checklist
-                </option>
-                <option value="Special Audit">Special Audit</option>
-                <option value="Fraud & Investigation">
-                  Fraud & Investigation
-                </option>
-                <option value="Assurance and Compiance">
-                  Assurance and Compiance
-                </option>
-                <option value="Advisory and consulting">
-                  Advisory and consulting
-                </option>
-              </select>
-            </div>
+            {allAuditableUnits?.find(
+              (all) => all?.id === selectedAuditableUnitId
+            )?.engagement?.natureThrough === "Compliance Checklist" && (
+              <div className="col-lg-12">
+                <label>Job Type</label>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  name="jobType"
+                  defaultValue={data?.jobType}
+                >
+                  <option value="Compliance Checklist">
+                    Compliance Checklist
+                  </option>
+                </select>
+              </div>
+            )}
+            {allAuditableUnits?.find(
+              (all) => all?.id === selectedAuditableUnitId
+            )?.engagement?.natureThrough === "Special Project/Audit" && (
+              <div className="col-lg-12">
+                <label>Job Type</label>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  name="jobType"
+                  defaultValue={data?.jobType}
+                >
+                  <option value="Special Audit">Special Audit </option>
+                </select>
+              </div>
+            )}
+            {allAuditableUnits?.find(
+              (all) => all?.id === selectedAuditableUnitId
+            )?.engagement?.natureThrough === "Business Objective" && (
+              <div className="col-lg-12">
+                <label>Job Type</label>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  name="jobType"
+                  value={data?.jobType}
+                  onChange={handleChange}
+                >
+                  <option>Review</option>
+                  <option value="Fraud & Investigation">
+                    Fraud & Investigation
+                  </option>
+                  <option value="Assurance and Compiance">
+                    Assurance and Compiance
+                  </option>
+                  <option value="Advisory and consulting">
+                    Advisory and consulting
+                  </option>{" "}
+                </select>
+              </div>
+            )}
           </div>
           {/* <div className="row">
             <div className="col-lg-6">

@@ -58,6 +58,11 @@ const RiskFactorApproach = () => {
             };
           }),
           score: scoreSum,
+          riskAssessments: {
+            ...performRiskAssessmentObject?.riskAssessments,
+            riskAsssessmentCriteriaForRiskManagementCPList:
+              data?.riskAsssessmentCriteriaForRiskManagementCPList,
+          },
         })
       );
     }
