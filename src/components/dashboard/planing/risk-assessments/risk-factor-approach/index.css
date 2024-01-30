@@ -5,6 +5,9 @@
 .w-400{
   width: 400px;
 }
+.invisble{
+  opacity: 0 !important;
+}
 
 #SideComponents {
   width: 76%;

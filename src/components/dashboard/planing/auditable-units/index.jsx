@@ -1,19 +1,52 @@
 import React from "react";
 import "./index.css";
-import Pagination from "../../../common/pagination/Pagination";
+// import Pagination from "../../../common/pagination/Pagination";
+import EditAuditableUnit from "../../../modals/edit-auditable-unit";
 import AuditableUnitRatingDialog from "../../../modals/auditable-unit-rating-dialog/index";
+import {
+  setupGetAllAuditableUnits,
+  resetAuditableUnitSuccess,
+} from "../../../../global-redux/reducers/planing/auditable-units/slice";
+import { useSelector, useDispatch } from "react-redux";
+import { CircularProgress } from "@mui/material";
 
 const AuditableUnits = () => {
   const [auditableUnitRatingDialog, setAuditableUnitRatingDialog] =
     React.useState(false);
-  const data = [
-    {
-      no: "1",
-      objective:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-      rating: "53",
-    },
-  ];
+  const [selectedAuditableUnitId, setSelectedAuditableUnitId] =
+    React.useState("");
+  const [selectedAuditableSubUnitId, setSelectedAuditableSubUnitId] =
+    React.useState("");
+  const dispatch = useDispatch();
+  const { loading, allAuditableUnits, auditableUnitAddSuccess } = useSelector(
+    (state) => state?.planingAuditableUnit
+  );
+  const [showEditAuditableUnit, setShowEditAuditableUnit] =
+    React.useState(false);
+  const { user } = useSelector((state) => state?.auth);
+  const { company } = useSelector((state) => state?.common);
+
+  React.useEffect(() => {
+    if (auditableUnitAddSuccess) {
+      const companyId = user[0]?.company?.find(
+        (item) => item?.companyName === company
+      )?.id;
+      if (companyId) {
+        dispatch(setupGetAllAuditableUnits(companyId));
+      }
+      dispatch(resetAuditableUnitSuccess());
+    }
+  }, [auditableUnitAddSuccess]);
+
+  React.useEffect(() => {
+    const companyId = user[0]?.company?.find(
+      (item) => item?.companyName === company
+    )?.id;
+    if (companyId) {
+      dispatch(setupGetAllAuditableUnits(companyId));
+    }
+  }, [user]);
+
   return (
     <div>
       {auditableUnitRatingDialog && (
@@ -21,6 +54,18 @@ const AuditableUnits = () => {
           <div className="model-wrap">
             <AuditableUnitRatingDialog
               setAuditableUnitRatingDialog={setAuditableUnitRatingDialog}
+              selectedAuditableUnitId={selectedAuditableUnitId}
+            />
+          </div>
+        </div>
+      )}
+      {showEditAuditableUnit && (
+        <div className="dashboard-modal">
+          <div className="model-wrap">
+            <EditAuditableUnit
+              setShowEditAuditableUnit={setShowEditAuditableUnit}
+              selectedAuditableUnitId={selectedAuditableUnitId}
+              selectedAuditableSubUnitId={selectedAuditableSubUnitId}
             />
           </div>
         </div>
@@ -41,109 +86,88 @@ const AuditableUnits = () => {
             <div className="row">
               <div className="col-md-12">
                 <div className="accordion" id="accordionFlushExample">
-                  <div className="accordion-item">
-                    <h2 className="accordion-header">
-                      <button
-                        className="accordion-button collapsed"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#flush-collapseFour"
-                        aria-expanded="false"
-                        aria-controls="flush-collapseFour"
-                      >
-                        1st Autitable Unit
-                      </button>
-                    </h2>
-                    <div
-                      id="flush-collapseFour"
-                      className="accordion-collapse collapse"
-                      data-bs-parent="#accordionFlushExample"
-                    >
-                      <div className="accordion-body">
-                        <div className="table-responsive">
-                          <table className="table table-bordered  table-hover rounded">
-                            <thead className="bg-secondary text-white">
-                              <tr>
-                                <th className="w-80">Sr. #</th>
-                                <th>Business Objective</th>
-                                <th>Risk Rating</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {data?.map((item, index) => {
-                                return (
-                                  <tr className="h-40" key={index}>
-                                    <td>{item?.no}</td>
-                                    <td
-                                      onClick={() =>
-                                        setAuditableUnitRatingDialog(true)
-                                      }
-                                      className="cursor-pointer"
-                                    >
-                                      {item?.objective}
-                                    </td>
-                                    <td>{item?.rating}</td>
-                                  </tr>
-                                );
-                              })}
-                            </tbody>
-                          </table>
+                  {loading ? (
+                    <CircularProgress />
+                  ) : (
+                    allAuditableUnits?.map((item, index) => {
+                      return (
+                        <div className="accordion-item" key={index}>
+                          <h2 className="accordion-header">
+                            <button
+                              className="accordion-button collapsed"
+                              type="button"
+                              data-bs-toggle="collapse"
+                              data-bs-target={`#flush-collapse${index}`}
+                              aria-expanded="false"
+                              aria-controls={`flush-collapse${index}`}
+                              onClick={() =>
+                                setSelectedAuditableUnitId(item?.id)
+                              }
+                            >
+                              {item?.jobName}
+                            </button>
+                          </h2>
+                          <div
+                            id={`flush-collapse${index}`}
+                            className="accordion-collapse collapse"
+                            data-bs-parent="#accordionFlushExample"
+                          >
+                            <div className="accordion-body">
+                              <div
+                                className={`btn btn-labeled btn-primary px-3 shadow  my-4 ${
+                                  loading && "disabled"
+                                }`}
+                                onClick={() =>
+                                  setAuditableUnitRatingDialog(true)
+                                }
+                              >
+                                <span className="btn-label me-2">
+                                  <i className="fa fa-check-circle f-18"></i>
+                                </span>
+                                {loading ? "Loading.." : "Add Unit"}
+                              </div>
+                              <div className="table-responsive">
+                                <table className="table table-bordered  table-hover rounded">
+                                  <thead className="bg-secondary text-white">
+                                    <tr>
+                                      <th className="w-80">Sr. #</th>
+                                      <th>Auditable Unit</th>
+                                      <th>Job Type</th>
+                                      <th>Actions</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {item?.unitList?.map((unit, i) => {
+                                      return (
+                                        <tr className="h-40" key={i}>
+                                          <td>{unit?.id}</td>
+                                          <td className="cursor-pointer">
+                                            {unit?.reason}
+                                          </td>
+                                          <td>{unit?.jobType}</td>
+                                          <td>
+                                            <i
+                                              className="fa fa-edit  px-3 f-18 cursor-pointer"
+                                              onClick={() => {
+                                                setSelectedAuditableSubUnitId(
+                                                  unit?.id
+                                                );
+                                                setShowEditAuditableUnit(true);
+                                              }}
+                                            ></i>
+                                          </td>
+                                        </tr>
+                                      );
+                                    })}
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/*  */}
-                  <div className="accordion-item">
-                    <h2 className="accordion-header">
-                      <button
-                        className="accordion-button collapsed br-8"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#flush-collapseFive"
-                        aria-expanded="false"
-                        aria-controls="flush-collapseFive"
-                      >
-                        2nd Autitable Unit
-                      </button>
-                    </h2>
-                    <div
-                      id="flush-collapseFive"
-                      className="accordion-collapse collapse"
-                      data-bs-parent="#accordionFlushExample"
-                    >
-                      <div className="accordion-body">
-                        <div className="table-responsive">
-                          <table className="table table-bordered  table-hover rounded">
-                            <thead className="bg-secondary text-white">
-                              <tr>
-                                <th className="w-80">Sr. #</th>
-                                <th>Business Objective</th>
-                                <th>Risk Rating</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {data?.map((item, index) => {
-                                return (
-                                  <tr className="h-40" key={index}>
-                                    <td>{item?.no}</td>
-                                    <td
-                                      onClick={() =>
-                                        setAuditableUnitRatingDialog(true)
-                                      }
-                                      className="cursor-pointer"
-                                    >
-                                      {item?.objective}
-                                    </td>
-                                    <td>{item?.rating}</td>
-                                  </tr>
-                                );
-                              })}
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                      );
+                    })
+                  )}
                 </div>
               </div>
             </div>

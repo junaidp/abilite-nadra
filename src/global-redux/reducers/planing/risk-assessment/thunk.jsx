@@ -42,7 +42,7 @@ export const updateRiskAssessment = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
-      `${baseUrl}/auditPlanningAndScheduling/riskAssessment/update`,
+      `${baseUrl}/auditPlanningAndScheduling/riskAssessment/riskFactorApproach/update`,
       data,
       {
         headers: {

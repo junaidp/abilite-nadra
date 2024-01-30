@@ -4,11 +4,12 @@ import { toast } from "react-toastify";
 import { setupAddAuditableUnit } from "../../../global-redux/reducers/planing/auditable-units/slice";
 
 const AuditableUnitRatingDialog = ({
-  setAuditableUnitRatingDialog,
+  setShowEditAuditableUnit,
   selectedAuditableUnitId,
+  selectedAuditableSubUnitId,
 }) => {
   const dispatch = useDispatch();
-  const { loading, auditableUnitAddSuccess } = useSelector(
+  const { loading, auditableUnitAddSuccess, allAuditableUnits } = useSelector(
     (state) => state?.planingAuditableUnit
   );
   const [data, setData] = React.useState({
@@ -49,9 +50,16 @@ const AuditableUnitRatingDialog = ({
         jobType: "",
         reason: "",
       });
-      setAuditableUnitRatingDialog(false);
+      setShowEditAuditableUnit(false);
     }
   }, [auditableUnitAddSuccess]);
+
+  React.useEffect(() => {
+    const selectedItem = allAuditableUnits
+      ?.find((all) => all?.id === selectedAuditableUnitId)
+      ?.unitList.filter((unit) => unit.id === selectedAuditableSubUnitId)[0];
+    setData({ reason: selectedItem?.reason, jobType: selectedItem?.jobType });
+  }, []);
 
   return (
     <div className="p-4">
@@ -71,9 +79,9 @@ const AuditableUnitRatingDialog = ({
             </div>
             <div className=" col-lg-3 text-end">
               <div
-                className="text-white bg-danger float-end  px-2 py-3 rounded shadow risk-rating-btn"
+                className="text-white bg-danger float-end  px-2 py-3 rounded shadow risk-rating-btn cursor-pointer"
                 onClick={() => {
-                  setAuditableUnitRatingDialog(false);
+                  setShowEditAuditableUnit(false);
                   setData({ jobType: "", reason: "" });
                 }}
               >
@@ -154,7 +162,6 @@ const AuditableUnitRatingDialog = ({
       <div className="pb-4">
         <button
           className={`btn btn-danger   float-end ${loading && "disabled"}`}
-          onClick={handleSave}
         >
           {loading ? "Loading..." : "Add"}
         </button>

@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   setupPerformRiskAssessment,
   resetRiskAssessment,
+  setupUpdateRiskAssessment,
 } from "../../../../../global-redux/reducers/planing/risk-assessment/slice";
 import { useSearchParams } from "react-router-dom";
 import {
@@ -16,10 +17,10 @@ import {
 const RiskFactorApproach = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state?.auth);
+  const [scoreSum, setScoreSum] = React.useState(0);
   const navigate = useNavigate();
-  const { performRiskAssessmentObject, riskAssessmentSuccess } = useSelector(
-    (state) => state?.planingRiskAssessments
-  );
+  const { performRiskAssessmentObject, riskAssessmentSuccess, loading } =
+    useSelector((state) => state?.planingRiskAssessments);
   const [searchParams, setSearchParams] = useSearchParams();
   const riskAssessmentId = searchParams.get("riskAssessmentId");
   const [showAddRiskFactorDialog, setShowAddRiskFactorDialog] =
@@ -44,7 +45,59 @@ const RiskFactorApproach = () => {
     });
   }
 
-  function handleCommentChange() {}
+  function handleSaveRiskAssessment() {
+    if (!loading) {
+      dispatch(
+        setupUpdateRiskAssessment({
+          ...performRiskAssessmentObject,
+          riskAssessmentList: data?.riskAssessmentList.map((singleItem) => {
+            return {
+              ...singleItem,
+              score:
+                Number(singleItem?.likelihood) + Number(singleItem?.impact),
+            };
+          }),
+          score: scoreSum,
+        })
+      );
+    }
+  }
+
+  function handleChangeCpList(event, id) {
+    setData((pre) => {
+      return {
+        ...pre,
+        riskAsssessmentCriteriaForRiskManagementCPList:
+          data?.riskAsssessmentCriteriaForRiskManagementCPList?.map((item) =>
+            item?.id === id
+              ? {
+                  ...item,
+                  inadequate: false,
+                  needsImprovement: false,
+                  adequate: false,
+                  [event?.target?.name]: event?.target?.checked,
+                }
+              : item
+          ),
+      };
+    });
+  }
+  function handleChangeCpListComments(event, id) {
+    setData((pre) => {
+      return {
+        ...pre,
+        riskAsssessmentCriteriaForRiskManagementCPList:
+          data?.riskAsssessmentCriteriaForRiskManagementCPList?.map((item) =>
+            item?.id === id
+              ? {
+                  ...item,
+                  [event?.target?.name]: event?.target?.value,
+                }
+              : item
+          ),
+      };
+    });
+  }
 
   React.useEffect(() => {
     setData((pre) => {
@@ -87,6 +140,14 @@ const RiskFactorApproach = () => {
       );
     }
   }, [riskAssessmentId, user]);
+
+  React.useEffect(() => {
+    let value = 0;
+    data?.riskAssessmentList?.forEach((element) => {
+      value = value + (Number(element?.likelihood) + Number(element?.impact));
+    });
+    setScoreSum(value);
+  }, [data]);
 
   React.useEffect(() => {
     dispatch(changeActiveLink("li-risk-assessments"));
@@ -203,8 +264,14 @@ const RiskFactorApproach = () => {
                               placeholder="Enter Reason"
                               id="exampleFormControlTextarea1"
                               rows="3"
+                              name="comments"
                               value={item?.comments || ""}
-                              onChange={handleCommentChange}
+                              onChange={(event) =>
+                                handleChangeSingleRiskAssessmentItem(
+                                  event,
+                                  item?.id
+                                )
+                              }
                             ></textarea>
                             <label className="word-limit-info label-text">
                               Maximum 1500 words
@@ -216,6 +283,56 @@ const RiskFactorApproach = () => {
                         </tr>
                       );
                     })}
+                    {/* Show some dummy non-visible row so we can show the total score */}
+                    <tr>
+                      <td className="invisble">19</td>
+                      <td className="invisble">Dummy Added</td>
+                      <td className="w-80 invisble">
+                        <select
+                          className="form-select"
+                          aria-label="Default select example"
+                          name="likelihood"
+                          defaultValue={1}
+                        >
+                          <option value={0}>0</option>
+                          <option value={1}>1</option>
+                          <option value={2}>2</option>
+                          <option value={3}>3</option>
+                          <option value={4}>4</option>
+                        </select>
+                      </td>
+                      <td className="w-80 invisble">
+                        <select
+                          className="form-select"
+                          aria-label="Default select example"
+                          name="impact"
+                          defaultValue={1}
+                        >
+                          <option value={0}>0</option>
+                          <option value={1}>1</option>
+                          <option value={2}>2</option>
+                          <option value={3}>3</option>
+                          <option value={4}>4</option>
+                        </select>
+                      </td>
+                      <td className="bold width-50">{scoreSum}</td>
+                      <td className="invisble">
+                        <textarea
+                          className="form-control"
+                          placeholder="Enter Reason"
+                          id="exampleFormControlTextarea1"
+                          rows="3"
+                          name="comments"
+                          defaultValue="Invisible Comments"
+                        ></textarea>
+                        <label className="word-limit-info label-text">
+                          Maximum 1500 words
+                        </label>
+                      </td>
+                      <td className="text-center justify-content-center pt-3 invisble">
+                        <i className="fa fa-trash text-danger f-18"></i>
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -260,38 +377,93 @@ const RiskFactorApproach = () => {
                   <tr>
                     <th className="sr-col">Sr. #</th>
                     <th>Criteria for Risk Management and Control Processes</th>
-                    <th className="width-100">Remarks</th>
+                    <th className="width-100">Inadequate</th>
+                    <th className="width-100">Needs Improvement</th>
+                    <th className="width-100">Adequate</th>
                     <th className="width-100">Comments</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td className="w-400">
-                      Lorem ipsum is simply dummy text of the printing and
-                      typesetting industry.
-                    </td>
-                    <td>
-                      <select
-                        className="form-select border-2"
-                        aria-label="Default select example"
-                      >
-                        <option>Yes</option>
-                        <option value="2">No</option>
-                      </select>
-                    </td>
-                    <td className="w-300">
-                      <textarea
-                        className="form-control"
-                        placeholder="Enter Reason"
-                        id="exampleFormCont"
-                        rows="3"
-                      ></textarea>
-                      <label className="word-limit-info label-text">
-                        Maximum 1500 words
-                      </label>
-                    </td>
-                  </tr>
+                  {data?.riskAsssessmentCriteriaForRiskManagementCPList?.map(
+                    (cpItem, i) => {
+                      return (
+                        <tr key={i}>
+                          <td>{cpItem?.id}</td>
+                          <td className="w-400">{cpItem?.description || ""}</td>
+                          <td>
+                            <div className="form-check">
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                                checked={cpItem?.inadequate}
+                                id="flexCheckDefault"
+                                name="inadequate"
+                                onChange={(event) =>
+                                  handleChangeCpList(event, cpItem?.id)
+                                }
+                              />
+                              <label
+                                className="form-check-label"
+                                htmlFor="flexCheckDefault"
+                              ></label>
+                            </div>
+                          </td>
+                          <td>
+                            <div className="form-check">
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                                checked={cpItem?.needsImprovement}
+                                id="flexCheckDefault"
+                                onChange={(event) =>
+                                  handleChangeCpList(event, cpItem?.id)
+                                }
+                                name="needsImprovement"
+                              />
+                              <label
+                                className="form-check-label"
+                                htmlFor="flexCheckDefault"
+                              ></label>
+                            </div>
+                          </td>
+                          <td>
+                            <div className="form-check">
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                                checked={cpItem?.adequate}
+                                id="flexCheckDefault"
+                                name="adequate"
+                                onChange={(event) =>
+                                  handleChangeCpList(event, cpItem?.id)
+                                }
+                              />
+                              <label
+                                className="form-check-label"
+                                htmlFor="flexCheckDefault"
+                              ></label>
+                            </div>
+                          </td>
+                          <td className="w-300">
+                            <textarea
+                              className="form-control"
+                              placeholder="Enter Reason"
+                              id="exampleFormCont"
+                              rows="3"
+                              value={cpItem?.comments || ""}
+                              onChange={(event) =>
+                                handleChangeCpListComments(event, cpItem?.id)
+                              }
+                              name="comments"
+                            ></textarea>
+                            <label className="word-limit-info label-text">
+                              Maximum 1500 words
+                            </label>
+                          </td>
+                        </tr>
+                      );
+                    }
+                  )}
                 </tbody>
               </table>
             ) : (
@@ -328,11 +500,16 @@ const RiskFactorApproach = () => {
                 </div>
               </div>
 
-              <div className="btn btn-labeled btn-primary px-3 shadow float-end my-4">
+              <div
+                className={`btn btn-labeled btn-primary px-3 shadow float-end my-4 ${
+                  loading && "disabled"
+                }`}
+                onClick={handleSaveRiskAssessment}
+              >
                 <span className="btn-label me-2">
                   <i className="fa fa-check-circle f-18"></i>
                 </span>
-                Save
+                {loading ? "Loading.." : "Save"}
               </div>
             </div>
           </div>
