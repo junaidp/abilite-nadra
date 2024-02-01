@@ -160,14 +160,14 @@ const Location = () => {
                 ?.map((item, index) => {
                   return (
                     <div className="accordion-item" key={index}>
-                      <h2 className="accordion-header" id={index}>
+                      <h2 className="accordion-header" id={"b" + index}>
                         <button
                           className="accordion-button collapsed"
                           type="button"
                           data-bs-toggle="collapse"
-                          data-bs-target={`#flush-collapse${index}`}
+                          data-bs-target={`#flush-collapse${"b" + index}`}
                           aria-expanded="false"
-                          aria-controls={`flush-collapse${index}`}
+                          aria-controls={`flush-collapse${"b" + index}`}
                           onClick={() => {
                             setLocationId(item?.id);
                             setSubLocationText("");
@@ -177,18 +177,24 @@ const Location = () => {
                             <div className=" d-flex align-items-center">
                               {index + 1}. {item?.description}
                             </div>
-                            <div>
+                            <div
+                              className=" d-flex align-items-center underline"
+                              onClick={() => setShowEditLocationDialog(true)}
+                            >
+                              Rename Location
+                            </div>
+                            {/* <div>
                               <div
                                 onClick={() => setShowEditLocationDialog(true)}
                               >
                                 <i className="fa fa-edit   f-18 cursor-pointer"></i>
                               </div>
-                            </div>
+                            </div> */}
                           </div>
                         </button>
                       </h2>
                       <div
-                        id={`flush-collapse${index}`}
+                        id={`flush-collapse${"b" + index}`}
                         className="accordion-collapse collapse"
                         data-bs-parent="#accordionLocationExample"
                       >

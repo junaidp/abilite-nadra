@@ -1,11 +1,37 @@
 import React from "react";
+import {
+  setupGetAllCompanies,
+  resetCompanyRegisterSuccess,
+} from "../../../../../global-redux/reducers/settings/company-management/slice";
+import { useSelector, useDispatch } from "react-redux";
+import { CircularProgress } from "@mui/material";
+import Pagination from "@mui/material/Pagination";
 
-const Company = ({
-  setCompanySearch,
-  setAddCompantDialog,
-  companySearch,
-  companies,
-}) => {
+const Company = ({ setAddCompantDialog }) => {
+  const dispatch = useDispatch();
+  const { allCompanies, loading, companyAddSuccess } = useSelector(
+    (state) => state?.settingsCompanyManagement
+  );
+  const {user}=useSelector((state)=>state?.auth)
+  const [companySearch, setCompanySearch] = React.useState("");
+  const [page, setPage] = React.useState(1);
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
+
+  React.useEffect(() => {
+    if(user[0]?.token){
+      dispatch(setupGetAllCompanies());
+    }
+  }, [user]);
+
+  React.useEffect(() => {
+    if (companyAddSuccess) {
+      dispatch(resetCompanyRegisterSuccess());
+      dispatch(setupGetAllCompanies());
+    }
+  }, [companyAddSuccess]);
+
   return (
     <div
       className="tab-pane fade"
@@ -60,38 +86,52 @@ const Company = ({
                 </tr>
               </thead>
               <tbody>
-                {companies?.map((item, i) => {
-                  if (
-                    item?.companyName
-                      .toLowerCase()
-                      .includes(companySearch.toLowerCase())
-                  ) {
-                    return (
-                      <tr key={i}>
-                        <td>{i + 1}</td>
-                        <td>{item?.companyName}</td>
-                        <td>{item?.legalName}</td>
-                        <td>{item?.id}</td>
-                        <td>
-                          {new Date(item?.fiscalYearForm).toLocaleString()}
-                        </td>
-                        <td>{new Date(item?.fiscalYearTo).toLocaleString()}</td>
-                        <td>{item?.clientId?.clientpackage}</td>
-                        <td>
-                          <div>
-                            <i className="fa fa-edit  px-3 f-18"></i>
+                {loading ? (
+                  <CircularProgress />
+                ) : allCompanies?.length === 0 ? (
+                  <tr>
+                    <td className="w-300">No company to show!</td>
+                  </tr>
+                ) : (
+                  allCompanies
+                    ?.filter((all) =>
+                      all?.companyName
+                        ?.toLowerCase()
+                        .includes(companySearch?.toLowerCase())
+                    )
+                    ?.slice((page - 1) * 5, page * 5)
+                    ?.map((item, i) => {
+                      return (
+                        <tr key={i}>
+                          <td>{i + 1}</td>
+                          <td>{item?.companyName}</td>
+                          <td>{item?.legalName}</td>
+                          <td>{item?.id}</td>
+                          <td>
+                            {new Date(item?.fiscalYearForm).toLocaleString()}
+                          </td>
+                          <td>
+                            {new Date(item?.fiscalYearTo).toLocaleString()}
+                          </td>
+                          <td>{item?.clientId?.clientpackage}</td>
+                          <td>
+                            <div>
+                              <i className="fa fa-edit  px-3 f-18"></i>
 
-                            <i className="fa fa-trash text-danger f-18"></i>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  } else {
-                    return null;
-                  }
-                })}
+                              <i className="fa fa-trash text-danger f-18"></i>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })
+                )}
               </tbody>
             </table>
+            <Pagination
+              count={Math.ceil(allCompanies?.length / 5)}
+              page={page}
+              onChange={handleChange}
+            />
           </div>
         </div>
       </div>

@@ -217,29 +217,35 @@ const CheckList = ({ setCheckListManagementDialog }) => {
             ) : (
               checkList?.slice((page - 1) * 5, page * 5)?.map((item, index) => {
                 return (
-                  <div className="accordion-item" id={index} key={index}>
+                  <div className="accordion-item" id={"a" + index} key={index}>
                     <h2 className="accordion-header">
                       <button
                         className="accordion-button collapsed"
                         type="button"
                         data-bs-toggle="collapse"
-                        data-bs-target={`#flush-collapse${index}`}
+                        data-bs-target={`#flush-collapse${"a" + index}`}
                         aria-expanded="false"
-                        aria-controls={`flush-collapse${index}`}
+                        aria-controls={`flush-collapse${"a" + index}`}
                         onClick={() => handleGetAllCheckListItems(item?.id)}
                       >
                         <div className="d-flex w-100 me-3 align-items-center justify-content-between">
                           <div className=" d-flex align-items-center">
                             {index}. {item?.description}
                           </div>
-                          <div onClick={() => setShowEditCheckListDialog(true)}>
-                            <i className="fa fa-edit  f-18"></i>
+                          <div
+                            className=" d-flex align-items-center underline"
+                            onClick={() => setShowEditCheckListDialog(true)}
+                          >
+                            Rename Checklist
                           </div>
+                          {/* <div onClick={() => setShowEditCheckListDialog(true)}>
+                            <i className="fa fa-edit  f-18"></i>
+                          </div> */}
                         </div>
                       </button>
                     </h2>
                     <div
-                      id={`flush-collapse${index}`}
+                      id={`flush-collapse${"a" + index}`}
                       className="accordion-collapse collapse"
                       data-bs-parent="#accordionCheckListExample"
                     >

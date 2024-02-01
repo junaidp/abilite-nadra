@@ -135,14 +135,14 @@ const Process = () => {
                 ?.map((item, index) => {
                   return (
                     <div className="accordion-item" key={index}>
-                      <h2 className="accordion-header" id={index}>
+                      <h2 className="accordion-header" id={"c" + index}>
                         <button
                           className="accordion-button collapsed"
                           type="button"
                           data-bs-toggle="collapse"
-                          data-bs-target={`#flush-collapse${index}`}
+                          data-bs-target={`#flush-collapse${"c" + index}`}
                           aria-expanded="false"
-                          aria-controls={`flush-collapse${index}`}
+                          aria-controls={`flush-collapse${"c" + index}`}
                           onClick={() => {
                             setSubProcessText("");
                             setProcessId(item?.id);
@@ -161,7 +161,7 @@ const Process = () => {
                         </button>
                       </h2>
                       <div
-                        id={`flush-collapse${index}`}
+                        id={`flush-collapse${"c" + index}`}
                         className="accordion-collapse collapse"
                         data-bs-parent="#accordionProcessExample"
                       >

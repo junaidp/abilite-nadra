@@ -105,9 +105,9 @@ export const slice = createSlice({
     resetUpdateUserNameSuccess: (state) => {
       state.userNameUpdateSuccess = false;
     },
-    updateUserState:(state)=>{
-      state.user=[{...state?.user,name:action.payload}]
-    }
+    updateUserState: (state) => {
+      state.user = [{ ...state?.user, name: action.payload }];
+    },
   },
   extraReducers: {
     // Register
@@ -149,7 +149,8 @@ export const slice = createSlice({
           token: payload?.data?.jwt,
           email: payload?.data?.email,
           company: payload?.data?.userId?.company,
-          id: payload?.data?.userId?.id
+          id: payload?.data?.userId?.id,
+          userId: payload?.data?.userId,
         },
       ];
       state.authSuccess = true;
@@ -242,7 +243,7 @@ export const {
   resetResetPasswordSuccess,
   resetInternalResetPasswordSuccess,
   updateUserState,
-  resetUpdateUserNameSuccess
+  resetUpdateUserNameSuccess,
 } = slice.actions;
 
 export default slice.reducer;

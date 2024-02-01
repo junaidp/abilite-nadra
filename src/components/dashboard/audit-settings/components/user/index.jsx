@@ -1,6 +1,30 @@
 import React from "react";
+import {
+  setupGetAllUsers,
+  resetAddUserSuccess,
+} from "../../../../../global-redux/reducers/settings/user-management/slice";
+import { useSelector, useDispatch } from "react-redux";
+import { CircularProgress } from "@mui/material";
 
 const UserManagement = ({ setUserManagementDialog }) => {
+  const { loading, addUserSuccess, allUsers } = useSelector(
+    (state) => state?.setttingsUserManagement
+  );
+  const { user } = useSelector((state) => state?.auth);
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    if (user[0]?.token) {
+      // dispatch(setupGetAllUsers());
+    }
+  }, [user]);
+
+  React.useEffect(() => {
+    if (addUserSuccess) {
+      dispatch(resetAddUserSuccess());
+      // dispatch(setupGetAllUsers());
+    }
+  }, [addUserSuccess]);
+
   return (
     <div
       className="tab-pane fade"
@@ -38,6 +62,17 @@ const UserManagement = ({ setUserManagementDialog }) => {
           <div className="table-responsive">
             <table className="table table-bordered  table-hover rounded">
               <thead className="bg-secondary text-white">
+                {/* {loading ? (
+                  <tr>
+                    <td>
+                      <CircularProgress />
+                    </td>
+                  </tr>
+                ) : allUsers?.length === 0 ? (
+                  <tr>
+                    <td className="w-300">No user to show!</td>
+                  </tr>
+                ) : ( */}
                 <tr>
                   <th className="w-10">Sr No.</th>
                   <th>Username</th>
@@ -49,6 +84,7 @@ const UserManagement = ({ setUserManagementDialog }) => {
                   <th>Comapny</th>
                   <th>Actions</th>
                 </tr>
+                {/* )} */}
               </thead>
               <tbody>
                 <tr>

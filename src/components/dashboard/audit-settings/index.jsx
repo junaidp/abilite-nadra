@@ -17,8 +17,6 @@ import UserManagement from "./components/user";
 import Modules from "./components/modules";
 import Process from "./components/process";
 const AuditSettings = () => {
-  const { companies } = useSelector((state) => state.company);
-  const [companySearch, setCompanySearch] = React.useState("");
   const [activeEmailTab, setActiveEmailTab] = React.useState("systemEmail");
   const [checkListManagementDialog, setCheckListManagementDialog] =
     React.useState(false);
@@ -250,10 +248,7 @@ const AuditSettings = () => {
 
               <Modules />
               <Company
-                setCompanySearch={setCompanySearch}
                 setAddCompantDialog={setAddCompantDialog}
-                companySearch={companySearch}
-                companies={companies}
               />
               <Process />
             </div>

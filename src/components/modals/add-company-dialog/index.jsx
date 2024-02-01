@@ -3,30 +3,20 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  resetCompanyRegisterSuccess,
   setupRegisterCompany,
-} from "../../../global-redux/reducers/company/slice";
+} from "../../../global-redux/reducers/settings/company-management/slice";
 
 const AddCompanyDialog = ({ setAddCompantDialog }) => {
   let dispatch = useDispatch();
-  let { registerCompanySuccess, loading } = useSelector(
-    (state) => state.company
+  let { companyAddSuccess, loading } = useSelector(
+    (state) => state.settingsCompanyManagement
   );
   const [initialState, setInitialState] = React.useState({
     companyName: "",
     fiscalYearForm: "",
     fiscalYearTo: "",
     legalName: "",
-    id: 1,
-    clientId: {
-      clientpackage: "",
-      managementAccounts: "",
-      name: "",
-      status: 1,
-      id: 1,
-      numberOfUsers: "",
-      createdDate: new Date().toDateString(),
-    },
+    userEmail: "",
   });
   const formik = useFormik({
     initialValues: initialState,
@@ -40,14 +30,7 @@ const AddCompanyDialog = ({ setAddCompantDialog }) => {
           "Fiscal Year To must be after Fiscal Year From"
         ),
       legalName: Yup.string().required("Legal Name is required"),
-      clientId: Yup.object().shape({
-        clientpackage: Yup.string().required("Client Package is required"),
-        managementAccounts: Yup.number().required(
-          "Management Accounts is required"
-        ),
-        numberOfUsers: Yup.number().required("Number Of Users  is required"),
-        name: Yup.string().required("Name is required"),
-      }),
+      userEmail: Yup.string().required("User Email is required"),
     }),
     onSubmit: (values) => {
       // Handle form submission here
@@ -64,40 +47,23 @@ const AddCompanyDialog = ({ setAddCompantDialog }) => {
       fiscalYearForm: "",
       fiscalYearTo: "",
       legalName: "",
-      clientId: {
-        clientpackage: "",
-        managementAccounts: "",
-        name: "",
-        status: 1,
-        id: 1,
-        numberOfUsers: "",
-        createdDate: new Date().toDateString(),
-      },
+      userEmail: "",
     });
   }
   React.useEffect(() => {
-    if (registerCompanySuccess) {
+    if (companyAddSuccess) {
       setTimeout(() => {
         setInitialState({
           companyName: "",
           fiscalYearForm: "",
           fiscalYearTo: "",
           legalName: "",
-          clientId: {
-            clientpackage: "",
-            managementAccounts: "",
-            name: "",
-            status: 1,
-            id: 1,
-            numberOfUsers: "",
-            createdDate: new Date().toDateString(),
-          },
+          userEmail: "",
         });
-        dispatch(resetCompanyRegisterSuccess());
         setAddCompantDialog(false);
       }, 500);
     }
-  }, [registerCompanySuccess]);
+  }, [companyAddSuccess]);
 
   return (
     <div className="px-4 py-4">
@@ -120,6 +86,22 @@ const AddCompanyDialog = ({ setAddCompantDialog }) => {
           />
           {formik.touched.companyName && formik.errors.companyName ? (
             <div className="error">{formik.errors.companyName}</div>
+          ) : null}
+        </div>
+
+        <div className="col-lg-12 mt-2">
+          <label htmlFor="companyName">User Email:</label>
+          <input
+            id="userEmail"
+            name="userEmail"
+            type="text"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.userEmail}
+            className="form-control w-100"
+          />
+          {formik.touched.userEmail && formik.errors.userEmail ? (
+            <div className="error">{formik.errors.userEmail}</div>
           ) : null}
         </div>
 
@@ -176,89 +158,9 @@ const AddCompanyDialog = ({ setAddCompantDialog }) => {
           ) : null}
         </div>
 
-        {/* Client ID */}
-        {/* Client Package */}
-        <div className="col-lg-12 mt-2">
-          <label htmlFor="clientId.clientpackage">Client Package:</label>
-          <select
-            id="clientId.clientpackage"
-            name="clientId.clientpackage"
-            className="form-select w-100"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.clientId.clientpackage}
-          >
-            <option value="Trial">Trial</option>
-            <option value="Standard">Standard</option>
-            <option value="Premium">Premium</option>
-          </select>
-          {formik.touched.clientId?.clientpackage &&
-          formik.errors.clientId?.clientpackage ? (
-            <div className="error">{formik.errors.clientId.clientpackage}</div>
-          ) : null}
-        </div>
-
-        {/* Management Accounts */}
-        <div className="row mb-2">
-          <div className="col-lg-6 mt-2">
-            <label htmlFor="clientId.managementAccounts">
-              Management Accounts:
-            </label>
-            <input
-              id="clientId.managementAccounts"
-              className="form-control w-100"
-              name="clientId.managementAccounts"
-              type="number"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.clientId.managementAccounts}
-            />
-            {formik.touched.clientId?.managementAccounts &&
-            formik.errors.clientId?.managementAccounts ? (
-              <div className="error">
-                {formik.errors.clientId.managementAccounts}
-              </div>
-            ) : null}
-          </div>
-
-          {/* Name */}
-          <div className="col-lg-6 mt-2">
-            <label htmlFor="clientId.name">Name:</label>
-            <input
-              id="clientId.name"
-              name="clientId.name"
-              type="text"
-              className="form-control w-100"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.clientId.name}
-            />
-            {formik.touched.clientId?.name && formik.errors.clientId?.name ? (
-              <div className="error">{formik.errors.clientId.name}</div>
-            ) : null}
-          </div>
-        </div>
-
-        <div className="col-lg-12 mb-2">
-          <label htmlFor="clientId.numberOfUsers">Number Of Users:</label>
-          <input
-            id="clientId.numberOfUsers"
-            className="form-control w-100"
-            name="clientId.numberOfUsers"
-            type="number"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.clientId.numberOfUsers}
-          />
-          {formik.touched.clientId?.numberOfUsers &&
-          formik.errors.clientId?.numberOfUsers ? (
-            <div className="error">{formik.errors.clientId.numberOfUsers}</div>
-          ) : null}
-        </div>
-
         <button
           type="submit"
-          className={`btn btn-danger ${loading && "disabled"}`}
+          className={`btn btn-danger ${loading && "disabled"} mt-4`}
         >
           {loading ? "Loading" : "Submit"}
         </button>

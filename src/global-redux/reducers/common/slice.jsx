@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
+import { getAllCompanies } from "./thunk";
+
 let menuItems = [
   {
     id: "li-dashboard",
@@ -147,7 +149,16 @@ const initialState = {
   kickOffRequest: "",
   company: localStorage.getItem("company") || "",
   year: localStorage.getItem("year") || "",
+  allCompanies: [],
+  allUsers: [],
 };
+
+export const setupGetAllCompanies = createAsyncThunk(
+  "common/getAllCompanies",
+  async (data, thunkAPI) => {
+    return getAllCompanies(data, thunkAPI);
+  }
+);
 
 export const slice = createSlice({
   name: "common",
@@ -197,7 +208,23 @@ export const slice = createSlice({
       }
     },
   },
-  extraReducers: {},
+  extraReducers: {
+    [setupGetAllCompanies.pending]: (state) => {
+      state.loading = true;
+    },
+    [setupGetAllCompanies.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.allCompanies = payload || [];
+    },
+    [setupGetAllCompanies.rejected]: (state, { payload }) => {
+      state.loading = false;
+      if (payload?.response?.data?.message) {
+        toast.error(payload?.response?.data?.message);
+      } else {
+        toast.error("An Error has accoured");
+      }
+    },
+  },
 });
 
 export const {
