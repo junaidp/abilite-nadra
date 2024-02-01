@@ -8,6 +8,7 @@ import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
 } from "../../../../../global-redux/reducers/common/slice";
+import { setupGetAllLocations } from "../../../../../global-redux/reducers/settings/location/slice";
 import {
   resetAddEngagementSuccess,
   setupGetSingleSpecialProjectAuditObjective,
@@ -23,11 +24,13 @@ const SpecialProjectAudit = () => {
   const [showObjectiveListDialog, setShowObjectiveListDialog] =
     React.useState(false);
   const [domain, setDomain] = React.useState("");
+  const { allLocations } = useSelector((state) => state.setttingsLocation);
   const [description, setDescription] = React.useState("");
   const [searchParams, setSearchParams] = useSearchParams();
   const engagementId = searchParams.get("engagementId");
   const { planingEngagementSingleObject, engagementAddSuccess, loading } =
     useSelector((state) => state.planingEngagements);
+  const [allSubLocations, setAllSubLocations] = React.useState([]);
   const { user } = useSelector((state) => state?.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -176,6 +179,22 @@ const SpecialProjectAudit = () => {
     dispatch(InitialLoadSidebarActiveLink("li-audit"));
   }, []);
 
+  // Location and Sub Location
+  React.useEffect(() => {
+    if (user[0]?.token) {
+      dispatch(setupGetAllLocations());
+    }
+  }, [user]);
+
+  React.useEffect(() => {
+    if (object?.location_Id) {
+      const item = allLocations?.find(
+        (all) => all?.id === Number(object?.location_Id)
+      );
+      setAllSubLocations(item?.subLocations);
+    }
+  }, [object?.location_Id]);
+
   return (
     <div>
       <Dialog open={showObjectiveListDialog} onClose={handleClose}>
@@ -228,6 +247,18 @@ const SpecialProjectAudit = () => {
                   aria-expanded="false"
                   aria-controls="flush-collapseFour"
                 >
+                  {planingEngagementSingleObject?.meetingScheduleAndMinutes
+                    ?.location_Id &&
+                  planingEngagementSingleObject?.meetingScheduleAndMinutes
+                    ?.subLocation_Id &&
+                  planingEngagementSingleObject?.meetingScheduleAndMinutes
+                    ?.meetingDateTimeFrom &&
+                  planingEngagementSingleObject?.meetingScheduleAndMinutes
+                    ?.meetingDateTimeTo ? (
+                    <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
+                  ) : (
+                    <p className="display-none">None</p>
+                  )}
                   Set Meeting Time
                 </button>
               </h2>
@@ -248,9 +279,13 @@ const SpecialProjectAudit = () => {
                         onChange={handleChange}
                       >
                         <option>List of Locations</option>
-                        <option value="1">Location 1</option>
-                        <option value="2">Location 2</option>
-                        <option value="3">Location 3</option>
+                        {allLocations?.map((item, ind) => {
+                          return (
+                            <option key={ind} value={item?.id}>
+                              {item?.description}
+                            </option>
+                          );
+                        })}
                       </select>
                     </div>
                     <div className="col-lg-6">
@@ -263,9 +298,13 @@ const SpecialProjectAudit = () => {
                         value={object?.subLocation_Id}
                       >
                         <option>List of Sub Locations</option>
-                        <option value="4">Sub Location 1</option>
-                        <option value="5">Sub Location 2</option>
-                        <option value="6">Sub Location 3</option>
+                        {allSubLocations?.map((item, index) => {
+                          return (
+                            <option value={item?.id} key={index}>
+                              {item?.description}
+                            </option>
+                          );
+                        })}
                       </select>
                     </div>
                   </div>
@@ -341,12 +380,7 @@ const SpecialProjectAudit = () => {
             {object?.businessObjectiveAndMapProcessList?.map((item, index) => {
               return (
                 <div key={index}>
-                  <div className="w-100 float-right">
-                    <i
-                      className="fa fa-trash text-danger f-18 px-3 cursor-pointer float-right w-100"
-                      onClick={() => handleDeleteSingleMapItem(item?.id)}
-                    ></i>
-                  </div>
+                  <div className="w-100 float-right"></div>
                   <div className="accordion-item">
                     <h2 className="accordion-header">
                       <button
@@ -362,9 +396,22 @@ const SpecialProjectAudit = () => {
                         }}
                       >
                         <div className="d-flex w-100 me-3 align-items-center justify-content-between">
-                          <div className=" d-flex align-items-center">
-                            <i className="fa fa-check-circle fs-3 text-success pe-3"></i>{" "}
-                            Define Business Objective and Map Process
+                          <div className=" d-flex align-items-center w-100">
+                            {item?.description && item?.domain && (
+                              <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
+                            )}
+                            <div className="d-flex w-100 me-3 align-items-center justify-content-between">
+                              <div>
+                                Define Business Objective and Map Process
+                              </div>
+                              <div
+                                onClick={() =>
+                                  handleDeleteSingleMapItem(item?.id)
+                                }
+                              >
+                                <i className="fa fa-trash text-danger f-18  cursor-pointer "></i>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </button>

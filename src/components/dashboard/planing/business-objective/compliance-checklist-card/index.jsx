@@ -10,13 +10,14 @@ import {
   setupSaveCheckListObjective,
   setupGetCheckListItems,
 } from "../../../../../global-redux/reducers/planing/engagement/slice";
+import Pagination from "@mui/material/Pagination";
 import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
 } from "../../../../../global-redux/reducers/common/slice";
 
 const ComplianceCheckListCard = () => {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const engagementId = searchParams.get("engagementId");
   const {
@@ -28,18 +29,22 @@ const ComplianceCheckListCard = () => {
   const { user } = useSelector((state) => state?.auth);
   const dispatch = useDispatch();
 
-  React.useEffect(() => {
-    if (engagementAddSuccess) {
-      dispatch(resetAddEngagementSuccess());
-      // dispatch(setupGetSingleCheckListObjective(engagementId));
-    }
-  }, [engagementAddSuccess]);
+  const [page, setPage] = React.useState(1);
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
 
   function handleSelectCheckList(item) {
     if (!loading) {
       dispatch(setupSaveCheckListObjective(item));
     }
   }
+  React.useEffect(() => {
+    if (engagementAddSuccess) {
+      dispatch(resetAddEngagementSuccess());
+      dispatch(setupGetSingleCheckListObjective(engagementId));
+    }
+  }, [engagementAddSuccess]);
 
   React.useEffect(() => {
     if (engagementId && user[0]?.token) {
@@ -70,95 +75,108 @@ const ComplianceCheckListCard = () => {
           <div className="accordion" id="accordionCheckListExample">
             {Array.isArray(planingEngagementSingleObject) &&
             planingEngagementSingleObject?.length !== 0 ? (
-              planingEngagementSingleObject?.map((item, index) => {
-                return (
-                  <div className="accordion-item" key={index}>
-                    <h2 className="accordion-header">
-                      <button
-                        className="accordion-button collapsed"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target={`#flush-collapse${index}`}
-                        aria-expanded="false"
-                        aria-controls={`flush-collapse${index}`}
-                        onClick={() => {
-                          dispatch(
-                            setupGetCheckListItems(
-                              `?userEmailId=${user[0]?.email}&checklistId=${item?.checklist_id}`
-                            )
-                          );
-                        }}
-                      >
-                        <div className="d-flex w-100 me-3 align-items-center justify-content-between">
-                          <div className=" d-flex align-items-center">
-                            {item?.description || "null"}
-                          </div>
-                        </div>
-                      </button>
-                    </h2>
-                    <div
-                      id={`flush-collapse${index}`}
-                      className="accordion-collapse collapse"
-                      data-bs-parent="#accordionCheckListExample"
-                    >
-                      <div className="accordion-body">
-                        <div className="row mt-3">
-                          <div
-                            className={`btn btn-labeled btn-primary px-3 shadow col-lg-2 mb-4 ${
-                              loading && "disabled"
-                            }`}
-                            onClick={() => handleSelectCheckList(item)}
+              <div>
+                {planingEngagementSingleObject
+                  ?.slice((page - 1) * 5, page * 5)
+                  ?.map((item, index) => {
+                    return (
+                      <div className="accordion-item" key={index}>
+                        <h2 className="accordion-header">
+                          <button
+                            className="accordion-button collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target={`#flush-collapse${index}`}
+                            aria-expanded="false"
+                            aria-controls={`flush-collapse${index}`}
+                            onClick={() => {
+                              dispatch(
+                                setupGetCheckListItems(
+                                  `?userEmailId=${user[0]?.email}&checklistId=${item?.checklist_id}`
+                                )
+                              );
+                            }}
                           >
-                            {!loading ? "Select Check List" : "Loading..."}
-                          </div>
-                          <div className="col-lg-12">
-                            <div className="table-responsive">
-                              <table className="table table-bordered  table-hover rounded">
-                                <thead className="bg-secondary text-white">
-                                  <tr>
-                                    <th className="w-80">Sr No.</th>
-                                    <th>Area</th>
-                                    <th>Subject</th>
-                                    <th>Particulars</th>
-                                    <th>Observation</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  {loading ? (
-                                    <tr>
-                                      <td>
-                                        <CircularProgress />
-                                      </td>
-                                    </tr>
-                                  ) : selectedCheckListItems ? (
-                                    selectedCheckListItems?.map(
-                                      (checkItem, i) => {
-                                        return (
-                                          <tr key={i}>
-                                            <td>{i + 1}</td>
-                                            <td>{checkItem?.area}</td>
-                                            <td>{checkItem?.subject}</td>
-                                            <td>{checkItem?.particulars}</td>
-                                            <td>{checkItem?.observation}</td>
-                                          </tr>
-                                        );
-                                      }
-                                    )
-                                  ) : (
-                                    <tr className="w-300">
-                                      <td>No CheckListItem to show</td>
-                                    </tr>
-                                  )}
-                                </tbody>
-                              </table>
+                            <div className="d-flex w-100 me-3 align-items-center justify-content-between">
+                              <div className=" d-flex align-items-center">
+                                {item?.description || "null"}
+                              </div>
+                            </div>
+                          </button>
+                        </h2>
+                        <div
+                          id={`flush-collapse${index}`}
+                          className="accordion-collapse collapse"
+                          data-bs-parent="#accordionCheckListExample"
+                        >
+                          <div className="accordion-body">
+                            <div className="row mt-3">
+                              <div
+                                className={`btn btn-labeled btn-primary px-3 shadow col-lg-2 mb-4 ${
+                                  loading && "disabled"
+                                }`}
+                                onClick={() => handleSelectCheckList(item)}
+                              >
+                                {!loading ? "Select Check List" : "Loading..."}
+                              </div>
+                              <div className="col-lg-12">
+                                <div className="table-responsive">
+                                  <table className="table table-bordered  table-hover rounded">
+                                    <thead className="bg-secondary text-white">
+                                      <tr>
+                                        <th className="w-80">Sr No.</th>
+                                        <th>Area</th>
+                                        <th>Subject</th>
+                                        <th>Particulars</th>
+                                        <th>Observation</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {loading ? (
+                                        <tr>
+                                          <td>
+                                            <CircularProgress />
+                                          </td>
+                                        </tr>
+                                      ) : selectedCheckListItems ? (
+                                        selectedCheckListItems?.map(
+                                          (checkItem, i) => {
+                                            return (
+                                              <tr key={i}>
+                                                <td>{i + 1}</td>
+                                                <td>{checkItem?.area}</td>
+                                                <td>{checkItem?.subject}</td>
+                                                <td>
+                                                  {checkItem?.particulars}
+                                                </td>
+                                                <td>
+                                                  {checkItem?.observation}
+                                                </td>
+                                              </tr>
+                                            );
+                                          }
+                                        )
+                                      ) : (
+                                        <tr className="w-300">
+                                          <td>No CheckListItem to show</td>
+                                        </tr>
+                                      )}
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                );
-              })
+                    );
+                  })}
+                <Pagination
+                  count={Math.ceil(planingEngagementSingleObject?.length / 5)}
+                  page={page}
+                  onChange={handleChange}
+                />
+              </div>
             ) : (
               <div className="accordion-item">
                 <h2 className="accordion-header">

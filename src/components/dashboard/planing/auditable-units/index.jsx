@@ -85,7 +85,7 @@ const AuditableUnits = () => {
               >
                 <i className="fa fa-arrow-left text-primary fs-5 pe-3"></i>
               </a>
-              <h3 className="mb-0 fw-bold">Auditable Units</h3>
+              <div className="mb-0 heading">Auditable Units</div>
             </header>
 
             <div className="row">
@@ -133,7 +133,7 @@ const AuditableUnits = () => {
                                   <span className="btn-label me-2">
                                     <i className="fa fa-check-circle f-18"></i>
                                   </span>
-                                  {loading ? "Loading.." : "Add Unit"}
+                                  {loading ? "Loading.." : "Add Auditable Unit"}
                                 </div>
                                 <div className="table-responsive">
                                   <table className="table table-bordered  table-hover rounded">
@@ -148,7 +148,7 @@ const AuditableUnits = () => {
                                     <tbody>
                                       {item?.unitList?.length === 0 ? (
                                         <tr>
-                                          <td>No Unit To show</td>
+                                          <td className="w-300">No Unit To show</td>
                                         </tr>
                                       ) : (
                                         item?.unitList?.map((unit, i) => {

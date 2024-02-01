@@ -25,17 +25,20 @@ const JobPrioritization = () => {
   function handleUpdate(id) {
     setCurrentId(id);
     let object = data?.find((item) => item?.id === id);
-    // if (object?.selectedForAudit && object?.comments && object?.year) {
-    //   object = { ...object, completed: true };
-    // }
-    // if (
-    //   object?.selectedForAudit === null ||
-    //   object?.comments === null ||
-    //   object?.year === null
-    // ) {
-    //   object = { ...object, completed: false };
-    // }
-
+    if (
+      object?.selectedForAudit !== null &&
+      object?.comments !== null &&
+      object?.year !== null
+    ) {
+      object = { ...object, completed: true };
+    }
+    if (
+      object?.selectedForAudit === null ||
+      object?.comments === null ||
+      object?.year === null
+    ) {
+      object = { ...object, completed: false };
+    }
     if (!loading) {
       dispatch(setupUpdateJobPrioritization(object));
     }
@@ -132,7 +135,7 @@ const JobPrioritization = () => {
             <tbody>
               {allJobPrioritization?.length === 0 ? (
                 <tr>
-                  <td>No Job Prioritization to show</td>
+                  <td className="w-300">No Job Prioritization to show</td>
                 </tr>
               ) : (
                 data?.slice((page - 1) * 5, page * 5)?.map((item, index) => {
@@ -221,71 +224,6 @@ const JobPrioritization = () => {
           page={page}
           onChange={handleChangePage}
         />
-
-        {/* <div className="row">
-          <div className="col-2 d-flex align-items-center">
-            <label className="me-2 label-text fw-bold">View Entries</label>
-            <select
-              className="form-select w-70"
-              aria-label="Default select example"
-            >
-              <option>10</option>
-              <option value="1">20</option>
-              <option value="2">30</option>
-              <option value="3">40</option>
-            </select>
-          </div>
-
-          <div className="col-10 d-flex align-items-center justify-content-end">
-            <a href="#" className="text-secondary">
-              <i className="fa fa-print me-3 w-18"></i>
-            </a>
-
-            <nav aria-label="Page navigation example">
-              <ul className="pagination mb-0 justify-content-center">
-                <li className="page-item disabled">
-                  <a className="page-link">Previous</a>
-                </li>
-                <li className="page-item">
-                  <a className="page-link" href="#">
-                    1
-                  </a>
-                </li>
-                <li className="page-item">
-                  <a className="page-link" href="#">
-                    2
-                  </a>
-                </li>
-                <li className="page-item">
-                  <a className="page-link" href="#">
-                    3
-                  </a>
-                </li>
-                <li className="page-item">
-                  <a className="page-link" href="#">
-                    Next
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div> */}
-
-        {/* <div className="row mt-3">
-          <div className="col-lg-12 justify-content-end text-end">
-            <div
-              className={`btn btn-labeled btn-primary px-3 shadow ${
-                loading && "disabled"
-              }`}
-              onClick={handleUpdate}
-            >
-              <span className="btn-label me-2">
-                <i className="fa fa-check-circle"></i>
-              </span>
-              {loading ? "Loading..." : "Save"}
-            </div>
-          </div>
-        </div> */}
       </div>
     </div>
   );

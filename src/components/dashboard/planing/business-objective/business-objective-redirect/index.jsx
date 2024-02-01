@@ -10,6 +10,7 @@ import {
   setupSaveMapProcessBusinessObjective,
   setupUpdateBusinessMinuteMeeting,
 } from "../../../../../global-redux/reducers/planing/engagement/slice";
+import { setupGetAllLocations } from "../../../../../global-redux/reducers/settings/location/slice";
 import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
@@ -22,10 +23,12 @@ import { v4 as uuidv4 } from "uuid";
 const BusinessObjectiveRedirect = () => {
   const [showObjectiveListDialog, setShowObjectiveListDialog] =
     React.useState(false);
+  const { allLocations } = useSelector((state) => state.setttingsLocation);
   const [domain, setDomain] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [searchParams, setSearchParams] = useSearchParams();
   const engagementId = searchParams.get("engagementId");
+  const [allSubLocations, setAllSubLocations] = React.useState([]);
   const { user } = useSelector((state) => state?.auth);
 
   const { planingEngagementSingleObject, engagementAddSuccess, loading } =
@@ -77,46 +80,6 @@ const BusinessObjectiveRedirect = () => {
       );
     }
   }
-
-  // function handleDeleteFileItem(id) {
-  //   setObject((pre) => {
-  //     return {
-  //       ...pre,
-  //       strategicDocuments: pre.strategicDocuments.filter(
-  //         (all) => all?.id !== id
-  //       ),
-  //     };
-  //   });
-  // }
-
-  // file Upload
-
-  // const isImage = (file) => {
-  //   const acceptedImageTypes = ["image/jpeg", "image/png", "image/gif"];
-  //   return file && acceptedImageTypes.includes(file.type);
-  // };
-
-  // const handleFileChange = (event) => {
-  //   const selectedFile = event.target.files[0];
-  //   if (isImage(selectedFile)) {
-  //     toast.error("Selected file is an image. Please select a non-image file.");
-  //     return;
-  //   }
-  //   if (!isImage(selectedFile))
-  //     setObject((pre) => {
-  //       return {
-  //         ...pre,
-  //         strategicDocuments: [
-  //           ...pre.strategicDocuments,
-  //           {
-  //             fileName: selectedFile?.name,
-  //             location: selectedFile?.name,
-  //             id: uuidv4(),
-  //           },
-  //         ],
-  //       };
-  //     });
-  // };
 
   function handleSumMapProcess() {
     setObject((pre) => {
@@ -190,7 +153,8 @@ const BusinessObjectiveRedirect = () => {
         engagementName:
           planingEngagementSingleObject?.engagement?.engagementName || "",
         businessObjectiveAndMapProcessList:
-          planingEngagementSingleObject?.businessObjectiveAndMapProcessList || [],
+          planingEngagementSingleObject?.businessObjectiveAndMapProcessList ||
+          [],
         location_Id:
           planingEngagementSingleObject?.meetingScheduleAndMinutes
             ?.location_Id || "",
@@ -221,6 +185,22 @@ const BusinessObjectiveRedirect = () => {
     dispatch(changeActiveLink("li-business-objective"));
     dispatch(InitialLoadSidebarActiveLink("li-audit"));
   }, []);
+
+  // Location and Sub Location
+  React.useEffect(() => {
+    if (user[0]?.token) {
+      dispatch(setupGetAllLocations());
+    }
+  }, [user]);
+
+  React.useEffect(() => {
+    if (object?.location_Id) {
+      const item = allLocations?.find(
+        (all) => all?.id === Number(object?.location_Id)
+      );
+      setAllSubLocations(item?.subLocations);
+    }
+  }, [object?.location_Id]);
 
   return (
     <div>
@@ -274,7 +254,9 @@ const BusinessObjectiveRedirect = () => {
                   aria-expanded="false"
                   aria-controls="flush-collapseOne"
                 >
-                  <i className="fa fa-check-circle fs-3 text-success pe-3"></i>{" "}
+                  {planingEngagementSingleObject?.industryUpdate && (
+                    <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
+                  )}
                   Industry Updates
                 </button>
               </h2>
@@ -284,11 +266,9 @@ const BusinessObjectiveRedirect = () => {
                 data-bs-parent="#accordionFlushExample"
               >
                 <div className="accordion-body">
-                  {" "}
                   <div className="container">
                     <div className="d-flex justify-content-between">
                       <label>Industry Update</label>
-
                       <a
                         href="#"
                         className="link-underline-muted decoration-none"
@@ -331,6 +311,9 @@ const BusinessObjectiveRedirect = () => {
                   aria-expanded="false"
                   aria-controls="flush-collapseTwo"
                 >
+                  {planingEngagementSingleObject?.companyUpdate && (
+                    <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
+                  )}
                   Company Updates
                 </button>
               </h2>
@@ -340,10 +323,8 @@ const BusinessObjectiveRedirect = () => {
                 data-bs-parent="#accordionFlushExample"
               >
                 <div className="accordion-body">
-                  {" "}
                   <div className="d-flex justify-content-between">
                     <label>Company Update</label>
-
                     <a
                       href="#"
                       className="link-underline-muted decoration-none"
@@ -374,76 +355,6 @@ const BusinessObjectiveRedirect = () => {
                 </div>
               </div>
             </div>
-            {/* <div className="accordion-item">
-              <h2 className="accordion-header">
-                <button
-                  className="accordion-button collapsed"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#flush-collapseThree"
-                  aria-expanded="false"
-                  aria-controls="flush-collapseThree"
-                >
-                  Assess Strategy Document
-                </button>
-              </h2>
-              <div
-                id="flush-collapseThree"
-                className="accordion-collapse collapse"
-                data-bs-parent="#accordionFlushExample"
-              >
-                <div className="accordion-body">
-                  <div className="container upload-table">
-                    <div className="file-upload float-end mb-3">
-                      <div className="input-group">
-                        <div className="custom-file">
-                          <input
-                            type="file"
-                            className="custom-file-input hidden visibility-hidden"
-                            id="inputGroupFile01"
-                            onChange={handleFileChange}
-                          />
-                          <label
-                            className="btn btn-primary p-2 px-3"
-                            htmlFor="inputGroupFile01"
-                          >
-                            <i className="bi bi-upload"></i> Upload Document
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                    <table className="table">
-                      <thead>
-                        <tr>
-                          <th scope="col">Sr No.</th>
-                          <th scope="col">Document Name</th>
-                          <th>Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {object?.strategicDocuments?.map((item, index) => {
-                          return (
-                            <tr>
-                              <td>{index + 1}</td>
-                              <td>
-                                <a href="#">{item?.fileName}</a>
-                              </td>
-                              <td>
-                                <i
-                                  className="fa fa-trash text-danger f-18 cursor-pointer"
-                                  onClick={() => handleDeleteFileItem(item?.id)}
-                                ></i>
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div> */}
-            {/*  */}
             <div className="accordion-item">
               <h2 className="accordion-header">
                 <button
@@ -454,6 +365,18 @@ const BusinessObjectiveRedirect = () => {
                   aria-expanded="false"
                   aria-controls="flush-collapseFour"
                 >
+                  {planingEngagementSingleObject?.meetingScheduleAndMinutes
+                    ?.location_Id &&
+                  planingEngagementSingleObject?.meetingScheduleAndMinutes
+                    ?.subLocation_Id &&
+                  planingEngagementSingleObject?.meetingScheduleAndMinutes
+                    ?.meetingDateTimeFrom &&
+                  planingEngagementSingleObject?.meetingScheduleAndMinutes
+                    ?.meetingDateTimeTo ? (
+                    <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
+                  ) : (
+                    <p className="display-none">None</p>
+                  )}
                   Set Meeting Time
                 </button>
               </h2>
@@ -474,9 +397,13 @@ const BusinessObjectiveRedirect = () => {
                         onChange={handleChange}
                       >
                         <option>List of Locations</option>
-                        <option value="1">Location 1</option>
-                        <option value="2">Location 2</option>
-                        <option value="3">Location 3</option>
+                        {allLocations?.map((item, ind) => {
+                          return (
+                            <option key={ind} value={item?.id}>
+                              {item?.description}
+                            </option>
+                          );
+                        })}
                       </select>
                     </div>
                     <div className="col-lg-6">
@@ -489,9 +416,13 @@ const BusinessObjectiveRedirect = () => {
                         value={object?.subLocation_Id}
                       >
                         <option>List of Sub Locations</option>
-                        <option value="4">Sub Location 1</option>
-                        <option value="5">Sub Location 2</option>
-                        <option value="6">Sub Location 3</option>
+                        {allSubLocations?.map((item, index) => {
+                          return (
+                            <option value={item?.id} key={index}>
+                              {item?.description}
+                            </option>
+                          );
+                        })}
                       </select>
                     </div>
                   </div>
@@ -567,12 +498,7 @@ const BusinessObjectiveRedirect = () => {
             {object?.businessObjectiveAndMapProcessList?.map((item, index) => {
               return (
                 <div key={index}>
-                  <div className="w-100 float-right">
-                    <i
-                      className="fa fa-trash text-danger f-18 px-3 cursor-pointer float-right w-100"
-                      onClick={() => handleDeleteSingleMapItem(item?.id)}
-                    ></i>
-                  </div>
+                  <div className="w-100 float-right"></div>
                   <div className="accordion-item">
                     <h2 className="accordion-header">
                       <button
@@ -588,9 +514,22 @@ const BusinessObjectiveRedirect = () => {
                         }}
                       >
                         <div className="d-flex w-100 me-3 align-items-center justify-content-between">
-                          <div className=" d-flex align-items-center">
-                            <i className="fa fa-check-circle fs-3 text-success pe-3"></i>{" "}
-                            Define Business Objective and Map Process
+                          <div className="d-flex align-items-center w-100">
+                            {item?.description && item?.domain && (
+                              <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
+                            )}
+                            <div className="d-flex w-100 me-3 align-items-center justify-content-between">
+                              <div>
+                                Define Business Objective and Map Process
+                              </div>
+                              <div
+                                onClick={() =>
+                                  handleDeleteSingleMapItem(item?.id)
+                                }
+                              >
+                                <i className="fa fa-trash text-danger f-18 cursor-pointer"></i>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </button>

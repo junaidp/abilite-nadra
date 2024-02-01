@@ -67,6 +67,6 @@ export const slice = createSlice({
   },
 });
 
-export const { resetJobPrioritizationSuccess } = slice.actions;
+export const { resetJobSchedulingSuccess } = slice.actions;
 
 export default slice.reducer;

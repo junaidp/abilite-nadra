@@ -91,13 +91,13 @@ const JobScheduling = () => {
               <tbody>
                 {loading ? (
                   <tr>
-                    <td>
+                    <td className="w-300">
                       <CircularProgress />
                     </td>
                   </tr>
                 ) : allJobScheduling?.length === 0 ? (
                   <tr>
-                    <td>No data to show</td>
+                    <td className="w-300">No data to show</td>
                   </tr>
                 ) : (
                   allJobScheduling

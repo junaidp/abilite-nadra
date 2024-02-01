@@ -36,18 +36,23 @@ const AuditableUnitRatingDialog = ({
         const currentAuditableUnit = allAuditableUnits?.find(
           (all) => all?.id === selectedAuditableUnitId
         );
+        let filteredUnitList = currentAuditableUnit?.unitList?.filter(
+          (all) => all?.id !== selectedAuditableSubUnitId
+        );
+        filteredUnitList = [
+          ...filteredUnitList,
+          {
+            id: selectedAuditableSubUnitId,
+            reason: data?.reason,
+            jobType: data?.jobType,
+            processid: null,
+            subProcessid: null,
+          },
+        ];
         dispatch(
           setupEditAuditableUnit({
             ...currentAuditableUnit,
-            unitList: [
-              {
-                id: selectedAuditableSubUnitId,
-                reason: data?.reason,
-                jobType: data?.jobType,
-                processid: null,
-                subProcessid: null,
-              },
-            ],
+            unitList: filteredUnitList,
           })
         );
       }

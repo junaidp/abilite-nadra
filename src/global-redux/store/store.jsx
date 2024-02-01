@@ -4,6 +4,7 @@ import authReducer from "../reducers/auth/slice";
 import companyReducer from "../reducers/company/slice";
 import settingsCheckListReducer from "../reducers/settings/check-list/slice";
 import settingsLocationReducer from "../reducers/settings/location/slice";
+import settingsProcessReducer from "../reducers/settings/process/slice"
 import planingEngagementsReducers from "../reducers/planing/engagement/slice";
 import planingRiskAssessmentReducer from "../reducers/planing/risk-assessment/slice";
 import planingAuditableUnitReducer from "../reducers/planing/auditable-units/slice";
@@ -17,6 +18,7 @@ export const store = configureStore({
     // settings
     setttingsCheckList: settingsCheckListReducer,
     setttingsLocation: settingsLocationReducer,
+    setttingsProcess: settingsProcessReducer,
     // planing
     planingEngagements: planingEngagementsReducers,
     planingRiskAssessments: planingRiskAssessmentReducer,

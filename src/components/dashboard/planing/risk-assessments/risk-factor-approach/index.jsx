@@ -290,53 +290,8 @@ const RiskFactorApproach = () => {
                     })}
                     {/* Show some dummy non-visible row so we can show the total score */}
                     <tr>
-                      <td className="invisble">19</td>
-                      <td className="invisble">Dummy Added</td>
-                      <td className="w-80 invisble">
-                        <select
-                          className="form-select"
-                          aria-label="Default select example"
-                          name="likelihood"
-                          defaultValue={1}
-                        >
-                          <option value={0}>0</option>
-                          <option value={1}>1</option>
-                          <option value={2}>2</option>
-                          <option value={3}>3</option>
-                          <option value={4}>4</option>
-                        </select>
-                      </td>
-                      <td className="w-80 invisble">
-                        <select
-                          className="form-select"
-                          aria-label="Default select example"
-                          name="impact"
-                          defaultValue={1}
-                        >
-                          <option value={0}>0</option>
-                          <option value={1}>1</option>
-                          <option value={2}>2</option>
-                          <option value={3}>3</option>
-                          <option value={4}>4</option>
-                        </select>
-                      </td>
+                      <td colSpan="4">Total Score</td>
                       <td className="bold width-50">{scoreSum}</td>
-                      <td className="invisble">
-                        <textarea
-                          className="form-control"
-                          placeholder="Enter Reason"
-                          id="exampleFormControlTextarea1"
-                          rows="3"
-                          name="comments"
-                          defaultValue="Invisible Comments"
-                        ></textarea>
-                        <label className="word-limit-info label-text">
-                          Maximum 1500 words
-                        </label>
-                      </td>
-                      <td className="text-center justify-content-center pt-3 invisble">
-                        <i className="fa fa-trash text-danger f-18"></i>
-                      </td>
                     </tr>
                   </tbody>
                 </table>

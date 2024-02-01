@@ -21,7 +21,7 @@ const initialState = {
   engagementAddSuccess: false,
   selectedSingleEngagementItem: {},
   planingEngagementSingleObject: [],
-  selectedCheckListItems:[]
+  selectedCheckListItems: [],
 };
 
 export const setupGetAllEngagements = createAsyncThunk(
@@ -159,7 +159,7 @@ export const slice = createSlice({
     [setupSaveCheckListObjective.fulfilled]: (state, { payload }) => {
       state.loading = false;
       state.engagementAddSuccess = true;
-      state.planingEngagementSingleObject=payload?.data
+      state.planingEngagementSingleObject = payload?.data;
       toast.success("Checklist Objective Edited Successfully");
     },
     [setupSaveCheckListObjective.rejected]: (state, { payload }) => {
@@ -231,7 +231,7 @@ export const slice = createSlice({
     },
     [setupGetSingleCheckListObjective.fulfilled]: (state, { payload }) => {
       state.loading = false;
-      state.planingEngagementSingleObject = payload?.data;
+      state.planingEngagementSingleObject = payload?.data || [];
     },
     [setupGetSingleCheckListObjective.rejected]: (state, { payload }) => {
       state.loading = false;
@@ -326,7 +326,7 @@ export const slice = createSlice({
     },
     [setupGetCheckListItems.fulfilled]: (state, { payload }) => {
       state.loading = false;
-      state.selectedCheckListItems=payload?.data
+      state.selectedCheckListItems = payload?.data;
     },
     [setupGetCheckListItems.rejected]: (state, { payload }) => {
       state.loading = false;

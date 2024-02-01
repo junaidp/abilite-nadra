@@ -2,6 +2,7 @@ import React from "react";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
 import GeneratePlaningReportDialog from "../../../../modals/generate-planing-report-dialog";
+import Editor from "../../../../../components/common/rich-text/index";
 
 const GeneratePlanningReport = () => {
   const [generatePlaningReportDialog, setGeneratePlaningReportDialog] =
@@ -82,12 +83,13 @@ const GeneratePlanningReport = () => {
           <label htmlFor="exampleFormControlTextarea1" className="form-label">
             Executive Summary
           </label>
-          <textarea
+          {/* <textarea
             className="form-control"
             placeholder="Enter Here"
             id="exampleFormControlTextarea1"
             rows="3"
-          ></textarea>
+          ></textarea> */}
+          <Editor />
           <p className="word-limit-info mb-0">Maximum 1500 words</p>
         </div>
       </div>
@@ -96,12 +98,13 @@ const GeneratePlanningReport = () => {
           <label htmlFor="exampleFormControlTextarea1" className="form-label">
             Audit Planning Methodology
           </label>
-          <textarea
+          {/* <textarea
             className="form-control"
             placeholder="Enter Here"
             id="exampleFormControl1"
             rows="3"
-          ></textarea>
+          ></textarea> */}
+          <Editor />
           <p className="word-limit-info mb-0">Maximum 1500 words</p>
         </div>
       </div>
@@ -110,12 +113,13 @@ const GeneratePlanningReport = () => {
           <label htmlFor="exampleFormControlTextarea1" className="form-label">
             Risk assessment summary
           </label>
-          <textarea
+          {/* <textarea
             className="form-control"
             placeholder="Enter Here"
             id="exampleFormControl2"
             rows="3"
-          ></textarea>
+          ></textarea> */}
+          <Editor />
           <p className="word-limit-info mb-0">Maximum 1500 words</p>
         </div>
       </div>
@@ -125,12 +129,13 @@ const GeneratePlanningReport = () => {
             Organizational strategy, key areas of focus, key risks, and
             associated assurance strategies in the audit plan.
           </label>
-          <textarea
+          {/* <textarea
             className="form-control"
             placeholder="Enter Here"
             id="example                                                                                        "
             rows="3"
-          ></textarea>
+          ></textarea> */}
+          <Editor />
           <p className="word-limit-info mb-0">Maximum 1500 words</p>
         </div>
       </div>
@@ -153,7 +158,7 @@ const GeneratePlanningReport = () => {
         <div className="col-lg-12">
           <label htmlFor="exampleFormControlTextarea1" className="form-label">
             Analyses (or summary) of inherent and/or residual risk levels of
-            auditable units.{" "}
+            auditable units.
           </label>
 
           <table className="table table-bordered table-hover rounded">

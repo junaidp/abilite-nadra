@@ -5,7 +5,7 @@ export const addLocation = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
-      `${baseUrl}/abiliteconfig/location/save`,
+      `${baseUrl}/configurations/location/save`,
       data,
       {
         headers: {
@@ -21,9 +21,83 @@ export const addLocation = async (data, thunkAPI) => {
 
 export const getAllLocations = async (data, thunkAPI) => {
   try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.get(`${baseUrl}/configurations/location/getall`, {
+      headers: {
+        Authorization: `Bearer ${user[0]?.token}`,
+      },
+    });
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
+export const updateLocation = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
-      `${baseUrl}/abiliteconfig/location/getall`,
-      data
+      `${baseUrl}/configurations/location/update`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
+export const saveSubLocation = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.post(
+      `${baseUrl}/configurations/sublocation/save`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
+export const updateSubLocation = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.post(
+      `${baseUrl}/configurations/sublocation/update`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
+export const deleteSubLocation = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.delete(
+      `${baseUrl}/configurations/sublocation/delete${data}`,
+      null,
+      {
+        headers: {
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
     );
     return props.data;
   } catch (error) {
