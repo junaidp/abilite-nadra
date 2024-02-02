@@ -25,7 +25,6 @@ const TopBar = () => {
   const navigate = useNavigate();
   let { user } = useSelector((state) => state.auth);
   const { showSidebar, company, year } = useSelector((state) => state.common);
-  const { companies } = useSelector((state) => state.company);
   const notificationRef = useDetectClickOutside({
     onTriggered: closeNotficationDropDown,
   });

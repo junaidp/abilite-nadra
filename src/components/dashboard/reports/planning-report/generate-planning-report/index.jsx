@@ -8,6 +8,33 @@ const GeneratePlanningReport = () => {
   const [generatePlaningReportDialog, setGeneratePlaningReportDialog] =
     React.useState(false);
   const navigate = useNavigate();
+  const [data, setData] = React.useState({
+    summary: "",
+    methodology: "",
+    riskAssesmentSummary: "",
+    orgnizationStrategy: "",
+    summaryRisk: "",
+    newHeading: [],
+  });
+
+  const handleEditorContentChange = (name, newContent) => {
+    setData((pre) => {
+      return {
+        ...pre,
+        [name]: newContent,
+      };
+    });
+  };
+
+  function handleDeleteHeading(id) {
+    setData((pre) => {
+      return {
+        ...pre,
+        newHeading: pre?.newHeading?.filter((all) => all.id !== id),
+      };
+    });
+  }
+
   return (
     <div>
       {generatePlaningReportDialog && (
@@ -15,6 +42,7 @@ const GeneratePlanningReport = () => {
           <div className="model-wrap">
             <GeneratePlaningReportDialog
               setGeneratePlaningReportDialog={setGeneratePlaningReportDialog}
+              setData={setData}
             />
           </div>
         </div>
@@ -83,13 +111,11 @@ const GeneratePlanningReport = () => {
           <label htmlFor="exampleFormControlTextarea1" className="form-label">
             Executive Summary
           </label>
-          {/* <textarea
-            className="form-control"
-            placeholder="Enter Here"
-            id="exampleFormControlTextarea1"
-            rows="3"
-          ></textarea> */}
-          <Editor />
+          <Editor
+            onContentChange={handleEditorContentChange}
+            initialValue={data?.summary}
+            name="summary"
+          />
           <p className="word-limit-info mb-0">Maximum 1500 words</p>
         </div>
       </div>
@@ -98,13 +124,11 @@ const GeneratePlanningReport = () => {
           <label htmlFor="exampleFormControlTextarea1" className="form-label">
             Audit Planning Methodology
           </label>
-          {/* <textarea
-            className="form-control"
-            placeholder="Enter Here"
-            id="exampleFormControl1"
-            rows="3"
-          ></textarea> */}
-          <Editor />
+          <Editor
+            onContentChange={handleEditorContentChange}
+            initialValue={data?.methodology}
+            name="methodology"
+          />
           <p className="word-limit-info mb-0">Maximum 1500 words</p>
         </div>
       </div>
@@ -113,13 +137,11 @@ const GeneratePlanningReport = () => {
           <label htmlFor="exampleFormControlTextarea1" className="form-label">
             Risk assessment summary
           </label>
-          {/* <textarea
-            className="form-control"
-            placeholder="Enter Here"
-            id="exampleFormControl2"
-            rows="3"
-          ></textarea> */}
-          <Editor />
+          <Editor
+            onContentChange={handleEditorContentChange}
+            initialValue={data?.riskAssesmentSummary}
+            name="riskAssesmentSummary"
+          />
           <p className="word-limit-info mb-0">Maximum 1500 words</p>
         </div>
       </div>
@@ -129,13 +151,11 @@ const GeneratePlanningReport = () => {
             Organizational strategy, key areas of focus, key risks, and
             associated assurance strategies in the audit plan.
           </label>
-          {/* <textarea
-            className="form-control"
-            placeholder="Enter Here"
-            id="example                                                                                        "
-            rows="3"
-          ></textarea> */}
-          <Editor />
+          <Editor
+            onContentChange={handleEditorContentChange}
+            initialValue={data?.orgnizationStrategy}
+            name="orgnizationStrategy"
+          />
           <p className="word-limit-info mb-0">Maximum 1500 words</p>
         </div>
       </div>
@@ -145,14 +165,47 @@ const GeneratePlanningReport = () => {
           <label htmlFor="exampleFormControlTextarea1" className="form-label">
             Summary of risks.
           </label>
-          <textarea
-            className="form-control"
-            placeholder="Enter Here"
-            id="exampleFormContr"
-            rows="3"
-          ></textarea>
+          <Editor
+            onContentChange={handleEditorContentChange}
+            initialValue={data?.summaryRisk}
+            name="summaryRisk"
+          />
           <p className="word-limit-info mb-0">Maximum 1500 words</p>
         </div>
+      </div>
+
+      <div className="table-responsive">
+        <table className="table table-bordered  table-hover rounded">
+          <thead className="bg-secondary text-white">
+            <tr>
+              <th>Heading </th>
+              <th>Description</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data?.newHeading?.length === 0 ? (
+              <tr>
+                <td className="w-300">No Haeding Added!</td>
+              </tr>
+            ) : (
+              data?.newHeading?.map((head, index) => {
+                return (
+                  <tr key={index}>
+                    <td>{head?.heading}</td>
+                    <td>{head?.description}</td>
+                    <td
+                      className="w-130"
+                      onClick={() => handleDeleteHeading(head?.id)}
+                    >
+                      <i className="fa fa-trash text-danger f-18 cursor-pointer"></i>
+                    </td>
+                  </tr>
+                );
+              })
+            )}
+          </tbody>
+        </table>
       </div>
       <div className="row mb-3">
         <div className="col-lg-12">

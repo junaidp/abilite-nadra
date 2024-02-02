@@ -4,7 +4,6 @@ import "./Register.css";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-// import { setupGetCompanies } from "../../../global-redux/reducers/company/slice";
 import {
   setupRegisterUser,
   changeAuthState,
@@ -13,7 +12,6 @@ import {
 const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const { companies } = useSelector((state) => state.company);
   const {
     registerName,
     registerEmail,
@@ -87,9 +85,6 @@ const Register = () => {
     }
   }
 
-  // React.useEffect(() => {
-  //   dispatch(setupGetCompanies());
-  // }, []);
 
   React.useEffect(() => {
     if (registerSuccess) {

@@ -252,55 +252,57 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
           )}
         </div>
 
-        <div className="col-lg-6">
-          <label htmlFor="defaultRemarks" className="w-100">
-            Reporting To:
-          </label>
-          <select
-            id="reportingTo"
-            name="reportingTo"
-            className="form-control w-100 h-40"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.reportingTo}
-          >
-            <option value="User 1">User 1</option>
-            <option value="User 3">User 3</option>
-            <option value="User 4">User 4</option>
-            <option value="User 5">User 5</option>
-          </select>
-          {/* Add more options as needed */}
-          {formik.touched.reportingTo && formik.errors.reportingTo && (
-            <div className="error">{formik.errors.reportingTo}</div>
-          )}
-        </div>
+        <div className="row">
+          <div className="col-lg-6">
+            <label htmlFor="defaultRemarks" className="w-100">
+              Reporting To:
+            </label>
+            <select
+              id="reportingTo"
+              name="reportingTo"
+              className="form-control w-100 h-40"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.reportingTo}
+            >
+              <option value="User 1">User 1</option>
+              <option value="User 3">User 3</option>
+              <option value="User 4">User 4</option>
+              <option value="User 5">User 5</option>
+            </select>
+            {/* Add more options as needed */}
+            {formik.touched.reportingTo && formik.errors.reportingTo && (
+              <div className="error">{formik.errors.reportingTo}</div>
+            )}
+          </div>
 
-        {/* Default Remarks select field */}
-        <div className="col-lg-4">
-          <label htmlFor="defaultRemarks" className="w-100">
-            Company:
-          </label>
-          <select
-            id="company"
-            name="company"
-            className="form-control w-100 h-40"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.company}
-          >
-            <option value="">Select One</option>
-            {allCompanies?.map((item, ind) => {
-              return (
-                <option value={item?.id} key={ind}>
-                  {item?.companyName}
-                </option>
-              );
-            })}
-          </select>
-          {/* Add more options as needed */}
-          {formik.touched.company && formik.errors.company && (
-            <div className="error">{formik.errors.company}</div>
-          )}
+          {/* Default Remarks select field */}
+          <div className="col-lg-6">
+            <label htmlFor="defaultRemarks" className="w-100">
+              Company:
+            </label>
+            <select
+              id="company"
+              name="company"
+              className="form-control w-100 h-40"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.company}
+            >
+              <option value="">Select One</option>
+              {allCompanies?.map((item, ind) => {
+                return (
+                  <option value={item?.id} key={ind}>
+                    {item?.companyName}
+                  </option>
+                );
+              })}
+            </select>
+            {/* Add more options as needed */}
+            {formik.touched.company && formik.errors.company && (
+              <div className="error">{formik.errors.company}</div>
+            )}
+          </div>
         </div>
 
         <button

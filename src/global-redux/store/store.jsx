@@ -1,7 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import commonReducer from "../reducers/common/slice";
 import authReducer from "../reducers/auth/slice";
-import companyReducer from "../reducers/company/slice";
 import settingsCheckListReducer from "../reducers/settings/check-list/slice";
 import settingsCompanyReducer from "../reducers/settings/company-management/slice";
 import settingsLocationReducer from "../reducers/settings/location/slice";
@@ -12,11 +11,11 @@ import planingRiskAssessmentReducer from "../reducers/planing/risk-assessment/sl
 import planingAuditableUnitReducer from "../reducers/planing/auditable-units/slice";
 import planingJobPrioritizationReducer from "../reducers/planing/job-prioritization/slice";
 import planingJobSchedulingReducer from "../reducers/planing/job-scheduling/slice";
+import reportReducer from "../reducers/reports/slice";
 export const store = configureStore({
   reducer: {
     common: commonReducer,
     auth: authReducer,
-    company: companyReducer,
     // settings
     setttingsCheckList: settingsCheckListReducer,
     setttingsLocation: settingsLocationReducer,
@@ -29,5 +28,7 @@ export const store = configureStore({
     planingAuditableUnit: planingAuditableUnitReducer,
     planingJobPrioritization: planingJobPrioritizationReducer,
     planingJobScheduling: planingJobSchedulingReducer,
+    // Report
+    reports: reportReducer,
   },
 });

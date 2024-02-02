@@ -1,87 +1,96 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useMemo } from "react";
 import JoditEditor from "jodit-react";
 
-const RichTextEditor = () => {
-  const [content, setContent] = useState("");
+const RichTextEditor = ({ onContentChange, initialValue, name }) => {
   const editor = useRef(null);
+  const [content, setContent] = React.useState(initialValue || "");
 
-  const config = {
-    uploader: {
-      insertImageAsBase64URI: true, // Converts the image to base64 and embeds it
-    },
-    controls: {
-      font: {
-        list: {
-          Serif: "Sans Serif",
-          Garamond: "Garamond",
+  const config = useMemo(
+    () => ({
+      uploader: {
+        insertImageAsBase64URI: true, // Converts the image to base64 and embeds it
+      },
+      controls: {
+        font: {
+          list: {
+            Serif: "Sans Serif",
+            Garamond: "Garamond",
+          },
         },
       },
-    },
-    spellcheck: true,
-    buttons: [
-      "bold",
-      "|",
-      "strikethrough",
-      "|",
-      "underline",
-      "|",
-      "italic",
-      "|",
-      "ul",
-      "|",
-      "ol",
-      "|",
-      "image",
-      "|",
-      "table",
-      "|",
-      "font",
-      "|",
-      "fontsize",
-      "|",
-      "paragraph",
-      "|",
-      "fullsize",
-    ],
+      spellcheck: true,
+      buttons: [
+        "bold",
+        "|",
+        "strikethrough",
+        "|",
+        "underline",
+        "|",
+        "italic",
+        "|",
+        "ul",
+        "|",
+        "ol",
+        "|",
+        "image",
+        "|",
+        "table",
+        "|",
+        "font",
+        "|",
+        "fontsize",
+        "|",
+        "paragraph",
+        "|",
+        "fullsize",
+      ],
 
-    buttonsXS: [
-      "bold",
-      "|",
-      "strikethrough",
-      "|",
-      "underline",
-      "|",
-      "italic",
-      "|",
-      "ul",
-      "|",
-      "ol",
-      "|",
-      "image",
-      "|",
-      "table",
-      "|",
-      "font",
-      "|",
-      "fontsize",
-      "|",
-      "paragraph",
-      "|",
-      "fullsize",
-  ],
+      buttonsXS: [
+        "bold",
+        "|",
+        "strikethrough",
+        "|",
+        "underline",
+        "|",
+        "italic",
+        "|",
+        "ul",
+        "|",
+        "ol",
+        "|",
+        "image",
+        "|",
+        "table",
+        "|",
+        "font",
+        "|",
+        "fontsize",
+        "|",
+        "paragraph",
+        "|",
+        "fullsize",
+      ],
 
-    events: {},
-    textIcons: false,
+      events: {},
+      textIcons: false,
+    }),
+    []
+  );
+
+  const handleEditorChange = (newContent) => {
+    setContent(newContent);
+    if (onContentChange) {
+      onContentChange(name, newContent);
+    }
   };
 
   return (
     <JoditEditor
       ref={editor}
-      value={content}
       config={config}
       tabIndex={1}
-      onBlur={(newContent) => setContent(newContent)}
-      onChange={(newContent) => {}}
+      value={content}
+      onChange={handleEditorChange}
     />
   );
 };

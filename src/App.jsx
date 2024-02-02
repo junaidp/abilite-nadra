@@ -44,8 +44,6 @@ import InternalAuditReportPage from "./pages/dashboard/report/internal-audit-rep
 import Layout from "./components/common/layout/Layout";
 import GenerateInternalAuditReportPage from "./pages/dashboard/report/internal-audit-report/generate-internal-audit-report/GenerateInternalAuditReport";
 import { changeAuthUser } from "./global-redux/reducers/auth/slice";
-import { setupGetCompanies } from "./global-redux/reducers/company/slice";
-import { setupGetAllEngagements } from "./global-redux/reducers/planing/engagement/slice";
 
 import { useDispatch, useSelector } from "react-redux";
 import { changeYear } from "./global-redux/reducers/common/slice";

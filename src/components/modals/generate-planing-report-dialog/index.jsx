@@ -1,6 +1,38 @@
 import React from "react";
+import { toast } from "react-toastify";
+import { v4 as uuidv4 } from "uuid";
 
-const GeneratePlaningReportDialog = ({ setGeneratePlaningReportDialog }) => {
+const GeneratePlaningReportDialog = ({
+  setGeneratePlaningReportDialog,
+  setData,
+}) => {
+  const [heading, setHeading] = React.useState("");
+  const [description, setDescription] = React.useState("");
+
+  function handleClose() {
+    setGeneratePlaningReportDialog(false);
+    setHeading("");
+    setDescription("");
+  }
+
+  function handleAdd() {
+    if (heading === "" || description === "") {
+      toast.error("Please Provide both values");
+    } else {
+      setData((pre) => {
+        return {
+          ...pre,
+          newHeading: [
+            ...pre?.newHeading,
+            { id: uuidv4(), heading, description },
+          ],
+        };
+      });
+      setHeading("");
+      setDescription("");
+      setGeneratePlaningReportDialog(false);
+    }
+  }
   return (
     <div className="px-4 py-4">
       <div className="row mb-2">
@@ -14,6 +46,8 @@ const GeneratePlaningReportDialog = ({ setGeneratePlaningReportDialog }) => {
               name="fname"
               placeholder="Enter"
               required="required"
+              value={heading}
+              onChange={(event) => setHeading(event?.target?.value)}
             />
           </div>
         </div>
@@ -29,22 +63,25 @@ const GeneratePlaningReportDialog = ({ setGeneratePlaningReportDialog }) => {
               name="fname"
               placeholder="Add detail here"
               required="required"
+              value={description}
+              onChange={(event) => setDescription(event?.target?.value)}
             ></textarea>
           </div>
         </div>
       </div>
 
       <div className="row py-3">
-        <div className="col-lg-12 text-end">
-          <button
-            className="btn btn-primary float-end"
-            onClick={() => setGeneratePlaningReportDialog(false)}
-          >
+        <div className="col-lg-1 text-end">
+          <button className="btn btn-primary float-start" onClick={handleAdd}>
             Add
           </button>
         </div>
+        <div className="col-lg-2 text-end">
+          <button className="btn btn-primary float-start" onClick={handleClose}>
+            Close
+          </button>
+        </div>
       </div>
-      
     </div>
   );
 };
