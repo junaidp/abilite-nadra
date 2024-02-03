@@ -3,11 +3,24 @@ import "./index.css";
 import { useNavigate } from "react-router-dom";
 import GeneratePlaningReportDialog from "../../../../modals/generate-planing-report-dialog";
 import Editor from "../../../../../components/common/rich-text/index";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  resetReportAddSuccess,
+  setupSaveReports,
+} from "../../../../../global-redux/reducers/reports/slice";
+import { toast } from "react-toastify";
+import { setupGetAllUsers } from "../../../../../global-redux/reducers/settings/user-management/slice";
 
 const GeneratePlanningReport = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [generatePlaningReportDialog, setGeneratePlaningReportDialog] =
     React.useState(false);
-  const navigate = useNavigate();
+  const [hierarchy, setHierarchy] = React.useState("");
+  const [selectedUser, setSelectedUsers] = React.useState([]);
+  const { allUsers } = useSelector((state) => state?.setttingsUserManagement);
+  const { loading, reportAddSuccess } = useSelector((state) => state?.reports);
+  const { user } = useSelector((state) => state?.auth);
   const [data, setData] = React.useState({
     summary: "",
     methodology: "",
@@ -15,6 +28,7 @@ const GeneratePlanningReport = () => {
     orgnizationStrategy: "",
     summaryRisk: "",
     newHeading: [],
+    reportShareWith: "",
   });
 
   const handleEditorContentChange = (name, newContent) => {
@@ -34,6 +48,74 @@ const GeneratePlanningReport = () => {
       };
     });
   }
+
+  function handleSaveReport() {
+    if (!loading) {
+      if (
+        data?.summary === "" ||
+        data?.methodology === "" ||
+        data?.riskAssesmentSummary === "" ||
+        data?.orgnizationStrategy === "" ||
+        data?.summaryRisk === "" ||
+        data?.newHeading?.length === 0 ||
+        data?.reportShareWith === ""
+      ) {
+        toast.error("Please Provide all the fields");
+      } else {
+        dispatch(
+          setupSaveReports({
+            ...data,
+            newHeading: data?.newHeading?.map((item) => {
+              return {
+                haeding: item?.heading,
+                description: item?.description,
+              };
+            }),
+            createdBy: user[0]?.userId?.id,
+            storedHtml: null,
+            reportStatus: "draft",
+          })
+        );
+      }
+    }
+  }
+
+  function handleChangeReportingToUser(id) {
+    setData((pre) => {
+      return {
+        ...pre,
+        reportShareWith: Number(id),
+      };
+    });
+  }
+
+  React.useEffect(() => {
+    if (reportAddSuccess) {
+      dispatch(resetReportAddSuccess());
+      setData({
+        summary: "",
+        methodology: "",
+        riskAssesmentSummary: "",
+        orgnizationStrategy: "",
+        summaryRisk: "",
+        newHeading: [],
+        reportShareWith: "",
+      });
+    }
+  }, [reportAddSuccess]);
+
+  React.useEffect(() => {
+    const users = allUsers?.filter(
+      (all) => all?.employeeid?.userHierarchy === hierarchy
+    );
+    setSelectedUsers(users);
+  }, [hierarchy]);
+
+  React.useEffect(() => {
+    if (user[0]?.token) {
+      dispatch(setupGetAllUsers({ shareWith: true }));
+    }
+  }, [user]);
 
   return (
     <div>
@@ -519,6 +601,49 @@ const GeneratePlanningReport = () => {
         </div>
       </div>
 
+      <div className="row mb-4">
+        <div className="col-lg-6">
+          <label htmlFor="defaultRemarks" className="w-100">
+            User Hierarchy:
+          </label>
+          <select
+            id="userHierarchy"
+            name="userHierarchy"
+            className="form-control w-100 h-40"
+            value={hierarchy}
+            onChange={(event) => setHierarchy(event?.target?.value)}
+          >
+            <option value="">Select</option>
+            <option value="IAH">IAH</option>
+            <option value="Team_Lead">Team_Lead</option>
+            <option value="Audit_Executive_2">Audit_Executive_2</option>
+            <option value="Audit_Executive_1">Audit_Executive_1</option>
+          </select>
+        </div>
+        <div className="col-lg-6">
+          <label htmlFor="defaultRemarks" className="w-100">
+            Users:
+          </label>
+          <select
+            id="userHierarchy"
+            name="userHierarchy"
+            className="form-control w-100 h-40"
+            onChange={(event) =>
+              handleChangeReportingToUser(event?.target?.value)
+            }
+          >
+            <option value="">Select</option>
+            {selectedUser?.map((all, index) => {
+              return (
+                <option value={all?.id} key={index}>
+                  {all?.name}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+      </div>
+
       <div className="row mb-3">
         <div className="col-lg-12 d-flex justify-content-between">
           <div className="btn btn-labeled btn-primary px-3 shadow fitContent">
@@ -527,11 +652,16 @@ const GeneratePlanningReport = () => {
             </span>
             Download PDF
           </div>
-          <div className="btn btn-labeled btn-primary px-3 shadow me-3 fitContent">
+          <div
+            className={`btn btn-labeled btn-primary px-3 shadow me-3 fitContent ${
+              loading && "disabled"
+            }`}
+            onClick={handleSaveReport}
+          >
             <span className="btn-label me-2">
               <i className="fa fa-check-circle f-18"></i>
             </span>
-            Save
+            {loading ? "Loading..." : "Save"}
           </div>
         </div>
       </div>

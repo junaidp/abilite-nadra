@@ -5,23 +5,29 @@ import {
 } from "../../../../../global-redux/reducers/settings/user-management/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
+import Pagination from "@mui/material/Pagination";
 
 const UserManagement = ({ setUserManagementDialog }) => {
   const dispatch = useDispatch();
   const { loading, addUserSuccess, allUsers } = useSelector(
     (state) => state?.setttingsUserManagement
   );
+  const [nameVal, setNameVal] = React.useState("");
   const { user } = useSelector((state) => state?.auth);
+  const [page, setPage] = React.useState(1);
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
   React.useEffect(() => {
     if (user[0]?.token) {
-      // dispatch(setupGetAllUsers());
+      dispatch(setupGetAllUsers());
     }
   }, [user]);
 
   React.useEffect(() => {
     if (addUserSuccess) {
       dispatch(resetAddUserSuccess());
-      // dispatch(setupGetAllUsers());
+      dispatch(setupGetAllUsers());
     }
   }, [addUserSuccess]);
 
@@ -41,7 +47,12 @@ const UserManagement = ({ setUserManagementDialog }) => {
       <div className="row my-3">
         <div className="col-lg-6">
           <label>User By User Name</label>
-          <input className="form-control w-100" placeholder="Enter Text here" />
+          <input
+            className="form-control w-100"
+            placeholder="Enter Text here"
+            value={nameVal}
+            onChange={(event) => setNameVal(event?.target?.value)}
+          />
         </div>
 
         <div className="col-lg-6 text-end float-end align-self-end">
@@ -62,17 +73,6 @@ const UserManagement = ({ setUserManagementDialog }) => {
           <div className="table-responsive">
             <table className="table table-bordered  table-hover rounded">
               <thead className="bg-secondary text-white">
-                {/* {loading ? (
-                  <tr>
-                    <td>
-                      <CircularProgress />
-                    </td>
-                  </tr>
-                ) : allUsers?.length === 0 ? (
-                  <tr>
-                    <td className="w-300">No user to show!</td>
-                  </tr>
-                ) : ( */}
                 <tr>
                   <th className="w-10">Sr No.</th>
                   <th>Username</th>
@@ -80,99 +80,52 @@ const UserManagement = ({ setUserManagementDialog }) => {
                   <th>Email ID</th>
                   <th>Skill Set</th>
                   <th>Role</th>
-                  <th>Reporting </th>
                   <th>Comapny</th>
                   <th>Actions</th>
                 </tr>
-                {/* )} */}
               </thead>
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>xxxxxxxx</td>
-                  <td>xxxxxxxx</td>
-                  <td>xxxxxxxx</td>
-                  <td>xxxxxxxx</td>
-                  <td>
-                    {" "}
-                    <select
-                      className="form-select"
-                      aria-label="Default select example"
-                    >
-                      <option>Role 1</option>
-                      <option value="2">Role 2</option>
-                    </select>
-                  </td>
-                  <td>
-                    {" "}
-                    <select
-                      className="form-select"
-                      aria-label="Default select example"
-                    >
-                      <option>Repoting 1</option>
-                      <option value="2">Reporting 2</option>
-                    </select>
-                  </td>
-                  <td>
-                    {" "}
-                    <select
-                      className="form-select"
-                      aria-label="Default select example"
-                    >
-                      <option>Comapny 1</option>
-                      <option value="2">Comapny 2</option>
-                    </select>
-                  </td>
-                  <td>
-                    <i className="fa fa-edit   f-18"></i>
-
-                    <i className="fa fa-trash text-danger mx-2 f-18"></i>
-                  </td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>xxxxx</td>
-                  <td>xxxxx</td>
-                  <td>xxxxx</td>
-                  <td>xxxx</td>
-                  <td>
-                    {" "}
-                    <select
-                      className="form-select"
-                      aria-label="Default select example"
-                    >
-                      <option>Role 1</option>
-                      <option value="2">Role 2</option>
-                    </select>
-                  </td>
-                  <td>
-                    {" "}
-                    <select
-                      className="form-select"
-                      aria-label="Default select example"
-                    >
-                      <option>Repoting 1</option>
-                      <option value="2">Reporting 2</option>
-                    </select>
-                  </td>
-                  <td>
-                    {" "}
-                    <select
-                      className="form-select"
-                      aria-label="Default select example"
-                    >
-                      <option>Comapny 1</option>
-                      <option value="2">Comapny 2</option>
-                    </select>
-                  </td>
-                  <td>
-                    <i className="fa fa-edit   f-18"></i>
-
-                    <i className="fa fa-trash text-danger f-18 mx-2"></i>
-                  </td>
-                </tr>
+                {loading ? (
+                  <tr>
+                    <td className="w-300">
+                      <CircularProgress />
+                    </td>
+                  </tr>
+                ) : allUsers?.length === 0 ? (
+                  <tr>
+                    <td className="w-300">No user to show!</td>
+                  </tr>
+                ) : (
+                  allUsers
+                    ?.filter((all) =>
+                      all?.name?.toLowerCase().includes(nameVal?.toLowerCase())
+                    )
+                    ?.slice((page - 1) * 5, page * 5)
+                    ?.map((userItem, index) => {
+                      return (
+                        <tr key={index}>
+                          <td>{userItem?.id}</td>
+                          <td>{userItem?.name || ""}</td>
+                          <td>{userItem?.employeeid?.designation || ""}</td>
+                          <td>{userItem?.email || ""}</td>
+                          <td>{userItem?.employeeid?.skillSet || ""}</td>
+                          <td>{userItem?.role[0]?.name || ""}</td>
+                          <td>{userItem?.company[0]?.companyName || ""}</td>
+                          <td>
+                            <i className="fa fa-edit   f-18 cursor-pointer"></i>
+                            <i className="fa fa-trash text-danger mx-2 f-18 cursor-pointer"></i>
+                          </td>
+                        </tr>
+                      );
+                    })
+                )}
               </tbody>
             </table>
+            <Pagination
+              count={Math.ceil(allUsers?.length / 5)}
+              page={page}
+              onChange={handleChange}
+            />
           </div>
         </div>
       </div>

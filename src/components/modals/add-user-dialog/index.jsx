@@ -13,7 +13,6 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
   const { addUserSuccess, loading, allUsers } = useSelector(
     (state) => state.setttingsUserManagement
   );
-
   const { user } = useSelector((state) => state?.auth);
   const { allCompanies } = useSelector(
     (state) => state?.settingsCompanyManagement
@@ -48,6 +47,9 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
         const selectedCompany = allCompanies?.find(
           (all) => Number(all?.id) === Number(values?.company)
         );
+        const reportingObj = allUsers?.find(
+          (all) => all?.name === values?.reportingTo
+        )?.employeeid;
         dispatch(
           setupAddUser({
             name: values?.name,
@@ -58,19 +60,31 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
               designation: values?.designation,
               userHierarchy: values?.userHierarchy,
               skillSet: values?.skillSet,
-              reportingTo: {
-                id: 9,
-                name: "string",
-                designation: "string",
-                userHierarchy: "string",
-                skillSet: "string",
-                reportingTo: null,
-              },
+              reportingTo: reportingObj,
             },
             client: selectedCompany?.clientId,
             resetToken: "string",
             createdBy: user[0]?.user?.userId,
-            company: [selectedCompany],
+            company: [
+              {
+                id: 22,
+                companyName: "Testing",
+                legalName: "Testing123",
+                fiscalYearForm: "2024-01-11T15:44:18.671+00:00",
+                fiscalYearTo: "2024-01-11T15:44:18.671+00:00",
+                logoPath: "string",
+                headerImage: "string",
+                clientId: {
+                  id: 1,
+                  name: "Nadra",
+                  numberOfUsers: 40,
+                  managementAccounts: 40,
+                  status: 1,
+                  clientpackage: "Platinum",
+                  createdDate: "2024-01-09T12:04:29.588+00:00",
+                },
+              },
+            ],
           })
         );
       }
@@ -220,6 +234,7 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
               onBlur={formik.handleBlur}
               value={formik.values.userHierarchy}
             >
+              <option value="">Select</option>
               <option value="IAH">IAH</option>
               <option value="Team_Lead">Team_Lead</option>
               <option value="Audit_Executive_2">Audit_Executive_2</option>
@@ -265,10 +280,14 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
               onBlur={formik.handleBlur}
               value={formik.values.reportingTo}
             >
-              <option value="User 1">User 1</option>
-              <option value="User 3">User 3</option>
-              <option value="User 4">User 4</option>
-              <option value="User 5">User 5</option>
+              <option value="">Select User</option>
+              {allUsers?.map((userVal, ind) => {
+                return (
+                  <option value={userVal?.name} key={ind}>
+                    {userVal?.name}
+                  </option>
+                );
+              })}
             </select>
             {/* Add more options as needed */}
             {formik.touched.reportingTo && formik.errors.reportingTo && (
