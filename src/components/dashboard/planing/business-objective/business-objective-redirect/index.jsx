@@ -21,20 +21,20 @@ import { useSearchParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 
 const BusinessObjectiveRedirect = () => {
-  const [showObjectiveListDialog, setShowObjectiveListDialog] =
-    React.useState(false);
-  const { allLocations } = useSelector((state) => state.setttingsLocation);
-  const [domain, setDomain] = React.useState("");
-  const [description, setDescription] = React.useState("");
-  const [searchParams, setSearchParams] = useSearchParams();
-  const engagementId = searchParams.get("engagementId");
-  const [allSubLocations, setAllSubLocations] = React.useState([]);
-  const { user } = useSelector((state) => state?.auth);
-
-  const { planingEngagementSingleObject, engagementAddSuccess, loading } =
-    useSelector((state) => state.planingEngagements);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const engagementId = searchParams.get("engagementId");
+  const { allLocations } = useSelector((state) => state.setttingsLocation);
+  const { planingEngagementSingleObject, engagementAddSuccess, loading } =
+    useSelector((state) => state.planingEngagements);
+  const { user } = useSelector((state) => state?.auth);
+  const [showObjectiveListDialog, setShowObjectiveListDialog] =
+    React.useState(false);
+  const [domain, setDomain] = React.useState("");
+  const [description, setDescription] = React.useState("");
+  const [allSubLocations, setAllSubLocations] = React.useState([]);
+
   const [object, setObject] = React.useState({
     engagementName: "",
     industryUpdate: "",

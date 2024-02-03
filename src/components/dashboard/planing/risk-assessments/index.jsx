@@ -8,18 +8,18 @@ import { setupGetAllRiskAssessments } from "../../../../global-redux/reducers/pl
 import { CircularProgress } from "@mui/material";
 const RiskAssessments = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [performRiskAssessmentModal, setPerformRiskAssessmentModal] =
     React.useState(false);
   const [page, setPage] = React.useState(1);
-  const handleChange = (event, value) => {
-    setPage(value);
-  };
-  const navigate = useNavigate();
   const { allRiskAssessments, loading } = useSelector(
     (state) => state?.planingRiskAssessments
   );
   const { company } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
 
   function handleUpdateRiskAssessment(item) {
     navigate(`/audit/risk-factor-approach?riskAssessmentId=${item?.id}`);
@@ -30,7 +30,9 @@ const RiskAssessments = () => {
       let companyId = user[0]?.company.find(
         (all) => all?.companyName === company
       )?.id;
-      dispatch(setupGetAllRiskAssessments(companyId));
+      if (companyId) {
+        dispatch(setupGetAllRiskAssessments(companyId));
+      }
     }
   }, [user]);
 
@@ -67,15 +69,7 @@ const RiskAssessments = () => {
 
       <div className="row">
         <div className="col-lg-12">
-          <div className="example-header">
-            {/* <div className="mb-2 w-100">
-              <input
-                placeholder="Filter"
-                id="inputField"
-                className="border-bottom"
-              />
-            </div> */}
-          </div>
+          <div className="example-header"></div>
           <div className="table-responsive">
             <table className="table table-bordered  table-hover rounded">
               <thead className="bg-secondary text-white">
@@ -97,7 +91,7 @@ const RiskAssessments = () => {
                   </tr>
                 ) : allRiskAssessments?.length == 0 ? (
                   <tr>
-                    <td>No Risk Assessment to show</td>
+                    <td className="w-300">No Risk Assessment to show</td>
                   </tr>
                 ) : (
                   allRiskAssessments

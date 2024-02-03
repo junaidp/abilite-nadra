@@ -12,19 +12,19 @@ import Pagination from "@mui/material/Pagination";
 import { toast } from "react-toastify";
 
 const Process = () => {
+  const dispatch = useDispatch();
+  const { loading, processAddSuccess, allProcess, allSubProcess } = useSelector(
+    (state) => state?.setttingsProcess
+  );
   const { user } = useSelector((state) => state?.auth);
   const { company } = useSelector((state) => state?.common);
   const [processText, setProcessText] = React.useState("");
   const [subProcessText, setSubProcessText] = React.useState("");
   const [processId, setProcessId] = React.useState("");
-  const dispatch = useDispatch();
   const [page, setPage] = React.useState(1);
   const handleChange = (event, value) => {
     setPage(value);
   };
-  const { loading, processAddSuccess, allProcess, allSubProcess } = useSelector(
-    (state) => state?.setttingsProcess
-  );
 
   function handleSaveProcess() {
     if (processText === "") {

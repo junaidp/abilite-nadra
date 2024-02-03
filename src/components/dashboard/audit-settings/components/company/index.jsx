@@ -12,7 +12,7 @@ const Company = ({ setAddCompantDialog }) => {
   const { allCompanies, loading, companyAddSuccess } = useSelector(
     (state) => state?.settingsCompanyManagement
   );
-  const {user}=useSelector((state)=>state?.auth)
+  const { user } = useSelector((state) => state?.auth);
   const [companySearch, setCompanySearch] = React.useState("");
   const [page, setPage] = React.useState(1);
   const handleChange = (event, value) => {
@@ -20,7 +20,7 @@ const Company = ({ setAddCompantDialog }) => {
   };
 
   React.useEffect(() => {
-    if(user[0]?.token){
+    if (user[0]?.token) {
       dispatch(setupGetAllCompanies());
     }
   }, [user]);
@@ -87,7 +87,11 @@ const Company = ({ setAddCompantDialog }) => {
               </thead>
               <tbody>
                 {loading ? (
-                  <CircularProgress />
+                  <tr>
+                    <td className="w-300">
+                      <CircularProgress />
+                    </td>
+                  </tr>
                 ) : allCompanies?.length === 0 ? (
                   <tr>
                     <td className="w-300">No company to show!</td>

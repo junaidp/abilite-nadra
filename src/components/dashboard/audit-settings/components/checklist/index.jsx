@@ -19,14 +19,6 @@ import Pagination from "@mui/material/Pagination";
 import { CircularProgress } from "@mui/material";
 
 const CheckList = ({ setCheckListManagementDialog }) => {
-  const [showEditCheckListDialog, setShowEditCheckListDialog] =
-    React.useState(false);
-  const [showEditCheckListItemDialog, setShowEditCheckListItemDialog] =
-    React.useState(false);
-  const [page, setPage] = React.useState(1);
-  const handleChange = (event, value) => {
-    setPage(value);
-  };
   const dispatch = useDispatch();
   const {
     loading,
@@ -36,9 +28,16 @@ const CheckList = ({ setCheckListManagementDialog }) => {
     checkListId,
     checkListItems,
   } = useSelector((state) => state.setttingsCheckList);
-  // const { companies } = useSelector((state) => state.company);
   const { user } = useSelector((state) => state.auth);
   const { company } = useSelector((state) => state.common);
+  const [showEditCheckListDialog, setShowEditCheckListDialog] =
+    React.useState(false);
+  const [showEditCheckListItemDialog, setShowEditCheckListItemDialog] =
+    React.useState(false);
+  const [page, setPage] = React.useState(1);
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
 
   const initialValues = {
     description: "",
@@ -174,7 +173,6 @@ const CheckList = ({ setCheckListManagementDialog }) => {
 
       <form onSubmit={formik.handleSubmit}>
         <div className="row mt-3">
-          {/* Description input field */}
           <div className="col-lg-4">
             <label htmlFor="description" className="w-100">
               Check List:

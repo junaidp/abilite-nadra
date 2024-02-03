@@ -18,6 +18,7 @@ import {
 
 const ComplianceCheckListCard = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
   const engagementId = searchParams.get("engagementId");
   const {
@@ -27,8 +28,6 @@ const ComplianceCheckListCard = () => {
     selectedCheckListItems,
   } = useSelector((state) => state.planingEngagements);
   const { user } = useSelector((state) => state?.auth);
-  const dispatch = useDispatch();
-
   const [page, setPage] = React.useState(1);
   const handleChange = (event, value) => {
     setPage(value);
@@ -69,7 +68,7 @@ const ComplianceCheckListCard = () => {
               >
                 <i className="fa fa-arrow-left text-primary fs-5 pe-3"></i>
               </a>
-              <h3 className="mb-0 fw-bold">Compliance Check List</h3>
+              <div className="mb-0 heading">Compliance Check List</div>
             </header>
           </div>
           <div className="accordion" id="accordionCheckListExample">
@@ -157,8 +156,10 @@ const ComplianceCheckListCard = () => {
                                           }
                                         )
                                       ) : (
-                                        <tr className="w-300">
-                                          <td>No CheckListItem to show</td>
+                                        <tr>
+                                          <td className="w-300">
+                                            No CheckListItem to show
+                                          </td>
                                         </tr>
                                       )}
                                     </tbody>
@@ -245,8 +246,10 @@ const ComplianceCheckListCard = () => {
                                   }
                                 )
                               ) : (
-                                <tr className="w-300">
-                                  <td>No CheckListItem to show</td>
+                                <tr>
+                                  <td className="w-300">
+                                    No CheckListItem to show
+                                  </td>
                                 </tr>
                               )}
                             </tbody>

@@ -7,11 +7,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
 
 const UserManagement = ({ setUserManagementDialog }) => {
+  const dispatch = useDispatch();
   const { loading, addUserSuccess, allUsers } = useSelector(
     (state) => state?.setttingsUserManagement
   );
   const { user } = useSelector((state) => state?.auth);
-  const dispatch = useDispatch();
   React.useEffect(() => {
     if (user[0]?.token) {
       // dispatch(setupGetAllUsers());

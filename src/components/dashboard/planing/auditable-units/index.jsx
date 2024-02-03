@@ -12,24 +12,25 @@ import { CircularProgress } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 
 const AuditableUnits = () => {
-  const [auditableUnitRatingDialog, setAuditableUnitRatingDialog] =
-    React.useState(false);
-  const [page, setPage] = React.useState(1);
-  const handleChange = (event, value) => {
-    setPage(value);
-  };
-  const [selectedAuditableUnitId, setSelectedAuditableUnitId] =
-    React.useState("");
-  const [selectedAuditableSubUnitId, setSelectedAuditableSubUnitId] =
-    React.useState("");
   const dispatch = useDispatch();
   const { loading, allAuditableUnits, auditableUnitAddSuccess } = useSelector(
     (state) => state?.planingAuditableUnit
   );
-  const [showEditAuditableUnit, setShowEditAuditableUnit] =
-    React.useState(false);
   const { user } = useSelector((state) => state?.auth);
   const { company } = useSelector((state) => state?.common);
+  const [auditableUnitRatingDialog, setAuditableUnitRatingDialog] =
+    React.useState(false);
+  const [page, setPage] = React.useState(1);
+  const [selectedAuditableUnitId, setSelectedAuditableUnitId] =
+    React.useState("");
+  const [selectedAuditableSubUnitId, setSelectedAuditableSubUnitId] =
+    React.useState("");
+  const [showEditAuditableUnit, setShowEditAuditableUnit] =
+    React.useState(false);
+
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
 
   React.useEffect(() => {
     if (auditableUnitAddSuccess) {
@@ -148,7 +149,9 @@ const AuditableUnits = () => {
                                     <tbody>
                                       {item?.unitList?.length === 0 ? (
                                         <tr>
-                                          <td className="w-300">No Unit To show</td>
+                                          <td className="w-300">
+                                            No Unit To show
+                                          </td>
                                         </tr>
                                       ) : (
                                         item?.unitList?.map((unit, i) => {

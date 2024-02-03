@@ -7,19 +7,19 @@ import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
 
 const JobScheduling = () => {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [page, setPage] = React.useState(1);
-  const handleChange = (event, value) => {
-    setPage(value);
-  };
   const { allJobScheduling, loading } = useSelector(
     (state) => state?.planingJobScheduling
   );
-  const [searchValue, setSearchValue] = React.useState("");
   const { company } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
+  const [page, setPage] = React.useState(1);
+  const [searchValue, setSearchValue] = React.useState("");
 
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
   React.useEffect(() => {
     const companyId = user[0]?.company?.find(
       (item) => item?.companyName === company

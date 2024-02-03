@@ -19,10 +19,6 @@ import { useSelector, useDispatch } from "react-redux";
 const StartScheduling = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [currentJobSchedulingObject, setCurrentJobScheduling] = React.useState(
-    {}
-  );
-  const [allSubLocations, setAllSubLocations] = React.useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const jobSchedulingId = searchParams.get("Id");
   const { allJobScheduling, loading, jobSchedulingAddSuccess } = useSelector(
@@ -30,6 +26,10 @@ const StartScheduling = () => {
   );
   const { company } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
+  const [currentJobSchedulingObject, setCurrentJobScheduling] = React.useState(
+    {}
+  );
+  const [allSubLocations, setAllSubLocations] = React.useState([]);
 
   function handleChangeNumberTextField(event) {
     setCurrentJobScheduling((pre) => {

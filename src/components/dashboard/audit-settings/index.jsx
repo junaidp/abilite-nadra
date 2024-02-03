@@ -101,7 +101,6 @@ const AuditSettings = () => {
                   type="button"
                   role="tab"
                   aria-controls="nav-home"
-                  aria-="true"
                 >
                   Supporting Doc
                 </button>
@@ -113,7 +112,6 @@ const AuditSettings = () => {
                   type="button"
                   role="tab"
                   aria-controls="nav-profile"
-                  aria-="false"
                 >
                   Location
                 </button>
@@ -125,7 +123,6 @@ const AuditSettings = () => {
                   type="button"
                   role="tab"
                   aria-controls="nav-risk"
-                  aria-="false"
                 >
                   Risk Factor
                 </button>
@@ -137,7 +134,6 @@ const AuditSettings = () => {
                   type="button"
                   role="tab"
                   aria-controls="nav-email"
-                  aria-="false"
                 >
                   Email
                 </button>
@@ -149,7 +145,6 @@ const AuditSettings = () => {
                   type="button"
                   role="tab"
                   aria-controls="nav-check"
-                  aria-="false"
                 >
                   Checklist Management
                 </button>
@@ -161,7 +156,6 @@ const AuditSettings = () => {
                   type="button"
                   role="tab"
                   aria-controls="nav-noti"
-                  aria-="false"
                 >
                   Notification
                 </button>
@@ -173,7 +167,6 @@ const AuditSettings = () => {
                   type="button"
                   role="tab"
                   aria-controls="nav-user"
-                  aria-="false"
                 >
                   User Management
                 </button>
@@ -185,7 +178,6 @@ const AuditSettings = () => {
                   type="button"
                   role="tab"
                   aria-controls="nav-mod"
-                  aria-="false"
                 >
                   Modules
                 </button>
@@ -197,7 +189,6 @@ const AuditSettings = () => {
                   type="button"
                   role="tab"
                   aria-controls="nav-com"
-                  aria-="false"
                 >
                   Company Management
                 </button>
@@ -209,7 +200,6 @@ const AuditSettings = () => {
                   type="button"
                   role="tab"
                   aria-controls="nav-com"
-                  aria-="false"
                 >
                   Process
                 </button>
@@ -247,9 +237,7 @@ const AuditSettings = () => {
               />
 
               <Modules />
-              <Company
-                setAddCompantDialog={setAddCompantDialog}
-              />
+              <Company setAddCompantDialog={setAddCompantDialog} />
               <Process />
             </div>
           </div>

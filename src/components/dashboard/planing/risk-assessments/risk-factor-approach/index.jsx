@@ -16,13 +16,13 @@ import {
 
 const RiskFactorApproach = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state?.auth);
-  const [scoreSum, setScoreSum] = React.useState(0);
   const navigate = useNavigate();
-  const { performRiskAssessmentObject, riskAssessmentSuccess, loading } =
-    useSelector((state) => state?.planingRiskAssessments);
   const [searchParams, setSearchParams] = useSearchParams();
   const riskAssessmentId = searchParams.get("riskAssessmentId");
+  const { user } = useSelector((state) => state?.auth);
+  const { performRiskAssessmentObject, riskAssessmentSuccess, loading } =
+    useSelector((state) => state?.planingRiskAssessments);
+  const [scoreSum, setScoreSum] = React.useState(0);
   const [showAddRiskFactorDialog, setShowAddRiskFactorDialog] =
     React.useState(false);
   const [data, setData] = React.useState({
@@ -288,7 +288,6 @@ const RiskFactorApproach = () => {
                         </tr>
                       );
                     })}
-                    {/* Show some dummy non-visible row so we can show the total score */}
                     <tr>
                       <td colSpan="4">Total Score</td>
                       <td className="bold width-50">{scoreSum}</td>

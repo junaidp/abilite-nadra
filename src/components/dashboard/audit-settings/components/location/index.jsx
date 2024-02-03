@@ -14,25 +14,25 @@ import EditLocationDialog from "../../../../modals/edit-location-dialog";
 import EditSubLocationDialog from "../../../../modals/edit-sub-location-dialog";
 
 const Location = () => {
-  const [locationDescription, setLocationDescription] = React.useState("");
+  const dispatch = useDispatch();
   const { loading, locationAddSuccess, allLocations } = useSelector(
     (state) => state.setttingsLocation
   );
+  const { company } = useSelector((state) => state?.common);
+  const { user } = useSelector((state) => state?.auth);
+  const [locationDescription, setLocationDescription] = React.useState("");
   const [subLocationText, setSubLocationText] = React.useState("");
   const [LocationId, setLocationId] = React.useState("");
   const [SubLocationId, setSubLocationId] = React.useState("");
   const [page, setPage] = React.useState(1);
-  const handleChange = (event, value) => {
-    setPage(value);
-  };
   const [showEditLocationDialog, setShowEditLocationDialog] =
     React.useState(false);
   const [showEditSubLocationDialog, setShowEditSubLocationDialog] =
     React.useState(false);
-  const { company } = useSelector((state) => state?.common);
-  const { user } = useSelector((state) => state?.auth);
-  const dispatch = useDispatch();
 
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
   function handleSaveLocation() {
     if (!loading) {
       if (locationDescription === "") {

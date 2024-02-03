@@ -10,24 +10,24 @@ import { setupGetAllEngagements } from "../../../../global-redux/reducers/planin
 import { CircularProgress } from "@mui/material";
 
 const BusinessObjective = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { allEngagements, loading } = useSelector(
     (state) => state.planingEngagements
   );
   const { company } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
   const [page, setPage] = React.useState(1);
-  const handleChange = (event, value) => {
-    setPage(value);
-  };
   const [businessObjectiveDialog, setBusinessObjectiveDialog] =
     React.useState(false);
-  const navigate = useNavigate();
   const [showAddSingleEngagement, setShowAddSingleEngagement] =
     React.useState(false);
   const [editSingleEngagementDialog, setShowEditSingleEngagementDialog] =
     React.useState(false);
-  let dispatch = useDispatch();
 
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
   function handleClickEngagement(id, name) {
     if (name === "Business Objective") {
       navigate(`/audit/business-objectives-redirect?engagementId=${id}`);
@@ -122,9 +122,9 @@ const BusinessObjective = () => {
                             <CircularProgress />
                           </td>
                         </tr>
-                      ) : allEngagements?.length == 0 ? (
+                      ) : allEngagements?.length === 0 ? (
                         <tr>
-                          <td>No Engagement To Show</td>
+                          <td className="w-300">No Engagement To Show</td>
                         </tr>
                       ) : (
                         allEngagements

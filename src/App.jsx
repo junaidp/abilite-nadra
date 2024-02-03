@@ -57,7 +57,6 @@ const App = () => {
   let dispatch = useDispatch();
   let { menuItems, year } = useSelector((state) => state.common);
   let { user } = useSelector((state) => state.auth);
-  let { company } = useSelector((state) => state.common);
   React.useEffect(() => {
     let authUser = JSON.parse(localStorage.getItem("user"));
     if (authUser) {
@@ -85,6 +84,7 @@ const App = () => {
     }
     dispatch(InitialLoadSidebarActiveLink());
   }, []);
+
   React.useEffect(() => {
     if (user[0]?.company[0]?.companyName) {
       dispatch(changeCompany(user[0]?.company[0]?.companyName));

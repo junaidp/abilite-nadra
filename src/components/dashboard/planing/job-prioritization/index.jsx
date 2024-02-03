@@ -13,14 +13,14 @@ const JobPrioritization = () => {
   const dispatch = useDispatch();
   const { loading, allJobPrioritization, jobPrioritizationAddSuccess } =
     useSelector((state) => state?.planingJobPrioritization);
+  const { user } = useSelector((state) => state?.auth);
+  const { company } = useSelector((state) => state?.common);
   const [currentId, setCurrentId] = React.useState("");
   const [data, setData] = React.useState([]);
   const [page, setPage] = React.useState(1);
   const handleChangePage = (event, value) => {
     setPage(value);
   };
-  const { user } = useSelector((state) => state?.auth);
-  const { company } = useSelector((state) => state?.common);
 
   function handleUpdate(id) {
     setCurrentId(id);
@@ -196,7 +196,6 @@ const JobPrioritization = () => {
                         </select>
                       </td>
                       <td>
-                        {" "}
                         <div
                           className={`btn btn-labeled btn-primary px-3 shadow ${
                             loading && currentId === item?.id && "disabled"
