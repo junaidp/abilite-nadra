@@ -15,6 +15,7 @@ import {
 } from "../../../../../global-redux/reducers/planing/job-scheduling/slice";
 import { useSearchParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import moment from "moment";
 
 const StartScheduling = () => {
   const navigate = useNavigate();
@@ -38,6 +39,17 @@ const StartScheduling = () => {
         [event?.target?.name]: Number(event?.target?.value),
       };
     });
+  }
+
+  function handleFrequencyChange(event) {
+    if (event.target?.value) {
+      dispatch(
+        setupUpdateJobScheduling({
+          ...currentJobSchedulingObject,
+          frequency: event?.target?.value,
+        })
+      );
+    }
   }
   function handleChangeJobSchedulingStringTextFields(event) {
     setCurrentJobScheduling((pre) => {
@@ -156,20 +168,6 @@ const StartScheduling = () => {
             />
           </div>
         </div>
-
-        {/* <div className="row mb-3">
-          <div className="col-lg-12">
-            <MultiSelect
-              title="Seprate Job For Location"
-              names={["Job 1", "Job 2", "Job 3"]}
-              initialPersonalArray={
-                currentJobSchedulingObject?.jobScheduleForLocationList
-              }
-              name="jobScheduleForLocationList"
-              setCurrentJobScheduling={setCurrentJobScheduling}
-            />
-          </div>
-        </div> */}
 
         <div className="row">
           <div className="col-md-12">
@@ -390,20 +388,6 @@ const StartScheduling = () => {
                             onChange={handleChangeNumberTextField}
                           />
                         </div>
-                        {/* <div className="col-lg-12">
-                          <label>Total Jobs</label>
-                          <input
-                            type="email"
-                            className="form-control"
-                            id="wa"
-                            placeholder=""
-                            value={
-                              currentJobSchedulingObject?.travellingDays
-                            }
-                            name="travellingDays"
-                            onChange={handleChangeNumberTextField}
-                          />
-                        </div> */}
                       </div>
 
                       <div className="row mb-3">
@@ -419,7 +403,7 @@ const StartScheduling = () => {
                         </div>
                       </div>
 
-                      <div className="row mb-3">
+                      {/* <div className="row mb-3">
                         <div className="col-lg-12">
                           <label>Proposed Job Approver</label>
                           <input
@@ -434,7 +418,7 @@ const StartScheduling = () => {
                             onChange={handleChangeNumberTextField}
                           />
                         </div>
-                      </div>
+                      </div> */}
 
                       <div className="row mb-3">
                         <div className="col-lg-6 align-self-center">
@@ -446,6 +430,7 @@ const StartScheduling = () => {
                               id="flexCheckDefault"
                               name="repeatJob"
                               checked={currentJobSchedulingObject?.repeatJob}
+                              onChange={handleChangeJobSchedulingCheckFields}
                             />
                             <label
                               className="form-check-label"
@@ -455,30 +440,101 @@ const StartScheduling = () => {
                             </label>
                           </div>
                         </div>
-                        <div className="col-lg-6">
-                          <label className="me-3">Frequency</label>
-                          <select
-                            className="form-select"
-                            aria-label="Default select example"
-                            value={currentJobSchedulingObject?.frequency || ""}
-                            name="frequency"
-                            onChange={handleChangeJobSchedulingStringTextFields}
-                          >
-                            <option>Select</option>
-                            <option value="Once">Once</option>
-                            <option value="Monthly">Monthly</option>
-                            <option value="Quarterly">Quarterly</option>
-                            <option value="Semi-Annually">Semi-Annually</option>
-                            <option value="Every Second Year">
-                              Every Second Year
-                            </option>
-                            <option value="Every Third Year">
-                              Every Third Year
-                            </option>
-                          </select>
-                        </div>
+                        {currentJobSchedulingObject?.repeatJob === true && (
+                          <div className="col-lg-6">
+                            <label className="me-3">Frequency</label>
+                            <select
+                              className="form-select"
+                              aria-label="Default select example"
+                              value={
+                                currentJobSchedulingObject?.frequency || ""
+                              }
+                              name="frequency"
+                              onChange={handleFrequencyChange}
+                            >
+                              <option>Select</option>
+                              <option value="Once">Once</option>
+                              <option value="Monthly">Monthly</option>
+                              <option value="Quarterly">Quarterly</option>
+                              <option value="Semi-Annually">
+                                Semi-Annually
+                              </option>
+                              <option value="Every Second Year">
+                                Every Second Year
+                              </option>
+                              <option value="Every Third Year">
+                                Every Third Year
+                              </option>
+                            </select>
+                          </div>
+                        )}
                       </div>
                     </div>
+                  </div>
+                </div>
+              </div>
+              <div className="accordion-item">
+                <h2 className="accordion-header">
+                  <button
+                    className="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#flush-collapseFour"
+                    aria-expanded="false"
+                    aria-controls="flush-collapseFour"
+                  >
+                    Job Schedule List
+                  </button>
+                </h2>
+                <div
+                  id="flush-collapseFour"
+                  className="accordion-collapse collapse"
+                  data-bs-parent="#accordionFlushExample"
+                >
+                  <div className="accordion-body">
+                    {currentJobSchedulingObject?.jobScheduleList?.length ===
+                    0 ? (
+                      <p>No job schedule list to show!</p>
+                    ) : (
+                      <div>
+                        {currentJobSchedulingObject?.jobScheduleList?.map(
+                          (list, ind) => {
+                            return (
+                              <div className="row mb-4" key={ind}>
+                                <div className="col-lg-6">
+                                  <label className="form-label me-2">
+                                    Start Date
+                                  </label>
+                                  <input
+                                    type="date"
+                                    className="form-control"
+                                    placeholder="Select Date"
+                                    value={moment(
+                                      list?.plannedJobStartDate
+                                    ).format("YYYY-MM-DD")}
+                                    readOnly
+                                  />
+                                </div>
+                                <div className="col-lg-6">
+                                  <label className="form-label me-2">
+                                    End Date
+                                  </label>
+                                  <input
+                                    type="date"
+                                    className="form-control"
+                                    placeholder="Select Date"
+                                    value={moment(
+                                      list?.plannedJobEndDate
+                                    ).format("YYYY-MM-DD")}
+                                    readOnly
+                                  />
+                                </div>
+                              </div>
+                            );
+                          }
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

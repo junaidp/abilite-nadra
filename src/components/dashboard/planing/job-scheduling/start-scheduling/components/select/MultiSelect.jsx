@@ -65,7 +65,7 @@ export default function MultipleSelect({
           labelId="demo-multiple-name-label"
           id="demo-multiple-name"
           multiple
-          value={selectedArray}
+          value={selectedArray || []}
           onChange={handleChange}
           input={<OutlinedInput label={title} />}
           MenuProps={MenuProps}

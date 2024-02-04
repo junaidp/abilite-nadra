@@ -126,7 +126,7 @@ export const slice = createSlice({
       const sortedArray = payload?.data?.sort(
         (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
       );
-      state.allEngagements = sortedArray;
+      state.allEngagements = sortedArray || [];
       state.loading = false;
     },
     [setupGetAllEngagements.rejected]: (state, { payload }) => {

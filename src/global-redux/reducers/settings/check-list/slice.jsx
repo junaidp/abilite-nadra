@@ -107,7 +107,7 @@ export const slice = createSlice({
       state.loading = true;
     },
     [setupGetAllCheckLists.fulfilled]: (state, { payload }) => {
-      state.checkList = payload.data;
+      state.checkList = payload.data || [];
       state.loading = false;
     },
     [setupGetAllCheckLists.rejected]: (state, { payload }) => {

@@ -442,7 +442,8 @@ const RiskFactorApproach = () => {
                     type="text"
                     className="form-control w-100 h-40"
                     name="residualLevelOfRisk"
-                    defaultValue={data?.residualLevelOfRisk}
+                    readOnly
+                    value={data?.residualLevelOfRisk}
                   />
                 </div>
                 <div className="col-lg-6">
@@ -454,7 +455,8 @@ const RiskFactorApproach = () => {
                     type="text"
                     className="form-control w-100 h-40"
                     name="controlEffectiveness"
-                    defaultValue={data?.controlEffectiveness}
+                    readOnly
+                    value={data?.controlEffectiveness}
                   />
                 </div>
               </div>

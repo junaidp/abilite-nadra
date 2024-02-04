@@ -95,7 +95,7 @@ const AuditableUnits = () => {
                   {loading ? (
                     <CircularProgress />
                   ) : allAuditableUnits?.length === 0 ? (
-                    <h3>No data to show!</h3>
+                    <p>No data to show!</p>
                   ) : (
                     allAuditableUnits
                       ?.slice((page - 1) * 5, page * 5)

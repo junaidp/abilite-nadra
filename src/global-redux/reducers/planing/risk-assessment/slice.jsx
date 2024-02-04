@@ -60,7 +60,7 @@ export const slice = createSlice({
       const sortedArray = payload?.data?.sort(
         (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
       );
-      state.allRiskAssessments = sortedArray;
+      state.allRiskAssessments = sortedArray || [];
     },
     [setupGetAllRiskAssessments.rejected]: (state, { payload }) => {
       state.loading = false;

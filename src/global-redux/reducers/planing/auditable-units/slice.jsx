@@ -43,7 +43,7 @@ export const slice = createSlice({
     },
     [setupGetAllAuditableUnits.fulfilled]: (state, { payload }) => {
       state.loading = false;
-      state.allAuditableUnits = payload?.data;
+      state.allAuditableUnits = payload?.data || [];
     },
     [setupGetAllAuditableUnits.rejected]: (state, { payload }) => {
       state.loading = false;

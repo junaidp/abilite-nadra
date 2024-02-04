@@ -13,6 +13,7 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
   const { addUserSuccess, loading, allUsers } = useSelector(
     (state) => state.setttingsUserManagement
   );
+  const [usersList, setUsersList] = React.useState([]);
   const { user } = useSelector((state) => state?.auth);
   const { allCompanies } = useSelector(
     (state) => state?.settingsCompanyManagement
@@ -44,9 +45,9 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
     }),
     onSubmit: (values) => {
       if (!loading) {
-        const selectedCompany = allCompanies?.find(
-          (all) => Number(all?.id) === Number(values?.company)
-        );
+        // const selectedCompany = allCompanies?.find(
+        //   (all) => Number(all?.id) === Number(values?.company)
+        // );
         const reportingObj = allUsers?.find(
           (all) => all?.name === values?.reportingTo
         )?.employeeid;
@@ -60,9 +61,17 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
               designation: values?.designation,
               userHierarchy: values?.userHierarchy,
               skillSet: values?.skillSet,
-              reportingTo: reportingObj,
+              reportingTo: reportingObj ? reportingObj : null,
             },
-            client: selectedCompany?.clientId,
+            client: {
+              id: 1,
+              name: "Nadra",
+              numberOfUsers: 40,
+              managementAccounts: 40,
+              status: 1,
+              clientpackage: "Platinum",
+              createdDate: "2024-01-09T12:04:29.588+00:00",
+            },
             resetToken: "string",
             createdBy: user[0]?.user?.userId,
             company: [
@@ -105,6 +114,35 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
       }, 500);
     }
   }, [addUserSuccess]);
+
+  React.useEffect(() => {
+    if (formik.values?.userHierarchy === "IAH") {
+      setUsersList([{ name: "Not-Required" }]);
+    }
+
+    if (formik.values?.userHierarchy === "Team_Lead") {
+      const allowedRoles = ["IAH"];
+      const filteredArr = allUsers.filter((item) =>
+        allowedRoles.includes(item?.employeeid?.userHierarchy)
+      );
+      setUsersList(filteredArr);
+    }
+
+    if (formik.values?.userHierarchy === "Audit_Executive_2") {
+      const allowedRoles = ["Team_Lead", "IAH"];
+      const filteredArr = allUsers.filter((item) =>
+        allowedRoles.includes(item?.employeeid?.userHierarchy)
+      );
+      setUsersList(filteredArr);
+    }
+    if (formik.values?.userHierarchy === "Audit_Executive_1") {
+      const allowedRoles = ["Audit_Executive_2", "Team_Lead", "IAH"];
+      const filteredArr = allUsers.filter((item) =>
+        allowedRoles.includes(item?.employeeid?.userHierarchy)
+      );
+      setUsersList(filteredArr);
+    }
+  }, [formik.values]);
 
   React.useEffect(() => {
     dispatch(setupGetAllCompanies());
@@ -281,7 +319,7 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
               value={formik.values.reportingTo}
             >
               <option value="">Select User</option>
-              {allUsers?.map((userVal, ind) => {
+              {usersList?.map((userVal, ind) => {
                 return (
                   <option value={userVal?.name} key={ind}>
                     {userVal?.name}

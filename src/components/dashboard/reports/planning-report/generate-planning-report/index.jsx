@@ -7,19 +7,38 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   resetReportAddSuccess,
   setupSaveReports,
+  setupGetAllReports,
+  setupUpdateSingleReport,
 } from "../../../../../global-redux/reducers/reports/slice";
+import { useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { setupGetAllUsers } from "../../../../../global-redux/reducers/settings/user-management/slice";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 const GeneratePlanningReport = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const editable = searchParams.get("editable");
+  const reportId = searchParams.get("reportId");
+  const [rolesList, setRolesList] = React.useState([
+    "IAH",
+    "Team_Lead",
+    "Audit_Executive_2",
+    "Audit_Executive_1",
+  ]);
+  const [pdfLoading, setPdfLoading] = React.useState(false);
+
   const [generatePlaningReportDialog, setGeneratePlaningReportDialog] =
     React.useState(false);
+  const [shareWithUserId, setShareWithUserId] = React.useState("");
   const [hierarchy, setHierarchy] = React.useState("");
   const [selectedUser, setSelectedUsers] = React.useState([]);
   const { allUsers } = useSelector((state) => state?.setttingsUserManagement);
-  const { loading, reportAddSuccess } = useSelector((state) => state?.reports);
+  const { loading, reportAddSuccess, allReports } = useSelector(
+    (state) => state?.reports
+  );
   const { user } = useSelector((state) => state?.auth);
   const [data, setData] = React.useState({
     summary: "",
@@ -49,6 +68,32 @@ const GeneratePlanningReport = () => {
     });
   }
 
+  const handleDownload = () => {
+    if (!pdfLoading) {
+      const element = document.getElementById("reportsPage");
+      setPdfLoading(true);
+      html2canvas(element)
+        .then((canvas) => {
+          const imgData = canvas.toDataURL("image/png");
+          const imgWidth = 210;
+          const imgHeight = (canvas.height * imgWidth) / canvas.width;
+          const pdf = new jsPDF({
+            orientation: "p",
+            unit: "mm",
+            format: [imgWidth, imgHeight],
+          });
+          pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+          pdf.save("document.pdf");
+          setPdfLoading(false);
+          toast.success("Pdf Dowloaded!");
+        })
+        .catch((error) => {
+          toast.error("Error generating PDF:", error);
+          setPdfLoading(false);
+        });
+    }
+  };
+
   function handleSaveReport() {
     if (!loading) {
       if (
@@ -67,7 +112,7 @@ const GeneratePlanningReport = () => {
             ...data,
             newHeading: data?.newHeading?.map((item) => {
               return {
-                haeding: item?.heading,
+                heading: item?.heading,
                 description: item?.description,
               };
             }),
@@ -80,14 +125,48 @@ const GeneratePlanningReport = () => {
     }
   }
 
-  function handleChangeReportingToUser(id) {
-    setData((pre) => {
-      return {
-        ...pre,
-        reportShareWith: Number(id),
-      };
-    });
+  function handleEditReport() {
+    if (!loading) {
+      if (
+        data?.summary === "" ||
+        data?.methodology === "" ||
+        data?.riskAssesmentSummary === "" ||
+        data?.orgnizationStrategy === "" ||
+        data?.summaryRisk === "" ||
+        data?.newHeading?.length === 0 ||
+        data?.reportShareWith === ""
+      ) {
+        toast.error("Please Provide all the fields");
+      } else {
+        dispatch(
+          setupUpdateSingleReport({
+            ...data,
+            newHeading: data?.newHeading?.map((item) => {
+              return {
+                heading: item?.heading,
+                description: item?.description,
+              };
+            }),
+            createdBy: user[0]?.userId?.id,
+            storedHtml: null,
+            reportStatus: "draft",
+            id: Number(reportId),
+          })
+        );
+      }
+    }
   }
+
+  React.useEffect(() => {
+    if (shareWithUserId !== "") {
+      setData((pre) => {
+        return {
+          ...pre,
+          reportShareWith: Number(shareWithUserId),
+        };
+      });
+    }
+  }, [shareWithUserId]);
 
   React.useEffect(() => {
     if (reportAddSuccess) {
@@ -101,24 +180,84 @@ const GeneratePlanningReport = () => {
         newHeading: [],
         reportShareWith: "",
       });
+      navigate("/audit/planning-report");
     }
   }, [reportAddSuccess]);
 
   React.useEffect(() => {
-    const users = allUsers?.filter(
-      (all) => all?.employeeid?.userHierarchy === hierarchy
-    );
-    setSelectedUsers(users);
+    if (hierarchy !== "") {
+      const users = allUsers?.filter(
+        (all) => all?.employeeid?.userHierarchy === hierarchy
+      );
+      setSelectedUsers(users);
+    }
   }, [hierarchy]);
 
   React.useEffect(() => {
+    if (
+      editable === "false" &&
+      allReports?.length !== 0 &&
+      allUsers?.length !== 0
+    ) {
+      const details = allReports?.find((all) => all?.id === Number(reportId));
+      setData({
+        summary: details?.summary,
+        methodology: details?.methodology,
+        riskAssesmentSummary: details?.riskAssesmentSummary,
+        orgnizationStrategy: details?.orgnizationStrategy,
+        summaryRisk: details?.summaryRisk,
+        newHeading: details?.newHeading || [],
+        reportShareWith: details?.reportShareWith?.id,
+      });
+      const currentUser = allUsers?.find(
+        (all) => Number(all?.id) === Number(details?.reportShareWith?.id)
+      );
+      setHierarchy(currentUser?.employeeid?.userHierarchy);
+      setShareWithUserId(details?.reportShareWith?.id);
+    }
+  }, [editable, allReports, allUsers]);
+
+  React.useEffect(() => {
+    if (
+      editable === "true" &&
+      allReports?.length !== 0 &&
+      allUsers?.length !== 0
+    ) {
+      const details = allReports?.find((all) => all?.id === Number(reportId));
+      setData({
+        summary: details?.summary,
+        methodology: details?.methodology,
+        riskAssesmentSummary: details?.riskAssesmentSummary,
+        orgnizationStrategy: details?.orgnizationStrategy,
+        summaryRisk: details?.summaryRisk,
+        newHeading: details?.newHeading || [],
+        reportShareWith: details?.reportShareWith?.id,
+      });
+      const currentUser = allUsers?.find(
+        (all) => Number(all?.id) === Number(details?.reportShareWith?.id)
+      );
+      setHierarchy(currentUser?.employeeid?.userHierarchy);
+      setShareWithUserId(details?.reportShareWith?.id);
+    }
+  }, [editable, allReports, allUsers]);
+
+  React.useEffect(() => {
     if (user[0]?.token) {
+      dispatch(setupGetAllReports());
       dispatch(setupGetAllUsers({ shareWith: true }));
     }
   }, [user]);
 
+  React.useEffect(() => {
+    if (user[0]?.token) {
+      setRolesList((pre) =>
+        pre.filter((all) => all !== user[0]?.userId?.employeeid?.userHierarchy)
+      );
+    }
+  }, [user]);
+
   return (
-    <div>
+    <div id="reportsPage">
       {generatePlaningReportDialog && (
         <div className="audit-settings-modal">
           <div className="model-wrap">
@@ -163,24 +302,25 @@ const GeneratePlanningReport = () => {
                 />
               </div>
             </div>
-
-            <div className="col-lg-4 d-flex text-end justify-content-end">
-              <div className="mb-3">
-                <div
-                  className="btn btn-labeled btn-primary px-3 shadow fitContent"
-                  onClick={() => setGeneratePlaningReportDialog(true)}
-                >
-                  <span className="btn-label me-2">
-                    <i className="fa fa-plus"></i>
-                  </span>
-                  Add Section
+            {editable !== "false" && (
+              <div className="col-lg-4 d-flex text-end justify-content-end">
+                <div className="mb-3">
+                  <div
+                    className="btn btn-labeled btn-primary px-3 shadow fitContent"
+                    onClick={() => setGeneratePlaningReportDialog(true)}
+                  >
+                    <span className="btn-label me-2">
+                      <i className="fa fa-plus"></i>
+                    </span>
+                    Add Section
+                  </div>
                 </div>
+                <i
+                  className="fa fa-info-circle ps-3 text-secondary mt-2 cursor-pointer"
+                  title="Info"
+                ></i>
               </div>
-              <i
-                className="fa fa-info-circle ps-3 text-secondary mt-2 cursor-pointer"
-                title="Info"
-              ></i>
-            </div>
+            )}
           </div>
         </div>
       </div>
@@ -188,71 +328,79 @@ const GeneratePlanningReport = () => {
       <div className="row mb-3">
         <div className="col-lg-12"></div>
       </div>
-      <div className="row mb-3">
-        <div className="col-lg-12">
-          <label htmlFor="exampleFormControlTextarea1" className="form-label">
-            Executive Summary
-          </label>
-          <Editor
-            onContentChange={handleEditorContentChange}
-            initialValue={data?.summary}
-            name="summary"
-          />
-          <p className="word-limit-info mb-0">Maximum 1500 words</p>
-        </div>
-      </div>
-      <div className="row mb-3">
-        <div className="col-lg-12">
-          <label htmlFor="exampleFormControlTextarea1" className="form-label">
-            Audit Planning Methodology
-          </label>
-          <Editor
-            onContentChange={handleEditorContentChange}
-            initialValue={data?.methodology}
-            name="methodology"
-          />
-          <p className="word-limit-info mb-0">Maximum 1500 words</p>
-        </div>
-      </div>
-      <div className="row mb-3">
-        <div className="col-lg-12">
-          <label htmlFor="exampleFormControlTextarea1" className="form-label">
-            Risk assessment summary
-          </label>
-          <Editor
-            onContentChange={handleEditorContentChange}
-            initialValue={data?.riskAssesmentSummary}
-            name="riskAssesmentSummary"
-          />
-          <p className="word-limit-info mb-0">Maximum 1500 words</p>
-        </div>
-      </div>
-      <div className="row mb-3">
-        <div className="col-lg-12">
-          <label htmlFor="exampleFormControlTextarea1" className="form-label">
-            Organizational strategy, key areas of focus, key risks, and
-            associated assurance strategies in the audit plan.
-          </label>
-          <Editor
-            onContentChange={handleEditorContentChange}
-            initialValue={data?.orgnizationStrategy}
-            name="orgnizationStrategy"
-          />
-          <p className="word-limit-info mb-0">Maximum 1500 words</p>
-        </div>
-      </div>
 
-      <div className="row mb-3">
-        <div className="col-lg-12">
-          <label htmlFor="exampleFormControlTextarea1" className="form-label">
-            Summary of risks.
-          </label>
-          <Editor
-            onContentChange={handleEditorContentChange}
-            initialValue={data?.summaryRisk}
-            name="summaryRisk"
-          />
-          <p className="word-limit-info mb-0">Maximum 1500 words</p>
+      <div>
+        <div className="row mb-3">
+          <div className="col-lg-12">
+            <label htmlFor="exampleFormControlTextarea1" className="form-label">
+              Executive Summary
+            </label>
+            <Editor
+              onContentChange={handleEditorContentChange}
+              initialValue={data?.summary}
+              name="summary"
+              editable={editable}
+            />
+            <p className="word-limit-info mb-0">Maximum 1500 words</p>
+          </div>
+        </div>
+        <div className="row mb-3">
+          <div className="col-lg-12">
+            <label htmlFor="exampleFormControlTextarea1" className="form-label">
+              Audit Planning Methodology
+            </label>
+            <Editor
+              onContentChange={handleEditorContentChange}
+              initialValue={data?.methodology}
+              name="methodology"
+              editable={editable}
+            />
+            <p className="word-limit-info mb-0">Maximum 1500 words</p>
+          </div>
+        </div>
+        <div className="row mb-3">
+          <div className="col-lg-12">
+            <label htmlFor="exampleFormControlTextarea1" className="form-label">
+              Risk assessment summary
+            </label>
+            <Editor
+              onContentChange={handleEditorContentChange}
+              initialValue={data?.riskAssesmentSummary}
+              name="riskAssesmentSummary"
+              editable={editable}
+            />
+            <p className="word-limit-info mb-0">Maximum 1500 words</p>
+          </div>
+        </div>
+        <div className="row mb-3">
+          <div className="col-lg-12">
+            <label htmlFor="exampleFormControlTextarea1" className="form-label">
+              Organizational strategy, key areas of focus, key risks, and
+              associated assurance strategies in the audit plan.
+            </label>
+            <Editor
+              onContentChange={handleEditorContentChange}
+              initialValue={data?.orgnizationStrategy}
+              name="orgnizationStrategy"
+              editable={editable}
+            />
+            <p className="word-limit-info mb-0">Maximum 1500 words</p>
+          </div>
+        </div>
+
+        <div className="row mb-3">
+          <div className="col-lg-12">
+            <label htmlFor="exampleFormControlTextarea1" className="form-label">
+              Summary of risks.
+            </label>
+            <Editor
+              onContentChange={handleEditorContentChange}
+              initialValue={data?.summaryRisk}
+              name="summaryRisk"
+              editable={editable}
+            />
+            <p className="word-limit-info mb-0">Maximum 1500 words</p>
+          </div>
         </div>
       </div>
 
@@ -549,21 +697,6 @@ const GeneratePlanningReport = () => {
 
       <div className="row mb-3">
         <div className="col-lg-12">
-          <label htmlFor="exampleFormControlTextarea1" className="form-label">
-            Add Heading
-          </label>
-          <textarea
-            className="form-control"
-            placeholder="Enter Here"
-            id="exampleFormControlTextarea2"
-            rows="3"
-          ></textarea>
-          <p className="word-limit-info mb-0">Maximum 1500 words</p>
-        </div>
-      </div>
-
-      <div className="row mb-3">
-        <div className="col-lg-12">
           <label
             htmlFor="exampleFormControlTextarea1"
             className="form-label me-3 mb-3"
@@ -601,68 +734,123 @@ const GeneratePlanningReport = () => {
         </div>
       </div>
 
-      <div className="row mb-4">
-        <div className="col-lg-6">
-          <label htmlFor="defaultRemarks" className="w-100">
-            User Hierarchy:
-          </label>
-          <select
-            id="userHierarchy"
-            name="userHierarchy"
-            className="form-control w-100 h-40"
-            value={hierarchy}
-            onChange={(event) => setHierarchy(event?.target?.value)}
-          >
-            <option value="">Select</option>
-            <option value="IAH">IAH</option>
-            <option value="Team_Lead">Team_Lead</option>
-            <option value="Audit_Executive_2">Audit_Executive_2</option>
-            <option value="Audit_Executive_1">Audit_Executive_1</option>
-          </select>
+      {editable !== "notApplicable" && (
+        <div className="row mb-4">
+          <div className="col-lg-6">
+            <label htmlFor="area">User:</label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              readOnly
+              className="form-control"
+              defaultValue={
+                allUsers?.find(
+                  (all) => Number(all?.id) === Number(shareWithUserId)
+                )?.name
+              }
+            />
+          </div>
+          <div className="col-lg-6">
+            <label htmlFor="area"> User Hierarchy:</label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              readOnly
+              className="form-control"
+              defaultValue={hierarchy}
+            />
+          </div>
         </div>
-        <div className="col-lg-6">
-          <label htmlFor="defaultRemarks" className="w-100">
-            Users:
-          </label>
-          <select
-            id="userHierarchy"
-            name="userHierarchy"
-            className="form-control w-100 h-40"
-            onChange={(event) =>
-              handleChangeReportingToUser(event?.target?.value)
-            }
-          >
-            <option value="">Select</option>
-            {selectedUser?.map((all, index) => {
-              return (
-                <option value={all?.id} key={index}>
-                  {all?.name}
-                </option>
-              );
-            })}
-          </select>
+      )}
+      {editable === "notApplicable" && (
+        <div className="row mb-4">
+          <div className="col-lg-6">
+            <label htmlFor="defaultRemarks" className="w-100">
+              User Hierarchy:
+            </label>
+            <select
+              id="userHierarchy"
+              name="userHierarchy"
+              className="form-control w-100 h-40"
+              value={hierarchy}
+              onChange={(event) => setHierarchy(event?.target?.value)}
+            >
+              <option value="">Select</option>
+              {rolesList?.map((item, index) => {
+                return (
+                  <option value={item} key={index}>
+                    {item}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+
+          <div className="col-lg-6">
+            <label htmlFor="defaultRemarks" className="w-100">
+              Users:
+            </label>
+            <select
+              id="userHierarchy"
+              name="userHierarchy"
+              className="form-control w-100 h-40"
+              value={shareWithUserId}
+              onChange={(event) => setShareWithUserId(event?.target?.value)}
+            >
+              <option value="">Select</option>
+              {selectedUser?.map((all, index) => {
+                return (
+                  <option value={all?.id} key={index}>
+                    {all?.name}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="row mb-3">
         <div className="col-lg-12 d-flex justify-content-between">
-          <div className="btn btn-labeled btn-primary px-3 shadow fitContent">
+          <div
+            className={`btn btn-labeled btn-primary px-3 shadow fitContent ${
+              pdfLoading && "disabled"
+            }`}
+            onClick={handleDownload}
+          >
             <span className="btn-label me-2">
               <i className="fa fa-file-pdf f-18"></i>
             </span>
-            Download PDF
+            {pdfLoading ? "Loading" : "Download PDF"}
           </div>
-          <div
-            className={`btn btn-labeled btn-primary px-3 shadow me-3 fitContent ${
-              loading && "disabled"
-            }`}
-            onClick={handleSaveReport}
-          >
-            <span className="btn-label me-2">
-              <i className="fa fa-check-circle f-18"></i>
-            </span>
-            {loading ? "Loading..." : "Save"}
-          </div>
+          {editable === "notApplicable" && (
+            <div
+              className={`btn btn-labeled btn-primary px-3 shadow me-3 fitContent ${
+                loading && "disabled"
+              }`}
+              onClick={handleSaveReport}
+            >
+              <span className="btn-label me-2">
+                <i className="fa fa-check-circle f-18"></i>
+              </span>
+              {loading ? "Loading..." : "Save"}
+            </div>
+          )}
+          {editable === "true" && (
+            <div
+              className={`btn btn-labeled btn-primary px-3 shadow me-3 fitContent ${
+                loading && "disabled"
+              }`}
+              onClick={handleEditReport}
+            >
+              <span className="btn-label me-2">
+                <i className="fa fa-check-circle f-18"></i>
+              </span>
+              {loading ? "Loading..." : "Edit"}
+            </div>
+          )}
         </div>
       </div>
     </div>
