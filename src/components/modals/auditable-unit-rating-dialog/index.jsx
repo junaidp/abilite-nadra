@@ -17,7 +17,6 @@ const AuditableUnitRatingDialog = ({
     jobType: "",
   });
 
-
   function handleChange(event) {
     setData((pre) => {
       return {
@@ -169,7 +168,8 @@ const AuditableUnitRatingDialog = ({
                   value={data?.jobType}
                   onChange={handleChange}
                 >
-                  <option>Review</option>
+                  <option>Select Option</option>
+                  <option value="Review">Review</option>
                   <option value="Fraud & Investigation">
                     Fraud & Investigation
                   </option>

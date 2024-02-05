@@ -7,6 +7,7 @@ import {
   InitialLoadSidebarActiveLink,
 } from "../../../../../global-redux/reducers/common/slice";
 import { setupGetAllLocations } from "../../../../../global-redux/reducers/settings/location/slice";
+import { setupGetAllUsers } from "../../../../../global-redux/reducers/settings/user-management/slice";
 import Select from "./components/Select";
 import {
   setupGetAllJobScheduling,
@@ -26,7 +27,14 @@ const StartScheduling = () => {
     (state) => state?.planingJobScheduling
   );
   const { company } = useSelector((state) => state?.common);
+  const { allUsers } = useSelector((state) => state?.setttingsUserManagement);
   const { user } = useSelector((state) => state?.auth);
+  const [initialLocationList, setInitialLocationList] = React.useState([]);
+  const [initialSubLocationList, setInitialSubLocationList] = React.useState(
+    []
+  );
+  const [initialUserList, setInitialUserList] = React.useState([]);
+  const { allLocations } = useSelector((state) => state?.setttingsLocation);
   const [currentJobSchedulingObject, setCurrentJobScheduling] = React.useState(
     {}
   );
@@ -43,12 +51,58 @@ const StartScheduling = () => {
 
   function handleFrequencyChange(event) {
     if (event.target?.value) {
-      dispatch(
-        setupUpdateJobScheduling({
-          ...currentJobSchedulingObject,
-          frequency: event?.target?.value,
-        })
+      const filteredLocationArray = allLocations.filter((item) =>
+        currentJobSchedulingObject?.locationList.includes(item?.description)
       );
+      const filteredSubLocationArray = allSubLocations.filter((item) =>
+        currentJobSchedulingObject?.subLocation.includes(item?.description)
+      );
+      const filteredHeadOfInternalAudit = allUsers.find(
+        (item) =>
+          item?.name == currentJobSchedulingObject?.headOfInternalAudit?.name
+      );
+      const filteredBackupHeadOfInternalAudit = allUsers.find(
+        (item) =>
+          item?.name ==
+          currentJobSchedulingObject?.backupHeadOfInternalAudit?.name
+      );
+      const filteredProposedJobApprover = allUsers.find(
+        (item) =>
+          item?.name == currentJobSchedulingObject?.proposedJobApprover?.name
+      );
+      const filteredResourceArray = allUsers.filter((item) =>
+        currentJobSchedulingObject?.resourcesList.includes(item?.name)
+      );
+      let object;
+      object = {
+        ...currentJobSchedulingObject,
+        frequency: event?.target?.value,
+        locationList: filteredLocationArray.map((list) => {
+          return {
+            id: list?.id,
+            description: list?.description,
+            companyid: list?.companyid,
+          };
+        }),
+        subLocation: filteredSubLocationArray,
+        headOfInternalAudit: filteredHeadOfInternalAudit,
+        backupHeadOfInternalAudit: filteredBackupHeadOfInternalAudit,
+        proposedJobApprover: filteredProposedJobApprover,
+        resourcesList: filteredResourceArray,
+      };
+      const hasNullValue = Object.values(object).includes(null);
+      if (hasNullValue) {
+        object = {
+          ...object,
+          complete: false,
+        };
+      } else {
+        object = {
+          ...object,
+          complete: true,
+        };
+      }
+      dispatch(setupUpdateJobScheduling(object));
     }
   }
   function handleChangeJobSchedulingStringTextFields(event) {
@@ -70,7 +124,57 @@ const StartScheduling = () => {
 
   function handleSave() {
     if (!loading) {
-      dispatch(setupUpdateJobScheduling(currentJobSchedulingObject));
+      const filteredLocationArray = allLocations.filter((item) =>
+        currentJobSchedulingObject?.locationList.includes(item?.description)
+      );
+      const filteredSubLocationArray = allSubLocations.filter((item) =>
+        currentJobSchedulingObject?.subLocation.includes(item?.description)
+      );
+      const filteredResourceArray = allUsers.filter((item) =>
+        currentJobSchedulingObject?.resourcesList.includes(item?.name)
+      );
+      const filteredHeadOfInternalAudit = allUsers.find(
+        (item) =>
+          item?.name == currentJobSchedulingObject?.headOfInternalAudit?.name
+      );
+      const filteredProposedJobApprover = allUsers.find(
+        (item) =>
+          item?.name == currentJobSchedulingObject?.proposedJobApprover?.name
+      );
+      const filteredBackupHeadOfInternalAudit = allUsers.find(
+        (item) =>
+          item?.name ==
+          currentJobSchedulingObject?.backupHeadOfInternalAudit?.name
+      );
+      let object;
+      object = {
+        ...currentJobSchedulingObject,
+        locationList: filteredLocationArray.map((list) => {
+          return {
+            id: list?.id,
+            description: list?.description,
+            companyid: list?.companyid,
+          };
+        }),
+        subLocation: filteredSubLocationArray,
+        headOfInternalAudit: filteredHeadOfInternalAudit,
+        backupHeadOfInternalAudit: filteredBackupHeadOfInternalAudit,
+        proposedJobApprover: filteredProposedJobApprover,
+        resourcesList: filteredResourceArray,
+      };
+      const hasNullValue = Object.values(object).includes(null);
+      if (hasNullValue) {
+        object = {
+          ...object,
+          complete: false,
+        };
+      } else {
+        object = {
+          ...object,
+          complete: true,
+        };
+      }
+      dispatch(setupUpdateJobScheduling(object));
     }
   }
 
@@ -114,24 +218,32 @@ const StartScheduling = () => {
         (item) => item?.id === Number(jobSchedulingId)
       );
       setCurrentJobScheduling(object);
+      setInitialLocationList(
+        object?.locationList?.map((all) => all?.description)
+      );
+      setInitialSubLocationList(
+        object?.subLocation?.map((all) => all?.description)
+      );
+      setInitialUserList(object?.resourcesList?.map((all) => all?.name));
     }
   }, [jobSchedulingId, allJobScheduling]);
 
-  // Location and Sub Location
   React.useEffect(() => {
     if (user[0]?.token) {
       dispatch(setupGetAllLocations());
+      dispatch(setupGetAllUsers());
     }
   }, [user]);
 
-  // React.useEffect(() => {
-  //   if (object?.location_Id) {
-  //     const item = allLocations?.find(
-  //       (all) => all?.id === Number(object?.location_Id)
-  //     );
-  //     setAllSubLocations(item?.subLocations);
-  //   }
-  // }, [object?.location_Id]);
+  React.useEffect(() => {
+    const locationArray = allLocations.filter((item) =>
+      currentJobSchedulingObject?.locationList?.includes(item?.description)
+    );
+    let allSubLocations = locationArray.reduce((acc, item) => {
+      return acc.concat(item.subLocations);
+    }, []);
+    setAllSubLocations(allSubLocations);
+  }, [currentJobSchedulingObject?.locationList]);
 
   return (
     <div>
@@ -149,23 +261,39 @@ const StartScheduling = () => {
         </header>
 
         <div className="row mb-3">
-          <div className="col-lg-6">
+          <div className="col-lg-5">
             <MultiSelect
-              names={["Location 1", "Location 2", "Location 3"]}
+              names={allLocations?.map((all) => all?.description)}
               title="Location"
-              initialPersonalArray={currentJobSchedulingObject?.locationList}
+              initialPersonalArray={initialLocationList}
               name="locationList"
               setCurrentJobScheduling={setCurrentJobScheduling}
             />
           </div>
-          <div className="col-lg-6">
+          <div className="col-lg-5">
             <MultiSelect
               title="SubLocation"
-              names={["SubLocation 1", "SubLocation 2", "SubLocation 3"]}
-              initialPersonalArray={currentJobSchedulingObject?.subLocation}
+              names={allSubLocations?.map((all) => all?.description)}
+              initialPersonalArray={initialSubLocationList}
               name="subLocation"
               setCurrentJobScheduling={setCurrentJobScheduling}
             />
+          </div>
+          <div className="col-lg-2 align-self-center">
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                value=""
+                id="flexCheckDefault"
+                name="separateJob"
+                checked={currentJobSchedulingObject?.separateJob}
+                onChange={handleChangeJobSchedulingCheckFields}
+              />
+              <label className="form-check-label" htmlFor="flexCheckDefault">
+                Seprate job
+              </label>
+            </div>
           </div>
         </div>
 
@@ -403,23 +531,6 @@ const StartScheduling = () => {
                         </div>
                       </div>
 
-                      {/* <div className="row mb-3">
-                        <div className="col-lg-12">
-                          <label>Proposed Job Approver</label>
-                          <input
-                            type="number"
-                            className="form-control"
-                            id="labeltext"
-                            placeholder=""
-                            value={
-                              currentJobSchedulingObject?.proposedJobApprover
-                            }
-                            name="proposedJobApprover"
-                            onChange={handleChangeNumberTextField}
-                          />
-                        </div>
-                      </div> */}
-
                       <div className="row mb-3">
                         <div className="col-lg-6 align-self-center">
                           <div className="form-check">
@@ -453,18 +564,11 @@ const StartScheduling = () => {
                               onChange={handleFrequencyChange}
                             >
                               <option>Select</option>
-                              <option value="Once">Once</option>
-                              <option value="Monthly">Monthly</option>
+                              <option value="Semi Annually">
+                                Semi Annually
+                              </option>
                               <option value="Quarterly">Quarterly</option>
-                              <option value="Semi-Annually">
-                                Semi-Annually
-                              </option>
-                              <option value="Every Second Year">
-                                Every Second Year
-                              </option>
-                              <option value="Every Third Year">
-                                Every Third Year
-                              </option>
+                              <option value="Monthly">Monthly</option>
                             </select>
                           </div>
                         )}
@@ -503,7 +607,7 @@ const StartScheduling = () => {
                               <div className="row mb-4" key={ind}>
                                 <div className="col-lg-6">
                                   <label className="form-label me-2">
-                                    Start Date
+                                    {ind + 1}. Start Date
                                   </label>
                                   <input
                                     type="date"
@@ -517,7 +621,7 @@ const StartScheduling = () => {
                                 </div>
                                 <div className="col-lg-6">
                                   <label className="form-label me-2">
-                                    End Date
+                                    {ind + 1}. End Date
                                   </label>
                                   <input
                                     type="date"
@@ -560,61 +664,51 @@ const StartScheduling = () => {
                     <div className="container overflow-x-auto">
                       <div className="row mb-3">
                         <div className="col-lg-6">
-                          <label>Head Of Internal Audit</label>
-                          <input
-                            type="number"
-                            className="form-control"
-                            id="labeltext"
-                            placeholder=""
+                          <Select
+                            label="Head Of Internal Audit"
                             value={
                               currentJobSchedulingObject?.headOfInternalAudit
+                                ?.name || ""
                             }
+                            setCurrentJobScheduling={setCurrentJobScheduling}
                             name="headOfInternalAudit"
-                            onChange={handleChangeNumberTextField}
+                            list={allUsers?.map((all) => all?.name)}
                           />
                         </div>
                         <div className="col-lg-6">
-                          <label>Backup Head Of InternalAudit</label>
-                          <input
-                            type="number"
-                            className="form-control"
-                            id="labeltext"
-                            placeholder=""
+                          <Select
+                            label="Backup Head Of InternalAudit"
                             value={
-                              currentJobSchedulingObject?.backupHeadOfInternalAudit
+                              currentJobSchedulingObject
+                                ?.backupHeadOfInternalAudit?.name || ""
                             }
+                            setCurrentJobScheduling={setCurrentJobScheduling}
                             name="backupHeadOfInternalAudit"
-                            onChange={handleChangeNumberTextField}
+                            list={allUsers?.map((all) => all?.name)}
                           />
                         </div>
                       </div>
-
-                      <div className="select-grid">
-                        <div className="single-select-grid single-select-grid-part-1">
-                          <p>Year</p>
-                          <p>2023</p>
-                          <p>2024</p>
-                          <p>2025</p>
-                          <p>2026</p>
-                          <p>2027</p>
+                      <div className="row mb-3">
+                        <div className="col-lg-6">
+                          <Select
+                            label="Proposed Job Approver"
+                            value={
+                              currentJobSchedulingObject?.proposedJobApprover
+                                ?.name || ""
+                            }
+                            setCurrentJobScheduling={setCurrentJobScheduling}
+                            name="proposedJobApprover"
+                            list={allUsers?.map((all) => all?.name)}
+                          />
                         </div>
-                        <div className="resource-allocation-select-wrap">
-                          <div className="single-select-grid single-select-grid-part-2">
-                            <p>Proposed Resources </p>
-                            <Select />
-                            <Select />
-                            <Select />
-                            <Select />
-                            <Select />
-                          </div>
-                          <div className="single-select-grid single-select-grid-part-3">
-                            <p>Proposed Job Approver</p>
-                            <Select />
-                            <Select />
-                            <Select />
-                            <Select />
-                            <Select />
-                          </div>
+                        <div className="col-lg-6">
+                          <MultiSelect
+                            title="Resources List"
+                            names={allUsers?.map((all) => all?.name)}
+                            initialPersonalArray={initialUserList}
+                            name="resourcesList"
+                            setCurrentJobScheduling={setCurrentJobScheduling}
+                          />
                         </div>
                       </div>
                     </div>

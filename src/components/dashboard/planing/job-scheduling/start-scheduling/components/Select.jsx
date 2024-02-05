@@ -4,23 +4,38 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
-const SelectComponent = () => {
-  const [year, setYear] = React.useState("");
+const SelectComponent = ({
+  list,
+  name,
+  setCurrentJobScheduling,
+  value,
+  label,
+}) => {
+  function handleChange(event) {
+    setCurrentJobScheduling((pre) => {
+      return {
+        ...pre,
+        [name]: { name: event?.target?.value },
+      };
+    });
+  }
   return (
-    <FormControl variant="filled" sx={{ m: 1, minWidth: 180 }}>
-      <InputLabel id="demo-simple-select-filled-label">Year</InputLabel>
+    <FormControl variant="filled" sx={{ width: "100%" }}>
+      <InputLabel id="demo-simple-select-label">{label}</InputLabel>
       <Select
-        labelId="demo-simple-select-filled-label"
-        id="demo-simple-select-filled"
-        value={year}
-        onChange={(e) => setYear(e.target.value)}
+        labelId="demo-simple-select-label"
+        id="demo-simple-select"
+        value={value}
+        onChange={handleChange}
       >
-        <MenuItem value=""></MenuItem>
-        <MenuItem value="2023">2023</MenuItem>
-        <MenuItem value="2024">2024</MenuItem>
-        <MenuItem value="2025">2025</MenuItem>
-        <MenuItem value="2026">2026</MenuItem>
-        <MenuItem value="2027">2027</MenuItem>
+        <MenuItem value="">Select User</MenuItem>
+        {list?.map((item, index) => {
+          return (
+            <MenuItem value={item} key={index}>
+              {item}
+            </MenuItem>
+          );
+        })}
       </Select>
     </FormControl>
   );

@@ -18,6 +18,7 @@ const RichTextEditor = ({ onContentChange, initialValue, name, editable }) => {
           },
         },
       },
+      toolbarAdaptive:true,
       readonly: editable === "false" ? true : false,
       spellcheck: true,
       buttons: [

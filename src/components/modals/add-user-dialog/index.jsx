@@ -7,17 +7,21 @@ import {
 } from "../../../global-redux/reducers/settings/user-management/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { setupGetAllCompanies } from "../../../global-redux/reducers/settings/company-management/slice";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import TextField from "@mui/material/TextField";
 
 const UserManagementDialog = ({ setUserManagementDialog }) => {
   const dispatch = useDispatch();
   const { addUserSuccess, loading, allUsers } = useSelector(
     (state) => state.setttingsUserManagement
   );
-  const [usersList, setUsersList] = React.useState([]);
+  const [nullReportingTo, setNullReportingTo] = React.useState(false);
   const { user } = useSelector((state) => state?.auth);
   const { allCompanies } = useSelector(
     (state) => state?.settingsCompanyManagement
   );
+
   const initialState = {
     name: "",
     email: "",
@@ -41,13 +45,10 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
       userHierarchy: Yup.string().required("User Hierarchy is required"),
       skillSet: Yup.string().required("Skill Set is required"),
       reportingTo: Yup.string().required("Reporting To is required"),
-      company: Yup.string().required("Company To is required"),
+      company: Yup.string().required("Company  is required"),
     }),
     onSubmit: (values) => {
       if (!loading) {
-        // const selectedCompany = allCompanies?.find(
-        //   (all) => Number(all?.id) === Number(values?.company)
-        // );
         const reportingObj = allUsers?.find(
           (all) => all?.name === values?.reportingTo
         )?.employeeid;
@@ -117,36 +118,23 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
 
   React.useEffect(() => {
     if (formik.values?.userHierarchy === "IAH") {
-      setUsersList([{ name: "Not-Required" }]);
-    }
-
-    if (formik.values?.userHierarchy === "Team_Lead") {
-      const allowedRoles = ["IAH"];
-      const filteredArr = allUsers.filter((item) =>
-        allowedRoles.includes(item?.employeeid?.userHierarchy)
-      );
-      setUsersList(filteredArr);
-    }
-
-    if (formik.values?.userHierarchy === "Audit_Executive_2") {
-      const allowedRoles = ["Team_Lead", "IAH"];
-      const filteredArr = allUsers.filter((item) =>
-        allowedRoles.includes(item?.employeeid?.userHierarchy)
-      );
-      setUsersList(filteredArr);
-    }
-    if (formik.values?.userHierarchy === "Audit_Executive_1") {
-      const allowedRoles = ["Audit_Executive_2", "Team_Lead", "IAH"];
-      const filteredArr = allUsers.filter((item) =>
-        allowedRoles.includes(item?.employeeid?.userHierarchy)
-      );
-      setUsersList(filteredArr);
+      setNullReportingTo(true);
+    } else {
+      setNullReportingTo(false);
     }
   }, [formik.values]);
 
   React.useEffect(() => {
     dispatch(setupGetAllCompanies());
   }, []);
+
+  React.useEffect(() => {
+    if (nullReportingTo) {
+      formik.resetForm({ values: { ...formik.values, reportingTo: "null" } });
+    } else {
+      formik.resetForm({ values: { ...formik.values, reportingTo: "" } });
+    }
+  }, [nullReportingTo]);
 
   return (
     <div className="px-4 py-4">
@@ -161,11 +149,11 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
             <div className="col-lg-12">
               <div className="form-group">
                 <label htmlFor="area">Name:</label>
-                <input
+                <TextField
                   id="name"
                   name="name"
                   type="text"
-                  className="form-control"
+                  className="form-control w-100"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.name}
@@ -181,7 +169,7 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
             <div className="col-lg-12">
               <div className="form-group">
                 <label htmlFor="area">Email:</label>
-                <input
+                <TextField
                   id="email"
                   name="email"
                   type="text"
@@ -203,7 +191,7 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
             <div className="col-lg-12">
               <div className="form-group">
                 <label htmlFor="area">Password:</label>
-                <input
+                <TextField
                   id="password"
                   name="password"
                   type="text"
@@ -222,7 +210,7 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
             <div className="col-lg-12">
               <div className="form-group">
                 <label htmlFor="area">Employee Name:</label>
-                <input
+                <TextField
                   id="employeeName"
                   name="employeeName"
                   type="text"
@@ -244,7 +232,7 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
             <div className="col-lg-12">
               <div className="form-group">
                 <label htmlFor="area">Designation:</label>
-                <input
+                <TextField
                   id="designation"
                   name="designation"
                   type="text"
@@ -261,10 +249,10 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
           </div>
 
           <div className="col-lg-6">
-            <label htmlFor="defaultRemarks" className="w-100">
-              User Hierarchy:
+            <label htmlFor="userHierarchy" className="w-100">
+              User Roles:
             </label>
-            <select
+            <Select
               id="userHierarchy"
               name="userHierarchy"
               className="form-control w-100 h-40"
@@ -272,13 +260,12 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
               onBlur={formik.handleBlur}
               value={formik.values.userHierarchy}
             >
-              <option value="">Select</option>
-              <option value="IAH">IAH</option>
-              <option value="Team_Lead">Team_Lead</option>
-              <option value="Audit_Executive_2">Audit_Executive_2</option>
-              <option value="Audit_Executive_1">Audit_Executive_1</option>
-            </select>
-            {/* Add more options as needed */}
+              <MenuItem value="">Select Role</MenuItem>
+              <MenuItem value="IAH">IAH</MenuItem>
+              <MenuItem value="Team_Lead">Team_Lead</MenuItem>
+              <MenuItem value="Audit_Executive_2">Audit_Executive_2</MenuItem>
+              <MenuItem value="Audit_Executive_1">Audit_Executive_1</MenuItem>
+            </Select>
             {formik.touched.userHierarchy && formik.errors.userHierarchy && (
               <div className="error">{formik.errors.userHierarchy}</div>
             )}
@@ -286,59 +273,81 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
         </div>
 
         <div className="col-lg-12 mb-2">
-          <div className="col-lg-12">
-            <div className="form-group">
-              <label htmlFor="area">Skill Set:</label>
-              <input
-                id="skillSet"
-                name="skillSet"
-                type="text"
-                className="form-control"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.skillSet}
-              />
-            </div>
-          </div>
+          <label htmlFor="skillSet" className="w-100">
+            Skill Set:
+          </label>
+          <Select
+            id="skillSet"
+            name="skillSet"
+            className="form-control w-100 h-40"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.skillSet}
+          >
+            <MenuItem value="">Select Role</MenuItem>
+            <MenuItem value="IT">IT</MenuItem>
+            <MenuItem value="Finance">Finance</MenuItem>
+            <MenuItem value="Business">Business</MenuItem>
+            <MenuItem value="Fraud">Fraud</MenuItem>
+            <MenuItem value="Operations">Operations</MenuItem>
+            <MenuItem value="Other">Other</MenuItem>
+          </Select>
           {formik.touched.skillSet && formik.errors.skillSet && (
             <div className="error">{formik.errors.skillSet}</div>
           )}
         </div>
 
         <div className="row">
-          <div className="col-lg-6">
-            <label htmlFor="defaultRemarks" className="w-100">
-              Reporting To:
-            </label>
-            <select
-              id="reportingTo"
-              name="reportingTo"
-              className="form-control w-100 h-40"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.reportingTo}
-            >
-              <option value="">Select User</option>
-              {usersList?.map((userVal, ind) => {
-                return (
-                  <option value={userVal?.name} key={ind}>
-                    {userVal?.name}
-                  </option>
-                );
-              })}
-            </select>
-            {/* Add more options as needed */}
-            {formik.touched.reportingTo && formik.errors.reportingTo && (
-              <div className="error">{formik.errors.reportingTo}</div>
-            )}
-          </div>
+          {!nullReportingTo && (
+            <div className="col-lg-6">
+              <label htmlFor="reportingTo" className="w-100">
+                Reporting To:
+              </label>
+              <Select
+                id="reportingTo"
+                name="reportingTo"
+                className="form-control w-100 h-40"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.reportingTo}
+              >
+                <MenuItem value="">Select User</MenuItem>
+                {allUsers?.map((userVal, ind) => {
+                  return (
+                    <MenuItem value={userVal?.name} key={ind} className="h-80">
+                      {userVal?.name}(
+                      {userVal?.employeeid?.userHierarchy || "null"})
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+              {formik.touched.reportingTo && formik.errors.reportingTo && (
+                <div className="error">{formik.errors.reportingTo}</div>
+              )}
+            </div>
+          )}
+
+          {nullReportingTo && (
+            <div className="col-lg-6">
+              <label htmlFor="area">Reporting To:</label>
+              <TextField
+                id="designation"
+                name="designation"
+                type="text"
+                className="form-control"
+                defaultValue="null"
+                readOnly
+                disabled
+              />
+            </div>
+          )}
 
           {/* Default Remarks select field */}
           <div className="col-lg-6">
-            <label htmlFor="defaultRemarks" className="w-100">
+            <label htmlFor="company" className="w-100">
               Company:
             </label>
-            <select
+            <Select
               id="company"
               name="company"
               className="form-control w-100 h-40"
@@ -346,16 +355,19 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
               onBlur={formik.handleBlur}
               value={formik.values.company}
             >
-              <option value="">Select One</option>
-              {allCompanies?.map((item, ind) => {
+              <MenuItem value="">Select Company</MenuItem>
+              {allCompanies?.map((userVal, ind) => {
                 return (
-                  <option value={item?.id} key={ind}>
-                    {item?.companyName}
-                  </option>
+                  <MenuItem
+                    value={userVal?.companyName}
+                    key={ind}
+                    className="h-80"
+                  >
+                    {userVal?.companyName}
+                  </MenuItem>
                 );
               })}
-            </select>
-            {/* Add more options as needed */}
+            </Select>
             {formik.touched.company && formik.errors.company && (
               <div className="error">{formik.errors.company}</div>
             )}
@@ -364,15 +376,15 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
 
         <button
           type="submit"
-          className={`btn btn-primary ${loading && "disabled"} mt-2`}
+          className={`btn btn-primary ${loading && "disabled"} mt-4`}
         >
           {loading ? "Loading" : "Add User"}
         </button>
       </form>
 
-      <div className="row py-3">
+      <div className="row py-3 ">
         <div className="col-lg-12 text-end" onClick={handleClose}>
-          <button className="btn btn-primary float-end">Close</button>
+          <button className="btn btn-danger float-end">Close</button>
         </div>
       </div>
     </div>
