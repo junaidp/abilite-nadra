@@ -169,7 +169,7 @@ const SpecialProjectAudit = () => {
   }, [planingEngagementSingleObject]);
 
   React.useEffect(() => {
-    if (user[0]?.token) {
+    if (user[0]?.token && engagementId) {
       dispatch(setupGetSingleSpecialProjectAuditObjective(engagementId));
     }
   }, [engagementId, user]);
@@ -194,6 +194,13 @@ const SpecialProjectAudit = () => {
       setAllSubLocations(item?.subLocations);
     }
   }, [object?.location_Id]);
+
+  React.useEffect(() => {
+    if (!engagementId) {
+      navigate("/audit/business-objective");
+    }
+  }, [engagementId]);
+
 
   return (
     <div>

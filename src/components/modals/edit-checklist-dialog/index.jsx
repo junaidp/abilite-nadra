@@ -56,7 +56,7 @@ const EditCheckListDialog = ({ setShowEditCheckListDialog }) => {
         </div>
         <div className="col-lg-6 w-100">
           <button
-            className={`btn btn-secondary ${loading && "disabled"}`}
+            className={`btn btn-primary ${loading && "disabled"}`}
             onClick={handleSubmit}
           >
             {loading ? "Loading" : "Edit"}
@@ -64,7 +64,7 @@ const EditCheckListDialog = ({ setShowEditCheckListDialog }) => {
         </div>
       <div className="mb-4">
         <button
-          className="btn btn-primary float-end"
+          className="btn btn-danger float-end"
           onClick={() => {
             setShowEditCheckListDialog(false);
             setCheckListName("");

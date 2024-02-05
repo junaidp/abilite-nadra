@@ -30,41 +30,44 @@ export const slice = createSlice({
       state.companyAddSuccess = false;
     },
   },
-  extraReducers: {
-    // Register Comapany
-    [setupRegisterCompany.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupRegisterCompany.fulfilled]: (state) => {
-      state.loading = false;
-      toast.success("Company registered successfully");
-      state.companyAddSuccess = true;
-    },
-    [setupRegisterCompany.rejected]: (state, { payload }) => {
-      state.loading = false;
-      state.companyAddSuccess = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
-    // Get Comapanies
-    [setupGetAllCompanies.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupGetAllCompanies.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.allCompanies = payload || [];
-    },
-    [setupGetAllCompanies.rejected]: (state, { payload }) => {
-      state.loading = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
+  extraReducers: (builder) => {
+    // Register Company
+    builder
+      .addCase(setupRegisterCompany.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupRegisterCompany.fulfilled, (state) => {
+        state.loading = false;
+        toast.success("Company registered successfully");
+        state.companyAddSuccess = true;
+      })
+      .addCase(setupRegisterCompany.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.companyAddSuccess = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+
+    // Get All Companies
+    builder
+      .addCase(setupGetAllCompanies.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetAllCompanies.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.allCompanies = payload || [];
+      })
+      .addCase(setupGetAllCompanies.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
   },
 });
 

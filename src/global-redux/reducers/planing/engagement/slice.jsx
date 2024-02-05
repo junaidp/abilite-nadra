@@ -30,6 +30,8 @@ export const setupGetAllEngagements = createAsyncThunk(
     return getAllEngagements(data, thunkAPI);
   }
 );
+
+
 export const setupAddNewEngagement = createAsyncThunk(
   "engagement/addNewEngagement",
   async (data, thunkAPI) => {
@@ -117,225 +119,282 @@ export const slice = createSlice({
       state.selectedSingleEngagementItem = action.payload;
     },
   },
-  extraReducers: {
+  extraReducers: (builder) => {
     // Get All Engagements
-    [setupGetAllEngagements.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupGetAllEngagements.fulfilled]: (state, { payload }) => {
-      const sortedArray = payload?.data?.sort(
-        (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
-      );
-      state.allEngagements = sortedArray || [];
-      state.loading = false;
-    },
-    [setupGetAllEngagements.rejected]: (state, { payload }) => {
-      state.loading = false;
-    },
+    builder
+      .addCase(setupGetAllEngagements.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetAllEngagements.fulfilled, (state, { payload }) => {
+        const sortedArray = payload?.data?.sort(
+          (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
+        );
+        state.allEngagements = sortedArray || [];
+        state.loading = false;
+      })
+      .addCase(setupGetAllEngagements.rejected, (state, { payload }) => {
+        state.loading = false;
+      });
+
     // Add New Engagements
-    [setupAddNewEngagement.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupAddNewEngagement.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.engagementAddSuccess = true;
-      state.planingEngagementSingleObject = payload?.data;
-      toast.success("Engagement Added Successfully");
-    },
-    [setupAddNewEngagement.rejected]: (state, { payload }) => {
-      state.loading = false;
-      state.engagementAddSuccess = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
+    builder
+      .addCase(setupAddNewEngagement.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupAddNewEngagement.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.engagementAddSuccess = true;
+        state.planingEngagementSingleObject = payload?.data;
+        toast.success("Engagement Added Successfully");
+      })
+      .addCase(setupAddNewEngagement.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.engagementAddSuccess = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
 
     // Setup Save CheckList Objective
-    [setupSaveCheckListObjective.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupSaveCheckListObjective.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.engagementAddSuccess = true;
-      state.planingEngagementSingleObject = payload?.data;
-      toast.success("Checklist Objective Edited Successfully");
-    },
-    [setupSaveCheckListObjective.rejected]: (state, { payload }) => {
-      state.loading = false;
-      state.engagementAddSuccess = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
-    // Setup Get Single Engagement Object
-    [setupGetSingleEngagementObject.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupGetSingleEngagementObject.fulfilled]: (state, { payload }) => {
-      state.planingEngagementSingleObject = payload?.data;
-      state.loading = false;
-      // state.engagementAddSuccess = true;
-    },
-    [setupGetSingleEngagementObject.rejected]: (state, { payload }) => {
-      state.loading = false;
-      state.engagementAddSuccess = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
-    // Update Business Objective
-    [setupUpdateBusinessObjective.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupUpdateBusinessObjective.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.engagementAddSuccess = true;
-      toast.success("Business Objective Updated Successfully");
-    },
-    [setupUpdateBusinessObjective.rejected]: (state, { payload }) => {
-      state.loading = false;
-      state.engagementAddSuccess = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
-    // Update Business Objective Map Process
-    [setupSaveMapProcessBusinessObjective.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupSaveMapProcessBusinessObjective.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.engagementAddSuccess = true;
-      toast.success("Business Objective Map Process Updated Successfully");
-    },
-    [setupSaveMapProcessBusinessObjective.rejected]: (state, { payload }) => {
-      state.loading = false;
-      state.engagementAddSuccess = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
-    // Get Single CheckList Objective
-    [setupGetSingleCheckListObjective.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupGetSingleCheckListObjective.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.planingEngagementSingleObject = payload?.data || [];
-    },
-    [setupGetSingleCheckListObjective.rejected]: (state, { payload }) => {
-      state.loading = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
-    // Get Single Special Project Audit
-    [setupGetSingleSpecialProjectAuditObjective.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupGetSingleSpecialProjectAuditObjective.fulfilled]: (
-      state,
-      { payload }
-    ) => {
-      state.loading = false;
-      state.planingEngagementSingleObject = payload?.data;
-    },
-    [setupGetSingleSpecialProjectAuditObjective.rejected]: (
-      state,
-      { payload }
-    ) => {
-      state.loading = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
-    // Update Business Minute Meeting
-    [setupUpdateBusinessMinuteMeeting.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupUpdateBusinessMinuteMeeting.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      toast.success("Meeting Updated Successfully");
-      state.engagementAddSuccess = true;
-    },
-    [setupUpdateBusinessMinuteMeeting.rejected]: (state, { payload }) => {
-      state.loading = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
-    // Update Special Project Audit
-    [setupUpdateSpecialProjectAudit.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupUpdateSpecialProjectAudit.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      toast.success("Special Project Audit Updated Successfully");
-      state.engagementAddSuccess = true;
-    },
-    [setupUpdateSpecialProjectAudit.rejected]: (state, { payload }) => {
-      state.loading = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
-    // Update Special Project Audit Map Process
-    [setupUpdateBusinessObjectiveAndMapProcessSpecialProjectOrAudit.pending]: (
-      state
-    ) => {
-      state.loading = true;
-    },
-    [setupUpdateBusinessObjectiveAndMapProcessSpecialProjectOrAudit.fulfilled]:
-      (state, { payload }) => {
+    builder
+      .addCase(setupSaveCheckListObjective.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupSaveCheckListObjective.fulfilled, (state, { payload }) => {
         state.loading = false;
-        toast.success("Special Project Audit Map Process Updated Successfully");
         state.engagementAddSuccess = true;
-      },
-    [setupUpdateBusinessObjectiveAndMapProcessSpecialProjectOrAudit.rejected]: (
-      state,
-      { payload }
-    ) => {
-      state.loading = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
+        state.planingEngagementSingleObject = payload?.data;
+        toast.success("Checklist Objective Edited Successfully");
+      })
+      .addCase(setupSaveCheckListObjective.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.engagementAddSuccess = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+
+    // Setup Get Single Engagement Object
+    builder
+      .addCase(setupGetSingleEngagementObject.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(
+        setupGetSingleEngagementObject.fulfilled,
+        (state, { payload }) => {
+          state.planingEngagementSingleObject = payload?.data;
+          state.loading = false;
+          // state.engagementAddSuccess = true;
+        }
+      )
+      .addCase(
+        setupGetSingleEngagementObject.rejected,
+        (state, { payload }) => {
+          state.loading = false;
+          state.engagementAddSuccess = false;
+          if (payload?.response?.data?.message) {
+            toast.error(payload?.response?.data?.message);
+          } else {
+            toast.error("An Error has occurred");
+          }
+        }
+      );
+
+    // Update Business Objective
+    builder
+      .addCase(setupUpdateBusinessObjective.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupUpdateBusinessObjective.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.engagementAddSuccess = true;
+        toast.success("Business Objective Updated Successfully");
+      })
+      .addCase(setupUpdateBusinessObjective.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.engagementAddSuccess = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+
+    // Update Business Objective Map Process
+    builder
+      .addCase(setupSaveMapProcessBusinessObjective.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(
+        setupSaveMapProcessBusinessObjective.fulfilled,
+        (state, { payload }) => {
+          state.loading = false;
+          state.engagementAddSuccess = true;
+          toast.success("Business Objective Map Process Updated Successfully");
+        }
+      )
+      .addCase(
+        setupSaveMapProcessBusinessObjective.rejected,
+        (state, { payload }) => {
+          state.loading = false;
+          state.engagementAddSuccess = false;
+          if (payload?.response?.data?.message) {
+            toast.error(payload?.response?.data?.message);
+          } else {
+            toast.error("An Error has occurred");
+          }
+        }
+      );
+
+    // Get Single CheckList Objective
+    builder
+      .addCase(setupGetSingleCheckListObjective.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(
+        setupGetSingleCheckListObjective.fulfilled,
+        (state, { payload }) => {
+          state.loading = false;
+          state.planingEngagementSingleObject = payload?.data || [];
+        }
+      )
+      .addCase(
+        setupGetSingleCheckListObjective.rejected,
+        (state, { payload }) => {
+          state.loading = false;
+          if (payload?.response?.data?.message) {
+            toast.error(payload?.response?.data?.message);
+          } else {
+            toast.error("An Error has occurred");
+          }
+        }
+      );
+
+    // Get Single Special Project Audit
+    builder
+      .addCase(setupGetSingleSpecialProjectAuditObjective.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(
+        setupGetSingleSpecialProjectAuditObjective.fulfilled,
+        (state, { payload }) => {
+          state.loading = false;
+          state.planingEngagementSingleObject = payload?.data;
+        }
+      )
+      .addCase(
+        setupGetSingleSpecialProjectAuditObjective.rejected,
+        (state, { payload }) => {
+          state.loading = false;
+          if (payload?.response?.data?.message) {
+            toast.error(payload?.response?.data?.message);
+          } else {
+            toast.error("An Error has occurred");
+          }
+        }
+      );
+
+    // Update Business Minute Meeting
+    builder
+      .addCase(setupUpdateBusinessMinuteMeeting.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(
+        setupUpdateBusinessMinuteMeeting.fulfilled,
+        (state, { payload }) => {
+          state.loading = false;
+          toast.success("Meeting Updated Successfully");
+          state.engagementAddSuccess = true;
+        }
+      )
+      .addCase(
+        setupUpdateBusinessMinuteMeeting.rejected,
+        (state, { payload }) => {
+          state.loading = false;
+          if (payload?.response?.data?.message) {
+            toast.error(payload?.response?.data?.message);
+          } else {
+            toast.error("An Error has occurred");
+          }
+        }
+      );
+
+    // Update Special Project Audit
+    builder
+      .addCase(setupUpdateSpecialProjectAudit.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(
+        setupUpdateSpecialProjectAudit.fulfilled,
+        (state, { payload }) => {
+          state.loading = false;
+          toast.success("Special Project Audit Updated Successfully");
+          state.engagementAddSuccess = true;
+        }
+      )
+      .addCase(
+        setupUpdateSpecialProjectAudit.rejected,
+        (state, { payload }) => {
+          state.loading = false;
+          if (payload?.response?.data?.message) {
+            toast.error(payload?.response?.data?.message);
+          } else {
+            toast.error("An Error has occurred");
+          }
+        }
+      );
+
+    // Update Special Project Audit Map Process
+    builder
+      .addCase(
+        setupUpdateBusinessObjectiveAndMapProcessSpecialProjectOrAudit.pending,
+        (state) => {
+          state.loading = true;
+        }
+      )
+      .addCase(
+        setupUpdateBusinessObjectiveAndMapProcessSpecialProjectOrAudit.fulfilled,
+        (state, { payload }) => {
+          state.loading = false;
+          toast.success(
+            "Special Project Audit Map Process Updated Successfully"
+          );
+          state.engagementAddSuccess = true;
+        }
+      )
+      .addCase(
+        setupUpdateBusinessObjectiveAndMapProcessSpecialProjectOrAudit.rejected,
+        (state, { payload }) => {
+          state.loading = false;
+          if (payload?.response?.data?.message) {
+            toast.error(payload?.response?.data?.message);
+          } else {
+            toast.error("An Error has occurred");
+          }
+        }
+      );
+
     // Setup get checklists
-    [setupGetCheckListItems.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupGetCheckListItems.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.selectedCheckListItems = payload?.data;
-    },
-    [setupGetCheckListItems.rejected]: (state, { payload }) => {
-      state.loading = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
+    builder
+      .addCase(setupGetCheckListItems.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetCheckListItems.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.selectedCheckListItems = payload?.data;
+      })
+      .addCase(setupGetCheckListItems.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
   },
 });
 

@@ -160,7 +160,7 @@ const AddCompanyDialog = ({ setAddCompantDialog }) => {
 
         <button
           type="submit"
-          className={`btn btn-danger ${loading && "disabled"} mt-4`}
+          className={`btn btn-primary ${loading && "disabled"} mt-4`}
         >
           {loading ? "Loading" : "Submit"}
         </button>

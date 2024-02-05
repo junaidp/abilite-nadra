@@ -159,6 +159,12 @@ const RiskFactorApproach = () => {
     dispatch(InitialLoadSidebarActiveLink("li-audit"));
   }, []);
 
+  React.useEffect(() => {
+    if (!riskAssessmentId) {
+      navigate("/audit/risk-assessment");
+    }
+  }, [riskAssessmentId]);
+
   return (
     <div>
       {showAddRiskFactorDialog && (

@@ -118,7 +118,7 @@ const JobScheduling = () => {
                               className="btn btn-outline-light text-primary  px-3 shadow"
                               onClick={() =>
                                 navigate(
-                                  `/audit/start-scheduling?Id=${item?.id}`
+                                  `/audit/start-scheduling?jobScheduling=${item?.id}`
                                 )
                               }
                             >

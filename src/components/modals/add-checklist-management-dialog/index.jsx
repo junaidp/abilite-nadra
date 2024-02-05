@@ -158,7 +158,7 @@ const AddCheckListManagementDialog = ({ setCheckListManagementDialog }) => {
 
       <div className="row py-3">
         <div className="col-lg-12 text-end" onClick={handleClose}>
-          <button className="btn btn-primary float-end">Close</button>
+          <button className="btn btn-danger float-end">Close</button>
         </div>
       </div>
     </div>

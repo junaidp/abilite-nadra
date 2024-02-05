@@ -109,129 +109,136 @@ export const slice = createSlice({
       state.user = [{ ...state?.user, name: action.payload }];
     },
   },
-  extraReducers: {
-    // Register
-    [setupRegisterUser.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupRegisterUser.fulfilled]: (state) => {
-      state.loading = false;
-      state.registerSuccess = true;
-      state.registerName = "";
-      state.registerEmail = "";
-      state.registerPassword = "";
-      state.registerConfirmPassword = "";
-      state.registerDesignation = "";
-      state.registerReportingToEmail = "";
-      state.registerCreatedByEmail = "";
-      toast.success("Register success please login");
-    },
-    [setupRegisterUser.rejected]: (state, { payload }) => {
-      state.loading = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
-
-    // Login
-    [setupLoginUser.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupLoginUser.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.loginEmail = "";
-      state.loginPassword = "";
-      state.user = [
-        {
-          name: payload?.data?.userId?.name,
-          token: payload?.data?.jwt,
-          email: payload?.data?.email,
-          company: payload?.data?.userId?.company,
-          id: payload?.data?.userId?.id,
-          userId: payload?.data?.userId,
-        },
-      ];
-      state.authSuccess = true;
-      toast.success("Login Success Redirecting!");
-    },
-    [setupLoginUser.rejected]: (state, { payload }) => {
-      state.loading = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
-    // Forgot Password
-    [setupForgetPassword.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupForgetPassword.fulfilled]: (state) => {
-      state.loading = false;
-      state.forgetPasswordEmail = "";
-      toast.success("Please check your email to change password");
-    },
-    [setupForgetPassword.rejected]: (state, { payload }) => {
-      state.loading = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
+  extraReducers: (builder) => {
+    // Register User
+    builder
+      .addCase(setupRegisterUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupRegisterUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.registerSuccess = !action.error;
+        if (!action.error) {
+          state.registerName = "";
+          state.registerEmail = "";
+          state.registerPassword = "";
+          state.registerConfirmPassword = "";
+          state.registerDesignation = "";
+          state.registerReportingToEmail = "";
+          state.registerCreatedByEmail = "";
+          toast.success("Register success please login");
+        }
+      })
+      .addCase(setupRegisterUser.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Login User
+    builder
+      .addCase(setupLoginUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupLoginUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.loginEmail = "";
+        state.loginPassword = "";
+        state.user = [
+          {
+            name: action.payload?.data?.userId?.name,
+            token: action.payload?.data?.jwt,
+            email: action.payload?.data?.email,
+            company: action.payload?.data?.userId?.company,
+            id: action.payload?.data?.userId?.id,
+            userId: action.payload?.data?.userId,
+          },
+        ];
+        state.authSuccess = true;
+        toast.success("Login Success Redirecting!");
+      })
+      .addCase(setupLoginUser.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Forget Password
+    builder
+      .addCase(setupForgetPassword.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupForgetPassword.fulfilled, (state) => {
+        state.loading = false;
+        state.forgetPasswordEmail = "";
+        toast.success("Please check your email to change password");
+      })
+      .addCase(setupForgetPassword.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      })
+      .addCase(setupResetPassword.pending, (state) => {
+        state.loading = true;
+      });
     // Reset Password
-    [setupResetPassword.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupResetPassword.fulfilled]: (state) => {
-      state.loading = false;
-      state.resetPasswordSuccess = true;
-      toast.success("Password reset successfully please login");
-    },
-    [setupResetPassword.rejected]: (state, { payload }) => {
-      state.loading = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
+    builder
+      .addCase(setupResetPassword.fulfilled, (state) => {
+        state.loading = false;
+        state.resetPasswordSuccess = true;
+        toast.success("Password reset successfully please login");
+      })
+      .addCase(setupResetPassword.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
     // Internal Reset Password
-    [setupInternalResetPassword.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupInternalResetPassword.fulfilled]: (state) => {
-      state.loading = false;
-      state.internalResetPasswordSuccess = true;
-      toast.success("Password reset successfully");
-    },
-    [setupInternalResetPassword.rejected]: (state, { payload }) => {
-      state.loading = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
+    builder
+      .addCase(setupInternalResetPassword.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupInternalResetPassword.fulfilled, (state) => {
+        state.loading = false;
+        state.internalResetPasswordSuccess = true;
+        toast.success("Password reset successfully");
+      })
+      .addCase(setupInternalResetPassword.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
     // Update User Name
-    [setupUpdateUserName.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupUpdateUserName.fulfilled]: (state) => {
-      state.loading = false;
-      state.userNameUpdateSuccess = true;
-      toast.success("User Name Updated successfully");
-    },
-    [setupUpdateUserName.rejected]: (state, { payload }) => {
-      state.loading = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
+    builder
+      .addCase(setupUpdateUserName.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupUpdateUserName.fulfilled, (state) => {
+        state.loading = false;
+        state.userNameUpdateSuccess = true;
+        toast.success("User Name Updated successfully");
+      })
+      .addCase(setupUpdateUserName.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
   },
 });
 

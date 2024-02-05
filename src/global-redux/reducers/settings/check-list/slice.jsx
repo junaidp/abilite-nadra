@@ -84,114 +84,127 @@ export const slice = createSlice({
       state.currentSubCheckListItem = action.payload;
     },
   },
-  extraReducers: {
+  extraReducers: (builder) => {
     // Add Check List
-    [setupAddCheckList.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupAddCheckList.fulfilled]: (state) => {
-      state.loading = false;
-      state.checkListAddSuccess = true;
-      toast.success("Check List Added Successfully");
-    },
-    [setupAddCheckList.rejected]: (state, { payload }) => {
-      state.loading = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
-    // Get CheckList
-    [setupGetAllCheckLists.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupGetAllCheckLists.fulfilled]: (state, { payload }) => {
-      state.checkList = payload.data || [];
-      state.loading = false;
-    },
-    [setupGetAllCheckLists.rejected]: (state, { payload }) => {
-      state.loading = false;
-    },
+    builder
+      .addCase(setupAddCheckList.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupAddCheckList.fulfilled, (state) => {
+        state.loading = false;
+        state.checkListAddSuccess = true;
+        toast.success("Check List Added Successfully");
+      })
+      .addCase(setupAddCheckList.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+
+    // Get All CheckList
+    builder
+      .addCase(setupGetAllCheckLists.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetAllCheckLists.fulfilled, (state, { payload }) => {
+        state.checkList = payload.data || [];
+        state.loading = false;
+      })
+      .addCase(setupGetAllCheckLists.rejected, (state, { payload }) => {
+        state.loading = false;
+      });
+
     // Update CheckList Name
-    [setupUpdateCheckListName.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupUpdateCheckListName.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.checkListAddSuccess = true;
-      toast.success("Check List Name Edited Successfully");
-    },
-    [setupUpdateCheckListName.rejected]: (state, { payload }) => {
-      state.loading = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
+    builder
+      .addCase(setupUpdateCheckListName.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupUpdateCheckListName.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.checkListAddSuccess = true;
+        toast.success("Check List Name Edited Successfully");
+      })
+      .addCase(setupUpdateCheckListName.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+
     // Update CheckList Remarks
-    [setupUpdateCheckListRemarks.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupUpdateCheckListRemarks.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.checkListAddSuccess = true;
-      toast.success("Check List Remarks Edited Successfully");
-    },
-    [setupUpdateCheckListRemarks.rejected]: (state, { payload }) => {
-      state.loading = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
-    // Add  CheckList Item
-    [setupAddCheckListItem.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupAddCheckListItem.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.subCheckListAddSuccess = true;
-      toast.success("Check List Item Added Successfully");
-    },
-    [setupAddCheckListItem.rejected]: (state, { payload }) => {
-      state.loading = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
-    // Gett all  CheckList Item
-    [setupGetAllCheckListItems.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupGetAllCheckListItems.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.checkListItems = payload?.data;
-    },
-    [setupGetAllCheckListItems.rejected]: (state, { payload }) => {
-      state.loading = false;
-    },
-    // Edit  CheckList Item
-    [setupEditCheckListItem.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupEditCheckListItem.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.subCheckListAddSuccess = true;
-      toast.success("Check List Item edited Successfully");
-    },
-    [setupEditCheckListItem.rejected]: (state, { payload }) => {
-      state.loading = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
+    builder
+      .addCase(setupUpdateCheckListRemarks.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupUpdateCheckListRemarks.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.checkListAddSuccess = true;
+        toast.success("Check List Remarks Edited Successfully");
+      })
+      .addCase(setupUpdateCheckListRemarks.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+
+    // Add CheckList Item
+    builder
+      .addCase(setupAddCheckListItem.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupAddCheckListItem.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.subCheckListAddSuccess = true;
+        toast.success("Check List Item Added Successfully");
+      })
+      .addCase(setupAddCheckListItem.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+
+    // Get all CheckList Items
+    builder
+      .addCase(setupGetAllCheckListItems.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetAllCheckListItems.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.checkListItems = payload?.data;
+      })
+      .addCase(setupGetAllCheckListItems.rejected, (state, { payload }) => {
+        state.loading = false;
+      });
+
+    // Edit CheckList Item
+    builder
+      .addCase(setupEditCheckListItem.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupEditCheckListItem.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.subCheckListAddSuccess = true;
+        toast.success("Check List Item edited Successfully");
+      })
+      .addCase(setupEditCheckListItem.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
   },
 });
 

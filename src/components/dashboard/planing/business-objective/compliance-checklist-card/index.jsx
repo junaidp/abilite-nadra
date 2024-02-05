@@ -56,6 +56,13 @@ const ComplianceCheckListCard = () => {
     dispatch(InitialLoadSidebarActiveLink("li-audit"));
   }, []);
 
+  React.useEffect(() => {
+    if (!engagementId) {
+      navigate("/audit/business-objective");
+    }
+  }, [engagementId]);
+
+
   return (
     <div>
       <div>

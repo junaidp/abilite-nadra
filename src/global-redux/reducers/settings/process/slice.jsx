@@ -48,79 +48,87 @@ export const slice = createSlice({
       state.processAddSuccess = false;
     },
   },
-  extraReducers: {
-    // Setup Add Process
-    [setupAddProcess.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupAddProcess.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.processAddSuccess = true;
-      toast.success("Process Added Successfully");
-    },
-    [setupAddProcess.rejected]: (state, { payload }) => {
-      state.loading = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
-    // Setup Get All Process
-    [setupGetAllProcess.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupGetAllProcess.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.allProcess =
-        payload?.data?.filter((all) => all?.description !== null) || [];
-    },
-    [setupGetAllProcess.rejected]: (state, { payload }) => {
-      state.loading = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
-    // Setup Add Sub Process
-    [setupSaveSubProcess.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupSaveSubProcess.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.processAddSuccess = true;
-      toast.success("Sub Process Added Successfully");
-    },
-    [setupSaveSubProcess.rejected]: (state, { payload }) => {
-      state.loading = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
-
-    // Setup Add Sub Process
-    [setupGetAllSubProcess.pending]: (state) => {},
-    [setupGetAllSubProcess.fulfilled]: (state, { payload }) => {
-      if (Array.isArray(payload?.data)) {
-        state.allSubProcess = payload?.data || [];
-      }
-      if (!Array.isArray(payload?.data) && payload?.data) {
-        state.allSubProcess = [{ ...payload?.data }];
-      }
-      if (!Array.isArray(payload?.data) && !payload?.data) {
-        state.allSubProcess = [];
-      }
-    },
-    [setupGetAllSubProcess.rejected]: (state, { payload }) => {
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
+  // Add Process
+  extraReducers: (builder) => {
+    builder
+      .addCase(setupAddProcess.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupAddProcess.fulfilled, (state, action) => {
+        state.loading = false;
+        state.processAddSuccess = !action.error;
+        if (!action.error) {
+          toast.success("Process Added Successfully");
+        }
+      })
+      .addCase(setupAddProcess.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+      // Get All Process
+    builder
+      .addCase(setupGetAllProcess.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetAllProcess.fulfilled, (state, action) => {
+        state.loading = false;
+        state.allProcess =
+          action.payload?.data?.filter((all) => all?.description !== null) ||
+          [];
+      })
+      .addCase(setupGetAllProcess.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+      // Save Sub Process
+    builder
+      .addCase(setupSaveSubProcess.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupSaveSubProcess.fulfilled, (state, action) => {
+        state.loading = false;
+        state.processAddSuccess = !action.error;
+        if (!action.error) {
+          toast.success("Sub Process Added Successfully");
+        }
+      })
+      .addCase(setupSaveSubProcess.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+      // Get All Sub Process
+    builder
+      .addCase(setupGetAllSubProcess.pending, (state) => {})
+      .addCase(setupGetAllSubProcess.fulfilled, (state, action) => {
+        if (Array.isArray(action.payload?.data)) {
+          state.allSubProcess = action.payload?.data || [];
+        }
+        if (!Array.isArray(action.payload?.data) && action.payload?.data) {
+          state.allSubProcess = [{ ...action.payload?.data }];
+        }
+        if (!Array.isArray(action.payload?.data) && !action.payload?.data) {
+          state.allSubProcess = [];
+        }
+      })
+      .addCase(setupGetAllSubProcess.rejected, (state, action) => {
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
   },
 });
 

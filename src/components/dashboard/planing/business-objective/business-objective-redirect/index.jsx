@@ -176,7 +176,7 @@ const BusinessObjectiveRedirect = () => {
   }, [planingEngagementSingleObject]);
 
   React.useEffect(() => {
-    if (user[0]?.token) {
+    if (user[0]?.token && engagementId) {
       dispatch(setupGetSingleEngagementObject(engagementId));
     }
   }, [engagementId, user]);
@@ -201,6 +201,12 @@ const BusinessObjectiveRedirect = () => {
       setAllSubLocations(item?.subLocations);
     }
   }, [object?.location_Id]);
+
+  React.useEffect(() => {
+    if (!engagementId) {
+      navigate("/audit/business-objective");
+    }
+  }, [engagementId]);
 
   return (
     <div>

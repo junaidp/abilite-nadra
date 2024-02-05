@@ -55,92 +55,101 @@ export const slice = createSlice({
       state.reportAddSuccess = false;
     },
   },
-  extraReducers: {
+  extraReducers: (builder) => {
     // Save Reports
-    [setupSaveReports.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupSaveReports.fulfilled]: (state) => {
-      state.loading = false;
-      toast.success("Report Added successfully");
-      state.reportAddSuccess = true;
-    },
-    [setupSaveReports.rejected]: (state, { payload }) => {
-      state.loading = false;
-      state.companyAddSuccess = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
+    builder
+      .addCase(setupSaveReports.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupSaveReports.fulfilled, (state) => {
+        state.loading = false;
+        toast.success("Report Added Successfully");
+        state.reportAddSuccess = true;
+      })
+      .addCase(setupSaveReports.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.companyAddSuccess = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+
     // Get All Reports
-    [setupGetAllReports.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupGetAllReports.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.allReports = payload?.data || [];
-    },
-    [setupGetAllReports.rejected]: (state, { payload }) => {
-      state.loading = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
+    builder
+      .addCase(setupGetAllReports.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetAllReports.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.allReports = payload?.data || [];
+      })
+      .addCase(setupGetAllReports.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+
     // Update Single Report
-    [setupUpdateSingleReport.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupUpdateSingleReport.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.reportAddSuccess = true;
-      toast.success("Report Updated Successfully");
-    },
-    [setupGetAllReports.rejected]: (state, { payload }) => {
-      state.loading = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
+    builder
+      .addCase(setupUpdateSingleReport.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupUpdateSingleReport.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.reportAddSuccess = true;
+        toast.success("Report Updated Successfully");
+      })
+      .addCase(setupUpdateSingleReport.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+
     // Delete Report
-    [setupDeleteSingleReport.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupDeleteSingleReport.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.reportAddSuccess = true;
-      toast.success("Report Deleted Successfully");
-    },
-    [setupDeleteSingleReport.rejected]: (state, { payload }) => {
-      state.loading = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
+    builder
+      .addCase(setupDeleteSingleReport.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupDeleteSingleReport.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.reportAddSuccess = true;
+        toast.success("Report Deleted Successfully");
+      })
+      .addCase(setupDeleteSingleReport.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+
     // Publish Report
-    [setupPublishReport.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupPublishReport.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.reportAddSuccess = true;
-      toast.success("Report Published Successfully");
-    },
-    [setupPublishReport.rejected]: (state, { payload }) => {
-      state.loading = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
+    builder
+      .addCase(setupPublishReport.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupPublishReport.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.reportAddSuccess = true;
+        toast.success("Report Published Successfully");
+      })
+      .addCase(setupPublishReport.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
   },
 });
 

@@ -29,41 +29,44 @@ export const slice = createSlice({
       state.jobSchedulingAddSuccess = false;
     },
   },
-  extraReducers: {
-    // Get all job prioritization
-    [setupGetAllJobScheduling.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupGetAllJobScheduling.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.allJobScheduling = payload?.data || [];
-    },
-    [setupGetAllJobScheduling.rejected]: (state, { payload }) => {
-      state.loading = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
-    // Update job Prioritization
-    [setupUpdateJobScheduling.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupUpdateJobScheduling.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      toast.success("Job Scheduling Updated Successfully");
-      state.jobSchedulingAddSuccess = true;
-    },
-    [setupUpdateJobScheduling.rejected]: (state, { payload }) => {
-      state.loading = false;
-      state.jobPrioritizationAddSuccess = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
+  extraReducers: (builder) => {
+    // Get all job scheduling
+    builder
+      .addCase(setupGetAllJobScheduling.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetAllJobScheduling.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.allJobScheduling = payload?.data || [];
+      })
+      .addCase(setupGetAllJobScheduling.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+
+    // Update job scheduling
+    builder
+      .addCase(setupUpdateJobScheduling.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupUpdateJobScheduling.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        toast.success("Job Scheduling Updated Successfully");
+        state.jobSchedulingAddSuccess = true;
+      })
+      .addCase(setupUpdateJobScheduling.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.jobSchedulingAddSuccess = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
   },
 });
 

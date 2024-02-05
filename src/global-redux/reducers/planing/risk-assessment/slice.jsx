@@ -50,76 +50,83 @@ export const slice = createSlice({
       state.riskAssessmentSuccess = false;
     },
   },
-  extraReducers: {
+  extraReducers: (builder) => {
     // Get All Risk Assessment
-    [setupGetAllRiskAssessments.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupGetAllRiskAssessments.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      const sortedArray = payload?.data?.sort(
-        (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
-      );
-      state.allRiskAssessments = sortedArray || [];
-    },
-    [setupGetAllRiskAssessments.rejected]: (state, { payload }) => {
-      state.loading = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
+    builder
+      .addCase(setupGetAllRiskAssessments.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetAllRiskAssessments.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        const sortedArray = payload?.data?.sort(
+          (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
+        );
+        state.allRiskAssessments = sortedArray || [];
+      })
+      .addCase(setupGetAllRiskAssessments.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+
     // Update Risk Assessment
-    [setupUpdateRiskAssessment.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupUpdateRiskAssessment.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.riskAssessmentSuccess = true;
-      toast.success("Risk Assessment Updated Successfully");
-    },
-    [setupUpdateRiskAssessment.rejected]: (state, { payload }) => {
-      state.loading = false;
-      state.riskAssessmentSuccess = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
-    // perform Risk Assessment
-    [setupPerformRiskAssessment.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupPerformRiskAssessment.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.performRiskAssessmentObject = payload?.data;
-    },
-    [setupPerformRiskAssessment.rejected]: (state, { payload }) => {
-      state.loading = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
+    builder
+      .addCase(setupUpdateRiskAssessment.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupUpdateRiskAssessment.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.riskAssessmentSuccess = true;
+        toast.success("Risk Assessment Updated Successfully");
+      })
+      .addCase(setupUpdateRiskAssessment.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.riskAssessmentSuccess = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+
+    // Perform Risk Assessment
+    builder
+      .addCase(setupPerformRiskAssessment.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupPerformRiskAssessment.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.performRiskAssessmentObject = payload?.data;
+      })
+      .addCase(setupPerformRiskAssessment.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+
     // Add Risk Assessment
-    [setupAddRiskAssessment.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupAddRiskAssessment.fulfilled]: (state) => {
-      state.loading = false;
-      state.riskAssessmentSuccess = true;
-    },
-    [setupAddRiskAssessment.rejected]: (state, { payload }) => {
-      state.loading = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
+    builder
+      .addCase(setupAddRiskAssessment.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupAddRiskAssessment.fulfilled, (state) => {
+        state.loading = false;
+        state.riskAssessmentSuccess = true;
+      })
+      .addCase(setupAddRiskAssessment.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
   },
 });
 

@@ -256,6 +256,17 @@ const GeneratePlanningReport = () => {
     }
   }, [user]);
 
+  React.useEffect(() => {
+    if (!editable) {
+      navigate("/audit/planning-report");
+    }
+    if (editable === "true" || editable === "false") {
+      if (!reportId) {
+        navigate("/audit/planning-report");
+      }
+    }
+  }, [editable]);
+
   return (
     <div id="reportsPage">
       {generatePlaningReportDialog && (

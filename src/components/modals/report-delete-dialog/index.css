@@ -1,0 +1,8 @@
+.report-delete-close-btn{
+    position: absolute;
+    bottom: 0px !important;
+    right: 30px;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 30px;
+}

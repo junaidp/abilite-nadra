@@ -22,7 +22,7 @@ const StartScheduling = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
-  const jobSchedulingId = searchParams.get("Id");
+  const jobSchedulingId = searchParams.get("jobScheduling");
   const { allJobScheduling, loading, jobSchedulingAddSuccess } = useSelector(
     (state) => state?.planingJobScheduling
   );
@@ -244,6 +244,12 @@ const StartScheduling = () => {
     }, []);
     setAllSubLocations(allSubLocations);
   }, [currentJobSchedulingObject?.locationList]);
+
+  React.useEffect(() => {
+    if (!jobSchedulingId) {
+      navigate("/audit/job-scheduling");
+    }
+  }, [jobSchedulingId]);
 
   return (
     <div>

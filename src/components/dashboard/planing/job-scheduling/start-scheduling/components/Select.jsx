@@ -20,24 +20,28 @@ const SelectComponent = ({
     });
   }
   return (
-    <FormControl variant="filled" sx={{ width: "100%" }}>
-      <InputLabel id="demo-simple-select-label">{label}</InputLabel>
-      <Select
-        labelId="demo-simple-select-label"
-        id="demo-simple-select"
-        value={value}
-        onChange={handleChange}
-      >
-        <MenuItem value="">Select User</MenuItem>
-        {list?.map((item, index) => {
-          return (
-            <MenuItem value={item} key={index}>
-              {item}
-            </MenuItem>
-          );
-        })}
-      </Select>
-    </FormControl>
+    <>
+      {list?.length !== 0 && (
+        <FormControl variant="filled" sx={{ width: "100%" }}>
+          <InputLabel id="demo-simple-select-label">{label}</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={value}
+            onChange={handleChange}
+          >
+            <MenuItem value="">Select User</MenuItem>
+            {list?.map((item, index) => {
+              return (
+                <MenuItem value={item} key={index}>
+                  {item}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        </FormControl>
+      )}
+    </>
   );
 };
 

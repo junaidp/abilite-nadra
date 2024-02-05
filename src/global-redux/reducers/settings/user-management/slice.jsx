@@ -29,40 +29,44 @@ export const slice = createSlice({
       state.addUserSuccess = false;
     },
   },
-  extraReducers: {
-    // Setup Add User
-    [setupAddUser.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupAddUser.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.addUserSuccess = true;
-      toast.success("User Added Successfully");
-    },
-    [setupAddUser.rejected]: (state, { payload }) => {
-      state.loading = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
-    // Setup Get All Users
-    [setupGetAllUsers.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupGetAllUsers.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.allUsers = payload?.data || [];
-    },
-    [setupGetAllUsers.rejected]: (state, { payload }) => {
-      state.loading = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
+  extraReducers: (builder) => {
+    // Add User
+    builder
+      .addCase(setupAddUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupAddUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.addUserSuccess = !action.error;
+        if (!action.error) {
+          toast.success("User Added Successfully");
+        }
+      })
+      .addCase(setupAddUser.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Get All Users
+    builder
+      .addCase(setupGetAllUsers.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetAllUsers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.allUsers = action.payload?.data || [];
+      })
+      .addCase(setupGetAllUsers.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
   },
 });
 

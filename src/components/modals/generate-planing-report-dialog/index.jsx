@@ -71,13 +71,13 @@ const GeneratePlaningReportDialog = ({
       </div>
 
       <div className="row py-3">
-        <div className="col-lg-1 text-end">
+        <div className="col-lg-6 text-end">
           <button className="btn btn-primary float-start" onClick={handleAdd}>
             Add
           </button>
         </div>
-        <div className="col-lg-2 text-end">
-          <button className="btn btn-primary float-start" onClick={handleClose}>
+        <div className="col-lg-6 text-end">
+          <button className="btn btn-danger float-end" onClick={handleClose}>
             Close
           </button>
         </div>

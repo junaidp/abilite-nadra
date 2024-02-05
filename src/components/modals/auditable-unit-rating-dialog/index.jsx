@@ -210,7 +210,7 @@ const AuditableUnitRatingDialog = ({
       </div>
       <div className="pb-4">
         <button
-          className={`btn btn-danger   float-end ${loading && "disabled"}`}
+          className={`btn btn-primary   float-end ${loading && "disabled"}`}
           onClick={handleSave}
         >
           {loading ? "Loading..." : "Add"}

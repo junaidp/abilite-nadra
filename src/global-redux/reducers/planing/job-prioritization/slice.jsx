@@ -29,41 +29,44 @@ export const slice = createSlice({
       state.jobPrioritizationAddSuccess = false;
     },
   },
-  extraReducers: {
+  extraReducers: (builder) => {
     // Get all job prioritization
-    [setupGetAllJobPrioritization.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupGetAllJobPrioritization.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.allJobPrioritization = payload?.data || [];
-    },
-    [setupGetAllJobPrioritization.rejected]: (state, { payload }) => {
-      state.loading = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
+    builder
+      .addCase(setupGetAllJobPrioritization.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetAllJobPrioritization.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.allJobPrioritization = payload?.data || [];
+      })
+      .addCase(setupGetAllJobPrioritization.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+
     // Update job Prioritization
-    [setupUpdateJobPrioritization.pending]: (state) => {
-      state.loading = true;
-    },
-    [setupUpdateJobPrioritization.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      toast.success("Job Prioritizing Updated Successfully");
-      state.jobPrioritizationAddSuccess = true;
-    },
-    [setupUpdateJobPrioritization.rejected]: (state, { payload }) => {
-      state.loading = false;
-      state.jobPrioritizationAddSuccess = false;
-      if (payload?.response?.data?.message) {
-        toast.error(payload?.response?.data?.message);
-      } else {
-        toast.error("An Error has accoured");
-      }
-    },
+    builder
+      .addCase(setupUpdateJobPrioritization.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupUpdateJobPrioritization.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        toast.success("Job Prioritizing Updated Successfully");
+        state.jobPrioritizationAddSuccess = true;
+      })
+      .addCase(setupUpdateJobPrioritization.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.jobPrioritizationAddSuccess = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
   },
 });
 
