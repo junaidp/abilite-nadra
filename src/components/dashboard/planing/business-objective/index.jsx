@@ -2,12 +2,11 @@ import React from "react";
 import "./index.css";
 import { useSelector, useDispatch } from "react-redux";
 import BusinessObjectiveModal from "../../../modals/add-engagement-audit-dialog/index";
-import AddSingleEngagement from "../../../../components/modals/add-single-engagement-dialog";
-import EditSingleEngagementDialog from "../../../modals/edit-single-engagement-dialog";
 import { useNavigate } from "react-router-dom";
 import Pagination from "@mui/material/Pagination";
 import { setupGetAllEngagements } from "../../../../global-redux/reducers/planing/engagement/slice";
 import { CircularProgress } from "@mui/material";
+import TableRow from "./components/table-row";
 
 const BusinessObjective = () => {
   const navigate = useNavigate();
@@ -19,10 +18,6 @@ const BusinessObjective = () => {
   const { user } = useSelector((state) => state?.auth);
   const [page, setPage] = React.useState(1);
   const [businessObjectiveDialog, setBusinessObjectiveDialog] =
-    React.useState(false);
-  const [showAddSingleEngagement, setShowAddSingleEngagement] =
-    React.useState(false);
-  const [editSingleEngagementDialog, setShowEditSingleEngagementDialog] =
     React.useState(false);
 
   const handleChange = (event, value) => {
@@ -60,27 +55,6 @@ const BusinessObjective = () => {
           </div>
         </div>
       )}
-      {showAddSingleEngagement && (
-        <div className="modal-objective">
-          <div className="model-wrap">
-            <AddSingleEngagement
-              setShowAddSingleEngagement={setShowAddSingleEngagement}
-            />
-          </div>
-        </div>
-      )}
-      {editSingleEngagementDialog && (
-        <div className="modal-objective">
-          <div className="model-wrap">
-            <EditSingleEngagementDialog
-              setShowEditSingleEngagementDialog={
-                setShowEditSingleEngagementDialog
-              }
-            />
-          </div>
-        </div>
-      )}
-
       <div>
         <section className="faq-section ">
           <div data-aos="fade-up">
@@ -131,43 +105,12 @@ const BusinessObjective = () => {
                           ?.slice((page - 1) * 5, page * 5)
                           .map((item, index) => {
                             return (
-                              <tr key={index}>
-                                <td>{index + 1}</td>
-                                <td
-                                  onClick={() =>
-                                    handleClickEngagement(
-                                      item?.id,
-                                      item?.natureThrough
-                                    )
-                                  }
-                                  className="cursor-pointer"
-                                >
-                                  {item?.engagementName}
-                                </td>
-                                <td
-                                  onClick={() =>
-                                    handleClickEngagement(
-                                      item?.id,
-                                      item?.natureThrough
-                                    )
-                                  }
-                                  className="cursor-pointer"
-                                >
-                                  {" "}
-                                  {item?.natureThrough}
-                                </td>
-                                <td
-                                  onClick={() =>
-                                    handleClickEngagement(
-                                      item?.id,
-                                      item?.natureThrough
-                                    )
-                                  }
-                                  className="cursor-pointer"
-                                >
-                                  {item?.initiatedBy?.name}
-                                </td>
-                              </tr>
+                              <TableRow
+                              key={index}
+                                index={index}
+                                item={item}
+                                handleClickEngagement={handleClickEngagement}
+                              />
                             );
                           })
                       )}

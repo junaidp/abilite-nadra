@@ -13,6 +13,8 @@ import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
 } from "../../../../../global-redux/reducers/common/slice";
+import CPListRows from "./components/cp-list-rows";
+import RiskAssessmentListRows from "./components/risk-assessment-list-rows";
 
 const RiskFactorApproach = () => {
   const dispatch = useDispatch();
@@ -223,75 +225,13 @@ const RiskFactorApproach = () => {
                   <tbody>
                     {data?.riskAssessmentList?.map((item, index) => {
                       return (
-                        <tr key={index}>
-                          <td>{item?.id}</td>
-                          <td>{item?.description || ""}</td>
-                          <td className="w-80">
-                            <select
-                              className="form-select"
-                              aria-label="Default select example"
-                              name="likelihood"
-                              value={item?.likelihood}
-                              onChange={(event) =>
-                                handleChangeSingleRiskAssessmentItem(
-                                  event,
-                                  item?.id
-                                )
-                              }
-                            >
-                              <option value={0}>0</option>
-                              <option value={1}>1</option>
-                              <option value={2}>2</option>
-                              <option value={3}>3</option>
-                              <option value={4}>4</option>
-                            </select>
-                          </td>
-                          <td className="w-80">
-                            <select
-                              className="form-select"
-                              aria-label="Default select example"
-                              name="impact"
-                              value={item?.impact}
-                              onChange={(event) =>
-                                handleChangeSingleRiskAssessmentItem(
-                                  event,
-                                  item?.id
-                                )
-                              }
-                            >
-                              <option value={0}>0</option>
-                              <option value={1}>1</option>
-                              <option value={2}>2</option>
-                              <option value={3}>3</option>
-                              <option value={4}>4</option>
-                            </select>
-                          </td>
-                          <td className="bold width-50">
-                            {Number(item?.likelihood) + Number(item?.impact)}
-                          </td>
-                          <td>
-                            <textarea
-                              className="form-control"
-                              placeholder="Enter Reason"
-                              id="exampleFormControlTextarea1"
-                              rows="3"
-                              name="comments"
-                              value={item?.comments || ""}
-                              onChange={(event) =>
-                                handleChangeSingleRiskAssessmentItem(
-                                  event,
-                                  item?.id
-                                )
-                              }
-                            ></textarea>
-                            <label className="word-limit-info label-text">
-                              Maximum 1500 words
-                            </label>
-                          </td>
-                          <td className="text-center justify-content-center pt-3">
-                            <i className="fa fa-trash text-danger f-18"></i>
-                          </td>
-                        </tr>
+                        <RiskAssessmentListRows
+                          key={index}
+                          item={item}
+                          handleChangeSingleRiskAssessmentItem={
+                            handleChangeSingleRiskAssessmentItem
+                          }
+                        />
                       );
                     })}
                     <tr>
@@ -350,82 +290,16 @@ const RiskFactorApproach = () => {
                 </thead>
                 <tbody>
                   {data?.riskAsssessmentCriteriaForRiskManagementCPList?.map(
-                    (cpItem, i) => {
+                    (cpItem, index) => {
                       return (
-                        <tr key={i}>
-                          <td>{cpItem?.id}</td>
-                          <td className="w-400">{cpItem?.description || ""}</td>
-                          <td>
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                checked={cpItem?.inadequate}
-                                id="flexCheckDefault"
-                                name="inadequate"
-                                onChange={(event) =>
-                                  handleChangeCpList(event, cpItem?.id)
-                                }
-                              />
-                              <label
-                                className="form-check-label"
-                                htmlFor="flexCheckDefault"
-                              ></label>
-                            </div>
-                          </td>
-                          <td>
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                checked={cpItem?.needsImprovement}
-                                id="flexCheckDefault"
-                                onChange={(event) =>
-                                  handleChangeCpList(event, cpItem?.id)
-                                }
-                                name="needsImprovement"
-                              />
-                              <label
-                                className="form-check-label"
-                                htmlFor="flexCheckDefault"
-                              ></label>
-                            </div>
-                          </td>
-                          <td>
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                checked={cpItem?.adequate}
-                                id="flexCheckDefault"
-                                name="adequate"
-                                onChange={(event) =>
-                                  handleChangeCpList(event, cpItem?.id)
-                                }
-                              />
-                              <label
-                                className="form-check-label"
-                                htmlFor="flexCheckDefault"
-                              ></label>
-                            </div>
-                          </td>
-                          <td className="w-300">
-                            <textarea
-                              className="form-control"
-                              placeholder="Enter Reason"
-                              id="exampleFormCont"
-                              rows="3"
-                              value={cpItem?.comments || ""}
-                              onChange={(event) =>
-                                handleChangeCpListComments(event, cpItem?.id)
-                              }
-                              name="comments"
-                            ></textarea>
-                            <label className="word-limit-info label-text">
-                              Maximum 1500 words
-                            </label>
-                          </td>
-                        </tr>
+                        <CPListRows
+                          cpItem={cpItem}
+                          key={index}
+                          handleChangeCpList={handleChangeCpList}
+                          handleChangeCpListComments={
+                            handleChangeCpListComments
+                          }
+                        />
                       );
                     }
                   )}
