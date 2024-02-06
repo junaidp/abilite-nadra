@@ -1,6 +1,9 @@
 .row {
   margin-left: 900px;
 }
+.w-280{
+  width: 280px;
+}
 
 #SideComponents {
   width: 76%;
