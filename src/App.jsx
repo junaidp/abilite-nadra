@@ -52,6 +52,9 @@ import {
   InitialLoadSidebarActiveLink,
   changeActiveLink,
 } from "./global-redux/reducers/common/slice";
+import JobTimeAllocationPage from "./pages/dashboard/report/job-time-allocation/JobTimeAllocation";
+import AuditPlaningSummaryPage from "./pages/dashboard/report/audit-planing-summary/AuditPlaningSummary";
+import AuditExceptionPage from "./pages/dashboard/report/audit-exception/AuditException";
 
 const App = () => {
   let dispatch = useDispatch();
@@ -191,6 +194,19 @@ const App = () => {
             <Route
               path="generate-internal-audit-report"
               element={<GenerateInternalAuditReportPage />}
+            />
+
+            <Route
+              path="job-time-allocation-report"
+              element={<JobTimeAllocationPage />}
+            />
+            <Route
+              path="audit-planning-summary-report"
+              element={<AuditPlaningSummaryPage />}
+            />
+            <Route
+              path="audit-exception-report"
+              element={<AuditExceptionPage />}
             />
           </Route>
         </Routes>

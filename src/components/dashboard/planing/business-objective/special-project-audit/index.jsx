@@ -65,6 +65,34 @@ const SpecialProjectAudit = () => {
     });
   }
 
+  function handleSumMapProcess() {
+    setObject((pre) => {
+      return {
+        ...pre,
+        businessObjectiveAndMapProcessList: [
+          ...pre?.businessObjectiveAndMapProcessList,
+          {
+            description: "",
+            domain: "",
+            id: uuidv4(),
+          },
+        ],
+      };
+    });
+  }
+
+  function handleDeleteSingleMapItem(id) {
+    setObject((pre) => {
+      return {
+        ...pre,
+        businessObjectiveAndMapProcessList:
+          pre.businessObjectiveAndMapProcessList.filter(
+            (all) => all?.id !== id
+          ),
+      };
+    });
+  }
+
   function handleSaveMinuteMeetings() {
     if (!loading) {
       dispatch(
@@ -78,22 +106,6 @@ const SpecialProjectAudit = () => {
         })
       );
     }
-  }
-
-  function handleSumMapProcess() {
-    setObject((pre) => {
-      return {
-        ...pre,
-        businessObjectiveAndMapProcessList: [
-          ...pre?.businessObjectiveAndMapProcessList,
-          {
-            description: pre?.mapProcessDescription,
-            domain: pre?.mapProcessDomain,
-            id: uuidv4(),
-          },
-        ],
-      };
-    });
   }
 
   function handleUpdateSpecialProjectAudit() {
@@ -110,18 +122,6 @@ const SpecialProjectAudit = () => {
     }
   }
 
-  function handleDeleteSingleMapItem(id) {
-    setObject((pre) => {
-      return {
-        ...pre,
-        businessObjectiveAndMapProcessList:
-          pre.businessObjectiveAndMapProcessList.filter(
-            (all) => all?.id !== id
-          ),
-      };
-    });
-  }
-
   function handleSaveBusinessObjectiveMapProcess() {
     if (!loading) {
       dispatch(
@@ -133,13 +133,6 @@ const SpecialProjectAudit = () => {
       );
     }
   }
-
-  React.useEffect(() => {
-    if (engagementAddSuccess) {
-      dispatch(resetAddEngagementSuccess());
-      dispatch(setupGetSingleSpecialProjectAuditObjective(engagementId));
-    }
-  }, [engagementAddSuccess]);
 
   React.useEffect(() => {
     setObject((pre) => {
@@ -171,22 +164,11 @@ const SpecialProjectAudit = () => {
   }, [planingEngagementSingleObject]);
 
   React.useEffect(() => {
-    if (user[0]?.token && engagementId) {
+    if (engagementAddSuccess) {
+      dispatch(resetAddEngagementSuccess());
       dispatch(setupGetSingleSpecialProjectAuditObjective(engagementId));
     }
-  }, [engagementId, user]);
-
-  React.useEffect(() => {
-    dispatch(changeActiveLink("li-business-objective"));
-    dispatch(InitialLoadSidebarActiveLink("li-audit"));
-  }, []);
-
-  // Location and Sub Location
-  React.useEffect(() => {
-    if (user[0]?.token) {
-      dispatch(setupGetAllLocations());
-    }
-  }, [user]);
+  }, [engagementAddSuccess]);
 
   React.useEffect(() => {
     if (object?.location_Id) {
@@ -198,10 +180,27 @@ const SpecialProjectAudit = () => {
   }, [object?.location_Id]);
 
   React.useEffect(() => {
+    if (user[0]?.token && engagementId) {
+      dispatch(setupGetSingleSpecialProjectAuditObjective(engagementId));
+    }
+  }, [engagementId, user]);
+
+  React.useEffect(() => {
+    if (user[0]?.token) {
+      dispatch(setupGetAllLocations());
+    }
+  }, [user]);
+
+  React.useEffect(() => {
     if (!engagementId) {
       navigate("/audit/business-objective");
     }
   }, [engagementId]);
+
+  React.useEffect(() => {
+    dispatch(changeActiveLink("li-business-objective"));
+    dispatch(InitialLoadSidebarActiveLink("li-audit"));
+  }, []);
 
   return (
     <div>

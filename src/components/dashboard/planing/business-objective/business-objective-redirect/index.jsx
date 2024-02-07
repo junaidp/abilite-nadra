@@ -70,6 +70,36 @@ const BusinessObjectiveRedirect = () => {
     });
   }
 
+
+  function handleSumMapProcess() {
+    setObject((pre) => {
+      return {
+        ...pre,
+        businessObjectiveAndMapProcessList: [
+          ...pre?.businessObjectiveAndMapProcessList,
+          {
+            description: "",
+            domain: "",
+            id: uuidv4(),
+          },
+        ],
+      };
+    });
+  }
+
+
+  function handleDeleteSingleMapItem(id) {
+    setObject((pre) => {
+      return {
+        ...pre,
+        businessObjectiveAndMapProcessList:
+          pre.businessObjectiveAndMapProcessList.filter(
+            (all) => all?.id !== id
+          ),
+      };
+    });
+  }
+
   function handleSaveMinuteMeetings() {
     if (!loading) {
       dispatch(
@@ -83,22 +113,6 @@ const BusinessObjectiveRedirect = () => {
         })
       );
     }
-  }
-
-  function handleSumMapProcess() {
-    setObject((pre) => {
-      return {
-        ...pre,
-        businessObjectiveAndMapProcessList: [
-          ...pre?.businessObjectiveAndMapProcessList,
-          {
-            description: pre?.mapProcessDescription,
-            domain: pre?.mapProcessDomain,
-            id: uuidv4(),
-          },
-        ],
-      };
-    });
   }
 
   function handleUpdateBusinessObjective() {
@@ -117,18 +131,6 @@ const BusinessObjectiveRedirect = () => {
     }
   }
 
-  function handleDeleteSingleMapItem(id) {
-    setObject((pre) => {
-      return {
-        ...pre,
-        businessObjectiveAndMapProcessList:
-          pre.businessObjectiveAndMapProcessList.filter(
-            (all) => all?.id !== id
-          ),
-      };
-    });
-  }
-
   function handleSaveBusinessObjectiveMapProcess() {
     if (!loading) {
       dispatch(
@@ -140,13 +142,6 @@ const BusinessObjectiveRedirect = () => {
       );
     }
   }
-
-  React.useEffect(() => {
-    if (engagementAddSuccess) {
-      dispatch(resetAddEngagementSuccess());
-      dispatch(setupGetSingleEngagementObject(engagementId));
-    }
-  }, [engagementAddSuccess]);
 
   React.useEffect(() => {
     setObject((pre) => {
@@ -180,22 +175,11 @@ const BusinessObjectiveRedirect = () => {
   }, [planingEngagementSingleObject]);
 
   React.useEffect(() => {
-    if (user[0]?.token && engagementId) {
+    if (engagementAddSuccess) {
+      dispatch(resetAddEngagementSuccess());
       dispatch(setupGetSingleEngagementObject(engagementId));
     }
-  }, [engagementId, user]);
-
-  React.useEffect(() => {
-    dispatch(changeActiveLink("li-business-objective"));
-    dispatch(InitialLoadSidebarActiveLink("li-audit"));
-  }, []);
-
-  // Location and Sub Location
-  React.useEffect(() => {
-    if (user[0]?.token) {
-      dispatch(setupGetAllLocations());
-    }
-  }, [user]);
+  }, [engagementAddSuccess]);
 
   React.useEffect(() => {
     if (object?.location_Id) {
@@ -207,10 +191,27 @@ const BusinessObjectiveRedirect = () => {
   }, [object?.location_Id]);
 
   React.useEffect(() => {
+    if (user[0]?.token && engagementId) {
+      dispatch(setupGetSingleEngagementObject(engagementId));
+    }
+  }, [engagementId, user]);
+
+  React.useEffect(() => {
+    if (user[0]?.token) {
+      dispatch(setupGetAllLocations());
+    }
+  }, [user]);
+
+  React.useEffect(() => {
     if (!engagementId) {
       navigate("/audit/business-objective");
     }
   }, [engagementId]);
+
+  React.useEffect(() => {
+    dispatch(changeActiveLink("li-business-objective"));
+    dispatch(InitialLoadSidebarActiveLink("li-audit"));
+  }, []);
 
   return (
     <div>

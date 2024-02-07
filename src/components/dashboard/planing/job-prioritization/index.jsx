@@ -64,15 +64,6 @@ const JobPrioritization = () => {
   }
 
   React.useEffect(() => {
-    const companyId = user[0]?.company?.find(
-      (item) => item?.companyName === company
-    )?.id;
-    if (companyId) {
-      dispatch(setupGetAllJobPrioritization(companyId));
-    }
-  }, [user]);
-
-  React.useEffect(() => {
     if (jobPrioritizationAddSuccess) {
       const companyId = user[0]?.company?.find(
         (item) => item?.companyName === company
@@ -88,6 +79,14 @@ const JobPrioritization = () => {
     setData(allJobPrioritization);
   }, [allJobPrioritization]);
 
+  React.useEffect(() => {
+    const companyId = user[0]?.company?.find(
+      (item) => item?.companyName === company
+    )?.id;
+    if (companyId) {
+      dispatch(setupGetAllJobPrioritization(companyId));
+    }
+  }, [user]);
   return (
     <div>
       <header className="section-header my-3 align-items-center justify-content-between text-start d-flex ">

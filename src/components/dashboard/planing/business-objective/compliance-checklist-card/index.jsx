@@ -38,6 +38,7 @@ const ComplianceCheckListCard = () => {
       dispatch(setupSaveCheckListObjective(item));
     }
   }
+
   React.useEffect(() => {
     if (engagementAddSuccess) {
       dispatch(resetAddEngagementSuccess());
@@ -52,16 +53,15 @@ const ComplianceCheckListCard = () => {
   }, [engagementId, user]);
 
   React.useEffect(() => {
-    dispatch(changeActiveLink("li-business-objective"));
-    dispatch(InitialLoadSidebarActiveLink("li-audit"));
-  }, []);
-
-  React.useEffect(() => {
     if (!engagementId) {
       navigate("/audit/business-objective");
     }
   }, [engagementId]);
 
+  React.useEffect(() => {
+    dispatch(changeActiveLink("li-business-objective"));
+    dispatch(InitialLoadSidebarActiveLink("li-audit"));
+  }, []);
 
   return (
     <div>

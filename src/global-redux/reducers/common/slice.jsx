@@ -110,6 +110,27 @@ let menuItems = [
         route: "/audit/internal-audit-report",
         active: false,
       },
+      {
+        id: "li-job-time-allocation-report",
+        label: "Job Time Allocation",
+        icon: "fa fa-file-code pe-2",
+        route: "/audit/job-time-allocation-report",
+        active: false,
+      },
+      {
+        id: "li-audit-planning-summary-report",
+        label: "Audit Planing Summary",
+        icon: "fa fa-file-code pe-2",
+        route: "/audit/audit-planning-summary-report",
+        active: false,
+      },
+      {
+        id: "li-audit-exception-report",
+        label: "Audit Exception",
+        icon: "fa fa-file-code pe-2",
+        route: "/audit/audit-exception-report",
+        active: false,
+      },
     ],
   },
 

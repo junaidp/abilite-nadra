@@ -61,6 +61,9 @@ body {
 .w-150 {
   width: 150px !important;
 }
+.h-150 {
+  height: 150px !important;
+}
 .w-190 {
   width: 190px !important;
 }
@@ -554,9 +557,22 @@ element {
 .ql-toolbar.ql-snow + .ql-container.ql-snow {
   min-height: 70vh !important;
 }
+.color-white{
+  color: white !important;
+}
+.f-40{
+  font-size: 40px !important;
+}
+.min-w-80{
+  min-width: 80px !important;
+}
 
 .jodit-container:not(.jodit_inline) .jodit-workplace {
   min-height: 30vh !important;
+}
+
+.application-main-color{
+  background-color: #0a7386 !important;
 }
 
 .jodit-popup__content {

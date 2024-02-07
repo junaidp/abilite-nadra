@@ -5,9 +5,11 @@ const RiskAssessmentListRows = ({
   handleChangeSingleRiskAssessmentItem,
 }) => {
   return (
-    <tr >
+    <tr>
       <td>{item?.id}</td>
-      <td>{item?.description || ""}</td>
+      <td>
+        <p>{item?.description || ""}</p>
+      </td>
       <td className="w-80">
         <select
           className="form-select"

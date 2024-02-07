@@ -51,6 +51,24 @@ const StartScheduling = () => {
     });
   }
 
+  function handleChangeJobSchedulingStringTextFields(event) {
+    setCurrentJobScheduling((pre) => {
+      return {
+        ...pre,
+        [event?.target?.name]: event?.target?.value,
+      };
+    });
+  }
+
+  function handleChangeJobSchedulingCheckFields(event) {
+    setCurrentJobScheduling((pre) => {
+      return {
+        ...pre,
+        [event?.target?.name]: event?.target?.checked,
+      };
+    });
+  }
+
   function handleFrequencyChange(event) {
     if (event.target?.value) {
       const filteredLocationArray = allLocations.filter((item) =>
@@ -106,22 +124,6 @@ const StartScheduling = () => {
       }
       dispatch(setupUpdateJobScheduling(object));
     }
-  }
-  function handleChangeJobSchedulingStringTextFields(event) {
-    setCurrentJobScheduling((pre) => {
-      return {
-        ...pre,
-        [event?.target?.name]: event?.target?.value,
-      };
-    });
-  }
-  function handleChangeJobSchedulingCheckFields(event) {
-    setCurrentJobScheduling((pre) => {
-      return {
-        ...pre,
-        [event?.target?.name]: event?.target?.checked,
-      };
-    });
   }
 
   function handleSave() {
@@ -181,17 +183,30 @@ const StartScheduling = () => {
   }
 
   React.useEffect(() => {
-    const companyId = user[0]?.company?.find(
-      (item) => item?.companyName === company
-    )?.id;
-    if (companyId) {
-      dispatch(
-        setupGetAllJobScheduling(
-          `?companyId=${companyId}&currentYear=${Number("2024")}`
-        )
+    if (jobSchedulingId && allJobScheduling?.length !== 0) {
+      const object = allJobScheduling?.find(
+        (item) => item?.id === Number(jobSchedulingId)
       );
+      setCurrentJobScheduling(object);
+      setInitialLocationList(
+        object?.locationList?.map((all) => all?.description)
+      );
+      setInitialSubLocationList(
+        object?.subLocation?.map((all) => all?.description)
+      );
+      setInitialUserList(object?.resourcesList?.map((all) => all?.name));
     }
-  }, [user]);
+  }, [jobSchedulingId, allJobScheduling]);
+
+  React.useEffect(() => {
+    const locationArray = allLocations.filter((item) =>
+      currentJobSchedulingObject?.locationList?.includes(item?.description)
+    );
+    let allSubLocations = locationArray.reduce((acc, item) => {
+      return acc.concat(item.subLocations);
+    }, []);
+    setAllSubLocations(allSubLocations);
+  }, [currentJobSchedulingObject?.locationList]);
 
   React.useEffect(() => {
     if (jobSchedulingAddSuccess) {
@@ -210,27 +225,6 @@ const StartScheduling = () => {
   }, [jobSchedulingAddSuccess]);
 
   React.useEffect(() => {
-    dispatch(changeActiveLink("li-job-scheduling"));
-    dispatch(InitialLoadSidebarActiveLink("li-audit"));
-  }, []);
-
-  React.useEffect(() => {
-    if (jobSchedulingId && allJobScheduling?.length !== 0) {
-      const object = allJobScheduling?.find(
-        (item) => item?.id === Number(jobSchedulingId)
-      );
-      setCurrentJobScheduling(object);
-      setInitialLocationList(
-        object?.locationList?.map((all) => all?.description)
-      );
-      setInitialSubLocationList(
-        object?.subLocation?.map((all) => all?.description)
-      );
-      setInitialUserList(object?.resourcesList?.map((all) => all?.name));
-    }
-  }, [jobSchedulingId, allJobScheduling]);
-
-  React.useEffect(() => {
     if (user[0]?.token) {
       dispatch(setupGetAllLocations());
       dispatch(setupGetAllUsers());
@@ -238,20 +232,28 @@ const StartScheduling = () => {
   }, [user]);
 
   React.useEffect(() => {
-    const locationArray = allLocations.filter((item) =>
-      currentJobSchedulingObject?.locationList?.includes(item?.description)
-    );
-    let allSubLocations = locationArray.reduce((acc, item) => {
-      return acc.concat(item.subLocations);
-    }, []);
-    setAllSubLocations(allSubLocations);
-  }, [currentJobSchedulingObject?.locationList]);
+    const companyId = user[0]?.company?.find(
+      (item) => item?.companyName === company
+    )?.id;
+    if (companyId) {
+      dispatch(
+        setupGetAllJobScheduling(
+          `?companyId=${companyId}&currentYear=${Number("2024")}`
+        )
+      );
+    }
+  }, [user]);
 
   React.useEffect(() => {
     if (!jobSchedulingId) {
       navigate("/audit/job-scheduling");
     }
   }, [jobSchedulingId]);
+
+  React.useEffect(() => {
+    dispatch(changeActiveLink("li-job-scheduling"));
+    dispatch(InitialLoadSidebarActiveLink("li-audit"));
+  }, []);
 
   return (
     <div>

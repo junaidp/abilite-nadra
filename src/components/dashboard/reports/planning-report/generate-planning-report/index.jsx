@@ -247,13 +247,6 @@ const GeneratePlanningReport = () => {
 
   React.useEffect(() => {
     if (user[0]?.token) {
-      dispatch(setupGetAllReports());
-      dispatch(setupGetAllUsers({ shareWith: true }));
-    }
-  }, [user]);
-
-  React.useEffect(() => {
-    if (user[0]?.token) {
       setRolesList((pre) =>
         pre.filter((all) => all !== user[0]?.userId?.employeeid?.userHierarchy)
       );
@@ -270,6 +263,13 @@ const GeneratePlanningReport = () => {
       }
     }
   }, [editable]);
+
+  React.useEffect(() => {
+    if (user[0]?.token) {
+      dispatch(setupGetAllReports());
+      dispatch(setupGetAllUsers({ shareWith: true }));
+    }
+  }, [user]);
 
   return (
     <div id="reportsPage">

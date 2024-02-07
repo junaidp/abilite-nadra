@@ -23,6 +23,102 @@
   grid-template-columns: 1fr 1fr;
   gap: 30px;
 }
+span{
+  font-size: 12px;
+}
+
+
+p{
+  font-size: 12px;
+  margin-bottom: 0px;
+}
+.glassmorphism-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.glassmorphism-card .card-body {
+  color: #000; /* Black text color */
+}
+
+.primary {
+  color: #0A7386; /* Icon color */
+}
+
+.media-body h3,
+.media-body span {
+  color: #000; /* Black text color */
+}
+
+.media-body {
+  text-align: right;
+}
+
+.align-self-center {
+  margin-right: 15px; /* Space between icon and text */
+}
+.glassmorphism-card- {
+  background: #0A7386;
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.glassmorphism-card- .card-body {
+  color: #fff; /* Black text color */
+}
+.label {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  margin-right: 1em;
+  border-radius: 5px;
+  font-family: Arial, sans-serif;
+  color: #333;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+.high {
+  background-color: #4472C4;
+  color: white;
+}
+
+.medium {
+  background-color: #ED7D31;
+  color: white;
+}
+.yellow{
+  background-color: #FFC61C;
+  color: white;
+}
+.low {
+  background-color: #A5A5A5;
+  color: white;
+}
+.highh{
+  background-color: #70AD47;
+  color: white;
+}
+.mediumm{
+  background-color: #5B9BD5;
+  color: white;
+}
+.card-header{
+  background:#0A7386 ;
+  color: white;
+}
+.job-card{
+  height: 240px;
+  overflow-x: auto;
+}
+
 
 @media screen and (max-width:1100px) {
   .dashboard-charts-wrapper {

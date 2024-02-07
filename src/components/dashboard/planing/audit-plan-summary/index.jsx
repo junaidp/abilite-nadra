@@ -56,6 +56,26 @@ const AuditPlanSummary = () => {
   }
 
   React.useEffect(() => {
+    if (allAuditPlanSummary?.length !== 0) {
+      allAuditPlanSummary?.forEach((element) => {
+        setTotals((pre) => {
+          return {
+            serviceProvider:
+              Number(pre.serviceProvider) + Number(element.serviceProvider),
+            iaa: Number(pre.iaa) + Number(element.iaa),
+            total: Number(pre.total) + Number(element.total),
+            q1: Number(pre.q1) + Number(element.q1),
+            q2: Number(pre.q2) + Number(element.q2),
+            q3: Number(pre.q3) + Number(element.q3),
+            q4: Number(pre.q4) + Number(element.q4),
+          };
+        });
+      });
+      setData(allAuditPlanSummary);
+    }
+  }, [allAuditPlanSummary]);
+
+  React.useEffect(() => {
     if (auditPlanSummaryAddSuccess) {
       const companyId = user[0]?.company?.find(
         (item) => item?.companyName === company
@@ -79,26 +99,6 @@ const AuditPlanSummary = () => {
       );
     }
   }, [user, year]);
-
-  React.useEffect(() => {
-    if (allAuditPlanSummary?.length !== 0) {
-      allAuditPlanSummary?.forEach((element) => {
-        setTotals((pre) => {
-          return {
-            serviceProvider:
-              Number(pre.serviceProvider) + Number(element.serviceProvider),
-            iaa: Number(pre.iaa) + Number(element.iaa),
-            total: Number(pre.total) + Number(element.total),
-            q1: Number(pre.q1) + Number(element.q1),
-            q2: Number(pre.q2) + Number(element.q2),
-            q3: Number(pre.q3) + Number(element.q3),
-            q4: Number(pre.q4) + Number(element.q4),
-          };
-        });
-      });
-      setData(allAuditPlanSummary);
-    }
-  }, [allAuditPlanSummary]);
 
   return (
     <div>

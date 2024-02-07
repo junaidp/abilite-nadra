@@ -47,29 +47,6 @@ const RiskFactorApproach = () => {
     });
   }
 
-  function handleSaveRiskAssessment() {
-    if (!loading) {
-      dispatch(
-        setupUpdateRiskAssessment({
-          ...performRiskAssessmentObject,
-          riskAssessmentList: data?.riskAssessmentList.map((singleItem) => {
-            return {
-              ...singleItem,
-              score:
-                Number(singleItem?.likelihood) + Number(singleItem?.impact),
-            };
-          }),
-          score: scoreSum,
-          riskAssessments: {
-            ...performRiskAssessmentObject?.riskAssessments,
-            riskAsssessmentCriteriaForRiskManagementCPList:
-              data?.riskAsssessmentCriteriaForRiskManagementCPList,
-          },
-        })
-      );
-    }
-  }
-
   function handleChangeCpList(event, id) {
     setData((pre) => {
       return {
@@ -106,6 +83,29 @@ const RiskFactorApproach = () => {
     });
   }
 
+  function handleSaveRiskAssessment() {
+    if (!loading) {
+      dispatch(
+        setupUpdateRiskAssessment({
+          ...performRiskAssessmentObject,
+          riskAssessmentList: data?.riskAssessmentList.map((singleItem) => {
+            return {
+              ...singleItem,
+              score:
+                Number(singleItem?.likelihood) + Number(singleItem?.impact),
+            };
+          }),
+          score: scoreSum,
+          riskAssessments: {
+            ...performRiskAssessmentObject?.riskAssessments,
+            riskAsssessmentCriteriaForRiskManagementCPList:
+              data?.riskAsssessmentCriteriaForRiskManagementCPList,
+          },
+        })
+      );
+    }
+  }
+
   React.useEffect(() => {
     setData((pre) => {
       return {
@@ -124,6 +124,14 @@ const RiskFactorApproach = () => {
       };
     });
   }, [performRiskAssessmentObject]);
+
+  React.useEffect(() => {
+    let value = 0;
+    data?.riskAssessmentList?.forEach((element) => {
+      value = value + (Number(element?.likelihood) + Number(element?.impact));
+    });
+    setScoreSum(value);
+  }, [data]);
 
   React.useEffect(() => {
     if (riskAssessmentSuccess) {
@@ -149,23 +157,15 @@ const RiskFactorApproach = () => {
   }, [riskAssessmentId, user]);
 
   React.useEffect(() => {
-    let value = 0;
-    data?.riskAssessmentList?.forEach((element) => {
-      value = value + (Number(element?.likelihood) + Number(element?.impact));
-    });
-    setScoreSum(value);
-  }, [data]);
+    if (!riskAssessmentId) {
+      navigate("/audit/risk-assessment");
+    }
+  }, [riskAssessmentId]);
 
   React.useEffect(() => {
     dispatch(changeActiveLink("li-risk-assessments"));
     dispatch(InitialLoadSidebarActiveLink("li-audit"));
   }, []);
-
-  React.useEffect(() => {
-    if (!riskAssessmentId) {
-      navigate("/audit/risk-assessment");
-    }
-  }, [riskAssessmentId]);
 
   return (
     <div>
