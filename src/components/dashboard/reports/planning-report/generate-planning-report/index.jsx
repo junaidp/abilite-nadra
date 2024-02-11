@@ -2,6 +2,7 @@ import React from "react";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
 import GeneratePlaningReportDialog from "../../../../modals/generate-planing-report-dialog";
+import EditGeneratePlaningReportDialog from "../../../../modals/edit-generate-planing-report-dialog";
 import { useSelector, useDispatch } from "react-redux";
 import {
   resetReportAddSuccess,
@@ -33,9 +34,12 @@ const GeneratePlanningReport = () => {
     "Audit_Executive_1",
   ]);
   const [pdfLoading, setPdfLoading] = React.useState(false);
-
   const [generatePlaningReportDialog, setGeneratePlaningReportDialog] =
     React.useState(false);
+  const [editGeneratePlaningReportDialog, setEditGeneratePlaningReportDialog] =
+    React.useState(false);
+  const [editGeneratePlaningId, setEditGeneratePlaningId] = React.useState("");
+
   const [shareWithUserId, setShareWithUserId] = React.useState("");
   const [hierarchy, setHierarchy] = React.useState("");
   const [selectedUser, setSelectedUsers] = React.useState([]);
@@ -283,6 +287,21 @@ const GeneratePlanningReport = () => {
           </div>
         </div>
       )}
+      {editGeneratePlaningReportDialog && (
+        <div className="audit-settings-modal">
+          <div className="model-wrap">
+            <EditGeneratePlaningReportDialog
+              setEditGeneratePlaningReportDialog={
+                setEditGeneratePlaningReportDialog
+              }
+              data={data}
+              setData={setData}
+              editGeneratePlaningId={editGeneratePlaningId}
+              setEditGeneratePlaningId={setEditGeneratePlaningId}
+            />
+          </div>
+        </div>
+      )}
       <header className="section-header my-3">
         <div className="row align-items-center mb-4">
           <div className="col-lg-12 d-flex align-items-center">
@@ -366,11 +385,18 @@ const GeneratePlanningReport = () => {
                   <tr key={index}>
                     <td>{head?.heading}</td>
                     <td>{head?.description}</td>
-                    <td
-                      className="w-130"
-                      onClick={() => handleDeleteHeading(head?.id)}
-                    >
-                      <i className="fa fa-trash text-danger f-18 cursor-pointer"></i>
+                    <td className="w-130">
+                      <i
+                        className="fa fa-trash text-danger f-18 cursor-pointer"
+                        onClick={() => handleDeleteHeading(head?.id)}
+                      ></i>
+                      <i
+                        class="fa fa-edit  px-3 f-18 cursor-pointer"
+                        onClick={() => {
+                          setEditGeneratePlaningId(head?.id);
+                          setEditGeneratePlaningReportDialog(true);
+                        }}
+                      ></i>
                     </td>
                   </tr>
                 );

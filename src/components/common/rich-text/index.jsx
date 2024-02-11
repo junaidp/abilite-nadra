@@ -10,6 +10,7 @@ const RichTextEditor = ({ onContentChange, initialValue, name, editable }) => {
       uploader: {
         insertImageAsBase64URI: true, // Converts the image to base64 and embeds it
       },
+      askBeforePasteHTML: false,
       controls: {
         font: {
           list: {
@@ -18,7 +19,10 @@ const RichTextEditor = ({ onContentChange, initialValue, name, editable }) => {
           },
         },
       },
-      toolbarAdaptive:true,
+      toolbarAdaptive: false,
+      processPasteHTML: false,
+      scrollToPastedContent: false,
+      nl2brInPlainText: true,
       readonly: editable === "false" ? true : false,
       spellcheck: true,
       buttons: [

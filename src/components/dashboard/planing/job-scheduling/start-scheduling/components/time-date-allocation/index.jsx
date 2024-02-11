@@ -101,10 +101,7 @@ const TimeAndDateAllocation = ({
                   </option>
                 </select>
               </div>
-            </div>
-
-            <div className="row mb-3">
-              <div className="col-lg-12">
+              <div className="col-lg-6">
                 <label>Travelling days</label>
                 <input
                   type="number"
@@ -132,7 +129,7 @@ const TimeAndDateAllocation = ({
             </div>
 
             <div className="row mb-3">
-              <div className="col-lg-6 align-self-center">
+              <div className="col-lg-6">
                 <div className="form-check">
                   <input
                     className="form-check-input"
