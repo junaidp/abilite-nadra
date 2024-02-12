@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import {
   setupGetAllReports,
   resetReportAddSuccess,
+  setupGetIAHReports,
 } from "../../../../global-redux/reducers/reports/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
@@ -15,16 +16,17 @@ import ReportStatusChangeDialog from "../../../modals/report-status-change-dialo
 const PlanningReport = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [page, setPage] = React.useState(1);
   const { loading, allReports, reportAddSuccess } = useSelector(
     (state) => state?.reports
   );
+  const { user } = useSelector((state) => state?.auth);
+  const { company } = useSelector((state) => state?.common);
+  const [page, setPage] = React.useState(1);
   const [selectedReportId, setSelectedReportId] = React.useState("");
   const [showReportDeleteDialog, setShowReportDeleteDialog] =
     React.useState(false);
   const [showReportStatusChangeDialog, setShowReportStatusChangeDialog] =
     React.useState(false);
-  const { user } = useSelector((state) => state?.auth);
   const [createdBy, setCreatedBy] = React.useState("");
 
   const handleChange = (event, value) => {
@@ -42,17 +44,37 @@ const PlanningReport = () => {
   }
 
   React.useEffect(() => {
-    if (user[0]?.token) {
-      dispatch(setupGetAllReports());
-    }
-  }, [user]);
-
-  React.useEffect(() => {
     if (reportAddSuccess) {
+      if (user[0]?.userId?.employeeid?.userHierarchy === "IAH") {
+        const companyId = user[0]?.company?.find(
+          (item) => item?.companyName === company
+        )?.id;
+        if (companyId) {
+          dispatch(setupGetIAHReports(companyId));
+        }
+      }
+      if (user[0]?.userId?.employeeid?.userHierarchy !== "IAH") {
+        dispatch(setupGetAllReports());
+      }
       dispatch(resetReportAddSuccess());
-      dispatch(setupGetAllReports());
     }
   }, [reportAddSuccess]);
+
+  React.useEffect(() => {
+    if (user[0]?.token) {
+      if (user[0]?.userId?.employeeid?.userHierarchy === "IAH") {
+        const companyId = user[0]?.company?.find(
+          (item) => item?.companyName === company
+        )?.id;
+        if (companyId) {
+          dispatch(setupGetIAHReports(companyId));
+        }
+      }
+      if (user[0]?.userId?.employeeid?.userHierarchy !== "IAH") {
+        dispatch(setupGetAllReports());
+      }
+    }
+  }, [user]);
 
   return (
     <div>
@@ -142,7 +164,7 @@ const PlanningReport = () => {
                           <td>{item?.createdBy?.name}</td>
                           <td>{item?.reportShareWith?.name}</td>
                           <td>{item?.reportStatus}</td>
-                          <td className="pt-3">
+                          <td>
                             <i
                               className="fa fa-eye text-primary f-18 cursor-pointer"
                               onClick={() =>
@@ -151,7 +173,9 @@ const PlanningReport = () => {
                                 )
                               }
                             ></i>
-                            {item?.reportStatus === "draft" && (
+                            {(item?.reportStatus === "draft" ||
+                              user[0]?.userId?.employeeid?.userHierarchy ===
+                                "IAH") && (
                               <i
                                 className="fa fa-edit mx-3 text-secondary f-18 cursor-pointer mx-2"
                                 onClick={() =>
@@ -161,7 +185,9 @@ const PlanningReport = () => {
                                 }
                               ></i>
                             )}
-                            {item?.reportStatus !== "Published" && (
+                            {(item?.reportStatus === "draft" ||
+                              user[0]?.userId?.employeeid?.userHierarchy ===
+                                "IAH") && (
                               <i
                                 className="fa fa-trash text-danger f-18 cursor-pointer mx-2"
                                 onClick={() => handleDelete(item?.id)}

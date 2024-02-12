@@ -8,11 +8,11 @@ import {
   resetReportAddSuccess,
   setupSaveReports,
   setupGetAllReports,
+  setupGetIAHReports,
   setupUpdateSingleReport,
 } from "../../../../../global-redux/reducers/reports/slice";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { setupGetAllUsers } from "../../../../../global-redux/reducers/settings/user-management/slice";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import AuditableUnits from "./components/auditable-units";
@@ -27,27 +27,17 @@ const GeneratePlanningReport = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const editable = searchParams.get("editable");
   const reportId = searchParams.get("reportId");
-  const [rolesList, setRolesList] = React.useState([
-    "IAH",
-    "Team_Lead",
-    "Audit_Executive_2",
-    "Audit_Executive_1",
-  ]);
+  const { loading, reportAddSuccess, allReports } = useSelector(
+    (state) => state?.reports
+  );
+  const { user } = useSelector((state) => state?.auth);
+  const { company } = useSelector((state) => state?.common);
   const [pdfLoading, setPdfLoading] = React.useState(false);
   const [generatePlaningReportDialog, setGeneratePlaningReportDialog] =
     React.useState(false);
   const [editGeneratePlaningReportDialog, setEditGeneratePlaningReportDialog] =
     React.useState(false);
   const [editGeneratePlaningId, setEditGeneratePlaningId] = React.useState("");
-
-  const [shareWithUserId, setShareWithUserId] = React.useState("");
-  const [hierarchy, setHierarchy] = React.useState("");
-  const [selectedUser, setSelectedUsers] = React.useState([]);
-  const { allUsers } = useSelector((state) => state?.setttingsUserManagement);
-  const { loading, reportAddSuccess, allReports } = useSelector(
-    (state) => state?.reports
-  );
-  const { user } = useSelector((state) => state?.auth);
   const [data, setData] = React.useState({
     summary: "",
     methodology: "",
@@ -55,7 +45,6 @@ const GeneratePlanningReport = () => {
     orgnizationStrategy: "",
     summaryRisk: "",
     newHeading: [],
-    reportShareWith: "",
   });
 
   const handleEditorContentChange = (name, newContent) => {
@@ -104,14 +93,16 @@ const GeneratePlanningReport = () => {
 
   function handleSaveReport() {
     if (!loading) {
+      const companyId = user[0]?.company?.find(
+        (item) => item?.companyName === company
+      )?.id;
       if (
         data?.summary === "" ||
         data?.methodology === "" ||
         data?.riskAssesmentSummary === "" ||
         data?.orgnizationStrategy === "" ||
         data?.summaryRisk === "" ||
-        data?.newHeading?.length === 0 ||
-        data?.reportShareWith === ""
+        data?.newHeading?.length === 0
       ) {
         toast.error("Please Provide all the fields");
       } else {
@@ -124,9 +115,12 @@ const GeneratePlanningReport = () => {
                 description: item?.description,
               };
             }),
-            createdBy: user[0]?.userId?.id,
-            storedHtml: null,
+            storedHtml: "<p>Dummy String By Now</p>",
             reportStatus: "draft",
+            createdBy: user[0]?.userId?.id,
+            reportingTo: user[0]?.userId?.employeeid?.reportingTo?.id || null,
+            reportShareWith: null,
+            companyId: companyId,
           })
         );
       }
@@ -141,11 +135,11 @@ const GeneratePlanningReport = () => {
         data?.riskAssesmentSummary === "" ||
         data?.orgnizationStrategy === "" ||
         data?.summaryRisk === "" ||
-        data?.newHeading?.length === 0 ||
-        data?.reportShareWith === ""
+        data?.newHeading?.length === 0
       ) {
         toast.error("Please Provide all the fields");
       } else {
+        const details = allReports?.find((all) => all?.id === Number(reportId));
         dispatch(
           setupUpdateSingleReport({
             ...data,
@@ -155,26 +149,19 @@ const GeneratePlanningReport = () => {
                 description: item?.description,
               };
             }),
-            createdBy: user[0]?.userId?.id,
-            storedHtml: null,
-            reportStatus: "draft",
-            id: Number(reportId),
+            storedHtml: "<p>Dummy String By Now</p>",
+            reportStatus: details?.reportStatus,
+            reportShareWith: details?.reportShareWith?.id || null,
+            reportingTo: details?.reportingTo?.id || null,
+            createdBy: details?.createdBy?.id,
+            userCompany: details?.userCompany?.id,
+            updatedBy: user[0]?.userId?.id,
+            id: reportId,
           })
         );
       }
     }
   }
-
-  React.useEffect(() => {
-    if (shareWithUserId !== "") {
-      setData((pre) => {
-        return {
-          ...pre,
-          reportShareWith: Number(shareWithUserId),
-        };
-      });
-    }
-  }, [shareWithUserId]);
 
   React.useEffect(() => {
     if (reportAddSuccess) {
@@ -186,26 +173,15 @@ const GeneratePlanningReport = () => {
         orgnizationStrategy: "",
         summaryRisk: "",
         newHeading: [],
-        reportShareWith: "",
       });
       navigate("/audit/planning-report");
     }
   }, [reportAddSuccess]);
 
   React.useEffect(() => {
-    if (hierarchy !== "") {
-      const users = allUsers?.filter(
-        (all) => all?.employeeid?.userHierarchy === hierarchy
-      );
-      setSelectedUsers(users);
-    }
-  }, [hierarchy]);
-
-  React.useEffect(() => {
     if (
-      editable === "false" &&
-      allReports?.length !== 0 &&
-      allUsers?.length !== 0
+      (editable === "false" || editable === "true") &&
+      allReports?.length !== 0
     ) {
       const details = allReports?.find((all) => all?.id === Number(reportId));
       setData({
@@ -215,47 +191,9 @@ const GeneratePlanningReport = () => {
         orgnizationStrategy: details?.orgnizationStrategy,
         summaryRisk: details?.summaryRisk,
         newHeading: details?.newHeading || [],
-        reportShareWith: details?.reportShareWith?.id,
       });
-      const currentUser = allUsers?.find(
-        (all) => Number(all?.id) === Number(details?.reportShareWith?.id)
-      );
-      setHierarchy(currentUser?.employeeid?.userHierarchy);
-      setShareWithUserId(details?.reportShareWith?.id);
     }
-  }, [editable, allReports, allUsers]);
-
-  React.useEffect(() => {
-    if (
-      editable === "true" &&
-      allReports?.length !== 0 &&
-      allUsers?.length !== 0
-    ) {
-      const details = allReports?.find((all) => all?.id === Number(reportId));
-      setData({
-        summary: details?.summary,
-        methodology: details?.methodology,
-        riskAssesmentSummary: details?.riskAssesmentSummary,
-        orgnizationStrategy: details?.orgnizationStrategy,
-        summaryRisk: details?.summaryRisk,
-        newHeading: details?.newHeading || [],
-        reportShareWith: details?.reportShareWith?.id,
-      });
-      const currentUser = allUsers?.find(
-        (all) => Number(all?.id) === Number(details?.reportShareWith?.id)
-      );
-      setHierarchy(currentUser?.employeeid?.userHierarchy);
-      setShareWithUserId(details?.reportShareWith?.id);
-    }
-  }, [editable, allReports, allUsers]);
-
-  React.useEffect(() => {
-    if (user[0]?.token) {
-      setRolesList((pre) =>
-        pre.filter((all) => all !== user[0]?.userId?.employeeid?.userHierarchy)
-      );
-    }
-  }, [user]);
+  }, [editable, allReports]);
 
   React.useEffect(() => {
     if (!editable) {
@@ -269,11 +207,20 @@ const GeneratePlanningReport = () => {
   }, [editable]);
 
   React.useEffect(() => {
-    if (user[0]?.token) {
-      dispatch(setupGetAllReports());
-      dispatch(setupGetAllUsers({ shareWith: true }));
+    if (user[0]?.token && editable !== "notApplicable") {
+      if (user[0]?.userId?.employeeid?.userHierarchy === "IAH") {
+        const companyId = user[0]?.company?.find(
+          (item) => item?.companyName === company
+        )?.id;
+        if (companyId) {
+          dispatch(setupGetIAHReports(companyId));
+        }
+      }
+      if (user[0]?.userId?.employeeid?.userHierarchy !== "IAH") {
+        dispatch(setupGetAllReports());
+      }
     }
-  }, [user]);
+  }, [user, editable]);
 
   return (
     <div id="reportsPage">
@@ -371,7 +318,7 @@ const GeneratePlanningReport = () => {
             <tr>
               <th>Heading </th>
               <th>Description</th>
-              <th>Actions</th>
+              {editable !== "false" && <th>Actions</th>}
             </tr>
           </thead>
           <tbody>
@@ -385,19 +332,21 @@ const GeneratePlanningReport = () => {
                   <tr key={index}>
                     <td>{head?.heading}</td>
                     <td>{head?.description}</td>
-                    <td className="w-130">
-                      <i
-                        className="fa fa-trash text-danger f-18 cursor-pointer"
-                        onClick={() => handleDeleteHeading(head?.id)}
-                      ></i>
-                      <i
-                        class="fa fa-edit  px-3 f-18 cursor-pointer"
-                        onClick={() => {
-                          setEditGeneratePlaningId(head?.id);
-                          setEditGeneratePlaningReportDialog(true);
-                        }}
-                      ></i>
-                    </td>
+                    {editable !== "false" && (
+                      <td className="w-130">
+                        <i
+                          className="fa fa-trash text-danger f-18 cursor-pointer"
+                          onClick={() => handleDeleteHeading(head?.id)}
+                        ></i>
+                        <i
+                          class="fa fa-edit  px-3 f-18 cursor-pointer"
+                          onClick={() => {
+                            setEditGeneratePlaningId(head?.id);
+                            setEditGeneratePlaningReportDialog(true);
+                          }}
+                        ></i>
+                      </td>
+                    )}
                   </tr>
                 );
               })
@@ -409,84 +358,6 @@ const GeneratePlanningReport = () => {
       <RiskScores />
       <RiskFactorApproach />
       <AttachFiles />
-      {editable !== "notApplicable" && (
-        <div className="row mb-4">
-          <div className="col-lg-6">
-            <label htmlFor="area">User:</label>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              readOnly
-              className="form-control"
-              defaultValue={
-                allUsers?.find(
-                  (all) => Number(all?.id) === Number(shareWithUserId)
-                )?.name
-              }
-            />
-          </div>
-          <div className="col-lg-6">
-            <label htmlFor="area"> User Hierarchy:</label>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              readOnly
-              className="form-control"
-              defaultValue={hierarchy}
-            />
-          </div>
-        </div>
-      )}
-      {editable === "notApplicable" && (
-        <div className="row mb-4">
-          <div className="col-lg-6">
-            <label htmlFor="defaultRemarks" className="w-100">
-              User Hierarchy:
-            </label>
-            <select
-              id="userHierarchy"
-              name="userHierarchy"
-              className="form-control w-100 h-40"
-              value={hierarchy}
-              onChange={(event) => setHierarchy(event?.target?.value)}
-            >
-              <option value="">Select</option>
-              {rolesList?.map((item, index) => {
-                return (
-                  <option value={item} key={index}>
-                    {item}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-
-          <div className="col-lg-6">
-            <label htmlFor="defaultRemarks" className="w-100">
-              Users:
-            </label>
-            <select
-              id="userHierarchy"
-              name="userHierarchy"
-              className="form-control w-100 h-40"
-              value={shareWithUserId}
-              onChange={(event) => setShareWithUserId(event?.target?.value)}
-            >
-              <option value="">Select</option>
-              {selectedUser?.map((all, index) => {
-                return (
-                  <option value={all?.id} key={index}>
-                    {all?.name}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-        </div>
-      )}
-
       <div className="row mb-3">
         <div className="col-lg-12 d-flex justify-content-between">
           <div

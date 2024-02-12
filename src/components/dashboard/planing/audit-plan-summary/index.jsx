@@ -7,6 +7,7 @@ import {
 } from "../../../../global-redux/reducers/planing/audit-plan-summary/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
+import Pagination from "@mui/material/Pagination";
 
 const AuditPlanSummary = () => {
   const { loading, allAuditPlanSummary, auditPlanSummaryAddSuccess } =
@@ -14,6 +15,7 @@ const AuditPlanSummary = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state?.auth);
   const { company, year } = useSelector((state) => state?.common);
+  const [page, setPage] = React.useState(1);
   const [data, setData] = React.useState([]);
   const [totals, setTotals] = React.useState({
     serviceProvider: 0,
@@ -24,6 +26,10 @@ const AuditPlanSummary = () => {
     q3: 0,
     q4: 0,
   });
+
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
 
   function handleChangePriority(event, id) {
     setData((pre) =>
@@ -153,7 +159,7 @@ const AuditPlanSummary = () => {
                     <th className="bg-white"></th>
                   </tr>
                 </thead>
-                {data?.map((item, index) => {
+                {data?.slice((page - 1) * 5, page * 5)?.map((item, index) => {
                   return (
                     <tbody key={index}>
                       <tr>
@@ -238,8 +244,8 @@ const AuditPlanSummary = () => {
                         <td className="normal-text">{item?.serviceProvider}</td>
                         <td className="normal-text">{item?.iaa}</td>
                         <td className="normal-text">{item?.total}</td>
-                        <td className="full-audit w-20">{item?.q1}</td>
-                        <td className="full-audit w-20">{item?.q2}</td>
+                        <td className="normal-text">{item?.q1}</td>
+                        <td className="normal-text">{item?.q2}</td>
                         <td className="normal-text">{item?.q3}</td>
                         <td className="normal-text">{item?.q4}</td>
                         <td className="normal-text"></td>
@@ -282,6 +288,13 @@ const AuditPlanSummary = () => {
                 </tbody>
               </table>
             )}
+            <div className="mb-4">
+              <Pagination
+                count={Math.ceil(allAuditPlanSummary?.length / 5)}
+                page={page}
+                onChange={handleChange}
+              />
+            </div>
           </div>
         </div>
       </div>

@@ -2,6 +2,7 @@ import { toast } from "react-toastify";
 import {
   saveReports,
   getAllReports,
+  getIAHReports,
   editSingleReport,
   deleteSingleReport,
   publishReport,
@@ -24,6 +25,12 @@ export const setupGetAllReports = createAsyncThunk(
   "reports/getAllReports",
   async (data, thunkAPI) => {
     return getAllReports(data, thunkAPI);
+  }
+);
+export const setupGetIAHReports = createAsyncThunk(
+  "reports/getIAHReports",
+  async (data, thunkAPI) => {
+    return getIAHReports(data, thunkAPI);
   }
 );
 
@@ -86,6 +93,23 @@ export const slice = createSlice({
         state.allReports = payload?.data || [];
       })
       .addCase(setupGetAllReports.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Get All IAH Reports
+    builder
+      .addCase(setupGetIAHReports.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetIAHReports.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.allReports = payload?.data || [];
+      })
+      .addCase(setupGetIAHReports.rejected, (state, { payload }) => {
         state.loading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);

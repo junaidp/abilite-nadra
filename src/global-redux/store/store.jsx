@@ -13,6 +13,7 @@ import planingAuditableUnitReducer from "../reducers/planing/auditable-units/sli
 import planingJobPrioritizationReducer from "../reducers/planing/job-prioritization/slice";
 import planingJobSchedulingReducer from "../reducers/planing/job-scheduling/slice";
 import reportReducer from "../reducers/reports/slice";
+import auditEngagementReducer from "../reducers/audit-engagement/slice";
 export const store = configureStore({
   reducer: {
     common: commonReducer,
@@ -32,5 +33,7 @@ export const store = configureStore({
     planingAuditPlanSummary: planingAuditPlanSummaryReducers,
     // Report
     reports: reportReducer,
+    // Audit Enagagement
+    auditEngagement: auditEngagementReducer,
   },
 });

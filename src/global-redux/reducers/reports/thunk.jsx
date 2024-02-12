@@ -35,6 +35,26 @@ export const getAllReports = async (data, thunkAPI) => {
   }
 };
 
+export const getIAHReports = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.post(
+      `${baseUrl}/planningreport/reports/IAH`,
+      null,
+      {
+        headers: {
+          companyId: data,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
 export const editSingleReport = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;

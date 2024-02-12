@@ -1,6 +1,9 @@
 import React from "react";
 
-const ViewRiskControlMatrixLibraryDialog = ({ setShowViewLibrary }) => {
+const ViewRiskControlMatrixLibraryDialog = ({
+  setShowViewLibrary,
+  currentAuditEngagement,
+}) => {
   return (
     <div className="mx-5">
       <header className="section-header mt-3  px-4  text-start d-flex align-items-center justify-content-between">
@@ -15,144 +18,110 @@ const ViewRiskControlMatrixLibraryDialog = ({ setShowViewLibrary }) => {
             <table className="table table-bordered  table-hover rounded">
               <thead>
                 <tr>
-                  <th>Process</th>
-                  <th>Sub-Process</th>
                   <th>Objective</th>
                   <th>Risk</th>
                   <th>Controls</th>
-                  <th>
-                    <input id="rememberMe" type="checkbox" const index />
-                  </th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td className="w-250">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry.
-                  </td>
-                  <td className="w-250">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry.{" "}
-                  </td>
-                  <td>
-                    <label>0.1</label>
-                    <textarea
-                      className="form-control"
-                      placeholder="Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-            "
-                      id="exampleFormCon"
-                      rows="3"
-                    ></textarea>
-                  </td>
-                  <td>
-                    <div className="d-flex justify-content-between align-items-center">
-                      <label className="width-50 mb-2">Risk Rating</label>
-                      <select
-                        className="form-select width-50 mb-2"
-                        aria-label="Default select example"
-                      >
-                        <option>high</option>
-                        <option value="2">Medium</option>
-                        <option value="2">Low</option>
-                      </select>
-                    </div>
-                    <textarea
-                      className="form-control"
-                      placeholder="Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-            "
-                      id="exampleFormControlT"
-                      rows="3"
-                    ></textarea>
-                  </td>
-                  <td>
-                    <div className="d-flex justify-content-between align-items-center">
-                      <label className="width-50 mb-2">Control Risk</label>
-                      <select
-                        className="form-select width-50 mb-2"
-                        aria-label="Default select example"
-                      >
-                        <option>high</option>
-                        <option value="2">Medium</option>
-                        <option value="2">Low</option>
-                      </select>
-                    </div>
-                    <textarea
-                      className="form-control"
-                      placeholder="Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-            "
-                      id="exampleFormContr"
-                      rows="3"
-                    ></textarea>
-                  </td>
-                  <td>
-                    <input id="rememberMe" type="checkbox" const index />
-                  </td>
-                </tr>
-                <tr>
-                  <td className="w-250">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry.{" "}
-                  </td>
-                  <td className="w-250">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry.{" "}
-                  </td>
-                  <td>
-                    <label>0.2</label>
-                    <textarea
-                      className="form-control"
-                      placeholder="Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-            "
-                      id="exampleFo"
-                      rows="3"
-                    ></textarea>
-                  </td>
-                  <td>
-                    <div className="d-flex justify-content-between align-items-center">
-                      <label className="width-50 mb-2">Risk Rating</label>
-                      <select
-                        className="form-select width-50  mb-2"
-                        aria-label="Default select example"
-                      >
-                        <option>high</option>
-                        <option value="2">Medium</option>
-                        <option value="2">Low</option>
-                      </select>
-                    </div>
-                    <textarea
-                      className="form-control"
-                      placeholder="Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-            "
-                      id="example"
-                      rows="3"
-                    ></textarea>
-                  </td>
-                  <td>
-                    <div className="d-flex justify-content-between align-items-center">
-                      <label className="width-50 mb-2">Control Risk</label>
-                      <select
-                        className="form-select width-50  mb-2"
-                        aria-label="Default select example"
-                      >
-                        <option>high</option>
-                        <option value="2">Medium</option>
-                        <option value="2">Low</option>
-                      </select>
-                    </div>
-                    <textarea
-                      className="form-control"
-                      placeholder="Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-            "
-                      id="examp"
-                      rows="3"
-                    ></textarea>
-                  </td>
+                {currentAuditEngagement?.riskControlMatrix?.objectives?.map(
+                  (item, index) => {
+                    return (
+                      <tr key={index}>
+                        <td>
+                          <div className="d-flex justify-content-between align-items-center">
+                            <label className="width-50 mb-2">Objective</label>
+                            <select
+                              className="form-select w-80  mb-2"
+                              aria-label="Default select example"
+                              value={item?.rating}
+                              readOnly
+                            >
+                              <option value="">Select One</option>
+                              <option value={1}>High</option>
+                              <option value={2}>Medium</option>
+                              <option value={3}>Low</option>
+                            </select>
+                          </div>
+                          <textarea
+                            className="form-control"
+                            value={item?.description}
+                            id="exampleFo"
+                            readOnly
+                            rows="3"
+                          ></textarea>
+                        </td>
 
-                  <td>
-                    <input type="checkbox" const index />
-                  </td>
-                </tr>
+                        <td>
+                          {item?.riskRatingList?.map((risk, index) => {
+                            return (
+                              <div key={index} className="mb-4">
+                                <div className="d-flex justify-content-between align-items-center">
+                                  <label className="width-100 mb-2">
+                                    Rating
+                                  </label>
+                                  <select
+                                    className="form-select w-80  mb-2"
+                                    aria-label="Default select example"
+                                    value={risk?.rating}
+                                    readOnly
+                                  >
+                                    <option value="">Select One</option>
+                                    <option value={1}>High</option>
+                                    <option value={2}>Medium</option>
+                                    <option value={3}>Low</option>
+                                  </select>
+                                </div>
+                                <textarea
+                                  className="form-control"
+                                  placeholder="Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                "
+                                  id="example"
+                                  value={risk?.description}
+                                  readOnly
+                                  rows="3"
+                                ></textarea>
+                              </div>
+                            );
+                          })}
+                        </td>
+                        <td>
+                          {item?.riskRatingList?.map((rating) =>
+                            rating?.controlRiskList?.map((control, index) => {
+                              return (
+                                <div key={index} className="mb-4">
+                                  <div className="d-flex justify-content-between align-items-center">
+                                    <label className="mb-2">Control</label>
+                                    <select
+                                      className="form-select w-80  mb-2"
+                                      aria-label="Default select example"
+                                      value={control?.rating}
+                                      readOnly
+                                    >
+                                      <option value="">Select One</option>
+                                      <option value={1}>High</option>
+                                      <option value={2}>Medium</option>
+                                      <option value={3}>Low</option>
+                                    </select>
+                                  </div>
+                                  <textarea
+                                    className="form-control"
+                                    placeholder="Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+    "
+                                    id="example"
+                                    value={control?.description}
+                                    readOnly
+                                    rows="3"
+                                  ></textarea>
+                                </div>
+                              );
+                            })
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  }
+                )}
               </tbody>
             </table>
           </div>
