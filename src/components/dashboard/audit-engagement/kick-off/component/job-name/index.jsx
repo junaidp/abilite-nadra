@@ -26,45 +26,43 @@ const JobName = () => {
             <div className="row mb-3 f-13">
               <div className="col-lg-6 px-3 d-flex justify-content-between">
                 <div className="fw-bold">Planned Start Date:</div>
-                <div className="">28-03-2023</div>
+                <div className="">10-02-2024</div>
               </div>
               <div className="col-lg-6 px-3 d-flex justify-content-between">
                 <div className="fw-bold">Process</div>
-                <div className="">28-03-2023</div>
+                <div className="">20-06-2024</div>
               </div>
             </div>
 
             <div className="row mb-3 f-13">
               <div className="col-lg-6 px-3 d-flex justify-content-between">
                 <div className="fw-bold">Planned End Date:</div>
-                <div className="">28-03-2023</div>
+                <div className="">10-02-2024</div>
               </div>
               <div className="col-lg-6 px-3 d-flex justify-content-between">
                 <div className="fw-bold">Sub Process</div>
-                <div className="">28-03-2023</div>
+                <div className="">28-09-2024</div>
               </div>
             </div>
 
             <div className="row mb-3 f-13">
               <div className="col-lg-6 px-3 d-flex justify-content-between">
                 <div className="fw-bold">Job Type:</div>
-                <div className="">Job type will display here</div>
+                <div className="">Finance</div>
               </div>
             </div>
 
             <div className="row mb-3 f-13">
               <div className="col-lg-6 px-3 d-flex justify-content-between">
-                <div className="fw-bold">Department/Division/ Location:</div>
-                <div className="">list of divisions will display here</div>
+                <div className="fw-bold">Location:</div>
+                <div className="">Germany</div>
               </div>
             </div>
 
             <div className="row mb-3 f-13">
               <div className="col-lg-6 px-3 d-flex justify-content-between">
-                <div className="fw-bold">
-                  Sub-Department/Sub-Division/Sub-Location
-                </div>
-                <div className="">list of department will display here</div>
+                <div className="fw-bold">Sub-Location:</div>
+                <div className="">Hamburg</div>
               </div>
             </div>
           </div>

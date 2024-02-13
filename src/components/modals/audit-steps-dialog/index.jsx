@@ -1,6 +1,54 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setupUpdateAuditSteps } from "../../../global-redux/reducers/audit-engagement/slice";
+import { toast } from "react-toastify";
+const AuditStepsDialog = ({
+  setShowAuditStepsDialog,
+  auditStepId,
+  currentAuditEngagement,
+}) => {
+  const dispatch = useDispatch();
+  const [currentAuditStep, setCurrentAuditStep] = React.useState({});
+  const { auditEngagementAddSuccess, loading } = useSelector(
+    (state) => state?.auditEngagement
+  );
 
-const AuditStepsDialog = ({ setShowAuditStepsDialog }) => {
+  function handleChange(event) {
+    setCurrentAuditStep((pre) => {
+      return {
+        ...pre,
+        [event?.target?.name]: Number(event?.target?.value),
+      };
+    });
+  }
+
+  function handleSave() {
+    if (!loading) {
+      if (
+        currentAuditStep?.sampling === "" ||
+        currentAuditStep?.samplingMethod === "" ||
+        currentAuditStep?.controlRisk === "" ||
+        currentAuditStep?.frequency === ""
+      ) {
+        toast.error("Provide all the values");
+      } else {
+        dispatch(setupUpdateAuditSteps(currentAuditStep));
+      }
+    }
+  }
+
+  React.useEffect(() => {
+    const step = currentAuditEngagement?.auditStep?.stepList?.find(
+      (item) => Number(item?.id) === Number(auditStepId)
+    );
+    setCurrentAuditStep(step);
+  }, [currentAuditEngagement]);
+
+  React.useEffect(() => {
+    if (auditEngagementAddSuccess) {
+      setShowAuditStepsDialog(false);
+    }
+  }, [auditEngagementAddSuccess]);
   return (
     <div className="mx-5">
       <header className="section-header mt-3  text-start d-flex align-items-center justify-content-between">
@@ -12,8 +60,7 @@ const AuditStepsDialog = ({ setShowAuditStepsDialog }) => {
       <div className="row mb-3">
         <div className="col-lg-12">
           <div className="sub-heading">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry.
+            {currentAuditStep?.program?.description}
           </div>
         </div>
       </div>
@@ -21,20 +68,34 @@ const AuditStepsDialog = ({ setShowAuditStepsDialog }) => {
       <div className="row mb-3">
         <div className="col-lg-6">
           <div>
-            <label className="me-3   ">Perform Sampling</label>
-            <select className="form-select" aria-label="Default select example">
-              <option>Yes</option>
-              <option value="2">No</option>
+            <label className="me-3">Perform Sampling</label>
+            <select
+              className="form-select"
+              aria-label="Default select example"
+              value={currentAuditStep?.sampling}
+              name="sampling"
+              onChange={(event) => handleChange(event)}
+            >
+              <option value="">Select One</option>
+              <option value={1}>Yes</option>
+              <option value={2}>No</option>
             </select>
           </div>
         </div>
         <div className="col-lg-6">
           <div>
-            <label className="me-3   ">Sampling Method</label>
-            <select className="form-select" aria-label="Default select example">
-              <option value="1">Simple Random Sampling</option>
-              <option>Systematic Sampling</option>
-              <option value="2">Cluster Samling</option>
+            <label className="me-3">Sampling Method</label>
+            <select
+              className="form-select"
+              onChange={(event) => handleChange(event)}
+              aria-label="Default select example"
+              value={currentAuditStep?.samplingMethod}
+              name="samplingMethod"
+            >
+              <option value="">Select One</option>
+              <option value={1}>Simple Random Sampling</option>
+              <option value={2}>Systematic Sampling</option>
+              <option value={3}>Cluster Samling</option>
             </select>
           </div>
         </div>
@@ -43,25 +104,39 @@ const AuditStepsDialog = ({ setShowAuditStepsDialog }) => {
       <div className="row mb-3">
         <div className="col-lg-6">
           <div>
-            <label className="me-3   ">Control Risk</label>
-            <select className="form-select" aria-label="Default select example">
-              <option value="1">Low</option>
-              <option>Medium</option>
-              <option value="2">High</option>
+            <label className="me-3">Control Risk</label>
+            <select
+              className="form-select"
+              aria-label="Default select example"
+              value={currentAuditStep?.controlRisk}
+              onChange={(event) => handleChange(event)}
+              name="controlRisk"
+            >
+              <option value="">Select One</option>
+              <option value={1}>High</option>
+              <option value={2}>Medium</option>
+              <option value={3}>Low</option>
             </select>
           </div>
         </div>
         <div className="col-lg-6">
           <div>
-            <label className="me-3   ">Frequency</label>
-            <select className="form-select" aria-label="Default select example">
-              <option value="1">Annually</option>
-              <option>Bi-annyally</option>
-              <option value="2">Quarterly</option>
-              <option value="1">Monthly</option>
-              <option>Weekly</option>
-              <option value="2">Daily</option>
-              <option value="2">Recurring</option>
+            <label className="me-3">Frequency</label>
+            <select
+              className="form-select"
+              aria-label="Default select example"
+              value={currentAuditStep?.frequency}
+              onChange={(event) => handleChange(event)}
+              name="frequency"
+            >
+              <option value="">Select One</option>
+              <option value={1}>Annually</option>
+              <option value={2}>Bi-annyally</option>
+              <option value={3}>Quarterly</option>
+              <option value={4}>Monthly</option>
+              <option value={5}>Weekly</option>
+              <option value={6}>Daily</option>
+              <option value={7}>Recurring</option>
             </select>
           </div>
         </div>
@@ -86,16 +161,8 @@ const AuditStepsDialog = ({ setShowAuditStepsDialog }) => {
           <div>
             <label className="form-label me-3 mb-3">Attach files</label>
 
-            <input
-              type="file"
-              id="fileInput"
-              className="f-10 w-180"
-            />
-            <a
-              className="form-label label-text underline"
-            >
-              View Sample
-            </a>
+            <input type="file" id="fileInput" className="f-10 w-180" />
+            <a className="form-label label-text underline">View Sample</a>
           </div>
 
           <div className="table-responsive">
@@ -193,7 +260,7 @@ const AuditStepsDialog = ({ setShowAuditStepsDialog }) => {
           <div className="d-flex justify-content-between align-items-center">
             <label className="form-label me-3">1</label>
             <div className="">
-              <a href="#"  className="f-10">
+              <a href="#" className="f-10">
                 + Attach file
               </a>
               <i className="ms-4 text-danger fa fa-trash"></i>
@@ -253,15 +320,26 @@ const AuditStepsDialog = ({ setShowAuditStepsDialog }) => {
           </div>
         </div>
       </div>
-
-      <div className="row py-4 px-4">
-        <div className="col-lg-12 text-end">
-          <button
-            className="btn btn-danger float-end"
-            onClick={() => setShowAuditStepsDialog(false)}
-          >
-            Close
-          </button>
+      <div className="row">
+        <div className="col-lg-6 ">
+          <div className="text-end">
+            <button
+              className="btn btn-danger float-start"
+              onClick={() => setShowAuditStepsDialog(false)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+        <div className=" col-lg-6 ">
+          <div className="text-end">
+            <button
+              className={`btn btn-primary float-end ${loading && "disabled"}`}
+              onClick={handleSave}
+            >
+              {loading ? "Loading..." : "Save"}
+            </button>
+          </div>
         </div>
       </div>
     </div>

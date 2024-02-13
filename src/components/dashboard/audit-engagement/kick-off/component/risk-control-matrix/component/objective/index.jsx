@@ -1,6 +1,6 @@
 import React from "react";
 import { setupUpdateRiskControlMatrixObjective } from "../../../../../../../../global-redux/reducers/audit-engagement/slice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 const Objective = ({
@@ -10,6 +10,11 @@ const Objective = ({
   setCurrentAuditEngagement,
 }) => {
   const dispatch = useDispatch();
+  const [currentButtonDescription, setCurrentButtonDescription] =
+    React.useState("");
+  const { auditEngagementAddSuccess } = useSelector(
+    (state) => state?.auditEngagement
+  );
 
   function handleChangeObjective(event, id) {
     setCurrentAuditEngagement((pre) => {
@@ -33,6 +38,7 @@ const Objective = ({
 
   function handleSave(item) {
     if (!loading) {
+      setCurrentButtonDescription(item?.description);
       if (item?.description === "" || item?.rating === "") {
         toast.error("Provide all values");
       } else {
@@ -48,6 +54,12 @@ const Objective = ({
       }
     }
   }
+
+  React.useEffect(() => {
+    if (auditEngagementAddSuccess) {
+      setCurrentButtonDescription("");
+    }
+  }, [auditEngagementAddSuccess]);
   return (
     <div className="col-lg-4">
       <p className="px-3 py-1 bg-secondary d-flex align-items-center rounded justify-content-between text-white">
@@ -96,11 +108,15 @@ const Objective = ({
               </label>
               <button
                 className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
-                  loading && "disabled"
+                  loading &&
+                  item?.description === currentButtonDescription &&
+                  "disabled"
                 }`}
                 onClick={() => handleSave(item)}
               >
-                Update
+                {loading && item?.description === currentButtonDescription
+                  ? "Loading..."
+                  : "Update"}
               </button>
             </div>
           );

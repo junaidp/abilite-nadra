@@ -63,6 +63,9 @@ const AuditNotifications = ({ currentAuditEngagement, auditEngagementId }) => {
           aria-expanded="false"
           aria-controls="flush-collapseTwo"
         >
+          {currentAuditEngagement?.auditNotification !== null && (
+            <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
+          )}
           Audit Notification
         </button>
       </h2>
@@ -126,14 +129,16 @@ const AuditNotifications = ({ currentAuditEngagement, auditEngagementId }) => {
                     <label htmlFor="fileInput">Add Attachment:</label>
                     <input className="ms-3 f-10" type="file" id="fileInput" />
                   </div> */}
-                  <button
-                    className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
-                      loading && "disabled"
-                    }`}
-                    onClick={handleSend}
-                  >
-                    {loading ? "Loading" : "Save"}
-                  </button>
+                  {currentAuditEngagement?.auditNotification === null && (
+                    <button
+                      className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
+                        loading && "disabled"
+                      }`}
+                      onClick={handleSend}
+                    >
+                      {loading ? "Loading" : "Save"}
+                    </button>
+                  )}
                 </div>
               </div>
             </div>

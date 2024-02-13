@@ -23,6 +23,9 @@ const RiskControlMatrix = ({
           aria-expanded="false"
           aria-controls="flush-collapseFour"
         >
+          {currentAuditEngagement?.riskControlMatrix !== null && (
+            <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
+          )}
           Risk Control Matrix
         </button>
       </h2>

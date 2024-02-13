@@ -1,6 +1,10 @@
 import React from "react";
 
-const AditSteps = ({ setShowAuditStepsDialog }) => {
+const AditSteps = ({
+  setShowAuditStepsDialog,
+  currentAuditEngagement,
+  setAuditStepId,
+}) => {
   return (
     <div className="accordion-item">
       <h2 className="accordion-header">
@@ -13,7 +17,12 @@ const AditSteps = ({ setShowAuditStepsDialog }) => {
           aria-controls="flush-collapseSix"
         >
           <div className="d-flex w-100 me-3 align-items-center justify-content-between">
-            <div className=" d-flex align-items-center">Audit Steps</div>
+            <div className=" d-flex align-items-center">
+              {currentAuditEngagement?.auditStep !== null && (
+                <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
+              )}
+              Audit Steps
+            </div>
           </div>
         </button>
       </h2>
@@ -31,41 +40,34 @@ const AditSteps = ({ setShowAuditStepsDialog }) => {
                     <thead className="bg-secondary text-white">
                       <tr>
                         <th className="f-80">Sr No.</th>
-                        <th>Program Name</th>
-                        <th>Actions</th>
+                        <th>Program Step</th>
+                        {/* <th>Actions</th> */}
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>1</td>
-                        <td>
-                          <a
-                            onClick={() => setShowAuditStepsDialog(true)}
-                            className="fw-bold  text-primary  px-3 py-1 f-10"
-                          >
-                            loram ipsum is simply dummay text of the prinitng
-                            and type settings industry
-                          </a>{" "}
-                        </td>
-                        <td>
-                          <i className="fa fa-times-circle text-danger f-18"></i>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1</td>
-                        <td>
-                          <a
-                            onClick={() => setShowAuditStepsDialog(true)}
-                            className="fw-bold  text-primary  px-3 py-1 f-10"
-                          >
-                            loram ipsum is simply dummay text of the prinitng
-                            and type settings industry
-                          </a>
-                        </td>
-                        <td>
-                          <i className="fa fa-check-circle text-success f-18"></i>
-                        </td>
-                      </tr>
+                      {currentAuditEngagement?.auditStep?.stepList?.map(
+                        (item, index) => {
+                          return (
+                            <tr key={index}>
+                              <td>{item?.id}</td>
+                              <td>
+                                <a
+                                  onClick={() => {
+                                    setAuditStepId(item?.id);
+                                    setShowAuditStepsDialog(true);
+                                  }}
+                                  className="fw-bold  text-primary  px-3 py-1 f-10"
+                                >
+                                  {item?.program?.description}
+                                </a>
+                              </td>
+                              {/* <td>
+                                <i className="fa fa-check-circle text-success f-18"></i>
+                              </td> */}
+                            </tr>
+                          );
+                        }
+                      )}
                     </tbody>
                   </table>
                 </div>

@@ -13,6 +13,7 @@ import ViewRiskLibraryDialog from "../../../modals/view-risk-control-matrix-libr
 import ViewAuditProgramLibraryDialog from "../../../modals/view-audit-program-library-dialog/index";
 import AuditStepsDialog from "../../../modals/audit-steps-dialog/index";
 import ComplianceCheckListDialog from "../../../modals/compliance-checklist-dialog/index";
+import AddAuditProgramDialog from "../../../modals/add-audit-program-dialog";
 import JobName from "./component/job-name";
 import AuditNotifications from "./component/audit-notifications";
 import RaiseInformationRequest from "./component/raise-information-request";
@@ -52,6 +53,9 @@ const KickOff = () => {
     React.useState(false);
   const [showKickOffControlDialog, setShowKickOffControlDialog] =
     React.useState(false);
+  const [showAddAuditProgramDialog, setShowAddAuditProgramDialog] =
+    React.useState(false);
+  const [auditStepId, setAuditStepId] = React.useState("");
 
   React.useEffect(() => {
     dispatch(changeActiveLink("li-audit-engagement"));
@@ -111,7 +115,10 @@ const KickOff = () => {
       {showViewLibrary && (
         <div className="modal-objective-library">
           <div className="model-wrap-library">
-            <ViewRiskLibraryDialog setShowViewLibrary={setShowViewLibrary} currentAuditEngagement={currentAuditEngagement} />
+            <ViewRiskLibraryDialog
+              setShowViewLibrary={setShowViewLibrary}
+              currentAuditEngagement={currentAuditEngagement}
+            />
           </div>
         </div>
       )}
@@ -131,6 +138,8 @@ const KickOff = () => {
           <div className="model-wrap-audit-steps-library">
             <AuditStepsDialog
               setShowAuditStepsDialog={setShowAuditStepsDialog}
+              auditStepId={auditStepId}
+              currentAuditEngagement={currentAuditEngagement}
             />
           </div>
         </div>
@@ -142,6 +151,17 @@ const KickOff = () => {
               setShowComplianceCheckListDialog={
                 setShowComplianceCheckListDialog
               }
+            />
+          </div>
+        </div>
+      )}
+      {showAddAuditProgramDialog && (
+        <div className="modal-compliance-check-list">
+          <div className="model-wrap-compliance-check-list">
+            <AddAuditProgramDialog
+              setShowAddAuditProgramDialog={setShowAddAuditProgramDialog}
+              auditEngagementId={auditEngagementId}
+              currentAuditEngagement={currentAuditEngagement}
             />
           </div>
         </div>
@@ -206,8 +226,16 @@ const KickOff = () => {
               setShowKickOffRatingDialog={setShowKickOffRatingDialog}
               setShowKickOffControlDialog={setShowKickOffControlDialog}
             />
-            <AuditProgram />
-            <AuditSteps setShowAuditStepsDialog={setShowAuditStepsDialog} />
+            <AuditProgram
+              currentAuditEngagement={currentAuditEngagement}
+              setCurrentAuditEngagement={setCurrentAuditEngagement}
+              setShowAddAuditProgramDialog={setShowAddAuditProgramDialog}
+            />
+            <AuditSteps
+              setShowAuditStepsDialog={setShowAuditStepsDialog}
+              currentAuditEngagement={currentAuditEngagement}
+              setAuditStepId={setAuditStepId}
+            />
             <ComplianceCheckList
               setShowComplianceCheckListDialog={
                 setShowComplianceCheckListDialog

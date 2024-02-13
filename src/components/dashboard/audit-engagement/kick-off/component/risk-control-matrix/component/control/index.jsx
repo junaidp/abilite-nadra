@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setupUpdateRiskControlMatrixControl } from "../../../../../../../../global-redux/reducers/audit-engagement/slice";
 import { toast } from "react-toastify";
 
@@ -10,7 +10,11 @@ const Control = ({
   setCurrentAuditEngagement,
 }) => {
   const dispatch = useDispatch();
-
+  const { auditEngagementAddSuccess } = useSelector(
+    (state) => state?.auditEngagement
+  );
+  const [currentButtonDescription, setCurrentButtonDescription] =
+    React.useState("");
   function handleChangeControl(event, objectiveId, riskId, controlId) {
     setCurrentAuditEngagement((pre) => {
       return {
@@ -51,6 +55,7 @@ const Control = ({
 
   function handleSave(control) {
     if (!loading) {
+      setCurrentButtonDescription(control?.description);
       if (control?.description === "" || control?.rating === "") {
         toast.error("provide all values");
       } else {
@@ -65,6 +70,12 @@ const Control = ({
       }
     }
   }
+
+  React.useEffect(() => {
+    if (auditEngagementAddSuccess) {
+      setCurrentButtonDescription("");
+    }
+  }, [auditEngagementAddSuccess]);
   return (
     <div className="col-lg-4">
       <p className="px-3 py-1 bg-secondary d-flex align-items-center rounded justify-content-between text-white">
@@ -140,11 +151,15 @@ const Control = ({
                 </label>
                 <button
                   className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
-                    loading && "disabled"
+                    loading &&
+                    control?.description === currentButtonDescription &&
+                    "disabled"
                   }`}
                   onClick={() => handleSave(control)}
                 >
-                  Update
+                  {loading && control?.description === currentButtonDescription
+                    ? "Loading..."
+                    : "Update"}
                 </button>
               </div>
             );

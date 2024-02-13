@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setupUpdateRiskControlMatrixRating } from "../../../../../../../../global-redux/reducers/audit-engagement/slice";
 import { toast } from "react-toastify";
 
@@ -10,6 +10,11 @@ const Rating = ({
   setCurrentAuditEngagement,
 }) => {
   const dispatch = useDispatch();
+  const [currentButtonDescription, setCurrentButtonDescription] =
+    React.useState("");
+  const { auditEngagementAddSuccess } = useSelector(
+    (state) => state?.auditEngagement
+  );
   function handleChangeRating(event, objectiveId, riskId) {
     setCurrentAuditEngagement((pre) => {
       return {
@@ -40,6 +45,7 @@ const Rating = ({
 
   function handleSave(risk) {
     if (!loading) {
+      setCurrentButtonDescription(risk?.description);
       if (risk?.description === "" || risk?.rating === "") {
         toast.error("Provide all values");
       } else {
@@ -55,6 +61,12 @@ const Rating = ({
       }
     }
   }
+
+  React.useEffect(() => {
+    if (auditEngagementAddSuccess) {
+      setCurrentButtonDescription("");
+    }
+  }, [auditEngagementAddSuccess]);
   return (
     <div className="col-lg-4">
       <p className="px-3 py-1 bg-secondary d-flex align-items-center rounded justify-content-between text-white">
@@ -115,11 +127,15 @@ const Rating = ({
               </label>
               <button
                 className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
-                  loading && "disabled"
+                  loading &&
+                  risk?.description === currentButtonDescription &&
+                  "disabled"
                 }`}
                 onClick={() => handleSave(risk)}
               >
-                Update
+                {loading && risk?.description === currentButtonDescription
+                  ? "Loading..."
+                  : "Update"}
               </button>
             </div>
           );
