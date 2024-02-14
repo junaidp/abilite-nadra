@@ -14,13 +14,11 @@ const AddAuditProgramDialog = ({
   );
   const [rating, setRating] = React.useState("");
   const [description, setDescription] = React.useState("");
-  const [controlId, setControlId] = React.useState("");
 
   function handleClose() {
     setShowAddAuditProgramDialog(false);
     setRating("");
     setDescription("");
-    setControlId("");
   }
 
   React.useEffect(() => {
@@ -28,13 +26,12 @@ const AddAuditProgramDialog = ({
       setShowAddAuditProgramDialog(false);
       setRating("");
       setDescription("");
-      setControlId("");
     }
   }, [auditEngagementAddSuccess]);
 
   function handleAdd() {
     if (!loading) {
-      if (rating === "" || description === "" || controlId === "") {
+      if (rating === "" || description === "") {
         toast.error("Please provide all values");
       } else {
         dispatch(
@@ -42,7 +39,7 @@ const AddAuditProgramDialog = ({
             auditEngagementId: Number(auditEngagementId),
             description: description,
             rating: Number(rating),
-            controlRisk_id: Number(controlId),
+            controlRisk_id: null,
           })
         );
       }
@@ -51,7 +48,7 @@ const AddAuditProgramDialog = ({
 
   return (
     <div className="px-4 py-4">
-      <h2 className="pb-4 heading">Add Risk Control Objective</h2>
+      <h2 className="pb-4 heading">Add Audit Program</h2>
       <div className="row mb-2">
         <div className="col-lg-2 label-text">Rating</div>
         <div className="col-lg-8">
@@ -65,31 +62,6 @@ const AddAuditProgramDialog = ({
             <option value={1}>High</option>
             <option value={2}>Medium</option>
             <option value={3}>Low</option>
-          </select>
-        </div>
-      </div>
-      <div className="row mb-2">
-        <div className="col-lg-2 label-text">Risk Control</div>
-        <div className="col-lg-8">
-          <select
-            className="form-select"
-            aria-label="Default select example"
-            value={controlId}
-            onChange={(event) => setControlId(event?.target?.value)}
-          >
-            <option value="">Select One</option>
-            {currentAuditEngagement?.riskControlMatrix?.objectives?.map(
-              (objective) =>
-                objective?.riskRatingList?.map((risk) =>
-                  risk?.controlRiskList?.map((control, i) => {
-                    return (
-                      <option value={control?.id} key={i}>
-                        {control?.description}
-                      </option>
-                    );
-                  })
-                )
-            )}
           </select>
         </div>
       </div>

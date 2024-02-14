@@ -193,6 +193,7 @@ const KickOff = () => {
             <AddKickOffControlDialog
               setShowKickOffControlDialog={setShowKickOffControlDialog}
               currentAuditEngagement={currentAuditEngagement}
+              auditEngagementId={auditEngagementId}
             />
           </div>
         </div>
@@ -205,14 +206,14 @@ const KickOff = () => {
             className="fa fa-arrow-left text-primary fs-5 pe-3 cursor-pointer"
           ></i>
 
-          <h2 className="mx-2 m-2 heading">Kick Off</h2>
+          <h2 className="mx-2 m-2 heading">{currentAuditEngagement?.title}</h2>
         </div>
       </header>
 
       <div className="row px-4">
         <div className="col-md-12">
           <div className="accordion" id="accordionFlushExample">
-            <JobName />
+            <JobName currentAuditEngagement={currentAuditEngagement} />
             <AuditNotifications
               currentAuditEngagement={currentAuditEngagement}
               auditEngagementId={auditEngagementId}
@@ -225,11 +226,13 @@ const KickOff = () => {
               setShowKickOffObjectiveDialog={setShowKickOffObjectiveDialog}
               setShowKickOffRatingDialog={setShowKickOffRatingDialog}
               setShowKickOffControlDialog={setShowKickOffControlDialog}
+              auditEngagementId={auditEngagementId}
             />
             <AuditProgram
               currentAuditEngagement={currentAuditEngagement}
               setCurrentAuditEngagement={setCurrentAuditEngagement}
               setShowAddAuditProgramDialog={setShowAddAuditProgramDialog}
+              auditEngagementId={auditEngagementId}
             />
             <AuditSteps
               setShowAuditStepsDialog={setShowAuditStepsDialog}

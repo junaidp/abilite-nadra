@@ -58,7 +58,7 @@ const AuditPlanSummary = () => {
   }
 
   function handleEdit(item) {
-    dispatch(setupUpdateAuditPlanSummary(item));
+    dispatch(setupUpdateAuditPlanSummary({ ...item, approved: true }));
   }
 
   React.useEffect(() => {

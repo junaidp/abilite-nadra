@@ -6,6 +6,7 @@ import { setupSaveRiskControlMatrixControl } from "../../../global-redux/reducer
 const AddKickOffControlDialog = ({
   setShowKickOffControlDialog,
   currentAuditEngagement,
+  auditEngagementId,
 }) => {
   const dispatch = useDispatch();
   const { auditEngagementAddSuccess, loading } = useSelector(
@@ -42,6 +43,7 @@ const AddKickOffControlDialog = ({
             description: description,
             rating: Number(rating),
             rcmLibraryObjectives_id: 0,
+            engagement_id: Number(auditEngagementId),
           })
         );
       }

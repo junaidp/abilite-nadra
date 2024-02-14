@@ -8,6 +8,7 @@ const Control = ({
   currentAuditEngagement,
   loading,
   setCurrentAuditEngagement,
+  auditEngagementId,
 }) => {
   const dispatch = useDispatch();
   const { auditEngagementAddSuccess } = useSelector(
@@ -64,7 +65,8 @@ const Control = ({
             id: control?.id,
             rcmLibraryControlRisk_id: control?.rcmLibraryControlRisk_id,
             description: control?.description,
-            rating: control?.rating,
+            rating: Number(control?.rating),
+            engagementId: Number(auditEngagementId),
           })
         );
       }

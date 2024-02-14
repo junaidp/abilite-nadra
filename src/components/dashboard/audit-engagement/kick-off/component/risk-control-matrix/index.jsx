@@ -10,6 +10,7 @@ const RiskControlMatrix = ({
   setShowKickOffObjectiveDialog,
   setShowKickOffRatingDialog,
   setShowKickOffControlDialog,
+  auditEngagementId,
 }) => {
   const { loading } = useSelector((state) => state?.auditEngagement);
   return (
@@ -70,6 +71,7 @@ const RiskControlMatrix = ({
                 setCurrentAuditEngagement={setCurrentAuditEngagement}
                 setShowKickOffControlDialog={setShowKickOffControlDialog}
                 loading={loading}
+                auditEngagementId={auditEngagementId}
               />
             </div>
           </div>

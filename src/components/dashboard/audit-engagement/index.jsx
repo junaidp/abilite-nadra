@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Pagination from "@mui/material/Pagination";
 import LinearProgress from "@mui/material/LinearProgress";
 // import MultipleSelect from "../../common/select/Select";
+import moment from "moment";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import CancelledDialog from "../../../components/modals/cancelled-dialog/index";
@@ -104,9 +105,7 @@ const AuditEngagement = () => {
                         <th>planned End Date </th>
                         <th>job Type </th>
                         <th>status </th>
-                        <th>planning </th>
-                        <th>field Work </th>
-                        <th>reporting </th>
+
                         {/* <th>Change Request </th> */}
                       </tr>
                     </thead>
@@ -129,9 +128,17 @@ const AuditEngagement = () => {
                               <tr key={index}>
                                 <td>{item?.id}</td>
                                 <td>{item?.title}</td>
-                                <td>{item?.plannedStartDate || "null"}</td>
-                                <td>{item?.plannedEndDate || "null"}</td>
-                                <td>null</td>
+                                <td>
+                                  {moment(item?.plannedStartDate).format(
+                                    "DD-MM-YYYY"
+                                  ) || "null"}
+                                </td>
+                                <td>
+                                  {moment(item?.item?.plannedEndDate).format(
+                                    "DD-MM-YYYY"
+                                  ) || "null"}
+                                </td>
+                                <td>{item?.jobType}</td>
                                 <td className="kink-off">
                                   <Link
                                     to={`/audit/kick-off?auditEngagementId=${item?.id}`}
@@ -140,25 +147,7 @@ const AuditEngagement = () => {
                                     kick off
                                   </Link>
                                 </td>
-                                <td>
-                                  <div className="progress-bar ">
-                                    <LinearProgress
-                                      variant="determinate"
-                                      value={30}
-                                    />
-                                  </div>
-                                </td>
-                                <td>
-                                  <div className="progress-bar ">null</div>
-                                </td>
-                                <td>
-                                  <div className="progress-bar ">
-                                    <LinearProgress
-                                      variant="determinate"
-                                      value={30}
-                                    />
-                                  </div>
-                                </td>
+
                                 {/* <td>
                                   <MultipleSelect />
                                 </td> */}

@@ -7,11 +7,13 @@ const AuditProgram = ({
   currentAuditEngagement,
   setCurrentAuditEngagement,
   setShowAddAuditProgramDialog,
+  auditEngagementId,
 }) => {
   const dispatch = useDispatch();
   const { loading, auditEngagementAddSuccess } = useSelector(
     (state) => state?.auditEngagement
   );
+  const [controlList, setControlList] = React.useState([]);
   const [currentButtonId, setCurrentButtonId] = React.useState("");
   function handleChange(event, id) {
     setCurrentAuditEngagement((pre) => {
@@ -32,22 +34,28 @@ const AuditProgram = ({
   function handleUpdate(item) {
     if (!loading) {
       setCurrentButtonId(item?.id);
-      if (
-        item?.description === "" ||
-        item?.rating === "" ||
-        item?.controlRisk_id === ""
-      ) {
+      if (item?.description === "" || item?.rating === "") {
         toast.error("Provide all values");
       } else {
         dispatch(
           setupUpdateAuditProgram({
-            id: item?.id,
-            description: item?.description,
-            rating: item?.rating,
-            controlRisk_id: item?.controlRisk_id,
+            program: {
+              id: item?.id,
+              description: item?.description,
+              rating: item?.rating,
+              controlRisk_id: item?.controlRisk_id,
+            },
+            engagement_id: Number(auditEngagementId),
           })
         );
       }
+    }
+  }
+
+  function getDescription(id) {
+    if (controlList?.length !== 0) {
+      return controlList?.find((all) => Number(all?.id) === Number(id))
+        ?.description;
     }
   }
 
@@ -56,6 +64,17 @@ const AuditProgram = ({
       setCurrentButtonId("");
     }
   }, [auditEngagementAddSuccess]);
+
+  React.useEffect(() => {
+    let array = [];
+    currentAuditEngagement?.riskControlMatrix?.objectives?.map((objective) =>
+      objective?.riskRatingList?.map((risk) =>
+        risk?.controlRiskList?.map((control) => (array = [...array, control]))
+      )
+    );
+    setControlList(array);
+  }, [currentAuditEngagement]);
+
   return (
     <div className="accordion-item">
       <h2 className="accordion-header">
@@ -105,9 +124,9 @@ const AuditProgram = ({
                     <thead>
                       <tr>
                         <th>Sr. #</th>
-                        <th>Controls</th>
+                        <th>Description</th>
                         <th>Rating</th>
-                        <th>Program</th>
+                        <th>Controls</th>
                         <th>Actions</th>
                       </tr>
                     </thead>
@@ -148,34 +167,16 @@ const AuditProgram = ({
                                 </div>
                               </td>
                               <td>
-                                <select
-                                  className="form-select"
-                                  aria-label="Default select example"
-                                  value={item?.controlRisk_id}
-                                  name="controlRisk_id"
-                                  onChange={(event) =>
-                                    handleChange(event, item?.id)
+                                <textarea
+                                  className="form-control"
+                                  id="exampleFormControlT"
+                                  rows="3"
+                                  value={
+                                    getDescription(item?.controlRisk_id) ||
+                                    "null"
                                   }
-                                >
-                                  <option value="">Select One</option>
-                                  {currentAuditEngagement?.riskControlMatrix?.objectives?.map(
-                                    (objective) =>
-                                      objective?.riskRatingList?.map((risk) =>
-                                        risk?.controlRiskList?.map(
-                                          (control, i) => {
-                                            return (
-                                              <option
-                                                value={control?.id}
-                                                key={i}
-                                              >
-                                                {control?.description}
-                                              </option>
-                                            );
-                                          }
-                                        )
-                                      )
-                                  )}
-                                </select>
+                                  readOnly
+                                ></textarea>
                               </td>
                               <td>
                                 <button

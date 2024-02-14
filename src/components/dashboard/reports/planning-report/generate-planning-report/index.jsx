@@ -20,6 +20,9 @@ import RiskScores from "./components/risk-scores";
 import RiskFactorApproach from "./components/risk-factor-approach";
 import AttachFiles from "./components/attach-files/index";
 import Editors from "./components/editors";
+import Header from "./components/header";
+import HeadingTable from "./components/heading-table";
+import Buttons from "./components/buttons";
 
 const GeneratePlanningReport = () => {
   const navigate = useNavigate();
@@ -39,6 +42,7 @@ const GeneratePlanningReport = () => {
     React.useState(false);
   const [editGeneratePlaningId, setEditGeneratePlaningId] = React.useState("");
   const [data, setData] = React.useState({
+    reportName: "",
     summary: "",
     methodology: "",
     riskAssesmentSummary: "",
@@ -97,6 +101,7 @@ const GeneratePlanningReport = () => {
         (item) => item?.companyName === company
       )?.id;
       if (
+        data?.reportName === "" ||
         data?.summary === "" ||
         data?.methodology === "" ||
         data?.riskAssesmentSummary === "" ||
@@ -130,6 +135,7 @@ const GeneratePlanningReport = () => {
   function handleEditReport() {
     if (!loading) {
       if (
+        data?.reportName === "" ||
         data?.summary === "" ||
         data?.methodology === "" ||
         data?.riskAssesmentSummary === "" ||
@@ -154,9 +160,8 @@ const GeneratePlanningReport = () => {
             reportShareWith: details?.reportShareWith?.id || null,
             reportingTo: details?.reportingTo?.id || null,
             createdBy: details?.createdBy?.id,
-            userCompany: details?.userCompany?.id,
             updatedBy: user[0]?.userId?.id,
-            id: reportId,
+            id: Number(reportId),
           })
         );
       }
@@ -167,6 +172,7 @@ const GeneratePlanningReport = () => {
     if (reportAddSuccess) {
       dispatch(resetReportAddSuccess());
       setData({
+        reportName: "",
         summary: "",
         methodology: "",
         riskAssesmentSummary: "",
@@ -185,6 +191,7 @@ const GeneratePlanningReport = () => {
     ) {
       const details = allReports?.find((all) => all?.id === Number(reportId));
       setData({
+        reportName: details?.reportName,
         summary: details?.summary,
         methodology: details?.methodology,
         riskAssesmentSummary: details?.riskAssesmentSummary,
@@ -249,62 +256,14 @@ const GeneratePlanningReport = () => {
           </div>
         </div>
       )}
-      <header className="section-header my-3">
-        <div className="row align-items-center mb-4">
-          <div className="col-lg-12 d-flex align-items-center">
-            <i
-              className="fa fa-arrow-left text-primary fs-5 pe-3 cursor-pointer"
-              onClick={() => navigate("/audit/planning-report")}
-            ></i>
 
-            <div className="mb-0 heading">Internal Audit Planning Report</div>
-          </div>
-        </div>
-      </header>
-
-      <div className="row">
-        <div className="col-lg-12">
-          <div className="row">
-            <div className="col-lg-8 d-flex">
-              <div className="mb-3 d-flex me-3  align-items-end">
-                <label className="form-label me-2">From</label>
-                <input
-                  type="date"
-                  className="form-control"
-                  placeholder="Select Date"
-                />
-              </div>
-              <div className="mb-3 d-flex me-3 align-items-end">
-                <label className="form-label me-2">To</label>
-                <input
-                  type="date"
-                  className="form-control"
-                  placeholder="Select Date"
-                />
-              </div>
-            </div>
-            {editable !== "false" && (
-              <div className="col-lg-4 d-flex text-end justify-content-end">
-                <div className="mb-3">
-                  <div
-                    className="btn btn-labeled btn-primary px-3 shadow fitContent"
-                    onClick={() => setGeneratePlaningReportDialog(true)}
-                  >
-                    <span className="btn-label me-2">
-                      <i className="fa fa-plus"></i>
-                    </span>
-                    Add Section
-                  </div>
-                </div>
-                <i
-                  className="fa fa-info-circle ps-3 text-secondary mt-2 cursor-pointer"
-                  title="Info"
-                ></i>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
+      <Header
+        navigate={navigate}
+        setGeneratePlaningReportDialog={setGeneratePlaningReportDialog}
+        data={data}
+        setData={setData}
+        editable={editable}
+      />
 
       <Editors
         handleEditorContentChange={handleEditorContentChange}
@@ -312,93 +271,25 @@ const GeneratePlanningReport = () => {
         editable={editable}
       />
 
-      <div className="table-responsive">
-        <table className="table table-bordered  table-hover rounded">
-          <thead className="bg-secondary text-white">
-            <tr>
-              <th>Heading </th>
-              <th>Description</th>
-              {editable !== "false" && <th>Actions</th>}
-            </tr>
-          </thead>
-          <tbody>
-            {data?.newHeading?.length === 0 ? (
-              <tr>
-                <td className="w-300">No Haeding Added!</td>
-              </tr>
-            ) : (
-              data?.newHeading?.map((head, index) => {
-                return (
-                  <tr key={index}>
-                    <td>{head?.heading}</td>
-                    <td>{head?.description}</td>
-                    {editable !== "false" && (
-                      <td className="w-130">
-                        <i
-                          className="fa fa-trash text-danger f-18 cursor-pointer"
-                          onClick={() => handleDeleteHeading(head?.id)}
-                        ></i>
-                        <i
-                          class="fa fa-edit  px-3 f-18 cursor-pointer"
-                          onClick={() => {
-                            setEditGeneratePlaningId(head?.id);
-                            setEditGeneratePlaningReportDialog(true);
-                          }}
-                        ></i>
-                      </td>
-                    )}
-                  </tr>
-                );
-              })
-            )}
-          </tbody>
-        </table>
-      </div>
+      <HeadingTable
+        editable={editable}
+        data={data}
+        handleDeleteHeading={handleDeleteHeading}
+        setEditGeneratePlaningId={setEditGeneratePlaningId}
+        setEditGeneratePlaningReportDialog={setEditGeneratePlaningReportDialog}
+      />
       <AuditableUnits />
       <RiskScores />
       <RiskFactorApproach />
       <AttachFiles />
-      <div className="row mb-3">
-        <div className="col-lg-12 d-flex justify-content-between">
-          <div
-            className={`btn btn-labeled btn-primary px-3 shadow fitContent ${
-              pdfLoading && "disabled"
-            }`}
-            onClick={handleDownload}
-          >
-            <span className="btn-label me-2">
-              <i className="fa fa-file-pdf f-18"></i>
-            </span>
-            {pdfLoading ? "Loading" : "Download PDF"}
-          </div>
-          {editable === "notApplicable" && (
-            <div
-              className={`btn btn-labeled btn-primary px-3 shadow me-3 fitContent ${
-                loading && "disabled"
-              }`}
-              onClick={handleSaveReport}
-            >
-              <span className="btn-label me-2">
-                <i className="fa fa-check-circle f-18"></i>
-              </span>
-              {loading ? "Loading..." : "Save"}
-            </div>
-          )}
-          {editable === "true" && (
-            <div
-              className={`btn btn-labeled btn-primary px-3 shadow me-3 fitContent ${
-                loading && "disabled"
-              }`}
-              onClick={handleEditReport}
-            >
-              <span className="btn-label me-2">
-                <i className="fa fa-check-circle f-18"></i>
-              </span>
-              {loading ? "Loading..." : "Edit"}
-            </div>
-          )}
-        </div>
-      </div>
+      <Buttons
+        handleDownload={handleDownload}
+        pdfLoading={pdfLoading}
+        editable={editable}
+        loading={loading}
+        handleSaveReport={handleSaveReport}
+        handleEditReport={handleEditReport}
+      />
     </div>
   );
 };
