@@ -10,6 +10,8 @@ import {
   addAuditProgram,
   updateAuditProgram,
   updateAuditSteps,
+  addAuditStepObservation,
+  updateAuditStepObservation,
 } from "./thunk";
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
@@ -93,6 +95,19 @@ export const setupUpdateAuditSteps = createAsyncThunk(
   "auditEngagement/updateAuditSteps",
   async (data, thunkAPI) => {
     return updateAuditSteps(data, thunkAPI);
+  }
+);
+
+export const setupAddAuditStepObservation = createAsyncThunk(
+  "auditEngagement/addAuditStepObservation",
+  async (data, thunkAPI) => {
+    return addAuditStepObservation(data, thunkAPI);
+  }
+);
+export const setupUpdateAuditStepObservation = createAsyncThunk(
+  "auditEngagement/updateAuditStepObservation",
+  async (data, thunkAPI) => {
+    return updateAuditStepObservation(data, thunkAPI);
   }
 );
 
@@ -305,6 +320,42 @@ export const slice = createSlice({
         toast.success("Audit Steps Updated Successfully");
       })
       .addCase(setupUpdateAuditSteps.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Add Audit Step Observation
+    builder
+      .addCase(setupAddAuditStepObservation.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupAddAuditStepObservation.fulfilled, (state) => {
+        state.loading = false;
+        state.auditEngagementAddSuccess = true;
+        toast.success("Audit Steps Observation Added Successfully");
+      })
+      .addCase(setupAddAuditStepObservation.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Update Audit Step Observation
+    builder
+      .addCase(setupUpdateAuditStepObservation.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupUpdateAuditStepObservation.fulfilled, (state) => {
+        state.loading = false;
+        state.auditEngagementAddSuccess = true;
+        toast.success("Audit Steps Observation Updated Successfully");
+      })
+      .addCase(setupUpdateAuditStepObservation.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);

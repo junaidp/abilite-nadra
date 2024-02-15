@@ -1,6 +1,10 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setupUpdateAuditSteps } from "../../../global-redux/reducers/audit-engagement/slice";
+import {
+  setupUpdateAuditSteps,
+  setupAddAuditStepObservation,
+  setupUpdateAuditStepObservation,
+} from "../../../global-redux/reducers/audit-engagement/slice";
 import { toast } from "react-toastify";
 const AuditStepsDialog = ({
   setShowAuditStepsDialog,
@@ -9,6 +13,8 @@ const AuditStepsDialog = ({
 }) => {
   const dispatch = useDispatch();
   const [currentAuditStep, setCurrentAuditStep] = React.useState({});
+  const [description, setDescription] = React.useState("");
+  React.useState(false);
   const { auditEngagementAddSuccess, loading } = useSelector(
     (state) => state?.auditEngagement
   );
@@ -20,6 +26,21 @@ const AuditStepsDialog = ({
         [event?.target?.name]: Number(event?.target?.value),
       };
     });
+  }
+
+  function handleAddObservation() {
+    if (!loading) {
+      if (description === "") {
+        toast.error("Provide the description");
+      } else {
+        dispatch(
+          setupAddAuditStepObservation({
+            description: description,
+            stepId: auditStepId,
+          })
+        );
+      }
+    }
   }
 
   function handleSave() {
@@ -37,6 +58,29 @@ const AuditStepsDialog = ({
     }
   }
 
+  function handleChangeDescription(event, id) {
+    setCurrentAuditStep((pre) => {
+      return {
+        ...pre,
+        auditStepObservationsList: pre?.auditStepObservationsList?.map((item) =>
+          Number(item?.id) === Number(id)
+            ? { ...item, description: event?.target?.value }
+            : item
+        ),
+      };
+    });
+  }
+
+  function handleUpdateObservation(item) {
+    dispatch(
+      setupUpdateAuditStepObservation({
+        id: item?.id,
+        description: item?.description,
+        observationAttachmentsList: null,
+      })
+    );
+  }
+
   React.useEffect(() => {
     const step = currentAuditEngagement?.auditStep?.stepList?.find(
       (item) => Number(item?.id) === Number(auditStepId)
@@ -47,6 +91,7 @@ const AuditStepsDialog = ({
   React.useEffect(() => {
     if (auditEngagementAddSuccess) {
       setShowAuditStepsDialog(false);
+      setDescription("");
     }
   }, [auditEngagementAddSuccess]);
   return (
@@ -156,7 +201,7 @@ const AuditStepsDialog = ({
           </div>
         </div>
       </div>
-      <div className="row mb-3">
+      {/* <div className="row mb-3">
         <div className="col-lg-12">
           <div>
             <label className="form-label me-3 mb-3">Attach files</label>
@@ -182,9 +227,9 @@ const AuditStepsDialog = ({
             </table>
           </div>
         </div>
-      </div>
+      </div> */}
 
-      <div className="row mb-3">
+      {/* <div className="row mb-3">
         <div className="col-lg-12">
           <label className="me-3   ">Audit Procedure Performed</label>
           <textarea
@@ -195,9 +240,9 @@ const AuditStepsDialog = ({
           ></textarea>
           <p className="word-limit-info mb-0">Maximum 1500 words</p>
         </div>
-      </div>
+      </div> */}
 
-      <div className="row mb-3">
+      {/* <div className="row mb-3">
         <div className="col-lg-12">
           <label className="form-label me-3 mb-3">Attach files</label>
 
@@ -239,35 +284,24 @@ const AuditStepsDialog = ({
             </table>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div className="row mb-3">
-        <div className="col-lg-12">
-          <div className="d-flex justify-content-between align-items-center">
-            <div className="sub-heading me-3 mb-3">Observation(s)</div>
-            <button className="btn btn-labeled float-end btn-primary px-3 shadow">
-              <span className="btn-label me-2">
-                <i className="fa fa-plus"></i>
-              </span>
-              Add Observation
-            </button>
-          </div>
+        <div className="col-lg-2">
+          <button
+            className={`btn btn-labeled float-start btn-primary px-3 shadow ${
+              loading && "disabled"
+            }`}
+            onClick={handleAddObservation}
+          >
+            <span className="btn-label me-2">
+              <i className="fa fa-plus"></i>
+            </span>
+            {!loading ? "Add Observation" : "Loading..."}
+          </button>
         </div>
       </div>
 
-      <div className="row mb-3">
-        <div className="col-lg-12">
-          <div className="d-flex justify-content-between align-items-center">
-            <label className="form-label me-3">1</label>
-            <div className="">
-              <a href="#" className="f-10">
-                + Attach file
-              </a>
-              <i className="ms-4 text-danger fa fa-trash"></i>
-            </div>
-          </div>
-        </div>
-      </div>
       <div className="row mb-3">
         <div className="col-lg-12">
           <textarea
@@ -275,51 +309,79 @@ const AuditStepsDialog = ({
             placeholder="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
             id="exampleFormControlT"
             rows="3"
+            value={description}
+            onChange={(event) => setDescription(event?.target?.value)}
           ></textarea>
           <p className="word-limit-info mb-0">Maximum 1500 words</p>
         </div>
       </div>
 
-      <div className="row mb-3">
-        <div className="col-lg-12">
-          <label className="form-label me-3 mb-3">Attach files</label>
+      <h3>Audit Step Observation List</h3>
+      {currentAuditStep?.auditStepObservationsList?.map((item, i) => {
+        return (
+          <div key={i}>
+            <div className="row mb-3">
+              <div className="col-lg-12">
+                <textarea
+                  className="form-control"
+                  placeholder="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+                  id="exampleFormControlT"
+                  rows="3"
+                  onChange={(event) => handleChangeDescription(event, item?.id)}
+                  value={item?.description}
+                ></textarea>
+                <div className="row">
+                  <div className="col-lg-2">
+                    <p className="word-limit-info mb-0">Maximum 1500 words</p>
+                  </div>
+                  <div className="col-lg-10">
+                    <button
+                      className={`btn btn-labeled float-end mt-4 btn-primary px-3 shadow ${
+                        loading && "disabled"
+                      }`}
+                      onClick={() => handleUpdateObservation(item)}
+                    >
+                      {!loading ? "Update Observation" : "Loading..."}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-          <input type="file" id="fileInpu" className="f-10" />
+            <div className="row mb-3">
+              <div className="col-lg-12">
+                <label className="form-label me-3 mb-3">Attach files</label>
 
-          <div className="table-responsive">
-            <table className="table table-bordered  table-hover rounded">
-              <thead className="bg-secondary text-white">
-                <tr>
-                  <th>Attach Files </th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <a href="#">Loram File will be displayed here</a>
-                  </td>
-                  <td className="w-130">
-                    <i className="fa fa-eye text-primary f-18"></i>
-                    <i className="fa fa-edit mx-3 text-secondary f-18"></i>
-                    <i className="fa fa-trash text-danger f-18"></i>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <a href="#">Loram File will be displayed here</a>
-                  </td>
-                  <td className="w-130">
-                    <i className="fa fa-eye text-primary f-18"></i>
-                    <i className="fa fa-edit mx-3 text-secondary f-18"></i>
-                    <i className="fa fa-trash text-danger f-18"></i>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                <input type="file" id="fileInpu" className="f-10" />
+
+                <div className="table-responsive">
+                  <table className="table table-bordered  table-hover rounded">
+                    <thead className="bg-secondary text-white">
+                      <tr>
+                        <th>Attach Files </th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#">Loram File will be displayed here</a>
+                        </td>
+                        <td className="w-130">
+                          <i className="fa fa-eye text-primary f-18"></i>
+                          <i className="fa fa-edit mx-3 text-secondary f-18"></i>
+                          <i className="fa fa-trash text-danger f-18"></i>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        );
+      })}
+
       <div className="row">
         <div className="col-lg-6 ">
           <div className="text-end">

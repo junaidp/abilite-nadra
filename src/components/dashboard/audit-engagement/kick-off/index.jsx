@@ -239,11 +239,14 @@ const KickOff = () => {
               currentAuditEngagement={currentAuditEngagement}
               setAuditStepId={setAuditStepId}
             />
-            <ComplianceCheckList
-              setShowComplianceCheckListDialog={
-                setShowComplianceCheckListDialog
-              }
-            />
+            {currentAuditEngagement?.auditStepChecklistList &&
+              currentAuditEngagement?.auditStepChecklistList?.length !== 0 && (
+                <ComplianceCheckList
+                  setShowComplianceCheckListDialog={
+                    setShowComplianceCheckListDialog
+                  }
+                />
+              )}
           </div>
         </div>
       </div>

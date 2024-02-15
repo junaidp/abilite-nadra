@@ -1,7 +1,8 @@
 import React from "react";
 import AddCheckListManagementDialog from "../../modals/add-checklist-management-dialog/index";
 import UserManagementDialog from "../../modals/add-user-dialog/index";
-import { useDispatch, useSelector } from "react-redux";
+import UpdateUserDialog from "../.././modals/update-user-dialog";
+import { useDispatch } from "react-redux";
 import * as XLSX from "xlsx";
 import "./index.css";
 import AddCompanyDialog from "../../modals/add-company-dialog/index";
@@ -20,8 +21,10 @@ const AuditSettings = () => {
   const [activeEmailTab, setActiveEmailTab] = React.useState("systemEmail");
   const [checkListManagementDialog, setCheckListManagementDialog] =
     React.useState(false);
+  const [updateUserId, setUpdateUserId] = React.useState("");
   const [excelData, setExcelData] = React.useState(null);
   const [userManagementDialog, setUserManagementDialog] = React.useState(false);
+  const [updateUserDialog, setUpdateUserDialog] = React.useState(false);
   const [addCompanyDialog, setAddCompantDialog] = React.useState(false);
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
@@ -79,6 +82,16 @@ const AuditSettings = () => {
         <div className="audit-settings-modal">
           <div className="model-wrap">
             <AddCompanyDialog setAddCompantDialog={setAddCompantDialog} />
+          </div>
+        </div>
+      )}
+      {updateUserDialog && (
+        <div className="audit-settings-modal">
+          <div className="model-wrap">
+            <UpdateUserDialog
+              setUpdateUserDialog={setUpdateUserDialog}
+              updateUserId={updateUserId}
+            />
           </div>
         </div>
       )}
@@ -234,6 +247,8 @@ const AuditSettings = () => {
 
               <UserManagement
                 setUserManagementDialog={setUserManagementDialog}
+                setUpdateUserId={setUpdateUserId}
+                setUpdateUserDialog={setUpdateUserDialog}
               />
 
               <Modules />

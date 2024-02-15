@@ -7,7 +7,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 
-const UserManagement = ({ setUserManagementDialog }) => {
+const UserManagement = ({
+  setUserManagementDialog,
+  setUpdateUserId,
+  setUpdateUserDialog,
+}) => {
   const dispatch = useDispatch();
   const { loading, addUserSuccess, allUsers } = useSelector(
     (state) => state?.setttingsUserManagement
@@ -103,7 +107,13 @@ const UserManagement = ({ setUserManagementDialog }) => {
                     ?.slice((page - 1) * 5, page * 5)
                     ?.map((userItem, index) => {
                       return (
-                        <tr key={index}>
+                        <tr
+                          key={index}
+                          onClick={() => {
+                            setUpdateUserId(userItem?.id);
+                            setUpdateUserDialog(true);
+                          }}
+                        >
                           <td>{userItem?.id}</td>
                           <td>{userItem?.name || ""}</td>
                           <td>{userItem?.employeeid?.designation || ""}</td>

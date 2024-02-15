@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { addUser, getAllUsers } from "./thunk";
+import { addUser, getAllUsers, updateUser } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -12,6 +12,12 @@ export const setupAddUser = createAsyncThunk(
   "userManagement/addUser",
   async (data, thunkAPI) => {
     return addUser(data, thunkAPI);
+  }
+);
+export const setupUpdateUser = createAsyncThunk(
+  "userManagement/updateUser",
+  async (data, thunkAPI) => {
+    return updateUser(data, thunkAPI);
   }
 );
 export const setupGetAllUsers = createAsyncThunk(
@@ -37,12 +43,28 @@ export const slice = createSlice({
       })
       .addCase(setupAddUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.addUserSuccess = !action.error;
-        if (!action.error) {
-          toast.success("User Added Successfully");
-        }
+        state.addUserSuccess = true;
+        toast.success("User Added Successfully");
       })
       .addCase(setupAddUser.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Update User
+    builder
+      .addCase(setupUpdateUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupUpdateUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.addUserSuccess = true;
+        toast.success("User Updated Successfully");
+      })
+      .addCase(setupUpdateUser.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);
