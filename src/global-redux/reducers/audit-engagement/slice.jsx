@@ -19,6 +19,7 @@ import { toast } from "react-toastify";
 const initialState = {
   loading: false,
   auditEngagementAddSuccess: false,
+  auditEngagementObservationAddSuccess: false,
   allAuditEngagement: [],
 };
 
@@ -117,6 +118,9 @@ export const slice = createSlice({
   reducers: {
     resetAuditEngagementAddSuccess: (state, action) => {
       state.auditEngagementAddSuccess = false;
+    },
+    resetAuditEngagementObservationAddSuccess: (state, action) => {
+      state.auditEngagementObservationAddSuccess = false;
     },
   },
   // Get all audit notifications
@@ -334,7 +338,7 @@ export const slice = createSlice({
       })
       .addCase(setupAddAuditStepObservation.fulfilled, (state) => {
         state.loading = false;
-        state.auditEngagementAddSuccess = true;
+        state.auditEngagementObservationAddSuccess = true;
         toast.success("Audit Steps Observation Added Successfully");
       })
       .addCase(setupAddAuditStepObservation.rejected, (state, action) => {
@@ -352,7 +356,7 @@ export const slice = createSlice({
       })
       .addCase(setupUpdateAuditStepObservation.fulfilled, (state) => {
         state.loading = false;
-        state.auditEngagementAddSuccess = true;
+        state.auditEngagementObservationAddSuccess = true;
         toast.success("Audit Steps Observation Updated Successfully");
       })
       .addCase(setupUpdateAuditStepObservation.rejected, (state, action) => {
@@ -366,6 +370,9 @@ export const slice = createSlice({
   },
 });
 
-export const { resetAuditEngagementAddSuccess } = slice.actions;
+export const {
+  resetAuditEngagementAddSuccess,
+  resetAuditEngagementObservationAddSuccess,
+} = slice.actions;
 
 export default slice.reducer;

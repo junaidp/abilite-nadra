@@ -42,7 +42,7 @@ const AuditProgram = ({
             program: {
               id: item?.id,
               description: item?.description,
-              rating: item?.rating,
+              rating: Number(item?.rating),
               controlRisk_id: item?.controlRisk_id,
             },
             engagement_id: Number(auditEngagementId),
@@ -88,9 +88,11 @@ const AuditProgram = ({
         >
           <div className="d-flex w-100 me-3 align-items-center justify-content-between">
             <div className=" d-flex align-items-center">
-              {currentAuditEngagement?.auditProgram !== null && (
-                <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
-              )}
+              {currentAuditEngagement?.auditProgram !== null &&
+                currentAuditEngagement?.auditProgram?.programList?.length !==
+                  0 && (
+                  <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
+                )}
               Audit Program
             </div>
           </div>
@@ -124,80 +126,89 @@ const AuditProgram = ({
                     <thead>
                       <tr>
                         <th>Sr. #</th>
-                        <th>Description</th>
+                        <th>Control</th>
                         <th>Rating</th>
-                        <th>Controls</th>
+                        <th>Description</th>
                         <th>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {currentAuditEngagement?.auditProgram?.programList?.map(
-                        (item, index) => {
-                          return (
-                            <tr key={index}>
-                              <td>{item?.id}</td>
-                              <td>
-                                <textarea
-                                  className="form-control"
-                                  id="exampleFormControlT"
-                                  rows="3"
-                                  value={item?.description}
-                                  name="description"
-                                  onChange={(event) =>
-                                    handleChange(event, item?.id)
-                                  }
-                                ></textarea>
-                              </td>
-                              <td>
-                                <div className="d-flex align-items-center">
-                                  <select
-                                    className="form-select"
-                                    aria-label="Default select example"
-                                    value={item?.rating}
-                                    name="rating"
+                      {currentAuditEngagement?.auditProgram?.programList
+                        ?.length === 0 ||
+                      currentAuditEngagement?.auditProgram === null ? (
+                        <tr>
+                          <td className="w-300">No program list to show</td>
+                        </tr>
+                      ) : (
+                        currentAuditEngagement?.auditProgram?.programList?.map(
+                          (item, index) => {
+                            return (
+                              <tr key={index}>
+                                <td>{item?.id}</td>
+                                <td>
+                                  <textarea
+                                    className="form-control"
+                                    id="exampleFormControlT"
+                                    rows="3"
+                                    value={
+                                      getDescription(item?.controlRisk_id) ||
+                                      "null"
+                                    }
+                                    readOnly
+                                    disabled
+                                  ></textarea>
+                                </td>
+                                <td>
+                                  <div className="d-flex align-items-center">
+                                    <select
+                                      className="form-select"
+                                      aria-label="Default select example"
+                                      value={item?.rating}
+                                      name="rating"
+                                      onChange={(event) =>
+                                        handleChange(event, item?.id)
+                                      }
+                                    >
+                                      <option value="">Select One</option>
+                                      <option value={1}>High</option>
+                                      <option value={2}>Medium</option>
+                                      <option value={3}>Low</option>
+                                    </select>
+                                  </div>
+                                </td>
+                                <td>
+                                  <textarea
+                                    className="form-control"
+                                    id="exampleFormControlT"
+                                    rows="3"
+                                    value={item?.description}
+                                    name="description"
                                     onChange={(event) =>
                                       handleChange(event, item?.id)
                                     }
+                                  ></textarea>
+                                </td>
+                                <td>
+                                  <button
+                                    className={`btn btn-labeled mt-2 btn-primary shadow ${
+                                      loading &&
+                                      item?.id === currentButtonId &&
+                                      "disabled"
+                                    }`}
+                                    onClick={() => handleUpdate(item)}
                                   >
-                                    <option value="">Select One</option>
-                                    <option value={1}>High</option>
-                                    <option value={2}>Medium</option>
-                                    <option value={3}>Low</option>
-                                  </select>
-                                </div>
-                              </td>
-                              <td>
-                                <textarea
-                                  className="form-control"
-                                  id="exampleFormControlT"
-                                  rows="3"
-                                  value={
-                                    getDescription(item?.controlRisk_id) ||
-                                    "null"
-                                  }
-                                  readOnly
-                                ></textarea>
-                              </td>
-                              <td>
-                                <button
-                                  className={`btn btn-labeled mt-2 btn-primary shadow ${
-                                    loading &&
-                                    item?.id === currentButtonId &&
-                                    "disabled"
-                                  }`}
-                                  onClick={() => handleUpdate(item)}
-                                >
-                                  <span className="btn-label me-2">
-                                    <i className="fa fa-save"></i>
-                                  </span>
-                                  {loading && item?.id === currentButtonId
-                                    ? "Loading..."
-                                    : "Update"}
-                                </button>
-                              </td>
-                            </tr>
-                          );
-                        }
+                                    <span className="btn-label me-2">
+                                      <i className="fa fa-save"></i>
+                                    </span>
+                                    {loading && item?.id === currentButtonId
+                                      ? "Loading..."
+                                      : "Save"}
+                                  </button>
+                                </td>
+                              </tr>
+                            );
+                          }
+                        )
                       )}
                     </tbody>
                   </table>

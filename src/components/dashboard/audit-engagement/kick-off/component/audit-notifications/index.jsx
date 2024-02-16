@@ -87,6 +87,11 @@ const AuditNotifications = ({ currentAuditEngagement, auditEngagementId }) => {
                     name="toEmail"
                     value={data?.toEmail}
                     onChange={(event) => handleChange(event)}
+                    disabled={
+                      currentAuditEngagement?.auditNotification !== null
+                        ? true
+                        : false
+                    }
                   />
                 </div>
                 <div className="d-flex mb-2  align-items-center">
@@ -98,6 +103,11 @@ const AuditNotifications = ({ currentAuditEngagement, auditEngagementId }) => {
                     name="ccEmail"
                     value={data?.ccEmail}
                     onChange={(event) => handleChange(event)}
+                    disabled={
+                      currentAuditEngagement?.auditNotification !== null
+                        ? true
+                        : false
+                    }
                   />
                 </div>
                 <div className="d-flex mb-2  align-items-center">
@@ -109,6 +119,11 @@ const AuditNotifications = ({ currentAuditEngagement, auditEngagementId }) => {
                     name="subject"
                     value={data?.subject}
                     onChange={(event) => handleChange(event)}
+                    disabled={
+                      currentAuditEngagement?.auditNotification !== null
+                        ? true
+                        : false
+                    }
                   />
                 </div>
                 <div className="d-flex mb-2  align-items-center">
@@ -121,6 +136,11 @@ const AuditNotifications = ({ currentAuditEngagement, auditEngagementId }) => {
                     name="body"
                     value={data?.body}
                     onChange={(event) => handleChange(event)}
+                    disabled={
+                      currentAuditEngagement?.auditNotification !== null
+                        ? true
+                        : false
+                    }
                   ></textarea>
                 </div>
 

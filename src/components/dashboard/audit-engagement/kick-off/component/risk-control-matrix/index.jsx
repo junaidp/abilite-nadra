@@ -24,9 +24,11 @@ const RiskControlMatrix = ({
           aria-expanded="false"
           aria-controls="flush-collapseFour"
         >
-          {currentAuditEngagement?.riskControlMatrix !== null && (
-            <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
-          )}
+          {currentAuditEngagement?.riskControlMatrix !== null &&
+            currentAuditEngagement?.riskControlMatrix?.objectives?.length !==
+              0 && (
+              <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
+            )}
           Risk Control Matrix
         </button>
       </h2>
@@ -51,29 +53,127 @@ const RiskControlMatrix = ({
               </div>
             </div>
 
-            <div className="row">
-              <Objective
-                currentAuditEngagement={currentAuditEngagement}
-                setCurrentAuditEngagement={setCurrentAuditEngagement}
-                setShowKickOffObjectiveDialog={setShowKickOffObjectiveDialog}
-                loading={loading}
-              />
+            {currentAuditEngagement?.riskControlMatrix === null ||
+              (currentAuditEngagement?.riskControlMatrix?.objectives?.length ===
+                0 && (
+                <div className="row">
+                  <div className="col-lg-4">
+                    <p className="px-3 py-1 bg-secondary d-flex align-items-center rounded justify-content-between text-white">
+                      <span>Objective</span>
+                      <a
+                        className="text-white add-btn"
+                        onClick={() => setShowKickOffObjectiveDialog(true)}
+                      >
+                        <span className="float-end f-10">
+                          <i className="fa fa-plus me-2"></i>Add Objective
+                        </span>
+                      </a>
+                    </p>
+                  </div>
+                  <div className="col-lg-4">
+                    <p className="px-3 py-1 bg-secondary d-flex align-items-center rounded justify-content-between text-white">
+                      <span>Risk</span>
+                      <a
+                        onClick={() => setShowKickOffRatingDialog(true)}
+                        className="text-white add-btn"
+                      >
+                        <span className="float-end f-10">
+                          <i className="fa fa-plus me-2"></i>Add Risk
+                        </span>
+                      </a>
+                    </p>
+                  </div>
+                  <div className="col-lg-4">
+                    <p className="px-3 py-1 bg-secondary d-flex align-items-center rounded justify-content-between text-white">
+                      <span>Controls</span>
+                      <a
+                        onClick={() => setShowKickOffControlDialog(true)}
+                        className="text-white add-btn"
+                      >
+                        <span className="float-end f-10">
+                          <i className="fa fa-plus me-2"></i>Add Control
+                        </span>
+                      </a>
+                    </p>
+                  </div>
+                </div>
+              ))}
 
-              <Rating
-                currentAuditEngagement={currentAuditEngagement}
-                setCurrentAuditEngagement={setCurrentAuditEngagement}
-                setShowKickOffRatingDialog={setShowKickOffRatingDialog}
-                loading={loading}
-              />
+            {currentAuditEngagement?.riskControlMatrix?.objectives?.map(
+              (singleAuditEngagement, index) => {
+                return (
+                  <div className="row" key={index}>
+                    <div className="col-lg-4">
+                      {index === 0 && (
+                        <p className="px-3 py-1 bg-secondary d-flex align-items-center rounded justify-content-between text-white">
+                          <span>Objective</span>
+                          <a
+                            className="text-white add-btn"
+                            onClick={() => setShowKickOffObjectiveDialog(true)}
+                          >
+                            <span className="float-end f-10">
+                              <i className="fa fa-plus me-2"></i>Add Objective
+                            </span>
+                          </a>
+                        </p>
+                      )}
 
-              <Control
-                currentAuditEngagement={currentAuditEngagement}
-                setCurrentAuditEngagement={setCurrentAuditEngagement}
-                setShowKickOffControlDialog={setShowKickOffControlDialog}
-                loading={loading}
-                auditEngagementId={auditEngagementId}
-              />
-            </div>
+                      <Objective
+                        loading={loading}
+                        setCurrentAuditEngagement={setCurrentAuditEngagement}
+                        singleAuditEngagement={singleAuditEngagement}
+                      />
+                    </div>
+
+                    <div className="col-lg-4">
+                      {index === 0 && (
+                        <p className="px-3 py-1 bg-secondary d-flex align-items-center rounded justify-content-between text-white">
+                          <span>Risk</span>
+                          <a
+                            onClick={() => setShowKickOffRatingDialog(true)}
+                            className="text-white add-btn"
+                          >
+                            <span className="float-end f-10">
+                              <i className="fa fa-plus me-2"></i>Add Risk
+                            </span>
+                          </a>
+                        </p>
+                      )}
+                      <Rating
+                        setCurrentAuditEngagement={setCurrentAuditEngagement}
+                        loading={loading}
+                        singleAuditEngagement={singleAuditEngagement}
+                      />
+                    </div>
+
+                    <div className="col-lg-4">
+                      {index === 0 && (
+                        <p className="px-3 py-1 bg-secondary d-flex align-items-center rounded justify-content-between text-white">
+                          <span>Controls</span>
+                          <a
+                            onClick={() => setShowKickOffControlDialog(true)}
+                            className="text-white add-btn"
+                          >
+                            <span className="float-end f-10">
+                              <i className="fa fa-plus me-2"></i>Add Control
+                            </span>
+                          </a>
+                        </p>
+                      )}
+
+                      <Control
+                        setCurrentAuditEngagement={setCurrentAuditEngagement}
+                        loading={loading}
+                        auditEngagementId={auditEngagementId}
+                        singleAuditEngagement={singleAuditEngagement}
+                      />
+                    </div>
+
+                    <hr />
+                  </div>
+                );
+              }
+            )}
           </div>
         </div>
       </div>

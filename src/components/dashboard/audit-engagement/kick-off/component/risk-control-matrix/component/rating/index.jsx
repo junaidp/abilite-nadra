@@ -4,10 +4,9 @@ import { setupUpdateRiskControlMatrixRating } from "../../../../../../../../glob
 import { toast } from "react-toastify";
 
 const Rating = ({
-  setShowKickOffRatingDialog,
-  currentAuditEngagement,
   loading,
   setCurrentAuditEngagement,
+  singleAuditEngagement,
 }) => {
   const dispatch = useDispatch();
   const [currentButtonDescription, setCurrentButtonDescription] =
@@ -68,79 +67,62 @@ const Rating = ({
     }
   }, [auditEngagementAddSuccess]);
   return (
-    <div className="col-lg-4">
-      <p className="px-3 py-1 bg-secondary d-flex align-items-center rounded justify-content-between text-white">
-        <span>Risk</span>
-        <a
-          onClick={() => setShowKickOffRatingDialog(true)}
-          className="text-white add-btn"
-        >
-          <span className="float-end f-10">
-            <i className="fa fa-plus me-2"></i>Add Risk
-          </span>
-        </a>
-      </p>
-
-      {currentAuditEngagement?.riskControlMatrix?.objectives?.map((objective) =>
-        objective?.riskRatingList?.map((risk, index) => {
-          return (
-            <div className="card p-3 mb-3 w-100 shadow-sm border" key={index}>
-              <div className="d-flex mb-2 justify-content-between align-items-center">
-                <span className="fw-bold">Risk Rating</span>
-                <div className="d-flex align-items-center">
-                  <select
-                    className="form-select"
-                    aria-label="Default select example"
-                    value={risk?.rating}
-                    name="rating"
-                    onChange={(event) =>
-                      handleChangeRating(event, objective?.id, risk?.id)
-                    }
-                  >
-                    <option value="">Select One</option>
-                    <option value={1}>High</option>
-                    <option value={2}>Medium</option>
-                    <option value={3}>Low</option>
-                  </select>
-                </div>
+    <div>
+      {singleAuditEngagement?.riskRatingList?.map((risk, index) => {
+        return (
+          <div className="card p-3 mb-3 w-100 shadow-sm border" key={index}>
+            <div className="d-flex mb-2 justify-content-between align-items-center">
+              <span className="fw-bold">Risk Rating</span>
+              <div className="d-flex align-items-center">
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  value={risk?.rating}
+                  name="rating"
+                  onChange={(event) =>
+                    handleChangeRating(
+                      event,
+                      singleAuditEngagement?.id,
+                      risk?.id
+                    )
+                  }
+                >
+                  <option value="">Select One</option>
+                  <option value={1}>High</option>
+                  <option value={2}>Medium</option>
+                  <option value={3}>Low</option>
+                </select>
               </div>
-              <div className="my-2">
-                <p>
-                  {`${objective?.description.slice(
-                    0,
-                    12
-                  )} --> ${risk?.description.slice(0, 12)}`}
-                </p>
-              </div>
-              <textarea
-                className="form-control"
-                placeholder="Enter Reason"
-                id="exampleFormControlTextarea222"
-                value={risk?.description || ""}
-                onChange={(event) =>
-                  handleChangeRating(event, objective?.id, risk?.id)
-                }
-                name="description"
-              ></textarea>
-              <label className="word-limit-info label-text">
-                Maximum 1500 words
-              </label>
-              <button
-                className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
-                  loading &&
-                  risk?.description === currentButtonDescription &&
-                  "disabled"
-                }`}
-                onClick={() => handleSave(risk)}
-              >
-                {loading && risk?.description === currentButtonDescription
-                  ? "Loading..."
-                  : "Update"}
-              </button>
             </div>
-          );
-        })
-      )}
+           
+            <textarea
+              className="form-control"
+              placeholder="Enter Reason"
+              id="exampleFormControlTextarea222"
+              value={risk?.description || ""}
+              onChange={(event) =>
+                handleChangeRating(event, singleAuditEngagement?.id, risk?.id)
+              }
+              name="description"
+            ></textarea>
+            <label className="word-limit-info label-text">
+              Maximum 1500 words
+            </label>
+            <button
+              className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
+                loading &&
+                risk?.description === currentButtonDescription &&
+                "disabled"
+              }`}
+              onClick={() => handleSave(risk)}
+            >
+              {loading && risk?.description === currentButtonDescription
+                ? "Loading..."
+                : "Update"}
+            </button>
+          </div>
+        );
+      })}
     </div>
   );
 };

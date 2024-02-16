@@ -107,13 +107,7 @@ const UserManagement = ({
                     ?.slice((page - 1) * 5, page * 5)
                     ?.map((userItem, index) => {
                       return (
-                        <tr
-                          key={index}
-                          onClick={() => {
-                            setUpdateUserId(userItem?.id);
-                            setUpdateUserDialog(true);
-                          }}
-                        >
+                        <tr key={index}>
                           <td>{userItem?.id}</td>
                           <td>{userItem?.name || ""}</td>
                           <td>{userItem?.employeeid?.designation || ""}</td>
@@ -122,7 +116,13 @@ const UserManagement = ({
                           <td>{userItem?.role[0]?.name || ""}</td>
                           <td>{userItem?.company[0]?.companyName || ""}</td>
                           <td>
-                            <i className="fa fa-edit   f-18 cursor-pointer"></i>
+                            <i
+                              className="fa fa-edit   f-18 cursor-pointer"
+                              onClick={() => {
+                                setUpdateUserId(userItem?.id);
+                                setUpdateUserDialog(true);
+                              }}
+                            ></i>
                             <i className="fa fa-trash text-danger mx-2 f-18 cursor-pointer"></i>
                           </td>
                         </tr>

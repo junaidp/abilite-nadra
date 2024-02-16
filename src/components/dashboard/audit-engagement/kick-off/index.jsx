@@ -26,6 +26,7 @@ import { useSelector } from "react-redux";
 import {
   setupGetAllAuditEngagement,
   resetAuditEngagementAddSuccess,
+  resetAuditEngagementObservationAddSuccess,
 } from "../../../../global-redux/reducers/audit-engagement/slice";
 
 const KickOff = () => {
@@ -35,9 +36,11 @@ const KickOff = () => {
   const auditEngagementId = searchParams.get("auditEngagementId");
   const { user } = useSelector((state) => state?.auth);
   const { company } = useSelector((state) => state?.common);
-  const { allAuditEngagement, auditEngagementAddSuccess } = useSelector(
-    (state) => state?.auditEngagement
-  );
+  const {
+    allAuditEngagement,
+    auditEngagementAddSuccess,
+    auditEngagementObservationAddSuccess,
+  } = useSelector((state) => state?.auditEngagement);
   const [currentAuditEngagement, setCurrentAuditEngagement] = React.useState(
     {}
   );
@@ -94,6 +97,22 @@ const KickOff = () => {
       dispatch(resetAuditEngagementAddSuccess());
     }
   }, [auditEngagementAddSuccess]);
+
+  React.useEffect(() => {
+    if (auditEngagementObservationAddSuccess) {
+      const companyId = user[0]?.company?.find(
+        (item) => item?.companyName === company
+      )?.id;
+      if (companyId) {
+        dispatch(
+          setupGetAllAuditEngagement(
+            `?companyId=${companyId}&currentYear=2024&userId=${user[0]?.userId?.id}`
+          )
+        );
+      }
+      dispatch(resetAuditEngagementObservationAddSuccess());
+    }
+  }, [auditEngagementObservationAddSuccess]);
 
   React.useEffect(() => {
     if (user[0]?.token) {

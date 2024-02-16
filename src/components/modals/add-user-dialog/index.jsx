@@ -383,8 +383,10 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
       </form>
 
       <div className="row py-3 ">
-        <div className="col-lg-12 text-end" onClick={handleClose}>
-          <button className="btn btn-danger float-end">Close</button>
+        <div className="col-lg-12 text-end">
+          <button className="btn btn-danger float-end" onClick={handleClose}>
+            Close
+          </button>
         </div>
       </div>
     </div>

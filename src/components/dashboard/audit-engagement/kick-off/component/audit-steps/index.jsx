@@ -18,9 +18,10 @@ const AditSteps = ({
         >
           <div className="d-flex w-100 me-3 align-items-center justify-content-between">
             <div className=" d-flex align-items-center">
-              {currentAuditEngagement?.auditStep !== null && (
-                <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
-              )}
+              {currentAuditEngagement?.auditStep !== null &&
+                currentAuditEngagement?.auditStep?.stepList?.length !== 0 && (
+                  <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
+                )}
               Audit Steps
             </div>
           </div>
@@ -45,28 +46,35 @@ const AditSteps = ({
                       </tr>
                     </thead>
                     <tbody>
-                      {currentAuditEngagement?.auditStep?.stepList?.map(
-                        (item, index) => {
-                          return (
-                            <tr key={index}>
-                              <td>{item?.id}</td>
-                              <td>
-                                <a
-                                  onClick={() => {
-                                    setAuditStepId(item?.id);
-                                    setShowAuditStepsDialog(true);
-                                  }}
-                                  className="fw-bold  text-primary  px-3 py-1 f-10"
-                                >
-                                  {item?.program?.description}
-                                </a>
-                              </td>
-                              {/* <td>
+                      {currentAuditEngagement?.auditStep?.stepList?.length ===
+                        0 || currentAuditEngagement?.auditStep == null ? (
+                        <tr>
+                          <td className="w-300">No Steps to show</td>
+                        </tr>
+                      ) : (
+                        currentAuditEngagement?.auditStep?.stepList?.map(
+                          (item, index) => {
+                            return (
+                              <tr key={index}>
+                                <td>{item?.id}</td>
+                                <td>
+                                  <a
+                                    onClick={() => {
+                                      setAuditStepId(item?.id);
+                                      setShowAuditStepsDialog(true);
+                                    }}
+                                    className="fw-bold  text-primary  px-3 py-1 f-10"
+                                  >
+                                    {item?.program?.description}
+                                  </a>
+                                </td>
+                                {/* <td>
                                 <i className="fa fa-check-circle text-success f-18"></i>
                               </td> */}
-                            </tr>
-                          );
-                        }
+                              </tr>
+                            );
+                          }
+                        )
                       )}
                     </tbody>
                   </table>

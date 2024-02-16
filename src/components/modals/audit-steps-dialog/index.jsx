@@ -15,9 +15,11 @@ const AuditStepsDialog = ({
   const [currentAuditStep, setCurrentAuditStep] = React.useState({});
   const [description, setDescription] = React.useState("");
   React.useState(false);
-  const { auditEngagementAddSuccess, loading } = useSelector(
-    (state) => state?.auditEngagement
-  );
+  const {
+    auditEngagementAddSuccess,
+    loading,
+    auditEngagementObservationAddSuccess,
+  } = useSelector((state) => state?.auditEngagement);
 
   function handleChange(event) {
     setCurrentAuditStep((pre) => {
@@ -94,6 +96,12 @@ const AuditStepsDialog = ({
       setDescription("");
     }
   }, [auditEngagementAddSuccess]);
+
+  React.useEffect(() => {
+    if (auditEngagementObservationAddSuccess) {
+      setDescription("");
+    }
+  }, [auditEngagementObservationAddSuccess]);
   return (
     <div className="mx-5">
       <header className="section-header mt-3  text-start d-flex align-items-center justify-content-between">
@@ -201,7 +209,7 @@ const AuditStepsDialog = ({
           </div>
         </div>
       </div>
-      {/* <div className="row mb-3">
+      <div className="row mb-3">
         <div className="col-lg-12">
           <div>
             <label className="form-label me-3 mb-3">Attach files</label>
@@ -227,9 +235,9 @@ const AuditStepsDialog = ({
             </table>
           </div>
         </div>
-      </div> */}
+      </div>
 
-      {/* <div className="row mb-3">
+      <div className="row mb-3">
         <div className="col-lg-12">
           <label className="me-3   ">Audit Procedure Performed</label>
           <textarea
@@ -240,9 +248,9 @@ const AuditStepsDialog = ({
           ></textarea>
           <p className="word-limit-info mb-0">Maximum 1500 words</p>
         </div>
-      </div> */}
+      </div>
 
-      {/* <div className="row mb-3">
+      <div className="row mb-3">
         <div className="col-lg-12">
           <label className="form-label me-3 mb-3">Attach files</label>
 
@@ -284,7 +292,7 @@ const AuditStepsDialog = ({
             </table>
           </div>
         </div>
-      </div> */}
+      </div>
 
       <div className="row mb-3">
         <div className="col-lg-2">
@@ -317,70 +325,78 @@ const AuditStepsDialog = ({
       </div>
 
       <h3>Audit Step Observation List</h3>
-      {currentAuditStep?.auditStepObservationsList?.map((item, i) => {
-        return (
-          <div key={i}>
-            <div className="row mb-3">
-              <div className="col-lg-12">
-                <textarea
-                  className="form-control"
-                  placeholder="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-                  id="exampleFormControlT"
-                  rows="3"
-                  onChange={(event) => handleChangeDescription(event, item?.id)}
-                  value={item?.description}
-                ></textarea>
-                <div className="row">
+      {currentAuditStep?.auditStepObservationsList?.length === 0 ? (
+        <p>No observation to show</p>
+      ) : (
+        currentAuditStep?.auditStepObservationsList?.map((item, i) => {
+          return (
+            <div key={i}>
+              <div className="row mb-3">
+                <div className="col-lg-11">
+                  <textarea
+                    className="form-control"
+                    placeholder="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+                    id="exampleFormControlT"
+                    rows="3"
+                    onChange={(event) =>
+                      handleChangeDescription(event, item?.id)
+                    }
+                    value={item?.description}
+                  ></textarea>
                   <div className="col-lg-2">
                     <p className="word-limit-info mb-0">Maximum 1500 words</p>
                   </div>
-                  <div className="col-lg-10">
-                    <button
-                      className={`btn btn-labeled float-end mt-4 btn-primary px-3 shadow ${
-                        loading && "disabled"
-                      }`}
-                      onClick={() => handleUpdateObservation(item)}
-                    >
-                      {!loading ? "Update Observation" : "Loading..."}
-                    </button>
+                </div>
+                <div className="col-lg-1">
+                  <button
+                    className={`btn btn-labeled float-end mt-4 btn-primary px-3 shadow ${
+                      loading && "disabled"
+                    }`}
+                    onClick={() => handleUpdateObservation(item)}
+                  >
+                    {!loading ? "Save" : "Loading..."}
+                  </button>
+                </div>
+              </div>
+
+              <div className="row mb-3">
+                <div className="col-lg-12">
+                  <label className="form-label me-3 mb-3">Attach files</label>
+
+                  <input type="file" id="fileInpu" className="f-10" />
+
+                  <div className="table-responsive">
+                    <table className="table table-bordered  table-hover rounded">
+                      <thead className="bg-secondary text-white">
+                        <tr>
+                          <th>Attach Files </th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <a href="#">Loram File will be displayed here</a>
+                          </td>
+                          <td className="w-130">
+                            <i className="fa fa-eye text-primary f-18"></i>
+                            <i className="fa fa-edit mx-3 text-secondary f-18"></i>
+                            <i className="fa fa-trash text-danger f-18"></i>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>
+              {i !==
+                currentAuditStep?.auditStepObservationsList?.length - 1 && (
+                <hr />
+              )}
             </div>
-
-            <div className="row mb-3">
-              <div className="col-lg-12">
-                <label className="form-label me-3 mb-3">Attach files</label>
-
-                <input type="file" id="fileInpu" className="f-10" />
-
-                <div className="table-responsive">
-                  <table className="table table-bordered  table-hover rounded">
-                    <thead className="bg-secondary text-white">
-                      <tr>
-                        <th>Attach Files </th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <a href="#">Loram File will be displayed here</a>
-                        </td>
-                        <td className="w-130">
-                          <i className="fa fa-eye text-primary f-18"></i>
-                          <i className="fa fa-edit mx-3 text-secondary f-18"></i>
-                          <i className="fa fa-trash text-danger f-18"></i>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      })}
+          );
+        })
+      )}
 
       <div className="row">
         <div className="col-lg-6 ">

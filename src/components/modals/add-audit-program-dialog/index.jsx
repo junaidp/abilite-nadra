@@ -13,12 +13,16 @@ const AddAuditProgramDialog = ({
     (state) => state?.auditEngagement
   );
   const [rating, setRating] = React.useState("");
+  const [control, setControl] = React.useState("");
   const [description, setDescription] = React.useState("");
+  const [showControls, setShowControls] = React.useState(true);
 
   function handleClose() {
     setShowAddAuditProgramDialog(false);
     setRating("");
     setDescription("");
+    setControl("");
+    setShowControls(true);
   }
 
   React.useEffect(() => {
@@ -26,12 +30,14 @@ const AddAuditProgramDialog = ({
       setShowAddAuditProgramDialog(false);
       setRating("");
       setDescription("");
+      setControl("");
+      setShowControls(true);
     }
   }, [auditEngagementAddSuccess]);
 
   function handleAdd() {
     if (!loading) {
-      if (rating === "" || description === "") {
+      if (rating === "" || description === "" || control === "") {
         toast.error("Please provide all values");
       } else {
         dispatch(
@@ -39,12 +45,27 @@ const AddAuditProgramDialog = ({
             auditEngagementId: Number(auditEngagementId),
             description: description,
             rating: Number(rating),
-            controlRisk_id: null,
+            controlRisk_id: Number(control),
           })
         );
       }
     }
   }
+
+  React.useEffect(() => {
+    let array = [];
+    currentAuditEngagement?.riskControlMatrix?.objectives?.map((objective) =>
+      objective?.riskRatingList?.map((risk) =>
+        risk?.controlRiskList?.map((control) => (array = [...array, control]))
+      )
+    );
+    if (array?.length === 0) {
+      setShowControls(false);
+      setControl("null");
+    } else {
+      setShowControls(true);
+    }
+  }, [currentAuditEngagement]);
 
   return (
     <div className="px-4 py-4">
@@ -65,6 +86,34 @@ const AddAuditProgramDialog = ({
           </select>
         </div>
       </div>
+      {showControls && (
+        <div className="row mb-2">
+          <div className="col-lg-2 label-text">Control</div>
+          <div className="col-lg-8">
+            <select
+              className="form-select "
+              aria-label="Default select example"
+              value={control}
+              onChange={(event) => setControl(event?.target?.value)}
+            >
+              <option value="">Select One</option>
+              {currentAuditEngagement?.riskControlMatrix?.objectives?.map(
+                (objective) =>
+                  objective?.riskRatingList?.map((risk) =>
+                    risk?.controlRiskList?.map((control, index) => {
+                      return (
+                        <option key={index} value={control?.id}>
+                          {control?.description}
+                        </option>
+                      );
+                    })
+                  )
+              )}
+            </select>
+          </div>
+        </div>
+      )}
+
       <div className="row mb-2">
         <div className="col-lg-2 label-text">Description</div>
         <div className="col-lg-8">
