@@ -12,6 +12,7 @@ import {
   updateAuditSteps,
   addAuditStepObservation,
   updateAuditStepObservation,
+  updateComplianceCheckList,
 } from "./thunk";
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
@@ -109,6 +110,13 @@ export const setupUpdateAuditStepObservation = createAsyncThunk(
   "auditEngagement/updateAuditStepObservation",
   async (data, thunkAPI) => {
     return updateAuditStepObservation(data, thunkAPI);
+  }
+);
+
+export const setupUpdateComplianceCheckList = createAsyncThunk(
+  "auditEngagement/updateComplianceCheckList",
+  async (data, thunkAPI) => {
+    return updateComplianceCheckList(data, thunkAPI);
   }
 );
 
@@ -360,6 +368,24 @@ export const slice = createSlice({
         toast.success("Audit Steps Observation Updated Successfully");
       })
       .addCase(setupUpdateAuditStepObservation.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Update Compliance CheckList
+    builder
+      .addCase(setupUpdateComplianceCheckList.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupUpdateComplianceCheckList.fulfilled, (state) => {
+        state.loading = false;
+        state.auditEngagementAddSuccess = true;
+        toast.success("Compliance Check List Updated Successfully");
+      })
+      .addCase(setupUpdateComplianceCheckList.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);

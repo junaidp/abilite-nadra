@@ -10,7 +10,6 @@ import AddKickOffObjectiveDialog from "../../../modals/add-kickoff-objective-dia
 import AddKickOffRatingDialog from "../../../modals/add-kickoff-rating-dialog";
 import AddKickOffControlDialog from "../../../modals/add-kickoff-control-dialog";
 import ViewRiskLibraryDialog from "../../../modals/view-risk-control-matrix-library-dialog/index";
-import ViewAuditProgramLibraryDialog from "../../../modals/view-audit-program-library-dialog/index";
 import AuditStepsDialog from "../../../modals/audit-steps-dialog/index";
 import ComplianceCheckListDialog from "../../../modals/compliance-checklist-dialog/index";
 import AddAuditProgramDialog from "../../../modals/add-audit-program-dialog";
@@ -41,13 +40,12 @@ const KickOff = () => {
     auditEngagementAddSuccess,
     auditEngagementObservationAddSuccess,
   } = useSelector((state) => state?.auditEngagement);
+
   const [currentAuditEngagement, setCurrentAuditEngagement] = React.useState(
     {}
   );
   const [showViewLibrary, setShowViewLibrary] = React.useState(false);
   let [showComplianceCheckListDialog, setShowComplianceCheckListDialog] =
-    React.useState(false);
-  const [viewAuditProgramLibraryDialog, setViewAuditProgramLibraryDialog] =
     React.useState(false);
   const [showAuditStepsDialog, setShowAuditStepsDialog] = React.useState(false);
   const [showKickOffObjectiveDialog, setShowKickOffObjectiveDialog] =
@@ -59,6 +57,8 @@ const KickOff = () => {
   const [showAddAuditProgramDialog, setShowAddAuditProgramDialog] =
     React.useState(false);
   const [auditStepId, setAuditStepId] = React.useState("");
+  const [complianceCheckListId, setComplianceCheckListId] = React.useState("");
+
 
   React.useEffect(() => {
     dispatch(changeActiveLink("li-audit-engagement"));
@@ -141,17 +141,7 @@ const KickOff = () => {
           </div>
         </div>
       )}
-      {viewAuditProgramLibraryDialog && (
-        <div className="modal-objective-audit-library">
-          <div className="model-wrap-audit-library">
-            <ViewAuditProgramLibraryDialog
-              setViewAuditProgramLibraryDialog={
-                setViewAuditProgramLibraryDialog
-              }
-            />
-          </div>
-        </div>
-      )}
+
       {showAuditStepsDialog && (
         <div className="modal-objective-audit-steps-library">
           <div className="model-wrap-audit-steps-library">
@@ -170,6 +160,8 @@ const KickOff = () => {
               setShowComplianceCheckListDialog={
                 setShowComplianceCheckListDialog
               }
+              complianceCheckListId={complianceCheckListId}
+              currentAuditEngagement={currentAuditEngagement}
             />
           </div>
         </div>
@@ -238,32 +230,43 @@ const KickOff = () => {
               auditEngagementId={auditEngagementId}
             />
             <RaiseInformationRequest />
-            <RiskControlMatrix
-              setShowViewLibrary={setShowViewLibrary}
-              currentAuditEngagement={currentAuditEngagement}
-              setCurrentAuditEngagement={setCurrentAuditEngagement}
-              setShowKickOffObjectiveDialog={setShowKickOffObjectiveDialog}
-              setShowKickOffRatingDialog={setShowKickOffRatingDialog}
-              setShowKickOffControlDialog={setShowKickOffControlDialog}
-              auditEngagementId={auditEngagementId}
-            />
-            <AuditProgram
-              currentAuditEngagement={currentAuditEngagement}
-              setCurrentAuditEngagement={setCurrentAuditEngagement}
-              setShowAddAuditProgramDialog={setShowAddAuditProgramDialog}
-              auditEngagementId={auditEngagementId}
-            />
-            <AuditSteps
-              setShowAuditStepsDialog={setShowAuditStepsDialog}
-              currentAuditEngagement={currentAuditEngagement}
-              setAuditStepId={setAuditStepId}
-            />
+            {currentAuditEngagement?.auditStepChecklistList === null ||
+              (currentAuditEngagement?.auditStepChecklistList?.length === 0 && (
+                <RiskControlMatrix
+                  setShowViewLibrary={setShowViewLibrary}
+                  currentAuditEngagement={currentAuditEngagement}
+                  setCurrentAuditEngagement={setCurrentAuditEngagement}
+                  setShowKickOffObjectiveDialog={setShowKickOffObjectiveDialog}
+                  setShowKickOffRatingDialog={setShowKickOffRatingDialog}
+                  setShowKickOffControlDialog={setShowKickOffControlDialog}
+                  auditEngagementId={auditEngagementId}
+                />
+              ))}
+            {currentAuditEngagement?.auditStepChecklistList === null ||
+              (currentAuditEngagement?.auditStepChecklistList?.length === 0 && (
+                <AuditProgram
+                  currentAuditEngagement={currentAuditEngagement}
+                  setCurrentAuditEngagement={setCurrentAuditEngagement}
+                  setShowAddAuditProgramDialog={setShowAddAuditProgramDialog}
+                  auditEngagementId={auditEngagementId}
+                />
+              ))}
+            {currentAuditEngagement?.auditStepChecklistList === null ||
+              (currentAuditEngagement?.auditStepChecklistList?.length === 0 && (
+                <AuditSteps
+                  setShowAuditStepsDialog={setShowAuditStepsDialog}
+                  currentAuditEngagement={currentAuditEngagement}
+                  setAuditStepId={setAuditStepId}
+                />
+              ))}
             {currentAuditEngagement?.auditStepChecklistList &&
               currentAuditEngagement?.auditStepChecklistList?.length !== 0 && (
                 <ComplianceCheckList
                   setShowComplianceCheckListDialog={
                     setShowComplianceCheckListDialog
                   }
+                  currentAuditEngagement={currentAuditEngagement}
+                  setComplianceCheckListId={setComplianceCheckListId}
                 />
               )}
           </div>

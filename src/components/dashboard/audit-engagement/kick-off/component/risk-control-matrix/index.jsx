@@ -53,51 +53,49 @@ const RiskControlMatrix = ({
               </div>
             </div>
 
-            {currentAuditEngagement?.riskControlMatrix === null ||
-              (currentAuditEngagement?.riskControlMatrix?.objectives?.length ===
-                0 && (
-                <div className="row">
-                  <div className="col-lg-4">
-                    <p className="px-3 py-1 bg-secondary d-flex align-items-center rounded justify-content-between text-white">
-                      <span>Objective</span>
-                      <a
-                        className="text-white add-btn"
-                        onClick={() => setShowKickOffObjectiveDialog(true)}
-                      >
-                        <span className="float-end f-10">
-                          <i className="fa fa-plus me-2"></i>Add Objective
-                        </span>
-                      </a>
-                    </p>
-                  </div>
-                  <div className="col-lg-4">
-                    <p className="px-3 py-1 bg-secondary d-flex align-items-center rounded justify-content-between text-white">
-                      <span>Risk</span>
-                      <a
-                        onClick={() => setShowKickOffRatingDialog(true)}
-                        className="text-white add-btn"
-                      >
-                        <span className="float-end f-10">
-                          <i className="fa fa-plus me-2"></i>Add Risk
-                        </span>
-                      </a>
-                    </p>
-                  </div>
-                  <div className="col-lg-4">
-                    <p className="px-3 py-1 bg-secondary d-flex align-items-center rounded justify-content-between text-white">
-                      <span>Controls</span>
-                      <a
-                        onClick={() => setShowKickOffControlDialog(true)}
-                        className="text-white add-btn"
-                      >
-                        <span className="float-end f-10">
-                          <i className="fa fa-plus me-2"></i>Add Control
-                        </span>
-                      </a>
-                    </p>
-                  </div>
+            {currentAuditEngagement?.riskControlMatrix === null && (
+              <div className="row">
+                <div className="col-lg-4">
+                  <p className="px-3 py-1 bg-secondary d-flex align-items-center rounded justify-content-between text-white">
+                    <span>Objective</span>
+                    <a
+                      className="text-white add-btn"
+                      onClick={() => setShowKickOffObjectiveDialog(true)}
+                    >
+                      <span className="float-end f-10">
+                        <i className="fa fa-plus me-2"></i>Add Objective
+                      </span>
+                    </a>
+                  </p>
                 </div>
-              ))}
+                <div className="col-lg-4">
+                  <p className="px-3 py-1 bg-secondary d-flex align-items-center rounded justify-content-between text-white">
+                    <span>Risk</span>
+                    <a
+                      onClick={() => setShowKickOffRatingDialog(true)}
+                      className="text-white add-btn"
+                    >
+                      <span className="float-end f-10">
+                        <i className="fa fa-plus me-2"></i>Add Risk
+                      </span>
+                    </a>
+                  </p>
+                </div>
+                <div className="col-lg-4">
+                  <p className="px-3 py-1 bg-secondary d-flex align-items-center rounded justify-content-between text-white">
+                    <span>Controls</span>
+                    <a
+                      onClick={() => setShowKickOffControlDialog(true)}
+                      className="text-white add-btn"
+                    >
+                      <span className="float-end f-10">
+                        <i className="fa fa-plus me-2"></i>Add Control
+                      </span>
+                    </a>
+                  </p>
+                </div>
+              </div>
+            )}
 
             {currentAuditEngagement?.riskControlMatrix?.objectives?.map(
               (singleAuditEngagement, index) => {

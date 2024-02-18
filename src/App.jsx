@@ -7,7 +7,6 @@ import "./App.css";
 import logo from "./assets/favicon.ico";
 import Login from "./pages/auth/login/Login";
 import Register from "./pages/auth/register/Register";
-// import Home from "./pages/home/Home";
 import ForgetPassword from "./pages/auth/forget-password/ForgetPassword";
 import DashboardHomePage from "./pages/dashboard/home/DashboardHome";
 import BusinessObjectivePage from "./pages/dashboard/planing/business-objective/BusinessObjective";
@@ -109,7 +108,6 @@ const App = () => {
       <ToastContainer />
       <BrowserRouter>
         <Routes>
-          {/* <Route path="/" element={<Home />} /> */}
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/login" element={<Login />} />

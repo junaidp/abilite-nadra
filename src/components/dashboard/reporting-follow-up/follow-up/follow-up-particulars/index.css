@@ -1,0 +1,14 @@
+.h-22{
+    height: 22px !important;
+}
+.w-22{
+    width: 22px !important;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-col{
+    flex-direction: column;
+}

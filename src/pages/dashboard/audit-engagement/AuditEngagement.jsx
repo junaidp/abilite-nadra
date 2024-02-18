@@ -1,17 +1,8 @@
 import React from "react";
 import AuditEngagement from "../../../components/dashboard/audit-engagement";
-import { Helmet } from "react-helmet-async";
 
 const AuditEngagementPage = () => {
-  return (
-    <div>
-      <Helmet>
-        <title>Audit Engagement</title>
-        <meta name="description" content="Nested component" />
-      </Helmet>
-      <AuditEngagement />
-    </div>
-  );
+  return <AuditEngagement />;
 };
 
 export default AuditEngagementPage;

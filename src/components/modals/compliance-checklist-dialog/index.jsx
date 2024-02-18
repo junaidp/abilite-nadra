@@ -1,6 +1,52 @@
 import React from "react";
+import { setupUpdateComplianceCheckList } from "../../../global-redux/reducers/audit-engagement/slice";
+import { useDispatch, useSelector } from "react-redux";
 
-const ComplianceCheckListDialog = ({ setShowComplianceCheckListDialog }) => {
+const ComplianceCheckListDialog = ({
+  setShowComplianceCheckListDialog,
+  complianceCheckListId,
+  currentAuditEngagement,
+}) => {
+  const dispatch = useDispatch();
+  const { loading, auditEngagementAddSuccess } = useSelector(
+    (state) => state?.auditEngagement
+  );
+  const [complianceItem, setComplianceItem] = React.useState({});
+
+  function handleUpdate() {
+    if (!loading) {
+      dispatch(setupUpdateComplianceCheckList(complianceItem));
+    }
+  }
+
+  function handleChange(event) {
+    setComplianceItem((pre) => {
+      return {
+        ...pre,
+        checklistObservationsList: [
+          {
+            ...pre?.checklistObservationsList[0],
+            [event?.target?.name]: event?.target?.value,
+          },
+        ],
+      };
+    });
+  }
+
+  React.useEffect(() => {
+    if (auditEngagementAddSuccess) {
+      setShowComplianceCheckListDialog(false);
+    }
+  }, [auditEngagementAddSuccess]);
+
+  React.useEffect(() => {
+    const singleComplianceItem =
+      currentAuditEngagement?.auditStepChecklistList?.find(
+        (item) => Number(item?.id) === Number(complianceCheckListId)
+      );
+    setComplianceItem(singleComplianceItem);
+  }, [currentAuditEngagement]);
+
   return (
     <div className="p-3">
       <div className="row">
@@ -27,54 +73,80 @@ const ComplianceCheckListDialog = ({ setShowComplianceCheckListDialog }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>XYZ</td>
-                      <td>ABC</td>
-                      <td>
-                        <textarea
-                          className="form-control"
-                          placeholder="Enter Here"
-                          id="ds"
-                          rows="3"
-                        ></textarea>
-                      </td>
-                      <td>
-                        <select
-                          className="form-select mb-2 w-80"
-                          aria-label="Default select example"
-                        >
-                          <option>Yes</option>
-                          <option value="2">No</option>
-                          <option value="2">Not Applicable</option>
-                          <option value="2">Partially Complied</option>
-                        </select>
-                      </td>
-                      <td>
-                        <textarea
-                          className="form-control"
-                          placeholder="Enter Here"
-                          id="ds"
-                          rows="3"
-                        ></textarea>
-                      </td>
-                      <td>
-                        <div className="d-flex">
-                          <div className="w-75 d-grid">
-                            <a href="#" className="text-primary">
-                              Attached file Name 1
-                            </a>
-                            <a href="#" className="text-primary">
-                              Attached file Name 2
-                            </a>
+                    {complianceItem?.checklistObservationsList && (
+                      <tr>
+                        <td>{complianceItem?.id}</td>
+                        <td>
+                          {complianceItem?.checklistObservationsList[0]?.area}
+                        </td>
+                        <td>
+                          {complianceItem?.checklistObservationsList[0]
+                            ?.subject || "null"}
+                        </td>
+                        <td>
+                          <textarea
+                            className="form-control"
+                            placeholder="Enter Here"
+                            id="ds"
+                            rows="3"
+                            value={
+                              complianceItem?.checklistObservationsList[0]
+                                ?.particulars
+                            }
+                            name="particulars"
+                            onChange={(event) => handleChange(event)}
+                          ></textarea>
+                        </td>
+                        <td>
+                          <select
+                            className="form-select mb-2"
+                            aria-label="Default select example"
+                            value={
+                              complianceItem?.checklistObservationsList[0]
+                                ?.remarks
+                            }
+                            name="remarks"
+                            onChange={(event) => handleChange(event)}
+                          >
+                            <option value="">Select One</option>
+                            <option value={1}>Yes</option>
+                            <option value={2}>No</option>
+                            <option value={3}>Not Applicable</option>
+                            <option value={4}>Partially Complied</option>
+                          </select>
+                        </td>
+                        <td>
+                          <textarea
+                            className="form-control"
+                            placeholder="Enter Here"
+                            id="ds"
+                            rows="3"
+                            value={
+                              complianceItem?.checklistObservationsList[0]
+                                ?.observation
+                            }
+                            name="observation"
+                            onChange={(event) => handleChange(event)}
+                          ></textarea>
+                        </td>
+                        <td>
+                          <div className="d-flex">
+                            <div className="w-75 d-grid">
+                              <a href="#" className="text-primary">
+                                Attached file Name 1
+                              </a>
+                              <a href="#" className="text-primary">
+                                Attached file Name 2
+                              </a>
+                            </div>
+                            <div className="w-25">
+                              <i className="fa fa-paperclip me-3 text-secondary"></i>
+                              <i className="fa fa-eye text-primary"></i>
+                            </div>
                           </div>
-                          <div className="w-25">
-                            <i className="fa fa-paperclip me-3 text-secondary"></i>
-                            <i className="fa fa-eye text-primary"></i>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -84,12 +156,20 @@ const ComplianceCheckListDialog = ({ setShowComplianceCheckListDialog }) => {
       </div>
 
       <div className="row py-4 px-4">
-        <div className="col-lg-12 text-end">
+        <div className="col-lg-6 text-start">
           <button
-            className="btn btn-danger float-end"
+            className="btn btn-danger float-start"
             onClick={() => setShowComplianceCheckListDialog(false)}
           >
             Close
+          </button>
+        </div>
+        <div className="col-lg-6 text-end">
+          <button
+            className={`btn btn-primary float-end ${loading && "disabled"}`}
+            onClick={handleUpdate}
+          >
+            {loading ? "Loading..." : "Save"}
           </button>
         </div>
       </div>

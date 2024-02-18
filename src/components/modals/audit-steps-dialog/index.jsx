@@ -331,6 +331,7 @@ const AuditStepsDialog = ({
         currentAuditStep?.auditStepObservationsList?.map((item, i) => {
           return (
             <div key={i}>
+              {`${i+1})`}
               <div className="row mb-3">
                 <div className="col-lg-11">
                   <textarea

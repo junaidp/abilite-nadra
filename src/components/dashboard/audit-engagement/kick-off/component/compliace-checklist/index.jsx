@@ -1,6 +1,10 @@
 import React from "react";
 
-const ComplianceCheckList = ({ setShowComplianceCheckListDialog }) => {
+const ComplianceCheckList = ({
+  setShowComplianceCheckListDialog,
+  currentAuditEngagement,
+  setComplianceCheckListId,
+}) => {
   return (
     <div className="accordion-item">
       <h2 className="accordion-header" id="headingeight">
@@ -14,6 +18,11 @@ const ComplianceCheckList = ({ setShowComplianceCheckListDialog }) => {
         >
           <div className="d-flex w-100 me-3 align-items-center justify-content-between">
             <div className=" d-flex align-items-center">
+              {currentAuditEngagement?.auditStepChecklistList !== null &&
+                currentAuditEngagement?.auditStepChecklistList?.length !==
+                  0 && (
+                  <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
+                )}
               Compliance Checklist
             </div>
           </div>
@@ -39,36 +48,28 @@ const ComplianceCheckList = ({ setShowComplianceCheckListDialog }) => {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>1</td>
-                        <td>
-                          <a
-                            className="fw-bold  text-primary  px-3 py-1 f-10"
-                            onClick={() =>
-                              setShowComplianceCheckListDialog(true)
-                            }
-                          >
-                            Location Name 1
-                          </a>
-                        </td>
-                        <td>Kickoff</td>
-                        <td>Postponed</td>
-                      </tr>
-                      <tr>
-                        <td>2</td>
-                        <td>
-                          <a
-                            className="fw-bold  text-primary px-3 py-1 f-10"
-                            onClick={() =>
-                              setShowComplianceCheckListDialog(true)
-                            }
-                          >
-                            Location Name 2
-                          </a>
-                        </td>
-                        <td>Postponed</td>
-                        <td>Cancelled</td>
-                      </tr>
+                      {currentAuditEngagement?.auditStepChecklistList?.map(
+                        (item, index) => {
+                          return (
+                            <tr key={index}>
+                              <td>{item?.id}</td>
+                              <td>
+                                <a
+                                  className="fw-bold  text-primary  px-3 py-1 f-10"
+                                  onClick={() => {
+                                    setComplianceCheckListId(item?.id);
+                                    setShowComplianceCheckListDialog(true);
+                                  }}
+                                >
+                                  {item?.subLocation?.locationid?.description}
+                                </a>
+                              </td>
+                              <td>null</td>
+                              <td>null</td>
+                            </tr>
+                          );
+                        }
+                      )}
                     </tbody>
                   </table>
                 </div>

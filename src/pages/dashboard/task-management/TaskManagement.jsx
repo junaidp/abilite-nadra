@@ -1,18 +1,9 @@
-import React from 'react'
-import { Helmet } from "react-helmet-async";
+import React from "react";
 
-import TaskManagement from '../../../components/dashboard/task-management';
+import TaskManagement from "../../../components/dashboard/task-management";
 
 const TaskManagementPage = () => {
-  return (
-    <div>
-    <Helmet>
-      <title>Information Request</title>
-      <meta name="description" content="Nested component" />
-    </Helmet>
-    <TaskManagement />
-  </div>
-  )
-}
+  return <TaskManagement />;
+};
 
-export default TaskManagementPage
+export default TaskManagementPage;

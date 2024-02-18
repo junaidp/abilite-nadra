@@ -129,16 +129,22 @@ const AuditEngagement = () => {
                                 <td>{item?.id}</td>
                                 <td>{item?.title}</td>
                                 <td>
-                                  {moment(item?.plannedStartDate).format(
-                                    "DD-MM-YYYY"
-                                  ) || "null"}
+                                  {item?.plannedStartDate
+                                    ? moment(item?.plannedStartDate).format(
+                                        "DD-MM-YYYY"
+                                      )
+                                    : "null"}
                                 </td>
                                 <td>
-                                  {moment(item?.item?.plannedEndDate).format(
-                                    "DD-MM-YYYY"
-                                  ) || "null"}
+                                  {item?.plannedEndDate
+                                    ? moment(item?.item?.plannedEndDate).format(
+                                        "DD-MM-YYYY"
+                                      )
+                                    : "null"}
                                 </td>
-                                <td>{item?.jobType}</td>
+                                <td>
+                                  {item?.jobType ? item?.jobType : "null"}
+                                </td>
                                 <td className="kink-off">
                                   <Link
                                     to={`/audit/kick-off?auditEngagementId=${item?.id}`}
