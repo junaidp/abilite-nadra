@@ -128,7 +128,7 @@ const AuditProgram = ({
                         <th>Sr. #</th>
                         <th>Control</th>
                         <th>Rating</th>
-                        <th>Description</th>
+                        <th>Audit Program</th>
                         <th>Actions</th>
                       </tr>
                     </thead>
@@ -181,7 +181,7 @@ const AuditProgram = ({
                                     className="form-control"
                                     id="exampleFormControlT"
                                     rows="3"
-                                    value={item?.description}
+                                    value={item?.description || ""}
                                     name="description"
                                     onChange={(event) =>
                                       handleChange(event, item?.id)

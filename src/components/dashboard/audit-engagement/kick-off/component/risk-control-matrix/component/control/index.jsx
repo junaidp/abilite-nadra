@@ -8,6 +8,9 @@ const Control = ({
   setCurrentAuditEngagement,
   auditEngagementId,
   singleAuditEngagement,
+  risk,
+  riskIndex,
+  index,
 }) => {
   const dispatch = useDispatch();
   const { auditEngagementAddSuccess } = useSelector(
@@ -79,69 +82,72 @@ const Control = ({
   }, [auditEngagementAddSuccess]);
   return (
     <div>
-      {singleAuditEngagement?.riskRatingList?.map((risk) =>
-        risk?.controlRiskList?.map((control, index) => {
-          return (
-            <div className="card p-3 mb-3 w-100 shadow-sm border" key={index}>
-              <div className="d-flex mb-2 justify-content-between align-items-center">
-                <span className="fw-bold">Control Risk</span>
-                <div className="d-flex align-items-center">
-                  <select
-                    className="form-select"
-                    aria-label="Default select example"
-                    value={control?.rating}
-                    onChange={(event) =>
-                      handleChangeControl(
-                        event,
-                        singleAuditEngagement?.id,
-                        risk?.id,
-                        control?.id
-                      )
-                    }
-                    name="rating"
-                  >
-                    <option value="">Select One</option>
-                    <option value={1}>High</option>
-                    <option value={2}>Medium</option>
-                    <option value={3}>Low</option>
-                  </select>
-                </div>
+      {risk?.controlRiskList?.map((control, controlIndex) => {
+        return (
+          <div
+            className="card p-3 mb-3 w-100 shadow-sm border"
+            key={controlIndex}
+          >
+            <div className="d-flex mb-2 justify-content-between align-items-center">
+              <span className="fw-bold">
+                {index + 1}.{riskIndex + 1}.{controlIndex + 1} Control Risk
+              </span>
+              <div className="d-flex align-items-center">
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  value={control?.rating}
+                  onChange={(event) =>
+                    handleChangeControl(
+                      event,
+                      singleAuditEngagement?.id,
+                      risk?.id,
+                      control?.id
+                    )
+                  }
+                  name="rating"
+                >
+                  <option value="">Select One</option>
+                  <option value={1}>High</option>
+                  <option value={2}>Medium</option>
+                  <option value={3}>Low</option>
+                </select>
               </div>
-
-              <textarea
-                className="form-control"
-                placeholder="Enter Reason"
-                id="exampleFormControlTextarea222"
-                value={control?.description || ""}
-                onChange={(event) =>
-                  handleChangeControl(
-                    event,
-                    singleAuditEngagement?.id,
-                    risk?.id,
-                    control?.id
-                  )
-                }
-                name="description"
-              ></textarea>
-              <label className="word-limit-info label-text">
-                Maximum 1500 words
-              </label>
-              <button
-                className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
-                  loading &&
-                  control?.description === currentButtonDescription &&
-                  "disabled"
-                }`}
-                onClick={() => handleSave(control)}
-              >
-                {loading && control?.description === currentButtonDescription
-                  ? "Loading..."
-                  : "Update"}
-              </button>
             </div>
-          );
-        })
-      )}
+
+            <textarea
+              className="form-control"
+              placeholder="Enter Reason"
+              id="exampleFormControlTextarea222"
+              value={control?.description || ""}
+              onChange={(event) =>
+                handleChangeControl(
+                  event,
+                  singleAuditEngagement?.id,
+                  risk?.id,
+                  control?.id
+                )
+              }
+              name="description"
+            ></textarea>
+            <label className="word-limit-info label-text">
+              Maximum 1500 words
+            </label>
+            <button
+              className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
+                loading &&
+                control?.description === currentButtonDescription &&
+                "disabled"
+              }`}
+              onClick={() => handleSave(control)}
+            >
+              {loading && control?.description === currentButtonDescription
+                ? "Loading..."
+                : "Update"}
+            </button>
+          </div>
+        );
+      })}
     </div>
   );
 };

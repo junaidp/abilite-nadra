@@ -1,4 +1,5 @@
 import React from "react";
+import "./index.css";
 
 const ViewRiskControlMatrixLibraryDialog = ({
   setShowViewLibrary,
@@ -8,7 +9,7 @@ const ViewRiskControlMatrixLibraryDialog = ({
     <div className="mx-5">
       <header className="section-header mt-3  px-4  text-start d-flex align-items-center justify-content-between">
         <div className="mb-0 heading d-flex align-items-center">
-          <h2 className="mx-2 m-2 heading">Library</h2>
+          <h2 className="mx-2 m-2 heading">Control Risk Matrix Library</h2>
         </div>
       </header>
 
@@ -18,9 +19,12 @@ const ViewRiskControlMatrixLibraryDialog = ({
             <table className="table table-bordered  table-hover rounded">
               <thead>
                 <tr>
+                  <th>Process</th>
+                  <th>Sub-Process</th>
                   <th>Objective</th>
                   <th>Risk</th>
                   <th>Controls</th>
+                  <th>Check</th>
                 </tr>
               </thead>
               <tbody>
@@ -28,14 +32,25 @@ const ViewRiskControlMatrixLibraryDialog = ({
                   (item, index) => {
                     return (
                       <tr key={index}>
+                        <td className="w-250">
+                          Lorem Ipsum is simply dummy text of the printing and
+                          typesetting industry.
+                        </td>
+                        <td className="w-250">
+                          Lorem Ipsum is simply dummy text of the printing and
+                          typesetting industry.
+                        </td>
                         <td>
                           <div className="d-flex justify-content-between align-items-center">
-                            <label className="width-50 mb-2">Objective</label>
+                            <label className=" mb-2">
+                              {index + 1} Objective
+                            </label>
                             <select
                               className="form-select w-80  mb-2"
                               aria-label="Default select example"
                               value={item?.rating}
                               readOnly
+                              
                             >
                               <option value="">Select One</option>
                               <option value={1}>High</option>
@@ -48,23 +63,25 @@ const ViewRiskControlMatrixLibraryDialog = ({
                             value={item?.description}
                             id="exampleFo"
                             readOnly
+                            
                             rows="3"
                           ></textarea>
                         </td>
 
                         <td>
-                          {item?.riskRatingList?.map((risk, index) => {
+                          {item?.riskRatingList?.map((risk, riskIndex) => {
                             return (
-                              <div key={index} className="mb-4">
+                              <div key={riskIndex} className="mb-4">
                                 <div className="d-flex justify-content-between align-items-center">
                                   <label className="width-100 mb-2">
-                                    Rating
+                                    {index + 1}.{riskIndex + 1} Rating
                                   </label>
                                   <select
                                     className="form-select w-80  mb-2"
                                     aria-label="Default select example"
                                     value={risk?.rating}
                                     readOnly
+                                    
                                   >
                                     <option value="">Select One</option>
                                     <option value={1}>High</option>
@@ -78,45 +95,98 @@ const ViewRiskControlMatrixLibraryDialog = ({
                 "
                                   id="example"
                                   value={risk?.description}
+                                  
                                   readOnly
                                   rows="3"
                                 ></textarea>
+                                <div className="visibility-0">
+                                  {risk?.controlRiskList
+                                    ?.slice(1)
+                                    ?.map((control, controlIndex) => {
+                                      return (
+                                        <div
+                                          key={controlIndex}
+                                          className="mb-4"
+                                        >
+                                          <div className="d-flex justify-content-between align-items-center">
+                                            <label className="mb-2">
+                                              {index + 1}.{riskIndex + 1}.
+                                              {controlIndex + 1} Control
+                                            </label>
+                                            <select
+                                              className="form-select w-80  mb-2"
+                                              aria-label="Default select example"
+                                              value={control?.rating}
+                                              readOnly
+                                              
+                                            >
+                                              <option value="">
+                                                Select One
+                                              </option>
+                                              <option value={1}>High</option>
+                                              <option value={2}>Medium</option>
+                                              <option value={3}>Low</option>
+                                            </select>
+                                          </div>
+                                          <textarea
+                                            className="form-control"
+                                            placeholder="Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+    "
+                                            id="example"
+                                            value={control?.description}
+                                            readOnly
+                                            rows="3"
+                                          ></textarea>
+                                        </div>
+                                      );
+                                    })}
+                                </div>
                               </div>
                             );
                           })}
                         </td>
                         <td>
-                          {item?.riskRatingList?.map((rating) =>
-                            rating?.controlRiskList?.map((control, index) => {
-                              return (
-                                <div key={index} className="mb-4">
-                                  <div className="d-flex justify-content-between align-items-center">
-                                    <label className="mb-2">Control</label>
-                                    <select
-                                      className="form-select w-80  mb-2"
-                                      aria-label="Default select example"
-                                      value={control?.rating}
-                                      readOnly
-                                    >
-                                      <option value="">Select One</option>
-                                      <option value={1}>High</option>
-                                      <option value={2}>Medium</option>
-                                      <option value={3}>Low</option>
-                                    </select>
-                                  </div>
-                                  <textarea
-                                    className="form-control"
-                                    placeholder="Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                          {item?.riskRatingList?.map((rating, riskIndex) =>
+                            rating?.controlRiskList?.map(
+                              (control, controlIndex) => {
+                                return (
+                                  <div key={controlIndex} className="mb-4">
+                                    <div className="d-flex justify-content-between align-items-center">
+                                      <label className="mb-2">
+                                        {index + 1}.{riskIndex + 1}.
+                                        {controlIndex + 1} Control
+                                      </label>
+                                      <select
+                                        className="form-select w-80  mb-2"
+                                        aria-label="Default select example"
+                                        value={control?.rating}
+                                        readOnly
+                                        
+                                      >
+                                        <option value="">Select One</option>
+                                        <option value={1}>High</option>
+                                        <option value={2}>Medium</option>
+                                        <option value={3}>Low</option>
+                                      </select>
+                                    </div>
+                                    <textarea
+                                      className="form-control"
+                                      placeholder="Lorem Ipsum is simply dummy text of the printing and typesetting industry.
     "
-                                    id="example"
-                                    value={control?.description}
-                                    readOnly
-                                    rows="3"
-                                  ></textarea>
-                                </div>
-                              );
-                            })
+                                      id="example"
+                                      value={control?.description}
+                                      readOnly
+                                      
+                                      rows="3"
+                                    ></textarea>
+                                  </div>
+                                );
+                              }
+                            )
                           )}
+                        </td>
+                        <td>
+                          <input id="rememberMe" type="checkbox"  />
                         </td>
                       </tr>
                     );

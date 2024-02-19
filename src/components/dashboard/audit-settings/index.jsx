@@ -2,7 +2,6 @@ import React from "react";
 import AddCheckListManagementDialog from "../../modals/add-checklist-management-dialog/index";
 import UserManagementDialog from "../../modals/add-user-dialog/index";
 import UpdateUserDialog from "../.././modals/update-user-dialog";
-import { useDispatch } from "react-redux";
 import * as XLSX from "xlsx";
 import "./index.css";
 import AddCompanyDialog from "../../modals/add-company-dialog/index";
@@ -13,9 +12,11 @@ import Company from "./components/company";
 import { toast } from "react-toastify";
 import RiskFactor from "./components/risk-factor";
 import EmailManagement from "./components/email";
+import ResidualRisk from "./components/residual-risk";
 import Notifications from "./components/notification";
 import UserManagement from "./components/user";
 import Modules from "./components/modules";
+import RCMLibrary from "./components/rcm-library";
 import Process from "./components/process";
 const AuditSettings = () => {
   const [activeEmailTab, setActiveEmailTab] = React.useState("systemEmail");
@@ -57,7 +58,6 @@ const AuditSettings = () => {
 
     reader.readAsArrayBuffer(file);
   };
-  const dispatch = useDispatch();
   return (
     <div>
       {checkListManagementDialog && (
@@ -127,6 +127,28 @@ const AuditSettings = () => {
                   aria-controls="nav-profile"
                 >
                   Location
+                </button>
+                <button
+                  className="nav-link shadow-sm  border-0 mb-3  rounded-0  me-3 "
+                  id="nav-residual-risk-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#nav-residual-risk"
+                  type="button"
+                  role="tab"
+                  aria-controls="nav-residual-risk"
+                >
+                  Residual Risk
+                </button>
+                <button
+                  className="nav-link shadow-sm  border-0 mb-3  rounded-0  me-3 "
+                  id="nav-rcm-library-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#nav-rcm-library"
+                  type="button"
+                  role="tab"
+                  aria-controls="nav-rcm-library"
+                >
+                  RCM Library
                 </button>
                 <button
                   className="nav-link shadow-sm border-0 mb-3  rounded-0 me-3 "
@@ -232,6 +254,9 @@ const AuditSettings = () => {
               />
 
               <Location />
+
+              <ResidualRisk />
+              <RCMLibrary />
 
               <RiskFactor />
               <EmailManagement

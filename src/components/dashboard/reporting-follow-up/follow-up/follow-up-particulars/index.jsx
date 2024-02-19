@@ -40,25 +40,20 @@ const ReportingParticulars = () => {
     );
   }
 
-  function handleChangeCheck(event, id) {
-    setReports((pre) =>
-      pre.map((item) =>
-        Number(item?.id) === Number(id)
-          ? {
-              ...item,
-              followUp: {
-                ...item?.followUp,
-                [event?.target?.name]: event?.target?.checked,
-              },
-            }
-          : item
-      )
-    );
-  }
-
   function handleSave(item) {
     if (!loading) {
-      dispatch(setupUpdateFollowUp(item?.followUp));
+      dispatch(
+        setupUpdateFollowUp({
+          ...item?.followUp,
+          recommendationsImplemented:
+            item?.followUp?.recommendationsImplemented === "true"
+              ? true
+              : false,
+
+          testInNextYear:
+            item?.followUp?.testInNextYear === "true" ? true : false,
+        })
+      );
     }
   }
 
@@ -113,7 +108,7 @@ const ReportingParticulars = () => {
         >
           <i className="fa fa-arrow-left text-primary fs-5 pe-3"></i>
         </a>
-        <div className="mb-0 heading">Reporting & Follow-Up</div>
+        <div className="mb-0 heading">Follow-Up</div>
       </header>
       <div className="row px-4">
         <div className="col-md-12">
@@ -151,7 +146,71 @@ const ReportingParticulars = () => {
                         data-bs-parent="#accordionFlushExample"
                       >
                         <div className="accordion-body">
-                          <div className="my-2">
+                          <div className="row mb-3">
+                            <div className="col-lg-12">
+                              <label>Observation Title:</label>
+                              <input
+                                className="form-control w-100"
+                                placeholder="Enter Observation Title here"
+                                type="text"
+                                value={item?.observationTitle}
+                                disabled
+                              />
+                            </div>
+                          </div>
+                          <div className="mb-3">
+                            <label>Observation:</label>
+                            <textarea
+                              className="form-control "
+                              placeholder="Enter Reason"
+                              id="exampleFor"
+                              rows="3"
+                              value={item?.observationName}
+                              disabled
+                            ></textarea>
+                          </div>
+
+                          <div className="mb-3 align-items-center">
+                            <label className="pe-4">Implication Rating:</label>
+                            <select
+                              className="form-select"
+                              aria-label="Default select example"
+                              value={item?.implicationRating}
+                              disabled
+                            >
+                              <option value="">Select One</option>
+                              <option value={1}>High</option>
+                              <option value={2}>Medium</option>
+                              <option value={3}>Low</option>
+                            </select>
+                          </div>
+                          <div className="mb-3">
+                            <label>Implication:</label>
+                            <textarea
+                              className="form-control "
+                              placeholder="Enter Reason"
+                              id="exampleFormControlTextarea1"
+                              rows="3"
+                              value={item?.implication}
+                              disabled
+                            ></textarea>
+                          </div>
+
+                          <div className="row mb-3">
+                            <div className="col-lg-12">
+                              <label>Auditee:</label>
+                              <input
+                                className="form-control w-100"
+                                placeholder="Enter Observation Title here"
+                                type="text"
+                                value={item?.auditee?.name}
+                                disabled
+                              />
+                            </div>
+                          </div>
+
+                          {/*  */}
+                          <div className="mb-3">
                             <label>Management Comments:</label>
                             <textarea
                               className="form-control "
@@ -164,85 +223,79 @@ const ReportingParticulars = () => {
                                 handleChange(event, item?.id)
                               }
                             ></textarea>
-                            <label className="word-limit-info label-text mb-3">
+                            <label className="word-limit-info label-text">
                               Maximum 1500 words
                             </label>
                           </div>
-                          <div className="my-2">
-                            <label>Final Comments:</label>
-                            <textarea
-                              className="form-control "
-                              placeholder="Enter Reason"
-                              id="exampleFor"
-                              rows="3"
-                              value={item?.followUp?.finalComments || ""}
-                              name="finalComments"
+                          <div className="mb-3">
+                            <label className="py-1">Implementation Date:</label>
+                            <input
+                              type="date"
+                              className="form-control"
+                              id="exampleFormControlInput1"
+                              value={moment(
+                                item?.followUp?.implementationDate
+                              ).format("YYYY-MM-DD")}
+                              name="implementationDate"
                               onChange={(event) =>
                                 handleChange(event, item?.id)
                               }
-                            ></textarea>
-                            <label className="word-limit-info label-text mb-3">
-                              Maximum 1500 words
-                            </label>
+                            />
                           </div>
-                          <div className="my-2 row">
-                            <div className="col-lg-4">
-                              <label className="py-1">
-                                Implementation Date:
-                              </label>
-                              <input
-                                type="date"
-                                className="form-control w-150"
-                                id="exampleFormControlInput1"
-                                value={moment(
-                                  item?.followUp?.implementationDate
-                                ).format("YYYY-MM-DD")}
-                                name="implementationDate"
+                          <div className="mb-3 align-items-center">
+                            <label className="pe-4">
+                              Recommendations Implemented:
+                            </label>
+                            <select
+                              className="form-select"
+                              aria-label="Default select example"
+                              value={item?.followUp?.recommendationsImplemented.toString()}
+                              name="recommendationsImplemented"
+                              onChange={(event) =>
+                                handleChange(event, item?.id)
+                              }
+                            >
+                              <option value="">Select One</option>
+                              <option value="true">Yes</option>
+                              <option value="false">No</option>
+                            </select>
+                          </div>
+                          {item?.followUp?.recommendationsImplemented.toString() ===
+                            "true" && (
+                            <div className="mb-3">
+                              <label>Final Comments:</label>
+                              <textarea
+                                className="form-control "
+                                placeholder="Enter Reason"
+                                id="exampleFor"
+                                rows="3"
+                                value={item?.followUp?.finalComments || ""}
+                                name="finalComments"
                                 onChange={(event) =>
                                   handleChange(event, item?.id)
                                 }
-                              />
-                            </div>
-                            <div className="col-lg-4 flex flex-col">
-                              <label
-                                htmlFor="flexCheckDefault"
-                                className="w-250 form-check-label py-1"
-                              >
-                                Recommendations Implemented:
+                              ></textarea>
+                              <label className="word-limit-info label-text">
+                                Maximum 1500 words
                               </label>
-                              <input
-                                className="form-check-input h-30 h-22 w-22"
-                                type="checkbox"
-                                value=""
-                                id="flexCheckDefault"
-                                name="recommendationsImplemented"
-                                checked={
-                                  item?.followUp?.recommendationsImplemented
-                                }
-                                onChange={(event) =>
-                                  handleChangeCheck(event, item?.id)
-                                }
-                              />
                             </div>
-                            <div className="col-lg-4 flex flex-col">
-                              <label
-                                htmlFor="flexCheckDefault"
-                                className="w-250 form-check-label py-1"
-                              >
-                                Test In Next Year:
-                              </label>
-                              <input
-                                className="form-check-input h-30 h-22 w-22"
-                                type="checkbox"
-                                value=""
-                                id="flexCheckDefault"
-                                name="testInNextYear"
-                                checked={item?.followUp?.testInNextYear}
-                                onChange={(event) =>
-                                  handleChangeCheck(event, item?.id)
-                                }
-                              />
-                            </div>
+                          )}
+
+                          <div className="mb-3 align-items-center">
+                            <label className="pe-4">Test In Next Year:</label>
+                            <select
+                              className="form-select"
+                              aria-label="Default select example"
+                              value={item?.followUp?.testInNextYear.toString()}
+                              name="testInNextYear"
+                              onChange={(event) =>
+                                handleChange(event, item?.id)
+                              }
+                            >
+                              <option value="">Select One</option>
+                              <option value="true">Yes</option>
+                              <option value="false">No</option>
+                            </select>
                           </div>
 
                           <div className="row">

@@ -107,7 +107,7 @@ const ReportingParticulars = () => {
         >
           <i className="fa fa-arrow-left text-primary fs-5 pe-3"></i>
         </a>
-        <div className="mb-0 heading">Reporting & Follow-Up</div>
+        <div className="mb-0 heading">Reporting</div>
       </header>
       <div className="row px-4">
         <div className="col-md-12">

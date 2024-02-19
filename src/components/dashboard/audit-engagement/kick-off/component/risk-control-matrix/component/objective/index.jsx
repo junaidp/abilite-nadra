@@ -7,6 +7,7 @@ const Objective = ({
   loading,
   setCurrentAuditEngagement,
   singleAuditEngagement,
+  index,
 }) => {
   const dispatch = useDispatch();
   const [currentButtonDescription, setCurrentButtonDescription] =
@@ -63,7 +64,7 @@ const Objective = ({
     <div>
       <div className="card p-3 w-100 shadow-sm border">
         <div className="d-flex mb-2 justify-content-between align-items-center">
-          <span className="fw-bold">Objective</span>
+          <span className="fw-bold">{index + 1} Objective</span>
           <div className="d-flex align-items-center">
             <select
               className="form-select "

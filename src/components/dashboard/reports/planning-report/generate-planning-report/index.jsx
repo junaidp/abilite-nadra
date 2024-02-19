@@ -11,6 +11,10 @@ import {
   setupGetIAHReports,
   setupUpdateSingleReport,
 } from "../../../../../global-redux/reducers/reports/slice";
+import {
+  changeActiveLink,
+  InitialLoadSidebarActiveLink,
+} from "../../../../../global-redux/reducers/common/slice";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import jsPDF from "jspdf";
@@ -228,6 +232,11 @@ const GeneratePlanningReport = () => {
       }
     }
   }, [user, editable]);
+
+  React.useEffect(() => {
+    dispatch(changeActiveLink("li-internal-audit-planing-report"));
+    dispatch(InitialLoadSidebarActiveLink("li-reports"));
+  }, []);
 
   return (
     <div id="reportsPage">

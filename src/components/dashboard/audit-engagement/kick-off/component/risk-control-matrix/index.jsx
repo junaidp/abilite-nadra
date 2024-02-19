@@ -115,59 +115,87 @@ const RiskControlMatrix = ({
                           </a>
                         </p>
                       )}
-
                       <Objective
                         loading={loading}
                         setCurrentAuditEngagement={setCurrentAuditEngagement}
                         singleAuditEngagement={singleAuditEngagement}
+                        index={index}
                       />
                     </div>
+                    <div className="col-lg-8">
+                      {singleAuditEngagement?.riskRatingList?.map(
+                        (risk, riskIndex) => {
+                          return (
+                            <div key={riskIndex} className="row">
+                              <div className="col-lg-6">
+                                {index === 0 && riskIndex === 0 && (
+                                  <p className="px-3 py-1 bg-secondary d-flex align-items-center rounded justify-content-between text-white">
+                                    <span>Risk</span>
+                                    <a
+                                      onClick={() =>
+                                        setShowKickOffRatingDialog(true)
+                                      }
+                                      className="text-white add-btn"
+                                    >
+                                      <span className="float-end f-10">
+                                        <i className="fa fa-plus me-2"></i>Add
+                                        Risk
+                                      </span>
+                                    </a>
+                                  </p>
+                                )}
+                                <Rating
+                                  setCurrentAuditEngagement={
+                                    setCurrentAuditEngagement
+                                  }
+                                  loading={loading}
+                                  singleAuditEngagement={singleAuditEngagement}
+                                  risk={risk}
+                                  riskIndex={riskIndex}
+                                  index={index}
+                                />
+                              </div>
 
-                    <div className="col-lg-4">
-                      {index === 0 && (
-                        <p className="px-3 py-1 bg-secondary d-flex align-items-center rounded justify-content-between text-white">
-                          <span>Risk</span>
-                          <a
-                            onClick={() => setShowKickOffRatingDialog(true)}
-                            className="text-white add-btn"
-                          >
-                            <span className="float-end f-10">
-                              <i className="fa fa-plus me-2"></i>Add Risk
-                            </span>
-                          </a>
-                        </p>
+                              <div className="col-lg-6">
+                                {index === 0 && riskIndex === 0 && (
+                                  <p className="px-3 py-1 bg-secondary d-flex align-items-center rounded justify-content-between text-white">
+                                    <span>Controls</span>
+                                    <a
+                                      onClick={() =>
+                                        setShowKickOffControlDialog(true)
+                                      }
+                                      className="text-white add-btn"
+                                    >
+                                      <span className="float-end f-10">
+                                        <i className="fa fa-plus me-2"></i>Add
+                                        Control
+                                      </span>
+                                    </a>
+                                  </p>
+                                )}
+
+                                <Control
+                                  setCurrentAuditEngagement={
+                                    setCurrentAuditEngagement
+                                  }
+                                  loading={loading}
+                                  auditEngagementId={auditEngagementId}
+                                  singleAuditEngagement={singleAuditEngagement}
+                                  risk={risk}
+                                  riskIndex={riskIndex}
+                                  index={index}
+                                />
+                              </div>
+                            </div>
+                          );
+                        }
                       )}
-                      <Rating
-                        setCurrentAuditEngagement={setCurrentAuditEngagement}
-                        loading={loading}
-                        singleAuditEngagement={singleAuditEngagement}
-                      />
                     </div>
 
-                    <div className="col-lg-4">
-                      {index === 0 && (
-                        <p className="px-3 py-1 bg-secondary d-flex align-items-center rounded justify-content-between text-white">
-                          <span>Controls</span>
-                          <a
-                            onClick={() => setShowKickOffControlDialog(true)}
-                            className="text-white add-btn"
-                          >
-                            <span className="float-end f-10">
-                              <i className="fa fa-plus me-2"></i>Add Control
-                            </span>
-                          </a>
-                        </p>
-                      )}
-
-                      <Control
-                        setCurrentAuditEngagement={setCurrentAuditEngagement}
-                        loading={loading}
-                        auditEngagementId={auditEngagementId}
-                        singleAuditEngagement={singleAuditEngagement}
-                      />
-                    </div>
-
-                    <hr />
+                    {currentAuditEngagement?.riskControlMatrix?.objectives
+                      ?.length -
+                      1 !==
+                      index && <hr />}
                   </div>
                 );
               }

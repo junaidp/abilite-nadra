@@ -30,7 +30,7 @@ const Reporting = () => {
       <div className="mx-3">
         <div className="row pt-4">
           <div className="col-lg-7">
-            <h2 className="mx-2 m-2 heading">Reporting</h2>
+            <h2 className="mx-2 m-2 heading">Follow-Up</h2>
           </div>
 
           <div className="col-lg-5 text-end">
@@ -92,7 +92,13 @@ const Reporting = () => {
                               </a>
                             </td>
                             <td>null</td>
-                            <td>{allReports[0]?.reportingList?.length}</td>
+                            <td>
+                              {
+                                allReports[0]?.reportingList?.filter(
+                                  (all) => all?.followUp !== null
+                                )?.length
+                              }
+                            </td>
                             <td>null</td>
                           </tr>
                         );

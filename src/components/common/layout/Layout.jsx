@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import TopBar from "../top-bar/TopBar";
 import Sidebar from "../sidebar/Sidebar";
 import { Outlet } from "react-router-dom";
-import "./Layout.css";
 
 const Layout = () => {
   let { showSidebar } = useSelector((state) => state.common);
