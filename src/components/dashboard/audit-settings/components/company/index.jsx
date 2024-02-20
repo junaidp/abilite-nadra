@@ -6,8 +6,13 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
+import moment from "moment";
 
-const Company = ({ setAddCompantDialog }) => {
+const Company = ({
+  setAddCompantDialog,
+  setCurrentCompanyId,
+  setShowUpdateCompanyDialog,
+}) => {
   const dispatch = useDispatch();
   const { allCompanies, loading, companyAddSuccess } = useSelector(
     (state) => state?.settingsCompanyManagement
@@ -82,7 +87,7 @@ const Company = ({ setAddCompantDialog }) => {
                   <th>Fiscal Year From:</th>
                   <th>Fiscal Year To:</th>
                   <th>Package</th>
-                  <th className="w-180">Actions</th>
+                  <th className="w-150">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -112,17 +117,23 @@ const Company = ({ setAddCompantDialog }) => {
                           <td>{item?.legalName}</td>
                           <td>{item?.id}</td>
                           <td>
-                            {new Date(item?.fiscalYearForm).toLocaleString()}
+                            {moment(item?.fiscalYearForm).format("MM-DD-YYYY")}
                           </td>
                           <td>
-                            {new Date(item?.fiscalYearTo).toLocaleString()}
+                            {moment(item?.fiscalYearTo).format("MM-DD-YYYY")}
                           </td>
                           <td>{item?.clientId?.clientpackage}</td>
                           <td>
                             <div>
-                              <i className="fa fa-edit  px-3 f-18"></i>
+                              <i
+                                className="fa fa-edit  px-3 f-18 cursor-pointer"
+                                onClick={() => {
+                                  setCurrentCompanyId(item?.id);
+                                  setShowUpdateCompanyDialog(true);
+                                }}
+                              ></i>
 
-                              <i className="fa fa-trash text-danger f-18"></i>
+                              <i className="fa fa-trash text-danger f-18 cursor-pointer"></i>
                             </div>
                           </td>
                         </tr>

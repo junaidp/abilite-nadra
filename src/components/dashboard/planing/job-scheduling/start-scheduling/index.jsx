@@ -69,63 +69,6 @@ const StartScheduling = () => {
     });
   }
 
-  function handleFrequencyChange(event) {
-    if (event.target?.value) {
-      const filteredLocationArray = allLocations.filter((item) =>
-        currentJobSchedulingObject?.locationList.includes(item?.description)
-      );
-      const filteredSubLocationArray = allSubLocations.filter((item) =>
-        currentJobSchedulingObject?.subLocation.includes(item?.description)
-      );
-      const filteredHeadOfInternalAudit = allUsers.find(
-        (item) =>
-          item?.name == currentJobSchedulingObject?.headOfInternalAudit?.name
-      );
-      const filteredBackupHeadOfInternalAudit = allUsers.find(
-        (item) =>
-          item?.name ==
-          currentJobSchedulingObject?.backupHeadOfInternalAudit?.name
-      );
-      const filteredProposedJobApprover = allUsers.find(
-        (item) =>
-          item?.name == currentJobSchedulingObject?.proposedJobApprover?.name
-      );
-      const filteredResourceArray = allUsers.filter((item) =>
-        currentJobSchedulingObject?.resourcesList.includes(item?.name)
-      );
-      let object;
-      object = {
-        ...currentJobSchedulingObject,
-        frequency: event?.target?.value,
-        locationList: filteredLocationArray.map((list) => {
-          return {
-            id: list?.id,
-            description: list?.description,
-            companyid: list?.companyid,
-          };
-        }),
-        subLocation: filteredSubLocationArray,
-        headOfInternalAudit: filteredHeadOfInternalAudit,
-        backupHeadOfInternalAudit: filteredBackupHeadOfInternalAudit,
-        proposedJobApprover: filteredProposedJobApprover,
-        resourcesList: filteredResourceArray,
-      };
-      const hasNullValue = Object.values(object).includes(null);
-      if (hasNullValue) {
-        object = {
-          ...object,
-          complete: false,
-        };
-      } else {
-        object = {
-          ...object,
-          complete: true,
-        };
-      }
-      dispatch(setupUpdateJobScheduling(object));
-    }
-  }
-
   function handleSave() {
     if (!loading) {
       const filteredLocationArray = allLocations.filter((item) =>
@@ -323,7 +266,6 @@ const StartScheduling = () => {
                   handleChangeJobSchedulingStringTextFields
                 }
                 handleChangeNumberTextField={handleChangeNumberTextField}
-                handleFrequencyChange={handleFrequencyChange}
               />
 
               <JobScheduleList

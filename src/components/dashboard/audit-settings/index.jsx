@@ -1,6 +1,7 @@
 import React from "react";
 import AddCheckListManagementDialog from "../../modals/add-checklist-management-dialog/index";
 import UserManagementDialog from "../../modals/add-user-dialog/index";
+import UpdateCompanyDialog from "../../modals/update-company-dialog";
 import UpdateUserDialog from "../.././modals/update-user-dialog";
 import * as XLSX from "xlsx";
 import "./index.css";
@@ -27,6 +28,9 @@ const AuditSettings = () => {
   const [userManagementDialog, setUserManagementDialog] = React.useState(false);
   const [updateUserDialog, setUpdateUserDialog] = React.useState(false);
   const [addCompanyDialog, setAddCompantDialog] = React.useState(false);
+  const [currentCompanyId, setCurrentCompanyId] = React.useState("");
+  const [showUpdateCompanyDialog, setShowUpdateCompanyDialog] =
+    React.useState("");
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
 
@@ -82,6 +86,16 @@ const AuditSettings = () => {
         <div className="audit-settings-modal">
           <div className="model-wrap">
             <AddCompanyDialog setAddCompantDialog={setAddCompantDialog} />
+          </div>
+        </div>
+      )}
+      {showUpdateCompanyDialog && (
+        <div className="audit-settings-modal">
+          <div className="model-wrap">
+            <UpdateCompanyDialog
+              setShowUpdateCompanyDialog={setShowUpdateCompanyDialog}
+              currentCompanyId={currentCompanyId}
+            />
           </div>
         </div>
       )}
@@ -277,7 +291,11 @@ const AuditSettings = () => {
               />
 
               <Modules />
-              <Company setAddCompantDialog={setAddCompantDialog} />
+              <Company
+                setAddCompantDialog={setAddCompantDialog}
+                setCurrentCompanyId={setCurrentCompanyId}
+                setShowUpdateCompanyDialog={setShowUpdateCompanyDialog}
+              />
               <Process />
             </div>
           </div>

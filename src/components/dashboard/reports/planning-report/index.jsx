@@ -283,7 +283,7 @@ const PlanningReport = () => {
           count={Math.ceil(allReports?.length / 5)}
           page={page}
           onChange={handleChange}
-        />{" "}
+        />
       </div>
     </div>
   );

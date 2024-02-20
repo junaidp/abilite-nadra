@@ -48,7 +48,10 @@ export const slice = createSlice({
       })
       .addCase(setupGetAllAuditableUnits.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.allAuditableUnits = payload?.data || [];
+        const sortedArray = payload?.data?.sort(
+          (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
+        );
+        state.allAuditableUnits = sortedArray || [];
       })
       .addCase(setupGetAllAuditableUnits.rejected, (state, { payload }) => {
         state.loading = false;

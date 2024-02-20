@@ -74,7 +74,7 @@ const ResidualRisk = () => {
                         className="form-select w-50 mb-2"
                         aria-label="Default select example"
                       >
-                        <option selected>high</option>
+                        <option >high</option>
                         <option value="2">Medium</option>
                         <option value="2">Low</option>
                       </select>
@@ -94,7 +94,7 @@ const ResidualRisk = () => {
                         className="form-select w-50 mb-2"
                         aria-label="Default select example"
                       >
-                        <option selected>high</option>
+                        <option >high</option>
                         <option value="2">Medium</option>
                         <option value="2">Low</option>
                       </select>
@@ -134,7 +134,7 @@ const ResidualRisk = () => {
                         className="form-select w-50  mb-2"
                         aria-label="Default select example"
                       >
-                        <option selected>high</option>
+                        <option >high</option>
                         <option value="2">Medium</option>
                         <option value="2">Low</option>
                       </select>
@@ -154,7 +154,7 @@ const ResidualRisk = () => {
                         className="form-select w-50  mb-2"
                         aria-label="Default select example"
                       >
-                        <option selected>high</option>
+                        <option >high</option>
                         <option value="2">Medium</option>
                         <option value="2">Low</option>
                       </select>

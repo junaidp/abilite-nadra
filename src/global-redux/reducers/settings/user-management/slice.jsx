@@ -77,9 +77,12 @@ export const slice = createSlice({
       .addCase(setupGetAllUsers.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupGetAllUsers.fulfilled, (state, action) => {
+      .addCase(setupGetAllUsers.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.allUsers = action.payload?.data || [];
+        const sortedArray = payload?.data?.sort(
+          (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
+        );
+        state.allUsers = sortedArray || [];
       })
       .addCase(setupGetAllUsers.rejected, (state, action) => {
         state.loading = false;

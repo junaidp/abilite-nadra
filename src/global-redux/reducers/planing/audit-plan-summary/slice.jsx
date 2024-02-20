@@ -37,7 +37,10 @@ export const slice = createSlice({
       })
       .addCase(setupGetAllAuditPlanSummary.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.allAuditPlanSummary = payload?.data || [];
+        const sortedArray = payload?.data?.sort(
+          (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
+        );
+        state.allAuditPlanSummary = sortedArray || [];
       })
       .addCase(setupGetAllAuditPlanSummary.rejected, (state, { payload }) => {
         state.loading = false;

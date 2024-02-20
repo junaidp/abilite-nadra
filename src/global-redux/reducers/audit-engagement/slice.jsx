@@ -139,7 +139,10 @@ export const slice = createSlice({
       })
       .addCase(setupGetAllAuditEngagement.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.allAuditEngagement = payload?.data || [];
+        const sortedArray = payload?.data?.sort(
+          (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
+        );
+        state.allAuditEngagement = sortedArray || [];
       })
       .addCase(setupGetAllAuditEngagement.rejected, (state, action) => {
         state.loading = false;

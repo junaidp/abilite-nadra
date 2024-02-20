@@ -37,7 +37,10 @@ export const slice = createSlice({
       })
       .addCase(setupGetAllJobScheduling.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.allJobScheduling = payload?.data || [];
+        const sortedArray = payload?.data?.sort(
+          (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
+        );
+        state.allJobScheduling = sortedArray || [];
       })
       .addCase(setupGetAllJobScheduling.rejected, (state, { payload }) => {
         state.loading = false;

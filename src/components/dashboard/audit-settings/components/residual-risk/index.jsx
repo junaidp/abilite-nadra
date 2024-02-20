@@ -61,7 +61,6 @@ const ResidualRisk = () => {
                   <td>Lorem Ipsum Simple Dummy Text</td>
                   <td>
                     <i className="fa fa-edit  px-3 f-18"></i>
-
                     <i className="fa fa-trash text-danger f-18"></i>
                   </td>
                 </tr>

@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { registerCompany, getAllCompanies } from "./thunk";
+import { registerCompany, getAllCompanies, updateCompany } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -22,6 +22,13 @@ export const setupGetAllCompanies = createAsyncThunk(
   }
 );
 
+export const setupUpdateCompany = createAsyncThunk(
+  "company/updateCompany",
+  async (data, thunkAPI) => {
+    return updateCompany(data, thunkAPI);
+  }
+);
+
 export const slice = createSlice({
   name: "auth",
   initialState,
@@ -38,8 +45,8 @@ export const slice = createSlice({
       })
       .addCase(setupRegisterCompany.fulfilled, (state) => {
         state.loading = false;
-        toast.success("Company registered successfully");
         state.companyAddSuccess = true;
+        toast.success("Company registered successfully");
       })
       .addCase(setupRegisterCompany.rejected, (state, { payload }) => {
         state.loading = false;
@@ -61,6 +68,24 @@ export const slice = createSlice({
         state.allCompanies = payload || [];
       })
       .addCase(setupGetAllCompanies.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Update Company
+    builder
+      .addCase(setupUpdateCompany.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupUpdateCompany.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.companyAddSuccess = true;
+        toast.success("Company updated successfully");
+      })
+      .addCase(setupUpdateCompany.rejected, (state, { payload }) => {
         state.loading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);

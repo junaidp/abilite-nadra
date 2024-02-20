@@ -90,7 +90,10 @@ export const slice = createSlice({
       })
       .addCase(setupGetAllReports.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.allReports = payload?.data || [];
+        const sortedArray = payload?.data?.sort(
+          (a, b) => new Date(b.createdTime) - new Date(a.createdTime)
+        );
+        state.allReports = sortedArray || [];
       })
       .addCase(setupGetAllReports.rejected, (state, { payload }) => {
         state.loading = false;
@@ -107,7 +110,10 @@ export const slice = createSlice({
       })
       .addCase(setupGetIAHReports.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.allReports = payload?.data || [];
+        const sortedArray = payload?.data?.sort(
+          (a, b) => new Date(b.createdTime) - new Date(a.createdTime)
+        );
+        state.allReports = sortedArray || [];
       })
       .addCase(setupGetIAHReports.rejected, (state, { payload }) => {
         state.loading = false;

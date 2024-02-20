@@ -5,7 +5,6 @@ const TimeAndDateAllocation = ({
   handleChangeJobSchedulingCheckFields,
   handleChangeJobSchedulingStringTextFields,
   handleChangeNumberTextField,
-  handleFrequencyChange,
 }) => {
   return (
     <div className="accordion-item">
@@ -156,9 +155,9 @@ const TimeAndDateAllocation = ({
                     aria-label="Default select example"
                     value={currentJobSchedulingObject?.frequency || ""}
                     name="frequency"
-                    onChange={handleFrequencyChange}
+                    onChange={handleChangeJobSchedulingStringTextFields}
                   >
-                    <option>Select</option>
+                    <option value="">Select</option>
                     <option value="Semi Annually">Semi Annually</option>
                     <option value="Quarterly">Quarterly</option>
                     <option value="Monthly">Monthly</option>
