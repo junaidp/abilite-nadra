@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import ObjectiveListDialog from "../../../../modals/objective-list-dialog/index";
 import Dialog from "@mui/material/Dialog";
 import moment from "moment";
+import { toast } from "react-toastify";
 import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
@@ -95,16 +96,37 @@ const SpecialProjectAudit = () => {
 
   function handleSaveMinuteMeetings() {
     if (!loading) {
-      dispatch(
-        setupUpdateBusinessMinuteMeeting({
-          engagementId: engagementId,
-          location_Id: object?.location_Id,
-          subLocation_Id: object?.subLocation_Id,
-          meetingDateTimeFrom: object?.meetingDateTimeFrom,
-          meetingDateTimeTo: object?.meetingDateTimeTo,
-          meetingMinutes: "",
-        })
-      );
+      if (
+        object?.location_Id === "" ||
+        object?.subLocation_Id === "" ||
+        object?.meetingDateTimeFrom === "" ||
+        object?.meetingDateTimeTo === ""
+      ) {
+        toast.error("Please provide all values");
+      }
+      const fromDate = new Date(object?.meetingDateTimeFrom);
+      const toDate = new Date(object?.meetingDateTimeTo);
+      if (fromDate > toDate) {
+        toast.error("InValid meeting date range");
+      }
+      if (
+        object?.location_Id !== "" &&
+        object?.subLocation_Id !== "" &&
+        object?.meetingDateTimeFrom !== "" &&
+        object?.meetingDateTimeTo !== "" &&
+        toDate > fromDate
+      ) {
+        dispatch(
+          setupUpdateBusinessMinuteMeeting({
+            engagementId: engagementId,
+            location_Id: object?.location_Id,
+            subLocation_Id: object?.subLocation_Id,
+            meetingDateTimeFrom: object?.meetingDateTimeFrom,
+            meetingDateTimeTo: object?.meetingDateTimeTo,
+            meetingMinutes: "",
+          })
+        );
+      }
     }
   }
 
@@ -146,16 +168,20 @@ const SpecialProjectAudit = () => {
         location_Id:
           planingEngagementSingleObject?.meetingScheduleAndMinutes
             ?.location_Id || "",
-        meetingDateTimeFrom:
-          moment(
-            planingEngagementSingleObject?.meetingScheduleAndMinutes
-              ?.meetingDateTimeFrom
-          ).format("YYYY-MM-DD") || "",
-        meetingDateTimeTo:
-          moment(
-            planingEngagementSingleObject?.meetingScheduleAndMinutes
-              ?.meetingDateTimeTo
-          ).format("YYYY-MM-DD") || "",
+        meetingDateTimeFrom: planingEngagementSingleObject
+          ?.meetingScheduleAndMinutes?.meetingDateTimeFrom
+          ? moment(
+              planingEngagementSingleObject?.meetingScheduleAndMinutes
+                ?.meetingDateTimeFrom
+            ).format("YYYY-MM-DD")
+          : "",
+        meetingDateTimeTo: planingEngagementSingleObject
+          ?.meetingScheduleAndMinutes?.meetingDateTimeTo
+          ? moment(
+              planingEngagementSingleObject?.meetingScheduleAndMinutes
+                ?.meetingDateTimeTo
+            ).format("YYYY-MM-DD")
+          : "",
         subLocation_Id:
           planingEngagementSingleObject?.meetingScheduleAndMinutes
             ?.subLocation_Id || "",

@@ -123,6 +123,42 @@ const RiskControlMatrix = ({
                       />
                     </div>
                     <div className="col-lg-8">
+                      {index === 0 &&
+                        singleAuditEngagement?.riskRatingList?.length === 0 && (
+                          <div className="row">
+                            <div className="col-lg-6">
+                              <p className="px-3 py-1 bg-secondary d-flex align-items-center rounded justify-content-between text-white">
+                                <span>Risk</span>
+                                <a
+                                  onClick={() =>
+                                    setShowKickOffRatingDialog(true)
+                                  }
+                                  className="text-white add-btn"
+                                >
+                                  <span className="float-end f-10">
+                                    <i className="fa fa-plus me-2"></i>Add Risk
+                                  </span>
+                                </a>
+                              </p>
+                            </div>
+                            <div className="col-lg-6">
+                              <p className="px-3 py-1 bg-secondary d-flex align-items-center rounded justify-content-between text-white">
+                                <span>Controls</span>
+                                <a
+                                  onClick={() =>
+                                    setShowKickOffControlDialog(true)
+                                  }
+                                  className="text-white add-btn"
+                                >
+                                  <span className="float-end f-10">
+                                    <i className="fa fa-plus me-2"></i>Add
+                                    Control
+                                  </span>
+                                </a>
+                              </p>
+                            </div>
+                          </div>
+                        )}
                       {singleAuditEngagement?.riskRatingList?.map(
                         (risk, riskIndex) => {
                           return (

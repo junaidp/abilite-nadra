@@ -4,7 +4,7 @@ let menuItems = [
   {
     id: "li-dashboard",
     label: "Dashboard",
-    icon: "fa fa-home me-1",
+    icon: "bi bi-house-gear-fill",
     route: "/audit/dashboard",
     active: true,
   },

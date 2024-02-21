@@ -23,6 +23,7 @@ import IndustryUpdates from "./components/industry-updates";
 import CompanyUpdates from "./components/company-updates";
 import SetMeetingTime from "./components/set-meeting-time";
 import BusinessObjectiveMapProcess from "./components/business-objective-map-process";
+import { toast } from "react-toastify";
 
 const BusinessObjectiveRedirect = () => {
   const navigate = useNavigate();
@@ -70,7 +71,6 @@ const BusinessObjectiveRedirect = () => {
     });
   }
 
-
   function handleSumMapProcess() {
     setObject((pre) => {
       return {
@@ -87,7 +87,6 @@ const BusinessObjectiveRedirect = () => {
     });
   }
 
-
   function handleDeleteSingleMapItem(id) {
     setObject((pre) => {
       return {
@@ -102,16 +101,37 @@ const BusinessObjectiveRedirect = () => {
 
   function handleSaveMinuteMeetings() {
     if (!loading) {
-      dispatch(
-        setupUpdateBusinessMinuteMeeting({
-          engagementId: engagementId,
-          location_Id: object?.location_Id,
-          subLocation_Id: object?.subLocation_Id,
-          meetingDateTimeFrom: object?.meetingDateTimeFrom,
-          meetingDateTimeTo: object?.meetingDateTimeTo,
-          meetingMinutes: "",
-        })
-      );
+      if (
+        object?.location_Id === "" ||
+        object?.subLocation_Id === "" ||
+        object?.meetingDateTimeFrom === "" ||
+        object?.meetingDateTimeTo === ""
+      ) {
+        toast.error("Please provide all values");
+      }
+      const fromDate = new Date(object?.meetingDateTimeFrom);
+      const toDate = new Date(object?.meetingDateTimeTo);
+      if (fromDate > toDate) {
+        toast.error("InValid meeting date range");
+      }
+      if (
+        object?.location_Id !== "" &&
+        object?.subLocation_Id !== "" &&
+        object?.meetingDateTimeFrom !== "" &&
+        object?.meetingDateTimeTo !== "" &&
+        toDate > fromDate
+      ) {
+        dispatch(
+          setupUpdateBusinessMinuteMeeting({
+            engagementId: engagementId,
+            location_Id: object?.location_Id,
+            subLocation_Id: object?.subLocation_Id,
+            meetingDateTimeFrom: object?.meetingDateTimeFrom,
+            meetingDateTimeTo: object?.meetingDateTimeTo,
+            meetingMinutes: "",
+          })
+        );
+      }
     }
   }
 
@@ -157,16 +177,20 @@ const BusinessObjectiveRedirect = () => {
         location_Id:
           planingEngagementSingleObject?.meetingScheduleAndMinutes
             ?.location_Id || "",
-        meetingDateTimeFrom:
-          moment(
-            planingEngagementSingleObject?.meetingScheduleAndMinutes
-              ?.meetingDateTimeFrom
-          ).format("YYYY-MM-DD") || "",
-        meetingDateTimeTo:
-          moment(
-            planingEngagementSingleObject?.meetingScheduleAndMinutes
-              ?.meetingDateTimeTo
-          ).format("YYYY-MM-DD") || "",
+        meetingDateTimeFrom: planingEngagementSingleObject
+          ?.meetingScheduleAndMinutes?.meetingDateTimeFrom
+          ? moment(
+              planingEngagementSingleObject?.meetingScheduleAndMinutes
+                ?.meetingDateTimeFrom
+            ).format("YYYY-MM-DD")
+          : "",
+        meetingDateTimeTo: planingEngagementSingleObject
+          ?.meetingScheduleAndMinutes?.meetingDateTimeTo
+          ? moment(
+              planingEngagementSingleObject?.meetingScheduleAndMinutes
+                ?.meetingDateTimeTo
+            ).format("YYYY-MM-DD")
+          : "",
         subLocation_Id:
           planingEngagementSingleObject?.meetingScheduleAndMinutes
             ?.subLocation_Id || "",

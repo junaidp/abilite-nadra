@@ -8,6 +8,7 @@ import "./index.css";
 import AddCompanyDialog from "../../modals/add-company-dialog/index";
 import CheckList from "./components/checklist";
 import SupportingDocs from "./components/supporting-docs/index";
+import ApprovalManagement from "./components/approval-management/index";
 import Location from "./components/location";
 import Company from "./components/company";
 import { toast } from "react-toastify";
@@ -144,6 +145,17 @@ const AuditSettings = () => {
                 </button>
                 <button
                   className="nav-link shadow-sm  border-0 mb-3  rounded-0  me-3 "
+                  id="nav-approval-management-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#nav-approval-management"
+                  type="button"
+                  role="tab"
+                  aria-controls="nav-approval-management"
+                >
+                  Approval Management
+                </button>
+                <button
+                  className="nav-link shadow-sm  border-0 mb-3  rounded-0  me-3 "
                   id="nav-residual-risk-tab"
                   data-bs-toggle="tab"
                   data-bs-target="#nav-residual-risk"
@@ -266,6 +278,7 @@ const AuditSettings = () => {
                 setExcelData={setExcelData}
                 excelData={excelData}
               />
+              <ApprovalManagement />
 
               <Location />
 

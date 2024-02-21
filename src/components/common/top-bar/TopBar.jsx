@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import { useNavigate } from "react-router-dom";
 import { changeAuthUser } from "../../../global-redux/reducers/auth/slice";
+import nadraLogo from "../../../assets/logo.png";
 import {
   changeCompany,
   changeYear,
@@ -98,6 +99,7 @@ const TopBar = () => {
               aria-controls="offcanvasWithBothOptions"
             ></a>
             <ul className="navbar-nav flex-row ms-auto align-items-center justify-content-center">
+              <img src={nadraLogo} className="h-60 w-60 py-1 px-2" />
               <select
                 className="form-select me-4 h-40 w-200"
                 aria-label="Default select example"

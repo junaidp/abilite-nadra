@@ -114,7 +114,7 @@ const Rating = ({
       >
         {loading && risk?.description === currentButtonDescription
           ? "Loading..."
-          : "Update"}
+          : "Save"}
       </button>
     </div>
   );

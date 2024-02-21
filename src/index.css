@@ -541,11 +541,11 @@ element {
 }
 
 .link-wrap span i{
-  font-size: 18px !important;
+  font-size: 20px !important;
   /* color: #0a7386 !important; */
 }
 .link-wrap-active span i{
-  font-size: 18px !important;
+  font-size: 20px !important;
 }
 
 .quill {

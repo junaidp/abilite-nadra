@@ -143,7 +143,7 @@ const Control = ({
             >
               {loading && control?.description === currentButtonDescription
                 ? "Loading..."
-                : "Update"}
+                : "Save"}
             </button>
           </div>
         );
