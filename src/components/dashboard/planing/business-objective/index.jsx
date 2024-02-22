@@ -62,13 +62,17 @@ const BusinessObjective = () => {
               <div className="mb-0 heading">Business Objective</div>
               <div className="">
                 <div
-                  className="btn btn-labeled btn-primary px-3 shadow"
-                  onClick={() => setBusinessObjectiveDialog(true)}
+                  className={`btn btn-labeled btn-primary px-3 shadow ${
+                    loading && "disabled"
+                  }`}
+                  onClick={() => {
+                    !loading && setBusinessObjectiveDialog(true);
+                  }}
                 >
                   <span className="btn-label me-2">
                     <i className="fa fa-plus-circle"></i>
                   </span>
-                  Add Engagement
+                  {loading ? "Loading.." : "Add Engagement"}
                 </div>
                 <i
                   className="fa fa-info-circle ps-3 text-secondary cursor-pointer"
@@ -106,7 +110,7 @@ const BusinessObjective = () => {
                           .map((item, index) => {
                             return (
                               <TableRow
-                              key={index}
+                                key={index}
                                 index={index}
                                 item={item}
                                 handleClickEngagement={handleClickEngagement}

@@ -19,7 +19,6 @@ const initialState = {
   loading: false,
   allEngagements: [],
   engagementAddSuccess: false,
-  selectedSingleEngagementItem: {},
   planingEngagementSingleObject: [],
   selectedCheckListItems: [],
 };
@@ -30,7 +29,6 @@ export const setupGetAllEngagements = createAsyncThunk(
     return getAllEngagements(data, thunkAPI);
   }
 );
-
 
 export const setupAddNewEngagement = createAsyncThunk(
   "engagement/addNewEngagement",
@@ -115,8 +113,12 @@ export const slice = createSlice({
     resetAddEngagementSuccess: (state) => {
       state.engagementAddSuccess = false;
     },
-    changeSelectedEngagementDialog: (state, action) => {
-      state.selectedSingleEngagementItem = action.payload;
+    handleCleanUp: (state) => {
+      (state.loading = false),
+        (state.allEngagements = []),
+        (state.engagementAddSuccess = false),
+        (state.planingEngagementSingleObject = []),
+        (state.selectedCheckListItems = []);
     },
   },
   extraReducers: (builder) => {
@@ -398,7 +400,6 @@ export const slice = createSlice({
   },
 });
 
-export const { resetAddEngagementSuccess, changeSelectedEngagementDialog } =
-  slice.actions;
+export const { resetAddEngagementSuccess, handleCleanUp } = slice.actions;
 
 export default slice.reducer;

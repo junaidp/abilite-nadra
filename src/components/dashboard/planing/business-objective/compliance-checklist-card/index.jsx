@@ -9,6 +9,7 @@ import {
   setupGetSingleCheckListObjective,
   setupSaveCheckListObjective,
   setupGetCheckListItems,
+  handleCleanUp,
 } from "../../../../../global-redux/reducers/planing/engagement/slice";
 import Pagination from "@mui/material/Pagination";
 import {
@@ -29,6 +30,7 @@ const ComplianceCheckListCard = () => {
   } = useSelector((state) => state.planingEngagements);
   const { user } = useSelector((state) => state?.auth);
   const [page, setPage] = React.useState(1);
+  const [checkListId, setCheckListId] = React.useState("");
   const handleChange = (event, value) => {
     setPage(value);
   };
@@ -47,6 +49,16 @@ const ComplianceCheckListCard = () => {
   }, [engagementAddSuccess]);
 
   React.useEffect(() => {
+    if (checkListId && checkListId !== "") {
+      dispatch(
+        setupGetCheckListItems(
+          `?userEmailId=${user[0]?.email}&checklistId=${checkListId}`
+        )
+      );
+    }
+  }, [checkListId]);
+
+  React.useEffect(() => {
     if (engagementId && user[0]?.token) {
       dispatch(setupGetSingleCheckListObjective(engagementId));
     }
@@ -61,6 +73,9 @@ const ComplianceCheckListCard = () => {
   React.useEffect(() => {
     dispatch(changeActiveLink("li-business-objective"));
     dispatch(InitialLoadSidebarActiveLink("li-audit"));
+    return () => {
+      dispatch(handleCleanUp());
+    };
   }, []);
 
   return (
@@ -95,13 +110,7 @@ const ComplianceCheckListCard = () => {
                             data-bs-target={`#flush-collapse${index}`}
                             aria-expanded="false"
                             aria-controls={`flush-collapse${index}`}
-                            onClick={() => {
-                              dispatch(
-                                setupGetCheckListItems(
-                                  `?userEmailId=${user[0]?.email}&checklistId=${item?.checklist_id}`
-                                )
-                              );
-                            }}
+                            onClick={() => setCheckListId(item?.checklist_id)}
                           >
                             <div className="d-flex w-100 me-3 align-items-center justify-content-between">
                               <div className=" d-flex align-items-center">
@@ -195,15 +204,11 @@ const ComplianceCheckListCard = () => {
                     data-bs-target={`#flush-collapseOne`}
                     aria-expanded="false"
                     aria-controls={`flush-collapseOne`}
-                    onClick={() => {
-                      if (planingEngagementSingleObject?.checklist_id) {
-                        dispatch(
-                          setupGetCheckListItems(
-                            `?userEmailId=${user[0]?.email}&checklistId=${planingEngagementSingleObject?.checklist_id}`
-                          )
-                        );
-                      }
-                    }}
+                    onClick={() =>
+                      setCheckListId(
+                        planingEngagementSingleObject?.checklist_id
+                      )
+                    }
                   >
                     <div className="d-flex w-100 me-3 align-items-center justify-content-between">
                       <div className=" d-flex align-items-center">

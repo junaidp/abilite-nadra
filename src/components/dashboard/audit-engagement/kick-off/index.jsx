@@ -59,7 +59,6 @@ const KickOff = () => {
   const [auditStepId, setAuditStepId] = React.useState("");
   const [complianceCheckListId, setComplianceCheckListId] = React.useState("");
 
-
   React.useEffect(() => {
     dispatch(changeActiveLink("li-audit-engagement"));
   }, []);
@@ -75,9 +74,39 @@ const KickOff = () => {
 
   React.useEffect(() => {
     if (allAuditEngagement?.length !== 0) {
-      const currentItem = allAuditEngagement?.find(
+      let currentItem = allAuditEngagement?.find(
         (all) => Number(all?.id) === Number(auditEngagementId)
       );
+      if (currentItem?.riskControlMatrix !== null) {
+        currentItem = {
+          ...currentItem,
+          riskControlMatrix: {
+            ...currentItem?.riskControlMatrix,
+            objectives: currentItem?.riskControlMatrix?.objectives?.map(
+              (objective) => {
+                return {
+                  ...objective,
+                  editable: false,
+                  riskRatingList: objective?.riskRatingList?.map((rating) => {
+                    return {
+                      ...rating,
+                      editable: false,
+                      controlRiskList: rating?.controlRiskList?.map(
+                        (control) => {
+                          return {
+                            ...control,
+                            editable: false,
+                          };
+                        }
+                      ),
+                    };
+                  }),
+                };
+              }
+            ),
+          },
+        };
+      }
       setCurrentAuditEngagement(currentItem);
     }
   }, [allAuditEngagement]);

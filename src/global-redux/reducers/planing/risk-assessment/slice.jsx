@@ -49,6 +49,12 @@ export const slice = createSlice({
     resetRiskAssessment: (state) => {
       state.riskAssessmentSuccess = false;
     },
+    handleCleanUp: (state) => {
+      (state.loading = false),
+        (state.allRiskAssessments = []),
+        (state.riskAssessmentSuccess = false),
+        (state.performRiskAssessmentObject = {});
+    },
   },
   extraReducers: (builder) => {
     // Get All Risk Assessment
@@ -130,6 +136,6 @@ export const slice = createSlice({
   },
 });
 
-export const { resetRiskAssessment } = slice.actions;
+export const { resetRiskAssessment, handleCleanUp } = slice.actions;
 
 export default slice.reducer;

@@ -18,6 +18,42 @@ const Control = ({
   );
   const [currentButtonDescription, setCurrentButtonDescription] =
     React.useState("");
+  function handleAddEditable(objectiveId, riskId, controlId) {
+    setCurrentAuditEngagement((pre) => {
+      return {
+        ...pre,
+        riskControlMatrix: {
+          ...pre?.riskControlMatrix,
+          objectives: pre?.riskControlMatrix?.objectives?.map(
+            (singleObjective) =>
+              Number(singleObjective?.id) === Number(objectiveId)
+                ? {
+                    ...singleObjective,
+                    riskRatingList: singleObjective?.riskRatingList?.map(
+                      (singleRisk) =>
+                        Number(singleRisk?.id) === Number(riskId)
+                          ? {
+                              ...singleRisk,
+                              controlRiskList: singleRisk?.controlRiskList?.map(
+                                (singleControl) =>
+                                  Number(singleControl?.id) ===
+                                  Number(controlId)
+                                    ? {
+                                        ...singleControl,
+                                        editable: true,
+                                      }
+                                    : singleControl
+                              ),
+                            }
+                          : singleRisk
+                    ),
+                  }
+                : singleObjective
+          ),
+        },
+      };
+    });
+  }
   function handleChangeControl(event, objectiveId, riskId, controlId) {
     setCurrentAuditEngagement((pre) => {
       return {
@@ -105,6 +141,7 @@ const Control = ({
                       control?.id
                     )
                   }
+                  disabled={control?.editable ? false : true}
                   name="rating"
                 >
                   <option value="">Select One</option>
@@ -128,23 +165,38 @@ const Control = ({
                   control?.id
                 )
               }
+              disabled={control?.editable ? false : true}
               name="description"
             ></textarea>
             <label className="word-limit-info label-text">
               Maximum 1500 words
             </label>
-            <button
-              className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
-                loading &&
-                control?.description === currentButtonDescription &&
-                "disabled"
-              }`}
-              onClick={() => handleSave(control)}
-            >
-              {loading && control?.description === currentButtonDescription
-                ? "Loading..."
-                : "Save"}
-            </button>
+            {!control?.editable && (
+              <i
+                class="fa fa-edit   f-18 cursor-pointer  mt-3"
+                onClick={() =>
+                  handleAddEditable(
+                    singleAuditEngagement?.id,
+                    risk?.id,
+                    control?.id
+                  )
+                }
+              ></i>
+            )}
+            {control?.editable && (
+              <button
+                className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
+                  loading &&
+                  control?.description === currentButtonDescription &&
+                  "disabled"
+                }`}
+                onClick={() => handleSave(control)}
+              >
+                {loading && control?.description === currentButtonDescription
+                  ? "Loading..."
+                  : "Save"}
+              </button>
+            )}
           </div>
         );
       })}

@@ -7,6 +7,7 @@ import {
   setupPerformRiskAssessment,
   resetRiskAssessment,
   setupUpdateRiskAssessment,
+  handleCleanUp,
 } from "../../../../../global-redux/reducers/planing/risk-assessment/slice";
 import { useSearchParams } from "react-router-dom";
 import {
@@ -165,6 +166,9 @@ const RiskFactorApproach = () => {
   React.useEffect(() => {
     dispatch(changeActiveLink("li-risk-assessments"));
     dispatch(InitialLoadSidebarActiveLink("li-audit"));
+    return () => {
+      dispatch(handleCleanUp());
+    };
   }, []);
 
   return (

@@ -9,6 +9,7 @@ import {
   setupUpdateBusinessObjective,
   setupSaveMapProcessBusinessObjective,
   setupUpdateBusinessMinuteMeeting,
+  handleCleanUp,
 } from "../../../../../global-redux/reducers/planing/engagement/slice";
 import { setupGetAllLocations } from "../../../../../global-redux/reducers/settings/location/slice";
 import {
@@ -153,13 +154,17 @@ const BusinessObjectiveRedirect = () => {
 
   function handleSaveBusinessObjectiveMapProcess() {
     if (!loading) {
-      dispatch(
-        setupSaveMapProcessBusinessObjective({
-          businessObjective: planingEngagementSingleObject,
-          description,
-          domain,
-        })
-      );
+      if (description === "" || domain === "") {
+        toast.error("Provide all values");
+      } else {
+        dispatch(
+          setupSaveMapProcessBusinessObjective({
+            businessObjective: planingEngagementSingleObject,
+            description,
+            domain,
+          })
+        );
+      }
     }
   }
 
@@ -217,14 +222,9 @@ const BusinessObjectiveRedirect = () => {
   React.useEffect(() => {
     if (user[0]?.token && engagementId) {
       dispatch(setupGetSingleEngagementObject(engagementId));
-    }
-  }, [engagementId, user]);
-
-  React.useEffect(() => {
-    if (user[0]?.token) {
       dispatch(setupGetAllLocations());
     }
-  }, [user]);
+  }, [engagementId, user]);
 
   React.useEffect(() => {
     if (!engagementId) {
@@ -235,6 +235,9 @@ const BusinessObjectiveRedirect = () => {
   React.useEffect(() => {
     dispatch(changeActiveLink("li-business-objective"));
     dispatch(InitialLoadSidebarActiveLink("li-audit"));
+    return () => {
+      dispatch(handleCleanUp());
+    };
   }, []);
 
   return (

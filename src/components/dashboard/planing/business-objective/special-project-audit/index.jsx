@@ -16,6 +16,7 @@ import {
   setupUpdateSpecialProjectAudit,
   setupUpdateBusinessObjectiveAndMapProcessSpecialProjectOrAudit,
   setupUpdateBusinessMinuteMeeting,
+  handleCleanUp,
 } from "../../../../../global-redux/reducers/planing/engagement/slice";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
@@ -146,13 +147,17 @@ const SpecialProjectAudit = () => {
 
   function handleSaveBusinessObjectiveMapProcess() {
     if (!loading) {
-      dispatch(
-        setupUpdateBusinessObjectiveAndMapProcessSpecialProjectOrAudit({
-          specialProjectOrAudit: planingEngagementSingleObject,
-          domain,
-          description,
-        })
-      );
+      if (description === "" || domain === "") {
+        toast.error("Provide all values");
+      } else {
+        dispatch(
+          setupUpdateBusinessObjectiveAndMapProcessSpecialProjectOrAudit({
+            specialProjectOrAudit: planingEngagementSingleObject,
+            domain,
+            description,
+          })
+        );
+      }
     }
   }
 
@@ -208,14 +213,9 @@ const SpecialProjectAudit = () => {
   React.useEffect(() => {
     if (user[0]?.token && engagementId) {
       dispatch(setupGetSingleSpecialProjectAuditObjective(engagementId));
-    }
-  }, [engagementId, user]);
-
-  React.useEffect(() => {
-    if (user[0]?.token) {
       dispatch(setupGetAllLocations());
     }
-  }, [user]);
+  }, [engagementId, user]);
 
   React.useEffect(() => {
     if (!engagementId) {
@@ -226,6 +226,9 @@ const SpecialProjectAudit = () => {
   React.useEffect(() => {
     dispatch(changeActiveLink("li-business-objective"));
     dispatch(InitialLoadSidebarActiveLink("li-audit"));
+    return () => {
+      dispatch(handleCleanUp());
+    };
   }, []);
 
   return (

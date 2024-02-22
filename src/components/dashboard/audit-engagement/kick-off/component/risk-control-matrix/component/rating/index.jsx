@@ -17,6 +17,35 @@ const Rating = ({
   const { auditEngagementAddSuccess } = useSelector(
     (state) => state?.auditEngagement
   );
+
+  function handleAddEditable(objectiveId, riskId) {
+    setCurrentAuditEngagement((pre) => {
+      return {
+        ...pre,
+        riskControlMatrix: {
+          ...pre?.riskControlMatrix,
+          objectives: pre?.riskControlMatrix?.objectives?.map(
+            (singleObjective) =>
+              Number(singleObjective?.id) === Number(objectiveId)
+                ? {
+                    ...singleObjective,
+                    riskRatingList: singleObjective?.riskRatingList?.map(
+                      (singleRisk) =>
+                        Number(singleRisk?.id) === Number(riskId)
+                          ? {
+                              ...singleRisk,
+                              editable: true,
+                            }
+                          : singleRisk
+                    ),
+                  }
+                : singleObjective
+          ),
+        },
+      };
+    });
+  }
+
   function handleChangeRating(event, objectiveId, riskId) {
     setCurrentAuditEngagement((pre) => {
       return {
@@ -84,6 +113,7 @@ const Rating = ({
             onChange={(event) =>
               handleChangeRating(event, singleAuditEngagement?.id, risk?.id)
             }
+            disabled={risk?.editable ? false : true}
           >
             <option value="">Select One</option>
             <option value={1}>High</option>
@@ -102,20 +132,29 @@ const Rating = ({
           handleChangeRating(event, singleAuditEngagement?.id, risk?.id)
         }
         name="description"
+        disabled={risk?.editable ? false : true}
       ></textarea>
       <label className="word-limit-info label-text">Maximum 1500 words</label>
-      <button
-        className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
-          loading &&
-          risk?.description === currentButtonDescription &&
-          "disabled"
-        }`}
-        onClick={() => handleSave(risk)}
-      >
-        {loading && risk?.description === currentButtonDescription
-          ? "Loading..."
-          : "Save"}
-      </button>
+      {!risk?.editable && (
+        <i
+          class="fa fa-edit   f-18 cursor-pointer  mt-3"
+          onClick={() => handleAddEditable(singleAuditEngagement?.id, risk?.id)}
+        ></i>
+      )}
+      {risk?.editable && (
+        <button
+          className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
+            loading &&
+            risk?.description === currentButtonDescription &&
+            "disabled"
+          }`}
+          onClick={() => handleSave(risk)}
+        >
+          {loading && risk?.description === currentButtonDescription
+            ? "Loading..."
+            : "Save"}
+        </button>
+      )}
     </div>
   );
 };

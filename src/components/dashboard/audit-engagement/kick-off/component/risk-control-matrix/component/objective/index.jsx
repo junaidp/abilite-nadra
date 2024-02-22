@@ -16,6 +16,26 @@ const Objective = ({
     (state) => state?.auditEngagement
   );
 
+  function handleAddEditable(objectiveId) {
+    setCurrentAuditEngagement((pre) => {
+      return {
+        ...pre,
+        riskControlMatrix: {
+          ...pre?.riskControlMatrix,
+          objectives: pre?.riskControlMatrix?.objectives?.map(
+            (singleObjective) =>
+              Number(singleObjective?.id) === Number(objectiveId)
+                ? {
+                    ...singleObjective,
+                    editable: true,
+                  }
+                : singleObjective
+          ),
+        },
+      };
+    });
+  }
+
   function handleChangeObjective(event, id) {
     setCurrentAuditEngagement((pre) => {
       return {
@@ -74,6 +94,7 @@ const Objective = ({
                 handleChangeObjective(event, singleAuditEngagement?.id)
               }
               name="rating"
+              disabled={singleAuditEngagement?.editable ? false : true}
             >
               <option value="">Select One</option>
               <option value={1}>High</option>
@@ -91,21 +112,30 @@ const Objective = ({
             handleChangeObjective(event, singleAuditEngagement?.id)
           }
           name="description"
+          disabled={singleAuditEngagement?.editable ? false : true}
         ></textarea>
         <label className="word-limit-info label-text">Maximum 1500 words</label>
-        <button
-          className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
-            loading &&
-            singleAuditEngagement?.description === currentButtonDescription &&
-            "disabled"
-          }`}
-          onClick={() => handleSave(singleAuditEngagement)}
-        >
-          {loading &&
-          singleAuditEngagement?.description === currentButtonDescription
-            ? "Loading..."
-            : "Save"}
-        </button>
+        {!singleAuditEngagement?.editable && (
+          <i
+            class="fa fa-edit   f-18 cursor-pointer  mt-3"
+            onClick={() => handleAddEditable(singleAuditEngagement?.id)}
+          ></i>
+        )}
+        {singleAuditEngagement?.editable && (
+          <button
+            className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
+              loading &&
+              singleAuditEngagement?.description === currentButtonDescription &&
+              "disabled"
+            }`}
+            onClick={() => handleSave(singleAuditEngagement)}
+          >
+            {loading &&
+            singleAuditEngagement?.description === currentButtonDescription
+              ? "Loading..."
+              : "Save"}
+          </button>
+        )}
       </div>
     </div>
   );
