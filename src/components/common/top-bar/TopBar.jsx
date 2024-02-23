@@ -104,7 +104,10 @@ const TopBar = () => {
                 className="form-select me-4 h-40 w-200"
                 aria-label="Default select example"
                 value={company}
-                onChange={(e) => dispatch(changeCompany(e?.target?.value))}
+                onChange={(e) => {
+                  e?.target?.value !== "" &&
+                    dispatch(changeCompany(e?.target?.value));
+                }}
               >
                 <option value="">select company</option>
                 {user[0]?.company?.map((item, i) => {
@@ -121,11 +124,12 @@ const TopBar = () => {
                 aria-label="Default select example"
                 value={year}
                 onChange={(e) => {
-                  if (e?.target?.value) {
+                  if (e?.target?.value !== "") {
                     dispatch(changeYear(e?.target?.value));
                   }
                 }}
               >
+                <option value="">Select Year</option>
                 <option value="2024">2024</option>
                 <option value="2023">2023</option>
                 <option value="2022">2022</option>

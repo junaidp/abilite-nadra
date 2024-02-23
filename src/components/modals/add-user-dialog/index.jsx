@@ -6,10 +6,7 @@ import {
   resetAddUserSuccess,
 } from "../../../global-redux/reducers/settings/user-management/slice";
 import { useSelector, useDispatch } from "react-redux";
-import { setupGetAllCompanies } from "../../../global-redux/reducers/settings/company-management/slice";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
-import TextField from "@mui/material/TextField";
+import Form from "./component/Form";
 
 const UserManagementDialog = ({ setUserManagementDialog }) => {
   const dispatch = useDispatch();
@@ -18,9 +15,6 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
   );
   const [nullReportingTo, setNullReportingTo] = React.useState(false);
   const { user } = useSelector((state) => state?.auth);
-  const { allCompanies } = useSelector(
-    (state) => state?.settingsCompanyManagement
-  );
 
   const initialState = {
     name: "",
@@ -52,6 +46,9 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
         const reportingObj = allUsers?.find(
           (all) => all?.name === values?.reportingTo
         )?.employeeid;
+        const currentCompany = user[0]?.userId?.company?.find(
+          (item) => item?.companyName === values?.company
+        );
         dispatch(
           setupAddUser({
             name: values?.name,
@@ -64,37 +61,10 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
               skillSet: values?.skillSet,
               reportingTo: reportingObj ? reportingObj : null,
             },
-            client: {
-              id: 1,
-              name: "Nadra",
-              numberOfUsers: 40,
-              managementAccounts: 40,
-              status: 1,
-              clientpackage: "Platinum",
-              createdDate: "2024-01-09T12:04:29.588+00:00",
-            },
+            client: currentCompany?.clientId,
             resetToken: "string",
             createdBy: user[0]?.user?.userId,
-            company: [
-              {
-                id: 1,
-                companyName: "Nadra",
-                legalName: "National Database and Registration Authority",
-                fiscalYearForm: "2024-01-09T00:00:00.000+00:00",
-                fiscalYearTo: "2025-01-09T00:00:00.000+00:00",
-                logoPath: null,
-                headerImage: null,
-                clientId: {
-                  id: 1,
-                  name: "Admin User",
-                  numberOfUsers: 0,
-                  managementAccounts: 0,
-                  status: 1,
-                  clientpackage: "Silver",
-                  createdDate: "2024-02-07T10:50:11.441+00:00",
-                },
-              },
-            ],
+            company: [currentCompany],
           })
         );
       }
@@ -117,16 +87,15 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
   }, [addUserSuccess]);
 
   React.useEffect(() => {
-    if (formik.values?.userHierarchy === "IAH") {
+    if (
+      formik.values?.userHierarchy === "IAH" ||
+      formik.values?.userHierarchy === "Management_Auditee"
+    ) {
       setNullReportingTo(true);
     } else {
       setNullReportingTo(false);
     }
   }, [formik.values]);
-
-  React.useEffect(() => {
-    dispatch(setupGetAllCompanies());
-  }, []);
 
   React.useEffect(() => {
     if (nullReportingTo) {
@@ -143,244 +112,15 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
           <h2 className=" heading">Add New User</h2>
         </div>
       </header>
-      <form onSubmit={formik.handleSubmit}>
-        <div className="row">
-          <div className="col-lg-6 mb-2">
-            <div className="col-lg-12">
-              <div className="form-group">
-                <label htmlFor="area">Name:</label>
-                <TextField
-                  id="name"
-                  name="name"
-                  type="text"
-                  className="form-control w-100"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.name}
-                />
-              </div>
-            </div>
-            {formik.touched.name && formik.errors.name && (
-              <div className="error">{formik.errors.name}</div>
-            )}
-          </div>
-
-          <div className="col-lg-6 mb-2">
-            <div className="col-lg-12">
-              <div className="form-group">
-                <label htmlFor="area">Email:</label>
-                <TextField
-                  id="email"
-                  name="email"
-                  type="text"
-                  className="form-control"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.email}
-                />
-              </div>
-            </div>
-            {formik.touched.email && formik.errors.email && (
-              <div className="error">{formik.errors.email}</div>
-            )}
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-lg-6 mb-2">
-            <div className="col-lg-12">
-              <div className="form-group">
-                <label htmlFor="area">Password:</label>
-                <TextField
-                  id="password"
-                  name="password"
-                  type="text"
-                  className="form-control"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.password}
-                />
-              </div>
-            </div>
-            {formik.touched.password && formik.errors.password && (
-              <div className="error">{formik.errors.password}</div>
-            )}
-          </div>
-          <div className="mb-2 col-lg-6">
-            <div className="col-lg-12">
-              <div className="form-group">
-                <label htmlFor="area">Employee Name:</label>
-                <TextField
-                  id="employeeName"
-                  name="employeeName"
-                  type="text"
-                  className="form-control"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.employeeName}
-                />
-              </div>
-            </div>
-            {formik.touched.employeeName && formik.errors.employeeName && (
-              <div className="error">{formik.errors.employeeName}</div>
-            )}
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-lg-6 mb-2">
-            <div className="col-lg-12">
-              <div className="form-group">
-                <label htmlFor="area">Designation:</label>
-                <TextField
-                  id="designation"
-                  name="designation"
-                  type="text"
-                  className="form-control"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.designation}
-                />
-              </div>
-            </div>
-            {formik.touched.designation && formik.errors.designation && (
-              <div className="error">{formik.errors.designation}</div>
-            )}
-          </div>
-
-          <div className="col-lg-6">
-            <label htmlFor="userHierarchy" className="w-100">
-              User Roles:
-            </label>
-            <Select
-              id="userHierarchy"
-              name="userHierarchy"
-              className="form-control w-100 h-40"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.userHierarchy}
-            >
-              <MenuItem value="">Select Role</MenuItem>
-              <MenuItem value="IAH">IAH</MenuItem>
-              <MenuItem value="Team_Lead">Team_Lead</MenuItem>
-              <MenuItem value="Audit_Executive_2">Audit_Executive_2</MenuItem>
-              <MenuItem value="Audit_Executive_1">Audit_Executive_1</MenuItem>
-            </Select>
-            {formik.touched.userHierarchy && formik.errors.userHierarchy && (
-              <div className="error">{formik.errors.userHierarchy}</div>
-            )}
-          </div>
-        </div>
-
-        <div className="col-lg-12 mb-2">
-          <label htmlFor="skillSet" className="w-100">
-            Skill Set:
-          </label>
-          <Select
-            id="skillSet"
-            name="skillSet"
-            className="form-control w-100 h-40"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.skillSet}
-          >
-            <MenuItem value="">Select Role</MenuItem>
-            <MenuItem value="IT">IT</MenuItem>
-            <MenuItem value="Finance">Finance</MenuItem>
-            <MenuItem value="Business">Business</MenuItem>
-            <MenuItem value="Fraud">Fraud</MenuItem>
-            <MenuItem value="Operations">Operations</MenuItem>
-            <MenuItem value="Other">Other</MenuItem>
-          </Select>
-          {formik.touched.skillSet && formik.errors.skillSet && (
-            <div className="error">{formik.errors.skillSet}</div>
-          )}
-        </div>
-
-        <div className="row">
-          {!nullReportingTo && (
-            <div className="col-lg-6">
-              <label htmlFor="reportingTo" className="w-100">
-                Reporting To:
-              </label>
-              <Select
-                id="reportingTo"
-                name="reportingTo"
-                className="form-control w-100 h-40"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.reportingTo}
-              >
-                <MenuItem value="">Select User</MenuItem>
-                {allUsers?.map((userVal, ind) => {
-                  return (
-                    <MenuItem value={userVal?.name} key={ind} className="h-80">
-                      {userVal?.name}(
-                      {userVal?.employeeid?.userHierarchy || "null"})
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-              {formik.touched.reportingTo && formik.errors.reportingTo && (
-                <div className="error">{formik.errors.reportingTo}</div>
-              )}
-            </div>
-          )}
-
-          {nullReportingTo && (
-            <div className="col-lg-6">
-              <label htmlFor="area">Reporting To:</label>
-              <TextField
-                id="designation"
-                name="designation"
-                type="text"
-                className="form-control"
-                defaultValue="null"
-                readOnly
-                disabled
-              />
-            </div>
-          )}
-
-          {/* Default Remarks select field */}
-          <div className="col-lg-6">
-            <label htmlFor="company" className="w-100">
-              Company:
-            </label>
-            <Select
-              id="company"
-              name="company"
-              className="form-control w-100 h-40"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.company}
-            >
-              <MenuItem value="">Select Company</MenuItem>
-              {allCompanies?.map((userVal, ind) => {
-                return (
-                  <MenuItem
-                    value={userVal?.companyName}
-                    key={ind}
-                    className="h-80"
-                  >
-                    {userVal?.companyName}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-            {formik.touched.company && formik.errors.company && (
-              <div className="error">{formik.errors.company}</div>
-            )}
-          </div>
-        </div>
-
-        <button
-          type="submit"
-          className={`btn btn-primary ${loading && "disabled"} mt-4`}
-        >
-          {loading ? "Loading" : "Add User"}
-        </button>
-      </form>
+      {user[0]?.userId && (
+        <Form
+          formik={formik}
+          user={user}
+          allUsers={allUsers}
+          nullReportingTo={nullReportingTo}
+          loading={loading}
+        />
+      )}
 
       <div className="row py-3 ">
         <div className="col-lg-12 text-end">

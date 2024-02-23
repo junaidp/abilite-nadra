@@ -15,7 +15,9 @@ import { CircularProgress } from "@mui/material";
 const AuditEngagement = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { kickOffRequest, company } = useSelector((state) => state.common);
+  const { kickOffRequest, company, year } = useSelector(
+    (state) => state.common
+  );
   const { allAuditEngagement, loading } = useSelector(
     (state) => state?.auditEngagement
   );
@@ -54,12 +56,14 @@ const AuditEngagement = () => {
       if (companyId) {
         dispatch(
           setupGetAllAuditEngagement(
-            `?companyId=${companyId}&currentYear=2024&userId=${user[0]?.userId?.id}`
+            `?companyId=${companyId}&currentYear=${Number(year)}&userId=${
+              user[0]?.userId?.id
+            }`
           )
         );
       }
     }
-  }, [user]);
+  }, [user, year]);
 
   return (
     <div>

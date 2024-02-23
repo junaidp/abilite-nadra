@@ -101,7 +101,9 @@ const AuditPlanSummary = () => {
     )?.id;
     if (companyId) {
       dispatch(
-        setupGetAllAuditPlanSummary(`?companyId=${companyId}&year=${year}`)
+        setupGetAllAuditPlanSummary(
+          `?companyId=${companyId}&year=${Number(year)}`
+        )
       );
     }
   }, [user, year]);

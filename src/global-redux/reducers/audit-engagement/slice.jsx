@@ -1,5 +1,6 @@
 import {
   getAllAuditEngagement,
+  getSingleAuditEngagement,
   saveAuditNotification,
   saveRiskControlMatrixObjective,
   updateRiskControlMatrixObjective,
@@ -20,6 +21,7 @@ import { toast } from "react-toastify";
 const initialState = {
   loading: false,
   auditEngagementAddSuccess: false,
+  singleAuditEngagementObject: {},
   auditEngagementObservationAddSuccess: false,
   allAuditEngagement: [],
 };
@@ -28,6 +30,13 @@ export const setupGetAllAuditEngagement = createAsyncThunk(
   "auditEngagement/getAllAuditEngagement",
   async (data, thunkAPI) => {
     return getAllAuditEngagement(data, thunkAPI);
+  }
+);
+
+export const setupGetSingleAuditEngagement = createAsyncThunk(
+  "auditEngagement/getSingleAuditEngagement",
+  async (data, thunkAPI) => {
+    return getSingleAuditEngagement(data, thunkAPI);
   }
 );
 
@@ -130,8 +139,15 @@ export const slice = createSlice({
     resetAuditEngagementObservationAddSuccess: (state, action) => {
       state.auditEngagementObservationAddSuccess = false;
     },
+    handleCleanUp: (state) => {
+      (state.loading = false),
+        (state.auditEngagementAddSuccess = false),
+        (state.auditEngagementObservationAddSuccess = false),
+        (state.singleAuditEngagementObject = {}),
+        (state.allAuditEngagement = []);
+    },
   },
-  // Get all audit notifications
+  // Get all Audit Engagements
   extraReducers: (builder) => {
     builder
       .addCase(setupGetAllAuditEngagement.pending, (state) => {
@@ -145,6 +161,26 @@ export const slice = createSlice({
         state.allAuditEngagement = sortedArray || [];
       })
       .addCase(setupGetAllAuditEngagement.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Get Single Audit Engagements
+    builder
+      .addCase(setupGetSingleAuditEngagement.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(
+        setupGetSingleAuditEngagement.fulfilled,
+        (state, { payload }) => {
+          state.loading = false;
+          state.singleAuditEngagementObject = payload?.data;
+        }
+      )
+      .addCase(setupGetSingleAuditEngagement.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);
@@ -402,6 +438,7 @@ export const slice = createSlice({
 export const {
   resetAuditEngagementAddSuccess,
   resetAuditEngagementObservationAddSuccess,
+  handleCleanUp,
 } = slice.actions;
 
 export default slice.reducer;

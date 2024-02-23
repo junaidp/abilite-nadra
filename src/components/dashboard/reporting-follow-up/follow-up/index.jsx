@@ -9,7 +9,7 @@ const Reporting = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state?.auth);
-  const { company } = useSelector((state) => state?.common);
+  const { company,year } = useSelector((state) => state?.common);
   const { allReports, loading } = useSelector((state) => state?.reporting);
 
   React.useEffect(() => {
@@ -19,11 +19,11 @@ const Reporting = () => {
     if (companyId) {
       dispatch(
         setupGetAllReporting(
-          `?companyId=${companyId}&currentYear=2024&userId=${user[0]?.userId?.id}`
+          `?companyId=${companyId}&currentYear=${Number(year)}&userId=${user[0]?.userId?.id}`
         )
       );
     }
-  }, [user]);
+  }, [user,year]);
 
   return (
     <div>

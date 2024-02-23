@@ -9,9 +9,10 @@ import {
 import { setupGetAllLocations } from "../../../../../global-redux/reducers/settings/location/slice";
 import { setupGetAllUsers } from "../../../../../global-redux/reducers/settings/user-management/slice";
 import {
-  setupGetAllJobScheduling,
+  setupGetSingleJobScheduling,
   setupUpdateJobScheduling,
   resetJobSchedulingSuccess,
+  handleCleanUp,
 } from "../../../../../global-redux/reducers/planing/job-scheduling/slice";
 import { useSearchParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -25,10 +26,8 @@ const StartScheduling = () => {
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
   const jobSchedulingId = searchParams.get("jobScheduling");
-  const { allJobScheduling, loading, jobSchedulingAddSuccess } = useSelector(
-    (state) => state?.planingJobScheduling
-  );
-  const { company } = useSelector((state) => state?.common);
+  const { loading, jobSchedulingAddSuccess, singleJobSchedulingObject } =
+    useSelector((state) => state?.planingJobScheduling);
   const { allUsers } = useSelector((state) => state?.setttingsUserManagement);
   const { user } = useSelector((state) => state?.auth);
   const [initialLocationList, setInitialLocationList] = React.useState([]);
@@ -126,20 +125,22 @@ const StartScheduling = () => {
   }
 
   React.useEffect(() => {
-    if (jobSchedulingId && allJobScheduling?.length !== 0) {
-      const object = allJobScheduling?.find(
-        (item) => item?.id === Number(jobSchedulingId)
-      );
-      setCurrentJobScheduling(object);
+    const isEmptyObject =
+      Object.keys(singleJobSchedulingObject).length === 0 &&
+      singleJobSchedulingObject.constructor === Object;
+    if (!isEmptyObject) {
+      setCurrentJobScheduling(singleJobSchedulingObject);
       setInitialLocationList(
-        object?.locationList?.map((all) => all?.description)
+        singleJobSchedulingObject?.locationList?.map((all) => all?.description)
       );
       setInitialSubLocationList(
-        object?.subLocation?.map((all) => all?.description)
+        singleJobSchedulingObject?.subLocation?.map((all) => all?.description)
       );
-      setInitialUserList(object?.resourcesList?.map((all) => all?.name));
+      setInitialUserList(
+        singleJobSchedulingObject?.resourcesList?.map((all) => all?.name)
+      );
     }
-  }, [jobSchedulingId, allJobScheduling]);
+  }, [singleJobSchedulingObject]);
 
   React.useEffect(() => {
     const locationArray = allLocations.filter((item) =>
@@ -153,39 +154,18 @@ const StartScheduling = () => {
 
   React.useEffect(() => {
     if (jobSchedulingAddSuccess) {
-      const companyId = user[0]?.company?.find(
-        (item) => item?.companyName === company
-      )?.id;
-      if (companyId) {
-        dispatch(
-          setupGetAllJobScheduling(
-            `?companyId=${companyId}&currentYear=${Number("2024")}`
-          )
-        );
-      }
+      dispatch(setupGetSingleJobScheduling(jobSchedulingId));
       dispatch(resetJobSchedulingSuccess());
     }
   }, [jobSchedulingAddSuccess]);
 
   React.useEffect(() => {
-    if (user[0]?.token) {
+    if (user[0]?.token && jobSchedulingId) {
+      dispatch(setupGetSingleJobScheduling(jobSchedulingId));
       dispatch(setupGetAllLocations());
       dispatch(setupGetAllUsers());
     }
-  }, [user]);
-
-  React.useEffect(() => {
-    const companyId = user[0]?.company?.find(
-      (item) => item?.companyName === company
-    )?.id;
-    if (companyId) {
-      dispatch(
-        setupGetAllJobScheduling(
-          `?companyId=${companyId}&currentYear=${Number("2024")}`
-        )
-      );
-    }
-  }, [user]);
+  }, [user, jobSchedulingId]);
 
   React.useEffect(() => {
     if (!jobSchedulingId) {
@@ -196,6 +176,9 @@ const StartScheduling = () => {
   React.useEffect(() => {
     dispatch(changeActiveLink("li-job-scheduling"));
     dispatch(InitialLoadSidebarActiveLink("li-audit"));
+    return () => {
+      dispatch(handleCleanUp());
+    };
   }, []);
 
   return (
@@ -232,7 +215,7 @@ const StartScheduling = () => {
               setCurrentJobScheduling={setCurrentJobScheduling}
             />
           </div>
-          <div className="col-lg-2 align-self-center">
+          <div className="col-lg-2">
             <div className="form-check">
               <input
                 className="form-check-input"

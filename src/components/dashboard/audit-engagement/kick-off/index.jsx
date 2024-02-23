@@ -1,11 +1,18 @@
 import React from "react";
 import "./index.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import {
   changeKickOffRequest,
   changeActiveLink,
 } from "../../../../global-redux/reducers/common/slice";
+import {
+  setupGetSingleAuditEngagement,
+  resetAuditEngagementAddSuccess,
+  resetAuditEngagementObservationAddSuccess,
+  handleCleanUp,
+} from "../../../../global-redux/reducers/audit-engagement/slice";
 import AddKickOffObjectiveDialog from "../../../modals/add-kickoff-objective-dialog";
 import AddKickOffRatingDialog from "../../../modals/add-kickoff-rating-dialog";
 import AddKickOffControlDialog from "../../../modals/add-kickoff-control-dialog";
@@ -20,13 +27,6 @@ import RiskControlMatrix from "./component/risk-control-matrix";
 import AuditProgram from "./component/audit-program";
 import AuditSteps from "./component/audit-steps";
 import ComplianceCheckList from "./component/compliace-checklist";
-import { useSearchParams } from "react-router-dom";
-import { useSelector } from "react-redux";
-import {
-  setupGetAllAuditEngagement,
-  resetAuditEngagementAddSuccess,
-  resetAuditEngagementObservationAddSuccess,
-} from "../../../../global-redux/reducers/audit-engagement/slice";
 
 const KickOff = () => {
   const dispatch = useDispatch();
@@ -34,12 +34,8 @@ const KickOff = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const auditEngagementId = searchParams.get("auditEngagementId");
   const { user } = useSelector((state) => state?.auth);
-  const { company } = useSelector((state) => state?.common);
-  const {
-    allAuditEngagement,
-    auditEngagementAddSuccess,
-    auditEngagementObservationAddSuccess,
-  } = useSelector((state) => state?.auditEngagement);
+  const { auditEngagementAddSuccess, auditEngagementObservationAddSuccess,singleAuditEngagementObject } =
+    useSelector((state) => state?.auditEngagement);
 
   const [currentAuditEngagement, setCurrentAuditEngagement] = React.useState(
     {}
@@ -60,23 +56,11 @@ const KickOff = () => {
   const [complianceCheckListId, setComplianceCheckListId] = React.useState("");
 
   React.useEffect(() => {
-    dispatch(changeActiveLink("li-audit-engagement"));
-  }, []);
-
-  React.useEffect(() => {
-    dispatch(changeKickOffRequest(""));
-  }, []);
-  React.useEffect(() => {
-    if (!auditEngagementId) {
-      navigate("/audit/audit-engagement");
-    }
-  }, [auditEngagementId]);
-
-  React.useEffect(() => {
-    if (allAuditEngagement?.length !== 0) {
-      let currentItem = allAuditEngagement?.find(
-        (all) => Number(all?.id) === Number(auditEngagementId)
-      );
+    const isEmptyObject =
+      Object.keys(singleAuditEngagementObject).length === 0 &&
+      singleAuditEngagementObject.constructor === Object;
+    if (!isEmptyObject) {
+      let currentItem = singleAuditEngagementObject;
       if (currentItem?.riskControlMatrix !== null) {
         currentItem = {
           ...currentItem,
@@ -109,54 +93,44 @@ const KickOff = () => {
       }
       setCurrentAuditEngagement(currentItem);
     }
-  }, [allAuditEngagement]);
+  }, [singleAuditEngagementObject]);
 
   React.useEffect(() => {
     if (auditEngagementAddSuccess) {
-      const companyId = user[0]?.company?.find(
-        (item) => item?.companyName === company
-      )?.id;
-      if (companyId) {
-        dispatch(
-          setupGetAllAuditEngagement(
-            `?companyId=${companyId}&currentYear=2024&userId=${user[0]?.userId?.id}`
-          )
-        );
-      }
+      dispatch(setupGetSingleAuditEngagement(auditEngagementId));
       dispatch(resetAuditEngagementAddSuccess());
     }
   }, [auditEngagementAddSuccess]);
 
   React.useEffect(() => {
     if (auditEngagementObservationAddSuccess) {
-      const companyId = user[0]?.company?.find(
-        (item) => item?.companyName === company
-      )?.id;
-      if (companyId) {
-        dispatch(
-          setupGetAllAuditEngagement(
-            `?companyId=${companyId}&currentYear=2024&userId=${user[0]?.userId?.id}`
-          )
-        );
-      }
+      dispatch(setupGetSingleAuditEngagement(auditEngagementId));
       dispatch(resetAuditEngagementObservationAddSuccess());
     }
   }, [auditEngagementObservationAddSuccess]);
 
   React.useEffect(() => {
-    if (user[0]?.token) {
-      const companyId = user[0]?.company?.find(
-        (item) => item?.companyName === company
-      )?.id;
-      if (companyId) {
-        dispatch(
-          setupGetAllAuditEngagement(
-            `?companyId=${companyId}&currentYear=2024&userId=${user[0]?.userId?.id}`
-          )
-        );
-      }
+    if (user[0]?.token && auditEngagementId) {
+      dispatch(setupGetSingleAuditEngagement(auditEngagementId));
     }
-  }, [user]);
+  }, [user, auditEngagementId]);
+
+  React.useEffect(() => {
+    dispatch(changeKickOffRequest(""));
+  }, []);
+
+  React.useEffect(() => {
+    if (!auditEngagementId) {
+      navigate("/audit/audit-engagement");
+    }
+  }, [auditEngagementId]);
+
+  React.useEffect(() => {
+    dispatch(changeActiveLink("li-audit-engagement"));
+    return () => {
+      dispatch(handleCleanUp());
+    };
+  }, []);
 
   return (
     <div>

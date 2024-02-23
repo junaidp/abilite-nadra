@@ -43,7 +43,6 @@ import InternalAuditReportPage from "./pages/dashboard/report/internal-audit-rep
 import Layout from "./components/common/layout/Layout";
 import GenerateInternalAuditReportPage from "./pages/dashboard/report/internal-audit-report/generate-internal-audit-report/GenerateInternalAuditReport";
 import { changeAuthUser } from "./global-redux/reducers/auth/slice";
-
 import { useDispatch, useSelector } from "react-redux";
 import { changeYear } from "./global-redux/reducers/common/slice";
 import "react-toastify/dist/ReactToastify.css";
@@ -57,7 +56,7 @@ import AuditExceptionPage from "./pages/dashboard/report/audit-exception/AuditEx
 
 const App = () => {
   let dispatch = useDispatch();
-  let { menuItems, year } = useSelector((state) => state.common);
+  let { menuItems, year, company } = useSelector((state) => state.common);
   let { user } = useSelector((state) => state.auth);
   React.useEffect(() => {
     let authUser = JSON.parse(localStorage.getItem("user"));
@@ -88,8 +87,10 @@ const App = () => {
   }, []);
 
   React.useEffect(() => {
-    if (user[0]?.company[0]?.companyName) {
-      dispatch(changeCompany(user[0]?.company[0]?.companyName));
+    if (company === "") {
+      if (user[0]?.company[0]?.companyName) {
+        dispatch(changeCompany(user[0]?.company[0]?.companyName));
+      }
     }
   }, [user]);
 

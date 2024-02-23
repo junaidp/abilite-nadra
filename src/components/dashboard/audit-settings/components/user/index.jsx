@@ -17,16 +17,10 @@ const UserManagement = ({
     (state) => state?.setttingsUserManagement
   );
   const [nameVal, setNameVal] = React.useState("");
-  const { user } = useSelector((state) => state?.auth);
   const [page, setPage] = React.useState(1);
   const handleChange = (event, value) => {
     setPage(value);
   };
-  React.useEffect(() => {
-    if (user[0]?.token) {
-      dispatch(setupGetAllUsers());
-    }
-  }, [user]);
 
   React.useEffect(() => {
     if (addUserSuccess) {

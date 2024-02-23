@@ -35,7 +35,7 @@ const HeadingTable = ({
                         onClick={() => handleDeleteHeading(head?.id)}
                       ></i>
                       <i
-                        class="fa fa-edit  px-3 f-18 cursor-pointer"
+                        className="fa fa-edit  px-3 f-18 cursor-pointer"
                         onClick={() => {
                           setEditGeneratePlaningId(head?.id);
                           setEditGeneratePlaningReportDialog(true);

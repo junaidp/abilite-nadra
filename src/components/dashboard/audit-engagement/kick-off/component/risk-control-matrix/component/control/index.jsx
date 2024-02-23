@@ -173,7 +173,7 @@ const Control = ({
             </label>
             {!control?.editable && (
               <i
-                class="fa fa-edit   f-18 cursor-pointer  mt-3"
+                className="fa fa-edit   f-18 cursor-pointer  mt-3"
                 onClick={() =>
                   handleAddEditable(
                     singleAuditEngagement?.id,

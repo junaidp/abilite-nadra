@@ -9,21 +9,21 @@ const initialState = {
 };
 
 export const setupGetAllReporting = createAsyncThunk(
-  "reports/getAllReporting",
+  "reporting/getAllReporting",
   async (data, thunkAPI) => {
     return getAllReporting(data, thunkAPI);
   }
 );
 
 export const setupUpdateReporting = createAsyncThunk(
-  "reports/updateReporting",
+  "reporting/updateReporting",
   async (data, thunkAPI) => {
     return updateReporting(data, thunkAPI);
   }
 );
 
 export const setupUpdateFollowUp = createAsyncThunk(
-  "reports/updateFollowUp",
+  "reporting/updateFollowUp",
   async (data, thunkAPI) => {
     return updateFollowUp(data, thunkAPI);
   }
@@ -49,13 +49,13 @@ export const slice = createSlice({
       })
       .addCase(setupGetAllReporting.rejected, (state, { payload }) => {
         state.loading = false;
-        state.companyAddSuccess = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
         } else {
           toast.error("An Error has occurred");
         }
       });
+
     // Update Reporting
     builder
       .addCase(setupUpdateReporting.pending, (state) => {
@@ -68,7 +68,6 @@ export const slice = createSlice({
       })
       .addCase(setupUpdateReporting.rejected, (state, { payload }) => {
         state.loading = false;
-        state.companyAddSuccess = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
         } else {
@@ -87,7 +86,6 @@ export const slice = createSlice({
       })
       .addCase(setupUpdateFollowUp.rejected, (state, { payload }) => {
         state.loading = false;
-        state.companyAddSuccess = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
         } else {

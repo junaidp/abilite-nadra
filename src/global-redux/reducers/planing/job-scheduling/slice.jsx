@@ -1,4 +1,8 @@
-import { getAllJobScheduling, updateJobScheduling } from "./thunk";
+import {
+  getAllJobScheduling,
+  updateJobScheduling,
+  getSingleJobScheduling,
+} from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
@@ -6,6 +10,7 @@ const initialState = {
   loading: false,
   allJobScheduling: [],
   jobSchedulingAddSuccess: false,
+  singleJobSchedulingObject: {},
 };
 
 export const setupGetAllJobScheduling = createAsyncThunk(
@@ -14,6 +19,14 @@ export const setupGetAllJobScheduling = createAsyncThunk(
     return getAllJobScheduling(data, thunkAPI);
   }
 );
+
+export const setupGetSingleJobScheduling = createAsyncThunk(
+  "jobScheduling/getSingleJobScheduling",
+  async (data, thunkAPI) => {
+    return getSingleJobScheduling(data, thunkAPI);
+  }
+);
+
 export const setupUpdateJobScheduling = createAsyncThunk(
   "jobScheduling/updateJobScheduling",
   async (data, thunkAPI) => {
@@ -27,6 +40,12 @@ export const slice = createSlice({
   reducers: {
     resetJobSchedulingSuccess: (state) => {
       state.jobSchedulingAddSuccess = false;
+    },
+    handleCleanUp: (state) => {
+      (state.loading = false),
+        (state.allJobScheduling = []),
+        (state.jobSchedulingAddSuccess = false),
+        (state.singleJobSchedulingObject = {});
     },
   },
   extraReducers: (builder) => {
@@ -43,6 +62,23 @@ export const slice = createSlice({
         state.allJobScheduling = sortedArray || [];
       })
       .addCase(setupGetAllJobScheduling.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Get single job scheduling
+    builder
+      .addCase(setupGetSingleJobScheduling.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetSingleJobScheduling.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.singleJobSchedulingObject = payload?.data;
+      })
+      .addCase(setupGetSingleJobScheduling.rejected, (state, { payload }) => {
         state.loading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
@@ -73,6 +109,6 @@ export const slice = createSlice({
   },
 });
 
-export const { resetJobSchedulingSuccess } = slice.actions;
+export const { resetJobSchedulingSuccess,handleCleanUp } = slice.actions;
 
 export default slice.reducer;

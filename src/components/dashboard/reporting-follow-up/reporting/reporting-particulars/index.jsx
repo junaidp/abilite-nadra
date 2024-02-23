@@ -18,7 +18,7 @@ const ReportingParticulars = () => {
   const dispatch = useDispatch();
 
   const { user } = useSelector((state) => state?.auth);
-  const { company } = useSelector((state) => state?.common);
+  const { company ,year} = useSelector((state) => state?.common);
   const { allReports, loading, reportingAddSuccess } = useSelector(
     (state) => state?.reporting
   );
@@ -65,7 +65,9 @@ const ReportingParticulars = () => {
       if (companyId) {
         dispatch(
           setupGetAllReporting(
-            `?companyId=${companyId}&currentYear=2024&userId=${user[0]?.userId?.id}`
+            `?companyId=${companyId}&currentYear=${Number(year)}&userId=${
+              user[0]?.userId?.id
+            }`
           )
         );
       }
@@ -86,12 +88,12 @@ const ReportingParticulars = () => {
     if (companyId) {
       dispatch(
         setupGetAllReporting(
-          `?companyId=${companyId}&currentYear=2024&userId=${user[0]?.userId?.id}`
+          `?companyId=${companyId}&currentYear=${Number(year)}&userId=${user[0]?.userId?.id}`
         )
       );
       dispatch(setupGetAllUsers());
     }
-  }, [user]);
+  }, [user,year]);
 
   React.useEffect(() => {
     dispatch(changeActiveLink("li-reporting"));

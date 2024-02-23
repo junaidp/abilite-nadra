@@ -55,15 +55,6 @@ const Process = () => {
   }
 
   React.useEffect(() => {
-    const companyId = user[0]?.company?.find(
-      (item) => item?.companyName === company
-    )?.id;
-    if (companyId) {
-      dispatch(setupGetAllProcess(companyId));
-    }
-  }, [user]);
-
-  React.useEffect(() => {
     if (processAddSuccess) {
       const companyId = user[0]?.company?.find(
         (item) => item?.companyName === company

@@ -48,8 +48,15 @@ export const slice = createSlice({
       })
       .addCase(setupAddUser.rejected, (state, action) => {
         state.loading = false;
-        if (action.payload?.response?.data?.message) {
-          toast.error(action.payload.response.data.message);
+        if (action.payload?.response?.data?.data) {
+          let errorsArray = Object.values(action.payload?.response?.data?.data);
+          if (errorsArray?.length !== 0) {
+            errorsArray?.forEach((err) => {
+              toast.error(err);
+            });
+          } else {
+            toast.error(action.payload?.response?.data?.message);
+          }
         } else {
           toast.error("An Error has occurred");
         }

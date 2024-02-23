@@ -1,24 +1,22 @@
 import React from "react";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
-import GeneratePlaningReportDialog from "../../../../modals/generate-planing-report-dialog";
-import EditGeneratePlaningReportDialog from "../../../../modals/edit-generate-planing-report-dialog";
 import { useSelector, useDispatch } from "react-redux";
+import { useSearchParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 import {
   resetReportAddSuccess,
   setupSaveReports,
-  setupGetAllReports,
-  setupGetIAHReports,
+  setupGetSingleReport,
   setupUpdateSingleReport,
+  handleCleanUp,
 } from "../../../../../global-redux/reducers/reports/slice";
 import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
 } from "../../../../../global-redux/reducers/common/slice";
-import { useSearchParams } from "react-router-dom";
-import { toast } from "react-toastify";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
 import AuditableUnits from "./components/auditable-units";
 import RiskScores from "./components/risk-scores";
 import RiskFactorApproach from "./components/risk-factor-approach";
@@ -27,6 +25,8 @@ import Editors from "./components/editors";
 import Header from "./components/header";
 import HeadingTable from "./components/heading-table";
 import Buttons from "./components/buttons";
+import GeneratePlaningReportDialog from "../../../../modals/generate-planing-report-dialog";
+import EditGeneratePlaningReportDialog from "../../../../modals/edit-generate-planing-report-dialog";
 
 const GeneratePlanningReport = () => {
   const navigate = useNavigate();
@@ -34,7 +34,7 @@ const GeneratePlanningReport = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const editable = searchParams.get("editable");
   const reportId = searchParams.get("reportId");
-  const { loading, reportAddSuccess, allReports } = useSelector(
+  const { loading, reportAddSuccess, singleReportObject } = useSelector(
     (state) => state?.reports
   );
   const { user } = useSelector((state) => state?.auth);
@@ -149,7 +149,7 @@ const GeneratePlanningReport = () => {
       ) {
         toast.error("Please Provide all the fields");
       } else {
-        const details = allReports?.find((all) => all?.id === Number(reportId));
+        const details = singleReportObject;
         dispatch(
           setupUpdateSingleReport({
             ...data,
@@ -189,22 +189,21 @@ const GeneratePlanningReport = () => {
   }, [reportAddSuccess]);
 
   React.useEffect(() => {
-    if (
-      (editable === "false" || editable === "true") &&
-      allReports?.length !== 0
-    ) {
-      const details = allReports?.find((all) => all?.id === Number(reportId));
+    const isEmptyObject =
+      Object.keys(singleReportObject).length === 0 &&
+      singleReportObject.constructor === Object;
+    if ((editable === "false" || editable === "true") && !isEmptyObject) {
       setData({
-        reportName: details?.reportName,
-        summary: details?.summary,
-        methodology: details?.methodology,
-        riskAssesmentSummary: details?.riskAssesmentSummary,
-        orgnizationStrategy: details?.orgnizationStrategy,
-        summaryRisk: details?.summaryRisk,
-        newHeading: details?.newHeading || [],
+        reportName: singleReportObject?.reportName,
+        summary: singleReportObject?.summary,
+        methodology: singleReportObject?.methodology,
+        riskAssesmentSummary: singleReportObject?.riskAssesmentSummary,
+        orgnizationStrategy: singleReportObject?.orgnizationStrategy,
+        summaryRisk: singleReportObject?.summaryRisk,
+        newHeading: singleReportObject?.newHeading || [],
       });
     }
-  }, [editable, allReports]);
+  }, [editable, singleReportObject]);
 
   React.useEffect(() => {
     if (!editable) {
@@ -219,23 +218,16 @@ const GeneratePlanningReport = () => {
 
   React.useEffect(() => {
     if (user[0]?.token && editable !== "notApplicable") {
-      if (user[0]?.userId?.employeeid?.userHierarchy === "IAH") {
-        const companyId = user[0]?.company?.find(
-          (item) => item?.companyName === company
-        )?.id;
-        if (companyId) {
-          dispatch(setupGetIAHReports(companyId));
-        }
-      }
-      if (user[0]?.userId?.employeeid?.userHierarchy !== "IAH") {
-        dispatch(setupGetAllReports());
-      }
+      dispatch(setupGetSingleReport(reportId));
     }
   }, [user, editable]);
 
   React.useEffect(() => {
     dispatch(changeActiveLink("li-internal-audit-planing-report"));
     dispatch(InitialLoadSidebarActiveLink("li-reports"));
+    return () => {
+      dispatch(handleCleanUp());
+    };
   }, []);
 
   return (

@@ -12,7 +12,7 @@ const JobScheduling = () => {
   const { allJobScheduling, loading } = useSelector(
     (state) => state?.planingJobScheduling
   );
-  const { company } = useSelector((state) => state?.common);
+  const { company, year } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
   const [page, setPage] = React.useState(1);
   const [searchValue, setSearchValue] = React.useState("");
@@ -27,11 +27,11 @@ const JobScheduling = () => {
     if (companyId) {
       dispatch(
         setupGetAllJobScheduling(
-          `?companyId=${companyId}&currentYear=${Number("2024")}`
+          `?companyId=${companyId}&currentYear=${Number(year)}`
         )
       );
     }
-  }, [user]);
+  }, [user, year]);
 
   return (
     <div>

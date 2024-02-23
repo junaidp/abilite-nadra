@@ -74,12 +74,6 @@ const Location = () => {
     }
   }, [locationAddSuccess]);
 
-  React.useEffect(() => {
-    if (user[0]?.token) {
-      dispatch(setupGetAllLocations());
-    }
-  }, [user]);
-
   return (
     <div
       className="tab-pane fade"

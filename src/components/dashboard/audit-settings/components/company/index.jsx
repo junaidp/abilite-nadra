@@ -17,18 +17,12 @@ const Company = ({
   const { allCompanies, loading, companyAddSuccess } = useSelector(
     (state) => state?.settingsCompanyManagement
   );
-  const { user } = useSelector((state) => state?.auth);
   const [companySearch, setCompanySearch] = React.useState("");
   const [page, setPage] = React.useState(1);
   const handleChange = (event, value) => {
     setPage(value);
   };
 
-  React.useEffect(() => {
-    if (user[0]?.token) {
-      dispatch(setupGetAllCompanies());
-    }
-  }, [user]);
 
   React.useEffect(() => {
     if (companyAddSuccess) {

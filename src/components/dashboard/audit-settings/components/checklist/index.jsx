@@ -101,17 +101,7 @@ const CheckList = ({ setCheckListManagementDialog }) => {
     }
   }, [checkListAddSuccess]);
 
-  React.useEffect(() => {
-    let email = user[0]?.email;
-    let companyId = user[0]?.company.find(
-      (all) => all?.companyName === company
-    )?.id;
-    if (email && companyId) {
-      dispatch(
-        setupGetAllCheckLists(`?userEmailId=${email}&companyId=${companyId}`)
-      );
-    }
-  }, [company, user]);
+ 
 
   React.useEffect(() => {
     let email = user[0]?.email;

@@ -1,8 +1,14 @@
 import React from "react";
+import { setupGetAllCheckLists } from "../../../global-redux/reducers/settings/check-list/slice";
+import { setupGetAllCompanies } from "../../../global-redux/reducers/settings/company-management/slice";
+import { setupGetAllLocations } from "../../../global-redux/reducers/settings/location/slice";
+import { setupGetAllProcess } from "../../../global-redux/reducers/settings/process/slice";
+import { setupGetAllUsers } from "../../../global-redux/reducers/settings/user-management/slice";
 import AddCheckListManagementDialog from "../../modals/add-checklist-management-dialog/index";
 import UserManagementDialog from "../../modals/add-user-dialog/index";
 import UpdateCompanyDialog from "../../modals/update-company-dialog";
 import UpdateUserDialog from "../.././modals/update-user-dialog";
+import { useSelector, useDispatch } from "react-redux";
 import * as XLSX from "xlsx";
 import "./index.css";
 import AddCompanyDialog from "../../modals/add-company-dialog/index";
@@ -21,9 +27,14 @@ import Modules from "./components/modules";
 import RCMLibrary from "./components/rcm-library";
 import Process from "./components/process";
 const AuditSettings = () => {
+  const dispatch = useDispatch();
   const [activeEmailTab, setActiveEmailTab] = React.useState("systemEmail");
   const [checkListManagementDialog, setCheckListManagementDialog] =
     React.useState(false);
+  const [currentSettingOption, setCurrentSettingOption] =
+    React.useState("docs");
+  const { user } = useSelector((state) => state.auth);
+  const { company } = useSelector((state) => state.common);
   const [updateUserId, setUpdateUserId] = React.useState("");
   const [excelData, setExcelData] = React.useState(null);
   const [userManagementDialog, setUserManagementDialog] = React.useState(false);
@@ -63,6 +74,33 @@ const AuditSettings = () => {
 
     reader.readAsArrayBuffer(file);
   };
+
+  // Calls
+  React.useEffect(() => {
+    let email = user[0]?.email;
+    let companyId = user[0]?.company.find(
+      (all) => all?.companyName === company
+    )?.id;
+    if (email && companyId) {
+      if (currentSettingOption === "checklist") {
+        dispatch(
+          setupGetAllCheckLists(`?userEmailId=${email}&companyId=${companyId}`)
+        );
+      }
+      if (currentSettingOption === "company") {
+        dispatch(setupGetAllCompanies());
+      }
+      if (currentSettingOption === "location") {
+        dispatch(setupGetAllLocations());
+      }
+      if (currentSettingOption === "process") {
+        dispatch(setupGetAllProcess(companyId));
+      }
+      if (currentSettingOption === "users") {
+        dispatch(setupGetAllUsers());
+      }
+    }
+  }, [currentSettingOption, user]);
   return (
     <div>
       {checkListManagementDialog && (
@@ -140,6 +178,7 @@ const AuditSettings = () => {
                   type="button"
                   role="tab"
                   aria-controls="nav-profile"
+                  onClick={() => setCurrentSettingOption("location")}
                 >
                   Location
                 </button>
@@ -206,6 +245,7 @@ const AuditSettings = () => {
                   type="button"
                   role="tab"
                   aria-controls="nav-check"
+                  onClick={() => setCurrentSettingOption("checklist")}
                 >
                   Checklist Management
                 </button>
@@ -228,6 +268,7 @@ const AuditSettings = () => {
                   type="button"
                   role="tab"
                   aria-controls="nav-user"
+                  onClick={() => setCurrentSettingOption("users")}
                 >
                   User Management
                 </button>
@@ -250,6 +291,7 @@ const AuditSettings = () => {
                   type="button"
                   role="tab"
                   aria-controls="nav-com"
+                  onClick={() => setCurrentSettingOption("company")}
                 >
                   Company Management
                 </button>
@@ -261,6 +303,7 @@ const AuditSettings = () => {
                   type="button"
                   role="tab"
                   aria-controls="nav-com"
+                  onClick={() => setCurrentSettingOption("process")}
                 >
                   Process
                 </button>

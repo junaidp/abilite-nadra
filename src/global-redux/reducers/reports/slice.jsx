@@ -2,6 +2,7 @@ import { toast } from "react-toastify";
 import {
   saveReports,
   getAllReports,
+  getSingleReport,
   getIAHReports,
   editSingleReport,
   deleteSingleReport,
@@ -12,6 +13,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 const initialState = {
   loading: false,
   reportAddSuccess: false,
+  singleReportObject: {},
   allReports: [],
 };
 
@@ -25,6 +27,12 @@ export const setupGetAllReports = createAsyncThunk(
   "reports/getAllReports",
   async (data, thunkAPI) => {
     return getAllReports(data, thunkAPI);
+  }
+);
+export const setupGetSingleReport = createAsyncThunk(
+  "reports/getSingleReport",
+  async (data, thunkAPI) => {
+    return getSingleReport(data, thunkAPI);
   }
 );
 export const setupGetIAHReports = createAsyncThunk(
@@ -61,6 +69,12 @@ export const slice = createSlice({
     resetReportAddSuccess: (state, action) => {
       state.reportAddSuccess = false;
     },
+    handleCleanUp: (state) => {
+      (state.loading = false),
+        (state.reportAddSuccess = false),
+        (state.singleReportObject = {}),
+        (state.allReports = []);
+    },
   },
   extraReducers: (builder) => {
     // Save Reports
@@ -89,13 +103,30 @@ export const slice = createSlice({
         state.loading = true;
       })
       .addCase(setupGetAllReports.fulfilled, (state, { payload }) => {
-        state.loading = false;
         const sortedArray = payload?.data?.sort(
           (a, b) => new Date(b.createdTime) - new Date(a.createdTime)
         );
         state.allReports = sortedArray || [];
+        state.loading = false;
       })
       .addCase(setupGetAllReports.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Get Single Report
+    builder
+      .addCase(setupGetSingleReport.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetSingleReport.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.singleReportObject = payload?.data || {};
+      })
+      .addCase(setupGetSingleReport.rejected, (state, { payload }) => {
         state.loading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
@@ -109,11 +140,11 @@ export const slice = createSlice({
         state.loading = true;
       })
       .addCase(setupGetIAHReports.fulfilled, (state, { payload }) => {
-        state.loading = false;
         const sortedArray = payload?.data?.sort(
           (a, b) => new Date(b.createdTime) - new Date(a.createdTime)
         );
         state.allReports = sortedArray || [];
+        state.loading = false;
       })
       .addCase(setupGetIAHReports.rejected, (state, { payload }) => {
         state.loading = false;
@@ -183,6 +214,6 @@ export const slice = createSlice({
   },
 });
 
-export const { resetReportAddSuccess } = slice.actions;
+export const { resetReportAddSuccess, handleCleanUp } = slice.actions;
 
 export default slice.reducer;
