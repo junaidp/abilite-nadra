@@ -9,7 +9,7 @@ const Reporting = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state?.auth);
-  const { company,year } = useSelector((state) => state?.common);
+  const { company, year } = useSelector((state) => state?.common);
   const { allReports, loading } = useSelector((state) => state?.reporting);
 
   React.useEffect(() => {
@@ -19,11 +19,13 @@ const Reporting = () => {
     if (companyId) {
       dispatch(
         setupGetAllReporting(
-          `?companyId=${companyId}&currentYear=${Number(year)}&userId=${user[0]?.userId?.id}`
+          `?companyId=${companyId}&currentYear=${Number(year)}&userId=${
+            user[0]?.userId?.id
+          }`
         )
       );
     }
-  }, [user,year]);
+  }, [user, year,company]);
 
   return (
     <div>
@@ -57,7 +59,8 @@ const Reporting = () => {
             <div className="table-responsive">
               {loading ? (
                 <CircularProgress />
-              ) : allReports[0]?.reportingList?.filter(
+              ) : allReports?.length === 0 ||
+                allReports[0]?.reportingList?.filter(
                   (item) => item?.followUp !== null
                 )?.length === 0 ? (
                 <p>No Reports to Show</p>

@@ -52,7 +52,7 @@ const AuditableUnits = () => {
     if (companyId) {
       dispatch(setupGetAllAuditableUnits(companyId));
     }
-  }, [user]);
+  }, [user,company]);
 
   return (
     <div>

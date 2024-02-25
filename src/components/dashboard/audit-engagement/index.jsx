@@ -63,7 +63,7 @@ const AuditEngagement = () => {
         );
       }
     }
-  }, [user, year]);
+  }, [user, year,company]);
 
   return (
     <div>

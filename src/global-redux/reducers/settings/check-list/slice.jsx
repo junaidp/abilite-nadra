@@ -177,14 +177,14 @@ export const slice = createSlice({
     // Get all CheckList Items
     builder
       .addCase(setupGetAllCheckListItems.pending, (state) => {
-        state.loading = true;
+        // state.loading = true;
       })
       .addCase(setupGetAllCheckListItems.fulfilled, (state, { payload }) => {
-        state.loading = false;
+        // state.loading = false;
         state.checkListItems = payload?.data;
       })
       .addCase(setupGetAllCheckListItems.rejected, (state, { payload }) => {
-        state.loading = false;
+        // state.loading = false;
       });
 
     // Edit CheckList Item

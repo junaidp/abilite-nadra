@@ -86,7 +86,7 @@ const JobPrioritization = () => {
     if (companyId) {
       dispatch(setupGetAllJobPrioritization(companyId));
     }
-  }, [user]);
+  }, [user, company]);
   return (
     <div>
       <header className="section-header my-3 align-items-center justify-content-between text-start d-flex ">

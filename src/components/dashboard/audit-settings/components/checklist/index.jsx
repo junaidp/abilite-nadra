@@ -101,8 +101,6 @@ const CheckList = ({ setCheckListManagementDialog }) => {
     }
   }, [checkListAddSuccess]);
 
- 
-
   React.useEffect(() => {
     let email = user[0]?.email;
     if (checkListId && email) {
@@ -200,7 +198,9 @@ const CheckList = ({ setCheckListManagementDialog }) => {
       <div className="row mt-3">
         <div className="col-lg-12">
           <div className="accordion" id="accordionCheckListExample">
-            {checkList?.length === 0 ? (
+            {loading ? (
+              <CircularProgress />
+            ) : checkList?.length === 0 ? (
               <p>No Checklist to show!</p>
             ) : (
               checkList?.slice((page - 1) * 5, page * 5)?.map((item, index) => {
@@ -218,7 +218,7 @@ const CheckList = ({ setCheckListManagementDialog }) => {
                       >
                         <div className="d-flex w-100 me-3 align-items-center justify-content-between">
                           <div className=" d-flex align-items-center">
-                            {index}. {item?.description}
+                            {index +1}. {item?.description}
                           </div>
                           <div
                             className=" d-flex align-items-center underline"
@@ -278,13 +278,7 @@ const CheckList = ({ setCheckListManagementDialog }) => {
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    {loading ? (
-                                      <tr>
-                                        <td className="w-300">
-                                          <CircularProgress />
-                                        </td>
-                                      </tr>
-                                    ) : checkListItems ? (
+                                    {checkListItems ? (
                                       checkListItems?.map((item, i) => {
                                         return (
                                           <tr key={i}>

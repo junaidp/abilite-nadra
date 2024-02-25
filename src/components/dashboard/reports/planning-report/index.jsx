@@ -105,7 +105,7 @@ const PlanningReport = () => {
         dispatch(setupGetAllUsers({ shareWith: true }));
       }
     }
-  }, [user]);
+  }, [user, company]);
 
   return (
     <div>

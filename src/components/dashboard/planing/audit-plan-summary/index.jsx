@@ -106,7 +106,7 @@ const AuditPlanSummary = () => {
         )
       );
     }
-  }, [user, year]);
+  }, [user, year, company]);
 
   return (
     <div>

@@ -30,6 +30,7 @@ const StartScheduling = () => {
     useSelector((state) => state?.planingJobScheduling);
   const { allUsers } = useSelector((state) => state?.setttingsUserManagement);
   const { user } = useSelector((state) => state?.auth);
+  const { company } = useSelector((state) => state?.common);
   const [initialLocationList, setInitialLocationList] = React.useState([]);
   const [initialSubLocationList, setInitialSubLocationList] = React.useState(
     []
@@ -165,7 +166,7 @@ const StartScheduling = () => {
       dispatch(setupGetAllLocations());
       dispatch(setupGetAllUsers());
     }
-  }, [user, jobSchedulingId]);
+  }, [user, jobSchedulingId, company]);
 
   React.useEffect(() => {
     if (!jobSchedulingId) {

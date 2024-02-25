@@ -42,7 +42,7 @@ const BusinessObjective = () => {
     if (companyId) {
       dispatch(setupGetAllEngagements(companyId));
     }
-  }, [user]);
+  }, [user,company]);
 
   return (
     <div>

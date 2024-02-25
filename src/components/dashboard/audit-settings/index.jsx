@@ -100,7 +100,7 @@ const AuditSettings = () => {
         dispatch(setupGetAllUsers());
       }
     }
-  }, [currentSettingOption, user]);
+  }, [currentSettingOption, user, company]);
   return (
     <div>
       {checkListManagementDialog && (

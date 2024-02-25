@@ -35,7 +35,7 @@ export const updateUser = async (data, thunkAPI) => {
 
 export const getAllUsers = async (data, thunkAPI) => {
   const { user } = thunkAPI.getState().auth;
-  let currentCompany = localStorage.getItem("company");
+  let { company } = thunkAPI.getState().common;
   if (!data?.shareWith) {
     try {
       let props = await axios.post(
@@ -45,7 +45,7 @@ export const getAllUsers = async (data, thunkAPI) => {
             email: user[0]?.email,
           },
           company: user[0]?.company.find(
-            (item) => item?.companyName === currentCompany
+            (item) => item?.companyName === company
           ),
         },
         {

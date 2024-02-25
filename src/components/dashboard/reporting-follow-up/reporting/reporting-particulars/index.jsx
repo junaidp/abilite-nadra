@@ -93,7 +93,7 @@ const ReportingParticulars = () => {
       );
       dispatch(setupGetAllUsers());
     }
-  }, [user,year]);
+  }, [user,year,company]);
 
   React.useEffect(() => {
     dispatch(changeActiveLink("li-reporting"));

@@ -96,7 +96,7 @@ const ReportingParticulars = () => {
         )
       );
     }
-  }, [user, year]);
+  }, [user, year, company]);
 
   React.useEffect(() => {
     dispatch(changeActiveLink("li-followup"));

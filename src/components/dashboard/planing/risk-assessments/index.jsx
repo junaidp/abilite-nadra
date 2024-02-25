@@ -34,7 +34,7 @@ const RiskAssessments = () => {
         dispatch(setupGetAllRiskAssessments(companyId));
       }
     }
-  }, [user]);
+  }, [user, company]);
 
   return (
     <div>
