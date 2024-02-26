@@ -4,6 +4,7 @@ import { setupGetAllCompanies } from "../../../global-redux/reducers/settings/co
 import { setupGetAllLocations } from "../../../global-redux/reducers/settings/location/slice";
 import { setupGetAllProcess } from "../../../global-redux/reducers/settings/process/slice";
 import { setupGetAllUsers } from "../../../global-redux/reducers/settings/user-management/slice";
+import { setupGetAllCPList } from "../../../global-redux/reducers/settings/cp-list/slice";
 import AddCheckListManagementDialog from "../../modals/add-checklist-management-dialog/index";
 import UserManagementDialog from "../../modals/add-user-dialog/index";
 import UpdateCompanyDialog from "../../modals/update-company-dialog";
@@ -13,6 +14,7 @@ import * as XLSX from "xlsx";
 import "./index.css";
 import AddCompanyDialog from "../../modals/add-company-dialog/index";
 import CheckList from "./components/checklist";
+import CPList from "./components/cp-list/index";
 import SupportingDocs from "./components/supporting-docs/index";
 import ApprovalManagement from "./components/approval-management/index";
 import Location from "./components/location";
@@ -87,11 +89,17 @@ const AuditSettings = () => {
           setupGetAllCheckLists(`?userEmailId=${email}&companyId=${companyId}`)
         );
       }
-      if (currentSettingOption === "company") {
+      if (
+        currentSettingOption === "company" ||
+        currentSettingOption === "approval-management"
+      ) {
         dispatch(setupGetAllCompanies());
       }
       if (currentSettingOption === "location") {
         dispatch(setupGetAllLocations());
+      }
+      if (currentSettingOption === "cp-list") {
+        dispatch(setupGetAllCPList(companyId));
       }
       if (currentSettingOption === "process") {
         dispatch(setupGetAllProcess(companyId));
@@ -184,12 +192,25 @@ const AuditSettings = () => {
                 </button>
                 <button
                   className="nav-link shadow-sm  border-0 mb-3  rounded-0  me-3 "
+                  id="cp-list-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#cp-list"
+                  type="button"
+                  role="tab"
+                  aria-controls="cp-list"
+                  onClick={() => setCurrentSettingOption("cp-list")}
+                >
+                  CP List
+                </button>
+                <button
+                  className="nav-link shadow-sm  border-0 mb-3  rounded-0  me-3 "
                   id="nav-approval-management-tab"
                   data-bs-toggle="tab"
                   data-bs-target="#nav-approval-management"
                   type="button"
                   role="tab"
                   aria-controls="nav-approval-management"
+                  onClick={() => setCurrentSettingOption("approval-management")}
                 >
                   Approval Management
                 </button>
@@ -324,6 +345,7 @@ const AuditSettings = () => {
               <ApprovalManagement />
 
               <Location />
+              <CPList />
 
               <ResidualRisk />
               <RCMLibrary />

@@ -1,12 +1,12 @@
 import axios from "axios";
 import { baseUrl } from "../../../../constants/index";
 
-export const registerCompany = async (data, thunkAPI) => {
+export const getAllCPList = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
-      `${baseUrl}/account/company/saveCompany`,
-      data,
+      `${baseUrl}/configurations/CriteriaForRiskManagementCP/getAll?companyId=${data}`,
+      null,
       {
         headers: {
           "Content-Type": "application/json",
@@ -20,27 +20,12 @@ export const registerCompany = async (data, thunkAPI) => {
   }
 };
 
-export const getAllCompanies = async (data, thunkAPI) => {
-  try {
-    const { user } = thunkAPI.getState().auth;
-    let props = await axios.get(`${baseUrl}/account/company/getAllCompanies`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${user[0]?.token}`,
-      },
-    });
-    return props.data;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
-  }
-};
-
-export const updateCompany = async (data, thunkAPI) => {
+export const addCPList = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
-      `${baseUrl}/account/company/updateCompany`,
-      data,
+      `${baseUrl}/configurations/CriteriaForRiskManagementCP/create${data}`,
+      null,
       {
         headers: {
           "Content-Type": "application/json",
@@ -54,11 +39,11 @@ export const updateCompany = async (data, thunkAPI) => {
   }
 };
 
-export const updateApprovalManagement = async (data, thunkAPI) => {
+export const updateCPList = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
-      `${baseUrl}/configurations/approvalManagement/updateApprovalConfigurations`,
+      `${baseUrl}/configurations/CriteriaForRiskManagementCP/update`,
       data,
       {
         headers: {

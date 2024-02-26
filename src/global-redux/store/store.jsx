@@ -15,6 +15,7 @@ import planingJobSchedulingReducer from "../reducers/planing/job-scheduling/slic
 import reportReducer from "../reducers/reports/slice";
 import reportingReducer from "../reducers/reporting/slice";
 import auditEngagementReducer from "../reducers/audit-engagement/slice";
+import settingCPListReducer from "../reducers/settings/cp-list/slice";
 export const store = configureStore({
   reducer: {
     common: commonReducer,
@@ -25,6 +26,7 @@ export const store = configureStore({
     setttingsProcess: settingsProcessReducer,
     setttingsUserManagement: settingsAddUserReducer,
     settingsCompanyManagement: settingsCompanyReducer,
+    settingsCPList: settingCPListReducer,
     // planing
     planingEngagements: planingEngagementsReducers,
     planingRiskAssessments: planingRiskAssessmentReducer,

@@ -97,12 +97,12 @@ const PlanningReport = () => {
         )?.id;
         if (companyId) {
           dispatch(setupGetIAHReports(companyId));
-          dispatch(setupGetAllUsers({ shareWith: true }));
+          dispatch(setupGetAllUsers());
         }
       }
       if (user[0]?.userId?.employeeid?.userHierarchy !== "IAH") {
         dispatch(setupGetAllReports());
-        dispatch(setupGetAllUsers({ shareWith: true }));
+        dispatch(setupGetAllUsers());
       }
     }
   }, [user, company]);

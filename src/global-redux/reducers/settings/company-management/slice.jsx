@@ -1,5 +1,10 @@
 import { toast } from "react-toastify";
-import { registerCompany, getAllCompanies, updateCompany } from "./thunk";
+import {
+  registerCompany,
+  getAllCompanies,
+  updateCompany,
+  updateApprovalManagement,
+} from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -26,6 +31,12 @@ export const setupUpdateCompany = createAsyncThunk(
   "company/updateCompany",
   async (data, thunkAPI) => {
     return updateCompany(data, thunkAPI);
+  }
+);
+export const setupUpdateApprovalManagement = createAsyncThunk(
+  "company/updateApprovalManagement",
+  async (data, thunkAPI) => {
+    return updateApprovalManagement(data, thunkAPI);
   }
 );
 
@@ -86,6 +97,27 @@ export const slice = createSlice({
         toast.success("Company updated successfully");
       })
       .addCase(setupUpdateCompany.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Approval Management Update
+    builder
+      .addCase(setupUpdateApprovalManagement.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(
+        setupUpdateApprovalManagement.fulfilled,
+        (state, { payload }) => {
+          state.loading = false;
+          state.companyAddSuccess = true;
+          toast.success("Approval Management Updated Successfully");
+        }
+      )
+      .addCase(setupUpdateApprovalManagement.rejected, (state, { payload }) => {
         state.loading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
