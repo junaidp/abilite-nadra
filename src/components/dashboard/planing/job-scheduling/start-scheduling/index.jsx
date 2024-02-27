@@ -121,6 +121,12 @@ const StartScheduling = () => {
           complete: true,
         };
       }
+      if (object?.repeatJob === false) {
+        object = {
+          ...object,
+          frequency: "Once",
+        };
+      }
       dispatch(setupUpdateJobScheduling(object));
     }
   }
