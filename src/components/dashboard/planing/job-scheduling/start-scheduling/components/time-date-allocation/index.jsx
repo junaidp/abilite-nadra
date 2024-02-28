@@ -1,4 +1,6 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setupUpdateJobSehedulingTimeAndDateAllocation } from "../../../../../../../global-redux/reducers/planing/job-scheduling/slice";
 
 const TimeAndDateAllocation = ({
   currentJobSchedulingObject,
@@ -6,6 +8,22 @@ const TimeAndDateAllocation = ({
   handleChangeJobSchedulingStringTextFields,
   handleChangeNumberTextField,
 }) => {
+  const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state?.planingJobScheduling);
+  function handleSave() {
+    if (!loading) {
+      dispatch(
+        setupUpdateJobSehedulingTimeAndDateAllocation({
+          ...currentJobSchedulingObject?.timeAndDateAllocation,
+          frequency:
+            currentJobSchedulingObject?.timeAndDateAllocation?.repeatJob ===
+            false
+              ? "Once"
+              : currentJobSchedulingObject?.timeAndDateAllocation?.frequency,
+        })
+      );
+    }
+  }
   return (
     <div className="accordion-item">
       <h2 className="accordion-header">
@@ -35,9 +53,14 @@ const TimeAndDateAllocation = ({
                   className="form-control"
                   id="lav"
                   placeholder=""
-                  value={currentJobSchedulingObject?.estimatedWeeks}
+                  value={
+                    currentJobSchedulingObject?.timeAndDateAllocation
+                      ?.estimatedWeeks
+                  }
                   name="estimatedWeeks"
-                  onChange={handleChangeNumberTextField}
+                  onChange={(event) =>
+                    handleChangeNumberTextField(event, "timeAllocation")
+                  }
                 />
               </div>
               <div className="col-lg-6">
@@ -47,9 +70,14 @@ const TimeAndDateAllocation = ({
                   className="form-control"
                   id="lab"
                   placeholder=""
-                  value={currentJobSchedulingObject?.fieldWorkManHours}
+                  value={
+                    currentJobSchedulingObject?.timeAndDateAllocation
+                      ?.fieldWorkManHours
+                  }
                   name="fieldWorkManHours"
-                  onChange={handleChangeNumberTextField}
+                  onChange={(event) =>
+                    handleChangeNumberTextField(event, "timeAllocation")
+                  }
                 />
               </div>
             </div>
@@ -63,10 +91,13 @@ const TimeAndDateAllocation = ({
                   id="la"
                   placeholder=""
                   value={
-                    currentJobSchedulingObject?.internalAuditManagementHours
+                    currentJobSchedulingObject?.timeAndDateAllocation
+                      ?.internalAuditManagementHours
                   }
                   name="internalAuditManagementHours"
-                  onChange={handleChangeNumberTextField}
+                  onChange={(event) =>
+                    handleChangeNumberTextField(event, "timeAllocation")
+                  }
                 />
               </div>
               <div className="col-lg-6">
@@ -76,9 +107,14 @@ const TimeAndDateAllocation = ({
                   className="form-control"
                   id="l"
                   placeholder=""
-                  value={currentJobSchedulingObject?.totalWorkingManHours}
+                  value={
+                    currentJobSchedulingObject?.timeAndDateAllocation
+                      ?.totalWorkingManHours
+                  }
                   name="totalWorkingManHours"
-                  onChange={handleChangeNumberTextField}
+                  onChange={(event) =>
+                    handleChangeNumberTextField(event, "timeAllocation")
+                  }
                 />
               </div>
             </div>
@@ -88,7 +124,10 @@ const TimeAndDateAllocation = ({
                 <select
                   className="form-select"
                   aria-label="Default select example"
-                  value={currentJobSchedulingObject?.placeOfWork || ""}
+                  value={
+                    currentJobSchedulingObject?.timeAndDateAllocation
+                      ?.placeOfWork || ""
+                  }
                   name="placeOfWork"
                   onChange={handleChangeJobSchedulingStringTextFields}
                 >
@@ -107,9 +146,14 @@ const TimeAndDateAllocation = ({
                   className="form-control"
                   id="sa"
                   placeholder=""
-                  value={currentJobSchedulingObject?.travellingDays}
+                  value={
+                    currentJobSchedulingObject?.timeAndDateAllocation
+                      ?.travellingDays
+                  }
                   name="travellingDays"
-                  onChange={handleChangeNumberTextField}
+                  onChange={(event) =>
+                    handleChangeNumberTextField(event, "timeAllocation")
+                  }
                 />
               </div>
             </div>
@@ -121,7 +165,10 @@ const TimeAndDateAllocation = ({
                     TOTAL HOURS INCLUSIVE OF TRAVELLING:
                   </span>
                   <span className="float-end">
-                    {currentJobSchedulingObject?.totalHours}
+                    {
+                      currentJobSchedulingObject?.timeAndDateAllocation
+                        ?.totalHours
+                    }
                   </span>
                 </p>
               </div>
@@ -136,8 +183,13 @@ const TimeAndDateAllocation = ({
                     value=""
                     id="flexCheckDefault"
                     name="repeatJob"
-                    checked={currentJobSchedulingObject?.repeatJob}
-                    onChange={handleChangeJobSchedulingCheckFields}
+                    checked={
+                      currentJobSchedulingObject?.timeAndDateAllocation
+                        ?.repeatJob
+                    }
+                    onChange={(event) =>
+                      handleChangeJobSchedulingCheckFields(event, "repeatJob")
+                    }
                   />
                   <label
                     className="form-check-label"
@@ -147,13 +199,17 @@ const TimeAndDateAllocation = ({
                   </label>
                 </div>
               </div>
-              {currentJobSchedulingObject?.repeatJob === true && (
+              {currentJobSchedulingObject?.timeAndDateAllocation?.repeatJob ===
+                true && (
                 <div className="col-lg-6">
                   <label className="me-3">Frequency</label>
                   <select
                     className="form-select"
                     aria-label="Default select example"
-                    value={currentJobSchedulingObject?.frequency || ""}
+                    value={
+                      currentJobSchedulingObject?.timeAndDateAllocation
+                        ?.frequency || ""
+                    }
                     name="frequency"
                     onChange={handleChangeJobSchedulingStringTextFields}
                   >
@@ -164,6 +220,21 @@ const TimeAndDateAllocation = ({
                   </select>
                 </div>
               )}
+            </div>
+            <div className="row mt-3">
+              <div className="col-lg-12 justify-content-end text-end">
+                <div
+                  className={`btn btn-labeled btn-primary px-3 shadow ${
+                    loading && "disabled"
+                  }`}
+                  onClick={handleSave}
+                >
+                  <span className="btn-label me-2">
+                    <i className="fa fa-check-circle"></i>
+                  </span>
+                  {loading ? "Loading..." : "Save"}
+                </div>
+              </div>
             </div>
           </div>
         </div>

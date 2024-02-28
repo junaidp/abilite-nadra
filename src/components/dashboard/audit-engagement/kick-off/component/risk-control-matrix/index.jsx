@@ -1,8 +1,9 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Objective from "./component/objective";
 import Rating from "./component/rating";
 import Control from "./component/control";
+import { setupUpdateRiskControlMatrixApproval } from "../../../../../../global-redux/reducers/audit-engagement/slice";
 const RiskControlMatrix = ({
   setShowViewLibrary,
   currentAuditEngagement,
@@ -12,7 +13,25 @@ const RiskControlMatrix = ({
   setShowKickOffControlDialog,
   auditEngagementId,
 }) => {
+  const dispatch = useDispatch();
   const { loading } = useSelector((state) => state?.auditEngagement);
+  const { user } = useSelector((state) => state?.auth);
+  function handleApprove() {
+    dispatch(
+      setupUpdateRiskControlMatrixApproval({
+        ...currentAuditEngagement?.riskControlMatrix,
+        approved: true,
+      })
+    );
+  }
+  function handleSubmit() {
+    dispatch(
+      setupUpdateRiskControlMatrixApproval({
+        ...currentAuditEngagement?.riskControlMatrix,
+        submitted: true,
+      })
+    );
+  }
   return (
     <div className="accordion-item">
       <h2 className="accordion-header">
@@ -107,7 +126,11 @@ const RiskControlMatrix = ({
                           <span>Objective</span>
                           <a
                             className="text-white add-btn"
-                            onClick={() => setShowKickOffObjectiveDialog(true)}
+                            onClick={() =>
+                              currentAuditEngagement?.riskControlMatrix
+                                ?.approved !== true &&
+                              setShowKickOffObjectiveDialog(true)
+                            }
                           >
                             <span className="float-end f-10">
                               <i className="fa fa-plus me-2"></i>Add Objective
@@ -120,6 +143,7 @@ const RiskControlMatrix = ({
                         setCurrentAuditEngagement={setCurrentAuditEngagement}
                         singleAuditEngagement={singleAuditEngagement}
                         index={index}
+                        currentAuditEngagement={currentAuditEngagement}
                       />
                     </div>
                     <div className="col-lg-8">
@@ -131,6 +155,8 @@ const RiskControlMatrix = ({
                                 <span>Risk</span>
                                 <a
                                   onClick={() =>
+                                    currentAuditEngagement?.riskControlMatrix
+                                      ?.approved !== true &&
                                     setShowKickOffRatingDialog(true)
                                   }
                                   className="text-white add-btn"
@@ -146,6 +172,8 @@ const RiskControlMatrix = ({
                                 <span>Controls</span>
                                 <a
                                   onClick={() =>
+                                    currentAuditEngagement?.riskControlMatrix
+                                      ?.approved !== true &&
                                     setShowKickOffControlDialog(true)
                                   }
                                   className="text-white add-btn"
@@ -169,6 +197,9 @@ const RiskControlMatrix = ({
                                     <span>Risk</span>
                                     <a
                                       onClick={() =>
+                                        currentAuditEngagement
+                                          ?.riskControlMatrix?.approved !==
+                                          true &&
                                         setShowKickOffRatingDialog(true)
                                       }
                                       className="text-white add-btn"
@@ -189,6 +220,9 @@ const RiskControlMatrix = ({
                                   risk={risk}
                                   riskIndex={riskIndex}
                                   index={index}
+                                  currentAuditEngagement={
+                                    currentAuditEngagement
+                                  }
                                 />
                               </div>
 
@@ -198,6 +232,9 @@ const RiskControlMatrix = ({
                                     <span>Controls</span>
                                     <a
                                       onClick={() =>
+                                        currentAuditEngagement
+                                          ?.riskControlMatrix?.approved !==
+                                          true &&
                                         setShowKickOffControlDialog(true)
                                       }
                                       className="text-white add-btn"
@@ -220,6 +257,9 @@ const RiskControlMatrix = ({
                                   risk={risk}
                                   riskIndex={riskIndex}
                                   index={index}
+                                  currentAuditEngagement={
+                                    currentAuditEngagement
+                                  }
                                 />
                               </div>
                             </div>
@@ -236,6 +276,47 @@ const RiskControlMatrix = ({
                 );
               }
             )}
+            <div className="mt-3">
+              {currentAuditEngagement?.riskControlMatrix?.submitted ===
+                false && (
+                <div onClick={handleSubmit}>
+                  <div className="justify-content-end text-end">
+                    <div
+                      className={`btn btn-labeled btn-primary px-3 shadow ${
+                        loading && "disabled"
+                      }`}
+                    >
+                      {loading ? "Loading..." : "Submit"}
+                    </div>
+                  </div>
+                </div>
+              )}
+              {currentAuditEngagement?.riskControlMatrix?.submitted === true &&
+                currentAuditEngagement?.riskControlMatrix?.approved === false &&
+                (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
+                  Number(user[0]?.userId?.id) ===
+                    Number(
+                      currentAuditEngagement?.resourceAllocation
+                        ?.backupHeadOfInternalAudit?.id
+                    ) ||
+                  Number(user[0]?.userId?.id) ===
+                    Number(
+                      currentAuditEngagement?.resourceAllocation
+                        ?.proposedJobApprover?.id
+                    )) && (
+                  <div onClick={handleApprove}>
+                    <div className="justify-content-end text-end">
+                      <div
+                        className={`btn btn-labeled btn-primary px-3 shadow ${
+                          loading && "disabled"
+                        }`}
+                      >
+                        {loading ? "Loading" : "Approve"}
+                      </div>
+                    </div>
+                  </div>
+                )}
+            </div>
           </div>
         </div>
       </div>

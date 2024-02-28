@@ -42,31 +42,63 @@ const StartScheduling = () => {
   );
   const [allSubLocations, setAllSubLocations] = React.useState([]);
 
-  function handleChangeNumberTextField(event) {
-    setCurrentJobScheduling((pre) => {
-      return {
-        ...pre,
-        [event?.target?.name]: Number(event?.target?.value),
-      };
-    });
+  function handleChangeNumberTextField(event, section) {
+    if (section === "resourcesRequired") {
+      setCurrentJobScheduling((pre) => {
+        return {
+          ...pre,
+          numberOfResourcesRequired: {
+            ...pre?.numberOfResourcesRequired,
+            [event?.target?.name]: Number(event?.target?.value),
+          },
+        };
+      });
+    }
+    if (section === "timeAllocation") {
+      setCurrentJobScheduling((pre) => {
+        return {
+          ...pre,
+          timeAndDateAllocation: {
+            ...pre?.timeAndDateAllocation,
+            [event?.target?.name]: Number(event?.target?.value),
+          },
+        };
+      });
+    }
   }
 
   function handleChangeJobSchedulingStringTextFields(event) {
     setCurrentJobScheduling((pre) => {
       return {
         ...pre,
-        [event?.target?.name]: event?.target?.value,
+        timeAndDateAllocation: {
+          ...pre?.timeAndDateAllocation,
+          [event?.target?.name]: event?.target?.value,
+        },
       };
     });
   }
 
-  function handleChangeJobSchedulingCheckFields(event) {
-    setCurrentJobScheduling((pre) => {
-      return {
-        ...pre,
-        [event?.target?.name]: event?.target?.checked,
-      };
-    });
+  function handleChangeJobSchedulingCheckFields(event, section) {
+    if (section === "repeatJob") {
+      setCurrentJobScheduling((pre) => {
+        return {
+          ...pre,
+          timeAndDateAllocation: {
+            ...pre?.timeAndDateAllocation,
+            [event?.target?.name]: event?.target?.checked,
+          },
+        };
+      });
+    }
+    if (section === "seprateJob") {
+      setCurrentJobScheduling((pre) => {
+        return {
+          ...pre,
+          [event?.target?.name]: event?.target?.checked,
+        };
+      });
+    }
   }
 
   function handleSave() {
@@ -76,22 +108,6 @@ const StartScheduling = () => {
       );
       const filteredSubLocationArray = allSubLocations.filter((item) =>
         currentJobSchedulingObject?.subLocation.includes(item?.description)
-      );
-      const filteredResourceArray = allUsers.filter((item) =>
-        currentJobSchedulingObject?.resourcesList.includes(item?.name)
-      );
-      const filteredHeadOfInternalAudit = allUsers.find(
-        (item) =>
-          item?.name == currentJobSchedulingObject?.headOfInternalAudit?.name
-      );
-      const filteredProposedJobApprover = allUsers.find(
-        (item) =>
-          item?.name == currentJobSchedulingObject?.proposedJobApprover?.name
-      );
-      const filteredBackupHeadOfInternalAudit = allUsers.find(
-        (item) =>
-          item?.name ==
-          currentJobSchedulingObject?.backupHeadOfInternalAudit?.name
       );
       let object;
       object = {
@@ -104,13 +120,17 @@ const StartScheduling = () => {
           };
         }),
         subLocation: filteredSubLocationArray,
-        headOfInternalAudit: filteredHeadOfInternalAudit,
-        backupHeadOfInternalAudit: filteredBackupHeadOfInternalAudit,
-        proposedJobApprover: filteredProposedJobApprover,
-        resourcesList: filteredResourceArray,
       };
       const hasNullValue = Object.values(object).includes(null);
-      if (hasNullValue) {
+      if (
+        hasNullValue ||
+        object?.timeAndDateAllocation?.placeOfWork === null ||
+        object?.timeAndDateAllocation?.frequency === null ||
+        object?.resourceAllocation?.resourcesList === null ||
+        object?.resourceAllocation?.headOfInternalAudit === null ||
+        object?.resourceAllocation?.backupHeadOfInternalAudit === null ||
+        object?.resourceAllocation?.proposedJobApprover === null
+      ) {
         object = {
           ...object,
           complete: false,
@@ -119,12 +139,6 @@ const StartScheduling = () => {
         object = {
           ...object,
           complete: true,
-        };
-      }
-      if (object?.repeatJob === false) {
-        object = {
-          ...object,
-          frequency: "Once",
         };
       }
       dispatch(setupUpdateJobScheduling(object));
@@ -137,15 +151,28 @@ const StartScheduling = () => {
       singleJobSchedulingObject.constructor === Object;
     if (!isEmptyObject) {
       setCurrentJobScheduling(singleJobSchedulingObject);
-      setInitialLocationList(
-        singleJobSchedulingObject?.locationList?.map((all) => all?.description)
-      );
-      setInitialSubLocationList(
-        singleJobSchedulingObject?.subLocation?.map((all) => all?.description)
-      );
-      setInitialUserList(
-        singleJobSchedulingObject?.resourcesList?.map((all) => all?.name)
-      );
+      if (singleJobSchedulingObject?.locationList !== null) {
+        setInitialLocationList(
+          singleJobSchedulingObject?.locationList?.map(
+            (all) => all?.description
+          )
+        );
+      }
+      if (singleJobSchedulingObject?.subLocation !== null) {
+        setInitialSubLocationList(
+          singleJobSchedulingObject?.subLocation?.map((all) => all?.description)
+        );
+      }
+      if (
+        singleJobSchedulingObject?.resourceAllocation !== null &&
+        singleJobSchedulingObject?.resourceAllocation?.resourcesList !== null
+      ) {
+        setInitialUserList(
+          singleJobSchedulingObject?.resourceAllocation?.resourcesList?.map(
+            (all) => all?.name
+          )
+        );
+      }
     }
   }, [singleJobSchedulingObject]);
 
@@ -231,7 +258,9 @@ const StartScheduling = () => {
                 id="flexCheckDefault"
                 name="separateJob"
                 checked={currentJobSchedulingObject?.separateJob}
-                onChange={handleChangeJobSchedulingCheckFields}
+                onChange={(event) =>
+                  handleChangeJobSchedulingCheckFields(event, "seprateJob")
+                }
               />
               <label className="form-check-label" htmlFor="flexCheckDefault">
                 Seprate job

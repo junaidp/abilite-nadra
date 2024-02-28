@@ -11,6 +11,7 @@ const Control = ({
   risk,
   riskIndex,
   index,
+  currentAuditEngagement,
 }) => {
   const dispatch = useDispatch();
   const { auditEngagementAddSuccess } = useSelector(
@@ -171,32 +172,34 @@ const Control = ({
             <label className="word-limit-info label-text">
               Maximum 1500 words
             </label>
-            {!control?.editable && (
-              <i
-                className="fa fa-edit   f-18 cursor-pointer  mt-3"
-                onClick={() =>
-                  handleAddEditable(
-                    singleAuditEngagement?.id,
-                    risk?.id,
-                    control?.id
-                  )
-                }
-              ></i>
-            )}
-            {control?.editable && (
-              <button
-                className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
-                  loading &&
-                  control?.description === currentButtonDescription &&
-                  "disabled"
-                }`}
-                onClick={() => handleSave(control)}
-              >
-                {loading && control?.description === currentButtonDescription
-                  ? "Loading..."
-                  : "Save"}
-              </button>
-            )}
+            {!control?.editable &&
+              currentAuditEngagement?.riskControlMatrix?.approved !== true && (
+                <i
+                  className="fa fa-edit   f-18 cursor-pointer  mt-3"
+                  onClick={() =>
+                    handleAddEditable(
+                      singleAuditEngagement?.id,
+                      risk?.id,
+                      control?.id
+                    )
+                  }
+                ></i>
+              )}
+            {control?.editable &&
+              currentAuditEngagement?.riskControlMatrix?.approved !== true && (
+                <button
+                  className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
+                    loading &&
+                    control?.description === currentButtonDescription &&
+                    "disabled"
+                  }`}
+                  onClick={() => handleSave(control)}
+                >
+                  {loading && control?.description === currentButtonDescription
+                    ? "Loading..."
+                    : "Save"}
+                </button>
+              )}
           </div>
         );
       })}

@@ -2,6 +2,9 @@ import {
   getAllJobScheduling,
   updateJobScheduling,
   getSingleJobScheduling,
+  updateJobSchedulingTimeAndDateAllocation,
+  updateJobSchedulingNumberOfResourcesRequired,
+  updateJobSchedulingResourcesAllocation,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
@@ -31,6 +34,28 @@ export const setupUpdateJobScheduling = createAsyncThunk(
   "jobScheduling/updateJobScheduling",
   async (data, thunkAPI) => {
     return updateJobScheduling(data, thunkAPI);
+  }
+);
+
+export const setupUpdateJobSehedulingTimeAndDateAllocation = createAsyncThunk(
+  "jobScheduling/updateJobSchedulingTimeAndDateAllocation",
+  async (data, thunkAPI) => {
+    return updateJobSchedulingTimeAndDateAllocation(data, thunkAPI);
+  }
+);
+
+export const setupUpdateJobSchedulingNumberOfResourcesRequired =
+  createAsyncThunk(
+    "jobScheduling/updateJobSchedulingNumberOfResourcesRequired",
+    async (data, thunkAPI) => {
+      return updateJobSchedulingNumberOfResourcesRequired(data, thunkAPI);
+    }
+  );
+
+export const setUpupdateJobSchedulingResourcesAllocation = createAsyncThunk(
+  "jobScheduling/updateJobSchedulingResourcesAllocation",
+  async (data, thunkAPI) => {
+    return updateJobSchedulingResourcesAllocation(data, thunkAPI);
   }
 );
 
@@ -106,9 +131,90 @@ export const slice = createSlice({
           toast.error("An Error has occurred");
         }
       });
+    // Update Time and date allocation
+    builder
+      .addCase(
+        setupUpdateJobSehedulingTimeAndDateAllocation.pending,
+        (state) => {
+          state.loading = true;
+        }
+      )
+      .addCase(
+        setupUpdateJobSehedulingTimeAndDateAllocation.fulfilled,
+        (state, { payload }) => {
+          state.loading = false;
+          state.jobSchedulingAddSuccess = true;
+          toast.success("Time and date allocation updated successfully");
+        }
+      )
+      .addCase(
+        setupUpdateJobSehedulingTimeAndDateAllocation.rejected,
+        (state, { payload }) => {
+          state.loading = false;
+          state.jobSchedulingAddSuccess = false;
+          if (payload?.response?.data?.message) {
+            toast.error(payload?.response?.data?.message);
+          } else {
+            toast.error("An Error has occurred");
+          }
+        }
+      );
+    // Update resource required
+    builder
+      .addCase(
+        setupUpdateJobSchedulingNumberOfResourcesRequired.pending,
+        (state) => {
+          state.loading = true;
+        }
+      )
+      .addCase(
+        setupUpdateJobSchedulingNumberOfResourcesRequired.fulfilled,
+        (state, { payload }) => {
+          state.loading = false;
+          state.jobSchedulingAddSuccess = true;
+          toast.success("Resource required updated successfully");
+        }
+      )
+      .addCase(
+        setupUpdateJobSchedulingNumberOfResourcesRequired.rejected,
+        (state, { payload }) => {
+          state.loading = false;
+          state.jobSchedulingAddSuccess = false;
+          if (payload?.response?.data?.message) {
+            toast.error(payload?.response?.data?.message);
+          } else {
+            toast.error("An Error has occurred");
+          }
+        }
+      );
+    // Update resource allocation
+    builder
+      .addCase(setUpupdateJobSchedulingResourcesAllocation.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(
+        setUpupdateJobSchedulingResourcesAllocation.fulfilled,
+        (state, { payload }) => {
+          state.loading = false;
+          state.jobSchedulingAddSuccess = true;
+          toast.success("Resource allocation updated successfully");
+        }
+      )
+      .addCase(
+        setUpupdateJobSchedulingResourcesAllocation.rejected,
+        (state, { payload }) => {
+          state.loading = false;
+          state.jobSchedulingAddSuccess = false;
+          if (payload?.response?.data?.message) {
+            toast.error(payload?.response?.data?.message);
+          } else {
+            toast.error("An Error has occurred");
+          }
+        }
+      );
   },
 });
 
-export const { resetJobSchedulingSuccess,handleCleanUp } = slice.actions;
+export const { resetJobSchedulingSuccess, handleCleanUp } = slice.actions;
 
 export default slice.reducer;

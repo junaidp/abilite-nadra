@@ -8,6 +8,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
+import Table from "./component/Table";
 
 const AuditPlanSummary = () => {
   const { loading, allAuditPlanSummary, auditPlanSummaryAddSuccess } =
@@ -58,7 +59,27 @@ const AuditPlanSummary = () => {
   }
 
   function handleEdit(item) {
-    dispatch(setupUpdateAuditPlanSummary({ ...item, approved: true }));
+    dispatch(setupUpdateAuditPlanSummary(item));
+  }
+
+  function handleSubmit(item) {
+    dispatch(setupUpdateAuditPlanSummary({ ...item, submitted: true }));
+  }
+
+  function handleApprove(item) {
+    dispatch(
+      setupUpdateAuditPlanSummary({ ...item, approved: true, locked: true })
+    );
+  }
+
+  function handleEditEditable(item) {
+    setData((pre) =>
+      pre.map((singleItem) =>
+        singleItem?.id === item?.id
+          ? { ...singleItem, editable: true }
+          : singleItem
+      )
+    );
   }
 
   React.useEffect(() => {
@@ -77,7 +98,14 @@ const AuditPlanSummary = () => {
           };
         });
       });
-      setData(allAuditPlanSummary);
+      setData(
+        allAuditPlanSummary?.map((item) => {
+          return {
+            ...item,
+            editable: false,
+          };
+        })
+      );
     }
   }, [allAuditPlanSummary]);
 
@@ -138,7 +166,7 @@ const AuditPlanSummary = () => {
                       Proposed schedule current year
                     </th>
                     <th>Total Annual Effort</th>
-                    <th colSpan="3">Edit</th>
+                    <th>Edit</th>
                   </tr>
                 </thead>
 
@@ -163,108 +191,19 @@ const AuditPlanSummary = () => {
                 </thead>
                 {data?.slice((page - 1) * 5, page * 5)?.map((item, index) => {
                   return (
-                    <tbody key={index}>
-                      <tr>
-                        <td>{item?.id}</td>
-                        <td className="min-w-300">{item?.title}</td>
-                        <td className="normal-text">
-                          {item?.residualRiskRating}
-                        </td>
-                        <td>
-                          <select
-                            className="form-select w-80"
-                            aria-label="Default select example"
-                            name="priority"
-                            value={item?.priority || ""}
-                            onChange={(event) =>
-                              handleChangePriority(event, item?.id)
-                            }
-                          >
-                            <option>Select One</option>
-                            <option value="High">High</option>
-                            <option value="Medium">Medium</option>
-                            <option value="Low">Low</option>
-                          </select>
-                        </td>
-                        <td className="normal-text">
-                          <div className="form-check">
-                            <input
-                              className="form-check-input"
-                              type="checkbox"
-                              value=""
-                              id="flexCheckDefault"
-                              checked={item?.threeYearsAgo || false}
-                              name="threeYearsAgo"
-                              onChange={(event) =>
-                                handleChangeYear(event, item?.id)
-                              }
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor="flexCheckDefault"
-                            ></label>
-                          </div>
-                        </td>
-                        <td className="normal-text">
-                          <div className="form-check">
-                            <input
-                              className="form-check-input"
-                              type="checkbox"
-                              value=""
-                              id="flex"
-                              checked={item?.twoYearsAgo || false}
-                              name="twoYearsAgo"
-                              onChange={(event) =>
-                                handleChangeYear(event, item?.id)
-                              }
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor="flexCheckDefault"
-                            ></label>
-                          </div>
-                        </td>
-                        <td className="normal-text">
-                          <div className="form-check">
-                            <input
-                              className="form-check-input"
-                              type="checkbox"
-                              value=""
-                              checked={item?.lastYear || false}
-                              id="lastYear"
-                              name="lastYear"
-                              onChange={(event) =>
-                                handleChangeYear(event, item?.id)
-                              }
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor="flexCheckDefault"
-                            ></label>
-                          </div>
-                        </td>
-                        <td className="normal-text">{item?.serviceProvider}</td>
-                        <td className="normal-text">{item?.iaa}</td>
-                        <td className="normal-text">{item?.total}</td>
-                        <td className="normal-text">{item?.q1}</td>
-                        <td className="normal-text">{item?.q2}</td>
-                        <td className="normal-text">{item?.q3}</td>
-                        <td className="normal-text">{item?.q4}</td>
-                        <td className="normal-text"></td>
-                        <td className="normal-text ">
-                          <div className="row mt-3">
-                            <div className="col-lg-12 justify-content-end text-end">
-                              <div
-                                className="btn btn-labeled btn-primary px-3 shadow"
-                                onClick={() => handleEdit(item)}
-                              >
-                                Edit
-                              </div>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
+                    <Table
+                      key={index}
+                      index={index}
+                      item={item}
+                      handleChangePriority={handleChangePriority}
+                      handleChangeYear={handleChangeYear}
+                      handleEditEditable={handleEditEditable}
+                      handleEdit={handleEdit}
+                      handleSubmit={handleSubmit}
+                      handleApprove={handleApprove}
+                      allAuditPlanSummary={allAuditPlanSummary}
+                      user={user}
+                    />
                   );
                 })}
                 <tbody>

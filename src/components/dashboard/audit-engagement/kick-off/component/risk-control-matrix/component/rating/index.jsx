@@ -10,6 +10,7 @@ const Rating = ({
   risk,
   riskIndex,
   index,
+  currentAuditEngagement,
 }) => {
   const dispatch = useDispatch();
   const [currentButtonDescription, setCurrentButtonDescription] =
@@ -135,26 +136,30 @@ const Rating = ({
         disabled={risk?.editable ? false : true}
       ></textarea>
       <label className="word-limit-info label-text">Maximum 1500 words</label>
-      {!risk?.editable && (
-        <i
-          className="fa fa-edit   f-18 cursor-pointer  mt-3"
-          onClick={() => handleAddEditable(singleAuditEngagement?.id, risk?.id)}
-        ></i>
-      )}
-      {risk?.editable && (
-        <button
-          className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
-            loading &&
-            risk?.description === currentButtonDescription &&
-            "disabled"
-          }`}
-          onClick={() => handleSave(risk)}
-        >
-          {loading && risk?.description === currentButtonDescription
-            ? "Loading..."
-            : "Save"}
-        </button>
-      )}
+      {!risk?.editable &&
+        currentAuditEngagement?.riskControlMatrix?.approved !== true && (
+          <i
+            className="fa fa-edit   f-18 cursor-pointer  mt-3"
+            onClick={() =>
+              handleAddEditable(singleAuditEngagement?.id, risk?.id)
+            }
+          ></i>
+        )}
+      {risk?.editable &&
+        currentAuditEngagement?.riskControlMatrix?.approved !== true && (
+          <button
+            className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
+              loading &&
+              risk?.description === currentButtonDescription &&
+              "disabled"
+            }`}
+            onClick={() => handleSave(risk)}
+          >
+            {loading && risk?.description === currentButtonDescription
+              ? "Loading..."
+              : "Save"}
+          </button>
+        )}
     </div>
   );
 };

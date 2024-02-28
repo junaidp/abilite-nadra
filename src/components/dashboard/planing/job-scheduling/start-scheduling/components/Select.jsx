@@ -10,12 +10,16 @@ const SelectComponent = ({
   setCurrentJobScheduling,
   value,
   label,
+  allUsers,
 }) => {
   function handleChange(event) {
     setCurrentJobScheduling((pre) => {
       return {
         ...pre,
-        [name]: { name: event?.target?.value },
+        resourceAllocation: {
+          ...pre?.resourceAllocation,
+          [name]: allUsers?.find((user) => user?.name === event?.target?.value),
+        },
       };
     });
   }

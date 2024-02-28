@@ -29,6 +29,8 @@ export default function MultipleSelect({
   initialPersonalArray,
   setCurrentJobScheduling,
   name,
+  section,
+  allUsers,
 }) {
   const theme = useTheme();
   const [selectedArray, setSelectedArray] = React.useState(
@@ -43,12 +45,28 @@ export default function MultipleSelect({
   };
 
   React.useEffect(() => {
-    setCurrentJobScheduling((pre) => {
-      return {
-        ...pre,
-        [name]: selectedArray,
-      };
-    });
+    if (section === "resourceAllocation") {
+      let usersList = allUsers.filter((item) =>
+        selectedArray.includes(item?.name)
+      );
+      setCurrentJobScheduling((pre) => {
+        return {
+          ...pre,
+          resourceAllocation: {
+            ...pre?.resourceAllocation,
+            resourcesList: usersList,
+          },
+        };
+      });
+    }
+    if (name === "locationList" || name === "subLocation") {
+      setCurrentJobScheduling((pre) => {
+        return {
+          ...pre,
+          [name]: selectedArray,
+        };
+      });
+    }
   }, [selectedArray, initialPersonalArray]);
 
   React.useEffect(() => {

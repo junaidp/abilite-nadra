@@ -1,9 +1,22 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setupUpdateJobSchedulingNumberOfResourcesRequired } from "../../../../../../../global-redux/reducers/planing/job-scheduling/slice";
 
 const ResourcesRequired = ({
   currentJobSchedulingObject,
   handleChangeNumberTextField,
 }) => {
+  const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state?.planingJobScheduling);
+  function handleSave() {
+    if (!loading) {
+      dispatch(
+        setupUpdateJobSchedulingNumberOfResourcesRequired(
+          currentJobSchedulingObject?.numberOfResourcesRequired
+        )
+      );
+    }
+  }
   return (
     <div className="accordion-item">
       <h2 className="accordion-header">
@@ -33,9 +46,13 @@ const ResourcesRequired = ({
                   className="form-control"
                   id="labeltext"
                   placeholder=""
-                  value={currentJobSchedulingObject?.it}
+                  value={
+                    currentJobSchedulingObject?.numberOfResourcesRequired?.it
+                  }
                   name="it"
-                  onChange={handleChangeNumberTextField}
+                  onChange={(event) =>
+                    handleChangeNumberTextField(event, "resourcesRequired")
+                  }
                 />
               </div>
               <div className="col-lg-6">
@@ -45,9 +62,14 @@ const ResourcesRequired = ({
                   className="form-control"
                   id="labeltex"
                   placeholder=""
-                  value={currentJobSchedulingObject?.finance}
+                  value={
+                    currentJobSchedulingObject?.numberOfResourcesRequired
+                      ?.finance
+                  }
                   name="finance"
-                  onChange={handleChangeNumberTextField}
+                  onChange={(event) =>
+                    handleChangeNumberTextField(event, "resourcesRequired")
+                  }
                 />
               </div>
             </div>
@@ -59,9 +81,14 @@ const ResourcesRequired = ({
                   className="form-control"
                   id="labelt"
                   placeholder=""
-                  value={currentJobSchedulingObject?.business}
+                  value={
+                    currentJobSchedulingObject?.numberOfResourcesRequired
+                      ?.business
+                  }
                   name="business"
-                  onChange={handleChangeNumberTextField}
+                  onChange={(event) =>
+                    handleChangeNumberTextField(event, "resourcesRequired")
+                  }
                 />
               </div>
               <div className="col-lg-6">
@@ -71,9 +98,13 @@ const ResourcesRequired = ({
                   className="form-control"
                   id="labelte"
                   placeholder=""
-                  value={currentJobSchedulingObject?.fraud}
+                  value={
+                    currentJobSchedulingObject?.numberOfResourcesRequired?.fraud
+                  }
                   name="fraud"
-                  onChange={handleChangeNumberTextField}
+                  onChange={(event) =>
+                    handleChangeNumberTextField(event, "resourcesRequired")
+                  }
                 />
               </div>
             </div>
@@ -85,9 +116,14 @@ const ResourcesRequired = ({
                   className="form-control"
                   id="label"
                   placeholder=""
-                  value={currentJobSchedulingObject?.operations}
+                  value={
+                    currentJobSchedulingObject?.numberOfResourcesRequired
+                      ?.operations
+                  }
                   name="operations"
-                  onChange={handleChangeNumberTextField}
+                  onChange={(event) =>
+                    handleChangeNumberTextField(event, "resourcesRequired")
+                  }
                 />
               </div>
               <div className="col-lg-6">
@@ -97,10 +133,29 @@ const ResourcesRequired = ({
                   className="form-control"
                   id="labe"
                   placeholder=""
-                  value={currentJobSchedulingObject?.other}
+                  value={
+                    currentJobSchedulingObject?.numberOfResourcesRequired?.other
+                  }
                   name="other"
-                  onChange={handleChangeNumberTextField}
+                  onChange={(event) =>
+                    handleChangeNumberTextField(event, "resourcesRequired")
+                  }
                 />
+              </div>
+            </div>
+            <div className="row mt-3">
+              <div className="col-lg-12 justify-content-end text-end">
+                <div
+                  className={`btn btn-labeled btn-primary px-3 shadow ${
+                    loading && "disabled"
+                  }`}
+                  onClick={handleSave}
+                >
+                  <span className="btn-label me-2">
+                    <i className="fa fa-check-circle"></i>
+                  </span>
+                  {loading ? "Loading..." : "Save"}
+                </div>
               </div>
             </div>
           </div>

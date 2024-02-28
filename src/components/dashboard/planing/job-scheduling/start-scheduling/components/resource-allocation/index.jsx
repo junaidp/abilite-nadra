@@ -1,6 +1,8 @@
 import React from "react";
 import Select from "../Select";
 import MultiSelect from "../select/MultiSelect";
+import { useSelector, useDispatch } from "react-redux";
+import { setUpupdateJobSchedulingResourcesAllocation } from "../../../../../../../global-redux/reducers/planing/job-scheduling/slice";
 
 const ResourceAllocation = ({
   currentJobSchedulingObject,
@@ -8,6 +10,17 @@ const ResourceAllocation = ({
   setCurrentJobScheduling,
   initialUserList,
 }) => {
+  const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state?.planingJobScheduling);
+  function handleSave() {
+    if (!loading) {
+      dispatch(
+        setUpupdateJobSchedulingResourcesAllocation(
+          currentJobSchedulingObject?.resourceAllocation
+        )
+      );
+    }
+  }
   return (
     <div className="accordion-item">
       <h2 className="accordion-header">
@@ -34,23 +47,26 @@ const ResourceAllocation = ({
                 <Select
                   label="Head Of Internal Audit"
                   value={
-                    currentJobSchedulingObject?.headOfInternalAudit?.name || ""
+                    currentJobSchedulingObject?.resourceAllocation
+                      ?.headOfInternalAudit?.name || ""
                   }
                   setCurrentJobScheduling={setCurrentJobScheduling}
                   name="headOfInternalAudit"
                   list={allUsers?.map((all) => all?.name)}
+                  allUsers={allUsers}
                 />
               </div>
               <div className="col-lg-6">
                 <Select
                   label="Backup Head Of InternalAudit"
                   value={
-                    currentJobSchedulingObject?.backupHeadOfInternalAudit
-                      ?.name || ""
+                    currentJobSchedulingObject?.resourceAllocation
+                      ?.backupHeadOfInternalAudit?.name || ""
                   }
                   setCurrentJobScheduling={setCurrentJobScheduling}
                   name="backupHeadOfInternalAudit"
                   list={allUsers?.map((all) => all?.name)}
+                  allUsers={allUsers}
                 />
               </div>
             </div>
@@ -59,11 +75,13 @@ const ResourceAllocation = ({
                 <Select
                   label="Proposed Job Approver"
                   value={
-                    currentJobSchedulingObject?.proposedJobApprover?.name || ""
+                    currentJobSchedulingObject?.resourceAllocation
+                      ?.proposedJobApprover?.name || ""
                   }
                   setCurrentJobScheduling={setCurrentJobScheduling}
                   name="proposedJobApprover"
                   list={allUsers?.map((all) => all?.name)}
+                  allUsers={allUsers}
                 />
               </div>
               <div className="col-lg-6">
@@ -73,7 +91,24 @@ const ResourceAllocation = ({
                   initialPersonalArray={initialUserList}
                   name="resourcesList"
                   setCurrentJobScheduling={setCurrentJobScheduling}
+                  section="resourceAllocation"
+                  allUsers={allUsers}
                 />
+              </div>
+            </div>
+            <div className="row mt-3">
+              <div className="col-lg-12 justify-content-end text-end">
+                <div
+                  className={`btn btn-labeled btn-primary px-3 shadow ${
+                    loading && "disabled"
+                  }`}
+                  onClick={handleSave}
+                >
+                  <span className="btn-label me-2">
+                    <i className="fa fa-check-circle"></i>
+                  </span>
+                  {loading ? "Loading..." : "Save"}
+                </div>
               </div>
             </div>
           </div>

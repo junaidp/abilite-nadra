@@ -39,6 +39,10 @@ const JobPrioritization = () => {
     ) {
       object = { ...object, completed: false };
     }
+    object = {
+      ...object,
+      year: Number(object?.year),
+    };
     if (!loading) {
       dispatch(setupUpdateJobPrioritization(object));
     }
