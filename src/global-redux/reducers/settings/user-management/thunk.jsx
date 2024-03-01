@@ -69,7 +69,7 @@ export const getAllUsers = async (data, thunkAPI) => {
             email: user[0]?.email,
           },
           company: user[0]?.company.find(
-            (item) => item?.companyName === currentCompany
+            (item) => item?.companyName === company
           ),
         },
         {

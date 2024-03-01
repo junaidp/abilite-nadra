@@ -11,6 +11,8 @@ const Table = ({
   handleApprove,
   allAuditPlanSummary,
   user,
+  currentId,
+  loading,
 }) => {
   return (
     <tbody>
@@ -119,10 +121,16 @@ const Table = ({
               <div className="mt-3">
                 <div className="justify-content-end text-end">
                   <div
-                    className="btn btn-labeled btn-primary px-3 shadow"
+                    className={`btn btn-labeled btn-primary px-3 shadow ${
+                      loading &&
+                      Number(currentId) === Number(item?.id) &&
+                      "disabled"
+                    }`}
                     onClick={() => handleEdit(item)}
                   >
-                    Edit
+                    {loading && Number(currentId) === Number(item?.id)
+                      ? "Loading..."
+                      : "Save"}
                   </div>
                 </div>
               </div>
@@ -135,10 +143,16 @@ const Table = ({
                 <div className="mt-3">
                   <div className="justify-content-end text-end">
                     <div
-                      className="btn btn-labeled btn-primary px-3 shadow"
+                      className={`btn btn-labeled btn-primary px-3 shadow ${
+                        loading &&
+                        Number(currentId) === Number(item?.id) &&
+                        "disabled"
+                      }`}
                       onClick={() => handleSubmit(item)}
                     >
-                      Submit
+                      {loading && Number(currentId) === Number(item?.id)
+                        ? "Loading..."
+                        : "Submit"}
                     </div>
                   </div>
                 </div>
@@ -150,10 +164,16 @@ const Table = ({
                 <div className="mt-3">
                   <div className="justify-content-end text-end">
                     <div
-                      className="btn btn-labeled btn-primary px-3 shadow"
+                      className={`btn btn-labeled btn-primary px-3 shadow ${
+                        loading &&
+                        Number(currentId) === Number(item?.id) &&
+                        "disabled"
+                      }`}
                       onClick={() => handleApprove(item)}
                     >
-                      Approve
+                      {loading && Number(currentId) === Number(item?.id)
+                        ? "Loading..."
+                        : "Approve"}
                     </div>
                   </div>
                 </div>

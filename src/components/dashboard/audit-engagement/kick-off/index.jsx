@@ -12,6 +12,7 @@ import {
   resetAuditEngagementAddSuccess,
   resetAuditEngagementObservationAddSuccess,
   handleCleanUp,
+  setupGetInitialSingleAuditEngagement,
 } from "../../../../global-redux/reducers/audit-engagement/slice";
 import AddKickOffObjectiveDialog from "../../../modals/add-kickoff-objective-dialog";
 import AddKickOffRatingDialog from "../../../modals/add-kickoff-rating-dialog";
@@ -27,6 +28,7 @@ import RiskControlMatrix from "./component/risk-control-matrix";
 import AuditProgram from "./component/audit-program";
 import AuditSteps from "./component/audit-steps";
 import ComplianceCheckList from "./component/compliace-checklist";
+import { CircularProgress } from "@mui/material";
 
 const KickOff = () => {
   const dispatch = useDispatch();
@@ -34,8 +36,13 @@ const KickOff = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const auditEngagementId = searchParams.get("auditEngagementId");
   const { user } = useSelector((state) => state?.auth);
-  const { auditEngagementAddSuccess, auditEngagementObservationAddSuccess,singleAuditEngagementObject } =
-    useSelector((state) => state?.auditEngagement);
+  const {
+    auditEngagementAddSuccess,
+    auditEngagementObservationAddSuccess,
+    singleAuditEngagementObject,
+    loading,
+    initialLoading,
+  } = useSelector((state) => state?.auditEngagement);
 
   const [currentAuditEngagement, setCurrentAuditEngagement] = React.useState(
     {}
@@ -91,6 +98,25 @@ const KickOff = () => {
           },
         };
       }
+      if (
+        currentItem?.auditProgram !== null &&
+        currentItem?.auditProgram?.programList?.length !== 0
+      ) {
+        currentItem = {
+          ...currentItem,
+          auditProgram: {
+            ...currentItem?.auditProgram,
+            programList: currentItem?.auditProgram?.programList?.map(
+              (program) => {
+                return {
+                  ...program,
+                  editable: false,
+                };
+              }
+            ),
+          },
+        };
+      }
       setCurrentAuditEngagement(currentItem);
     }
   }, [singleAuditEngagementObject]);
@@ -111,7 +137,7 @@ const KickOff = () => {
 
   React.useEffect(() => {
     if (user[0]?.token && auditEngagementId) {
-      dispatch(setupGetSingleAuditEngagement(auditEngagementId));
+      dispatch(setupGetInitialSingleAuditEngagement(auditEngagementId));
     }
   }, [user, auditEngagementId]);
 
@@ -134,147 +160,170 @@ const KickOff = () => {
 
   return (
     <div>
-      {showViewLibrary && (
-        <div className="modal-objective-library">
-          <div className="model-wrap-library">
-            <ViewRiskLibraryDialog
-              setShowViewLibrary={setShowViewLibrary}
-              currentAuditEngagement={currentAuditEngagement}
-            />
-          </div>
+      {initialLoading ? (
+        <div className="my-3">
+          <CircularProgress />
         </div>
-      )}
-
-      {showAuditStepsDialog && (
-        <div className="modal-objective-audit-steps-library">
-          <div className="model-wrap-audit-steps-library">
-            <AuditStepsDialog
-              setShowAuditStepsDialog={setShowAuditStepsDialog}
-              auditStepId={auditStepId}
-              currentAuditEngagement={currentAuditEngagement}
-            />
-          </div>
-        </div>
-      )}
-      {showComplianceCheckListDialog && (
-        <div className="modal-compliance-check-list">
-          <div className="model-wrap-compliance-check-list">
-            <ComplianceCheckListDialog
-              setShowComplianceCheckListDialog={
-                setShowComplianceCheckListDialog
-              }
-              complianceCheckListId={complianceCheckListId}
-              currentAuditEngagement={currentAuditEngagement}
-            />
-          </div>
-        </div>
-      )}
-      {showAddAuditProgramDialog && (
-        <div className="modal-compliance-check-list">
-          <div className="model-wrap-compliance-check-list">
-            <AddAuditProgramDialog
-              setShowAddAuditProgramDialog={setShowAddAuditProgramDialog}
-              auditEngagementId={auditEngagementId}
-              currentAuditEngagement={currentAuditEngagement}
-            />
-          </div>
-        </div>
-      )}
-      {/* Risk Control Matrix Dialogs */}
-      {showKickOffObjectiveDialog && (
-        <div className="modal-compliance-check-list">
-          <div className="model-wrap-compliance-check-list">
-            <AddKickOffObjectiveDialog
-              setShowKickOffObjectiveDialog={setShowKickOffObjectiveDialog}
-              auditEngagementId={auditEngagementId}
-            />
-          </div>
-        </div>
-      )}
-      {showKickOffRatingDialog && (
-        <div className="modal-compliance-check-list">
-          <div className="model-wrap-compliance-check-list">
-            <AddKickOffRatingDialog
-              setShowKickOffRatingDialog={setShowKickOffRatingDialog}
-              currentAuditEngagement={currentAuditEngagement}
-            />
-          </div>
-        </div>
-      )}
-      {showKickOffControlDialog && (
-        <div className="modal-compliance-check-list">
-          <div className="model-wrap-compliance-check-list">
-            <AddKickOffControlDialog
-              setShowKickOffControlDialog={setShowKickOffControlDialog}
-              currentAuditEngagement={currentAuditEngagement}
-              auditEngagementId={auditEngagementId}
-            />
-          </div>
-        </div>
-      )}
-
-      <header className="section-header my-3  text-start d-flex align-items-center justify-content-between">
-        <div className="mb-0 heading d-flex align-items-center">
-          <i
-            onClick={() => navigate("/audit/audit-engagement")}
-            className="fa fa-arrow-left text-primary fs-5 pe-3 cursor-pointer"
-          ></i>
-
-          <h2 className="mx-2 m-2 heading">{currentAuditEngagement?.title}</h2>
-        </div>
-      </header>
-
-      <div className="row px-4">
-        <div className="col-md-12">
-          <div className="accordion" id="accordionFlushExample">
-            <JobName currentAuditEngagement={currentAuditEngagement} />
-            <AuditNotifications
-              currentAuditEngagement={currentAuditEngagement}
-              auditEngagementId={auditEngagementId}
-            />
-            <RaiseInformationRequest />
-            {currentAuditEngagement?.auditStepChecklistList === null ||
-              (currentAuditEngagement?.auditStepChecklistList?.length === 0 && (
-                <RiskControlMatrix
+      ) : singleAuditEngagementObject[0]?.error === "Not Found" ? (
+        "Audit Engagement Not Found"
+      ) : (
+        <>
+          {showViewLibrary && (
+            <div className="modal-objective-library">
+              <div className="model-wrap-library">
+                <ViewRiskLibraryDialog
                   setShowViewLibrary={setShowViewLibrary}
                   currentAuditEngagement={currentAuditEngagement}
-                  setCurrentAuditEngagement={setCurrentAuditEngagement}
-                  setShowKickOffObjectiveDialog={setShowKickOffObjectiveDialog}
-                  setShowKickOffRatingDialog={setShowKickOffRatingDialog}
-                  setShowKickOffControlDialog={setShowKickOffControlDialog}
-                  auditEngagementId={auditEngagementId}
                 />
-              ))}
-            {currentAuditEngagement?.auditStepChecklistList === null ||
-              (currentAuditEngagement?.auditStepChecklistList?.length === 0 && (
-                <AuditProgram
-                  currentAuditEngagement={currentAuditEngagement}
-                  setCurrentAuditEngagement={setCurrentAuditEngagement}
-                  setShowAddAuditProgramDialog={setShowAddAuditProgramDialog}
-                  auditEngagementId={auditEngagementId}
-                />
-              ))}
-            {currentAuditEngagement?.auditStepChecklistList === null ||
-              (currentAuditEngagement?.auditStepChecklistList?.length === 0 && (
-                <AuditSteps
+              </div>
+            </div>
+          )}
+
+          {showAuditStepsDialog && (
+            <div className="modal-objective-audit-steps-library">
+              <div className="model-wrap-audit-steps-library">
+                <AuditStepsDialog
                   setShowAuditStepsDialog={setShowAuditStepsDialog}
+                  auditStepId={auditStepId}
                   currentAuditEngagement={currentAuditEngagement}
-                  setAuditStepId={setAuditStepId}
                 />
-              ))}
-            {currentAuditEngagement?.auditStepChecklistList &&
-              currentAuditEngagement?.auditStepChecklistList?.length !== 0 && (
-                <ComplianceCheckList
+              </div>
+            </div>
+          )}
+          {showComplianceCheckListDialog && (
+            <div className="modal-compliance-check-list">
+              <div className="model-wrap-compliance-check-list">
+                <ComplianceCheckListDialog
                   setShowComplianceCheckListDialog={
                     setShowComplianceCheckListDialog
                   }
+                  complianceCheckListId={complianceCheckListId}
                   currentAuditEngagement={currentAuditEngagement}
-                  setComplianceCheckListId={setComplianceCheckListId}
                 />
-              )}
+              </div>
+            </div>
+          )}
+          {showAddAuditProgramDialog && (
+            <div className="modal-compliance-check-list">
+              <div className="model-wrap-compliance-check-list">
+                <AddAuditProgramDialog
+                  setShowAddAuditProgramDialog={setShowAddAuditProgramDialog}
+                  auditEngagementId={auditEngagementId}
+                  currentAuditEngagement={currentAuditEngagement}
+                />
+              </div>
+            </div>
+          )}
+          {/* Risk Control Matrix Dialogs */}
+          {showKickOffObjectiveDialog && (
+            <div className="modal-compliance-check-list">
+              <div className="model-wrap-compliance-check-list">
+                <AddKickOffObjectiveDialog
+                  setShowKickOffObjectiveDialog={setShowKickOffObjectiveDialog}
+                  auditEngagementId={auditEngagementId}
+                />
+              </div>
+            </div>
+          )}
+          {showKickOffRatingDialog && (
+            <div className="modal-compliance-check-list">
+              <div className="model-wrap-compliance-check-list">
+                <AddKickOffRatingDialog
+                  setShowKickOffRatingDialog={setShowKickOffRatingDialog}
+                  currentAuditEngagement={currentAuditEngagement}
+                />
+              </div>
+            </div>
+          )}
+          {showKickOffControlDialog && (
+            <div className="modal-compliance-check-list">
+              <div className="model-wrap-compliance-check-list">
+                <AddKickOffControlDialog
+                  setShowKickOffControlDialog={setShowKickOffControlDialog}
+                  currentAuditEngagement={currentAuditEngagement}
+                  auditEngagementId={auditEngagementId}
+                />
+              </div>
+            </div>
+          )}
+
+          <header className="section-header my-3  text-start d-flex align-items-center justify-content-between">
+            <div className="mb-0 heading d-flex align-items-center">
+              <i
+                onClick={() => navigate("/audit/audit-engagement")}
+                className="fa fa-arrow-left text-primary fs-5 pe-3 cursor-pointer"
+              ></i>
+
+              <h2 className="mx-2 m-2 heading">
+                {currentAuditEngagement?.title}
+              </h2>
+            </div>
+          </header>
+
+          <div className="row px-4">
+            <div className="col-md-12">
+              <div className="accordion" id="accordionFlushExample">
+                <JobName currentAuditEngagement={currentAuditEngagement} />
+                <AuditNotifications
+                  currentAuditEngagement={currentAuditEngagement}
+                  auditEngagementId={auditEngagementId}
+                />
+                {/* <RaiseInformationRequest /> */}
+                {currentAuditEngagement?.auditStepChecklistList === null ||
+                  (currentAuditEngagement?.auditStepChecklistList?.length ===
+                    0 && (
+                    <RiskControlMatrix
+                      setShowViewLibrary={setShowViewLibrary}
+                      currentAuditEngagement={currentAuditEngagement}
+                      setCurrentAuditEngagement={setCurrentAuditEngagement}
+                      setShowKickOffObjectiveDialog={
+                        setShowKickOffObjectiveDialog
+                      }
+                      setShowKickOffRatingDialog={setShowKickOffRatingDialog}
+                      setShowKickOffControlDialog={setShowKickOffControlDialog}
+                      auditEngagementId={auditEngagementId}
+                    />
+                  ))}
+                {currentAuditEngagement?.auditStepChecklistList === null ||
+                  (currentAuditEngagement?.auditStepChecklistList?.length ===
+                    0 && (
+                    <AuditProgram
+                      currentAuditEngagement={currentAuditEngagement}
+                      setCurrentAuditEngagement={setCurrentAuditEngagement}
+                      setShowAddAuditProgramDialog={
+                        setShowAddAuditProgramDialog
+                      }
+                      auditEngagementId={auditEngagementId}
+                      singleAuditEngagementObject={singleAuditEngagementObject}
+                    />
+                  ))}
+                {currentAuditEngagement?.auditStepChecklistList === null ||
+                  (currentAuditEngagement?.auditStepChecklistList?.length ===
+                    0 && (
+                    <AuditSteps
+                      setShowAuditStepsDialog={setShowAuditStepsDialog}
+                      currentAuditEngagement={currentAuditEngagement}
+                      setAuditStepId={setAuditStepId}
+                      singleAuditEngagementObject={singleAuditEngagementObject}
+                      loading={loading}
+                    />
+                  ))}
+                {currentAuditEngagement?.auditStepChecklistList &&
+                  currentAuditEngagement?.auditStepChecklistList?.length !==
+                    0 && (
+                    <ComplianceCheckList
+                      setShowComplianceCheckListDialog={
+                        setShowComplianceCheckListDialog
+                      }
+                      currentAuditEngagement={currentAuditEngagement}
+                      setComplianceCheckListId={setComplianceCheckListId}
+                    />
+                  )}
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 };

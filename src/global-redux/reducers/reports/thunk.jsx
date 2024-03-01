@@ -35,7 +35,7 @@ export const getAllReports = async (data, thunkAPI) => {
   }
 };
 
-export const getSingleReport = async (data, thunkAPI) => {
+export const getInitialSingleReport = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.post(

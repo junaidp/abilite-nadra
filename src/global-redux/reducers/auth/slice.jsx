@@ -105,8 +105,8 @@ export const slice = createSlice({
     resetUpdateUserNameSuccess: (state) => {
       state.userNameUpdateSuccess = false;
     },
-    updateUserState: (state) => {
-      state.user = [{ ...state?.user, name: action.payload }];
+    updateUserState: (state, action) => {
+      state.user = [{ ...state?.user[0], name: action.payload }];
     },
   },
   extraReducers: (builder) => {

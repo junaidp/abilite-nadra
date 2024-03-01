@@ -9,9 +9,9 @@ import html2canvas from "html2canvas";
 import {
   resetReportAddSuccess,
   setupSaveReports,
-  setupGetSingleReport,
   setupUpdateSingleReport,
   handleCleanUp,
+  setupGetInitialSingleReport,
 } from "../../../../../global-redux/reducers/reports/slice";
 import {
   changeActiveLink,
@@ -27,6 +27,7 @@ import HeadingTable from "./components/heading-table";
 import Buttons from "./components/buttons";
 import GeneratePlaningReportDialog from "../../../../modals/generate-planing-report-dialog";
 import EditGeneratePlaningReportDialog from "../../../../modals/edit-generate-planing-report-dialog";
+import { CircularProgress } from "@mui/material";
 
 const GeneratePlanningReport = () => {
   const navigate = useNavigate();
@@ -34,9 +35,8 @@ const GeneratePlanningReport = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const editable = searchParams.get("editable");
   const reportId = searchParams.get("reportId");
-  const { loading, reportAddSuccess, singleReportObject } = useSelector(
-    (state) => state?.reports
-  );
+  const { loading, reportAddSuccess, singleReportObject, initialLoading } =
+    useSelector((state) => state?.reports);
   const { user } = useSelector((state) => state?.auth);
   const { company } = useSelector((state) => state?.common);
   const [pdfLoading, setPdfLoading] = React.useState(false);
@@ -218,7 +218,7 @@ const GeneratePlanningReport = () => {
 
   React.useEffect(() => {
     if (user[0]?.token && editable !== "notApplicable") {
-      dispatch(setupGetSingleReport(reportId));
+      dispatch(setupGetInitialSingleReport(reportId));
     }
   }, [user, editable]);
 
@@ -232,65 +232,79 @@ const GeneratePlanningReport = () => {
 
   return (
     <div id="reportsPage">
-      {generatePlaningReportDialog && (
-        <div className="audit-settings-modal">
-          <div className="model-wrap">
-            <GeneratePlaningReportDialog
-              setGeneratePlaningReportDialog={setGeneratePlaningReportDialog}
-              setData={setData}
-            />
-          </div>
+      {initialLoading ? (
+        <div className="my-3">
+          <CircularProgress />
         </div>
+      ) : singleReportObject[0]?.error === "Not Found" ? (
+        "Report Not Found"
+      ) : (
+        <>
+          {generatePlaningReportDialog && (
+            <div className="audit-settings-modal">
+              <div className="model-wrap">
+                <GeneratePlaningReportDialog
+                  setGeneratePlaningReportDialog={
+                    setGeneratePlaningReportDialog
+                  }
+                  setData={setData}
+                />
+              </div>
+            </div>
+          )}
+          {editGeneratePlaningReportDialog && (
+            <div className="audit-settings-modal">
+              <div className="model-wrap">
+                <EditGeneratePlaningReportDialog
+                  setEditGeneratePlaningReportDialog={
+                    setEditGeneratePlaningReportDialog
+                  }
+                  data={data}
+                  setData={setData}
+                  editGeneratePlaningId={editGeneratePlaningId}
+                  setEditGeneratePlaningId={setEditGeneratePlaningId}
+                />
+              </div>
+            </div>
+          )}
+
+          <Header
+            navigate={navigate}
+            setGeneratePlaningReportDialog={setGeneratePlaningReportDialog}
+            data={data}
+            setData={setData}
+            editable={editable}
+          />
+
+          <Editors
+            handleEditorContentChange={handleEditorContentChange}
+            data={data}
+            editable={editable}
+          />
+
+          <HeadingTable
+            editable={editable}
+            data={data}
+            handleDeleteHeading={handleDeleteHeading}
+            setEditGeneratePlaningId={setEditGeneratePlaningId}
+            setEditGeneratePlaningReportDialog={
+              setEditGeneratePlaningReportDialog
+            }
+          />
+          <AuditableUnits />
+          <RiskScores />
+          <RiskFactorApproach />
+          <AttachFiles />
+          <Buttons
+            handleDownload={handleDownload}
+            pdfLoading={pdfLoading}
+            editable={editable}
+            loading={loading}
+            handleSaveReport={handleSaveReport}
+            handleEditReport={handleEditReport}
+          />
+        </>
       )}
-      {editGeneratePlaningReportDialog && (
-        <div className="audit-settings-modal">
-          <div className="model-wrap">
-            <EditGeneratePlaningReportDialog
-              setEditGeneratePlaningReportDialog={
-                setEditGeneratePlaningReportDialog
-              }
-              data={data}
-              setData={setData}
-              editGeneratePlaningId={editGeneratePlaningId}
-              setEditGeneratePlaningId={setEditGeneratePlaningId}
-            />
-          </div>
-        </div>
-      )}
-
-      <Header
-        navigate={navigate}
-        setGeneratePlaningReportDialog={setGeneratePlaningReportDialog}
-        data={data}
-        setData={setData}
-        editable={editable}
-      />
-
-      <Editors
-        handleEditorContentChange={handleEditorContentChange}
-        data={data}
-        editable={editable}
-      />
-
-      <HeadingTable
-        editable={editable}
-        data={data}
-        handleDeleteHeading={handleDeleteHeading}
-        setEditGeneratePlaningId={setEditGeneratePlaningId}
-        setEditGeneratePlaningReportDialog={setEditGeneratePlaningReportDialog}
-      />
-      <AuditableUnits />
-      <RiskScores />
-      <RiskFactorApproach />
-      <AttachFiles />
-      <Buttons
-        handleDownload={handleDownload}
-        pdfLoading={pdfLoading}
-        editable={editable}
-        loading={loading}
-        handleSaveReport={handleSaveReport}
-        handleEditReport={handleEditReport}
-      />
     </div>
   );
 };

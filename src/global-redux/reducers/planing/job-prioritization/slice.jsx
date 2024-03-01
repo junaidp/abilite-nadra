@@ -1,9 +1,14 @@
-import { getAllJobPrioritization, updateJobPrioritization } from "./thunk";
+import {
+  getAllJobPrioritization,
+  updateJobPrioritization,
+  getInitialAllJobPrioritization,
+} from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
 const initialState = {
   loading: false,
+  initialLoading: false,
   allJobPrioritization: [],
   jobPrioritizationAddSuccess: false,
 };
@@ -14,6 +19,14 @@ export const setupGetAllJobPrioritization = createAsyncThunk(
     return getAllJobPrioritization(data, thunkAPI);
   }
 );
+
+export const setupGetInitialAllJobPrioritization = createAsyncThunk(
+  "jobPrioritization/getInitialAllJobPrioritization",
+  async (data, thunkAPI) => {
+    return getInitialAllJobPrioritization(data, thunkAPI);
+  }
+);
+
 export const setupUpdateJobPrioritization = createAsyncThunk(
   "jobPrioritization/updateJobPrioritization",
   async (data, thunkAPI) => {
@@ -50,6 +63,32 @@ export const slice = createSlice({
           toast.error("An Error has occurred");
         }
       });
+    // Get Initial all job prioritization
+    builder
+      .addCase(setupGetInitialAllJobPrioritization.pending, (state) => {
+        state.initialLoading = true;
+      })
+      .addCase(
+        setupGetInitialAllJobPrioritization.fulfilled,
+        (state, { payload }) => {
+          state.initialLoading = false;
+          const sortedArray = payload?.data?.sort(
+            (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
+          );
+          state.allJobPrioritization = sortedArray || [];
+        }
+      )
+      .addCase(
+        setupGetInitialAllJobPrioritization.rejected,
+        (state, { payload }) => {
+          state.initialLoading = false;
+          if (payload?.response?.data?.message) {
+            toast.error(payload?.response?.data?.message);
+          } else {
+            toast.error("An Error has occurred");
+          }
+        }
+      );
 
     // Update job Prioritization
     builder

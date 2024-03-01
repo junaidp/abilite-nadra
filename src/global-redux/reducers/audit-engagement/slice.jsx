@@ -1,6 +1,7 @@
 import {
   getAllAuditEngagement,
   getSingleAuditEngagement,
+  getInitialSingleAuditEngagement,
   saveAuditNotification,
   saveRiskControlMatrixObjective,
   updateRiskControlMatrixObjective,
@@ -23,6 +24,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 const initialState = {
   loading: false,
+  initialLoading: false,
   auditEngagementAddSuccess: false,
   singleAuditEngagementObject: {},
   auditEngagementObservationAddSuccess: false,
@@ -40,6 +42,13 @@ export const setupGetSingleAuditEngagement = createAsyncThunk(
   "auditEngagement/getSingleAuditEngagement",
   async (data, thunkAPI) => {
     return getSingleAuditEngagement(data, thunkAPI);
+  }
+);
+
+export const setupGetInitialSingleAuditEngagement = createAsyncThunk(
+  "auditEngagement/getInitialSingleAuditEngagement",
+  async (data, thunkAPI) => {
+    return getInitialSingleAuditEngagement(data, thunkAPI);
   }
 );
 
@@ -201,7 +210,9 @@ export const slice = createSlice({
         setupGetSingleAuditEngagement.fulfilled,
         (state, { payload }) => {
           state.loading = false;
-          state.singleAuditEngagementObject = payload?.data;
+          state.singleAuditEngagementObject = payload?.data || [
+            { error: "Not Found" },
+          ];
         }
       )
       .addCase(setupGetSingleAuditEngagement.rejected, (state, action) => {
@@ -212,6 +223,31 @@ export const slice = createSlice({
           toast.error("An Error has occurred");
         }
       });
+    // Get Initial Single Audit Engagements
+    builder
+      .addCase(setupGetInitialSingleAuditEngagement.pending, (state) => {
+        state.initialLoading = true;
+      })
+      .addCase(
+        setupGetInitialSingleAuditEngagement.fulfilled,
+        (state, { payload }) => {
+          state.initialLoading = false;
+          state.singleAuditEngagementObject = payload?.data || [
+            { error: "Not Found" },
+          ];
+        }
+      )
+      .addCase(
+        setupGetInitialSingleAuditEngagement.rejected,
+        (state, action) => {
+          state.initialLoading = false;
+          if (action.payload?.response?.data?.message) {
+            toast.error(action.payload.response.data.message);
+          } else {
+            toast.error("An Error has occurred");
+          }
+        }
+      );
     // Save audit notification
     builder
       .addCase(setupSaveAuditNotification.pending, (state) => {

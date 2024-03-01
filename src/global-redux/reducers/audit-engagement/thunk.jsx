@@ -34,6 +34,24 @@ export const getSingleAuditEngagement = async (data, thunkAPI) => {
   }
 };
 
+export const getInitialSingleAuditEngagement = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.get(
+      `${baseUrl}/auditEngagement/get?auditEngagementId=${data}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
 export const saveAuditNotification = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;

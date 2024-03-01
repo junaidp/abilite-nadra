@@ -19,6 +19,24 @@ export const getAllJobPrioritization = async (data, thunkAPI) => {
   }
 };
 
+export const getInitialAllJobPrioritization = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.get(
+      `${baseUrl}/auditPlanningAndScheduling/jobPrioritization/getAllByCompanyId?companyId=${data}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
 export const updateJobPrioritization = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;

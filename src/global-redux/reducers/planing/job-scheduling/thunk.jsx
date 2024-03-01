@@ -37,6 +37,24 @@ export const getSingleJobScheduling = async (data, thunkAPI) => {
   }
 };
 
+export const getInitialSingleJobScheduling = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.get(
+      `${baseUrl}/auditPlanningAndScheduling/jobScheduling/get?jobSchedulingId=${data}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
 export const updateJobScheduling = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;

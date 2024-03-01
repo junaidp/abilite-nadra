@@ -1,10 +1,52 @@
 import React from "react";
+import { setupUpdateAuditStepApproval } from "../../../../../../global-redux/reducers/audit-engagement/slice";
+import { useSelector, useDispatch } from "react-redux";
 
 const AditSteps = ({
   setShowAuditStepsDialog,
   currentAuditEngagement,
   setAuditStepId,
+  singleAuditEngagementObject,
+  loading,
 }) => {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state?.auth);
+  const [showSubmitButton, setShowSubmitButton] = React.useState(false);
+
+  function handleSubmit() {
+    dispatch(
+      setupUpdateAuditStepApproval({
+        ...currentAuditEngagement?.auditStep,
+        submitted: true,
+      })
+    );
+  }
+  function handleApprove() {
+    dispatch(
+      setupUpdateAuditStepApproval({
+        ...currentAuditEngagement?.auditStep,
+        approved: true,
+      })
+    );
+  }
+
+  React.useEffect(() => {
+    if (
+      singleAuditEngagementObject?.auditStep !== null &&
+      singleAuditEngagementObject?.auditStep?.stepList?.length !== 0
+    ) {
+      let submit = true;
+      singleAuditEngagementObject?.auditStep?.stepList?.forEach(
+        (singleStep) => {
+          if (singleStep?.auditStepObservationsList?.length === 0) {
+            submit = false;
+          }
+        }
+      );
+      setShowSubmitButton(submit);
+    }
+  }, [singleAuditEngagementObject]);
+
   return (
     <div className="accordion-item">
       <h2 className="accordion-header">
@@ -19,7 +61,8 @@ const AditSteps = ({
           <div className="d-flex w-100 me-3 align-items-center justify-content-between">
             <div className=" d-flex align-items-center">
               {currentAuditEngagement?.auditStep !== null &&
-                currentAuditEngagement?.auditStep?.stepList?.length !== 0 && (
+                currentAuditEngagement?.auditStep?.stepList?.length !== 0 &&
+                showSubmitButton && (
                   <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
                 )}
               Audit Steps
@@ -42,7 +85,7 @@ const AditSteps = ({
                       <tr>
                         <th className="f-80">Sr No.</th>
                         <th>Program Step</th>
-                        {/* <th>Actions</th> */}
+                        <th>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -60,17 +103,27 @@ const AditSteps = ({
                                 <td>
                                   <a
                                     onClick={() => {
-                                      setAuditStepId(item?.id);
-                                      setShowAuditStepsDialog(true);
+                                      if (
+                                        currentAuditEngagement?.auditStep
+                                          ?.approved !== true
+                                      ) {
+                                        setAuditStepId(item?.id);
+                                        setShowAuditStepsDialog(true);
+                                      }
                                     }}
                                     className="fw-bold  text-primary  px-3 py-1 f-10"
                                   >
                                     {item?.program?.description}
                                   </a>
                                 </td>
-                                {/* <td>
-                                <i className="fa fa-check-circle text-success f-18"></i>
-                              </td> */}
+                                <td>
+                                  {item?.auditStepObservationsList?.length !==
+                                  0 ? (
+                                    <i className="fa fa-check-circle text-success f-18"></i>
+                                  ) : (
+                                    <i className="fa fa-check-circle text-danger  f-18"></i>
+                                  )}
+                                </td>
                               </tr>
                             );
                           }
@@ -79,6 +132,45 @@ const AditSteps = ({
                     </tbody>
                   </table>
                 </div>
+                {currentAuditEngagement?.auditStep?.submitted === false &&
+                  showSubmitButton && (
+                    <div onClick={handleSubmit}>
+                      <div className="justify-content-end text-end">
+                        <div
+                          className={`btn btn-labeled btn-primary px-3 shadow ${
+                            loading && "disabled"
+                          }`}
+                        >
+                          {loading ? "Loading..." : "Submit"}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                {currentAuditEngagement?.auditStep?.submitted === true &&
+                  currentAuditEngagement?.auditStep?.approved === false &&
+                  (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
+                    Number(user[0]?.userId?.id) ===
+                      Number(
+                        currentAuditEngagement?.resourceAllocation
+                          ?.backupHeadOfInternalAudit?.id
+                      ) ||
+                    Number(user[0]?.userId?.id) ===
+                      Number(
+                        currentAuditEngagement?.resourceAllocation
+                          ?.proposedJobApprover?.id
+                      )) && (
+                    <div onClick={handleApprove}>
+                      <div className="justify-content-end text-end">
+                        <div
+                          className={`btn btn-labeled btn-primary px-3 shadow ${
+                            loading && "disabled"
+                          }`}
+                        >
+                          {loading ? "Loading..." : "Approve"}
+                        </div>
+                      </div>
+                    </div>
+                  )}
               </div>
             </div>
           </div>

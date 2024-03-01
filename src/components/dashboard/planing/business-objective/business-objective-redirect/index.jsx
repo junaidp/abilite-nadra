@@ -10,6 +10,7 @@ import {
   setupSaveMapProcessBusinessObjective,
   setupUpdateBusinessMinuteMeeting,
   handleCleanUp,
+  setupGetInitialSingleEngagementObject,
 } from "../../../../../global-redux/reducers/planing/engagement/slice";
 import { setupGetAllLocations } from "../../../../../global-redux/reducers/settings/location/slice";
 import {
@@ -25,6 +26,7 @@ import CompanyUpdates from "./components/company-updates";
 import SetMeetingTime from "./components/set-meeting-time";
 import BusinessObjectiveMapProcess from "./components/business-objective-map-process";
 import { toast } from "react-toastify";
+import { CircularProgress } from "@mui/material";
 
 const BusinessObjectiveRedirect = () => {
   const navigate = useNavigate();
@@ -32,8 +34,12 @@ const BusinessObjectiveRedirect = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const engagementId = searchParams.get("engagementId");
   const { allLocations } = useSelector((state) => state.setttingsLocation);
-  const { planingEngagementSingleObject, engagementAddSuccess, loading } =
-    useSelector((state) => state.planingEngagements);
+  const {
+    planingEngagementSingleObject,
+    engagementAddSuccess,
+    loading,
+    initialLoading,
+  } = useSelector((state) => state.planingEngagements);
   const { user } = useSelector((state) => state?.auth);
   const [showObjectiveListDialog, setShowObjectiveListDialog] =
     React.useState(false);
@@ -221,7 +227,7 @@ const BusinessObjectiveRedirect = () => {
 
   React.useEffect(() => {
     if (user[0]?.token && engagementId) {
-      dispatch(setupGetSingleEngagementObject(engagementId));
+      dispatch(setupGetInitialSingleEngagementObject(engagementId));
       dispatch(setupGetAllLocations());
     }
   }, [engagementId, user]);
@@ -242,97 +248,107 @@ const BusinessObjectiveRedirect = () => {
 
   return (
     <div>
-      <Dialog open={showObjectiveListDialog} onClose={handleClose}>
-        <ObjectiveListDialog
-          setShowObjectiveListDialog={setShowObjectiveListDialog}
-        />
-      </Dialog>
+      {initialLoading ? (
+        <div className="my-3">
+        <CircularProgress />
+        </div>
+      ) : planingEngagementSingleObject[0]?.error === "Not Found" ? (
+        "Engagement Not Found"
+      ) : (
+        <>
+          <Dialog open={showObjectiveListDialog} onClose={handleClose}>
+            <ObjectiveListDialog
+              setShowObjectiveListDialog={setShowObjectiveListDialog}
+            />
+          </Dialog>
 
-      <header className="section-header my-3 align-items-center  text-start d-flex ">
-        <a
-          className="text-primary"
-          onClick={() => navigate("/audit/business-objective")}
-        >
-          <i className="fa fa-arrow-left text-primary fs-5 pe-3"></i>
-        </a>
-        <div className="mb-0 heading">Business Objectives</div>
-      </header>
+          <header className="section-header my-3 align-items-center  text-start d-flex ">
+            <a
+              className="text-primary"
+              onClick={() => navigate("/audit/business-objective")}
+            >
+              <i className="fa fa-arrow-left text-primary fs-5 pe-3"></i>
+            </a>
+            <div className="mb-0 heading">Business Objectives</div>
+          </header>
 
-      <div className="row px-4">
-        <div className="row">
-          <div className="mb-4 col-lg-12">
-            <div className="col-lg-2 label-text w-100 mb-2">
-              Engagement Name
-            </div>
-            <div className="col-lg-12">
-              <div className="form-group">
-                <input
-                  type="text"
-                  id="description"
-                  value={object?.engagementName}
-                  onChange={handleChange}
-                  name="engagementName"
-                  className="form-control h-40"
-                  placeholder="Enter"
-                />
+          <div className="row px-4">
+            <div className="row">
+              <div className="mb-4 col-lg-12">
+                <div className="col-lg-2 label-text w-100 mb-2">
+                  Engagement Name
+                </div>
+                <div className="col-lg-12">
+                  <div className="form-group">
+                    <input
+                      type="text"
+                      id="description"
+                      value={object?.engagementName}
+                      onChange={handleChange}
+                      name="engagementName"
+                      className="form-control h-40"
+                      placeholder="Enter"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-        <div className="col-md-12">
-          <div className="accordion" id="accordionFlushExample">
-            <IndustryUpdates
-              handleUpdateBusinessObjective={handleUpdateBusinessObjective}
-              handleChange={handleChange}
-              object={object}
-              planingEngagementSingleObject={planingEngagementSingleObject}
-              loading={loading}
-            />
-            <CompanyUpdates
-              handleUpdateBusinessObjective={handleUpdateBusinessObjective}
-              handleChange={handleChange}
-              object={object}
-              planingEngagementSingleObject={planingEngagementSingleObject}
-              loading={loading}
-            />
+            <div className="col-md-12">
+              <div className="accordion" id="accordionFlushExample">
+                <IndustryUpdates
+                  handleUpdateBusinessObjective={handleUpdateBusinessObjective}
+                  handleChange={handleChange}
+                  object={object}
+                  planingEngagementSingleObject={planingEngagementSingleObject}
+                  loading={loading}
+                />
+                <CompanyUpdates
+                  handleUpdateBusinessObjective={handleUpdateBusinessObjective}
+                  handleChange={handleChange}
+                  object={object}
+                  planingEngagementSingleObject={planingEngagementSingleObject}
+                  loading={loading}
+                />
 
-            <SetMeetingTime
-              planingEngagementSingleObject={planingEngagementSingleObject}
-              object={object}
-              handleChange={handleChange}
-              allLocations={allLocations}
-              allSubLocations={allSubLocations}
-              loading={loading}
-              handleSaveMinuteMeetings={handleSaveMinuteMeetings}
-            />
-            <BusinessObjectiveMapProcess
-              handleSumMapProcess={handleSumMapProcess}
-              setShowObjectiveListDialog={setShowObjectiveListDialog}
-              object={object}
-              handleSaveBusinessObjectiveMapProcess={
-                handleSaveBusinessObjectiveMapProcess
-              }
-              loading={loading}
-              domain={domain}
-              description={description}
-              setDomain={setDomain}
-              setDescription={setDescription}
-              handleDeleteSingleMapItem={handleDeleteSingleMapItem}
-            />
+                <SetMeetingTime
+                  planingEngagementSingleObject={planingEngagementSingleObject}
+                  object={object}
+                  handleChange={handleChange}
+                  allLocations={allLocations}
+                  allSubLocations={allSubLocations}
+                  loading={loading}
+                  handleSaveMinuteMeetings={handleSaveMinuteMeetings}
+                />
+                <BusinessObjectiveMapProcess
+                  handleSumMapProcess={handleSumMapProcess}
+                  setShowObjectiveListDialog={setShowObjectiveListDialog}
+                  object={object}
+                  handleSaveBusinessObjectiveMapProcess={
+                    handleSaveBusinessObjectiveMapProcess
+                  }
+                  loading={loading}
+                  domain={domain}
+                  description={description}
+                  setDomain={setDomain}
+                  setDescription={setDescription}
+                  handleDeleteSingleMapItem={handleDeleteSingleMapItem}
+                />
+              </div>
+              <button
+                className={`btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow float-end ${
+                  loading && "disabled"
+                }`}
+                onClick={handleUpdateBusinessObjective}
+              >
+                <span className="btn-label me-2">
+                  <i className="fa fa-check-circle"></i>
+                </span>
+                {loading ? "loading..." : "Save"}
+              </button>
+            </div>
           </div>
-          <button
-            className={`btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow float-end ${
-              loading && "disabled"
-            }`}
-            onClick={handleUpdateBusinessObjective}
-          >
-            <span className="btn-label me-2">
-              <i className="fa fa-check-circle"></i>
-            </span>
-            {loading ? "loading..." : "Save"}
-          </button>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 };

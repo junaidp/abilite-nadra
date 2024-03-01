@@ -12,6 +12,7 @@ const ResourceAllocation = ({
 }) => {
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state?.planingJobScheduling);
+  const { user } = useSelector((state) => state?.auth);
   function handleSave() {
     if (!loading) {
       dispatch(
@@ -52,7 +53,11 @@ const ResourceAllocation = ({
                   }
                   setCurrentJobScheduling={setCurrentJobScheduling}
                   name="headOfInternalAudit"
-                  list={allUsers?.map((all) => all?.name)}
+                  list={allUsers
+                    ?.filter(
+                      (userItem) => Number(userItem?.id) !== user[0]?.userId?.id
+                    )
+                    ?.map((all) => all?.name)}
                   allUsers={allUsers}
                 />
               </div>
@@ -65,7 +70,11 @@ const ResourceAllocation = ({
                   }
                   setCurrentJobScheduling={setCurrentJobScheduling}
                   name="backupHeadOfInternalAudit"
-                  list={allUsers?.map((all) => all?.name)}
+                  list={allUsers
+                    ?.filter(
+                      (userItem) => Number(userItem?.id) !== user[0]?.userId?.id
+                    )
+                    ?.map((all) => all?.name)}
                   allUsers={allUsers}
                 />
               </div>
@@ -80,14 +89,23 @@ const ResourceAllocation = ({
                   }
                   setCurrentJobScheduling={setCurrentJobScheduling}
                   name="proposedJobApprover"
-                  list={allUsers?.map((all) => all?.name)}
+                  list={allUsers
+                    ?.filter(
+                      (userItem) => Number(userItem?.id) !== user[0]?.userId?.id
+                    )
+                    ?.map((all) => all?.name)}
                   allUsers={allUsers}
                 />
               </div>
               <div className="col-lg-6">
                 <MultiSelect
                   title="Resources List"
-                  names={allUsers?.map((all) => all?.name)}
+                  names={allUsers
+                    ?.filter(
+                      (userItem) =>
+                        Number(userItem?.id) !== Number(user[0]?.userId?.id)
+                    )
+                    ?.map((all) => all?.name)}
                   initialPersonalArray={initialUserList}
                   name="resourcesList"
                   setCurrentJobScheduling={setCurrentJobScheduling}

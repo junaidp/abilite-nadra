@@ -5,7 +5,7 @@ import {
   setupGetAllReports,
   resetReportAddSuccess,
   setupGetIAHReports,
-  setupUpdateSingleReport,
+  setupUpdateSingleReport  
 } from "../../../../global-redux/reducers/reports/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
@@ -97,12 +97,12 @@ const PlanningReport = () => {
         )?.id;
         if (companyId) {
           dispatch(setupGetIAHReports(companyId));
-          dispatch(setupGetAllUsers());
+          dispatch(setupGetAllUsers({ shareWith: true }));
         }
       }
       if (user[0]?.userId?.employeeid?.userHierarchy !== "IAH") {
         dispatch(setupGetAllReports());
-        dispatch(setupGetAllUsers());
+        dispatch(setupGetAllUsers({ shareWith: true }));
       }
     }
   }, [user, company]);

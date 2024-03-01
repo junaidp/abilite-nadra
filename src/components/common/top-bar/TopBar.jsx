@@ -80,7 +80,6 @@ const TopBar = () => {
             viewBox="0 0 16 16"
           >
             <path
-              // fill-rule="evenodd"
               d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"
             />
           </svg>
@@ -323,7 +322,7 @@ const TopBar = () => {
                 </a>
                 {showUserProfile && (
                   <div
-                    className="px-4 content-dd dropdown-menu-end  dropdown-menu-animate-up user-profile-dropdown absolute"
+                    className="px-4 content-dd dropdown-menu-end  dropdown-menu-animate-up user-profile-dropdown absolute left-300"
                     aria-labelledby="drop1"
                   >
                     <div data-simplebar="">
@@ -340,11 +339,11 @@ const TopBar = () => {
                         />
                         <div className="ms-3">
                           <h5 className="mb-1 fs-3">
-                            {user[0]?.firstname
-                              ? user[0]?.firstname
-                              : "Abdullah Shafique"}
+                            {user[0]?.name ? user[0]?.name : "Name Not Found"}
                           </h5>
-                          <span className="mb-1 d-block text-dark">Admin</span>
+                          <span className="mb-1 d-block text-dark">
+                            {user[0]?.userId?.role[0]?.name}
+                          </span>
                           <p className="mb-0 d-flex text-dark align-items-center gap-2">
                             <i className="fa fa-envelope fs-4"></i>{" "}
                             {user[0]?.email

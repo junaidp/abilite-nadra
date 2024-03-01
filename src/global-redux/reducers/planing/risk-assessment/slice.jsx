@@ -2,6 +2,7 @@ import {
   getAllRiskAssessments,
   updateRiskAssessment,
   performRiskAssessment,
+  performInitialRiskAssessment,
   addRiskAssessment,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
@@ -9,6 +10,7 @@ import { toast } from "react-toastify";
 
 const initialState = {
   loading: false,
+  initialLoading: false,
   allRiskAssessments: [],
   riskAssessmentSuccess: false,
   performRiskAssessmentObject: {},
@@ -32,6 +34,13 @@ export const setupPerformRiskAssessment = createAsyncThunk(
   "riskAssessment/performRiskAssessment",
   async (data, thunkAPI) => {
     return performRiskAssessment(data, thunkAPI);
+  }
+);
+
+export const setupPerformInitialRiskAssessment = createAsyncThunk(
+  "riskAssessment/performInitialRiskAssessment",
+  async (data, thunkAPI) => {
+    return performInitialRiskAssessment(data, thunkAPI);
   }
 );
 
@@ -105,7 +114,11 @@ export const slice = createSlice({
       })
       .addCase(setupPerformRiskAssessment.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.performRiskAssessmentObject = payload?.data;
+        state.performRiskAssessmentObject = payload?.data || [
+          {
+            error: "Not Found",
+          },
+        ];
       })
       .addCase(setupPerformRiskAssessment.rejected, (state, { payload }) => {
         state.loading = false;
@@ -115,6 +128,33 @@ export const slice = createSlice({
           toast.error("An Error has occurred");
         }
       });
+    // Perform Initial Risk Assessment
+    builder
+      .addCase(setupPerformInitialRiskAssessment.pending, (state) => {
+        state.initialLoading = true;
+      })
+      .addCase(
+        setupPerformInitialRiskAssessment.fulfilled,
+        (state, { payload }) => {
+          state.initialLoading = false;
+          state.performRiskAssessmentObject = payload?.data || [
+            {
+              error: "Not Found",
+            },
+          ];
+        }
+      )
+      .addCase(
+        setupPerformInitialRiskAssessment.rejected,
+        (state, { payload }) => {
+          state.initialLoading = false;
+          if (payload?.response?.data?.message) {
+            toast.error(payload?.response?.data?.message);
+          } else {
+            toast.error("An Error has occurred");
+          }
+        }
+      );
 
     // Add Risk Assessment
     builder

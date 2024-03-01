@@ -44,6 +44,15 @@ const ResidualRisk = () => {
     }
   }
 
+  function convertCamelCaseToReadable(camelCaseString) {
+    let words = camelCaseString.split(/(?=[A-Z])/);
+    let capitalizedWords = words.map(
+      (word) => word.charAt(0).toUpperCase() + word.slice(1)
+    );
+    let readableString = capitalizedWords.join(" ");
+    return readableString;
+  }
+
   function handleSave() {
     if (!loading) {
       dispatch(setupUpdateApprovalManagement(currentCompany));
@@ -102,7 +111,9 @@ const ResidualRisk = () => {
                     Object.entries(currentCompany?.iah).map(
                       ([key, value], index) => (
                         <tr key={index}>
-                          {typeof value === "boolean" && <td>{key}</td>}
+                          {typeof value === "boolean" && (
+                            <td>{convertCamelCaseToReadable(key)}</td>
+                          )}
                           {typeof value === "boolean" && (
                             <td>
                               <input
@@ -118,7 +129,6 @@ const ResidualRisk = () => {
                                   key !== "auditProgram" &&
                                   handleChange(event, "iah")
                                 }
-                              
                               />
                             </td>
                           )}

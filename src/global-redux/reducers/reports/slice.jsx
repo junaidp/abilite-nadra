@@ -2,7 +2,7 @@ import { toast } from "react-toastify";
 import {
   saveReports,
   getAllReports,
-  getSingleReport,
+  getInitialSingleReport,
   getIAHReports,
   editSingleReport,
   deleteSingleReport,
@@ -12,6 +12,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
   loading: false,
+  initialLoading: false,
   reportAddSuccess: false,
   singleReportObject: {},
   allReports: [],
@@ -29,10 +30,11 @@ export const setupGetAllReports = createAsyncThunk(
     return getAllReports(data, thunkAPI);
   }
 );
-export const setupGetSingleReport = createAsyncThunk(
-  "reports/getSingleReport",
+
+export const setupGetInitialSingleReport = createAsyncThunk(
+  "reports/getInitialSingleReport",
   async (data, thunkAPI) => {
-    return getSingleReport(data, thunkAPI);
+    return getInitialSingleReport(data, thunkAPI);
   }
 );
 export const setupGetIAHReports = createAsyncThunk(
@@ -117,17 +119,17 @@ export const slice = createSlice({
           toast.error("An Error has occurred");
         }
       });
-    // Get Single Report
+    // Get Initial Single Report
     builder
-      .addCase(setupGetSingleReport.pending, (state) => {
-        state.loading = true;
+      .addCase(setupGetInitialSingleReport.pending, (state) => {
+        state.initialLoading = true;
       })
-      .addCase(setupGetSingleReport.fulfilled, (state, { payload }) => {
-        state.loading = false;
-        state.singleReportObject = payload?.data || {};
+      .addCase(setupGetInitialSingleReport.fulfilled, (state, { payload }) => {
+        state.initialLoading = false;
+        state.singleReportObject = payload?.data || [{ error: "Not Found" }];
       })
-      .addCase(setupGetSingleReport.rejected, (state, { payload }) => {
-        state.loading = false;
+      .addCase(setupGetInitialSingleReport.rejected, (state, { payload }) => {
+        state.initialLoading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
         } else {

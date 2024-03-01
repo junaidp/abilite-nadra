@@ -2,6 +2,7 @@ import {
   getAllJobScheduling,
   updateJobScheduling,
   getSingleJobScheduling,
+  getInitialSingleJobScheduling,
   updateJobSchedulingTimeAndDateAllocation,
   updateJobSchedulingNumberOfResourcesRequired,
   updateJobSchedulingResourcesAllocation,
@@ -11,6 +12,7 @@ import { toast } from "react-toastify";
 
 const initialState = {
   loading: false,
+  initialLoading:false,
   allJobScheduling: [],
   jobSchedulingAddSuccess: false,
   singleJobSchedulingObject: {},
@@ -27,6 +29,13 @@ export const setupGetSingleJobScheduling = createAsyncThunk(
   "jobScheduling/getSingleJobScheduling",
   async (data, thunkAPI) => {
     return getSingleJobScheduling(data, thunkAPI);
+  }
+);
+
+export const setupGetInitialSingleJobScheduling = createAsyncThunk(
+  "jobScheduling/getInitialSingleJobScheduling",
+  async (data, thunkAPI) => {
+    return getInitialSingleJobScheduling(data, thunkAPI);
   }
 );
 
@@ -101,7 +110,9 @@ export const slice = createSlice({
       })
       .addCase(setupGetSingleJobScheduling.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.singleJobSchedulingObject = payload?.data;
+        state.singleJobSchedulingObject = payload?.data || [
+          { error: "Not Found" },
+        ];
       })
       .addCase(setupGetSingleJobScheduling.rejected, (state, { payload }) => {
         state.loading = false;
@@ -111,6 +122,31 @@ export const slice = createSlice({
           toast.error("An Error has occurred");
         }
       });
+    // Get Initial single job scheduling
+    builder
+      .addCase(setupGetInitialSingleJobScheduling.pending, (state) => {
+        state.initialLoading = true;
+      })
+      .addCase(
+        setupGetInitialSingleJobScheduling.fulfilled,
+        (state, { payload }) => {
+          state.initialLoading = false;
+          state.singleJobSchedulingObject = payload?.data || [
+            { error: "Not Found" },
+          ];
+        }
+      )
+      .addCase(
+        setupGetInitialSingleJobScheduling.rejected,
+        (state, { payload }) => {
+          state.initialLoading = false;
+          if (payload?.response?.data?.message) {
+            toast.error(payload?.response?.data?.message);
+          } else {
+            toast.error("An Error has occurred");
+          }
+        }
+      );
 
     // Update job scheduling
     builder

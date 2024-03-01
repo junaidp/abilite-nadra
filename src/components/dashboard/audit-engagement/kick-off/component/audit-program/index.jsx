@@ -1,20 +1,64 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { setupUpdateAuditProgram } from "../../../../../../global-redux/reducers/audit-engagement/slice";
-
+import {
+  setupUpdateAuditProgram,
+  setupUpdateAuditProgramApproval,
+} from "../../../../../../global-redux/reducers/audit-engagement/slice";
 const AuditProgram = ({
   currentAuditEngagement,
   setCurrentAuditEngagement,
   setShowAddAuditProgramDialog,
   auditEngagementId,
+  singleAuditEngagementObject,
 }) => {
   const dispatch = useDispatch();
   const { loading, auditEngagementAddSuccess } = useSelector(
     (state) => state?.auditEngagement
   );
+  const { user } = useSelector((state) => state?.auth);
   const [controlList, setControlList] = React.useState([]);
   const [currentButtonId, setCurrentButtonId] = React.useState("");
+  const [showSubmitButton, setShowSubmitButton] = React.useState(false);
+
+  function handleEditable(item) {
+    setCurrentAuditEngagement((pre) => {
+      return {
+        ...pre,
+        auditProgram: {
+          ...pre?.auditProgram,
+          programList: pre?.auditProgram?.programList?.map((program) =>
+            program?.id === item?.id ? { ...program, editable: true } : program
+          ),
+        },
+      };
+    });
+  }
+
+  function handleSubmit() {
+    dispatch(
+      setupUpdateAuditProgramApproval({
+        auditProgram: {
+          ...currentAuditEngagement?.auditProgram,
+          submitted: true,
+        },
+        engagement_id: Number(auditEngagementId),
+      })
+    );
+  }
+
+  function handleApprove() {
+    dispatch(
+      setupUpdateAuditProgramApproval({
+        auditProgram: {
+          ...currentAuditEngagement?.auditProgram,
+          approved: true,
+        },
+        engagement_id: Number(auditEngagementId),
+      })
+    );
+  }
+
   function handleChange(event, id) {
     setCurrentAuditEngagement((pre) => {
       return {
@@ -34,7 +78,7 @@ const AuditProgram = ({
   function handleUpdate(item) {
     if (!loading) {
       setCurrentButtonId(item?.id);
-      if (item?.description === "" || item?.rating === "") {
+      if (!item?.description || !item?.rating) {
         toast.error("Provide all values");
       } else {
         dispatch(
@@ -75,6 +119,20 @@ const AuditProgram = ({
     setControlList(array);
   }, [currentAuditEngagement]);
 
+  React.useEffect(() => {
+    if (singleAuditEngagementObject?.auditProgram !== null) {
+      let submit = true;
+      singleAuditEngagementObject?.auditProgram?.programList?.forEach(
+        (singleItem) => {
+          if (!singleItem?.description || !singleItem?.rating) {
+            submit = false;
+          }
+        }
+      );
+      setShowSubmitButton(submit);
+    }
+  }, [singleAuditEngagementObject]);
+
   return (
     <div className="accordion-item">
       <h2 className="accordion-header">
@@ -90,7 +148,8 @@ const AuditProgram = ({
             <div className=" d-flex align-items-center">
               {currentAuditEngagement?.auditProgram !== null &&
                 currentAuditEngagement?.auditProgram?.programList?.length !==
-                  0 && (
+                  0 &&
+                showSubmitButton === true && (
                   <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
                 )}
               Audit Program
@@ -106,17 +165,19 @@ const AuditProgram = ({
         <div className="accordion-body">
           <div className="container">
             <div className="row mb-2">
-              <div className="col-lg-12">
-                <button
-                  className="btn btn-labeled float-end btn-primary px-3 mt-3 shadow"
-                  onClick={() => setShowAddAuditProgramDialog(true)}
-                >
-                  <span className="btn-label me-2">
-                    <i className="fa fa-eye"></i>
-                  </span>
-                  Add Audit Program
-                </button>
-              </div>
+              {currentAuditEngagement?.auditProgram?.approved !== true && (
+                <div className="col-lg-12">
+                  <button
+                    className="btn btn-labeled float-end btn-primary px-3 mt-3 shadow"
+                    onClick={() => setShowAddAuditProgramDialog(true)}
+                  >
+                    <span className="btn-label me-2">
+                      <i className="fa fa-eye"></i>
+                    </span>
+                    Add Audit Program
+                  </button>
+                </div>
+              )}
             </div>
 
             <div className="row">
@@ -129,7 +190,8 @@ const AuditProgram = ({
                         <th>Control</th>
                         <th>Rating</th>
                         <th>Audit Program</th>
-                        <th>Actions</th>
+                        {currentAuditEngagement?.auditProgram?.approved !==
+                          true && <th>Actions</th>}
                       </tr>
                     </thead>
                     <tbody>
@@ -168,6 +230,13 @@ const AuditProgram = ({
                                       onChange={(event) =>
                                         handleChange(event, item?.id)
                                       }
+                                      disabled={
+                                        item?.editable === true &&
+                                        currentAuditEngagement?.auditProgram
+                                          ?.approved !== true
+                                          ? false
+                                          : true
+                                      }
                                     >
                                       <option value="">Select One</option>
                                       <option value={1}>High</option>
@@ -186,25 +255,43 @@ const AuditProgram = ({
                                     onChange={(event) =>
                                       handleChange(event, item?.id)
                                     }
+                                    disabled={
+                                      item?.editable === true &&
+                                      currentAuditEngagement?.auditProgram
+                                        ?.approved !== true
+                                        ? false
+                                        : true
+                                    }
                                   ></textarea>
                                 </td>
-                                <td>
-                                  <button
-                                    className={`btn btn-labeled mt-2 btn-primary shadow ${
-                                      loading &&
-                                      item?.id === currentButtonId &&
-                                      "disabled"
-                                    }`}
-                                    onClick={() => handleUpdate(item)}
-                                  >
-                                    <span className="btn-label me-2">
-                                      <i className="fa fa-save"></i>
-                                    </span>
-                                    {loading && item?.id === currentButtonId
-                                      ? "Loading..."
-                                      : "Save"}
-                                  </button>
-                                </td>
+                                {currentAuditEngagement?.auditProgram
+                                  ?.approved !== true && (
+                                  <td>
+                                    {item?.editable === false && (
+                                      <i
+                                        className="fa fa-edit  px-3 f-18 cursor-pointer"
+                                        onClick={() => handleEditable(item)}
+                                      ></i>
+                                    )}
+                                    {item?.editable === true && (
+                                      <button
+                                        className={`btn btn-labeled mt-2 btn-primary shadow ${
+                                          loading &&
+                                          item?.id === currentButtonId &&
+                                          "disabled"
+                                        }`}
+                                        onClick={() => handleUpdate(item)}
+                                      >
+                                        <span className="btn-label me-2">
+                                          <i className="fa fa-save"></i>
+                                        </span>
+                                        {loading && item?.id === currentButtonId
+                                          ? "Loading..."
+                                          : "Save"}
+                                      </button>
+                                    )}
+                                  </td>
+                                )}
                               </tr>
                             );
                           }
@@ -213,6 +300,49 @@ const AuditProgram = ({
                     </tbody>
                   </table>
                 </div>
+                {showSubmitButton &&
+                  currentAuditEngagement?.auditProgram?.submitted === false && (
+                    <div className="justify-content-end text-end">
+                      <button
+                        className={`btn btn-labeled mt-2 btn-primary shadow  ${
+                          loading && "disabled"
+                        }`}
+                        onClick={() => handleSubmit()}
+                      >
+                        <span className="btn-label me-2">
+                          <i className="fa fa-save"></i>
+                        </span>
+                        {loading ? "Loading..." : "Submit"}
+                      </button>
+                    </div>
+                  )}
+                {currentAuditEngagement?.auditProgram?.submitted === true &&
+                  currentAuditEngagement?.auditProgram?.approved === false &&
+                  (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
+                    Number(user[0]?.userId?.id) ===
+                      Number(
+                        currentAuditEngagement?.resourceAllocation
+                          ?.backupHeadOfInternalAudit?.id
+                      ) ||
+                    Number(user[0]?.userId?.id) ===
+                      Number(
+                        currentAuditEngagement?.resourceAllocation
+                          ?.proposedJobApprover?.id
+                      )) && (
+                    <div className="justify-content-end text-end">
+                      <button
+                        className={`btn btn-labeled mt-2 btn-primary shadow  ${
+                          loading && "disabled"
+                        }`}
+                        onClick={() => handleApprove()}
+                      >
+                        <span className="btn-label me-2">
+                          <i className="fa fa-save"></i>
+                        </span>
+                        {loading ? "Loading..." : "Approve"}
+                      </button>
+                    </div>
+                  )}
               </div>
             </div>
           </div>

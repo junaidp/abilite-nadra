@@ -1,9 +1,14 @@
-import { getAllAuditPlanSummary, updateAuditPlanSummary } from "./thunk";
+import {
+  getAllAuditPlanSummary,
+  updateAuditPlanSummary,
+  getInitialAllAuditPlanSummary,
+} from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
 const initialState = {
   loading: false,
+  initialLoading: false,
   allAuditPlanSummary: [],
   auditPlanSummaryAddSuccess: false,
 };
@@ -12,6 +17,13 @@ export const setupGetAllAuditPlanSummary = createAsyncThunk(
   "auditPlanSummary/getAllAuditPlanSummary",
   async (data, thunkAPI) => {
     return getAllAuditPlanSummary(data, thunkAPI);
+  }
+);
+
+export const setupGetInitialAllAuditPlanSummary = createAsyncThunk(
+  "auditPlanSummary/getInitialAllAuditPlanSummary",
+  async (data, thunkAPI) => {
+    return getInitialAllAuditPlanSummary(data, thunkAPI);
   }
 );
 
@@ -50,6 +62,32 @@ export const slice = createSlice({
           toast.error("An Error has occurred");
         }
       });
+    // Get Initial all audit plan summary
+    builder
+      .addCase(setupGetInitialAllAuditPlanSummary.pending, (state) => {
+        state.initialLoading = true;
+      })
+      .addCase(
+        setupGetInitialAllAuditPlanSummary.fulfilled,
+        (state, { payload }) => {
+          state.initialLoading = false;
+          const sortedArray = payload?.data?.sort(
+            (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
+          );
+          state.allAuditPlanSummary = sortedArray || [];
+        }
+      )
+      .addCase(
+        setupGetInitialAllAuditPlanSummary.rejected,
+        (state, { payload }) => {
+          state.initialLoading = false;
+          if (payload?.response?.data?.message) {
+            toast.error(payload?.response?.data?.message);
+          } else {
+            toast.error("An Error has occurred");
+          }
+        }
+      );
     // Update Audit Plan Summary
     builder
       .addCase(setupUpdateAuditPlanSummary.pending, (state) => {

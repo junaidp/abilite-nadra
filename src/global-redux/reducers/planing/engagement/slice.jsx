@@ -2,10 +2,13 @@ import {
   getAllEngagements,
   addNewEngagement,
   saveCheckListObjective,
+  getInitialSingleEngagementObject,
   getSingleEngagementObject,
   updateBusinessObjective,
   saveMapProcessBusinessObjective,
+  getInitialSingleCheckListObjective,
   getSingleCheckListObjective,
+  getInitialSingleSpecialProjectAuditObjective,
   getSingleSpecialProjectAuditObjective,
   updateBusinessMinuteMeeting,
   updateSpecialProjectAudit,
@@ -17,6 +20,7 @@ import { toast } from "react-toastify";
 
 const initialState = {
   loading: false,
+  initialLoading: false,
   allEngagements: [],
   engagementAddSuccess: false,
   planingEngagementSingleObject: [],
@@ -50,6 +54,13 @@ export const setupGetSingleEngagementObject = createAsyncThunk(
     return getSingleEngagementObject(data, thunkAPI);
   }
 );
+export const setupGetInitialSingleEngagementObject = createAsyncThunk(
+  "engagement/getInitialSingleEngagementObject",
+  async (data, thunkAPI) => {
+    return getInitialSingleEngagementObject(data, thunkAPI);
+  }
+);
+
 export const setupUpdateBusinessObjective = createAsyncThunk(
   "engagement/updateBusinessObjective",
   async (data, thunkAPI) => {
@@ -62,10 +73,18 @@ export const setupSaveMapProcessBusinessObjective = createAsyncThunk(
     return saveMapProcessBusinessObjective(data, thunkAPI);
   }
 );
+
 export const setupGetSingleCheckListObjective = createAsyncThunk(
   "engagement/getSingleCheckListObjective",
   async (data, thunkAPI) => {
     return getSingleCheckListObjective(data, thunkAPI);
+  }
+);
+
+export const setupGetInitialSingleCheckListObjective = createAsyncThunk(
+  "engagement/getInitialSingleCheckListObjective",
+  async (data, thunkAPI) => {
+    return getInitialSingleCheckListObjective(data, thunkAPI);
   }
 );
 
@@ -75,6 +94,15 @@ export const setupGetSingleSpecialProjectAuditObjective = createAsyncThunk(
     return getSingleSpecialProjectAuditObjective(data, thunkAPI);
   }
 );
+
+export const setupGetInitialSingleSpecialProjectAuditObjective =
+  createAsyncThunk(
+    "engagement/getInitialSingleSpecialProjectAuditObjective",
+    async (data, thunkAPI) => {
+      return getInitialSingleSpecialProjectAuditObjective(data, thunkAPI);
+    }
+  );
+
 export const setupUpdateBusinessMinuteMeeting = createAsyncThunk(
   "engagement/updateBusinessMinuteMeeting",
   async (data, thunkAPI) => {
@@ -188,16 +216,41 @@ export const slice = createSlice({
       .addCase(
         setupGetSingleEngagementObject.fulfilled,
         (state, { payload }) => {
-          state.planingEngagementSingleObject = payload?.data;
+          state.planingEngagementSingleObject = payload?.data || [
+            { error: "Not Found" },
+          ];
           state.loading = false;
-          // state.engagementAddSuccess = true;
         }
       )
       .addCase(
         setupGetSingleEngagementObject.rejected,
         (state, { payload }) => {
           state.loading = false;
-          state.engagementAddSuccess = false;
+          if (payload?.response?.data?.message) {
+            toast.error(payload?.response?.data?.message);
+          } else {
+            toast.error("An Error has occurred");
+          }
+        }
+      );
+    // Setup Get Initial Single Engagement Object
+    builder
+      .addCase(setupGetInitialSingleEngagementObject.pending, (state) => {
+        state.initialLoading = true;
+      })
+      .addCase(
+        setupGetInitialSingleEngagementObject.fulfilled,
+        (state, { payload }) => {
+          state.planingEngagementSingleObject = payload?.data || [
+            { error: "Not Found" },
+          ];
+          state.initialLoading = false;
+        }
+      )
+      .addCase(
+        setupGetInitialSingleEngagementObject.rejected,
+        (state, { payload }) => {
+          state.initialLoading = false;
           if (payload?.response?.data?.message) {
             toast.error(payload?.response?.data?.message);
           } else {
@@ -261,13 +314,44 @@ export const slice = createSlice({
         setupGetSingleCheckListObjective.fulfilled,
         (state, { payload }) => {
           state.loading = false;
-          state.planingEngagementSingleObject = payload?.data || [];
+          state.planingEngagementSingleObject = payload?.data || [
+            {
+              error: "Not Found",
+            },
+          ];
         }
       )
       .addCase(
         setupGetSingleCheckListObjective.rejected,
         (state, { payload }) => {
           state.loading = false;
+          if (payload?.response?.data?.message) {
+            toast.error(payload?.response?.data?.message);
+          } else {
+            toast.error("An Error has occurred");
+          }
+        }
+      );
+    // Get Initial Single CheckList Objective
+    builder
+      .addCase(setupGetInitialSingleCheckListObjective.pending, (state) => {
+        state.initialLoading = true;
+      })
+      .addCase(
+        setupGetInitialSingleCheckListObjective.fulfilled,
+        (state, { payload }) => {
+          state.initialLoading = false;
+          state.planingEngagementSingleObject = payload?.data || [
+            {
+              error: "Not Found",
+            },
+          ];
+        }
+      )
+      .addCase(
+        setupGetInitialSingleCheckListObjective.rejected,
+        (state, { payload }) => {
+          state.initialLoading = false;
           if (payload?.response?.data?.message) {
             toast.error(payload?.response?.data?.message);
           } else {
@@ -285,13 +369,45 @@ export const slice = createSlice({
         setupGetSingleSpecialProjectAuditObjective.fulfilled,
         (state, { payload }) => {
           state.loading = false;
-          state.planingEngagementSingleObject = payload?.data;
+          state.planingEngagementSingleObject = payload?.data || [
+            { error: "Not Found" },
+          ];
         }
       )
       .addCase(
         setupGetSingleSpecialProjectAuditObjective.rejected,
         (state, { payload }) => {
           state.loading = false;
+          if (payload?.response?.data?.message) {
+            toast.error(payload?.response?.data?.message);
+          } else {
+            toast.error("An Error has occurred");
+          }
+        }
+      );
+    // Get Initial Single Special Project Audit
+    builder
+      .addCase(
+        setupGetInitialSingleSpecialProjectAuditObjective.pending,
+        (state) => {
+          state.initialLoading = true;
+        }
+      )
+      .addCase(
+        setupGetInitialSingleSpecialProjectAuditObjective.fulfilled,
+        (state, { payload }) => {
+          state.initialLoading = false;
+          state.planingEngagementSingleObject = payload?.data || [
+            {
+              error: "Not Found",
+            },
+          ];
+        }
+      )
+      .addCase(
+        setupGetInitialSingleSpecialProjectAuditObjective.rejected,
+        (state, { payload }) => {
+          state.initialLoading = false;
           if (payload?.response?.data?.message) {
             toast.error(payload?.response?.data?.message);
           } else {

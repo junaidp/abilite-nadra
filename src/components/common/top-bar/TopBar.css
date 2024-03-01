@@ -1,6 +1,9 @@
 .navbar-toggler {
   cursor: pointer !important;
 }
+.left-300{
+  left: -300px !important;
+}
 
 .user-profile-dropdown {
   position: absolute;

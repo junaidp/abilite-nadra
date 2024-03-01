@@ -105,7 +105,7 @@ const AuditSettings = () => {
         dispatch(setupGetAllProcess(companyId));
       }
       if (currentSettingOption === "users") {
-        dispatch(setupGetAllUsers());
+        dispatch(setupGetAllUsers({ shareWith: true }));
       }
     }
   }, [currentSettingOption, user, company]);
