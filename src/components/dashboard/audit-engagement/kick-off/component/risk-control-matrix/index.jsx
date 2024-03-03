@@ -17,20 +17,25 @@ const RiskControlMatrix = ({
   const { loading } = useSelector((state) => state?.auditEngagement);
   const { user } = useSelector((state) => state?.auth);
   function handleApprove() {
-    dispatch(
-      setupUpdateRiskControlMatrixApproval({
-        ...currentAuditEngagement?.riskControlMatrix,
-        approved: true,
-      })
-    );
+    if (!loading) {
+      dispatch(
+        setupUpdateRiskControlMatrixApproval({
+          ...currentAuditEngagement?.riskControlMatrix,
+          approved: true,
+        })
+      );
+    }
   }
+
   function handleSubmit() {
-    dispatch(
-      setupUpdateRiskControlMatrixApproval({
-        ...currentAuditEngagement?.riskControlMatrix,
-        submitted: true,
-      })
-    );
+    if (!loading) {
+      dispatch(
+        setupUpdateRiskControlMatrixApproval({
+          ...currentAuditEngagement?.riskControlMatrix,
+          submitted: true,
+        })
+      );
+    }
   }
   return (
     <div className="accordion-item">

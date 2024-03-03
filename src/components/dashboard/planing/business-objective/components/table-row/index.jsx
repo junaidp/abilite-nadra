@@ -1,9 +1,9 @@
 import React from "react";
 
-const TableRow = ({ index, item, handleClickEngagement }) => {
+const TableRow = ({  item, handleClickEngagement }) => {
   return (
     <tr>
-      <td>{index + 1}</td>
+      <td>{item?.id}</td>
       <td
         onClick={() => handleClickEngagement(item?.id, item?.natureThrough)}
         className="cursor-pointer"

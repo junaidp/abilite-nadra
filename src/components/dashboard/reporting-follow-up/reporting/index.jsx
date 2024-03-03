@@ -10,7 +10,8 @@ const Reporting = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state?.auth);
   const { company, year } = useSelector((state) => state?.common);
-  const { allReports, loading } = useSelector((state) => state?.reporting);
+  const { allReporting, loading } = useSelector((state) => state?.reporting);
+  const [total, setTotal] = React.useState(0);
 
   React.useEffect(() => {
     const companyId = user[0]?.company?.find(
@@ -19,13 +20,21 @@ const Reporting = () => {
     if (companyId) {
       dispatch(
         setupGetAllReporting(
-          `?companyId=${companyId}&currentYear=${Number(year)}&userId=${
-            user[0]?.userId?.id
-          }`
+          `?companyId=${companyId}&currentYear=${Number(year)}`
         )
       );
     }
   }, [user, year, company]);
+
+  React.useEffect(() => {
+    if (allReporting?.length !== 0) {
+      let num = 0;
+      allReporting?.forEach((item) => {
+        num = Number(num) + Number(item?.reportingList?.length);
+      });
+      setTotal(num);
+    }
+  }, [allReporting]);
 
   return (
     <div>
@@ -59,9 +68,9 @@ const Reporting = () => {
             <div className="table-responsive">
               {loading ? (
                 <CircularProgress />
-              ) : allReports?.length === 0 ||
-                allReports[0]?.reportingList?.length === 0 ? (
-                <p>No Reports to Show</p>
+              ) : allReporting?.length === 0 ||
+                allReporting[0]?.error === "Not Found" ? (
+                <p>No Reporting to Show</p>
               ) : (
                 <table className="table table-bordered  table-hover rounded">
                   <thead>
@@ -74,28 +83,30 @@ const Reporting = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {allReports[0]?.reportingList?.map((report, index) => {
-                      return (
-                        <tr key={index}>
-                          <td>
-                            <label>{report?.id}</label>
-                          </td>
-                          <td>
-                            <a
-                              className=" text-primary  fw-bold f-12"
-                              onClick={() =>
-                                navigate(`/audit/reporting-particulars`)
-                              }
-                            >
-                              {report?.observationTitle}
-                            </a>
-                          </td>
-                          <td>null</td>
-                          <td>{allReports[0]?.reportingList?.length}</td>
-                          <td>null</td>
-                        </tr>
-                      );
-                    })}
+                    {allReporting?.map((item) =>
+                      item?.reportingList?.map((report, index) => {
+                        return (
+                          <tr key={index}>
+                            <td>
+                              <label>{report?.id}</label>
+                            </td>
+                            <td>
+                              <a
+                                className=" text-primary  fw-bold f-12"
+                                onClick={() =>
+                                  navigate(`/audit/reporting-particulars`)
+                                }
+                              >
+                                {report?.observationTitle}
+                              </a>
+                            </td>
+                            <td>null</td>
+                            <td>{total}</td>
+                            <td>null</td>
+                          </tr>
+                        );
+                      })
+                    )}
                   </tbody>
                 </table>
               )}

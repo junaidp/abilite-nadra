@@ -36,27 +36,31 @@ const AuditProgram = ({
   }
 
   function handleSubmit() {
-    dispatch(
-      setupUpdateAuditProgramApproval({
-        auditProgram: {
-          ...currentAuditEngagement?.auditProgram,
-          submitted: true,
-        },
-        engagement_id: Number(auditEngagementId),
-      })
-    );
+    if (!loading) {
+      dispatch(
+        setupUpdateAuditProgramApproval({
+          auditProgram: {
+            ...currentAuditEngagement?.auditProgram,
+            submitted: true,
+          },
+          engagement_id: Number(auditEngagementId),
+        })
+      );
+    }
   }
 
   function handleApprove() {
-    dispatch(
-      setupUpdateAuditProgramApproval({
-        auditProgram: {
-          ...currentAuditEngagement?.auditProgram,
-          approved: true,
-        },
-        engagement_id: Number(auditEngagementId),
-      })
-    );
+    if (!loading) {
+      dispatch(
+        setupUpdateAuditProgramApproval({
+          auditProgram: {
+            ...currentAuditEngagement?.auditProgram,
+            approved: true,
+          },
+          engagement_id: Number(auditEngagementId),
+        })
+      );
+    }
   }
 
   function handleChange(event, id) {

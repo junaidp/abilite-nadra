@@ -4,18 +4,34 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
-const SelectComponent = ({ list, setReports, value, label, id, allUsers }) => {
+const SelectComponent = ({
+  list,
+  setReports,
+  value,
+  label,
+  id,
+  allUsers,
+  mainIndex,
+}) => {
   function handleChange(event) {
     setReports((pre) =>
-      pre.map((item) =>
-        Number(item?.id) === Number(id)
+      pre.map((all) =>
+        Number(all?.id) === Number(mainIndex)
           ? {
-              ...item,
-              auditee: allUsers?.find(
-                (user) => user?.name === event?.target?.value
+              ...all,
+              reportingList: all?.reportingList?.map((report) =>
+                Number(report?.id) === Number(id)
+                  ? {
+                      ...report,
+                      auditee:
+                        allUsers?.find(
+                          (user) => user?.name === event?.target?.value
+                        ) || null,
+                    }
+                  : report
               ),
             }
-          : item
+          : all
       )
     );
   }

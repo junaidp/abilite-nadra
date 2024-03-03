@@ -65,20 +65,26 @@ const AuditPlanSummary = () => {
   }
 
   function handleEdit(item) {
-    setCurrentId(item?.id);
-    dispatch(setupUpdateAuditPlanSummary(item));
+    if (!loading) {
+      setCurrentId(item?.id);
+      dispatch(setupUpdateAuditPlanSummary(item));
+    }
   }
 
   function handleSubmit(item) {
-    setCurrentId(item?.id);
-    dispatch(setupUpdateAuditPlanSummary({ ...item, submitted: true }));
+    if (!loading) {
+      setCurrentId(item?.id);
+      dispatch(setupUpdateAuditPlanSummary({ ...item, submitted: true }));
+    }
   }
 
   function handleApprove(item) {
-    setCurrentId(item?.id);
-    dispatch(
-      setupUpdateAuditPlanSummary({ ...item, approved: true, locked: true })
-    );
+    if (!loading) {
+      setCurrentId(item?.id);
+      dispatch(
+        setupUpdateAuditPlanSummary({ ...item, approved: true, locked: true })
+      );
+    }
   }
 
   function handleEditEditable(item) {

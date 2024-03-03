@@ -111,7 +111,6 @@ const BusinessObjective = () => {
                             return (
                               <TableRow
                                 key={index}
-                                index={index}
                                 item={item}
                                 handleClickEngagement={handleClickEngagement}
                               />

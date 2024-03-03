@@ -14,20 +14,25 @@ const AditSteps = ({
   const [showSubmitButton, setShowSubmitButton] = React.useState(false);
 
   function handleSubmit() {
-    dispatch(
-      setupUpdateAuditStepApproval({
-        ...currentAuditEngagement?.auditStep,
-        submitted: true,
-      })
-    );
+    if (!loading) {
+      dispatch(
+        setupUpdateAuditStepApproval({
+          ...currentAuditEngagement?.auditStep,
+          submitted: true,
+        })
+      );
+    }
   }
+
   function handleApprove() {
-    dispatch(
-      setupUpdateAuditStepApproval({
-        ...currentAuditEngagement?.auditStep,
-        approved: true,
-      })
-    );
+    if (!loading) {
+      dispatch(
+        setupUpdateAuditStepApproval({
+          ...currentAuditEngagement?.auditStep,
+          approved: true,
+        })
+      );
+    }
   }
 
   React.useEffect(() => {

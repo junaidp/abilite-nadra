@@ -1,7 +1,7 @@
 import React from "react";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
-import { setupGetAllReporting } from "../../../../global-redux/reducers/reporting/slice";
+import { setupGetAllFollowUp } from "../../../../global-redux/reducers/reporting/slice";
 import { useDispatch, useSelector } from "react-redux";
 import { CircularProgress } from "@mui/material";
 
@@ -10,7 +10,7 @@ const Reporting = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state?.auth);
   const { company, year } = useSelector((state) => state?.common);
-  const { allReports, loading } = useSelector((state) => state?.reporting);
+  const { allFollowUp, loading } = useSelector((state) => state?.reporting);
 
   React.useEffect(() => {
     const companyId = user[0]?.company?.find(
@@ -18,14 +18,12 @@ const Reporting = () => {
     )?.id;
     if (companyId) {
       dispatch(
-        setupGetAllReporting(
-          `?companyId=${companyId}&currentYear=${Number(year)}&userId=${
-            user[0]?.userId?.id
-          }`
+        setupGetAllFollowUp(
+          `?companyId=${companyId}&currentYear=${Number(year)}`
         )
       );
     }
-  }, [user, year,company]);
+  }, [user, year, company]);
 
   return (
     <div>
@@ -59,11 +57,9 @@ const Reporting = () => {
             <div className="table-responsive">
               {loading ? (
                 <CircularProgress />
-              ) : allReports?.length === 0 ||
-                allReports[0]?.reportingList?.filter(
-                  (item) => item?.followUp !== null
-                )?.length === 0 ? (
-                <p>No Reports to Show</p>
+              ) : allFollowUp?.length === 0 ||
+                allFollowUp[0]?.error === "Not Found" ? (
+                <p>No Follow Up To Show</p>
               ) : (
                 <table className="table table-bordered  table-hover rounded">
                   <thead>
@@ -76,7 +72,7 @@ const Reporting = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {allReports[0]?.reportingList
+                    {allFollowUp[0]?.reportingList
                       ?.filter((item) => item?.followUp !== null)
                       ?.map((report, index) => {
                         return (
@@ -97,7 +93,7 @@ const Reporting = () => {
                             <td>null</td>
                             <td>
                               {
-                                allReports[0]?.reportingList?.filter(
+                                allFollowUp[0]?.reportingList?.filter(
                                   (all) => all?.followUp !== null
                                 )?.length
                               }

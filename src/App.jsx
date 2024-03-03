@@ -109,7 +109,15 @@ const App = () => {
       <ToastContainer />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Navigate to="/login" />} />
+          <Route
+            path="/"
+            element={
+              <div className="p-2">
+                <h2>Redirecting...</h2>
+                <Navigate to="/login" />
+              </div>
+            }
+          />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
