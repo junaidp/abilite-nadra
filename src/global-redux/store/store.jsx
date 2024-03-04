@@ -3,6 +3,7 @@ import commonReducer from "../reducers/common/slice";
 import authReducer from "../reducers/auth/slice";
 import settingsCheckListReducer from "../reducers/settings/check-list/slice";
 import settingsCompanyReducer from "../reducers/settings/company-management/slice";
+import settingsRiskControlMatrixReducer from "../reducers/settings/risk-control-matrix/slice";
 import settingsLocationReducer from "../reducers/settings/location/slice";
 import settingsAddUserReducer from "../reducers/settings/user-management/slice";
 import settingsProcessReducer from "../reducers/settings/process/slice";
@@ -23,6 +24,7 @@ export const store = configureStore({
     // settings
     setttingsCheckList: settingsCheckListReducer,
     setttingsLocation: settingsLocationReducer,
+    setttingsRiskControlMatrix: settingsRiskControlMatrixReducer,
     setttingsProcess: settingsProcessReducer,
     setttingsUserManagement: settingsAddUserReducer,
     settingsCompanyManagement: settingsCompanyReducer,

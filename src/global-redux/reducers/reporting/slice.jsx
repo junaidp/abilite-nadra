@@ -1,10 +1,10 @@
 import { toast } from "react-toastify";
 import {
+  getSingleReport,
+  getInitialSingleReport,
   getAllReporting,
-  getInitialAllReporting,
   updateReporting,
   getAllFollowUp,
-  getInitialAllFollowUp,
   updateFollowUp,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
@@ -15,6 +15,7 @@ const initialState = {
   reportingAddSuccess: false,
   allReporting: [],
   allFollowUp: [],
+  singleReport: {},
 };
 
 export const setupGetAllReporting = createAsyncThunk(
@@ -24,10 +25,17 @@ export const setupGetAllReporting = createAsyncThunk(
   }
 );
 
-export const setupGetInitialAllReporting = createAsyncThunk(
-  "reporting/getInitialAllReporting",
+export const setupGetInitialSingleReport = createAsyncThunk(
+  "reporting/getInitialSingleReport",
   async (data, thunkAPI) => {
-    return getInitialAllReporting(data, thunkAPI);
+    return getInitialSingleReport(data, thunkAPI);
+  }
+);
+
+export const setupGetSingleReport = createAsyncThunk(
+  "reporting/getSingleReport",
+  async (data, thunkAPI) => {
+    return getSingleReport(data, thunkAPI);
   }
 );
 
@@ -45,13 +53,6 @@ export const setupGetAllFollowUp = createAsyncThunk(
   }
 );
 
-export const setupGetInitialAllFollowUp = createAsyncThunk(
-  "reporting/getInitialAllFollowUp",
-  async (data, thunkAPI) => {
-    return getInitialAllFollowUp(data, thunkAPI);
-  }
-);
-
 export const setupUpdateFollowUp = createAsyncThunk(
   "reporting/updateFollowUp",
   async (data, thunkAPI) => {
@@ -63,7 +64,7 @@ export const slice = createSlice({
   name: "reporting",
   initialState,
   reducers: {
-    resetReportingAddSuccess: (state, action) => {
+    resetReportingAddSuccess: (state) => {
       state.reportingAddSuccess = false;
     },
   },
@@ -85,16 +86,33 @@ export const slice = createSlice({
           toast.error("An Error has occurred");
         }
       });
-    // Get Initial All Reporting
+    // Get Initial Report
     builder
-      .addCase(setupGetInitialAllReporting.pending, (state) => {
+      .addCase(setupGetSingleReport.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetSingleReport.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.singleReport = payload?.data || [{ error: "Not Found" }];
+      })
+      .addCase(setupGetSingleReport.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Get Initial Single Report
+    builder
+      .addCase(setupGetInitialSingleReport.pending, (state) => {
         state.initialLoading = true;
       })
-      .addCase(setupGetInitialAllReporting.fulfilled, (state, { payload }) => {
+      .addCase(setupGetInitialSingleReport.fulfilled, (state, { payload }) => {
         state.initialLoading = false;
-        state.allReporting = payload?.data || [{ error: "Not Found" }];
+        state.singleReport = payload?.data || [{ error: "Not Found" }];
       })
-      .addCase(setupGetInitialAllReporting.rejected, (state, { payload }) => {
+      .addCase(setupGetInitialSingleReport.rejected, (state, { payload }) => {
         state.initialLoading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
@@ -133,24 +151,6 @@ export const slice = createSlice({
       })
       .addCase(setupGetAllFollowUp.rejected, (state, { payload }) => {
         state.loading = false;
-        if (payload?.response?.data?.message) {
-          toast.error(payload?.response?.data?.message);
-        } else {
-          toast.error("An Error has occurred");
-        }
-      });
-
-    // Get Initial All Follow Up
-    builder
-      .addCase(setupGetInitialAllFollowUp.pending, (state) => {
-        state.initialLoading = true;
-      })
-      .addCase(setupGetInitialAllFollowUp.fulfilled, (state, { payload }) => {
-        state.initialLoading = false;
-        state.allFollowUp = payload?.data || [{ error: "Not Found" }];
-      })
-      .addCase(setupGetInitialAllFollowUp.rejected, (state, { payload }) => {
-        state.initialLoading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
         } else {

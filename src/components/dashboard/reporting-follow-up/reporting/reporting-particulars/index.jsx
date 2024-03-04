@@ -2,10 +2,11 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import {
   resetReportingAddSuccess,
-  setupGetAllReporting,
+  setupGetSingleReport,
   setupUpdateReporting,
-  setupGetInitialAllReporting,
+  setupGetInitialSingleReport,
 } from "../../../../../global-redux/reducers/reporting/slice";
+import { useSearchParams } from "react-router-dom";
 import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
@@ -18,32 +19,29 @@ import { CircularProgress } from "@mui/material";
 const ReportingParticulars = () => {
   let navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const [searchParams, setSearchParams] = useSearchParams();
+  const reportingId = searchParams.get("reportingId");
   const { user } = useSelector((state) => state?.auth);
   const { company, year } = useSelector((state) => state?.common);
-  const { allReporting, loading, reportingAddSuccess, initialLoading } =
+  const { singleReport, loading, reportingAddSuccess, initialLoading } =
     useSelector((state) => state?.reporting);
-  const [reports, setReports] = React.useState([]);
+  const [report, setReport] = React.useState([]);
   const { allUsers } = useSelector((state) => state?.setttingsUserManagement);
 
-  function handleChange(event, mainIndex, id) {
-    setReports((pre) =>
-      pre.map((all) =>
-        Number(all?.id) === Number(mainIndex)
-          ? {
-              ...all,
-              reportingList: all?.reportingList?.map((report) =>
-                Number(report?.id) === Number(id)
-                  ? { ...report, [event?.target?.name]: event?.target?.value }
-                  : report
-              ),
-            }
-          : all
-      )
-    );
+  function handleChange(event, id) {
+    setReport((pre) => {
+      return {
+        ...pre,
+        reportingList: pre?.reportingList?.map((report) =>
+          Number(report?.id) === Number(id)
+            ? { ...report, [event?.target?.name]: event?.target?.value }
+            : report
+        ),
+      };
+    });
   }
 
-  function handleSave(item) {
+  function handleSaveToStep1(item) {
     if (!loading) {
       dispatch(
         setupUpdateReporting({
@@ -54,14 +52,50 @@ const ReportingParticulars = () => {
             item?.observationName !== "" &&
             item?.observationName !== null &&
             item?.implicationRating !== "" &&
+            item?.implicationRating !== null &&
             item?.implication !== null &&
             item?.implication !== "" &&
-            item?.implication !== null &&
             item?.recommendedActionStep !== "" &&
             item?.recommendedActionStep !== null &&
             item?.auditee !== null
-              ? 2
+              ? 1
               : 0,
+        })
+      );
+    }
+  }
+
+  function handleSaveToStep2(item) {
+    if (!loading) {
+      dispatch(
+        setupUpdateReporting({
+          ...item,
+          stepNo: 2,
+        })
+      );
+    }
+  }
+  function handleSaveStep2(item) {
+    if (!loading) {
+      dispatch(setupUpdateReporting(item));
+    }
+  }
+  function handleSaveToStep3(item) {
+    if (!loading) {
+      dispatch(
+        setupUpdateReporting({
+          ...item,
+          stepNo: 3,
+        })
+      );
+    }
+  }
+  function handleSaveToStep4(item) {
+    if (!loading) {
+      dispatch(
+        setupUpdateReporting({
+          ...item,
+          stepNo: 4,
         })
       );
     }
@@ -74,9 +108,7 @@ const ReportingParticulars = () => {
       )?.id;
       if (companyId) {
         dispatch(
-          setupGetAllReporting(
-            `?companyId=${companyId}&currentYear=${Number(year)}`
-          )
+          setupGetSingleReport(`?reportingAndFollowUpId=${Number(reportingId)}`)
         );
       }
       dispatch(resetReportingAddSuccess());
@@ -84,10 +116,13 @@ const ReportingParticulars = () => {
   }, [reportingAddSuccess]);
 
   React.useEffect(() => {
-    if (allReporting?.length !== 0) {
-      setReports(allReporting);
+    const isEmptyObject =
+      Object.keys(singleReport).length === 0 &&
+      singleReport.constructor === Object;
+    if (!isEmptyObject && reportingId) {
+      setReport(singleReport);
     }
-  }, [allReporting]);
+  }, [singleReport]);
 
   React.useEffect(() => {
     const companyId = user[0]?.company?.find(
@@ -95,13 +130,19 @@ const ReportingParticulars = () => {
     )?.id;
     if (companyId) {
       dispatch(
-        setupGetInitialAllReporting(
-          `?companyId=${companyId}&currentYear=${Number(year)}`
+        setupGetInitialSingleReport(
+          `?reportingAndFollowUpId=${Number(reportingId)}`
         )
       );
       dispatch(setupGetAllUsers({ shareWith: true }));
     }
   }, [user, year, company]);
+
+  React.useEffect(() => {
+    if (!reportingId) {
+      navigate("/audit/reportings");
+    }
+  }, [reportingId]);
 
   React.useEffect(() => {
     dispatch(changeActiveLink("li-reporting"));
@@ -114,8 +155,7 @@ const ReportingParticulars = () => {
         <div className="my-3">
           <CircularProgress />
         </div>
-      ) : allReporting?.length === 0 ||
-        allReporting[0]?.error === "Not Found" ? (
+      ) : singleReport[0]?.error === "Not Found" ? (
         "Reporting Not Found"
       ) : (
         <>
@@ -131,29 +171,33 @@ const ReportingParticulars = () => {
           <div className="row px-4">
             <div className="col-md-12">
               <hr />
+              <div className="mb-0">{report?.title}</div>
 
               <div className="row mt-3">
                 <div className="col-lg-12">
                   <div className="accordion" id="accordionFlushExample">
-                    {reports?.map((item) =>
-                      item?.reportingList?.map((report, index) => {
-                        return (
-                          <AccordianItem
-                            mainIndex={item.id}
-                            key={index}
-                            item={report}
-                            handleChange={handleChange}
-                            loading={loading}
-                            allUsers={allUsers?.filter(
-                              (singleUser) =>
-                                Number(singleUser?.id) !== user[0]?.userId?.id
-                            )}
-                            setReports={setReports}
-                            handleSave={handleSave}
-                          />
-                        );
-                      })
-                    )}
+                    {report?.reportingList?.map((item, index) => {
+                      return (
+                        <AccordianItem
+                          key={index}
+                          item={item}
+                          handleChange={handleChange}
+                          loading={loading}
+                          allUsers={allUsers?.filter(
+                            (singleUser) =>
+                              Number(singleUser?.id) !== user[0]?.userId?.id
+                          )}
+                          singleReport={singleReport}
+                          reportingId={reportingId}
+                          setReport={setReport}
+                          handleSaveToStep1={handleSaveToStep1}
+                          handleSaveToStep2={handleSaveToStep2}
+                          handleSaveStep2={handleSaveStep2}
+                          handleSaveToStep3={handleSaveToStep3}
+                          handleSaveToStep4={handleSaveToStep4}
+                        />
+                      );
+                    })}
                   </div>
                 </div>
               </div>

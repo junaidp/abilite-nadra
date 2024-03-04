@@ -19,18 +19,30 @@ export const getAllReporting = async (data, thunkAPI) => {
   }
 };
 
-export const getInitialAllReporting = async (data, thunkAPI) => {
+export const getSingleReport = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
-    let props = await axios.get(
-      `${baseUrl}/reportingAndFollowUp/reporting/getAll${data}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user[0]?.token}`,
-        },
-      }
-    );
+    let props = await axios.get(`${baseUrl}/reportingAndFollowUp/get${data}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user[0]?.token}`,
+      },
+    });
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
+export const getInitialSingleReport = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.get(`${baseUrl}/reportingAndFollowUp/get${data}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user[0]?.token}`,
+      },
+    });
     return props.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
@@ -57,24 +69,6 @@ export const updateReporting = async (data, thunkAPI) => {
 };
 
 export const getAllFollowUp = async (data, thunkAPI) => {
-  try {
-    const { user } = thunkAPI.getState().auth;
-    let props = await axios.get(
-      `${baseUrl}/reportingAndFollowUp/followup/getAll${data}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user[0]?.token}`,
-        },
-      }
-    );
-    return props.data;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
-  }
-};
-
-export const getInitialAllFollowUp = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.get(

@@ -6,34 +6,30 @@ import Select from "@mui/material/Select";
 
 const SelectComponent = ({
   list,
-  setReports,
+  setReport,
   value,
   label,
   id,
   allUsers,
-  mainIndex,
+  disabled,
 }) => {
   function handleChange(event) {
-    setReports((pre) =>
-      pre.map((all) =>
-        Number(all?.id) === Number(mainIndex)
-          ? {
-              ...all,
-              reportingList: all?.reportingList?.map((report) =>
-                Number(report?.id) === Number(id)
-                  ? {
-                      ...report,
-                      auditee:
-                        allUsers?.find(
-                          (user) => user?.name === event?.target?.value
-                        ) || null,
-                    }
-                  : report
-              ),
-            }
-          : all
-      )
-    );
+    setReport((pre) => {
+      return {
+        ...pre,
+        reportingList: pre?.reportingList?.map((report) =>
+          Number(report?.id) === Number(id)
+            ? {
+                ...report,
+                auditee:
+                  allUsers?.find(
+                    (user) => user?.name === event?.target?.value
+                  ) || null,
+              }
+            : report
+        ),
+      };
+    });
   }
   return (
     <>
@@ -45,6 +41,7 @@ const SelectComponent = ({
             id="demo-simple-select"
             value={value || ""}
             onChange={handleChange}
+            disabled={disabled}
           >
             <MenuItem value="">Select User</MenuItem>
             {list?.map((item, index) => {

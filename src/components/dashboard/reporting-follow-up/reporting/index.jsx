@@ -83,30 +83,30 @@ const Reporting = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {allReporting?.map((item) =>
-                      item?.reportingList?.map((report, index) => {
-                        return (
-                          <tr key={index}>
-                            <td>
-                              <label>{report?.id}</label>
-                            </td>
-                            <td>
-                              <a
-                                className=" text-primary  fw-bold f-12"
-                                onClick={() =>
-                                  navigate(`/audit/reporting-particulars`)
-                                }
-                              >
-                                {report?.observationTitle}
-                              </a>
-                            </td>
-                            <td>null</td>
-                            <td>{total}</td>
-                            <td>null</td>
-                          </tr>
-                        );
-                      })
-                    )}
+                    {allReporting?.map((item, index) => {
+                      return (
+                        <tr key={index}>
+                          <td>
+                            <label>{item?.id}</label>
+                          </td>
+                          <td>
+                            <a
+                              className=" text-primary  fw-bold f-12"
+                              onClick={() =>
+                                navigate(
+                                  `/audit/reporting-particulars?reportingId=${item?.id}`
+                                )
+                              }
+                            >
+                              {item?.title}
+                            </a>
+                          </td>
+                          <td>null</td>
+                          <td>{total}</td>
+                          <td>null</td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               )}
