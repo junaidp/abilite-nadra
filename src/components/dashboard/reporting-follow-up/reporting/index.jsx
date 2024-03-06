@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { setupGetAllReporting } from "../../../../global-redux/reducers/reporting/slice";
 import { useDispatch, useSelector } from "react-redux";
 import { CircularProgress } from "@mui/material";
+import Pagination from "@mui/material/Pagination";
 
 const Reporting = () => {
   const navigate = useNavigate();
@@ -12,6 +13,10 @@ const Reporting = () => {
   const { company, year } = useSelector((state) => state?.common);
   const { allReporting, loading } = useSelector((state) => state?.reporting);
   const [total, setTotal] = React.useState(0);
+  const [page, setPage] = React.useState(1);
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
 
   React.useEffect(() => {
     const companyId = user[0]?.company?.find(
@@ -83,33 +88,40 @@ const Reporting = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {allReporting?.map((item, index) => {
-                      return (
-                        <tr key={index}>
-                          <td>
-                            <label>{item?.id}</label>
-                          </td>
-                          <td>
-                            <a
-                              className=" text-primary  fw-bold f-12"
-                              onClick={() =>
-                                navigate(
-                                  `/audit/reporting-particulars?reportingId=${item?.id}`
-                                )
-                              }
-                            >
-                              {item?.title}
-                            </a>
-                          </td>
-                          <td>null</td>
-                          <td>{total}</td>
-                          <td>null</td>
-                        </tr>
-                      );
-                    })}
+                    {allReporting
+                      ?.slice((page - 1) * 5, page * 5)
+                      ?.map((item, index) => {
+                        return (
+                          <tr key={index}>
+                            <td>
+                              <label>{item?.id}</label>
+                            </td>
+                            <td>
+                              <a
+                                className=" text-primary  fw-bold f-12"
+                                onClick={() =>
+                                  navigate(
+                                    `/audit/reporting-particulars?reportingId=${item?.id}`
+                                  )
+                                }
+                              >
+                                {item?.title}
+                              </a>
+                            </td>
+                            <td>null</td>
+                            <td>{total}</td>
+                            <td>null</td>
+                          </tr>
+                        );
+                      })}
                   </tbody>
                 </table>
               )}
+              <Pagination
+                count={Math.ceil(allReporting?.length / 5)}
+                page={page}
+                onChange={handleChange}
+              />
             </div>
           </div>
         </div>

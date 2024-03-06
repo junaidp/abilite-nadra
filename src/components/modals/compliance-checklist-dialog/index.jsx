@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 const ComplianceCheckListDialog = ({
   setShowComplianceCheckListDialog,
-  complianceCheckListId,
   currentAuditEngagement,
+  complianceCheckListMainId,
 }) => {
   const dispatch = useDispatch();
   const { loading, auditEngagementAddSuccess } = useSelector(
@@ -19,16 +19,15 @@ const ComplianceCheckListDialog = ({
     }
   }
 
-  function handleChange(event) {
+  function handleChange(event, id) {
     setComplianceItem((pre) => {
       return {
         ...pre,
-        checklistObservationsList: [
-          {
-            ...pre?.checklistObservationsList[0],
-            [event?.target?.name]: event?.target?.value,
-          },
-        ],
+        checklistObservationsList: pre?.checklistObservationsList?.map((item) =>
+          Number(item?.id) === Number(id)
+            ? { ...item, [event?.target?.name]: event?.target?.value }
+            : item
+        ),
       };
     });
   }
@@ -40,11 +39,11 @@ const ComplianceCheckListDialog = ({
   }, [auditEngagementAddSuccess]);
 
   React.useEffect(() => {
-    const singleComplianceItem =
+    const singleComplianceMainItem =
       currentAuditEngagement?.auditStepChecklistList?.find(
-        (item) => Number(item?.id) === Number(complianceCheckListId)
+        (mainItem) => Number(mainItem?.id) === Number(complianceCheckListMainId)
       );
-    setComplianceItem(singleComplianceItem);
+    setComplianceItem(singleComplianceMainItem);
   }, [currentAuditEngagement]);
 
   return (
@@ -73,80 +72,74 @@ const ComplianceCheckListDialog = ({
                     </tr>
                   </thead>
                   <tbody>
-                    {complianceItem?.checklistObservationsList && (
-                      <tr>
-                        <td>{complianceItem?.id}</td>
-                        <td>
-                          {complianceItem?.checklistObservationsList[0]?.area}
-                        </td>
-                        <td>
-                          {complianceItem?.checklistObservationsList[0]
-                            ?.subject || "null"}
-                        </td>
-                        <td>
-                          <textarea
-                            className="form-control"
-                            placeholder="Enter Here"
-                            id="ds"
-                            rows="3"
-                            value={
-                              complianceItem?.checklistObservationsList[0]
-                                ?.particulars
-                            }
-                            name="particulars"
-                            onChange={(event) => handleChange(event)}
-                          ></textarea>
-                        </td>
-                        <td>
-                          <select
-                            className="form-select mb-2"
-                            aria-label="Default select example"
-                            value={
-                              complianceItem?.checklistObservationsList[0]
-                                ?.remarks
-                            }
-                            name="remarks"
-                            onChange={(event) => handleChange(event)}
-                          >
-                            <option value="">Select One</option>
-                            <option value={1}>Yes</option>
-                            <option value={2}>No</option>
-                            <option value={3}>Not Applicable</option>
-                            <option value={4}>Partially Complied</option>
-                          </select>
-                        </td>
-                        <td>
-                          <textarea
-                            className="form-control"
-                            placeholder="Enter Here"
-                            id="ds"
-                            rows="3"
-                            value={
-                              complianceItem?.checklistObservationsList[0]
-                                ?.observation
-                            }
-                            name="observation"
-                            onChange={(event) => handleChange(event)}
-                          ></textarea>
-                        </td>
-                        <td>
-                          <div className="d-flex">
-                            <div className="w-75 d-grid">
-                              <a href="#" className="text-primary">
-                                Attached file Name 1
-                              </a>
-                              <a href="#" className="text-primary">
-                                Attached file Name 2
-                              </a>
-                            </div>
-                            <div className="w-25">
-                              <i className="fa fa-paperclip me-3 text-secondary"></i>
-                              <i className="fa fa-eye text-primary"></i>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    )}
+                    {complianceItem?.checklistObservationsList?.length === 0
+                      ? "No Observation To Show"
+                      : complianceItem?.checklistObservationsList?.map(
+                          (singleItem, index) => {
+                            return (
+                              <tr key={index}>
+                                <td>{singleItem?.id}</td>
+                                <td>{singleItem?.area}</td>
+                                <td>{singleItem?.subject || "null"}</td>
+                                <td>{singleItem?.particulars}</td>
+                                <td>
+                                  <select
+                                    className="form-select mb-2"
+                                    aria-label="Default select example"
+                                    value={singleItem?.remarks}
+                                    name="remarks"
+                                    onChange={(event) =>
+                                      handleChange(event, singleItem?.id)
+                                    }
+                                  >
+                                    <option value="">Select One</option>
+                                    <option value={1}>Yes</option>
+                                    <option value={2}>No</option>
+                                    <option value={3}>Not Applicable</option>
+                                    <option value={4}>
+                                      Partially Complied
+                                    </option>
+                                  </select>
+                                </td>
+                                <td>
+                                  <textarea
+                                    className="form-control"
+                                    placeholder="Enter Here"
+                                    id="ds"
+                                    disabled={
+                                      singleItem?.remarks === "1" ||
+                                      singleItem?.remarks === "3"
+                                        ? true
+                                        : false
+                                    }
+                                    rows="3"
+                                    value={singleItem?.observation}
+                                    name="observation"
+                                    onChange={(event) =>
+                                      handleChange(event, singleItem?.id)
+                                    }
+                                  ></textarea>
+                                </td>
+                                <td>
+                                  <div className="d-flex">
+                                    <div className="w-75 d-grid">
+                                      <a href="#" className="text-primary">
+                                        Attached file Name 1
+                                      </a>
+                                      <a href="#" className="text-primary">
+                                        Attached file Name 2
+                                      </a>
+                                    </div>
+                                    <div className="w-25">
+                                      <i className="fa fa-paperclip me-3 text-secondary"></i>
+                                      <i className="fa fa-eye text-primary"></i>
+                                    </div>
+                                  </div>
+                                </td>
+                              </tr>
+                            );
+                          }
+                        )}
                   </tbody>
                 </table>
               </div>

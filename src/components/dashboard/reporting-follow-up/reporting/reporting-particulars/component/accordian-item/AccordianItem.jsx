@@ -1,6 +1,7 @@
 import React from "react";
 import Select from "../select/Select";
 import moment from "moment";
+import { useSelector } from "react-redux";
 
 const AccordianItem = ({
   item,
@@ -16,6 +17,7 @@ const AccordianItem = ({
   singleReport,
   reportingId,
 }) => {
+  const { user } = useSelector((state) => state?.auth);
   const [curretItem, setCurrentItem] = React.useState({});
   React.useEffect(() => {
     if (singleReport && reportingId) {
@@ -238,21 +240,31 @@ const AccordianItem = ({
                   </button>
                 </div>
               )}
-              {item?.stepNo === 1 && (
-                <div className="d-flex align-items-center place-end">
-                  <button
-                    className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
-                      loading && "disabled"
-                    }`}
-                    onClick={() => handleSaveToStep2(item)}
-                  >
-                    <span className="btn-label me-2">
-                      <i className="fa fa-check"></i>
-                    </span>
-                    {loading ? "Loading..." : "Approve"}
-                  </button>
-                </div>
-              )}
+              {item?.stepNo === 1 &&
+                (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
+                  Number(user[0]?.userId?.id) ===
+                    Number(
+                      singleReport?.resourceAllocation
+                        ?.backupHeadOfInternalAudit?.id
+                    ) ||
+                  Number(user[0]?.userId?.id) ===
+                    Number(
+                      singleReport?.resourceAllocation?.proposedJobApprover?.id
+                    )) && (
+                  <div className="d-flex align-items-center place-end">
+                    <button
+                      className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
+                        loading && "disabled"
+                      }`}
+                      onClick={() => handleSaveToStep2(item)}
+                    >
+                      <span className="btn-label me-2">
+                        <i className="fa fa-check"></i>
+                      </span>
+                      {loading ? "Loading..." : "Approve"}
+                    </button>
+                  </div>
+                )}
               {item?.stepNo === 2 && (
                 <div className="d-flex align-items-center place-end">
                   <button
@@ -303,21 +315,35 @@ const AccordianItem = ({
                   </div>
                 )}
 
-              {item?.stepNo === 3 && (
-                <div className="d-flex align-items-center place-end">
-                  <button
-                    className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
-                      loading && "disabled"
-                    }`}
-                    onClick={() => handleSaveToStep4(item)}
-                  >
-                    <span className="btn-label me-2">
-                      <i className="fa fa-check"></i>
-                    </span>
-                    {loading ? "Loading..." : "Approve"}
-                  </button>
-                </div>
-              )}
+              {item?.stepNo === 3 &&
+                curretItem?.managementComments !== "" &&
+                curretItem?.managementComments !== null &&
+                curretItem?.implementationDate !== "" &&
+                curretItem?.implementationDate !== null &&
+                (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
+                  Number(user[0]?.userId?.id) ===
+                    Number(
+                      singleReport?.resourceAllocation
+                        ?.backupHeadOfInternalAudit?.id
+                    ) ||
+                  Number(user[0]?.userId?.id) ===
+                    Number(
+                      singleReport?.resourceAllocation?.proposedJobApprover?.id
+                    )) && (
+                  <div className="d-flex align-items-center place-end">
+                    <button
+                      className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
+                        loading && "disabled"
+                      }`}
+                      onClick={() => handleSaveToStep4(item)}
+                    >
+                      <span className="btn-label me-2">
+                        <i className="fa fa-check"></i>
+                      </span>
+                      {loading ? "Loading..." : "Approve"}
+                    </button>
+                  </div>
+                )}
             </div>
           </div>
         </div>

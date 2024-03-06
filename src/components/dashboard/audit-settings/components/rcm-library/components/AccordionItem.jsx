@@ -1,6 +1,332 @@
+import { toast } from "react-toastify";
+import TableBody from "../components/TableBody";
 import React from "react";
+import {
+  setupUpdateObjective,
+  setupUpdateRisk,
+  setupUpdateControl,
+  setupUpdateProgram,
+} from "../../../../../../global-redux/reducers/settings/risk-control-matrix/slice";
+import { useDispatch } from "react-redux";
 
-const AccordionItem = ({ item, setUpdatedRCMId, setShowUpdateRCMDialog }) => {
+const AccordionItem = ({
+  item,
+  setUpdatedRCMId,
+  setShowUpdateRCMDialog,
+  setRiskControlMatrix,
+  loading,
+  rcmAddSuccess
+}) => {
+  const dispatch = useDispatch();
+  function handleEditableObjective(objectiveId) {
+    setRiskControlMatrix((pre) => {
+      return pre?.map((singleItem) =>
+        Number(singleItem?.id) === Number(item?.id)
+          ? {
+              ...singleItem,
+              rcmLibraryObjectives: singleItem?.rcmLibraryObjectives?.map(
+                (objective) =>
+                  Number(objective?.id) === Number(objectiveId)
+                    ? { ...objective, editable: true }
+                    : objective
+              ),
+            }
+          : singleItem
+      );
+    });
+  }
+  function handleChangeObjective(event, objectiveId) {
+    setRiskControlMatrix((pre) => {
+      return pre?.map((singleItem) =>
+        Number(singleItem?.id) === Number(item?.id)
+          ? {
+              ...singleItem,
+              rcmLibraryObjectives: singleItem?.rcmLibraryObjectives?.map(
+                (objective) =>
+                  Number(objective?.id) === Number(objectiveId)
+                    ? {
+                        ...objective,
+                        [event?.target?.name]: event?.target?.value,
+                      }
+                    : objective
+              ),
+            }
+          : singleItem
+      );
+    });
+  }
+  function handleEditableRisk(objectiveId, riskId) {
+    setRiskControlMatrix((pre) => {
+      return pre?.map((singleItem) =>
+        Number(singleItem?.id) === Number(item?.id)
+          ? {
+              ...singleItem,
+              rcmLibraryObjectives: singleItem?.rcmLibraryObjectives?.map(
+                (objective) =>
+                  Number(objective?.id) === Number(objectiveId)
+                    ? {
+                        ...objective,
+                        rcmLibraryRiskRating:
+                          objective?.rcmLibraryRiskRating?.map((risk) =>
+                            Number(risk?.id) === Number(riskId)
+                              ? { ...risk, editable: true }
+                              : risk
+                          ),
+                      }
+                    : objective
+              ),
+            }
+          : singleItem
+      );
+    });
+  }
+  function handleChangeRisk(event, objectiveId, riskId) {
+    setRiskControlMatrix((pre) => {
+      return pre?.map((singleItem) =>
+        Number(singleItem?.id) === Number(item?.id)
+          ? {
+              ...singleItem,
+              rcmLibraryObjectives: singleItem?.rcmLibraryObjectives?.map(
+                (objective) =>
+                  Number(objective?.id) === Number(objectiveId)
+                    ? {
+                        ...objective,
+                        rcmLibraryRiskRating:
+                          objective?.rcmLibraryRiskRating?.map((risk) =>
+                            Number(risk?.id) === Number(riskId)
+                              ? {
+                                  ...risk,
+                                  [event?.target?.name]: event?.target?.value,
+                                }
+                              : risk
+                          ),
+                      }
+                    : objective
+              ),
+            }
+          : singleItem
+      );
+    });
+  }
+  function handleEditableControl(objectiveId, riskId, controlId) {
+    setRiskControlMatrix((pre) => {
+      return pre?.map((singleItem) =>
+        Number(singleItem?.id) === Number(item?.id)
+          ? {
+              ...singleItem,
+              rcmLibraryObjectives: singleItem?.rcmLibraryObjectives?.map(
+                (objective) =>
+                  Number(objective?.id) === Number(objectiveId)
+                    ? {
+                        ...objective,
+                        rcmLibraryRiskRating:
+                          objective?.rcmLibraryRiskRating?.map((risk) =>
+                            Number(risk?.id) === Number(riskId)
+                              ? {
+                                  ...risk,
+                                  rcmLibraryControlRisk:
+                                    risk?.rcmLibraryControlRisk?.map(
+                                      (control) =>
+                                        Number(control?.id) ===
+                                        Number(controlId)
+                                          ? { ...control, editable: true }
+                                          : control
+                                    ),
+                                }
+                              : risk
+                          ),
+                      }
+                    : objective
+              ),
+            }
+          : singleItem
+      );
+    });
+  }
+  function handleChangeControl(event, objectiveId, riskId, controlId) {
+    setRiskControlMatrix((pre) => {
+      return pre?.map((singleItem) =>
+        Number(singleItem?.id) === Number(item?.id)
+          ? {
+              ...singleItem,
+              rcmLibraryObjectives: singleItem?.rcmLibraryObjectives?.map(
+                (objective) =>
+                  Number(objective?.id) === Number(objectiveId)
+                    ? {
+                        ...objective,
+                        rcmLibraryRiskRating:
+                          objective?.rcmLibraryRiskRating?.map((risk) =>
+                            Number(risk?.id) === Number(riskId)
+                              ? {
+                                  ...risk,
+                                  rcmLibraryControlRisk:
+                                    risk?.rcmLibraryControlRisk?.map(
+                                      (control) =>
+                                        Number(control?.id) ===
+                                        Number(controlId)
+                                          ? {
+                                              ...control,
+                                              [event?.target?.name]:
+                                                event?.target?.value,
+                                            }
+                                          : control
+                                    ),
+                                }
+                              : risk
+                          ),
+                      }
+                    : objective
+              ),
+            }
+          : singleItem
+      );
+    });
+  }
+  function handleEditableProgram(objectiveId, riskId, controlId, programId) {
+    setRiskControlMatrix((pre) => {
+      return pre?.map((singleItem) =>
+        Number(singleItem?.id) === Number(item?.id)
+          ? {
+              ...singleItem,
+              rcmLibraryObjectives: singleItem?.rcmLibraryObjectives?.map(
+                (objective) =>
+                  Number(objective?.id) === Number(objectiveId)
+                    ? {
+                        ...objective,
+                        rcmLibraryRiskRating:
+                          objective?.rcmLibraryRiskRating?.map((risk) =>
+                            Number(risk?.id) === Number(riskId)
+                              ? {
+                                  ...risk,
+                                  rcmLibraryControlRisk:
+                                    risk?.rcmLibraryControlRisk?.map(
+                                      (control) =>
+                                        Number(control?.id) ===
+                                        Number(controlId)
+                                          ? {
+                                              ...control,
+                                              rcmLibraryAuditProgramsList:
+                                                control?.rcmLibraryAuditProgramsList?.map(
+                                                  (program) =>
+                                                    Number(program?.id) ===
+                                                    Number(programId)
+                                                      ? {
+                                                          ...program,
+                                                          editable: true,
+                                                        }
+                                                      : program
+                                                ),
+                                            }
+                                          : control
+                                    ),
+                                }
+                              : risk
+                          ),
+                      }
+                    : objective
+              ),
+            }
+          : singleItem
+      );
+    });
+  }
+
+  function handleSaveObjective(item) {
+    if (!loading) {
+      if (item?.description === "" || item?.rating === "") {
+        toast.error("Provide all values");
+      } else {
+        dispatch(setupUpdateObjective(item));
+      }
+    }
+  }
+
+  function handleSaveRisk(item) {
+    if (!loading) {
+      if (item?.description === "" || item?.rating === "") {
+        toast.error("Provide all values");
+      } else {
+        dispatch(setupUpdateRisk(item));
+      }
+    }
+  }
+
+  function handleSaveControl(item) {
+    if (!loading) {
+      if (item?.description === "" || item?.rating === "") {
+        toast.error("Provide all values");
+      } else {
+        dispatch(setupUpdateControl(item));
+      }
+    }
+  }
+
+  function handleSaveProgram(item) {
+    if (!loading) {
+      if (item?.description === "" || item?.rating === "") {
+        toast.error("Provide all values");
+      } else {
+        dispatch(setupUpdateProgram(item));
+      }
+    }
+  }
+
+  function handleChangeProgram(
+    event,
+    objectiveId,
+    riskId,
+    controlId,
+    programId
+  ) {
+    setRiskControlMatrix((pre) => {
+      return pre?.map((singleItem) =>
+        Number(singleItem?.id) === Number(item?.id)
+          ? {
+              ...singleItem,
+              rcmLibraryObjectives: singleItem?.rcmLibraryObjectives?.map(
+                (objective) =>
+                  Number(objective?.id) === Number(objectiveId)
+                    ? {
+                        ...objective,
+                        rcmLibraryRiskRating:
+                          objective?.rcmLibraryRiskRating?.map((risk) =>
+                            Number(risk?.id) === Number(riskId)
+                              ? {
+                                  ...risk,
+                                  rcmLibraryControlRisk:
+                                    risk?.rcmLibraryControlRisk?.map(
+                                      (control) =>
+                                        Number(control?.id) ===
+                                        Number(controlId)
+                                          ? {
+                                              ...control,
+                                              rcmLibraryAuditProgramsList:
+                                                control?.rcmLibraryAuditProgramsList?.map(
+                                                  (program) =>
+                                                    Number(program?.id) ===
+                                                    Number(programId)
+                                                      ? {
+                                                          ...program,
+                                                          [event?.target?.name]:
+                                                            event?.target
+                                                              ?.value,
+                                                        }
+                                                      : program
+                                                ),
+                                            }
+                                          : control
+                                    ),
+                                }
+                              : risk
+                          ),
+                      }
+                    : objective
+              ),
+            }
+          : singleItem
+      );
+    });
+  }
   return (
     <div className="accordion-item">
       <h2 className="accordion-header">
@@ -52,115 +378,24 @@ const AccordionItem = ({ item, setUpdatedRCMId, setShowUpdateRCMDialog }) => {
                     <tbody>
                       {item?.rcmLibraryObjectives?.map((objective, index) => {
                         return (
-                          <tr key={index}>
-                            <td>
-                              <textarea
-                                className="form-control"
-                                value={objective?.description}
-                                id="exampleFormCon"
-                                rows="3"
-                              ></textarea>
-                            </td>
-                            <td>
-                              {objective?.rcmLibraryRiskRating?.map(
-                                (risk, riskIndex) => {
-                                  return (
-                                    <div>
-                                      <textarea
-                                        key={riskIndex}
-                                        className="form-control mb-4"
-                                        value={risk?.description}
-                                        id="exampleFormCon"
-                                        rows="3"
-                                      ></textarea>
-                                      <div className="visibility-0">
-                                        {risk?.rcmLibraryControlRisk
-                                          ?.slice(1)
-                                          ?.map((control, controlIndex) => {
-                                            return (
-                                              <textarea
-                                                key={controlIndex}
-                                                className="form-control mb-4"
-                                                value={control?.description}
-                                                id="exampleFormCon"
-                                                rows="3"
-                                              ></textarea>
-                                            );
-                                          })}
-                                      </div>
-                                    </div>
-                                  );
-                                }
-                              )}
-                            </td>
-                            <td>
-                              {objective?.rcmLibraryRiskRating?.map((risk) =>
-                                risk?.rcmLibraryControlRisk?.map(
-                                  (control, controlIndex) => {
-                                    return (
-                                      <div>
-                                        {risk?.rcmLibraryControlRisk?.length ===
-                                          0 && (
-                                          <div className="visibility-0">
-                                            <textarea
-                                              key={controlIndex}
-                                              className="form-control mb-4"
-                                              value={control?.description}
-                                              id="exampleFormCon"
-                                              rows="3"
-                                            ></textarea>
-                                          </div>
-                                        )}
-                                        <textarea
-                                          key={controlIndex}
-                                          className="form-control mb-4"
-                                          value={control?.description}
-                                          id="exampleFormCon"
-                                          rows="3"
-                                        ></textarea>
-                                        <div className="visibility-0">
-                                          {control?.rcmLibraryAuditProgramsList
-                                            ?.slice(1)
-                                            ?.map((program, programIndex) => {
-                                              return (
-                                                <textarea
-                                                  key={programIndex}
-                                                  className="form-control mb-4"
-                                                  value={program?.description}
-                                                  id="exampleFormCon"
-                                                  rows="3"
-                                                ></textarea>
-                                              );
-                                            })}
-                                        </div>
-                                      </div>
-                                    );
-                                  }
-                                )
-                              )}
-                            </td>
-                            <td>
-                              {objective?.rcmLibraryRiskRating?.map((risk) =>
-                                risk?.rcmLibraryControlRisk?.map((control) =>
-                                  control?.rcmLibraryAuditProgramsList?.map(
-                                    (program, programIndex) => {
-                                      return (
-                                        <div>
-                                          <textarea
-                                            key={programIndex}
-                                            className="form-control mb-4"
-                                            value={program?.description}
-                                            id="exampleFormCon"
-                                            rows="3"
-                                          ></textarea>
-                                        </div>
-                                      );
-                                    }
-                                  )
-                                )
-                              )}
-                            </td>
-                          </tr>
+                          <TableBody
+                            objective={objective}
+                            key={index}
+                            handleEditableObjective={handleEditableObjective}
+                            handleChangeObjective={handleChangeObjective}
+                            handleEditableRisk={handleEditableRisk}
+                            handleChangeRisk={handleChangeRisk}
+                            handleEditableControl={handleEditableControl}
+                            handleChangeControl={handleChangeControl}
+                            handleEditableProgram={handleEditableProgram}
+                            handleChangeProgram={handleChangeProgram}
+                            handleSaveObjective={handleSaveObjective}
+                            handleSaveRisk={handleSaveRisk}
+                            handleSaveControl={handleSaveControl}
+                            handleSaveProgram={handleSaveProgram}
+                            loading={loading}
+                            rcmAddSuccess={rcmAddSuccess}
+                          />
                         );
                       })}
                     </tbody>

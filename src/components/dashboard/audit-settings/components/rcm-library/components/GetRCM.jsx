@@ -7,7 +7,7 @@ const GetRCM = ({
   subProcessId,
   setSubProcessId,
   allSubProcess,
-  handleGetRCM
+  handleGetRCM,
 }) => {
   return (
     <>
@@ -51,7 +51,12 @@ const GetRCM = ({
           </select>
         </div>
         <div className="col-lg-12">
-          <div className="btn btn-labeled btn-primary px-3 shadow my-4" onClick={handleGetRCM}>Get RCM</div>
+          <div
+            className="btn btn-labeled btn-primary px-3 shadow my-4"
+            onClick={handleGetRCM}
+          >
+            Get RCM
+          </div>
         </div>
       </div>
     </>

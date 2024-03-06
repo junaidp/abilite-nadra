@@ -1,10 +1,42 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setupUpdateComplianceCheckList } from "../../../../../../global-redux/reducers/audit-engagement/slice";
 
 const ComplianceCheckList = ({
   setShowComplianceCheckListDialog,
   currentAuditEngagement,
-  setComplianceCheckListId,
+  setComplianceCheckListMainId,
 }) => {
+  const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state?.auditEngagement);
+  const [currentButtonId, setCurrentButtonId] = React.useState("");
+  const { user } = useSelector((state) => state?.auth);
+  function checkStaus(item) {
+    let submit = true;
+    item?.checklistObservationsList?.forEach((all) => {
+      if (
+        all?.remarks === "" ||
+        all?.remarks === null ||
+        all?.observation === "" ||
+        all?.observation === null ||
+        all?.remarks === "PARTIALLY_APPLICABLE"
+      ) {
+        submit = false;
+      }
+    });
+    return submit;
+  }
+
+  function handleSubmit(item) {
+    if (!loading) {
+      dispatch(setupUpdateComplianceCheckList({ ...item, submitted: true }));
+    }
+  }
+  function handleApprove(item) {
+    if (!loading) {
+      dispatch(setupUpdateComplianceCheckList({ ...item, approved: true }));
+    }
+  }
   return (
     <div className="accordion-item">
       <h2 className="accordion-header" id="headingeight">
@@ -18,11 +50,6 @@ const ComplianceCheckList = ({
         >
           <div className="d-flex w-100 me-3 align-items-center justify-content-between">
             <div className=" d-flex align-items-center">
-              {currentAuditEngagement?.auditStepChecklistList !== null &&
-                currentAuditEngagement?.auditStepChecklistList?.length !==
-                  0 && (
-                  <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
-                )}
               Compliance Checklist
             </div>
           </div>
@@ -43,29 +70,124 @@ const ComplianceCheckList = ({
                       <tr>
                         <th className="f-80">Sr No.</th>
                         <th>Location Name</th>
+                        <th>Sub Location Name</th>
                         <th>Status</th>
                         <th>Change Request</th>
+                        <th>Status</th>
+                        <th>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
                       {currentAuditEngagement?.auditStepChecklistList?.map(
-                        (item, index) => {
+                        (mainItem, index) => {
                           return (
                             <tr key={index}>
-                              <td>{item?.id}</td>
+                              <td>{mainItem?.id}</td>
                               <td>
                                 <a
                                   className="fw-bold  text-primary  px-3 py-1 f-10"
                                   onClick={() => {
-                                    setComplianceCheckListId(item?.id);
-                                    setShowComplianceCheckListDialog(true);
+                                    if (mainItem?.approved !== true) {
+                                      setComplianceCheckListMainId(
+                                        mainItem?.id
+                                      );
+                                      setShowComplianceCheckListDialog(true);
+                                    }
                                   }}
                                 >
-                                  {item?.subLocation?.locationid?.description}
+                                  {
+                                    mainItem?.subLocation?.locationid
+                                      ?.description
+                                  }
+                                </a>
+                              </td>
+                              <td>
+                                <a
+                                  className="fw-bold  text-primary  px-3 py-1 f-10"
+                                  onClick={() => {
+                                    if (mainItem?.approved !== true) {
+                                      setComplianceCheckListMainId(
+                                        mainItem?.id
+                                      );
+                                      setShowComplianceCheckListDialog(true);
+                                    }
+                                  }}
+                                >
+                                  {mainItem?.subLocation?.description}
                                 </a>
                               </td>
                               <td>null</td>
                               <td>null</td>
+                              <td>
+                                {checkStaus(mainItem) ? (
+                                  <i className="fa fa-check-circle text-success f-18"></i>
+                                ) : (
+                                  <i className="fa fa-check-circle text-danger  f-18"></i>
+                                )}
+                              </td>
+                              <td>
+                                <div>
+                                  {checkStaus(mainItem) &&
+                                    mainItem?.submitted === false && (
+                                      <button
+                                        className={`btn btn-labeled btn-primary px-3  shadow ${
+                                          loading &&
+                                          Number(mainItem?.id) ===
+                                            Number(currentButtonId) &&
+                                          "disabled"
+                                        }`}
+                                        onClick={() => {
+                                          setCurrentButtonId(mainItem?.id);
+                                          handleSubmit(mainItem);
+                                        }}
+                                      >
+                                        {loading &&
+                                        Number(mainItem?.id) ===
+                                          Number(currentButtonId)
+                                          ? "Loading..."
+                                          : "Submit"}
+                                      </button>
+                                    )}
+                                </div>
+                                <div>
+                                  {checkStaus(mainItem) &&
+                                    mainItem?.submitted === true &&
+                                    mainItem?.approved === false &&
+                                    (user[0]?.userId?.employeeid
+                                      ?.userHierarchy === "IAH" ||
+                                      Number(user[0]?.userId?.id) ===
+                                        Number(
+                                          currentAuditEngagement
+                                            ?.resourceAllocation
+                                            ?.backupHeadOfInternalAudit?.id
+                                        ) ||
+                                      Number(user[0]?.userId?.id) ===
+                                        Number(
+                                          currentAuditEngagement
+                                            ?.resourceAllocation
+                                            ?.proposedJobApprover?.id
+                                        )) && (
+                                      <button
+                                        className={`btn btn-labeled btn-primary px-3  shadow ${
+                                          loading &&
+                                          Number(mainItem?.id) ===
+                                            Number(currentButtonId) &&
+                                          "disabled"
+                                        }`}
+                                        onClick={() => {
+                                          setCurrentButtonId(mainItem?.id);
+                                          handleApprove(mainItem);
+                                        }}
+                                      >
+                                        {loading &&
+                                        Number(mainItem?.id) ===
+                                          Number(currentButtonId)
+                                          ? "Loading..."
+                                          : "Approve"}
+                                      </button>
+                                    )}
+                                </div>
+                              </td>
                             </tr>
                           );
                         }

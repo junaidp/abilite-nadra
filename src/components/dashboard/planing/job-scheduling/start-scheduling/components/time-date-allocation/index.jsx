@@ -15,9 +15,16 @@ const TimeAndDateAllocation = ({
       dispatch(
         setupUpdateJobSehedulingTimeAndDateAllocation({
           ...currentJobSchedulingObject?.timeAndDateAllocation,
+          repeatJob:
+            currentJobSchedulingObject?.timeAndDateAllocation?.repeatJob ===
+            null
+              ? false
+              : currentJobSchedulingObject?.timeAndDateAllocation?.repeatJob,
           frequency:
             currentJobSchedulingObject?.timeAndDateAllocation?.repeatJob ===
-            false
+              false ||
+            currentJobSchedulingObject?.timeAndDateAllocation?.repeatJob ===
+              null
               ? "Once"
               : currentJobSchedulingObject?.timeAndDateAllocation?.frequency,
         })

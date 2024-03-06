@@ -60,7 +60,8 @@ const KickOff = () => {
   const [showAddAuditProgramDialog, setShowAddAuditProgramDialog] =
     React.useState(false);
   const [auditStepId, setAuditStepId] = React.useState("");
-  const [complianceCheckListId, setComplianceCheckListId] = React.useState("");
+  const [complianceCheckListMainId, setComplianceCheckListMainId] =
+    React.useState("");
 
   React.useEffect(() => {
     const isEmptyObject =
@@ -197,8 +198,8 @@ const KickOff = () => {
                   setShowComplianceCheckListDialog={
                     setShowComplianceCheckListDialog
                   }
-                  complianceCheckListId={complianceCheckListId}
                   currentAuditEngagement={currentAuditEngagement}
+                  complianceCheckListMainId={complianceCheckListMainId}
                 />
               </div>
             </div>
@@ -316,7 +317,9 @@ const KickOff = () => {
                         setShowComplianceCheckListDialog
                       }
                       currentAuditEngagement={currentAuditEngagement}
-                      setComplianceCheckListId={setComplianceCheckListId}
+                      setComplianceCheckListMainId={
+                        setComplianceCheckListMainId
+                      }
                     />
                   )}
               </div>

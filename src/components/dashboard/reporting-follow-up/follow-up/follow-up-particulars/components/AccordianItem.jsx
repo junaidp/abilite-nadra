@@ -1,5 +1,6 @@
 import React from "react";
 import moment from "moment";
+import { useSelector } from "react-redux";
 
 const AccordianItem = ({
   index,
@@ -12,6 +13,7 @@ const AccordianItem = ({
   singleReport,
   followUpId,
 }) => {
+  const { user } = useSelector((state) => state?.auth);
   const [curretItem, setCurrentItem] = React.useState({});
   React.useEffect(() => {
     if (singleReport && followUpId) {
@@ -241,7 +243,18 @@ const AccordianItem = ({
                   curretItem?.followUp?.recommendationsImplemented !== "" &&
                   curretItem?.followUp?.recommendationsImplemented !== null &&
                   curretItem?.followUp?.testInNextYear !== "" &&
-                  curretItem?.followUp?.testInNextYear !== null && (
+                  curretItem?.followUp?.testInNextYear !== null &&
+                  (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
+                    Number(user[0]?.userId?.id) ===
+                      Number(
+                        singleReport?.resourceAllocation
+                          ?.backupHeadOfInternalAudit?.id
+                      ) ||
+                    Number(user[0]?.userId?.id) ===
+                      Number(
+                        singleReport?.resourceAllocation?.proposedJobApprover
+                          ?.id
+                      )) && (
                     <button
                       className={`btn btn-labeled btn-primary px-3 mx-2 mt-3 shadow ${
                         loading && "disabled"

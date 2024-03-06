@@ -1,17 +1,13 @@
 import React from "react";
 import AddSettingsRCMDialog from "../../../../modals/add-settings-rcm-dialog";
 import UpdateSettinsRCMDialog from "../../../../modals/update-settings-rcm-dialog";
-import {
-  setupGetAllProcess,
-  setupGetAllSubProcess,
-} from "../../../../../global-redux/reducers/settings/process/slice";
+import { setupGetAllSubProcess } from "../../../../../global-redux/reducers/settings/process/slice";
 import { useSelector, useDispatch } from "react-redux";
 import GetRCM from "./components/GetRCM";
 import {
   setupGetInitialAllRiskControlMatrix,
   resetRCMAddSuccess,
   setupGetAllRiskControlMatrix,
-  handleReset,
 } from "../../../../../global-redux/reducers/settings/risk-control-matrix/slice";
 import { toast } from "react-toastify";
 import { CircularProgress } from "@mui/material";
@@ -95,7 +91,46 @@ const RCMLibraray = () => {
 
   React.useEffect(() => {
     if (allRCM?.length !== 0) {
-      setRiskControlMatrix(allRCM);
+      setRiskControlMatrix(
+        allRCM?.map((item) => {
+          return {
+            ...item,
+            rcmLibraryObjectives: item?.rcmLibraryObjectives?.map(
+              (objective) => {
+                return {
+                  ...objective,
+                  editable: false,
+                  rcmLibraryRiskRating: objective?.rcmLibraryRiskRating?.map(
+                    (risk) => {
+                      return {
+                        ...risk,
+                        editable: false,
+                        rcmLibraryControlRisk: risk?.rcmLibraryControlRisk?.map(
+                          (control) => {
+                            return {
+                              ...control,
+                              editable: false,
+                              rcmLibraryAuditProgramsList:
+                                control?.rcmLibraryAuditProgramsList?.map(
+                                  (program) => {
+                                    return {
+                                      ...program,
+                                      editable: false,
+                                    };
+                                  }
+                                ),
+                            };
+                          }
+                        ),
+                      };
+                    }
+                  ),
+                };
+              }
+            ),
+          };
+        })
+      );
     }
   }, [allRCM]);
 
@@ -122,21 +157,6 @@ const RCMLibraray = () => {
       dispatch(setupGetAllSubProcess(`?processId=${Number(processId)}`));
     }
   }, [processId]);
-
-  React.useEffect(() => {
-    const companyId = user[0]?.company?.find(
-      (item) => item?.companyName === company
-    )?.id;
-    if (companyId) {
-      dispatch(setupGetAllProcess(Number(companyId)));
-    }
-    return () => {
-      dispatch(handleReset());
-      setProcessId("");
-      setSubProcessId("");
-      setRiskControlMatrix([]);
-    };
-  }, []);
 
   return (
     <div
@@ -286,6 +306,9 @@ const RCMLibraray = () => {
                     item={item}
                     setUpdatedRCMId={setUpdatedRCMId}
                     setShowUpdateRCMDialog={setShowUpdateRCMDialog}
+                    setRiskControlMatrix={setRiskControlMatrix}
+                    loading={loading}
+                    rcmAddSuccess={rcmAddSuccess}
                   />
                 );
               })}

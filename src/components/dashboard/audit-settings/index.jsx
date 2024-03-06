@@ -101,7 +101,10 @@ const AuditSettings = () => {
       if (currentSettingOption === "cp-list") {
         dispatch(setupGetAllCPList(companyId));
       }
-      if (currentSettingOption === "process") {
+      if (
+        currentSettingOption === "process" ||
+        currentSettingOption === "rcm-library"
+      ) {
         dispatch(setupGetAllProcess(companyId));
       }
       if (currentSettingOption === "users") {
@@ -233,6 +236,7 @@ const AuditSettings = () => {
                   type="button"
                   role="tab"
                   aria-controls="nav-rcm-library"
+                  onClick={() => setCurrentSettingOption("rcm-library")}
                 >
                   RCM Library
                 </button>
