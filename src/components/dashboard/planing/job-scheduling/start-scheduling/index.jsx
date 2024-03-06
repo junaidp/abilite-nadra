@@ -189,6 +189,16 @@ const StartScheduling = () => {
     let allSubLocations = locationArray.reduce((acc, item) => {
       return acc.concat(item.subLocations);
     }, []);
+    setCurrentJobScheduling((pre) => {
+      return {
+        ...pre,
+        subLocation: allSubLocations
+          .filter((item) =>
+            currentJobSchedulingObject?.subLocation?.includes(item?.description)
+          )
+          ?.map((item) => item?.description),
+      };
+    });
     setAllSubLocations(allSubLocations);
   }, [currentJobSchedulingObject?.locationList]);
 
@@ -251,6 +261,7 @@ const StartScheduling = () => {
                 initialPersonalArray={initialLocationList}
                 name="locationList"
                 setCurrentJobScheduling={setCurrentJobScheduling}
+                currentJobSchedulingObject={currentJobSchedulingObject}
               />
             </div>
             <div className="col-lg-5">
@@ -260,6 +271,7 @@ const StartScheduling = () => {
                 initialPersonalArray={initialSubLocationList}
                 name="subLocation"
                 setCurrentJobScheduling={setCurrentJobScheduling}
+                currentJobSchedulingObject={currentJobSchedulingObject}
               />
             </div>
             <div className="col-lg-2">

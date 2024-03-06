@@ -1,6 +1,7 @@
 import React from "react";
 import { setupUpdateComplianceCheckList } from "../../../global-redux/reducers/audit-engagement/slice";
 import { useDispatch, useSelector } from "react-redux";
+import RichTextEditor from "./components/TextEditor";
 
 const ComplianceCheckListDialog = ({
   setShowComplianceCheckListDialog,
@@ -26,6 +27,19 @@ const ComplianceCheckListDialog = ({
         checklistObservationsList: pre?.checklistObservationsList?.map((item) =>
           Number(item?.id) === Number(id)
             ? { ...item, [event?.target?.name]: event?.target?.value }
+            : item
+        ),
+      };
+    });
+  }
+
+  function onContentChange(id, value) {
+    setComplianceItem((pre) => {
+      return {
+        ...pre,
+        checklistObservationsList: pre?.checklistObservationsList?.map((item) =>
+          Number(item?.id) === Number(id)
+            ? { ...item, observation: value }
             : item
         ),
       };
@@ -102,23 +116,11 @@ const ComplianceCheckListDialog = ({
                                   </select>
                                 </td>
                                 <td>
-                                  <textarea
-                                    className="form-control"
-                                    placeholder="Enter Here"
-                                    id="ds"
-                                    disabled={
-                                      singleItem?.remarks === "1" ||
-                                      singleItem?.remarks === "3"
-                                        ? true
-                                        : false
-                                    }
-                                    rows="3"
-                                    value={singleItem?.observation}
-                                    name="observation"
-                                    onChange={(event) =>
-                                      handleChange(event, singleItem?.id)
-                                    }
-                                  ></textarea>
+                                  <RichTextEditor
+                                    initialValue={singleItem?.observation}
+                                    onContentChange={onContentChange}
+                                    singleItem={singleItem}
+                                  />
                                 </td>
                                 <td>
                                   <div className="d-flex">

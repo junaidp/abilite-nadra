@@ -246,6 +246,11 @@ body {
   color: #0a7386 !important;
 }
 
+.css-sghohy-MuiButtonBase-root-MuiButton-root{
+  background-color: #0a7386 !important;
+
+}
+
 .form-control {
   font-size: 11px !important;
 }

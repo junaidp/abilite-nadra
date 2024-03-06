@@ -5,6 +5,7 @@ import { setupGetAllLocations } from "../../../global-redux/reducers/settings/lo
 import { setupGetAllProcess } from "../../../global-redux/reducers/settings/process/slice";
 import { setupGetAllUsers } from "../../../global-redux/reducers/settings/user-management/slice";
 import { setupGetAllCPList } from "../../../global-redux/reducers/settings/cp-list/slice";
+import { setupGetAllRiskFactors } from "../../../global-redux/reducers/settings/risk-factor/slice";
 import AddCheckListManagementDialog from "../../modals/add-checklist-management-dialog/index";
 import UserManagementDialog from "../../modals/add-user-dialog/index";
 import UpdateCompanyDialog from "../../modals/update-company-dialog";
@@ -100,6 +101,9 @@ const AuditSettings = () => {
       }
       if (currentSettingOption === "cp-list") {
         dispatch(setupGetAllCPList(companyId));
+      }
+      if (currentSettingOption === "risk-factor") {
+        dispatch(setupGetAllRiskFactors(`?company_id=${companyId}`));
       }
       if (
         currentSettingOption === "process" ||
@@ -242,12 +246,13 @@ const AuditSettings = () => {
                 </button>
                 <button
                   className="nav-link shadow-sm border-0 mb-3  rounded-0 me-3 "
-                  id="nav-risk-tab"
+                  id="nav-risk-factor-tab"
                   data-bs-toggle="tab"
-                  data-bs-target="#nav-risk"
+                  data-bs-target="#nav-risk-factor"
                   type="button"
                   role="tab"
-                  aria-controls="nav-risk"
+                  aria-controls="nav-risk-factor"
+                  onClick={() => setCurrentSettingOption("risk-factor")}
                 >
                   Risk Factor
                 </button>

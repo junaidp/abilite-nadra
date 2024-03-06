@@ -11,6 +11,7 @@ import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
 } from "../../../../../global-redux/reducers/common/slice";
+import { htmlToText } from "html-to-text";
 import { setupGetAllUsers } from "../../../../../global-redux/reducers/settings/user-management/slice";
 import { useDispatch, useSelector } from "react-redux";
 import AccordianItem from "./component/accordian-item/AccordianItem";
@@ -120,7 +121,16 @@ const ReportingParticulars = () => {
       Object.keys(singleReport).length === 0 &&
       singleReport.constructor === Object;
     if (!isEmptyObject && reportingId) {
-      setReport(singleReport);
+      setReport({
+        ...singleReport,
+        reportingList: singleReport?.reportingList?.map((singleItem) => {
+          return {
+            ...singleItem,
+            observationName: htmlToText(singleItem?.observationName),
+            observationTitle: htmlToText(singleItem?.observationTitle),
+          };
+        }),
+      });
     }
   }, [singleReport]);
 

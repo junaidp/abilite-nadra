@@ -1,19 +1,92 @@
+import { CircularProgress } from "@mui/material";
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import Pagination from "@mui/material/Pagination";
+import { toast } from "react-toastify";
+import {
+  setupCreateRiskFactor,
+  setupUpdateRiskFactor,
+  setupGetAllRiskFactors,
+  resetRiskFactorAddSuccess,
+} from "../../../../../global-redux/reducers/settings/risk-factor/slice";
 
 const RiskFactor = () => {
+  const dispatch = useDispatch();
+  const { loading, allRiskFactors, riskFactorAddSuccess } = useSelector(
+    (state) => state?.settingsRiskFactor
+  );
+  const { company } = useSelector((state) => state?.common);
+  const { user } = useSelector((state) => state?.auth);
+  const [riskFactorList, setRiskFactorList] = React.useState([]);
+  const [page, setPage] = React.useState(1);
+  const [description, setDescription] = React.useState("");
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
+
+  function handleSave() {
+    if (!loading) {
+      if (description === "") {
+        toast.error("Provide description");
+      } else {
+        let companyId = user[0]?.company.find(
+          (all) => all?.companyName === company
+        )?.id;
+        if (companyId) {
+          dispatch(
+            setupCreateRiskFactor(
+              `?description=${description}&Company_Id=${companyId}`
+            )
+          );
+        }
+      }
+    }
+  }
+
+  function handleUpdate(id) {
+    if (!loading) {
+      const currentRiskFactor = riskFactorList.find((all) => all?.id === id);
+      dispatch(setupUpdateRiskFactor(currentRiskFactor));
+    }
+  }
+
+  function handleChangeDescription(event, id) {
+    setRiskFactorList((pre) =>
+      pre?.map((item) =>
+        item?.id === id ? { ...item, description: event?.target?.value } : item
+      )
+    );
+  }
+
+  React.useEffect(() => {
+    if (riskFactorAddSuccess) {
+      let companyId = user[0]?.company.find(
+        (all) => all?.companyName === company
+      )?.id;
+      setDescription("");
+      dispatch(setupGetAllRiskFactors(`?company_id=${companyId}`));
+      dispatch(resetRiskFactorAddSuccess());
+    }
+  }, [riskFactorAddSuccess]);
+
+  React.useEffect(() => {
+    if (allRiskFactors?.length !== 0) {
+      setRiskFactorList(allRiskFactors);
+    }
+  }, [allRiskFactors]);
   return (
     <div
       className="tab-pane fade"
-      id="nav-risk"
+      id="nav-risk-factor"
       role="tabpanel"
-      aria-labelledby="nav-risk-tab"
+      aria-labelledby="nav-risk-factor-tab"
     >
       <div className="row">
         <div className="col-lg-12">
           <div className="sub-heading  fw-bold">Risk Factor</div>
           <label className="fw-light">
             Define list of Risk factors here for Risk Factor approach at
-            Universe Level Risk Assessment{" "}
+            Universe Level Risk Assessment
           </label>
         </div>
       </div>
@@ -25,14 +98,21 @@ const RiskFactor = () => {
             className="form-control w-100"
             placeholder="Enter"
             type="text"
+            value={description}
+            onChange={(event) => setDescription(event?.target?.value)}
           />
         </div>
         <div className="col-lg-6 text-end float-end align-self-end">
-          <div className="btn btn-labeled btn-primary px-3 shadow">
+          <div
+            className={`btn btn-labeled btn-primary px-3 shadow ${
+              loading && "disabled"
+            }`}
+            onClick={handleSave}
+          >
             <span className="btn-label me-2">
               <i className="fa fa-plus"></i>
             </span>
-            Add
+            {loading ? "Loading..." : "Add"}
           </div>
         </div>
       </div>
@@ -40,35 +120,61 @@ const RiskFactor = () => {
       <div className="row mt-3">
         <div className="col-lg-12">
           <div className="table-responsive">
-            <table className="table table-bordered  table-hover rounded">
-              <thead className="bg-secondary text-white">
-                <tr>
-                  <th className="w-80">Sr No.</th>
-                  <th>Particulars</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Show Sub-Department/Sub-Division/Sub-Location</td>
-                  <td>
-                    <i className="fa fa-edit  px-3 f-18"></i>
-
-                    <i className="fa fa-trash text-danger f-18"></i>
-                  </td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>Show Sub-Department/Sub-Division/Sub-Location</td>
-                  <td>
-                    <i className="fa fa-edit  px-3 f-18"></i>
-
-                    <i className="fa fa-trash text-danger f-18"></i>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            {loading ? (
+              <CircularProgress />
+            ) : allRiskFactors?.length === 0 ||
+              allRiskFactors[0]?.error === "Not Found" ? (
+              <p>No Risk Factors To Show</p>
+            ) : (
+              <table className="table table-bordered  table-hover rounded">
+                <thead className="bg-secondary text-white">
+                  <tr>
+                    <th className="w-80">Sr No.</th>
+                    <th>Risk Factor</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {riskFactorList
+                    ?.slice((page - 1) * 5, page * 5)
+                    ?.map((item, index) => {
+                      return (
+                        <tr key={index}>
+                          <td>{item?.id}</td>
+                          <td>
+                            <textarea
+                              className="form-control"
+                              placeholder="Enter Reason"
+                              id="exampleFormControlTextarea1"
+                              rows="3"
+                              value={item?.description || ""}
+                              onChange={(event) =>
+                                handleChangeDescription(event, item?.id)
+                              }
+                            ></textarea>
+                          </td>
+                          <td>
+                            <div
+                              className={`btn btn-labeled btn-primary px-3 shadow `}
+                              onClick={() => handleUpdate(item?.id)}
+                            >
+                              <span className="btn-label me-2">
+                                <i className="fa fa-check-circle"></i>
+                              </span>
+                              Save
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </table>
+            )}
+            <Pagination
+              count={Math.ceil(allRiskFactors?.length / 5)}
+              page={page}
+              onChange={handleChange}
+            />
           </div>
         </div>
       </div>
