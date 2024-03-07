@@ -1,7 +1,6 @@
 import React from "react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid } from "recharts";
 
-const SupportingDocs = ({ excelData, setExcelData, handleFileUpload }) => {
+const SupportingDocs = ({ userHierarchy, userRole }) => {
   return (
     <div
       className="tab-pane fade active show"
@@ -9,68 +8,47 @@ const SupportingDocs = ({ excelData, setExcelData, handleFileUpload }) => {
       role="tabpanel"
       aria-labelledby="nav-home-tab"
     >
-      <div className="row my-3">
-        <div className="col-lg-12">
-          <div className="sub-heading  fw-bold">Supporting Documents</div>
-        </div>
-      </div>
-
-      <div className="row position-relative">
-        <div className="col-lg-12 text-center settings-form">
-          <form>
-            <input type="file" onChange={handleFileUpload} />
-            <p className="mb-0">Drag your files here or click in this area.</p>
-          </form>
-        </div>
-      </div>
-
-      <div className="row my-3">
-        <div className="col-lg-12 text-end">
-          <button className="btn btn-labeled btn-primary px-3 mt-3 shadow">
-            <span className="btn-label me-2">
-              <i className="fa fa-save"></i>
-            </span>
-            Submit
-          </button>
-        </div>
-      </div>
-
-      <div>
-        {excelData && (
-          <div>
-            <LineChart width={700} height={400} data={excelData}>
-              <XAxis dataKey={Object.keys(excelData[0])[1]} />
-              <YAxis />
-              <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-              {Object.keys(excelData[0]).map((item, i) => {
-                return (
-                  <Line type="monotone" dataKey={item} stroke={`#8884d${i}`} />
-                );
-              })}
-            </LineChart>
-          </div>
-        )}
-      </div>
-      {excelData && (
-        <div className="my-3">
-          <div className="flex">
-            <div>
-              <i
-                className="fa fa-trash text-danger f-18 px-3"
-                onClick={() => setExcelData(null)}
-              ></i>
+      {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+        <div>
+          <div className="row my-3">
+            <div className="col-lg-12">
+              <div className="sub-heading  fw-bold">Supporting Documents</div>
             </div>
-            <div className="row position-relative">
-              <div className="col-lg-12 text-center settings-form h-0 border-none">
-                <form>
-                  <input type="file" onChange={handleFileUpload} />
-                  <i class="bi bi-pencil-square f-18 cursor-pointer"></i>
-                </form>
-              </div>
+          </div>
+          <div className="row position-relative">
+            <div className="col-lg-12 text-center settings-form">
+              <form>
+                <input type="file" />
+                <p className="mb-0">
+                  Drag your files here or click in this area.
+                </p>
+              </form>
+            </div>
+          </div>
+          <div className="row my-3">
+            <div className="col-lg-12 text-end">
+              <button className="btn btn-labeled btn-primary px-3 mt-3 shadow">
+                <span className="btn-label me-2">
+                  <i className="fa fa-save"></i>
+                </span>
+                Submit
+              </button>
             </div>
           </div>
         </div>
       )}
+
+      <div className="my-3">
+        <div className="flex">
+          <div className="row position-relative">
+            <div className="col-lg-12 text-center settings-form h-0 border-none">
+              <form>
+                <input type="file" />
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="row mb-3">
         <div className="col-lg-6">
           <label className="w-100">Search File Name:</label>
@@ -114,7 +92,9 @@ const SupportingDocs = ({ excelData, setExcelData, handleFileUpload }) => {
                   <td>
                     <i className="fa-eye fa f-18"></i>
 
-                    <i className="fa fa-trash text-danger f-18 px-3"></i>
+                    {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+                      <i className="fa fa-trash text-danger f-18 px-3"></i>
+                    )}
 
                     <i className="fa fa-download f-18"></i>
                   </td>

@@ -15,7 +15,9 @@ const AccordionItem = ({
   setShowUpdateRCMDialog,
   setRiskControlMatrix,
   loading,
-  rcmAddSuccess
+  rcmAddSuccess,
+  userHierarchy,
+  userRole,
 }) => {
   const dispatch = useDispatch();
   function handleEditableObjective(objectiveId) {
@@ -376,28 +378,36 @@ const AccordionItem = ({
                       </tr>
                     </thead>
                     <tbody>
-                      {item?.rcmLibraryObjectives?.map((objective, index) => {
-                        return (
-                          <TableBody
-                            objective={objective}
-                            key={index}
-                            handleEditableObjective={handleEditableObjective}
-                            handleChangeObjective={handleChangeObjective}
-                            handleEditableRisk={handleEditableRisk}
-                            handleChangeRisk={handleChangeRisk}
-                            handleEditableControl={handleEditableControl}
-                            handleChangeControl={handleChangeControl}
-                            handleEditableProgram={handleEditableProgram}
-                            handleChangeProgram={handleChangeProgram}
-                            handleSaveObjective={handleSaveObjective}
-                            handleSaveRisk={handleSaveRisk}
-                            handleSaveControl={handleSaveControl}
-                            handleSaveProgram={handleSaveProgram}
-                            loading={loading}
-                            rcmAddSuccess={rcmAddSuccess}
-                          />
-                        );
-                      })}
+                      {item?.rcmLibraryObjectives?.length === 0 ? (
+                        <tr>
+                          <td>No Objective Added Till Now</td>
+                        </tr>
+                      ) : (
+                        item?.rcmLibraryObjectives?.map((objective, index) => {
+                          return (
+                            <TableBody
+                              objective={objective}
+                              key={index}
+                              handleEditableObjective={handleEditableObjective}
+                              handleChangeObjective={handleChangeObjective}
+                              handleEditableRisk={handleEditableRisk}
+                              handleChangeRisk={handleChangeRisk}
+                              handleEditableControl={handleEditableControl}
+                              handleChangeControl={handleChangeControl}
+                              handleEditableProgram={handleEditableProgram}
+                              handleChangeProgram={handleChangeProgram}
+                              handleSaveObjective={handleSaveObjective}
+                              handleSaveRisk={handleSaveRisk}
+                              handleSaveControl={handleSaveControl}
+                              handleSaveProgram={handleSaveProgram}
+                              loading={loading}
+                              rcmAddSuccess={rcmAddSuccess}
+                              userHierarchy={userHierarchy}
+                              userRole={userRole}
+                            />
+                          );
+                        })
+                      )}
                     </tbody>
                   </table>
                 </div>

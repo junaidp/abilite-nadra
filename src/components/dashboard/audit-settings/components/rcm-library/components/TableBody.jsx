@@ -19,7 +19,9 @@ const TableBody = ({
   handleSaveControl,
   handleSaveProgram,
   loading,
-  rcmAddSuccess
+  rcmAddSuccess,
+  userHierarchy,
+  userRole,
 }) => {
   return (
     <tr>
@@ -31,6 +33,8 @@ const TableBody = ({
         handleEditableObjective={handleEditableObjective}
         loading={loading}
         rcmAddSuccess={rcmAddSuccess}
+        userHierarchy={userHierarchy}
+        userRole={userRole}
       />
       {/* First Colimn */}
       {/* Second Colimn */}
@@ -42,6 +46,8 @@ const TableBody = ({
         handleSaveRisk={handleSaveRisk}
         loading={loading}
         rcmAddSuccess={rcmAddSuccess}
+        userHierarchy={userHierarchy}
+        userRole={userRole}
       />
       {/* Second Colimn */}
       {/* Third Column */}
@@ -53,6 +59,8 @@ const TableBody = ({
         handleEditableControl={handleEditableControl}
         loading={loading}
         rcmAddSuccess={rcmAddSuccess}
+        userHierarchy={userHierarchy}
+        userRole={userRole}
       />
       {/* Third Column */}
       {/* Last Column */}
@@ -64,6 +72,8 @@ const TableBody = ({
         handleEditableProgram={handleEditableProgram}
         loading={loading}
         rcmAddSuccess={rcmAddSuccess}
+        userHierarchy={userHierarchy}
+        userRole={userRole}
       />
       {/* Last Column */}
     </tr>

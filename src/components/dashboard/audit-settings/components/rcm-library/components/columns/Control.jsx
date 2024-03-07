@@ -7,6 +7,8 @@ const Control = ({
   handleEditableControl,
   loading,
   rcmAddSuccess,
+  userHierarchy,
+  userRole,
 }) => {
   const [currentButtonControlId, setCurrentButtonControlId] =
     React.useState("");
@@ -54,7 +56,7 @@ const Control = ({
             <div>
               {risk?.rcmLibraryControlRisk?.map((control, controlIndex) => {
                 return (
-                  <div>
+                  <div key={controlIndex}>
                     <div className="col-lg-12 mb-2">
                       <select
                         className="form-select "
@@ -113,17 +115,21 @@ const Control = ({
                         </div>
                       </div>
                     ) : (
-                      <div
-                        className="float-end mt-2"
-                        onClick={() =>
-                          handleEditableControl(
-                            objective?.id,
-                            risk?.id,
-                            control?.id
-                          )
-                        }
-                      >
-                        <i className="fa fa-edit   mb-4 f-18"></i>
+                      <div className="mb-4 mt-2">
+                        {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+                          <div
+                            className="float-end"
+                            onClick={() =>
+                              handleEditableControl(
+                                objective?.id,
+                                risk?.id,
+                                control?.id
+                              )
+                            }
+                          >
+                            <i className="fa fa-edit f-18"></i>
+                          </div>
+                        )}
                       </div>
                     )}
                     {/* Hidden Only */}

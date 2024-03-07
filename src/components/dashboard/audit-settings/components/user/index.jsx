@@ -74,6 +74,7 @@ const UserManagement = ({
                 <tr>
                   <th className="w-10">Sr No.</th>
                   <th>Username</th>
+                  <th>User Hierarchy</th>
                   <th>Designation</th>
                   <th>Email ID</th>
                   <th>Skill Set</th>
@@ -89,7 +90,8 @@ const UserManagement = ({
                       <CircularProgress />
                     </td>
                   </tr>
-                ) : allUsers?.length === 0 ? (
+                ) : allUsers?.length === 0 ||
+                  allUsers[0]?.error === "Not Found" ? (
                   <tr>
                     <td className="w-300">No user to show!</td>
                   </tr>
@@ -104,6 +106,7 @@ const UserManagement = ({
                         <tr key={index}>
                           <td>{userItem?.id}</td>
                           <td>{userItem?.name || ""}</td>
+                          <td>{userItem?.employeeid?.userHierarchy || ""}</td>
                           <td>{userItem?.employeeid?.designation || ""}</td>
                           <td>{userItem?.email || ""}</td>
                           <td>{userItem?.employeeid?.skillSet || ""}</td>

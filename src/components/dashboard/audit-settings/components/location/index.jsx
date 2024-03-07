@@ -13,7 +13,7 @@ import Pagination from "@mui/material/Pagination";
 import EditLocationDialog from "../../../../modals/edit-location-dialog";
 import EditSubLocationDialog from "../../../../modals/edit-sub-location-dialog";
 
-const Location = () => {
+const Location = ({ userHierarchy, userRole }) => {
   const dispatch = useDispatch();
   const { loading, locationAddSuccess, allLocations } = useSelector(
     (state) => state.setttingsLocation
@@ -146,7 +146,8 @@ const Location = () => {
           <div className="accordion" id="accordionLocationExample">
             {loading ? (
               <CircularProgress />
-            ) : allLocations?.length === 0 ? (
+            ) : allLocations?.length === 0 ||
+              allLocations[0]?.error === "Not Found" ? (
               <p>No Location to show!</p>
             ) : (
               allLocations
@@ -169,21 +170,15 @@ const Location = () => {
                         >
                           <div className="d-flex w-100 me-3 align-items-center justify-content-between">
                             <div className=" d-flex align-items-center">
-                              {index + 1}. {item?.description}
+                              {item?.description}
                             </div>
+
                             <div
                               className=" d-flex align-items-center underline"
                               onClick={() => setShowEditLocationDialog(true)}
                             >
                               Rename Location
                             </div>
-                            {/* <div>
-                              <div
-                                onClick={() => setShowEditLocationDialog(true)}
-                              >
-                                <i className="fa fa-edit   f-18 cursor-pointer"></i>
-                              </div>
-                            </div> */}
                           </div>
                         </button>
                       </h2>
@@ -258,16 +253,19 @@ const Location = () => {
                                                     );
                                                   }}
                                                 ></i>
-                                                <i
-                                                  className="fa fa-trash text-danger f-18 cusrsor-pointer"
-                                                  onClick={() => {
-                                                    dispatch(
-                                                      setupDeleteSubLocation(
-                                                        `?deleteId=${subItem?.id}`
-                                                      )
-                                                    );
-                                                  }}
-                                                ></i>
+                                                {(userRole === "ADMIN" ||
+                                                  userHierarchy === "IAH") && (
+                                                  <i
+                                                    className="fa fa-trash text-danger f-18 cusrsor-pointer"
+                                                    onClick={() => {
+                                                      dispatch(
+                                                        setupDeleteSubLocation(
+                                                          `?deleteId=${subItem?.id}`
+                                                        )
+                                                      );
+                                                    }}
+                                                  ></i>
+                                                )}
                                               </td>
                                             </tr>
                                           );

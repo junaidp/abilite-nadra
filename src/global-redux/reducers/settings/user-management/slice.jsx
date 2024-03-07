@@ -89,7 +89,7 @@ export const slice = createSlice({
         const sortedArray = payload?.data?.sort(
           (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
         );
-        state.allUsers = sortedArray || [];
+        state.allUsers = sortedArray || [{ error: "Not Found" }];
       })
       .addCase(setupGetAllUsers.rejected, (state, action) => {
         state.loading = false;

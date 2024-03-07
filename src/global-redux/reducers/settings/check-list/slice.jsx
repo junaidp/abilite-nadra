@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 const initialState = {
   checkListAddSuccess: false,
   loading: false,
-  subCheckListAddSuccess: false,
+  subLoading: false,
   checkList: [],
   checkListItems: [],
   checkListId: "",
@@ -71,11 +71,8 @@ export const slice = createSlice({
   name: "settingsCheckList",
   initialState,
   reducers: {
-    resetAddCheckListSuccess: (state, action) => {
+    resetAddCheckListSuccess: (state) => {
       state.checkListAddSuccess = false;
-    },
-    resetAddSubCheckListSuccess: (state, action) => {
-      state.subCheckListAddSuccess = false;
     },
     addCheckListId: (state, action) => {
       state.checkListId = action.payload;
@@ -87,16 +84,13 @@ export const slice = createSlice({
   extraReducers: (builder) => {
     // Add Check List
     builder
-      .addCase(setupAddCheckList.pending, (state) => {
-        state.loading = true;
-      })
       .addCase(setupAddCheckList.fulfilled, (state) => {
-        state.loading = false;
         state.checkListAddSuccess = true;
+        state.checkListId = "";
+        state.currentSubCheckListItem = {};
         toast.success("Check List Added Successfully");
       })
       .addCase(setupAddCheckList.rejected, (state, { payload }) => {
-        state.loading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
         } else {
@@ -110,25 +104,27 @@ export const slice = createSlice({
         state.loading = true;
       })
       .addCase(setupGetAllCheckLists.fulfilled, (state, { payload }) => {
-        state.checkList = payload.data || [];
         state.loading = false;
+        state.checkList = payload.data || [{ error: "Not Found" }];
       })
       .addCase(setupGetAllCheckLists.rejected, (state, { payload }) => {
         state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
       });
 
     // Update CheckList Name
     builder
-      .addCase(setupUpdateCheckListName.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(setupUpdateCheckListName.fulfilled, (state, { payload }) => {
-        state.loading = false;
+      .addCase(setupUpdateCheckListName.fulfilled, (state) => {
         state.checkListAddSuccess = true;
+        state.checkListId = "";
+        state.currentSubCheckListItem = {};
         toast.success("Check List Name Edited Successfully");
       })
       .addCase(setupUpdateCheckListName.rejected, (state, { payload }) => {
-        state.loading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
         } else {
@@ -138,16 +134,13 @@ export const slice = createSlice({
 
     // Update CheckList Remarks
     builder
-      .addCase(setupUpdateCheckListRemarks.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(setupUpdateCheckListRemarks.fulfilled, (state, { payload }) => {
-        state.loading = false;
+      .addCase(setupUpdateCheckListRemarks.fulfilled, (state) => {
+        state.checkListId = "";
+        state.currentSubCheckListItem = {};
         state.checkListAddSuccess = true;
         toast.success("Check List Remarks Edited Successfully");
       })
       .addCase(setupUpdateCheckListRemarks.rejected, (state, { payload }) => {
-        state.loading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
         } else {
@@ -157,16 +150,12 @@ export const slice = createSlice({
 
     // Add CheckList Item
     builder
-      .addCase(setupAddCheckListItem.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(setupAddCheckListItem.fulfilled, (state, { payload }) => {
-        state.loading = false;
-        state.subCheckListAddSuccess = true;
+      .addCase(setupAddCheckListItem.fulfilled, (state) => {
+        state.checkListAddSuccess = true;
+        state.checkListId = "";
         toast.success("Check List Item Added Successfully");
       })
       .addCase(setupAddCheckListItem.rejected, (state, { payload }) => {
-        state.loading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
         } else {
@@ -177,28 +166,30 @@ export const slice = createSlice({
     // Get all CheckList Items
     builder
       .addCase(setupGetAllCheckListItems.pending, (state) => {
-        // state.loading = true;
+        state.subLoading = true;
       })
       .addCase(setupGetAllCheckListItems.fulfilled, (state, { payload }) => {
-        // state.loading = false;
-        state.checkListItems = payload?.data;
+        state.subLoading = false;
+        state.checkListItems = payload?.data || [{ error: "Not Found" }];
       })
       .addCase(setupGetAllCheckListItems.rejected, (state, { payload }) => {
-        // state.loading = false;
+        state.subLoading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
       });
 
     // Edit CheckList Item
     builder
-      .addCase(setupEditCheckListItem.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(setupEditCheckListItem.fulfilled, (state, { payload }) => {
-        state.loading = false;
-        state.subCheckListAddSuccess = true;
+      .addCase(setupEditCheckListItem.fulfilled, (state) => {
+        state.checkListAddSuccess = true;
+        state.checkListId = "";
+        state.currentSubCheckListItem = {};
         toast.success("Check List Item edited Successfully");
       })
       .addCase(setupEditCheckListItem.rejected, (state, { payload }) => {
-        state.loading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
         } else {
@@ -210,7 +201,6 @@ export const slice = createSlice({
 
 export const {
   resetAddCheckListSuccess,
-  resetAddSubCheckListSuccess,
   addCheckListId,
   changeCurrentSubListItem,
 } = slice.actions;

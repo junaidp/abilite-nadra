@@ -7,6 +7,8 @@ const Program = ({
   handleEditableProgram,
   loading,
   rcmAddSuccess,
+  userHierarchy,
+  userRole,
 }) => {
   const [currentButtonProgramId, setCurrentButtonProgramId] =
     React.useState("");
@@ -154,18 +156,23 @@ const Program = ({
                               </div>
                             </div>
                           ) : (
-                            <div
-                              className="float-end mt-2"
-                              onClick={() =>
-                                handleEditableProgram(
-                                  objective?.id,
-                                  risk?.id,
-                                  control?.id,
-                                  program?.id
-                                )
-                              }
-                            >
-                              <i className="fa fa-edit mb-4  f-18"></i>
+                            <div className="mb-4 mt-2">
+                              {(userRole === "ADMIN" ||
+                                userHierarchy === "IAH") && (
+                                <div
+                                  className="float-end"
+                                  onClick={() =>
+                                    handleEditableProgram(
+                                      objective?.id,
+                                      risk?.id,
+                                      control?.id,
+                                      program?.id
+                                    )
+                                  }
+                                >
+                                  <i className="fa fa-edit  f-18"></i>
+                                </div>
+                              )}
                             </div>
                           )}
                         </div>

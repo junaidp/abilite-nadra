@@ -10,7 +10,7 @@ import {
   resetCpListAddSuccess,
 } from "../../../../../global-redux/reducers/settings/cp-list/slice";
 
-const CPList = () => {
+const CPList = ({ userHierarchy, userRole }) => {
   const dispatch = useDispatch();
   const { loading, allCPList, cpListAddSuccess } = useSelector(
     (state) => state?.settingsCPList
@@ -81,14 +81,18 @@ const CPList = () => {
     >
       <div className="row">
         <div className="col-lg-12">
-          <div className="sub-heading  fw-bold">CP List</div>
-          <label className="fw-light">Here comes the CP List Description</label>
+          <div className="sub-heading  fw-bold"> Residual Risk</div>
+          <label className="fw-light">
+            Define criteria for risk management and control process
+          </label>
         </div>
       </div>
 
       <div className="row mt-3">
         <div className="col-lg-6">
-          <label className="w-100">Add CP List:</label>
+          <label className="w-100">
+            Add Criteria for Risk Management and Control Processes:
+          </label>
           <input
             className="form-control w-100"
             placeholder="Enter"
@@ -117,14 +121,14 @@ const CPList = () => {
           <div className="table-responsive">
             {loading ? (
               <CircularProgress />
-            ) : cpLists?.length === 0 ? (
+            ) : cpLists?.length === 0 || cpLists[0]?.error === "Not Found" ? (
               <p>No CP List To Show</p>
             ) : (
               <table className="table table-bordered  table-hover rounded">
                 <thead className="bg-secondary text-white">
                   <tr>
                     <th className="w-80">Sr No.</th>
-                    <th>CP List</th>
+                    <th>Criteria for Risk Management and Control Processes</th>
                     <th>Action</th>
                   </tr>
                 </thead>

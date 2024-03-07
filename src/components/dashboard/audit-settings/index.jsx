@@ -11,27 +11,26 @@ import UserManagementDialog from "../../modals/add-user-dialog/index";
 import UpdateCompanyDialog from "../../modals/update-company-dialog";
 import UpdateUserDialog from "../.././modals/update-user-dialog";
 import { useSelector, useDispatch } from "react-redux";
-import * as XLSX from "xlsx";
 import "./index.css";
 import AddCompanyDialog from "../../modals/add-company-dialog/index";
 import CheckList from "./components/checklist";
 import CPList from "./components/cp-list/index";
 import SupportingDocs from "./components/supporting-docs/index";
-import ApprovalManagement from "./components/approval-management/index";
+// import ApprovalManagement from "./components/approval-management/index";
 import Location from "./components/location";
 import Company from "./components/company";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import RiskFactor from "./components/risk-factor";
-import EmailManagement from "./components/email";
-import ResidualRisk from "./components/residual-risk";
-import Notifications from "./components/notification";
+// import EmailManagement from "./components/email";
+// import ResidualRisk from "./components/residual-risk";
+// import Notifications from "./components/notification";
 import UserManagement from "./components/user";
-import Modules from "./components/modules";
+// import Modules from "./components/modules";
 import RCMLibrary from "./components/rcm-library";
 import Process from "./components/process";
 const AuditSettings = () => {
   const dispatch = useDispatch();
-  const [activeEmailTab, setActiveEmailTab] = React.useState("systemEmail");
+  // const [activeEmailTab, setActiveEmailTab] = React.useState("systemEmail");
   const [checkListManagementDialog, setCheckListManagementDialog] =
     React.useState(false);
   const [currentSettingOption, setCurrentSettingOption] =
@@ -39,44 +38,14 @@ const AuditSettings = () => {
   const { user } = useSelector((state) => state.auth);
   const { company } = useSelector((state) => state.common);
   const [updateUserId, setUpdateUserId] = React.useState("");
-  const [excelData, setExcelData] = React.useState(null);
   const [userManagementDialog, setUserManagementDialog] = React.useState(false);
   const [updateUserDialog, setUpdateUserDialog] = React.useState(false);
   const [addCompanyDialog, setAddCompantDialog] = React.useState(false);
   const [currentCompanyId, setCurrentCompanyId] = React.useState("");
+  const [userRole, setUserRole] = React.useState("");
+  const [userHierarchy, setUserHierarchy] = React.useState("");
   const [showUpdateCompanyDialog, setShowUpdateCompanyDialog] =
     React.useState("");
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-
-    if (!file) {
-      toast.error("Please select a file.");
-      return;
-    }
-
-    const fileType = file.name.slice(
-      ((file.name.lastIndexOf(".") - 1) >>> 0) + 2
-    );
-
-    if (fileType !== "xls" && fileType !== "xlsx") {
-      toast.error("Invalid file type. Please upload an Excel file.");
-      return;
-    }
-
-    const reader = new FileReader();
-
-    reader.onload = (event) => {
-      const data = new Uint8Array(event.target.result);
-      const workbook = XLSX.read(data, { type: "array" });
-      const sheetName = workbook.SheetNames[0];
-      const sheet = workbook.Sheets[sheetName];
-      const jsonData = XLSX.utils.sheet_to_json(sheet);
-
-      setExcelData(jsonData);
-    };
-
-    reader.readAsArrayBuffer(file);
-  };
 
   // Calls
   React.useEffect(() => {
@@ -116,6 +85,13 @@ const AuditSettings = () => {
       }
     }
   }, [currentSettingOption, user, company]);
+
+  React.useEffect(() => {
+    if (user[0]?.token) {
+      setUserHierarchy(user[0]?.userId?.employeeid?.userHierarchy);
+      setUserRole(user[0]?.userId?.authorities[0]);
+    }
+  }, [user]);
   return (
     <div>
       {checkListManagementDialog && (
@@ -207,9 +183,9 @@ const AuditSettings = () => {
                   aria-controls="cp-list"
                   onClick={() => setCurrentSettingOption("cp-list")}
                 >
-                  CP List
+                  Residual Risk
                 </button>
-                <button
+                {/* <button
                   className="nav-link shadow-sm  border-0 mb-3  rounded-0  me-3 "
                   id="nav-approval-management-tab"
                   data-bs-toggle="tab"
@@ -220,8 +196,8 @@ const AuditSettings = () => {
                   onClick={() => setCurrentSettingOption("approval-management")}
                 >
                   Approval Management
-                </button>
-                <button
+                </button> */}
+                {/* <button
                   className="nav-link shadow-sm  border-0 mb-3  rounded-0  me-3 "
                   id="nav-residual-risk-tab"
                   data-bs-toggle="tab"
@@ -231,7 +207,7 @@ const AuditSettings = () => {
                   aria-controls="nav-residual-risk"
                 >
                   Residual Risk
-                </button>
+                </button> */}
                 <button
                   className="nav-link shadow-sm  border-0 mb-3  rounded-0  me-3 "
                   id="nav-rcm-library-tab"
@@ -256,7 +232,7 @@ const AuditSettings = () => {
                 >
                   Risk Factor
                 </button>
-                <button
+                {/* <button
                   className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
                   id="nav-email-tab"
                   data-bs-toggle="tab"
@@ -266,7 +242,7 @@ const AuditSettings = () => {
                   aria-controls="nav-email"
                 >
                   Email
-                </button>
+                </button> */}
                 <button
                   className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
                   id="nav-check-tab"
@@ -279,7 +255,7 @@ const AuditSettings = () => {
                 >
                   Checklist Management
                 </button>
-                <button
+                {/* <button
                   className="nav-link shadow-sm  border-0 mb-3   rounded-0 me-3 "
                   id="nav-noti-tab"
                   data-bs-toggle="tab"
@@ -289,20 +265,22 @@ const AuditSettings = () => {
                   aria-controls="nav-noti"
                 >
                   Notification
-                </button>
-                <button
-                  className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
-                  id="nav-user-tab"
-                  data-bs-toggle="tab"
-                  data-bs-target="#nav-user"
-                  type="button"
-                  role="tab"
-                  aria-controls="nav-user"
-                  onClick={() => setCurrentSettingOption("users")}
-                >
-                  User Management
-                </button>
-                <button
+                </button> */}
+                {userRole === "ADMIN" && (
+                  <button
+                    className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
+                    id="nav-user-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#nav-user"
+                    type="button"
+                    role="tab"
+                    aria-controls="nav-user"
+                    onClick={() => setCurrentSettingOption("users")}
+                  >
+                    User Management
+                  </button>
+                )}
+                {/* <button
                   className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
                   id="nav-mod-tab"
                   data-bs-toggle="tab"
@@ -312,19 +290,21 @@ const AuditSettings = () => {
                   aria-controls="nav-mod"
                 >
                   Modules
-                </button>
-                <button
-                  className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
-                  id="nav-com-tab"
-                  data-bs-toggle="tab"
-                  data-bs-target="#nav-com"
-                  type="button"
-                  role="tab"
-                  aria-controls="nav-com"
-                  onClick={() => setCurrentSettingOption("company")}
-                >
-                  Company Management
-                </button>
+                </button> */}
+                {userRole !== "ADMIN" && userRole !== "USER" && (
+                  <button
+                    className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
+                    id="nav-com-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#nav-com"
+                    type="button"
+                    role="tab"
+                    aria-controls="nav-com"
+                    onClick={() => setCurrentSettingOption("company")}
+                  >
+                    Company Management
+                  </button>
+                )}
                 <button
                   className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
                   id="nav-com-tab"
@@ -347,43 +327,47 @@ const AuditSettings = () => {
               id="nav-tabContent"
             >
               <SupportingDocs
-                handleFileUpload={handleFileUpload}
-                setExcelData={setExcelData}
-                excelData={excelData}
+                userHierarchy={userHierarchy}
+                userRole={userRole}
               />
-              <ApprovalManagement />
+              {/* <ApprovalManagement /> */}
+              <Location userHierarchy={userHierarchy} userRole={userRole} />
 
-              <Location />
-              <CPList />
+              <CPList userHierarchy={userHierarchy} userRole={userRole} />
 
-              <ResidualRisk />
-              <RCMLibrary />
+              {/* <ResidualRisk /> */}
+              <RCMLibrary userHierarchy={userHierarchy} userRole={userRole} />
 
               <RiskFactor />
-              <EmailManagement
+              {/* <EmailManagement
                 activeEmailTab={activeEmailTab}
                 setActiveEmailTab={setActiveEmailTab}
-              />
+              /> */}
 
               <CheckList
                 setCheckListManagementDialog={setCheckListManagementDialog}
+                userHierarchy={userHierarchy}
+                userRole={userRole}
               />
 
-              <Notifications />
+              {/* <Notifications />  */}
+              {userRole === "ADMIN" && (
+                <UserManagement
+                  setUserManagementDialog={setUserManagementDialog}
+                  setUpdateUserId={setUpdateUserId}
+                  setUpdateUserDialog={setUpdateUserDialog}
+                />
+              )}
 
-              <UserManagement
-                setUserManagementDialog={setUserManagementDialog}
-                setUpdateUserId={setUpdateUserId}
-                setUpdateUserDialog={setUpdateUserDialog}
-              />
-
-              <Modules />
-              <Company
-                setAddCompantDialog={setAddCompantDialog}
-                setCurrentCompanyId={setCurrentCompanyId}
-                setShowUpdateCompanyDialog={setShowUpdateCompanyDialog}
-              />
-              <Process />
+              {/* <Modules /> */}
+              {userRole !== "ADMIN" && userRole !== "USER" && (
+                <Company
+                  setAddCompantDialog={setAddCompantDialog}
+                  setCurrentCompanyId={setCurrentCompanyId}
+                  setShowUpdateCompanyDialog={setShowUpdateCompanyDialog}
+                />
+              )}
+              <Process userHierarchy={userHierarchy} userRole={userRole} />
             </div>
           </div>
         </div>

@@ -7,6 +7,8 @@ const Risk = ({
   handleSaveRisk,
   loading,
   rcmAddSuccess,
+  userHierarchy,
+  userRole,
 }) => {
   const [currentButtonRiskId, setCurrentButtonRiskId] = React.useState("");
   React.useEffect(() => {
@@ -65,11 +67,17 @@ const Risk = ({
                   </div>
                 </div>
               ) : (
-                <div
-                  className="float-end mt-2 "
-                  onClick={() => handleEditableRisk(objective?.id, risk?.id)}
-                >
-                  <i className="fa fa-edit  mb-4 f-18"></i>
+                <div className="mb-4 mt-2">
+                  {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+                    <div
+                      className="float-end"
+                      onClick={() =>
+                        handleEditableRisk(objective?.id, risk?.id)
+                      }
+                    >
+                      <i className="fa fa-edit  f-18"></i>
+                    </div>
+                  )}
                 </div>
               )}
               {/* Hidden  Only */}

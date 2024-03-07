@@ -11,11 +11,10 @@ import { CircularProgress } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import { toast } from "react-toastify";
 
-const Process = () => {
+const Process = ({ userHierarchy, userRole }) => {
   const dispatch = useDispatch();
-  const { loading, processAddSuccess, allProcess, allSubProcess } = useSelector(
-    (state) => state?.setttingsProcess
-  );
+  const { loading, processAddSuccess, allProcess, allSubProcess, subLoading } =
+    useSelector((state) => state?.setttingsProcess);
   const { user } = useSelector((state) => state?.auth);
   const { company } = useSelector((state) => state?.common);
   const [processText, setProcessText] = React.useState("");
@@ -27,32 +26,45 @@ const Process = () => {
   };
 
   function handleSaveProcess() {
-    if (processText === "") {
-      toast.error("Provide the process");
-    }
-    if (!loading && processText !== "") {
-      const selectedCompany = user[0]?.company?.find(
-        (item) => item?.companyName === company
-      );
-      dispatch(
-        setupAddProcess({ description: processText, company: selectedCompany })
-      );
+    if (!loading) {
+      if (processText === "") {
+        toast.error("Provide the process");
+      }
+      if (!loading && processText !== "") {
+        const selectedCompany = user[0]?.company?.find(
+          (item) => item?.companyName === company
+        );
+        dispatch(
+          setupAddProcess({
+            description: processText,
+            company: selectedCompany,
+          })
+        );
+      }
     }
   }
 
   function handleAddSubProcess() {
-    if (subProcessText === "") {
-      toast.error("Please Add Sub Process");
-    }
-    if (!loading && subProcessText !== "") {
-      dispatch(
-        setupSaveSubProcess({
-          description: subProcessText,
-          processId: processId,
-        })
-      );
+    if (!loading) {
+      if (subProcessText === "") {
+        toast.error("Please Add Sub Process");
+      }
+      if (!loading && subProcessText !== "") {
+        dispatch(
+          setupSaveSubProcess({
+            description: subProcessText,
+            processId: processId,
+          })
+        );
+      }
     }
   }
+
+  React.useEffect(() => {
+    if (processId !== "") {
+      dispatch(setupGetAllSubProcess(`?processId=${Number(processId)}`));
+    }
+  }, [processId]);
 
   React.useEffect(() => {
     if (processAddSuccess) {
@@ -62,6 +74,7 @@ const Process = () => {
       if (companyId) {
         dispatch(setupGetAllProcess(companyId));
       }
+      setProcessId("");
       setProcessText("");
       setSubProcessText("");
       dispatch(resetProcessAddSuccess());
@@ -86,40 +99,44 @@ const Process = () => {
           </label>
         </div>
       </div>
-
-      <div className="row mt-3">
-        <div className="col-lg-6">
-          <label>Add Process</label>
-          <input
-            className="form-control w-100"
-            placeholder="Enter Text here"
-            type="text"
-            value={processText}
-            onChange={(event) => setProcessText(event?.target?.value)}
-          />
-        </div>
-        <div className="col-lg-6 text-end float-end align-self-end">
-          <div
-            className={`btn btn-labeled btn-primary px-3 shadow ${
-              loading && "disabled"
-            }`}
-            onClick={handleSaveProcess}
-          >
-            <span className="btn-label me-2">
-              <i className="fa fa-plus"></i>
-            </span>
-            {loading ? "Loading..." : "Add"}
+      {(userRole === "ADMIN" ||
+        userHierarchy === "IAH" ||
+        userHierarchy === "Team_Lead") && (
+        <div className="row mt-3">
+          <div className="col-lg-6">
+            <label>Add Process</label>
+            <input
+              className="form-control w-100"
+              placeholder="Enter Text here"
+              type="text"
+              value={processText}
+              onChange={(event) => setProcessText(event?.target?.value)}
+            />
+          </div>
+          <div className="col-lg-6 text-end float-end align-self-end">
+            <div
+              className={`btn btn-labeled btn-primary px-3 shadow ${
+                loading && "disabled"
+              }`}
+              onClick={handleSaveProcess}
+            >
+              <span className="btn-label me-2">
+                <i className="fa fa-plus"></i>
+              </span>
+              {loading ? "Loading..." : "Add"}
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       <div className="row mt-3">
         <div className="col-lg-12">
           <div className="accordion" id="accordionProcessExample">
             {loading ? (
               <CircularProgress />
-            ) : allProcess?.length === 0 ? (
-              <p>No Item To Show</p>
+            ) : allProcess?.length === 0 ||
+              allProcess[0]?.error === "Not Found" ? (
+              <p>No Process To Show</p>
             ) : (
               allProcess
                 ?.slice((page - 1) * 5, page * 5)
@@ -137,11 +154,6 @@ const Process = () => {
                           onClick={() => {
                             setSubProcessText("");
                             setProcessId(item?.id);
-                            dispatch(
-                              setupGetAllSubProcess(
-                                `?processId=${Number(item?.id)}`
-                              )
-                            );
                           }}
                         >
                           <div className="d-flex w-100 me-3 align-items-center justify-content-between">
@@ -157,70 +169,92 @@ const Process = () => {
                         data-bs-parent="#accordionProcessExample"
                       >
                         <div className="accordion-body">
-                          <div className="row mt-3 mb-3">
-                            <div className="col-lg-6">
-                              <label className="w-100 ">Add SubProcess:</label>
-                              <input
-                                className="form-control w-100"
-                                placeholder="Enter"
-                                type="text"
-                                value={subProcessText}
-                                onChange={(event) =>
-                                  setSubProcessText(event?.target?.value)
-                                }
-                              />
-                            </div>
-                            <div className="col-lg-6 text-end float-end align-self-end">
-                              <div
-                                className={`btn btn-labeled btn-primary px-3 shadow ${
-                                  loading && "disabled"
-                                }`}
-                                onClick={handleAddSubProcess}
-                              >
-                                <span className="btn-label me-2">
-                                  <i className="fa fa-plus"></i>
-                                </span>
-                                {loading ? "Loading..." : "Add"}
+                          {(userRole === "ADMIN" ||
+                            userHierarchy === "IAH" ||
+                            userHierarchy === "Team_Lead") && (
+                            <div className="row mt-3 mb-3">
+                              <div className="col-lg-6">
+                                <label className="w-100 ">
+                                  Add SubProcess:
+                                </label>
+                                <input
+                                  className="form-control w-100"
+                                  placeholder="Enter"
+                                  type="text"
+                                  value={subProcessText}
+                                  onChange={(event) =>
+                                    setSubProcessText(event?.target?.value)
+                                  }
+                                />
+                              </div>
+                              <div className="col-lg-6 text-end float-end align-self-end">
+                                <div
+                                  className={`btn btn-labeled btn-primary px-3 shadow ${
+                                    loading && "disabled"
+                                  }`}
+                                  onClick={handleAddSubProcess}
+                                >
+                                  <span className="btn-label me-2">
+                                    <i className="fa fa-plus"></i>
+                                  </span>
+                                  {loading ? "Loading..." : "Add"}
+                                </div>
                               </div>
                             </div>
-                          </div>
+                          )}
 
                           <div className="row">
-                            <div className="col-lg-12">
-                              <div className="table-responsive">
-                                <table className="table table-bordered  table-hover rounded">
-                                  <thead className="bg-secondary text-white">
-                                    <tr>
-                                      <th className="w-80">Sr No.</th>
-                                      <th>Particulars</th>
-                                      <th>Actions</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    {allSubProcess?.length === 0 ? (
+                            {subLoading ? (
+                              <CircularProgress />
+                            ) : (
+                              <div className="col-lg-12">
+                                <div className="table-responsive">
+                                  <table className="table table-bordered  table-hover rounded">
+                                    <thead className="bg-secondary text-white">
                                       <tr>
-                                        <td className="w-300">
-                                          No sub-process to show!
-                                        </td>
+                                        <th className="w-80">Sr No.</th>
+                                        <th>Particulars</th>
+                                        <th>Actions</th>
                                       </tr>
-                                    ) : (
-                                      allSubProcess?.map((subItem, ind) => {
-                                        return (
-                                          <tr key={ind}>
-                                            <td>{subItem?.id}</td>
-                                            <td>{subItem?.description}</td>
-                                            <td>
-                                              <i className="fa fa-edit  px-3 f-18"></i>
-                                              <i className="fa fa-trash text-danger f-18"></i>
-                                            </td>
-                                          </tr>
-                                        );
-                                      })
-                                    )}
-                                  </tbody>
-                                </table>
+                                    </thead>
+                                    <tbody>
+                                      {allSubProcess?.length === 0 ||
+                                      allSubProcess[0]?.error ===
+                                        "Not Found" ? (
+                                        <tr>
+                                          <td className="w-300">
+                                            No sub-process to show!
+                                          </td>
+                                        </tr>
+                                      ) : (
+                                        allSubProcess?.map((subItem, ind) => {
+                                          return (
+                                            <tr key={ind}>
+                                              <td>{subItem?.id}</td>
+                                              <td>{subItem?.description}</td>
+                                              <td>
+                                                {(userRole === "ADMIN" ||
+                                                  userHierarchy === "IAH" ||
+                                                  userHierarchy ===
+                                                    "Team_Lead") && (
+                                                  <i className="fa fa-edit  px-3 f-18"></i>
+                                                )}
+                                                {(userRole === "ADMIN" ||
+                                                  userHierarchy === "IAH" ||
+                                                  userHierarchy ===
+                                                    "Team_Lead") && (
+                                                  <i className="fa fa-trash text-danger f-18"></i>
+                                                )}
+                                              </td>
+                                            </tr>
+                                          );
+                                        })
+                                      )}
+                                    </tbody>
+                                  </table>
+                                </div>
                               </div>
-                            </div>
+                            )}
                           </div>
                         </div>
                       </div>

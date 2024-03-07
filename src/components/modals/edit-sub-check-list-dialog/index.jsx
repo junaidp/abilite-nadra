@@ -1,14 +1,17 @@
 import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { setupEditCheckListItem } from "../../../global-redux/reducers/settings/check-list/slice";
+import {
+  setupEditCheckListItem,
+  resetAddCheckListSuccess,
+} from "../../../global-redux/reducers/settings/check-list/slice";
 import { useSelector, useDispatch } from "react-redux";
 
 const EditCheckListItemDialog = ({ setShowEditCheckListItemDialog }) => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
-  const { subCheckListAddSuccess, loading, currentSubCheckListItem } =
-    useSelector((state) => state.setttingsCheckList);
+  const { checkListAddSuccess, loading, currentSubCheckListItem } = useSelector(
+    (state) => state.setttingsCheckList
+  );
   const initialState = {
     area: currentSubCheckListItem?.area,
     subject: currentSubCheckListItem?.subject,
@@ -45,18 +48,17 @@ const EditCheckListItemDialog = ({ setShowEditCheckListItemDialog }) => {
   }
 
   React.useEffect(() => {
-    if (subCheckListAddSuccess) {
-      setTimeout(() => {
-        setShowEditCheckListItemDialog(false);
-        formik.resetForm({ values: initialState });
-      }, 500);
+    if (checkListAddSuccess) {
+      dispatch(resetAddCheckListSuccess());
+      formik.resetForm({ values: initialState });
+      setShowEditCheckListItemDialog(false);
     }
-  }, [subCheckListAddSuccess]);
+  }, [checkListAddSuccess]);
   return (
     <div className="px-4 py-4">
       <header className="section-header my-3    text-start d-flex align-items-center justify-content-between">
         <div className="mb-0 heading d-flex align-items-center">
-          <h2 className=" heading">Edit Check List Item</h2>
+          <h2 className=" heading">Edit CheckList Item</h2>
         </div>
       </header>
       <form onSubmit={formik.handleSubmit}>

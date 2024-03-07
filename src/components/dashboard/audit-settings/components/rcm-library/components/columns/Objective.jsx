@@ -6,15 +6,17 @@ const Objective = ({
   handleChangeObjective,
   handleEditableObjective,
   loading,
-  rcmAddSuccess
+  rcmAddSuccess,
+  userHierarchy,
+  userRole,
 }) => {
   const [currentButtonObjectiveId, setCurrentButtonObjectiveId] =
     React.useState("");
-    React.useEffect(()=>{
-      if(rcmAddSuccess){
-        setCurrentButtonObjectiveId("")
-      }
-    },[rcmAddSuccess])
+  React.useEffect(() => {
+    if (rcmAddSuccess) {
+      setCurrentButtonObjectiveId("");
+    }
+  }, [rcmAddSuccess]);
   return (
     <td>
       <div>
@@ -63,11 +65,15 @@ const Objective = ({
             </div>
           </div>
         ) : (
-          <div
-            className="float-end mt-2  mb-4"
-            onClick={() => handleEditableObjective(objective?.id)}
-          >
-            <i className="fa fa-edit   f-18"></i>
+          <div className="mb-4 mt-2">
+            {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+              <div
+                className="float-end"
+                onClick={() => handleEditableObjective(objective?.id)}
+              >
+                <i className="fa fa-edit  f-18"></i>
+              </div>
+            )}
           </div>
         )}
       </div>

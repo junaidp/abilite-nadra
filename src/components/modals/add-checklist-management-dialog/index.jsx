@@ -10,7 +10,7 @@ import { useSelector, useDispatch } from "react-redux";
 const AddCheckListManagementDialog = ({ setCheckListManagementDialog }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  const { subCheckListAddSuccess, loading, checkListId } = useSelector(
+  const { checkListAddSuccess, loading, checkListId } = useSelector(
     (state) => state.setttingsCheckList
   );
   const initialState = {
@@ -47,18 +47,17 @@ const AddCheckListManagementDialog = ({ setCheckListManagementDialog }) => {
   }
 
   React.useEffect(() => {
-    if (subCheckListAddSuccess) {
-      setTimeout(() => {
-        setCheckListManagementDialog(false);
-        formik.resetForm({ values: initialState });
-      }, 500);
+    if (checkListAddSuccess) {
+      formik.resetForm({ values: initialState });
+      dispatch(resetAddCheckListSuccess());
+      setCheckListManagementDialog(false);
     }
-  }, [subCheckListAddSuccess]);
+  }, [checkListAddSuccess]);
   return (
     <div className="px-4 py-4">
       <header className="section-header my-3    text-start d-flex align-items-center justify-content-between">
         <div className="mb-0 heading d-flex align-items-center">
-          <h2 className=" heading">Check List Management</h2>
+          <h2 className=" heading">CheckList Management</h2>
         </div>
       </header>
       <form onSubmit={formik.handleSubmit}>
@@ -152,7 +151,7 @@ const AddCheckListManagementDialog = ({ setCheckListManagementDialog }) => {
           type="submit"
           className={`btn btn-primary ${loading && "disabled"}`}
         >
-          {loading ? "Loading" : "Submit"}
+          {loading ? "Loading" : "Save And Submit"}
         </button>
       </form>
 

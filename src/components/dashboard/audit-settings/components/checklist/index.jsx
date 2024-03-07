@@ -1,13 +1,10 @@
 import React from "react";
-import { useFormik } from "formik";
-import * as Yup from "yup";
 import { toast } from "react-toastify";
 import {
   setupAddCheckList,
   resetAddCheckListSuccess,
   setupGetAllCheckLists,
   setupUpdateCheckListRemarks,
-  resetAddSubCheckListSuccess,
   setupGetAllCheckListItems,
   addCheckListId,
   changeCurrentSubListItem,
@@ -17,19 +14,25 @@ import EditCheckListDialog from "../../../../modals/edit-checklist-dialog";
 import EditCheckListItemDialog from "../../../../modals/edit-sub-check-list-dialog";
 import Pagination from "@mui/material/Pagination";
 import { CircularProgress } from "@mui/material";
+import AccordionItem from "./components/AccordionItem";
 
-const CheckList = ({ setCheckListManagementDialog }) => {
+const CheckList = ({
+  setCheckListManagementDialog,
+  userHierarchy,
+  userRole,
+}) => {
   const dispatch = useDispatch();
   const {
     loading,
+    subLoading,
     checkListAddSuccess,
-    subCheckListAddSuccess,
     checkList,
     checkListId,
     checkListItems,
   } = useSelector((state) => state.setttingsCheckList);
   const { user } = useSelector((state) => state.auth);
   const { company } = useSelector((state) => state.common);
+  const [description, setDescription] = React.useState("");
   const [showEditCheckListDialog, setShowEditCheckListDialog] =
     React.useState(false);
   const [showEditCheckListItemDialog, setShowEditCheckListItemDialog] =
@@ -39,25 +42,14 @@ const CheckList = ({ setCheckListManagementDialog }) => {
     setPage(value);
   };
 
-  const initialValues = {
-    description: "",
-    defaultRemarks: "",
-  };
-
-  const formik = useFormik({
-    initialValues: initialValues,
-    validationSchema: Yup.object({
-      description: Yup.string().required("Check List is required"),
-    }),
-    onSubmit: (values) => {
-      if (company === "") {
-        toast.error("Please select a company from top-bar");
-      }
-      if (company && !loading) {
+  function handleSave() {
+    if (!loading) {
+      if (description === "") {
+        toast.error("Provide description");
+      } else {
         dispatch(
           setupAddCheckList({
-            checklistName: values.description,
-            defaultRemarks: Number(values.defaultRemarks),
+            checklistName: description,
             company: user[0]?.company.find(
               (all) => all?.companyName === company
             ),
@@ -65,10 +57,10 @@ const CheckList = ({ setCheckListManagementDialog }) => {
           })
         );
       }
-    },
-  });
+    }
+  }
 
-  function handleGetAllCheckListItems(id) {
+  function handleChangeCurrentCheckListId(id) {
     dispatch(addCheckListId(id));
   }
 
@@ -89,7 +81,7 @@ const CheckList = ({ setCheckListManagementDialog }) => {
     if (checkListAddSuccess) {
       setTimeout(() => {
         dispatch(resetAddCheckListSuccess());
-        formik.resetForm({ values: initialValues });
+        setDescription("");
         let email = user[0]?.email;
         let companyId = user[0]?.company.find(
           (all) => all?.companyName === company
@@ -102,27 +94,17 @@ const CheckList = ({ setCheckListManagementDialog }) => {
   }, [checkListAddSuccess]);
 
   React.useEffect(() => {
-    let email = user[0]?.email;
-    if (checkListId && email) {
-      dispatch(
-        setupGetAllCheckListItems(
-          `?userEmailId=${email}&checklistId=${checkListId}`
-        )
-      );
+    if (checkListId && checkListId !== "") {
+      let email = user[0]?.email;
+      if (email) {
+        dispatch(
+          setupGetAllCheckListItems(
+            `?userEmailId=${email}&checklistId=${checkListId}`
+          )
+        );
+      }
     }
   }, [checkListId]);
-
-  React.useEffect(() => {
-    if (subCheckListAddSuccess) {
-      dispatch(resetAddSubCheckListSuccess());
-      let email = user[0]?.email;
-      dispatch(
-        setupGetAllCheckListItems(
-          `?userEmailId=${email}&checklistId=${checkListId}`
-        )
-      );
-    }
-  }, [subCheckListAddSuccess]);
 
   return (
     <div
@@ -158,171 +140,65 @@ const CheckList = ({ setCheckListManagementDialog }) => {
           </label>
         </div>
       </div>
-
-      <form onSubmit={formik.handleSubmit}>
+      {(userRole === "ADMIN" || userHierarchy === "IAH") && (
         <div className="row mt-3">
-          <div className="col-lg-4">
-            <label htmlFor="description" className="w-100">
-              Check List:
-            </label>
+          <div className="col-lg-6">
+            <label className="w-100">Add CheckList:</label>
             <input
-              id="description"
-              name="description"
+              className="form-control w-100"
+              placeholder="Enter"
               type="text"
-              className="form-control w-100 h-40"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.description}
+              value={description}
+              onChange={(event) => setDescription(event?.target?.value)}
             />
-            {formik.touched.description && formik.errors.description && (
-              <div className="error">{formik.errors.description}</div>
-            )}
           </div>
-
-          <div className="col-lg-4 mt-3 w-100">
-            <button
-              type="submit"
-              className={`btn btn-labeled btn-primary px-3 shadow col-lg-2 ${
+          <div className="col-lg-6 text-end float-end align-self-end">
+            <div
+              className={`btn btn-labeled btn-primary px-3 shadow ${
                 loading && "disabled"
               }`}
+              onClick={handleSave}
             >
               <span className="btn-label me-2">
                 <i className="fa fa-plus"></i>
               </span>
-              {loading ? "Loading.." : "Add"}
-            </button>
+              {loading ? "Loading..." : "Add"}
+            </div>
           </div>
         </div>
-      </form>
+      )}
 
       <div className="row mt-3">
         <div className="col-lg-12">
           <div className="accordion" id="accordionCheckListExample">
             {loading ? (
               <CircularProgress />
-            ) : checkList?.length === 0 ? (
+            ) : checkList?.length === 0 ||
+              checkList[0]?.error === "Not Found" ? (
               <p>No Checklist to show!</p>
             ) : (
               checkList?.slice((page - 1) * 5, page * 5)?.map((item, index) => {
                 return (
-                  <div className="accordion-item" id={"a" + index} key={index}>
-                    <h2 className="accordion-header">
-                      <button
-                        className="accordion-button collapsed"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target={`#flush-collapse${"a" + index}`}
-                        aria-expanded="false"
-                        aria-controls={`flush-collapse${"a" + index}`}
-                        onClick={() => handleGetAllCheckListItems(item?.id)}
-                      >
-                        <div className="d-flex w-100 me-3 align-items-center justify-content-between">
-                          <div className=" d-flex align-items-center">
-                            {index +1}. {item?.description}
-                          </div>
-                          <div
-                            className=" d-flex align-items-center underline"
-                            onClick={() => setShowEditCheckListDialog(true)}
-                          >
-                            Rename Checklist
-                          </div>
-                          {/* <div onClick={() => setShowEditCheckListDialog(true)}>
-                            <i className="fa fa-edit  f-18"></i>
-                          </div> */}
-                        </div>
-                      </button>
-                    </h2>
-                    <div
-                      id={`flush-collapse${"a" + index}`}
-                      className="accordion-collapse collapse"
-                      data-bs-parent="#accordionCheckListExample"
-                    >
-                      <div className="rows mt-4 mb-4 px-3">
-                        <select
-                          className="col-lg-6 form-select px-3"
-                          value={item?.defaultRemarks}
-                          onChange={(e) => handleChangeCheckListRemarks(e)}
-                        >
-                          <option value="">Select One</option>
-                          <option value={1}>Yes</option>
-                          <option value={2}>Partially Applicable</option>
-                          <option value={3}>No</option>
-                          <option value={4}>Not Applicable</option>
-                        </select>
-                      </div>
-
-                      <div className="accordion-body">
-                        <div className=" mt-3 bg-white p-3">
-                          <div
-                            className="btn btn-labeled btn-primary px-3 shadow col-lg-2"
-                            onClick={() => setCheckListManagementDialog(true)}
-                          >
-                            <span className="btn-label me-2">
-                              <i className="fa fa-plus"></i>
-                            </span>
-                            Add
-                          </div>
-
-                          <div className="row mt-3">
-                            <div className="col-lg-12">
-                              <div className="table-responsive">
-                                <table className="table table-bordered  table-hover rounded">
-                                  <thead className="bg-secondary text-white">
-                                    <tr>
-                                      <th className="w-80">Sr No.</th>
-                                      <th>Area</th>
-                                      <th>Subject</th>
-                                      <th>Particulars</th>
-                                      <th>Observation</th>
-                                      <th>Actions</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    {checkListItems ? (
-                                      checkListItems?.map((item, i) => {
-                                        return (
-                                          <tr key={i}>
-                                            <td>{i + 1}</td>
-                                            <td>{item?.area}</td>
-                                            <td>{item?.subject}</td>
-                                            <td>{item?.particulars}</td>
-                                            <td>{item?.observation}</td>
-                                            <td>
-                                              <div
-                                                onClick={() => {
-                                                  setShowEditCheckListItemDialog(
-                                                    true
-                                                  );
-                                                  dispatch(
-                                                    changeCurrentSubListItem(
-                                                      item
-                                                    )
-                                                  );
-                                                }}
-                                              >
-                                                <i className="fa fa-edit  px-3 f-18"></i>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                        );
-                                      })
-                                    ) : (
-                                      <tr>
-                                        <td className="w-300">
-                                          No CheckListItem to show. Please Add
-                                          One
-                                        </td>
-                                      </tr>
-                                    )}
-                                  </tbody>
-                                </table>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <AccordionItem
+                    item={item}
+                    subLoading={subLoading}
+                    dispatch={dispatch}
+                    key={index}
+                    index={index}
+                    handleChangeCurrentCheckListId={
+                      handleChangeCurrentCheckListId
+                    }
+                    setShowEditCheckListDialog={setShowEditCheckListDialog}
+                    handleChangeCheckListRemarks={handleChangeCheckListRemarks}
+                    setCheckListManagementDialog={setCheckListManagementDialog}
+                    checkListItems={checkListItems}
+                    setShowEditCheckListItemDialog={
+                      setShowEditCheckListItemDialog
+                    }
+                    changeCurrentSubListItem={changeCurrentSubListItem}
+                    userHierarchy={userHierarchy}
+                    userRole={userRole}
+                  />
                 );
               })
             )}

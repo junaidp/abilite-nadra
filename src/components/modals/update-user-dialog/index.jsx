@@ -88,7 +88,10 @@ const UpdateUsertDialog = ({ setUpdateUserDialog, updateUserId }) => {
   }, [addUserSuccess]);
 
   React.useEffect(() => {
-    if (formik.values?.userHierarchy === "IAH") {
+    if (
+      formik.values?.userHierarchy === "IAH" ||
+      formik.values?.userHierarchy === "Management_Auditee"
+    ) {
       setNullReportingTo(true);
     } else {
       setNullReportingTo(false);
@@ -135,7 +138,7 @@ const UpdateUsertDialog = ({ setUpdateUserDialog, updateUserId }) => {
     <div className="px-4 py-4">
       <header className="section-header my-3    text-start d-flex align-items-center justify-content-between">
         <div className="mb-0 heading d-flex align-items-center">
-          <h2 className=" heading">Add New User</h2>
+          <h2 className=" heading">Update User</h2>
         </div>
       </header>
       <form onSubmit={formik.handleSubmit}>
@@ -213,6 +216,7 @@ const UpdateUsertDialog = ({ setUpdateUserDialog, updateUserId }) => {
             >
               <MenuItem value="">Select Role</MenuItem>
               <MenuItem value="IAH">IAH</MenuItem>
+              <MenuItem value="Management_Auditee">Management_Auditee</MenuItem>
               <MenuItem value="Team_Lead">Team_Lead</MenuItem>
               <MenuItem value="Audit_Executive_2">Audit_Executive_2</MenuItem>
               <MenuItem value="Audit_Executive_1">Audit_Executive_1</MenuItem>
