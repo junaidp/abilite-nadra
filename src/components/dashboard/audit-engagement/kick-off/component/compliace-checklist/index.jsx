@@ -170,7 +170,9 @@ const ComplianceCheckList = ({
               </Button>
             </div>
           </div>
-          <p className="mx-2">{selectedFile?.name?selectedFile?.name:"Select file"}</p>
+          <p className="mx-2">
+            {selectedFile?.name ? selectedFile?.name : "Select file"}
+          </p>
 
           <div className="container">
             <div className="row">
@@ -211,6 +213,7 @@ const ComplianceCheckList = ({
                               handleSubmit={handleSubmit}
                               handleApprove={handleApprove}
                               handleDownload={handleDownload}
+                              currentAuditEngagement={currentAuditEngagement}
                             />
                           );
                         }

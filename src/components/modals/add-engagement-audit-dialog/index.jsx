@@ -46,9 +46,11 @@ const AddEngagementAuditDialog = ({ setBusinessObjectiveDialog }) => {
 
   React.useEffect(() => {
     if (engagementAddSuccess) {
-      navigate(
-        `${route}?engagementId=${planingEngagementSingleObject?.engagement?.id}`
-      );
+      if (planingEngagementSingleObject?.engagement?.id) {
+        navigate(
+          `${route}?engagementId=${planingEngagementSingleObject?.engagement?.id}`
+        );
+      }
       dispatch(resetAddEngagementSuccess());
     }
   }, [planingEngagementSingleObject]);

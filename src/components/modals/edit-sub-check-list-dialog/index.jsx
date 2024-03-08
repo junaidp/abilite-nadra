@@ -9,9 +9,8 @@ import { useSelector, useDispatch } from "react-redux";
 
 const EditCheckListItemDialog = ({ setShowEditCheckListItemDialog }) => {
   const dispatch = useDispatch();
-  const { checkListAddSuccess, loading, currentSubCheckListItem } = useSelector(
-    (state) => state.setttingsCheckList
-  );
+  const { checkListAddSuccess, editLoading, currentSubCheckListItem } =
+    useSelector((state) => state.setttingsCheckList);
   const initialState = {
     area: currentSubCheckListItem?.area,
     subject: currentSubCheckListItem?.subject,
@@ -28,7 +27,7 @@ const EditCheckListItemDialog = ({ setShowEditCheckListItemDialog }) => {
       observation: Yup.string().required("Observation is required"),
     }),
     onSubmit: (values) => {
-      if (!loading) {
+      if (!editLoading) {
         dispatch(
           setupEditCheckListItem({
             ...currentSubCheckListItem,
@@ -150,9 +149,9 @@ const EditCheckListItemDialog = ({ setShowEditCheckListItemDialog }) => {
 
         <button
           type="submit"
-          className={`btn btn-primary ${loading && "disabled"}`}
+          className={`btn btn-primary ${editLoading && "disabled"}`}
         >
-          {loading ? "Loading" : "Edit"}
+          {editLoading ? "Loading..." : "Edit"}
         </button>
       </form>
 

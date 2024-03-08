@@ -353,17 +353,19 @@ const AccordionItem = ({
         data-bs-parent="#accordionFlushExample"
       >
         <div className="accordion-body">
-          <div
-            className="col-lg-12"
-            onClick={() => {
-              setShowUpdateRCMDialog(true);
-              setUpdatedRCMId(item?.id);
-            }}
-          >
-            <div className="btn btn-labeled btn-primary  shadow">
-              Update RCM
+          {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+            <div
+              className="col-lg-12"
+              onClick={() => {
+                setShowUpdateRCMDialog(true);
+                setUpdatedRCMId(item?.id);
+              }}
+            >
+              <div className="btn btn-labeled btn-primary  shadow">
+                Update RCM
+              </div>
             </div>
-          </div>
+          )}
           <div className="container">
             <div className="row py-4">
               <div className="col-lg-12">

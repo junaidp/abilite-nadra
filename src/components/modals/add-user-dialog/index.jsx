@@ -89,7 +89,8 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
   React.useEffect(() => {
     if (
       formik.values?.userHierarchy === "IAH" ||
-      formik.values?.userHierarchy === "Management_Auditee"
+      formik.values?.userHierarchy === "Management_Auditee" ||
+      allUsers[0]?.error === "Not Found"
     ) {
       setNullReportingTo(true);
     } else {

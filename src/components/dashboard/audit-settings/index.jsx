@@ -7,6 +7,7 @@ import { setupGetAllUsers } from "../../../global-redux/reducers/settings/user-m
 import { setupGetAllCPList } from "../../../global-redux/reducers/settings/cp-list/slice";
 import { setupGetAllRiskFactors } from "../../../global-redux/reducers/settings/risk-factor/slice";
 import AddCheckListManagementDialog from "../../modals/add-checklist-management-dialog/index";
+import { handleReset } from "../../../global-redux/reducers/settings/risk-control-matrix/slice";
 import UserManagementDialog from "../../modals/add-user-dialog/index";
 import UpdateCompanyDialog from "../../modals/update-company-dialog";
 import UpdateUserDialog from "../.././modals/update-user-dialog";
@@ -91,6 +92,9 @@ const AuditSettings = () => {
       setUserHierarchy(user[0]?.userId?.employeeid?.userHierarchy);
       setUserRole(user[0]?.userId?.authorities[0]);
     }
+    return () => {
+      dispatch(handleReset());
+    };
   }, [user]);
   return (
     <div>

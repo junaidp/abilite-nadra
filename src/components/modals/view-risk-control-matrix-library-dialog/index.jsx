@@ -51,9 +51,13 @@ const ViewRiskControlMatrixLibraryDialog = ({
       ) : (
         <div className="row mt-4">
           <div className="col-lg-12">
-            {allRCM?.map((item, index) => {
-              return <AccordionItem key={index} item={item} />;
-            })}
+            {allRCM
+              ?.filter(
+                (singleRCM) => singleRCM?.rcmLibraryObjectives?.length !== 0
+              )
+              ?.map((item, index) => {
+                return <AccordionItem key={index} item={item} />;
+              })}
           </div>
         </div>
       )}

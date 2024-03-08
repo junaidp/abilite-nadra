@@ -80,9 +80,10 @@ const SupportingDocs = ({ userHierarchy, userRole }) => {
                   <td>
                     <i className="fa-eye fa f-18"></i>
 
-                    <i className="fa fa-trash text-danger f-18 px-3"></i>
-
-                    <i className="fa fa-download f-18"></i>
+                    {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+                      <i className="fa fa-trash text-danger f-18 px-3"></i>
+                    )}
+                    <i className="fa fa-download f-18 mx-2"></i>
                   </td>
                 </tr>
                 <tr>
@@ -96,7 +97,7 @@ const SupportingDocs = ({ userHierarchy, userRole }) => {
                       <i className="fa fa-trash text-danger f-18 px-3"></i>
                     )}
 
-                    <i className="fa fa-download f-18"></i>
+                    <i className="fa fa-download f-18 mx-2"></i>
                   </td>
                 </tr>
               </tbody>

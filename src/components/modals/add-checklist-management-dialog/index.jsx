@@ -4,13 +4,14 @@ import * as Yup from "yup";
 import {
   setupAddCheckListItem,
   resetAddCheckListSuccess,
+  resetCheckListId,
 } from "../../../global-redux/reducers/settings/check-list/slice";
 import { useSelector, useDispatch } from "react-redux";
 
 const AddCheckListManagementDialog = ({ setCheckListManagementDialog }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  const { checkListAddSuccess, loading, checkListId } = useSelector(
+  const { checkListAddSuccess, editLoading, checkListId } = useSelector(
     (state) => state.setttingsCheckList
   );
   const initialState = {
@@ -29,7 +30,7 @@ const AddCheckListManagementDialog = ({ setCheckListManagementDialog }) => {
       observation: Yup.string().required("Observation is required"),
     }),
     onSubmit: (values) => {
-      if (!loading) {
+      if (!editLoading) {
         dispatch(
           setupAddCheckListItem({
             ...values,
@@ -43,6 +44,7 @@ const AddCheckListManagementDialog = ({ setCheckListManagementDialog }) => {
 
   function handleClose() {
     setCheckListManagementDialog(false);
+    dispatch(resetCheckListId());
     formik.resetForm({ values: initialState });
   }
 
@@ -50,14 +52,13 @@ const AddCheckListManagementDialog = ({ setCheckListManagementDialog }) => {
     if (checkListAddSuccess) {
       formik.resetForm({ values: initialState });
       dispatch(resetAddCheckListSuccess());
-      setCheckListManagementDialog(false);
     }
   }, [checkListAddSuccess]);
   return (
     <div className="px-4 py-4">
       <header className="section-header my-3    text-start d-flex align-items-center justify-content-between">
         <div className="mb-0 heading d-flex align-items-center">
-          <h2 className=" heading">CheckList Management</h2>
+          <h2 className=" heading">Add CheckList</h2>
         </div>
       </header>
       <form onSubmit={formik.handleSubmit}>
@@ -149,9 +150,9 @@ const AddCheckListManagementDialog = ({ setCheckListManagementDialog }) => {
 
         <button
           type="submit"
-          className={`btn btn-primary ${loading && "disabled"}`}
+          className={`btn btn-primary ${editLoading && "disabled"}`}
         >
-          {loading ? "Loading" : "Save And Submit"}
+          {editLoading ? "Loading..." : "Save And Submit"}
         </button>
       </form>
 

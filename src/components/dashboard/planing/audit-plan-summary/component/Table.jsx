@@ -31,7 +31,7 @@ const Table = ({
               item?.locked === true || item?.editable === false ? true : false
             }
           >
-            <option>Select One</option>
+            <option value="">Select One</option>
             <option value="High">High</option>
             <option value="Medium">Medium</option>
             <option value="Low">Low</option>
@@ -137,6 +137,7 @@ const Table = ({
             )}
             {allAuditPlanSummary[index]?.submitted === false &&
               allAuditPlanSummary[index]?.priority !== null &&
+              allAuditPlanSummary[index]?.priority !== "" &&
               allAuditPlanSummary[index]?.threeYearsAgo !== null &&
               allAuditPlanSummary[index]?.twoYearsAgo !== null &&
               allAuditPlanSummary[index]?.lastYear !== null && (
@@ -159,6 +160,11 @@ const Table = ({
               )}
             {allAuditPlanSummary[index]?.submitted === true &&
               allAuditPlanSummary[index]?.approved === false &&
+              allAuditPlanSummary[index]?.priority !== null &&
+              allAuditPlanSummary[index]?.priority !== "" &&
+              allAuditPlanSummary[index]?.threeYearsAgo !== null &&
+              allAuditPlanSummary[index]?.twoYearsAgo !== null &&
+              allAuditPlanSummary[index]?.lastYear !== null &&
               (Number(item?.initiatorTLEB) === Number(user[0]?.userId?.id) ||
                 user[0]?.userId?.employeeid?.userHierarchy === "IAH") && (
                 <div className="mt-3">

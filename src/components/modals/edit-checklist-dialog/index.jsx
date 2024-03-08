@@ -6,17 +6,15 @@ import { setupUpdateCheckListName } from "../../../global-redux/reducers/setting
 const EditCheckListDialog = ({ setShowEditCheckListDialog }) => {
   const { user } = useSelector((state) => state.auth);
   const [checkListName, setCheckListName] = React.useState("");
-  const { checkListAddSuccess, loading, checkList, checkListId } = useSelector(
-    (state) => state.setttingsCheckList
-  );
+  const { checkListAddSuccess, editLoading, checkList, checkListId } =
+    useSelector((state) => state.setttingsCheckList);
   const dispatch = useDispatch();
   function handleSubmit() {
     if (checkListName === "") {
       toast.error("Provide checklist name");
     }
-    if (checkListName && !loading) {
+    if (checkListName && !editLoading) {
       const email = user[0]?.email;
-
       dispatch(
         setupUpdateCheckListName(
           `?userEmailId=${email}&checklistName=${checkListName}&checklistid=${checkListId}`
@@ -27,10 +25,8 @@ const EditCheckListDialog = ({ setShowEditCheckListDialog }) => {
 
   React.useEffect(() => {
     if (checkListAddSuccess) {
-      setTimeout(() => {
-        setCheckListName("");
-        setShowEditCheckListDialog(false);
-      }, 500);
+      setCheckListName("");
+      setShowEditCheckListDialog(false);
     }
   }, [checkListAddSuccess]);
   React.useEffect(() => {
@@ -56,23 +52,23 @@ const EditCheckListDialog = ({ setShowEditCheckListDialog }) => {
         </div>
         <div className="col-lg-6 w-100">
           <button
-            className={`btn btn-primary ${loading && "disabled"}`}
+            className={`btn btn-primary ${editLoading && "disabled"}`}
             onClick={handleSubmit}
           >
-            {loading ? "Loading" : "Edit"}
+            {editLoading ? "Loading..." : "Edit"}
           </button>
         </div>
-      <div className="mb-4">
-        <button
-          className="btn btn-danger float-end"
-          onClick={() => {
-            setShowEditCheckListDialog(false);
-            setCheckListName("");
-          }}
-        >
-          Close
-        </button>
-      </div>
+        <div className="mb-4">
+          <button
+            className="btn btn-danger float-end"
+            onClick={() => {
+              setShowEditCheckListDialog(false);
+              setCheckListName("");
+            }}
+          >
+            Close
+          </button>
+        </div>
       </div>
     </div>
   );

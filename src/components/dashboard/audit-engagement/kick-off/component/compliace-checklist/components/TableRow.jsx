@@ -14,6 +14,7 @@ const TableRow = ({
   handleApprove,
   handleDownload,
   setCurrentButtonId,
+  currentAuditEngagement,
 }) => {
   return (
     <tr>
@@ -28,7 +29,8 @@ const TableRow = ({
             }
           }}
         >
-          {mainItem?.subLocation?.locationid?.description}
+          {mainItem?.subLocation?.locationid?.description ||
+            "No Location Provided"}
         </a>
       </td>
       <td>
@@ -41,7 +43,7 @@ const TableRow = ({
             }
           }}
         >
-          {mainItem?.subLocation?.description}
+          {mainItem?.subLocation?.description || "No Sub Location Provided"}
         </a>
       </td>
       <td>null</td>
@@ -73,7 +75,7 @@ const TableRow = ({
           <button
             className={`btn btn-labeled btn-primary px-3  shadow disabled`}
           >
-            file approved
+            Approved
           </button>
         )}
 

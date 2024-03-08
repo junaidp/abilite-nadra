@@ -134,6 +134,9 @@ body {
 .width-50 {
   width: 50px !important;
 }
+.min-h-400{
+  min-height: 200px !important;
+}
 
 .h-200 {
   height: 200px !important;

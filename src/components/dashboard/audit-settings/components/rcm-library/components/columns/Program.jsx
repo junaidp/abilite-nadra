@@ -40,15 +40,19 @@ const Program = ({
                     </select>
                   </div>
                   <textarea
-                    className="form-control "
+                    className={`form-control ${
+                      userRole !== "ADMIN" && userHierarchy !== "IAH" && "mb-4"
+                    }`}
                     value="some"
                     readOnly
                     id="exampleFormCon"
                     rows="3"
                   ></textarea>
-                  <div className="btn btn-labeled btn-primary  shadow mt-2 float-end mb-2">
-                    Get RCM
-                  </div>
+                  {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+                    <div className="btn btn-labeled btn-primary  shadow mt-2 float-end mb-2">
+                      Get RCM
+                    </div>
+                  )}
                 </div>
               </div>
             )}
@@ -74,15 +78,21 @@ const Program = ({
                           </select>
                         </div>
                         <textarea
-                          className="form-control "
+                          className={`form-control ${
+                            userRole !== "ADMIN" &&
+                            userHierarchy !== "IAH" &&
+                            "mb-4"
+                          }`}
                           value="some"
                           readOnly
                           id="exampleFormCon"
                           rows="3"
                         ></textarea>
-                        <div className="btn btn-labeled btn-primary  shadow mt-2 float-end mb-2">
-                          Get RCM
-                        </div>
+                        {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+                          <div className="btn btn-labeled btn-primary  shadow mt-2 float-end mb-2">
+                            Get RCM
+                          </div>
+                        )}
                       </div>
                     </div>
                   )}
@@ -156,7 +166,7 @@ const Program = ({
                               </div>
                             </div>
                           ) : (
-                            <div className="mb-4 mt-2">
+                            <div className="mt-2 mb-4">
                               {(userRole === "ADMIN" ||
                                 userHierarchy === "IAH") && (
                                 <div
@@ -170,7 +180,7 @@ const Program = ({
                                     )
                                   }
                                 >
-                                  <i className="fa fa-edit  f-18"></i>
+                                  <i className="fa fa-edit mb-4  f-18"></i>
                                 </div>
                               )}
                             </div>

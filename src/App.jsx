@@ -87,17 +87,13 @@ const App = () => {
   }, []);
 
   React.useEffect(() => {
-    if (company === "") {
-      if (user[0]?.company[0]?.companyName) {
-        dispatch(changeCompany(user[0]?.company[0]?.companyName));
-      }
+    if (user[0]?.token && user[0]?.company[0]?.companyName) {
+      dispatch(changeCompany(user[0]?.company[0]?.companyName));
     }
   }, [user]);
 
   React.useEffect(() => {
-    if (year === "") {
-      dispatch(changeYear("2024"));
-    }
+    dispatch(changeYear("2024"));
   }, []);
 
   return (

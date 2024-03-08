@@ -25,7 +25,7 @@ const UserManagement = ({
   React.useEffect(() => {
     if (addUserSuccess) {
       dispatch(resetAddUserSuccess());
-      dispatch(setupGetAllUsers());
+      dispatch(setupGetAllUsers({ shareWith: true }));
     }
   }, [addUserSuccess]);
 

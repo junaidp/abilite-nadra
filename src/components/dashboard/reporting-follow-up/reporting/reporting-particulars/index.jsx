@@ -186,28 +186,30 @@ const ReportingParticulars = () => {
               <div className="row mt-3">
                 <div className="col-lg-12">
                   <div className="accordion" id="accordionFlushExample">
-                    {report?.reportingList?.map((item, index) => {
-                      return (
-                        <AccordianItem
-                          key={index}
-                          item={item}
-                          handleChange={handleChange}
-                          loading={loading}
-                          allUsers={allUsers?.filter(
-                            (singleUser) =>
-                              Number(singleUser?.id) !== user[0]?.userId?.id
-                          )}
-                          singleReport={singleReport}
-                          reportingId={reportingId}
-                          setReport={setReport}
-                          handleSaveToStep1={handleSaveToStep1}
-                          handleSaveToStep2={handleSaveToStep2}
-                          handleSaveStep2={handleSaveStep2}
-                          handleSaveToStep3={handleSaveToStep3}
-                          handleSaveToStep4={handleSaveToStep4}
-                        />
-                      );
-                    })}
+                    {report?.reportingList?.length === 0
+                      ? "No Reporting List Found"
+                      : report?.reportingList?.map((item, index) => {
+                          return (
+                            <AccordianItem
+                              key={index}
+                              item={item}
+                              handleChange={handleChange}
+                              loading={loading}
+                              allUsers={allUsers?.filter(
+                                (singleUser) =>
+                                  Number(singleUser?.id) !== user[0]?.userId?.id
+                              )}
+                              singleReport={singleReport}
+                              reportingId={reportingId}
+                              setReport={setReport}
+                              handleSaveToStep1={handleSaveToStep1}
+                              handleSaveToStep2={handleSaveToStep2}
+                              handleSaveStep2={handleSaveStep2}
+                              handleSaveToStep3={handleSaveToStep3}
+                              handleSaveToStep4={handleSaveToStep4}
+                            />
+                          );
+                        })}
                   </div>
                 </div>
               </div>

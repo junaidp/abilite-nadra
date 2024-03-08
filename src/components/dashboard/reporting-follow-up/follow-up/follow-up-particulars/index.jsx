@@ -153,24 +153,28 @@ const ReportingParticulars = () => {
               <div className="row mt-3">
                 <div className="col-lg-12">
                   <div className="accordion" id="accordionFlushExample">
-                    {report?.reportingList
-                      ?.filter((singleItem) => singleItem?.stepNo >= 5)
-                      ?.map((item, index) => {
-                        return (
-                          <AccordianItem
-                            key={index}
-                            index={index}
-                            item={item}
-                            handleChange={handleChange}
-                            handleSave={handleSave}
-                            handleSaveToStep6={handleSaveToStep6}
-                            handleSaveToStep7={handleSaveToStep7}
-                            loading={loading}
-                            singleReport={singleReport}
-                            followUpId={followUpId}
-                          />
-                        );
-                      })}
+                    {report?.reportingList?.filter(
+                      (singleItem) => singleItem?.stepNo >= 5
+                    )?.length === 0
+                      ? "No Reporting List Found"
+                      : report?.reportingList
+                          ?.filter((singleItem) => singleItem?.stepNo >= 5)
+                          ?.map((item, index) => {
+                            return (
+                              <AccordianItem
+                                key={index}
+                                index={index}
+                                item={item}
+                                handleChange={handleChange}
+                                handleSave={handleSave}
+                                handleSaveToStep6={handleSaveToStep6}
+                                handleSaveToStep7={handleSaveToStep7}
+                                loading={loading}
+                                singleReport={singleReport}
+                                followUpId={followUpId}
+                              />
+                            );
+                          })}
                   </div>
                 </div>
               </div>

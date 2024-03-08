@@ -14,6 +14,7 @@ const initialState = {
   checkListAddSuccess: false,
   loading: false,
   subLoading: false,
+  editLoading: false,
   checkList: [],
   checkListItems: [],
   checkListId: "",
@@ -77,6 +78,9 @@ export const slice = createSlice({
     addCheckListId: (state, action) => {
       state.checkListId = action.payload;
     },
+    resetCheckListId: (state) => {
+      state.checkListId = "";
+    },
     changeCurrentSubListItem: (state, action) => {
       state.currentSubCheckListItem = action.payload;
     },
@@ -118,13 +122,18 @@ export const slice = createSlice({
 
     // Update CheckList Name
     builder
+      .addCase(setupUpdateCheckListName.pending, (state) => {
+        state.editLoading = true;
+      })
       .addCase(setupUpdateCheckListName.fulfilled, (state) => {
+        state.editLoading = false;
         state.checkListAddSuccess = true;
         state.checkListId = "";
         state.currentSubCheckListItem = {};
         toast.success("Check List Name Edited Successfully");
       })
       .addCase(setupUpdateCheckListName.rejected, (state, { payload }) => {
+        state.editLoading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
         } else {
@@ -150,12 +159,16 @@ export const slice = createSlice({
 
     // Add CheckList Item
     builder
+      .addCase(setupAddCheckListItem.pending, (state) => {
+        state.editLoading = true;
+      })
       .addCase(setupAddCheckListItem.fulfilled, (state) => {
+        state.editLoading = false;
         state.checkListAddSuccess = true;
-        state.checkListId = "";
         toast.success("Check List Item Added Successfully");
       })
       .addCase(setupAddCheckListItem.rejected, (state, { payload }) => {
+        state.editLoading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
         } else {
@@ -183,13 +196,18 @@ export const slice = createSlice({
 
     // Edit CheckList Item
     builder
+      .addCase(setupEditCheckListItem.pending, (state) => {
+        state.editLoading = true;
+      })
       .addCase(setupEditCheckListItem.fulfilled, (state) => {
+        state.editLoading = false;
         state.checkListAddSuccess = true;
         state.checkListId = "";
         state.currentSubCheckListItem = {};
         toast.success("Check List Item edited Successfully");
       })
       .addCase(setupEditCheckListItem.rejected, (state, { payload }) => {
+        state.editLoading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
         } else {
@@ -202,6 +220,7 @@ export const slice = createSlice({
 export const {
   resetAddCheckListSuccess,
   addCheckListId,
+  resetCheckListId,
   changeCurrentSubListItem,
 } = slice.actions;
 

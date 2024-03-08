@@ -48,6 +48,10 @@ export const slice = createSlice({
     resetProcessAddSuccess: (state, action) => {
       state.processAddSuccess = false;
     },
+    resetAllValues: (state) => {
+      state.allProcess = [];
+      state.allSubProcess = [];
+    },
   },
   // Add Process
   extraReducers: (builder) => {
@@ -135,6 +139,6 @@ export const slice = createSlice({
   },
 });
 
-export const { resetProcessAddSuccess } = slice.actions;
+export const { resetProcessAddSuccess, resetAllValues } = slice.actions;
 
 export default slice.reducer;

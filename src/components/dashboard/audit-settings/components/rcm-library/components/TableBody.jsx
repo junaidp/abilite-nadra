@@ -36,7 +36,6 @@ const TableBody = ({
         userHierarchy={userHierarchy}
         userRole={userRole}
       />
-      {/* First Colimn */}
       {/* Second Colimn */}
 
       <RiskColumn
@@ -49,7 +48,6 @@ const TableBody = ({
         userHierarchy={userHierarchy}
         userRole={userRole}
       />
-      {/* Second Colimn */}
       {/* Third Column */}
 
       <ControlColumn
@@ -62,7 +60,6 @@ const TableBody = ({
         userHierarchy={userHierarchy}
         userRole={userRole}
       />
-      {/* Third Column */}
       {/* Last Column */}
 
       <Program
@@ -75,7 +72,6 @@ const TableBody = ({
         userHierarchy={userHierarchy}
         userRole={userRole}
       />
-      {/* Last Column */}
     </tr>
   );
 };
