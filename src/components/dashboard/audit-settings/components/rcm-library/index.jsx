@@ -155,6 +155,7 @@ const RCMLibraray = ({ userHierarchy, userRole }) => {
 
   React.useEffect(() => {
     if (processId && processId !== "") {
+      setSubProcessId("");
       dispatch(setupGetAllSubProcess(`?processId=${Number(processId)}`));
     }
   }, [processId]);

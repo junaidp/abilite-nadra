@@ -73,16 +73,16 @@ const AccordionItem = ({
             <div className=" mt-3 bg-white p-3">
               {(userRole === "ADMIN" || userHierarchy === "IAH") && (
                 <div
-                  className="btn btn-labeled btn-primary px-3 shadow col-lg-2"
+                  className="btn btn-labeled btn-primary px-3 shadow col-lg-4"
                   onClick={() => {
                     setCheckListManagementDialog(true);
                     handleChangeCurrentCheckListId(item?.id);
                   }}
                 >
                   <span className="btn-label me-2">
-                    <i className="fa fa-plus"></i>
+                    <i className="fa fa-check-circle f-18"></i>
                   </span>
-                  Add
+                  Add CheckList Item
                 </div>
               )}
 
@@ -96,7 +96,6 @@ const AccordionItem = ({
                           <th>Area</th>
                           <th>Subject</th>
                           <th>Particulars</th>
-                          <th>Observation</th>
                           {(userRole === "ADMIN" ||
                             userHierarchy === "IAH") && <th>Actions</th>}
                         </tr>
@@ -117,7 +116,6 @@ const AccordionItem = ({
                                 <td>{item?.area}</td>
                                 <td>{item?.subject}</td>
                                 <td>{item?.particulars}</td>
-                                <td>{item?.observation}</td>
                                 {(userRole === "ADMIN" ||
                                   userHierarchy === "IAH") && (
                                   <td>
@@ -139,7 +137,7 @@ const AccordionItem = ({
                         ) : (
                           <tr>
                             <td className="w-300">
-                              No CheckListItem to show. Please Add One
+                              No CheckListItem Available
                             </td>
                           </tr>
                         )}

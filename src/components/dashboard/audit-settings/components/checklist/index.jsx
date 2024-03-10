@@ -33,6 +33,7 @@ const CheckList = ({
   const { user } = useSelector((state) => state.auth);
   const { company } = useSelector((state) => state.common);
   const [description, setDescription] = React.useState("");
+  const [defaultRemarks, setDefaultRemarks] = React.useState("");
   const [showEditCheckListDialog, setShowEditCheckListDialog] =
     React.useState(false);
   const [showEditCheckListItemDialog, setShowEditCheckListItemDialog] =
@@ -65,31 +66,35 @@ const CheckList = ({
   }
 
   function handleChangeCheckListRemarks(event) {
-    if (event.target.value) {
+    if (event?.target?.value) {
+      setDefaultRemarks(event?.target?.value);
+    }
+  }
+
+  React.useEffect(() => {
+    if (defaultRemarks && defaultRemarks !== "") {
       dispatch(
         setupUpdateCheckListRemarks(
           `?userEmailId=${
             user[0]?.email
-          }&checklistid=${checkListId}&checklistName=${Number(
-            event.target.value
-          )}`
+          }&checklistid=${checkListId}&checklistName=${Number(defaultRemarks)}`
         )
       );
     }
-  }
+  }, [defaultRemarks]);
+
   React.useEffect(() => {
     if (checkListAddSuccess) {
-      setTimeout(() => {
-        dispatch(resetAddCheckListSuccess());
-        setDescription("");
-        let email = user[0]?.email;
-        let companyId = user[0]?.company.find(
-          (all) => all?.companyName === company
-        )?.id;
-        dispatch(
-          setupGetAllCheckLists(`?userEmailId=${email}&companyId=${companyId}`)
-        );
-      }, 500);
+      setDefaultRemarks("");
+      dispatch(resetAddCheckListSuccess());
+      setDescription("");
+      let email = user[0]?.email;
+      let companyId = user[0]?.company.find(
+        (all) => all?.companyName === company
+      )?.id;
+      dispatch(
+        setupGetAllCheckLists(`?userEmailId=${email}&companyId=${companyId}`)
+      );
     }
   }, [checkListAddSuccess]);
 
