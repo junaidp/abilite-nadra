@@ -209,7 +209,7 @@ const AuditPlanSummary = () => {
                       </tr>
                     </thead>
                     {data
-                      ?.slice((page - 1) * 5, page * 5)
+                      ?.slice((page - 1) * 10, page * 10)
                       ?.map((item, index) => {
                         return (
                           <Table
@@ -254,7 +254,7 @@ const AuditPlanSummary = () => {
                 )}
                 <div className="mb-4">
                   <Pagination
-                    count={Math.ceil(allAuditPlanSummary?.length / 5)}
+                    count={Math.ceil(allAuditPlanSummary?.length / 10)}
                     page={page}
                     onChange={handleChange}
                   />

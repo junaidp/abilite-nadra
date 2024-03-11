@@ -11,12 +11,15 @@ import { handleReset } from "../../../global-redux/reducers/settings/risk-contro
 import UserManagementDialog from "../../modals/add-user-dialog/index";
 import UpdateCompanyDialog from "../../modals/update-company-dialog";
 import UpdateUserDialog from "../.././modals/update-user-dialog";
+import { resetAuthValues } from "../../../global-redux/reducers/auth/slice";
 import { useSelector, useDispatch } from "react-redux";
 import "./index.css";
 import AddCompanyDialog from "../../modals/add-company-dialog/index";
 import CheckList from "./components/checklist";
 import CPList from "./components/cp-list/index";
 import SupportingDocs from "./components/supporting-docs/index";
+import InformationRequest from "./components/information-request";
+import TaskManagement from "./components/task-management";
 // import ApprovalManagement from "./components/approval-management/index";
 import Location from "./components/location";
 import Company from "./components/company";
@@ -96,6 +99,10 @@ const AuditSettings = () => {
       dispatch(handleReset());
     };
   }, [user]);
+
+  React.useEffect(() => {
+    dispatch(resetAuthValues());
+  }, []);
   return (
     <div>
       {checkListManagementDialog && (
@@ -321,6 +328,33 @@ const AuditSettings = () => {
                 >
                   Process
                 </button>
+                {/* For Admins Only */}
+                {userRole === "ADMIN" && (
+                  <button
+                    className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
+                    id="nav-information-request-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#nav-information-request"
+                    type="button"
+                    role="tab"
+                    aria-controls="nav-information-request"
+                  >
+                    Information Request
+                  </button>
+                )}
+                {userRole === "ADMIN" && (
+                  <button
+                    className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
+                    id="nav-task-management-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#nav-task-management"
+                    type="button"
+                    role="tab"
+                    aria-controls="nav-task-management"
+                  >
+                    Task Management
+                  </button>
+                )}
               </div>
             </nav>
           </div>
@@ -371,7 +405,10 @@ const AuditSettings = () => {
                   setShowUpdateCompanyDialog={setShowUpdateCompanyDialog}
                 />
               )}
+
               <Process userHierarchy={userHierarchy} userRole={userRole} />
+              {userRole === "ADMIN" && <InformationRequest />}
+              {userRole === "ADMIN" && <TaskManagement />}
             </div>
           </div>
         </div>

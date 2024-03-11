@@ -1,8 +1,13 @@
 import React from "react";
 
-const CPListRows = ({cpItem,handleChangeCpList,handleChangeCpListComments}) => {
+const CPListRows = ({
+  cpItem,
+  handleChangeCpList,
+  handleChangeCpListComments,
+  performRiskAssessmentObject
+}) => {
   return (
-    <tr >
+    <tr>
       <td>{cpItem?.id}</td>
       <td className="w-400">{cpItem?.description || ""}</td>
       <td>
@@ -14,6 +19,11 @@ const CPListRows = ({cpItem,handleChangeCpList,handleChangeCpListComments}) => {
             id="flexCheckDefault"
             name="inadequate"
             onChange={(event) => handleChangeCpList(event, cpItem?.id)}
+            disabled={
+              performRiskAssessmentObject?.riskAssessments?.riskRating === 0
+                ? false
+                : true
+            }
           />
           <label
             className="form-check-label"
@@ -30,6 +40,8 @@ const CPListRows = ({cpItem,handleChangeCpList,handleChangeCpListComments}) => {
             id="flexCheckDefault"
             onChange={(event) => handleChangeCpList(event, cpItem?.id)}
             name="needsImprovement"
+            disabled={performRiskAssessmentObject?.riskAssessments?.riskRating===0?false:true}
+
           />
           <label
             className="form-check-label"
@@ -46,6 +58,8 @@ const CPListRows = ({cpItem,handleChangeCpList,handleChangeCpListComments}) => {
             id="flexCheckDefault"
             name="adequate"
             onChange={(event) => handleChangeCpList(event, cpItem?.id)}
+            disabled={performRiskAssessmentObject?.riskAssessments?.riskRating===0?false:true}
+
           />
           <label
             className="form-check-label"
@@ -62,6 +76,8 @@ const CPListRows = ({cpItem,handleChangeCpList,handleChangeCpListComments}) => {
           value={cpItem?.comments || ""}
           onChange={(event) => handleChangeCpListComments(event, cpItem?.id)}
           name="comments"
+          disabled={performRiskAssessmentObject?.riskAssessments?.riskRating===0?false:true}
+
         ></textarea>
         <label className="word-limit-info label-text">Maximum 1500 words</label>
       </td>

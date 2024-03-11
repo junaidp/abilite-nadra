@@ -6,7 +6,6 @@ import { useSearchParams } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
 import {
   resetAddEngagementSuccess,
-  setupGetSingleCheckListObjective,
   setupSaveCheckListObjective,
   setupGetCheckListItems,
   handleCleanUp,
@@ -46,7 +45,7 @@ const ComplianceCheckListCard = () => {
   React.useEffect(() => {
     if (engagementAddSuccess) {
       dispatch(resetAddEngagementSuccess());
-      dispatch(setupGetSingleCheckListObjective(engagementId));
+      navigate("/audit/business-objective");
     }
   }, [engagementAddSuccess]);
 

@@ -169,101 +169,108 @@ const JobPrioritization = () => {
                     <td className="w-300">No Job Prioritization to show</td>
                   </tr>
                 ) : (
-                  data?.slice((page - 1) * 5, page * 5)?.map((item, index) => {
-                    return (
-                      <tr key={index}>
-                        <td>{item?.id}</td>
-                        <td className="w-200">{item?.auditableUnitTitle}</td>
-                        <td className="w-200">
-                          {item?.businessObjectiveTitle}
-                        </td>
-                        <td className="moderate">{item?.riskRating}</td>
-                        <td className="w-120">
-                          <div className="form-check">
-                            <input
-                              className="form-check-input"
-                              type="checkbox"
-                              id="flexCheckDefault"
-                              checked={item?.selectedForAudit}
-                              name="selectedForAudit"
+                  data
+                    ?.slice((page - 1) * 10, page * 10)
+                    ?.map((item, index) => {
+                      return (
+                        <tr key={index}>
+                          <td>{item?.id}</td>
+                          <td className="w-200">{item?.auditableUnitTitle}</td>
+                          <td className="w-200">
+                            {item?.businessObjectiveTitle}
+                          </td>
+                          <td className="moderate">{item?.riskRating}</td>
+                          <td className="w-120">
+                            <div className="form-check">
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                                id="flexCheckDefault"
+                                checked={item?.selectedForAudit}
+                                name="selectedForAudit"
+                                onChange={(event) =>
+                                  handleChangeCheckValue(event, item?.id)
+                                }
+                                disabled={
+                                  item?.editable === true ? false : true
+                                }
+                              />
+                              <label
+                                className="form-check-label"
+                                htmlFor="flexCheckDefault"
+                              ></label>
+                            </div>
+                          </td>
+                          <td>
+                            <textarea
+                              className="form-control"
+                              placeholder="Enter Reason"
+                              id="exampleFormControlTextarea1"
+                              rows="3"
+                              value={item?.comments || ""}
                               onChange={(event) =>
-                                handleChangeCheckValue(event, item?.id)
+                                handleChangeValue(event, item?.id)
                               }
                               disabled={item?.editable === true ? false : true}
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor="flexCheckDefault"
-                            ></label>
-                          </div>
-                        </td>
-                        <td>
-                          <textarea
-                            className="form-control"
-                            placeholder="Enter Reason"
-                            id="exampleFormControlTextarea1"
-                            rows="3"
-                            value={item?.comments || ""}
-                            onChange={(event) =>
-                              handleChangeValue(event, item?.id)
-                            }
-                            disabled={item?.editable === true ? false : true}
-                            name="comments"
-                          ></textarea>
-                          <label className="word-limit-info label-text">
-                            Maximum 1500 words
-                          </label>
-                        </td>
-                        <td className="width-100">
-                          <select
-                            className="form-select"
-                            aria-label="Default select example"
-                            value={item?.year || new Date()}
-                            onChange={(event) =>
-                              handleChangeValue(event, item?.id)
-                            }
-                            disabled={item?.editable === true ? false : true}
-                            name="year"
-                          >
-                            <option value="">Select Year</option>
-                            <option value={2023}>2023</option>
-                            <option value={2024}>2024</option>
-                            <option value={2025}>2025</option>
-                            <option value={2026}>2026</option>
-                          </select>
-                        </td>
-                        <td>
-                          {item?.editable === false && (
-                            <i
-                              className="fa fa-edit  px-3 f-18 cursor-pointer"
-                              onClick={() => handleEditable(item?.id)}
-                            ></i>
-                          )}
-                          {item?.editable === true && (
-                            <div
-                              className={`btn btn-labeled btn-primary px-3 shadow ${
-                                loading && currentId === item?.id && "disabled"
-                              }`}
-                              onClick={() => handleUpdate(item?.id)}
+                              name="comments"
+                            ></textarea>
+                            <label className="word-limit-info label-text">
+                              Maximum 1500 words
+                            </label>
+                          </td>
+                          <td className="width-100">
+                            <select
+                              className="form-select"
+                              aria-label="Default select example"
+                              value={item?.year || new Date()}
+                              onChange={(event) =>
+                                handleChangeValue(event, item?.id)
+                              }
+                              disabled={item?.editable === true ? false : true}
+                              name="year"
                             >
-                              <span className="btn-label me-2">
-                                <i className="fa fa-check-circle"></i>
-                              </span>
-                              {loading && currentId === item?.id
-                                ? "Loading..."
-                                : "Save"}
-                            </div>
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  })
+                              <option value="">Select Year</option>
+                              <option value={2024}>2024</option>
+                              <option value={2025}>2025</option>
+                              <option value={2026}>2026</option>
+                              <option value={2027}>2027</option>
+                              <option value={2028}>2028</option>
+                            </select>
+                          </td>
+                          <td>
+                            {item?.editable === false && (
+                              <i
+                                className="fa fa-edit  px-3 f-18 cursor-pointer"
+                                onClick={() => handleEditable(item?.id)}
+                              ></i>
+                            )}
+                            {item?.editable === true && (
+                              <div
+                                className={`btn btn-labeled btn-primary px-3 shadow ${
+                                  loading &&
+                                  currentId === item?.id &&
+                                  "disabled"
+                                }`}
+                                onClick={() => handleUpdate(item?.id)}
+                              >
+                                <span className="btn-label me-2">
+                                  <i className="fa fa-check-circle"></i>
+                                </span>
+                                {loading && currentId === item?.id
+                                  ? "Loading..."
+                                  : "Save"}
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })
                 )}
               </tbody>
             </table>
 
             <Pagination
-              count={Math.ceil(allJobPrioritization?.length / 5)}
+              count={Math.ceil(allJobPrioritization?.length / 10)}
               page={page}
               onChange={handleChangePage}
             />

@@ -14,6 +14,7 @@ import planingAuditableUnitReducer from "../reducers/planing/auditable-units/sli
 import planingJobPrioritizationReducer from "../reducers/planing/job-prioritization/slice";
 import planingJobSchedulingReducer from "../reducers/planing/job-scheduling/slice";
 import reportReducer from "../reducers/reports/slice";
+import InternalAuditReportReducer from "../reducers/reports/internal-audit-report/slice";
 import reportingReducer from "../reducers/reporting/slice";
 import auditEngagementReducer from "../reducers/audit-engagement/slice";
 import settingCPListReducer from "../reducers/settings/cp-list/slice";
@@ -40,6 +41,7 @@ export const store = configureStore({
     planingAuditPlanSummary: planingAuditPlanSummaryReducers,
     // Report
     reports: reportReducer,
+    internalAuditReports: InternalAuditReportReducer,
     reporting: reportingReducer,
     // Audit Enagagement
     auditEngagement: auditEngagementReducer,

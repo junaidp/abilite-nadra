@@ -95,7 +95,7 @@ const RiskAssessments = () => {
                   </tr>
                 ) : (
                   allRiskAssessments
-                    ?.slice((page - 1) * 5, page * 5)
+                    ?.slice((page - 1) * 10, page * 10)
                     ?.map((item, index) => {
                       return (
                         <tr className="h-40" key={index}>
@@ -116,7 +116,9 @@ const RiskAssessments = () => {
                               <span className="btn-label me-2">
                                 <i className="fa fa-play"></i>
                               </span>
-                              Perform Risk
+                              {item?.riskRating === 0
+                                ? "Perform Risk"
+                                : "View Risk"}
                             </div>
                           </td>
                           <td className="text-center pt-3">
@@ -130,7 +132,7 @@ const RiskAssessments = () => {
             </table>
           </div>
           <Pagination
-            count={Math.ceil(allRiskAssessments?.length / 5)}
+            count={Math.ceil(allRiskAssessments?.length / 10)}
             page={page}
             onChange={handleChange}
           />

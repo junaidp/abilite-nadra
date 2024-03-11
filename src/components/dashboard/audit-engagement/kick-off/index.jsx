@@ -270,58 +270,46 @@ const KickOff = () => {
                   auditEngagementId={auditEngagementId}
                 />
                 {/* <RaiseInformationRequest /> */}
-                {currentAuditEngagement?.auditStepChecklistList === null ||
-                  (currentAuditEngagement?.auditStepChecklistList?.length ===
-                    0 && (
-                    <RiskControlMatrix
-                      setShowViewLibrary={setShowViewLibrary}
-                      currentAuditEngagement={currentAuditEngagement}
-                      setCurrentAuditEngagement={setCurrentAuditEngagement}
-                      setShowKickOffObjectiveDialog={
-                        setShowKickOffObjectiveDialog
-                      }
-                      setShowKickOffRatingDialog={setShowKickOffRatingDialog}
-                      setShowKickOffControlDialog={setShowKickOffControlDialog}
-                      auditEngagementId={auditEngagementId}
-                    />
-                  ))}
-                {currentAuditEngagement?.auditStepChecklistList === null ||
-                  (currentAuditEngagement?.auditStepChecklistList?.length ===
-                    0 && (
-                    <AuditProgram
-                      currentAuditEngagement={currentAuditEngagement}
-                      setCurrentAuditEngagement={setCurrentAuditEngagement}
-                      setShowAddAuditProgramDialog={
-                        setShowAddAuditProgramDialog
-                      }
-                      auditEngagementId={auditEngagementId}
-                      singleAuditEngagementObject={singleAuditEngagementObject}
-                    />
-                  ))}
-                {currentAuditEngagement?.auditStepChecklistList === null ||
-                  (currentAuditEngagement?.auditStepChecklistList?.length ===
-                    0 && (
-                    <AuditSteps
-                      setShowAuditStepsDialog={setShowAuditStepsDialog}
-                      currentAuditEngagement={currentAuditEngagement}
-                      setAuditStepId={setAuditStepId}
-                      singleAuditEngagementObject={singleAuditEngagementObject}
-                      loading={loading}
-                    />
-                  ))}
-                {currentAuditEngagement?.auditStepChecklistList &&
-                  currentAuditEngagement?.auditStepChecklistList?.length !==
-                    0 && (
-                    <ComplianceCheckList
-                      setShowComplianceCheckListDialog={
-                        setShowComplianceCheckListDialog
-                      }
-                      currentAuditEngagement={currentAuditEngagement}
-                      setComplianceCheckListMainId={
-                        setComplianceCheckListMainId
-                      }
-                    />
-                  )}
+                {currentAuditEngagement?.jobType !== "Compliance Checklist" && (
+                  <RiskControlMatrix
+                    setShowViewLibrary={setShowViewLibrary}
+                    currentAuditEngagement={currentAuditEngagement}
+                    setCurrentAuditEngagement={setCurrentAuditEngagement}
+                    setShowKickOffObjectiveDialog={
+                      setShowKickOffObjectiveDialog
+                    }
+                    setShowKickOffRatingDialog={setShowKickOffRatingDialog}
+                    setShowKickOffControlDialog={setShowKickOffControlDialog}
+                    auditEngagementId={auditEngagementId}
+                  />
+                )}
+                {currentAuditEngagement?.jobType !== "Compliance Checklist" && (
+                  <AuditProgram
+                    currentAuditEngagement={currentAuditEngagement}
+                    setCurrentAuditEngagement={setCurrentAuditEngagement}
+                    setShowAddAuditProgramDialog={setShowAddAuditProgramDialog}
+                    auditEngagementId={auditEngagementId}
+                    singleAuditEngagementObject={singleAuditEngagementObject}
+                  />
+                )}
+                {currentAuditEngagement?.jobType !== "Compliance Checklist" && (
+                  <AuditSteps
+                    setShowAuditStepsDialog={setShowAuditStepsDialog}
+                    currentAuditEngagement={currentAuditEngagement}
+                    setAuditStepId={setAuditStepId}
+                    singleAuditEngagementObject={singleAuditEngagementObject}
+                    loading={loading}
+                  />
+                )}
+                {currentAuditEngagement?.jobType === "Compliance Checklist" && (
+                  <ComplianceCheckList
+                    setShowComplianceCheckListDialog={
+                      setShowComplianceCheckListDialog
+                    }
+                    currentAuditEngagement={currentAuditEngagement}
+                    setComplianceCheckListMainId={setComplianceCheckListMainId}
+                  />
+                )}
               </div>
             </div>
           </div>

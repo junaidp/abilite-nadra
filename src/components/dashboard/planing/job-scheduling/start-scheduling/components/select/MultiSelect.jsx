@@ -74,11 +74,11 @@ export default function MultipleSelect({
     setSelectedArray(initialPersonalArray);
   }, [initialPersonalArray]);
 
-  React.useEffect(() => {
-    if (name === "subLocation") {
-      setSelectedArray(currentJobSchedulingObject?.subLocation);
-    }
-  }, [currentJobSchedulingObject?.locationList]);
+  // React.useEffect(() => {
+  //   if (name === "subLocation") {
+  //     setSelectedArray(currentJobSchedulingObject?.subLocation);
+  //   }
+  // }, [currentJobSchedulingObject?.locationList]);
 
   return (
     <div>

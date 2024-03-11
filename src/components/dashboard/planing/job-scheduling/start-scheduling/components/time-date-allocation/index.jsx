@@ -7,6 +7,7 @@ const TimeAndDateAllocation = ({
   handleChangeJobSchedulingCheckFields,
   handleChangeJobSchedulingStringTextFields,
   handleChangeNumberTextField,
+  setCurrentJobScheduling,
 }) => {
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state?.planingJobScheduling);
@@ -31,6 +32,39 @@ const TimeAndDateAllocation = ({
       );
     }
   }
+
+  React.useEffect(() => {
+    let totalResources =
+      Number(currentJobSchedulingObject?.numberOfResourcesRequired?.finance) +
+      Number(currentJobSchedulingObject?.numberOfResourcesRequired?.business) +
+      Number(currentJobSchedulingObject?.numberOfResourcesRequired?.fraud) +
+      Number(
+        currentJobSchedulingObject?.numberOfResourcesRequired?.operations
+      ) +
+      Number(currentJobSchedulingObject?.numberOfResourcesRequired?.other) +
+      Number(currentJobSchedulingObject?.numberOfResourcesRequired?.it);
+    let totalWeeks =
+      Number(
+        currentJobSchedulingObject?.timeAndDateAllocation?.estimatedWeeks
+      ) * 40;
+
+    setCurrentJobScheduling((pre) => {
+      return {
+        ...pre,
+        timeAndDateAllocation: {
+          ...pre?.timeAndDateAllocation,
+          fieldWorkManHours: totalResources * totalWeeks,
+          totalWorkingManHours:
+            totalResources * totalWeeks +
+            Number(pre?.timeAndDateAllocation?.internalAuditManagementHours),
+          totalHours:
+            8 * Number(pre?.timeAndDateAllocation?.travellingDays) +
+            totalResources * totalWeeks +
+            Number(pre?.timeAndDateAllocation?.internalAuditManagementHours),
+        },
+      };
+    });
+  }, [currentJobSchedulingObject]);
   return (
     <div className="accordion-item">
       <h2 className="accordion-header">
@@ -77,14 +111,12 @@ const TimeAndDateAllocation = ({
                   className="form-control"
                   id="lab"
                   placeholder=""
+                  disabled
                   value={
                     currentJobSchedulingObject?.timeAndDateAllocation
                       ?.fieldWorkManHours
                   }
-                  name="fieldWorkManHours"
-                  onChange={(event) =>
-                    handleChangeNumberTextField(event, "timeAllocation")
-                  }
+                  readOnly
                 />
               </div>
             </div>
@@ -118,10 +150,8 @@ const TimeAndDateAllocation = ({
                     currentJobSchedulingObject?.timeAndDateAllocation
                       ?.totalWorkingManHours
                   }
-                  name="totalWorkingManHours"
-                  onChange={(event) =>
-                    handleChangeNumberTextField(event, "timeAllocation")
-                  }
+                  readOnly
+                  disabled
                 />
               </div>
             </div>

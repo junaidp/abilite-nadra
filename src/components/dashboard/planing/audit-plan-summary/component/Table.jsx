@@ -165,7 +165,8 @@ const Table = ({
               allAuditPlanSummary[index]?.threeYearsAgo !== null &&
               allAuditPlanSummary[index]?.twoYearsAgo !== null &&
               allAuditPlanSummary[index]?.lastYear !== null &&
-              (Number(item?.initiatorTLEB) === Number(user[0]?.userId?.id) ||
+              (Number(item?.initiatorTLEB) ===
+                Number(user[0]?.userId?.employeeid?.id) ||
                 user[0]?.userId?.employeeid?.userHierarchy === "IAH") && (
                 <div className="mt-3">
                   <div className="justify-content-end text-end">

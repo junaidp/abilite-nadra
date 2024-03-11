@@ -11,6 +11,28 @@ body {
   overflow-x: hidden;
 }
 
+.css-1rgmeur {
+  font-family: "Poppins", sans-serif !important;
+}
+.css-17gq4vl.MuiSelect-select{
+  font-family: "Poppins", sans-serif !important;
+}
+.css-qiwgdb.css-qiwgdb.css-qiwgdb{
+  font-family: "Poppins", sans-serif !important;
+}
+.css-14x1nlk{
+  font-family: "Poppins", sans-serif !important;
+}
+.css-1ald77x.Mui-focused{
+  font-family: "Poppins", sans-serif !important;
+}
+.css-p0rm37{
+  font-family: "Poppins", sans-serif !important;
+}
+.css-1km1ehz{
+  font-family: "Poppins", sans-serif !important;
+}
+
 .h-40 {
   height: 40px !important;
 }
@@ -337,6 +359,10 @@ h6 {
   background-color: #0a7ea4;
   color: #fff !important;
   border-radius: 7px;
+}
+
+.main-color{
+color: #0a7ea4;
 }
 
 :root {

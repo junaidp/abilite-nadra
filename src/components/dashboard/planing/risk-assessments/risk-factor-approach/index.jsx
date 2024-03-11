@@ -249,6 +249,9 @@ const RiskFactorApproach = () => {
                               handleChangeSingleRiskAssessmentItem={
                                 handleChangeSingleRiskAssessmentItem
                               }
+                              performRiskAssessmentObject={
+                                performRiskAssessmentObject
+                              }
                             />
                           );
                         })}
@@ -319,6 +322,9 @@ const RiskFactorApproach = () => {
                               handleChangeCpListComments={
                                 handleChangeCpListComments
                               }
+                              performRiskAssessmentObject={
+                                performRiskAssessmentObject
+                              }
                             />
                           );
                         }
@@ -360,18 +366,20 @@ const RiskFactorApproach = () => {
                       />
                     </div>
                   </div>
-
-                  <div
-                    className={`btn btn-labeled btn-primary px-3 shadow float-end my-4 ${
-                      loading && "disabled"
-                    }`}
-                    onClick={handleSaveRiskAssessment}
-                  >
-                    <span className="btn-label me-2">
-                      <i className="fa fa-check-circle f-18"></i>
-                    </span>
-                    {loading ? "Loading.." : "Save"}
-                  </div>
+                  {performRiskAssessmentObject?.riskAssessments?.riskRating ===
+                    0 && (
+                    <div
+                      className={`btn btn-labeled btn-primary px-3 shadow float-end my-4 ${
+                        loading && "disabled"
+                      }`}
+                      onClick={handleSaveRiskAssessment}
+                    >
+                      <span className="btn-label me-2">
+                        <i className="fa fa-check-circle f-18"></i>
+                      </span>
+                      {loading ? "Loading.." : "Save"}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

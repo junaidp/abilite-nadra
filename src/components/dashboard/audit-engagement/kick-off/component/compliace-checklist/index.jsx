@@ -147,32 +147,36 @@ const ComplianceCheckList = ({
         data-bs-parent="#accordionFlushExample"
       >
         <div className="accordion-body">
-          <div className="row">
-            <div className="mx-2 mb-2 col-lg-3">
-              <Button
-                component="label"
-                role={undefined}
-                variant="contained"
-                tabIndex={-1}
-                startIcon={<CloudUploadIcon />}
-                ref={fileInputRef}
-                onChange={handleFileChange}
-              >
-                File
-                <VisuallyHiddenInput type="file" />
-              </Button>
-              <Button
-                component="label"
-                className="mx-2"
-                onClick={handleFileUpdate}
-              >
-                Update File
-              </Button>
-            </div>
-          </div>
-          <p className="mx-2">
-            {selectedFile?.name ? selectedFile?.name : "Select file"}
-          </p>
+          {currentAuditEngagement?.auditStepChecklistList?.length !== 0 && (
+            <>
+              <div className="row">
+                <div className="mx-2 mb-2 col-lg-3">
+                  <Button
+                    component="label"
+                    role={undefined}
+                    variant="contained"
+                    tabIndex={-1}
+                    startIcon={<CloudUploadIcon />}
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                  >
+                    File
+                    <VisuallyHiddenInput type="file" />
+                  </Button>
+                  <Button
+                    component="label"
+                    className="mx-2"
+                    onClick={handleFileUpdate}
+                  >
+                    Update File
+                  </Button>
+                </div>
+              </div>
+              <p className="mx-2">
+                {selectedFile?.name ? selectedFile?.name : "Select file"}
+              </p>
+            </>
+          )}
 
           <div className="container">
             <div className="row">
@@ -191,32 +195,39 @@ const ComplianceCheckList = ({
                       </tr>
                     </thead>
                     <tbody>
-                      {currentAuditEngagement?.auditStepChecklistList?.map(
-                        (mainItem, index) => {
-                          return (
-                            <TableRow
-                              key={index}
-                              mainItem={mainItem}
-                              setComplianceCheckListMainId={
-                                setComplianceCheckListMainId
-                              }
-                              setShowComplianceCheckListDialog={
-                                setShowComplianceCheckListDialog
-                              }
-                              checkStaus={checkStaus}
-                              setCurrentButtonId={setCurrentButtonId}
-                              downloadLoading={downloadLoading}
-                              downloadFileId={downloadFileId}
-                              user={user}
-                              loading={loading}
-                              currentButtonId={currentButtonId}
-                              handleSubmit={handleSubmit}
-                              handleApprove={handleApprove}
-                              handleDownload={handleDownload}
-                              currentAuditEngagement={currentAuditEngagement}
-                            />
-                          );
-                        }
+                      {currentAuditEngagement?.auditStepChecklistList
+                        ?.length === 0 ? (
+                        <tr>
+                          <td>No data to show</td>
+                        </tr>
+                      ) : (
+                        currentAuditEngagement?.auditStepChecklistList?.map(
+                          (mainItem, index) => {
+                            return (
+                              <TableRow
+                                key={index}
+                                mainItem={mainItem}
+                                setComplianceCheckListMainId={
+                                  setComplianceCheckListMainId
+                                }
+                                setShowComplianceCheckListDialog={
+                                  setShowComplianceCheckListDialog
+                                }
+                                checkStaus={checkStaus}
+                                setCurrentButtonId={setCurrentButtonId}
+                                downloadLoading={downloadLoading}
+                                downloadFileId={downloadFileId}
+                                user={user}
+                                loading={loading}
+                                currentButtonId={currentButtonId}
+                                handleSubmit={handleSubmit}
+                                handleApprove={handleApprove}
+                                handleDownload={handleDownload}
+                                currentAuditEngagement={currentAuditEngagement}
+                              />
+                            );
+                          }
+                        )
                       )}
                     </tbody>
                   </table>

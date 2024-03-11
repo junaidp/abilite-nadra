@@ -31,7 +31,7 @@ const JobScheduling = () => {
         )
       );
     }
-  }, [user, year,company]);
+  }, [user, year, company]);
 
   return (
     <div>
@@ -106,7 +106,7 @@ const JobScheduling = () => {
                         ?.toLowerCase()
                         .includes(searchValue?.toLowerCase())
                     )
-                    ?.slice((page - 1) * 5, page * 5)
+                    ?.slice((page - 1) * 10, page * 10)
                     ?.map((item, index) => {
                       return (
                         <tr className="h-40" key={index}>
@@ -137,7 +137,7 @@ const JobScheduling = () => {
           </div>
         </div>
         <Pagination
-          count={Math.ceil(allJobScheduling?.length / 5)}
+          count={Math.ceil(allJobScheduling?.length / 10)}
           page={page}
           onChange={handleChange}
         />

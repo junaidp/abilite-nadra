@@ -52,7 +52,7 @@ const AuditableUnits = () => {
     if (companyId) {
       dispatch(setupGetAllAuditableUnits(companyId));
     }
-  }, [user,company]);
+  }, [user, company]);
 
   return (
     <div>
@@ -99,7 +99,7 @@ const AuditableUnits = () => {
                     <p>No data to show!</p>
                   ) : (
                     allAuditableUnits
-                      ?.slice((page - 1) * 5, page * 5)
+                      ?.slice((page - 1) * 10, page * 10)
                       ?.map((item, index) => {
                         return (
                           <AuditableUnitRow
@@ -124,7 +124,7 @@ const AuditableUnits = () => {
                 </div>
               </div>
               <Pagination
-                count={Math.ceil(allAuditableUnits?.length / 5)}
+                count={Math.ceil(allAuditableUnits?.length / 10)}
                 page={page}
                 onChange={handleChange}
               />

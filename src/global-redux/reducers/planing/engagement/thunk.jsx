@@ -131,24 +131,6 @@ export const saveMapProcessBusinessObjective = async (data, thunkAPI) => {
   }
 };
 
-export const getSingleCheckListObjective = async (data, thunkAPI) => {
-  try {
-    const { user } = thunkAPI.getState().auth;
-    let props = await axios.get(
-      `${baseUrl}/auditPlanningAndScheduling/engagments/checklistObjective/getByEngagementId?engagementId=${data}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user[0]?.token}`,
-        },
-      }
-    );
-    return props.data;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
-  }
-};
-
 export const getInitialSingleCheckListObjective = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
@@ -185,7 +167,10 @@ export const getSingleSpecialProjectAuditObjective = async (data, thunkAPI) => {
   }
 };
 
-export const getInitialSingleSpecialProjectAuditObjective = async (data, thunkAPI) => {
+export const getInitialSingleSpecialProjectAuditObjective = async (
+  data,
+  thunkAPI
+) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.get(

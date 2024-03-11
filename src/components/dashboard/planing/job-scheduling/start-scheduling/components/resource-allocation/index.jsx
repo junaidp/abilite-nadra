@@ -3,7 +3,7 @@ import Select from "../Select";
 import MultiSelect from "../select/MultiSelect";
 import { useSelector, useDispatch } from "react-redux";
 import { setUpupdateJobSchedulingResourcesAllocation } from "../../../../../../../global-redux/reducers/planing/job-scheduling/slice";
-
+import TextField from "@mui/material/TextField";
 const ResourceAllocation = ({
   currentJobSchedulingObject,
   allUsers,
@@ -45,12 +45,13 @@ const ResourceAllocation = ({
           <div className="container overflow-x-auto">
             <div className="row mb-3">
               <div className="col-lg-6">
-                <Select
+                {/* <Select
                   label="Head Of Internal Audit"
                   value={
                     currentJobSchedulingObject?.resourceAllocation
                       ?.headOfInternalAudit?.name || ""
                   }
+                  disabled={true}
                   setCurrentJobScheduling={setCurrentJobScheduling}
                   name="headOfInternalAudit"
                   list={allUsers
@@ -59,6 +60,17 @@ const ResourceAllocation = ({
                     )
                     ?.map((all) => all?.name)}
                   allUsers={allUsers}
+                /> */}
+                <TextField
+                  id="filled-basic"
+                  label="Head Of Internal Audit"
+                  variant="filled"
+                  value={
+                    currentJobSchedulingObject?.resourceAllocation
+                      ?.headOfInternalAudit?.name || ""
+                  }
+                  disabled
+                  className="w-100"
                 />
               </div>
               <div className="col-lg-6">

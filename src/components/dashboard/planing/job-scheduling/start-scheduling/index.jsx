@@ -189,16 +189,16 @@ const StartScheduling = () => {
     let allSubLocations = locationArray.reduce((acc, item) => {
       return acc.concat(item.subLocations);
     }, []);
-    setCurrentJobScheduling((pre) => {
-      return {
-        ...pre,
-        subLocation: allSubLocations
-          .filter((item) =>
-            currentJobSchedulingObject?.subLocation?.includes(item?.description)
-          )
-          ?.map((item) => item?.description),
-      };
-    });
+    // setCurrentJobScheduling((pre) => {
+    //   return {
+    //     ...pre,
+    //     subLocation: allSubLocations
+    //       .filter((item) =>
+    //         currentJobSchedulingObject?.subLocation?.includes(item?.description)
+    //       )
+    //       ?.map((item) => item?.description),
+    //   };
+    // });
     setAllSubLocations(allSubLocations);
   }, [currentJobSchedulingObject?.locationList]);
 
@@ -306,6 +306,7 @@ const StartScheduling = () => {
                   handleChangeJobSchedulingCheckFields={
                     handleChangeJobSchedulingCheckFields
                   }
+                  setCurrentJobScheduling={setCurrentJobScheduling}
                   handleChangeJobSchedulingStringTextFields={
                     handleChangeJobSchedulingStringTextFields
                   }

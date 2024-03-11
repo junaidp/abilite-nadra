@@ -7,7 +7,6 @@ import {
   updateBusinessObjective,
   saveMapProcessBusinessObjective,
   getInitialSingleCheckListObjective,
-  getSingleCheckListObjective,
   getInitialSingleSpecialProjectAuditObjective,
   getSingleSpecialProjectAuditObjective,
   updateBusinessMinuteMeeting,
@@ -74,12 +73,7 @@ export const setupSaveMapProcessBusinessObjective = createAsyncThunk(
   }
 );
 
-export const setupGetSingleCheckListObjective = createAsyncThunk(
-  "engagement/getSingleCheckListObjective",
-  async (data, thunkAPI) => {
-    return getSingleCheckListObjective(data, thunkAPI);
-  }
-);
+
 
 export const setupGetInitialSingleCheckListObjective = createAsyncThunk(
   "engagement/getInitialSingleCheckListObjective",
@@ -305,33 +299,7 @@ export const slice = createSlice({
         }
       );
 
-    // Get Single CheckList Objective
-    builder
-      .addCase(setupGetSingleCheckListObjective.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(
-        setupGetSingleCheckListObjective.fulfilled,
-        (state, { payload }) => {
-          state.loading = false;
-          state.planingEngagementSingleObject = payload?.data || [
-            {
-              error: "Not Found",
-            },
-          ];
-        }
-      )
-      .addCase(
-        setupGetSingleCheckListObjective.rejected,
-        (state, { payload }) => {
-          state.loading = false;
-          if (payload?.response?.data?.message) {
-            toast.error(payload?.response?.data?.message);
-          } else {
-            toast.error("An Error has occurred");
-          }
-        }
-      );
+  
     // Get Initial Single CheckList Objective
     builder
       .addCase(setupGetInitialSingleCheckListObjective.pending, (state) => {
