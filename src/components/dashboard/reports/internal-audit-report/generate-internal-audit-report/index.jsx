@@ -5,6 +5,8 @@ import {
   setupGetAllJobsForInternalAuditReport,
   setupCreateInternalAuditReportObject,
   handleResetData,
+  setupSaveInternalAuditReport,
+  resetInternalAuditReportAddSuccess,
 } from "../../../../../global-redux/reducers/reports/internal-audit-report/slice";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -19,8 +21,14 @@ const GenerateInternalAuditReport = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state?.auth);
   const { company, year } = useSelector((state) => state?.common);
-  const { jobsForInternalAuditReports, internalAuditReportObject, loading } =
-    useSelector((state) => state?.internalAuditReports);
+  const {
+    jobsForInternalAuditReports,
+    internalAuditReportObject,
+    loading,
+    internalAuditReportAddSuccess,
+    addReportLoading,
+  } = useSelector((state) => state?.internalAuditReports);
+  const [reportObject, setReportObject] = React.useState({});
   const [jobForInternalAuditReportId, setJobForInternalAuditReportId] =
     React.useState("");
 
@@ -43,11 +51,70 @@ const GenerateInternalAuditReport = () => {
     }
   }
 
+  function handleChangeReportObject(event) {
+    setReportObject((pre) => {
+      return {
+        ...pre,
+        [event?.target?.name]: event?.target?.value,
+      };
+    });
+  }
+  function handleChangeSummaryOfKeyFinding(event, id) {
+    setReportObject((pre) => {
+      return {
+        ...pre,
+        keyFindingsList: pre?.keyFindingsList?.map((keyObject) =>
+          Number(keyObject?.id) === Number(id)
+            ? { ...keyObject, summaryOfKeyFinding: event?.target?.value }
+            : keyObject
+        ),
+      };
+    });
+  }
+
+  function handleChangeExcutiveSummary(value) {
+    setReportObject((pre) => {
+      return {
+        ...pre,
+        executiveSummary: value,
+      };
+    });
+  }
+
+  function handleChangeAuditPurpose(value) {
+    setReportObject((pre) => {
+      return {
+        ...pre,
+        auditPurpose: value,
+      };
+    });
+  }
+
+  function handleSaveInternalAuditReport() {
+    if (!loading) {
+      dispatch(setupSaveInternalAuditReport(reportObject));
+    }
+  }
+
+  React.useEffect(() => {
+    if (internalAuditReportAddSuccess) {
+      dispatch(
+        setupCreateInternalAuditReportObject(
+          `?reportingAndFollowUpId=${Number(jobForInternalAuditReportId)}`
+        )
+      );
+      dispatch(resetInternalAuditReportAddSuccess());
+    }
+  }, [internalAuditReportAddSuccess]);
+
   React.useEffect(() => {
     const companyId = user[0]?.company?.find(
       (item) => item?.companyName === company
     )?.id;
-    if (companyId) {
+    let isNull =
+      Object.keys(internalAuditReportObject).length === 0 &&
+      internalAuditReportObject.constructor === Object;
+    if (companyId && isNull) {
       dispatch(
         setupGetAllJobsForInternalAuditReport(
           `?companyId=${companyId}&currentYear=${Number(year)}`
@@ -58,6 +125,15 @@ const GenerateInternalAuditReport = () => {
       dispatch(handleResetData());
     };
   }, [user, year, company]);
+
+  React.useEffect(() => {
+    let isNotNull =
+      Object.keys(internalAuditReportObject).length !== 0 &&
+      internalAuditReportObject.constructor === Object;
+    if (isNotNull) {
+      setReportObject(internalAuditReportObject);
+    }
+  }, [internalAuditReportObject]);
 
   return (
     <div>
@@ -77,7 +153,7 @@ const GenerateInternalAuditReport = () => {
                   label="Reporting And Follow Up"
                   onChange={handleChange}
                 >
-                  <MenuItem vlaue="">Select One</MenuItem>
+                  <MenuItem value="">Select One</MenuItem>
                   {jobsForInternalAuditReports?.map((item, index) => {
                     return (
                       <MenuItem value={item?.id} key={index}>
@@ -109,7 +185,13 @@ const GenerateInternalAuditReport = () => {
         Object.keys(internalAuditReportObject).length !== 0 &&
         internalAuditReportObject.constructor === Object && (
           <InternalAuditReportBody
-            internalAuditReportObject={internalAuditReportObject}
+            reportObject={reportObject}
+            handleChangeReportObject={handleChangeReportObject}
+            handleChangeExcutiveSummary={handleChangeExcutiveSummary}
+            handleChangeAuditPurpose={handleChangeAuditPurpose}
+            handleChangeSummaryOfKeyFinding={handleChangeSummaryOfKeyFinding}
+            handleSaveInternalAuditReport={handleSaveInternalAuditReport}
+            addReportLoading={addReportLoading}
           />
         )
       )}

@@ -1,16 +1,19 @@
-import React, { useState, useRef, useMemo } from "react";
+import React, { useRef, useMemo } from "react";
 import JoditEditor from "jodit-react";
 
-const RichTextEditor = () => {
+const RichTextEditor = ({
+  handleChangeExcutiveSummary,
+  initialValue,
+  handleChangeAuditPurpose,
+}) => {
   const editor = useRef(null);
   const [content, setContent] = React.useState("");
 
   const config = useMemo(
     () => ({
       uploader: {
-        insertImageAsBase64URI: true, // Converts the image to base64 and embeds it
+        insertImageAsBase64URI: true,
       },
-      // askBeforePasteHTML: false,
       controls: {
         font: {
           list: {
@@ -21,6 +24,7 @@ const RichTextEditor = () => {
       },
       toolbarAdaptive: false,
       spellcheck: true,
+
       buttons: [
         "bold",
         "|",
@@ -44,7 +48,6 @@ const RichTextEditor = () => {
         "|",
         "paragraph",
         "|",
-        "fullsize",
       ],
 
       buttonsXS: [
@@ -70,7 +73,6 @@ const RichTextEditor = () => {
         "|",
         "paragraph",
         "|",
-        "fullsize",
       ],
 
       events: {},
@@ -79,8 +81,20 @@ const RichTextEditor = () => {
     []
   );
 
+  React.useEffect(() => {
+    if (initialValue !== null && initialValue !== "") {
+      setContent(initialValue);
+    }
+  }, [initialValue]);
+
   const handleEditorChange = (newContent) => {
     setContent(newContent);
+    if (handleChangeExcutiveSummary) {
+      handleChangeExcutiveSummary(newContent);
+    }
+    if (handleChangeAuditPurpose) {
+      handleChangeAuditPurpose(newContent);
+    }
   };
 
   return (

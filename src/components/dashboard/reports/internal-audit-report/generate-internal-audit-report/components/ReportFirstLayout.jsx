@@ -1,13 +1,13 @@
 import React from "react";
 import moment from "moment";
 
-const ReportFirstLayout = ({ internalAuditReportObject }) => {
+const ReportFirstLayout = ({ reportObject ,handleChangeReportObject}) => {
   return (
     <div>
       <div className="row  ">
         <div className="col-md-12">
           <div className="sub-heading ps-2  fw-bold">
-            {internalAuditReportObject?.jobName}
+            {reportObject?.jobName}
           </div>
           <hr />
         </div>
@@ -21,10 +21,11 @@ const ReportFirstLayout = ({ internalAuditReportObject }) => {
                 className="form-control w-100"
                 placeholder="Select Date"
                 type="date"
-                disabled
-                value={moment(internalAuditReportObject?.reportDate).format(
+                name="reportDate"
+                value={moment(reportObject?.reportDate).format(
                   "YYYY-MM-DD"
                 )}
+                onChange={(event)=>handleChangeReportObject(event)}
               />
             </div>
           </div>
@@ -40,7 +41,7 @@ const ReportFirstLayout = ({ internalAuditReportObject }) => {
                 type="date"
                 disabled
                 value={moment(
-                  internalAuditReportObject?.plannedStartDate
+                  reportObject?.plannedStartDate
                 ).format("YYYY-MM-DD")}
               />
             </div>
@@ -53,7 +54,7 @@ const ReportFirstLayout = ({ internalAuditReportObject }) => {
                 placeholder="Select Date"
                 type="date"
                 disabled
-                value={moment(internalAuditReportObject?.plannedEndDate).format(
+                value={moment(reportObject?.plannedEndDate).format(
                   "YYYY-MM-DD"
                 )}
               />
@@ -76,7 +77,7 @@ const ReportFirstLayout = ({ internalAuditReportObject }) => {
                 placeholder="Enter planned Hours"
                 type="text"
                 disabled
-                value={internalAuditReportObject?.plannedHours}
+                value={reportObject?.plannedHours}
               />
             </div>
           </div>
@@ -90,6 +91,7 @@ const ReportFirstLayout = ({ internalAuditReportObject }) => {
                 className="form-control w-100"
                 placeholder="Enter Risk Approach"
                 type="text"
+                disabled
               />
             </div>
           </div>
@@ -100,6 +102,7 @@ const ReportFirstLayout = ({ internalAuditReportObject }) => {
                 className="form-control w-100"
                 placeholder="Enter Risk Rating"
                 type="text"
+                disabled
               />
             </div>
           </div>
@@ -113,6 +116,7 @@ const ReportFirstLayout = ({ internalAuditReportObject }) => {
                 className="form-control w-100"
                 placeholder="Enter Department/Division/ Location"
                 type="text"
+                disabled
               />
             </div>
           </div>
@@ -125,6 +129,7 @@ const ReportFirstLayout = ({ internalAuditReportObject }) => {
                 className="form-control w-100"
                 placeholder="Enter Sub-Department/Sub-Division/Sub-Location"
                 type="text"
+                disabled
               />
             </div>
           </div>

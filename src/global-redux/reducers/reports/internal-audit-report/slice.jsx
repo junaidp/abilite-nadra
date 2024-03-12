@@ -7,6 +7,7 @@ import {
   getSingleInternalAuditReport,
   getAllJobsForInternalAuditReport,
   createInternalAuditReportObject,
+  createExtraFields,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -17,6 +18,8 @@ const initialState = {
   internalAuditReportObject: {},
   singleInternalAuditReport: {},
   internalAuditReportAddSuccess: false,
+  addReportLoading: false,
+  createExtraFieldsLoading: false,
 };
 
 export const setupGetAllInternalAuditReports = createAsyncThunk(
@@ -67,6 +70,13 @@ export const setupCreateInternalAuditReportObject = createAsyncThunk(
   }
 );
 
+export const setupCreateExtraFields = createAsyncThunk(
+  "internalAuditReport/createExtraFields",
+  async (data, thunkAPI) => {
+    return createExtraFields(data, thunkAPI);
+  }
+);
+
 export const slice = createSlice({
   name: "internalAuditReport",
   initialState,
@@ -109,15 +119,15 @@ export const slice = createSlice({
     // Add Internal Audit Report
     builder
       .addCase(setupSaveInternalAuditReport.pending, (state) => {
-        state.loading = true;
+        state.addReportLoading = true;
       })
       .addCase(setupSaveInternalAuditReport.fulfilled, (state) => {
-        state.loading = false;
+        state.addReportLoading = false;
         state.internalAuditReportAddSuccess = true;
         toast.success("Internal Audit Report Added Successfully");
       })
       .addCase(setupSaveInternalAuditReport.rejected, (state, action) => {
-        state.loading = false;
+        state.addReportLoading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);
         } else {
@@ -232,6 +242,24 @@ export const slice = createSlice({
           }
         }
       );
+    // Create Extra Fields
+    builder
+      .addCase(setupCreateExtraFields.pending, (state) => {
+        state.createExtraFieldsLoading = true;
+      })
+      .addCase(setupCreateExtraFields.fulfilled, (state) => {
+        state.createExtraFieldsLoading = false;
+        state.internalAuditReportAddSuccess = true;
+        toast.success("Extra Field Added Successfully");
+      })
+      .addCase(setupCreateExtraFields.rejected, (state, action) => {
+        state.createExtraFieldsLoading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
   },
 });
 
