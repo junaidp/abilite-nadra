@@ -50,26 +50,30 @@ const StartScheduling = () => {
 
   function handleChangeNumberTextField(event, section) {
     if (section === "resourcesRequired") {
-      setCurrentJobScheduling((pre) => {
-        return {
-          ...pre,
-          numberOfResourcesRequired: {
-            ...pre?.numberOfResourcesRequired,
-            [event?.target?.name]: Number(event?.target?.value),
-          },
-        };
-      });
+      if (/^\d*\.?\d*$/.test(event?.target?.value)) {
+        setCurrentJobScheduling((pre) => {
+          return {
+            ...pre,
+            numberOfResourcesRequired: {
+              ...pre?.numberOfResourcesRequired,
+              [event?.target?.name]: Number(event?.target?.value),
+            },
+          };
+        });
+      }
     }
     if (section === "timeAllocation") {
-      setCurrentJobScheduling((pre) => {
-        return {
-          ...pre,
-          timeAndDateAllocation: {
-            ...pre?.timeAndDateAllocation,
-            [event?.target?.name]: Number(event?.target?.value),
-          },
-        };
-      });
+      if (/^\d*\.?\d*$/.test(event?.target?.value)) {
+        setCurrentJobScheduling((pre) => {
+          return {
+            ...pre,
+            timeAndDateAllocation: {
+              ...pre?.timeAndDateAllocation,
+              [event?.target?.name]: Number(event?.target?.value),
+            },
+          };
+        });
+      }
     }
   }
 
@@ -286,6 +290,12 @@ const StartScheduling = () => {
                   onChange={(event) =>
                     handleChangeJobSchedulingCheckFields(event, "seprateJob")
                   }
+                  disabled={
+                    currentJobSchedulingObject?.jobPrioritization?.auditableUnit
+                      ?.engagement?.natureThrough === "Compliance Checklist"
+                      ? true
+                      : false
+                  }
                 />
                 <label className="form-check-label" htmlFor="flexCheckDefault">
                   Seprate job
@@ -306,7 +316,6 @@ const StartScheduling = () => {
                   handleChangeJobSchedulingCheckFields={
                     handleChangeJobSchedulingCheckFields
                   }
-                  setCurrentJobScheduling={setCurrentJobScheduling}
                   handleChangeJobSchedulingStringTextFields={
                     handleChangeJobSchedulingStringTextFields
                   }

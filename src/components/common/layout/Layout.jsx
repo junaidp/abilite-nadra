@@ -26,7 +26,7 @@ const Layout = () => {
         {user[0]?.userId?.role[0]?.name === "USER" && <Sidebar />}
         {user[0]?.userId?.role[0]?.name === "ADMIN" && (
           <div className="p-4 w-100">
-            <h1 className="text-center main-color">Welcome Admin</h1>
+            <h2 className="text-center main-color">Welcome {user[0]?.name}</h2>
             <Settings />
           </div>
         )}

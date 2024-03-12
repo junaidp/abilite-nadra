@@ -7,15 +7,20 @@ const TimeAndDateAllocation = ({
   handleChangeJobSchedulingCheckFields,
   handleChangeJobSchedulingStringTextFields,
   handleChangeNumberTextField,
-  setCurrentJobScheduling,
 }) => {
   const dispatch = useDispatch();
+  const [fieldWorkManHours, setFieldWorkManHours] = React.useState(0);
+  const [totalWorkingManHours, setTotalWorkingManHours] = React.useState(0);
+  const [totalHours, setTotalHours] = React.useState(0);
   const { loading } = useSelector((state) => state?.planingJobScheduling);
   function handleSave() {
     if (!loading) {
       dispatch(
         setupUpdateJobSehedulingTimeAndDateAllocation({
           ...currentJobSchedulingObject?.timeAndDateAllocation,
+          fieldWorkManHours: fieldWorkManHours,
+          totalWorkingManHours: totalWorkingManHours,
+          totalHours: totalHours,
           repeatJob:
             currentJobSchedulingObject?.timeAndDateAllocation?.repeatJob ===
             null
@@ -43,28 +48,31 @@ const TimeAndDateAllocation = ({
       ) +
       Number(currentJobSchedulingObject?.numberOfResourcesRequired?.other) +
       Number(currentJobSchedulingObject?.numberOfResourcesRequired?.it);
-    let totalWeeks =
+    let totalWeeksHours =
       Number(
         currentJobSchedulingObject?.timeAndDateAllocation?.estimatedWeeks
       ) * 40;
-
-    setCurrentJobScheduling((pre) => {
-      return {
-        ...pre,
-        timeAndDateAllocation: {
-          ...pre?.timeAndDateAllocation,
-          fieldWorkManHours: totalResources * totalWeeks,
-          totalWorkingManHours:
-            totalResources * totalWeeks +
-            Number(pre?.timeAndDateAllocation?.internalAuditManagementHours),
-          totalHours:
-            8 * Number(pre?.timeAndDateAllocation?.travellingDays) +
-            totalResources * totalWeeks +
-            Number(pre?.timeAndDateAllocation?.internalAuditManagementHours),
-        },
-      };
-    });
+    setFieldWorkManHours(totalResources * totalWeeksHours);
+    setTotalWorkingManHours(
+      totalResources * totalWeeksHours +
+        Number(
+          currentJobSchedulingObject?.timeAndDateAllocation
+            ?.internalAuditManagementHours
+        )
+    );
+    setTotalHours(
+      Number(
+        currentJobSchedulingObject?.timeAndDateAllocation?.travellingDays
+      ) *
+        8 +
+        totalResources * totalWeeksHours +
+        Number(
+          currentJobSchedulingObject?.timeAndDateAllocation
+            ?.internalAuditManagementHours
+        )
+    );
   }, [currentJobSchedulingObject]);
+
   return (
     <div className="accordion-item">
       <h2 className="accordion-header">
@@ -112,10 +120,7 @@ const TimeAndDateAllocation = ({
                   id="lab"
                   placeholder=""
                   disabled
-                  value={
-                    currentJobSchedulingObject?.timeAndDateAllocation
-                      ?.fieldWorkManHours
-                  }
+                  value={fieldWorkManHours}
                   readOnly
                 />
               </div>
@@ -146,10 +151,7 @@ const TimeAndDateAllocation = ({
                   className="form-control"
                   id="l"
                   placeholder=""
-                  value={
-                    currentJobSchedulingObject?.timeAndDateAllocation
-                      ?.totalWorkingManHours
-                  }
+                  value={totalWorkingManHours}
                   readOnly
                   disabled
                 />
@@ -201,12 +203,7 @@ const TimeAndDateAllocation = ({
                   <span className="fw-bold label-text">
                     TOTAL HOURS INCLUSIVE OF TRAVELLING:
                   </span>
-                  <span className="float-end">
-                    {
-                      currentJobSchedulingObject?.timeAndDateAllocation
-                        ?.totalHours
-                    }
-                  </span>
+                  <span className="float-end">{totalHours}</span>
                 </p>
               </div>
             </div>

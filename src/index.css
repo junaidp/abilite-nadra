@@ -14,22 +14,54 @@ body {
 .css-1rgmeur {
   font-family: "Poppins", sans-serif !important;
 }
-.css-17gq4vl.MuiSelect-select{
+.css-17gq4vl.MuiSelect-select {
   font-family: "Poppins", sans-serif !important;
 }
-.css-qiwgdb.css-qiwgdb.css-qiwgdb{
+.css-1x5jdmq {
   font-family: "Poppins", sans-serif !important;
 }
-.css-14x1nlk{
+.fxt-template-layout31 .fxt-form-content .form-control {
+  font-size: 16px !important;
   font-family: "Poppins", sans-serif !important;
 }
-.css-1ald77x.Mui-focused{
+.css-e4w4as-MuiFormLabel-root-MuiInputLabel-root {
   font-family: "Poppins", sans-serif !important;
 }
-.css-p0rm37{
+.css-o943dk-MuiFormLabel-root-MuiInputLabel-root {
   font-family: "Poppins", sans-serif !important;
 }
-.css-1km1ehz{
+.css-10botns-MuiInputBase-input-MuiFilledInput-input {
+  font-family: "Poppins", sans-serif !important;
+}
+.css-yf8vq0-MuiSelect-nativeInput {
+  font-family: "Poppins", sans-serif !important;
+}
+.css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root {
+  font-family: "Poppins", sans-serif !important;
+}
+.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+  font-family: "Poppins", sans-serif !important;
+}
+.css-1jy569b-MuiFormLabel-root-MuiInputLabel-root.Mui-focused {
+  font-family: "Poppins", sans-serif !important;
+}
+.css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root {
+  font-family: "Poppins", sans-serif !important;
+}
+
+.css-qiwgdb.css-qiwgdb.css-qiwgdb {
+  font-family: "Poppins", sans-serif !important;
+}
+.css-14x1nlk {
+  font-family: "Poppins", sans-serif !important;
+}
+.css-1ald77x.Mui-focused {
+  font-family: "Poppins", sans-serif !important;
+}
+.css-p0rm37 {
+  font-family: "Poppins", sans-serif !important;
+}
+.css-1km1ehz {
   font-family: "Poppins", sans-serif !important;
 }
 
@@ -156,7 +188,7 @@ body {
 .width-50 {
   width: 50px !important;
 }
-.min-h-400{
+.min-h-400 {
   min-height: 200px !important;
 }
 
@@ -267,13 +299,12 @@ body {
   color: #0a7386;
 }
 
-.css-z01bqi{
+.css-z01bqi {
   color: #0a7386 !important;
 }
 
-.css-sghohy-MuiButtonBase-root-MuiButton-root{
+.css-sghohy-MuiButtonBase-root-MuiButton-root {
   background-color: #0a7386 !important;
-
 }
 
 .form-control {
@@ -361,8 +392,8 @@ h6 {
   border-radius: 7px;
 }
 
-.main-color{
-color: #0a7ea4;
+.main-color {
+  color: #0a7ea4;
 }
 
 :root {
@@ -450,22 +481,21 @@ label {
   font-size: 11px;
   color: #666;
   font-weight: normal !important;
-  margin-top: 5px; /* Adjust as needed */
+  margin-top: 5px;
 }
 
-/* Additional styles for other elements */
 .label {
   font-weight: bold;
 }
 .job-name-column {
   width: 300px !important;
-  min-width: 300px; /* Ensures that the width does not go below 250px */
-  max-width: 300px; /* Ensures that the width does not go above 250px */
+  min-width: 300px;
+  max-width: 300px;
 }
 .dynamic-cls {
   width: 100px !important;
-  min-width: 100px; /* Ensures that the width does not go below 250px */
-  max-width: 100px; /* Ensures that the width does not go above 250px */
+  min-width: 100px;
+  max-width: 100px;
 }
 .link-underline-muted {
   color: #007bff;
@@ -500,43 +530,25 @@ label {
 li {
   cursor: pointer !important;
 }
-/* Targeting mat-form-field directly within your component's CSS */
+
 mat-form-field {
-  background: rgba(
-    255,
-    255,
-    255,
-    0.7
-  ); /* Semi-transparent white for glass effect */
-  border-radius: 4px; /* Rounded corners */
-  border: 1px solid rgba(255, 255, 255, 0.5); /* Light white border for a subtle glass edge */
-  padding: 5px; /* Padding around the input field */
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  padding: 5px;
 }
 
-/* Style for the input inside the mat-form-field */
 mat-form-field .mat-input-element {
-  border: none; /* Remove default borders */
-  background-color: transparent; /* Ensure the input background is transparent */
+  border: none;
+  background-color: transparent;
 }
 
-/* Style for the mat-form-field label */
 mat-form-field .mat-form-field-label {
-  color: rgba(
-    0,
-    0,
-    0,
-    0.6
-  ); /* Slightly dimmed label color for better contrast */
+  color: rgba(0, 0, 0, 0.6);
 }
 
-/* Style for the mat-form-field when it is focused */
 mat-form-field.mat-focused .mat-form-field-ripple {
-  background-color: rgba(
-    100,
-    100,
-    255,
-    0.5
-  ); /* Light blue ripple effect when focused */
+  background-color: rgba(100, 100, 255, 0.5);
 }
 
 .css-1t1j96h-MuiPaper-root-MuiDialog-paper {
@@ -578,11 +590,11 @@ element {
   overflow-x: hidden !important;
 }
 
-.link-wrap span i{
+.link-wrap span i {
   font-size: 20px !important;
   /* color: #0a7386 !important; */
 }
-.link-wrap-active span i{
+.link-wrap-active span i {
   font-size: 20px !important;
 }
 
@@ -595,13 +607,13 @@ element {
 .ql-toolbar.ql-snow + .ql-container.ql-snow {
   min-height: 70vh !important;
 }
-.color-white{
+.color-white {
   color: white !important;
 }
-.f-40{
+.f-40 {
   font-size: 40px !important;
 }
-.min-w-80{
+.min-w-80 {
   min-width: 80px !important;
 }
 
@@ -609,7 +621,7 @@ element {
   min-height: 30vh !important;
 }
 
-.application-main-color{
+.application-main-color {
   background-color: #0a7386 !important;
 }
 
@@ -649,7 +661,7 @@ span[aria-label="Insert Ordered List"] .jodit-toolbar-button__trigger {
   display: flex !important;
 }
 
-.css-18lrjg1-MuiCircularProgress-root{
+.css-18lrjg1-MuiCircularProgress-root {
   color: #0a7386 !important;
 }
 
@@ -676,27 +688,26 @@ span[aria-label="Insert Ordered List"] .jodit-toolbar-button__trigger {
 
 .jodit-container:not(.jodit_inline) .jodit-wysiwyg img {
   display: block !important;
-  /* margin: 0 auto !important; */
 }
 
-.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input{
+.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
   height: 2px !important;
 }
-.css-1x5jdmq{
+.css-1x5jdmq {
   height: 2px !important;
 }
 
 .dashboard-modal {
   position: fixed;
   z-index: 100;
-  padding-top: 100px; /* Location of the box */
+  padding-top: 100px;
   left: 0;
   top: 0px;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0, 0, 0); /* Fallback color */
-  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
   min-height: 100vh;
   overflow-x: hidden;
 }

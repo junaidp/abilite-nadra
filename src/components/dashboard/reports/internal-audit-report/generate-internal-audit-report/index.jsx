@@ -13,6 +13,7 @@ import Select from "@mui/material/Select";
 import InternalAuditReportBody from "./components/InternalAuditReportBody";
 import Header from "./components/Header";
 import { toast } from "react-toastify";
+import { CircularProgress } from "@mui/material";
 
 const GenerateInternalAuditReport = () => {
   const dispatch = useDispatch();
@@ -102,10 +103,16 @@ const GenerateInternalAuditReport = () => {
             </div>
           </div>
         )}
-      {Object.keys(internalAuditReportObject).length !== 0 &&
+      {loading ? (
+        <CircularProgress />
+      ) : (
+        Object.keys(internalAuditReportObject).length !== 0 &&
         internalAuditReportObject.constructor === Object && (
-          <InternalAuditReportBody />
-        )}
+          <InternalAuditReportBody
+            internalAuditReportObject={internalAuditReportObject}
+          />
+        )
+      )}
     </div>
   );
 };
