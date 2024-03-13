@@ -4,8 +4,9 @@ import { baseUrl } from "../../../../constants/index";
 export const getAllInternalAuditReports = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
-    let props = await axios.get(
+    let props = await axios.post(
       `${baseUrl}/internalauditreport/report/getAll${data}`,
+      null,
       {
         headers: {
           Authorization: `Bearer ${user[0]?.token}`,
@@ -54,7 +55,7 @@ export const deleteInternalAuditReport = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.delete(
-      `${baseUrl}/internalauditreport/delete${data}`,
+      `${baseUrl}/internalauditreport/delete/${data}`,
       {
         headers: {
           Authorization: `Bearer ${user[0]?.token}`,
@@ -70,8 +71,9 @@ export const deleteInternalAuditReport = async (data, thunkAPI) => {
 export const getSingleInternalAuditReport = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
-    let props = await axios.get(
+    let props = await axios.post(
       `${baseUrl}/internalauditreport/report/detail${data}`,
+      null,
       {
         headers: {
           Authorization: `Bearer ${user[0]?.token}`,
@@ -125,6 +127,23 @@ export const createExtraFields = async (data, thunkAPI) => {
     let props = await axios.post(
       `${baseUrl}/internalauditreport/report/createExtraField${data}`,
       null,
+      {
+        headers: {
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+export const updateExtraField = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.post(
+      `${baseUrl}/internalauditreport/report/updatExtraField`,
+      data,
       {
         headers: {
           Authorization: `Bearer ${user[0]?.token}`,

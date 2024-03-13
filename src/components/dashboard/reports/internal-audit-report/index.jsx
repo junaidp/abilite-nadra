@@ -1,11 +1,78 @@
 import React from "react";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  setupGetAllInternalAuditReports,
+  resetInternalAuditReportAddSuccess,
+} from "../../../../global-redux/reducers/reports/internal-audit-report/slice";
+import { CircularProgress } from "@mui/material";
+import Pagination from "@mui/material/Pagination";
+import moment from "moment";
+import DeleteInternalAuditReportDialog from "../../../modals/delete-internal-audit-report-dialog";
 
 const InternalAuditReport = () => {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { company, year } = useSelector((state) => state?.common);
+  const { user } = useSelector((state) => state?.auth);
+  const [page, setPage] = React.useState(1);
+  const { allInternalAuditReports, loading, internalAuditReportAddSuccess } =
+    useSelector((state) => state?.internalAuditReports);
+  const [
+    showDeleteInternalAuditReportDialog,
+    setShowDeleteInternalAuditReportDialog,
+  ] = React.useState(false);
+  const [deleteInternalAuditReportId, setDeleteInternalAuditReportId] =
+    React.useState("");
+
+  const handleChange = (_, value) => {
+    setPage(value);
+  };
+
+  React.useEffect(() => {
+    if (internalAuditReportAddSuccess) {
+      const companyId = user[0]?.company?.find(
+        (item) => item?.companyName === company
+      )?.id;
+      if (companyId) {
+        dispatch(
+          setupGetAllInternalAuditReports(
+            `?companyId=${companyId}&Year=${Number(year)}`
+          )
+        );
+      }
+      dispatch(resetInternalAuditReportAddSuccess());
+    }
+  }, [internalAuditReportAddSuccess]);
+
+  React.useEffect(() => {
+    const companyId = user[0]?.company?.find(
+      (item) => item?.companyName === company
+    )?.id;
+    if (companyId) {
+      dispatch(
+        setupGetAllInternalAuditReports(
+          `?companyId=${companyId}&Year=${Number(year)}`
+        )
+      );
+    }
+  }, [user, company, year]);
+
   return (
     <div>
+      {showDeleteInternalAuditReportDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <DeleteInternalAuditReportDialog
+              setShowDeleteInternalAuditReportDialog={
+                setShowDeleteInternalAuditReportDialog
+              }
+              deleteInternalAuditReportId={deleteInternalAuditReportId}
+            />
+          </div>
+        </div>
+      )}
       <header className="section-header my-3 text-start d-flex align-items-center justify-content-between">
         <div className="mb-0 heading">Internal Audit Report</div>
         <div className="">
@@ -41,59 +108,67 @@ const InternalAuditReport = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry.
-                  </td>
-                  <td>12/7/2023</td>
-                  <td>AR</td>
-                  <td>FP</td>
-                  <td>Draft</td>
-                  <td>
-                    <i className="fa-eye fa f-18"></i>
-                    <i className="fa fa-edit  px-3 f-18"></i>
-
-                    <i className="fa fa-trash text-danger f-18"></i>
-                  </td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry.
-                  </td>
-                  <td>12/7/2023</td>
-                  <td>AR</td>
-                  <td>FP</td>
-                  <td>Finalized</td>
-                  <td>
-                    <i className="fa-eye fa f-18"></i>
-                    <i className="fa fa-edit  px-3 f-18"></i>
-
-                    <i className="fa fa-trash text-danger f-18"></i>
-                  </td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry.
-                  </td>
-                  <td>12/7/2023</td>
-                  <td>AR</td>
-                  <td>FP</td>
-                  <td>Approved</td>
-                  <td>
-                    <i className="fa-eye fa f-18"></i>
-                    <i className="fa fa-edit  px-3 f-18"></i>
-
-                    <i className="fa fa-trash text-danger f-18"></i>
-                  </td>
-                </tr>
+                {loading ? (
+                  <tr>
+                    <td className="w-300">
+                      <CircularProgress />
+                    </td>
+                  </tr>
+                ) : allInternalAuditReports?.length === 0 ||
+                  allInternalAuditReports[0]?.error === "Not Found" ? (
+                  <tr>
+                    <td className="w-300">Internal Audit Report Not Found</td>
+                  </tr>
+                ) : (
+                  allInternalAuditReports
+                    ?.slice((page - 1) * 10, page * 10)
+                    ?.map((item, index) => {
+                      return (
+                        <tr key={index}>
+                          <td>{item?.id}</td>
+                          <td>{item?.reportName || ""}</td>
+                          <td>
+                            {moment(item?.reportDate).format("DD-MM-YYYY")}
+                          </td>
+                          <td>{item?.preparedBy || ""}</td>
+                          <td>null</td>
+                          <td>Draft</td>
+                          <td>
+                            <i
+                              className="fa-eye fa f-18 cursor-pointer"
+                              onClick={() =>
+                                navigate(
+                                  `/audit/view-internal-audit-report?reportId=${item?.id}`
+                                )
+                              }
+                            ></i>
+                            <i
+                              className="fa fa-edit  px-3 f-18 cursor-pointer "
+                              onClick={() =>
+                                navigate(
+                                  `/audit/update-internal-audit-report?reportId=${item?.id}`
+                                )
+                              }
+                            ></i>
+                            <i
+                              className="fa fa-trash text-danger cursor-pointer f-18"
+                              onClick={() => {
+                                setDeleteInternalAuditReportId(item?.id);
+                                setShowDeleteInternalAuditReportDialog(true);
+                              }}
+                            ></i>
+                          </td>
+                        </tr>
+                      );
+                    })
+                )}
               </tbody>
             </table>
+            <Pagination
+              count={Math.ceil(allInternalAuditReports?.length / 10)}
+              page={page}
+              onChange={handleChange}
+            />
           </div>
         </div>
       </div>

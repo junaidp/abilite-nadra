@@ -8,6 +8,7 @@ import {
   getAllJobsForInternalAuditReport,
   createInternalAuditReportObject,
   createExtraFields,
+  updateExtraField,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -18,8 +19,10 @@ const initialState = {
   internalAuditReportObject: {},
   singleInternalAuditReport: {},
   internalAuditReportAddSuccess: false,
+  internalAuditReportExtraFieldsAddSuccess: false,
   addReportLoading: false,
   createExtraFieldsLoading: false,
+  internalAuditReportExtraFieldsObject: {},
 };
 
 export const setupGetAllInternalAuditReports = createAsyncThunk(
@@ -76,6 +79,12 @@ export const setupCreateExtraFields = createAsyncThunk(
     return createExtraFields(data, thunkAPI);
   }
 );
+export const setupUpdateExtraField = createAsyncThunk(
+  "internalAuditReport/updateExtraField",
+  async (data, thunkAPI) => {
+    return updateExtraField(data, thunkAPI);
+  }
+);
 
 export const slice = createSlice({
   name: "internalAuditReport",
@@ -84,13 +93,20 @@ export const slice = createSlice({
     resetInternalAuditReportAddSuccess: (state) => {
       state.internalAuditReportAddSuccess = false;
     },
+    resetInternalAuditReportExtraFieldsAddSuccess: (state) => {
+      state.internalAuditReportExtraFieldsAddSuccess = false;
+    },
     handleResetData: (state) => {
       (state.loading = false),
         (state.allInternalAuditReports = []),
         (state.jobsForInternalAuditReports = []),
         (state.internalAuditReportObject = {}),
         (state.singleInternalAuditReport = {}),
-        (state.internalAuditReportAddSuccess = false);
+        (state.internalAuditReportAddSuccess = false),
+        (state.internalAuditReportExtraFieldsAddSuccess = false),
+        (state.addReportLoading = false),
+        (state.createExtraFieldsLoading = false),
+        (state.internalAuditReportExtraFieldsObject = {});
     },
   },
   extraReducers: (builder) => {
@@ -247,9 +263,11 @@ export const slice = createSlice({
       .addCase(setupCreateExtraFields.pending, (state) => {
         state.createExtraFieldsLoading = true;
       })
-      .addCase(setupCreateExtraFields.fulfilled, (state) => {
+      .addCase(setupCreateExtraFields.fulfilled, (state, { payload }) => {
         state.createExtraFieldsLoading = false;
-        state.internalAuditReportAddSuccess = true;
+        state.internalAuditReportExtraFieldsAddSuccess = true;
+        state.internalAuditReportExtraFieldsObject =
+          payload?.data;
         toast.success("Extra Field Added Successfully");
       })
       .addCase(setupCreateExtraFields.rejected, (state, action) => {
@@ -260,10 +278,30 @@ export const slice = createSlice({
           toast.error("An Error has occurred");
         }
       });
+    // Create Extra Fields
+    builder
+      .addCase(setupUpdateExtraField.pending, (state) => {
+        state.createExtraFieldsLoading = true;
+      })
+      .addCase(setupUpdateExtraField.fulfilled, (state, { payload }) => {
+        state.createExtraFieldsLoading = false;
+        toast.success("Extra Field Updated Successfully");
+      })
+      .addCase(setupUpdateExtraField.rejected, (state, action) => {
+        state.createExtraFieldsLoading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
   },
 });
 
-export const { resetInternalAuditReportAddSuccess, handleResetData } =
-  slice.actions;
+export const {
+  resetInternalAuditReportAddSuccess,
+  handleResetData,
+  resetInternalAuditReportExtraFieldsAddSuccess,
+} = slice.actions;
 
 export default slice.reducer;

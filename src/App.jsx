@@ -40,6 +40,8 @@ import AuditParticularsPage from "./pages/dashboard/reporting-follow-up/reportin
 import FollowUpParticularsPage from "./pages/dashboard/reporting-follow-up/follow-up/follow-up-particulars/FollowUpParticulars";
 import AuditSettingsPage from "./pages/dashboard/audit-settings/AuditSettings";
 import InternalAuditReportPage from "./pages/dashboard/report/internal-audit-report/InternalAuditReport";
+import ViewInternalAuditReportPage from "./components/dashboard/reports/internal-audit-report/view-internal-audit-report/index";
+import UpdateInternalAuditReportPage from "./components/dashboard/reports/internal-audit-report/update-internal-audit-report/index";
 import Layout from "./components/common/layout/Layout";
 import GenerateInternalAuditReportPage from "./pages/dashboard/report/internal-audit-report/generate-internal-audit-report/GenerateInternalAuditReport";
 import { changeAuthUser } from "./global-redux/reducers/auth/slice";
@@ -197,6 +199,14 @@ const App = () => {
             <Route
               path="generate-internal-audit-report"
               element={<GenerateInternalAuditReportPage />}
+            />
+            <Route
+              path="view-internal-audit-report"
+              element={<ViewInternalAuditReportPage />}
+            />
+            <Route
+              path="update-internal-audit-report"
+              element={<UpdateInternalAuditReportPage />}
             />
 
             <Route

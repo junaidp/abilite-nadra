@@ -1,13 +1,13 @@
 import React from "react";
 import moment from "moment";
 
-const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
+const ReportFirstLayout = ({ singleInternalAuditReport }) => {
   return (
     <div>
       <div className="row  ">
         <div className="col-md-12">
           <div className="sub-heading ps-2  fw-bold">
-            {reportObject?.jobName}
+            {singleInternalAuditReport?.jobName || "No name provided"}
           </div>
           <hr />
         </div>
@@ -22,8 +22,11 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
                 placeholder="Select Date"
                 type="date"
                 name="reportDate"
-                value={moment(reportObject?.reportDate).format("YYYY-MM-DD")}
-                onChange={(event) => handleChangeReportObject(event)}
+                value={moment(singleInternalAuditReport?.reportDate).format(
+                  "YYYY-MM-DD"
+                )}
+                disabled
+                readOnly
               />
             </div>
           </div>
@@ -34,8 +37,9 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
                 className="form-control w-100"
                 placeholder="Job Name"
                 name="reportName"
-                value={reportObject?.reportName || ""}
-                onChange={(event) => handleChangeReportObject(event)}
+                value={singleInternalAuditReport?.reportName || ""}
+                disabled
+                readOnly
               />
             </div>
           </div>
@@ -50,9 +54,9 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
                 placeholder="Select Date"
                 type="date"
                 disabled
-                value={moment(reportObject?.plannedStartDate).format(
-                  "YYYY-MM-DD"
-                )}
+                value={moment(
+                  singleInternalAuditReport?.plannedStartDate
+                ).format("YYYY-MM-DD")}
               />
             </div>
           </div>
@@ -64,7 +68,7 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
                 placeholder="Select Date"
                 type="date"
                 disabled
-                value={moment(reportObject?.plannedEndDate).format(
+                value={moment(singleInternalAuditReport?.plannedEndDate).format(
                   "YYYY-MM-DD"
                 )}
               />
@@ -87,7 +91,7 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
                 placeholder="Enter planned Hours"
                 type="text"
                 disabled
-                value={reportObject?.plannedHours}
+                value={singleInternalAuditReport?.plannedHours}
               />
             </div>
           </div>
