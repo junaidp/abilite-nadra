@@ -67,9 +67,12 @@ const Location = ({ userHierarchy, userRole }) => {
   }
 
   React.useEffect(() => {
+    let companyId = user[0]?.company.find(
+      (all) => all?.companyName === company
+    )?.id;
     if (locationAddSuccess) {
       setLocationDescription("");
-      dispatch(setupGetAllLocations());
+      dispatch(setupGetAllLocations(`?companyId=${companyId}`));
       dispatch(resetLocationAddSuccess());
     }
   }, [locationAddSuccess]);

@@ -100,6 +100,7 @@ const InternalAuditReport = () => {
                 <tr>
                   <th className="w-80">Sr No.</th>
                   <th>Job Name</th>
+                  <th>Report Name</th>
                   <th>Report Date</th>
                   <th>Prepared By</th>
                   <th>Approved By</th>
@@ -126,6 +127,7 @@ const InternalAuditReport = () => {
                       return (
                         <tr key={index}>
                           <td>{item?.id}</td>
+                          <td>{item?.jobName || ""}</td>
                           <td>{item?.reportName || ""}</td>
                           <td>
                             {moment(item?.reportDate).format("DD-MM-YYYY")}

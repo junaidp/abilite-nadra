@@ -16,6 +16,18 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
         <div className="row mb-3">
           <div className="col-lg-6">
             <div>
+              <label className="me-3">Report Name:</label>
+              <input
+                className="form-control w-100"
+                placeholder="Job Name"
+                name="reportName"
+                value={reportObject?.reportName || ""}
+                onChange={(event) => handleChangeReportObject(event)}
+              />
+            </div>
+          </div>
+          <div className="col-lg-6">
+            <div>
               <label className="me-3">Report Date:</label>
               <input
                 className="form-control w-100"
@@ -23,18 +35,6 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
                 type="date"
                 name="reportDate"
                 value={moment(reportObject?.reportDate).format("YYYY-MM-DD")}
-                onChange={(event) => handleChangeReportObject(event)}
-              />
-            </div>
-          </div>
-          <div className="col-lg-6">
-            <div>
-              <label className="me-3">Report Name:</label>
-              <input
-                className="form-control w-100"
-                placeholder="Job Name"
-                name="reportName"
-                value={reportObject?.reportName || ""}
                 onChange={(event) => handleChangeReportObject(event)}
               />
             </div>

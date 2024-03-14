@@ -22,11 +22,14 @@ export const addLocation = async (data, thunkAPI) => {
 export const getAllLocations = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
-    let props = await axios.get(`${baseUrl}/configurations/location/getall`, {
-      headers: {
-        Authorization: `Bearer ${user[0]?.token}`,
-      },
-    });
+    let props = await axios.get(
+      `${baseUrl}/configurations/location/getall${data}`,
+      {
+        headers: {
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
     return props.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);

@@ -16,6 +16,19 @@ const ReportFirstLayout = ({ singleInternalAuditReport }) => {
         <div className="row mb-3">
           <div className="col-lg-6">
             <div>
+              <label className="me-3">Report Name:</label>
+              <input
+                className="form-control w-100"
+                placeholder="Job Name"
+                name="reportName"
+                value={singleInternalAuditReport?.reportName || ""}
+                disabled
+                readOnly
+              />
+            </div>
+          </div>
+          <div className="col-lg-6">
+            <div>
               <label className="me-3">Report Date:</label>
               <input
                 className="form-control w-100"
@@ -25,19 +38,6 @@ const ReportFirstLayout = ({ singleInternalAuditReport }) => {
                 value={moment(singleInternalAuditReport?.reportDate).format(
                   "YYYY-MM-DD"
                 )}
-                disabled
-                readOnly
-              />
-            </div>
-          </div>
-          <div className="col-lg-6">
-            <div>
-              <label className="me-3">Report Name:</label>
-              <input
-                className="form-control w-100"
-                placeholder="Job Name"
-                name="reportName"
-                value={singleInternalAuditReport?.reportName || ""}
                 disabled
                 readOnly
               />

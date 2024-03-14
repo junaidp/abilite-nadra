@@ -70,7 +70,7 @@ const AuditSettings = () => {
         dispatch(setupGetAllCompanies());
       }
       if (currentSettingOption === "location") {
-        dispatch(setupGetAllLocations());
+        dispatch(setupGetAllLocations(`?companyId=${companyId}`));
       }
       if (currentSettingOption === "cp-list") {
         dispatch(setupGetAllCPList(companyId));

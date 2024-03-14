@@ -12,7 +12,6 @@ import { useNavigate } from "react-router-dom";
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  setupGetAllJobsForInternalAuditReport,
   setupSaveInternalAuditReport,
   resetInternalAuditReportAddSuccess,
 } from "../../../../../global-redux/reducers/reports/internal-audit-report/slice";

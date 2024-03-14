@@ -203,6 +203,7 @@ const GenerateInternalAuditReport = () => {
           reportDate: pre?.reportDate,
           executiveSummary: pre?.executiveSummary,
           auditPurpose: pre?.auditPurpose,
+          annexure: pre?.annexure,
           keyFindingsList: pre?.keyFindingsList,
           reportingAndFollowUp: pre?.reportingAndFollowUp,
         };

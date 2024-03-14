@@ -16,6 +16,7 @@ import RichTextFields from "./components/RichTextElements";
 import KeyFindings from "./components/KeyFindings";
 import AuditExtraFields from "./components/AuditExtraFields";
 import Header from "./components/Header";
+import FollowUpItem from "./components/FollowUpItem";
 
 const ViewInternalAuditReport = () => {
   const dispatch = useDispatch();
@@ -70,6 +71,11 @@ const ViewInternalAuditReport = () => {
           <AuditExtraFields
             singleInternalAuditReport={singleInternalAuditReport}
           />
+          {singleInternalAuditReport?.reportingAndFollowUp?.reportingList?.map(
+            (item, index) => {
+              return <FollowUpItem key={index} item={item} />;
+            }
+          )}
         </div>
       )}
     </div>
