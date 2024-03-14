@@ -5,6 +5,7 @@ import { setupUpdateJobSchedulingNumberOfResourcesRequired } from "../../../../.
 const ResourcesRequired = ({
   currentJobSchedulingObject,
   handleChangeNumberTextField,
+  handleSaveMainJobScheduling,
 }) => {
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state?.planingJobScheduling);
@@ -16,6 +17,10 @@ const ResourcesRequired = ({
         )
       );
     }
+
+    setTimeout(() => {
+      handleSaveMainJobScheduling();
+    }, 2000);
   }
   return (
     <div className="accordion-item">

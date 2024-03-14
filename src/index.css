@@ -65,6 +65,18 @@ body {
   font-family: "Poppins", sans-serif !important;
 }
 
+.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
+  font-family: "Poppins", sans-serif !important;
+}
+.form-control {
+  font-family: "Poppins", sans-serif !important;
+  font-size: 15px !important;
+}
+
+.h-120 {
+  height: 120px !important;
+}
+
 .h-40 {
   height: 40px !important;
 }

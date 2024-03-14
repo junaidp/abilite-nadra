@@ -130,16 +130,18 @@ const RiskFactor = () => {
                 <thead className="bg-secondary text-white">
                   <tr>
                     <th className="w-80">Sr No.</th>
+                    <th className="w-80">Id</th>
                     <th>Risk Factor</th>
                     <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   {riskFactorList
-                    ?.slice((page - 1) * 5, page * 5)
+                    ?.slice((page - 1) * 15, page * 15)
                     ?.map((item, index) => {
                       return (
                         <tr key={index}>
+                          <td>{index + 1}</td>
                           <td>{item?.id}</td>
                           <td>
                             <textarea
@@ -171,7 +173,7 @@ const RiskFactor = () => {
               </table>
             )}
             <Pagination
-              count={Math.ceil(allRiskFactors?.length / 5)}
+              count={Math.ceil(allRiskFactors?.length / 15)}
               page={page}
               onChange={handleChange}
             />

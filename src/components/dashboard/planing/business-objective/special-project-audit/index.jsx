@@ -39,6 +39,7 @@ const SpecialProjectAudit = () => {
   } = useSelector((state) => state.planingEngagements);
   const { allLocations } = useSelector((state) => state.setttingsLocation);
   const { user } = useSelector((state) => state?.auth);
+  const { company } = useSelector((state) => state?.common);
   const [showObjectiveListDialog, setShowObjectiveListDialog] =
     React.useState(false);
   const [domain, setDomain] = React.useState("");
@@ -218,8 +219,11 @@ const SpecialProjectAudit = () => {
 
   React.useEffect(() => {
     if (user[0]?.token && engagementId) {
+      let companyId = user[0]?.company.find(
+        (all) => all?.companyName === company
+      )?.id;
       dispatch(setupGetInitialSingleSpecialProjectAuditObjective(engagementId));
-      dispatch(setupGetAllLocations());
+      dispatch(setupGetAllLocations(`?companyId=${companyId}`));
     }
   }, [engagementId, user]);
 

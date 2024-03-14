@@ -42,6 +42,7 @@ export const updateCheckListName = async (data, thunkAPI) => {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
       `${baseUrl}/configurations/checklist/updateChecklistName${data}`,
+      null,
       {
         headers: {
           "Content-Type": "application/json",
@@ -60,6 +61,7 @@ export const updateCheckListRemarks = async (data, thunkAPI) => {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
       `${baseUrl}/configurations/checklist/changeChecklistDefaultRemarks${data}`,
+      null,
       {
         headers: {
           "Content-Type": "application/json",

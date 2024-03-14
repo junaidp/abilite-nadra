@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 
 const initialState = {
   loading: false,
-  initialLoading:false,
+  initialLoading: false,
   allJobScheduling: [],
   jobSchedulingAddSuccess: false,
   singleJobSchedulingObject: {},
@@ -179,7 +179,6 @@ export const slice = createSlice({
         setupUpdateJobSehedulingTimeAndDateAllocation.fulfilled,
         (state, { payload }) => {
           state.loading = false;
-          state.jobSchedulingAddSuccess = true;
           toast.success("Time and date allocation updated successfully");
         }
       )
@@ -187,7 +186,6 @@ export const slice = createSlice({
         setupUpdateJobSehedulingTimeAndDateAllocation.rejected,
         (state, { payload }) => {
           state.loading = false;
-          state.jobSchedulingAddSuccess = false;
           if (payload?.response?.data?.message) {
             toast.error(payload?.response?.data?.message);
           } else {
@@ -207,7 +205,6 @@ export const slice = createSlice({
         setupUpdateJobSchedulingNumberOfResourcesRequired.fulfilled,
         (state, { payload }) => {
           state.loading = false;
-          state.jobSchedulingAddSuccess = true;
           toast.success("Resource required updated successfully");
         }
       )
@@ -215,7 +212,6 @@ export const slice = createSlice({
         setupUpdateJobSchedulingNumberOfResourcesRequired.rejected,
         (state, { payload }) => {
           state.loading = false;
-          state.jobSchedulingAddSuccess = false;
           if (payload?.response?.data?.message) {
             toast.error(payload?.response?.data?.message);
           } else {
@@ -232,7 +228,6 @@ export const slice = createSlice({
         setUpupdateJobSchedulingResourcesAllocation.fulfilled,
         (state, { payload }) => {
           state.loading = false;
-          state.jobSchedulingAddSuccess = true;
           toast.success("Resource allocation updated successfully");
         }
       )
@@ -240,7 +235,6 @@ export const slice = createSlice({
         setUpupdateJobSchedulingResourcesAllocation.rejected,
         (state, { payload }) => {
           state.loading = false;
-          state.jobSchedulingAddSuccess = false;
           if (payload?.response?.data?.message) {
             toast.error(payload?.response?.data?.message);
           } else {

@@ -7,10 +7,13 @@ import {
   resetCheckListId,
 } from "../../../global-redux/reducers/settings/check-list/slice";
 import { useSelector, useDispatch } from "react-redux";
+import RichTextEditor from "../../../components/common/rich-text/index";
+import { changeCommonRichTextFieldState } from "../../../global-redux/reducers/common/slice";
 
 const AddCheckListManagementDialog = ({ setCheckListManagementDialog }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
+  const { resetRichTextFieldState } = useSelector((state) => state.common);
   const { checkListAddSuccess, editLoading, checkListId } = useSelector(
     (state) => state.setttingsCheckList
   );
@@ -42,6 +45,10 @@ const AddCheckListManagementDialog = ({ setCheckListManagementDialog }) => {
     },
   });
 
+  function onContentChange(_, content) {
+    formik.resetForm({ values: { ...formik.values, observation: content } });
+  }
+
   function handleClose() {
     setCheckListManagementDialog(false);
     dispatch(resetCheckListId());
@@ -52,8 +59,17 @@ const AddCheckListManagementDialog = ({ setCheckListManagementDialog }) => {
     if (checkListAddSuccess) {
       formik.resetForm({ values: initialState });
       dispatch(resetAddCheckListSuccess());
+      dispatch(changeCommonRichTextFieldState(true));
     }
   }, [checkListAddSuccess]);
+
+  React.useEffect(() => {
+    if (resetRichTextFieldState === true) {
+      setTimeout(() => {
+        dispatch(changeCommonRichTextFieldState(false));
+      }, 3000);
+    }
+  }, [resetRichTextFieldState]);
   return (
     <div className="px-4 py-4">
       <header className="section-header my-3    text-start d-flex align-items-center justify-content-between">
@@ -64,7 +80,7 @@ const AddCheckListManagementDialog = ({ setCheckListManagementDialog }) => {
       <form onSubmit={formik.handleSubmit}>
         {/* Area input field */}
         <div className="row mb-2">
-          <div className="col-lg-11">
+          <div className="col-lg-12">
             <div className="form-group">
               <label htmlFor="area">Area:</label>
               <input
@@ -85,7 +101,7 @@ const AddCheckListManagementDialog = ({ setCheckListManagementDialog }) => {
 
         {/* Subject input field */}
         <div className="row mb-2">
-          <div className="col-lg-11">
+          <div className="col-lg-12">
             <div className="form-group">
               <label htmlFor="subject">Subject:</label>
               <input
@@ -112,14 +128,12 @@ const AddCheckListManagementDialog = ({ setCheckListManagementDialog }) => {
               id="particulars"
               name="particulars"
               type="text"
-              className="form-control"
+              className="form-control h-120"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.particulars}
             ></textarea>
-            <label className="word-limit-info label-text">
-              Maximum 1500 words
-            </label>
+
             {formik.touched.particulars && formik.errors.particulars && (
               <div className="error">{formik.errors.particulars}</div>
             )}
@@ -130,18 +144,13 @@ const AddCheckListManagementDialog = ({ setCheckListManagementDialog }) => {
         <div className="row mb-2">
           <div className="col-lg-12">
             <label htmlFor="observation">Observation:</label>
-            <textarea
-              id="observation"
+            <RichTextEditor
+              onContentChange={onContentChange}
+              initialValue=""
               name="observation"
-              type="text"
-              className="form-control"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.observation}
-            ></textarea>
-            <label className="word-limit-info label-text">
-              Maximum 1500 words
-            </label>
+              editable={true}
+            />
+
             {formik.touched.observation && formik.errors.observation && (
               <div className="error">{formik.errors.observation}</div>
             )}
@@ -150,7 +159,7 @@ const AddCheckListManagementDialog = ({ setCheckListManagementDialog }) => {
 
         <button
           type="submit"
-          className={`btn btn-primary ${editLoading && "disabled"}`}
+          className={`btn btn-primary ${editLoading && "disabled"} mt-4`}
         >
           {editLoading ? "Loading..." : "Save And Submit"}
         </button>

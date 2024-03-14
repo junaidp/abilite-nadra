@@ -6,6 +6,7 @@ import {
   resetAddCheckListSuccess,
 } from "../../../global-redux/reducers/settings/check-list/slice";
 import { useSelector, useDispatch } from "react-redux";
+import RichTextEditor from "../../../components/common/rich-text/index";
 
 const EditCheckListItemDialog = ({ setShowEditCheckListItemDialog }) => {
   const dispatch = useDispatch();
@@ -46,6 +47,10 @@ const EditCheckListItemDialog = ({ setShowEditCheckListItemDialog }) => {
     formik.resetForm({ values: initialState });
   }
 
+  function onContentChange(_, content) {
+    formik.resetForm({ values: { ...formik.values, observation: content } });
+  }
+
   React.useEffect(() => {
     if (checkListAddSuccess) {
       dispatch(resetAddCheckListSuccess());
@@ -63,7 +68,7 @@ const EditCheckListItemDialog = ({ setShowEditCheckListItemDialog }) => {
       <form onSubmit={formik.handleSubmit}>
         {/* Area input field */}
         <div className="row mb-2">
-          <div className="col-lg-11">
+          <div className="col-lg-12">
             <div className="form-group">
               <label htmlFor="area">Area:</label>
               <input
@@ -84,7 +89,7 @@ const EditCheckListItemDialog = ({ setShowEditCheckListItemDialog }) => {
 
         {/* Subject input field */}
         <div className="row mb-2">
-          <div className="col-lg-11">
+          <div className="col-lg-12">
             <div className="form-group">
               <label htmlFor="subject">Subject:</label>
               <input
@@ -111,14 +116,12 @@ const EditCheckListItemDialog = ({ setShowEditCheckListItemDialog }) => {
               id="particulars"
               name="particulars"
               type="text"
-              className="form-control"
+              className="form-control h-120"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.particulars}
             ></textarea>
-            <label className="word-limit-info label-text">
-              Maximum 1500 words
-            </label>
+
             {formik.touched.particulars && formik.errors.particulars && (
               <div className="error">{formik.errors.particulars}</div>
             )}
@@ -129,18 +132,13 @@ const EditCheckListItemDialog = ({ setShowEditCheckListItemDialog }) => {
         <div className="row mb-2">
           <div className="col-lg-12">
             <label htmlFor="observation">Observation:</label>
-            <textarea
-              id="observation"
+            <RichTextEditor
+              onContentChange={onContentChange}
+              initialValue={formik.values.observation}
               name="observation"
-              type="text"
-              className="form-control"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.observation}
-            ></textarea>
-            <label className="word-limit-info label-text">
-              Maximum 1500 words
-            </label>
+              editable={true}
+            />
+
             {formik.touched.observation && formik.errors.observation && (
               <div className="error">{formik.errors.observation}</div>
             )}
@@ -149,7 +147,7 @@ const EditCheckListItemDialog = ({ setShowEditCheckListItemDialog }) => {
 
         <button
           type="submit"
-          className={`btn btn-primary ${editLoading && "disabled"}`}
+          className={`btn btn-primary ${editLoading && "disabled"} mt-4`}
         >
           {editLoading ? "Loading..." : "Edit"}
         </button>

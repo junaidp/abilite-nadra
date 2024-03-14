@@ -17,7 +17,9 @@ const EditCheckListDialog = ({ setShowEditCheckListDialog }) => {
       const email = user[0]?.email;
       dispatch(
         setupUpdateCheckListName(
-          `?userEmailId=${email}&checklistName=${checkListName}&checklistid=${checkListId}`
+          `?userEmailId=${email}&checklistName=${checkListName}&checklistid=${Number(
+            checkListId
+          )}`
         )
       );
     }

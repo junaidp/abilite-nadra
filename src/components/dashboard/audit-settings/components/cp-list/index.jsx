@@ -128,16 +128,18 @@ const CPList = ({ userHierarchy, userRole }) => {
                 <thead className="bg-secondary text-white">
                   <tr>
                     <th className="w-80">Sr No.</th>
+                    <th className="w-80">Id</th>
                     <th>Criteria for Risk Management and Control Processes</th>
                     <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   {cpLists
-                    ?.slice((page - 1) * 5, page * 5)
+                    ?.slice((page - 1) * 15, page * 15)
                     ?.map((item, index) => {
                       return (
                         <tr key={index}>
+                          <td>{index + 1}</td>
                           <td>{item?.id}</td>
                           <td>
                             <textarea
@@ -169,7 +171,7 @@ const CPList = ({ userHierarchy, userRole }) => {
               </table>
             )}
             <Pagination
-              count={Math.ceil(allCPList?.length / 5)}
+              count={Math.ceil(allCPList?.length / 15)}
               page={page}
               onChange={handleChange}
             />

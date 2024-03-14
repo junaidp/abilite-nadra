@@ -5,6 +5,7 @@ import {
   setupGetAllProcess,
   setupSaveSubProcess,
   setupGetAllSubProcess,
+  resetSubProcessAddSuccess,
 } from "../../../../../global-redux/reducers/settings/process/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
@@ -13,8 +14,14 @@ import { toast } from "react-toastify";
 
 const Process = ({ userHierarchy, userRole }) => {
   const dispatch = useDispatch();
-  const { loading, processAddSuccess, allProcess, allSubProcess, subLoading } =
-    useSelector((state) => state?.setttingsProcess);
+  const {
+    loading,
+    processAddSuccess,
+    allProcess,
+    allSubProcess,
+    subLoading,
+    subProcessAddSuccess,
+  } = useSelector((state) => state?.setttingsProcess);
   const { user } = useSelector((state) => state?.auth);
   const { company } = useSelector((state) => state?.common);
   const [processText, setProcessText] = React.useState("");
@@ -81,6 +88,16 @@ const Process = ({ userHierarchy, userRole }) => {
     }
   }, [processAddSuccess]);
 
+  React.useEffect(() => {
+    if (subProcessAddSuccess) {
+      setSubProcessText("");
+      if (processId !== "") {
+        dispatch(setupGetAllSubProcess(`?processId=${Number(processId)}`));
+      }
+      dispatch(resetSubProcessAddSuccess());
+    }
+  }, [subProcessAddSuccess]);
+
   return (
     <div
       className="tab-pane fade"
@@ -91,7 +108,7 @@ const Process = ({ userHierarchy, userRole }) => {
       <div className="row">
         <div className="col-lg-12">
           <div className="sub-heading  fw-bold">
-            Processs & Sub Process Management
+            Process & Sub Process Management
           </div>
           <label className="fw-light">
             Create and manage your dropdown list for your organisation Process &
@@ -139,7 +156,7 @@ const Process = ({ userHierarchy, userRole }) => {
               <p>No Process To Show</p>
             ) : (
               allProcess
-                ?.slice((page - 1) * 5, page * 5)
+                ?.slice((page - 1) * 15, page * 15)
                 ?.map((item, index) => {
                   return (
                     <div className="accordion-item" key={index}>
@@ -213,6 +230,7 @@ const Process = ({ userHierarchy, userRole }) => {
                                     <thead className="bg-secondary text-white">
                                       <tr>
                                         <th className="w-80">Sr No.</th>
+                                        <th className="w-80">Id</th>
                                         <th>Particulars</th>
                                         <th>Actions</th>
                                       </tr>
@@ -230,6 +248,7 @@ const Process = ({ userHierarchy, userRole }) => {
                                         allSubProcess?.map((subItem, ind) => {
                                           return (
                                             <tr key={ind}>
+                                              <td>{ind + 1}</td>
                                               <td>{subItem?.id}</td>
                                               <td>{subItem?.description}</td>
                                               <td>
@@ -263,7 +282,7 @@ const Process = ({ userHierarchy, userRole }) => {
                 })
             )}
             <Pagination
-              count={Math.ceil(allProcess?.length / 5)}
+              count={Math.ceil(allProcess?.length / 15)}
               page={page}
               onChange={handleChange}
             />

@@ -41,6 +41,7 @@ const BusinessObjectiveRedirect = () => {
     initialLoading,
   } = useSelector((state) => state.planingEngagements);
   const { user } = useSelector((state) => state?.auth);
+  const { company } = useSelector((state) => state?.common);
   const [showObjectiveListDialog, setShowObjectiveListDialog] =
     React.useState(false);
   const [domain, setDomain] = React.useState("");
@@ -227,8 +228,11 @@ const BusinessObjectiveRedirect = () => {
 
   React.useEffect(() => {
     if (user[0]?.token && engagementId) {
+      let companyId = user[0]?.company.find(
+        (all) => all?.companyName === company
+      )?.id;
       dispatch(setupGetInitialSingleEngagementObject(engagementId));
-      dispatch(setupGetAllLocations());
+      dispatch(setupGetAllLocations(`?companyId=${companyId}`));
     }
   }, [engagementId, user]);
 
@@ -250,7 +254,7 @@ const BusinessObjectiveRedirect = () => {
     <div>
       {initialLoading ? (
         <div className="my-3">
-        <CircularProgress />
+          <CircularProgress />
         </div>
       ) : planingEngagementSingleObject[0]?.error === "Not Found" ? (
         "Engagement Not Found"

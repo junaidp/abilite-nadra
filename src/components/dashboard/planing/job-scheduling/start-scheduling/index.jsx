@@ -111,7 +111,7 @@ const StartScheduling = () => {
     }
   }
 
-  function handleSave() {
+  function handleSaveMainJobScheduling() {
     if (!loading) {
       const filteredLocationArray = allLocations.filter((item) =>
         currentJobSchedulingObject?.locationList.includes(item?.description)
@@ -215,8 +215,11 @@ const StartScheduling = () => {
 
   React.useEffect(() => {
     if (user[0]?.token && jobSchedulingId) {
+      let companyId = user[0]?.company.find(
+        (all) => all?.companyName === company
+      )?.id;
       dispatch(setupGetInitialSingleJobScheduling(jobSchedulingId));
-      dispatch(setupGetAllLocations());
+      dispatch(setupGetAllLocations(`?companyId=${companyId}`));
       dispatch(setupGetAllUsers({ shareWith: true }));
     }
   }, [user, jobSchedulingId, company]);
@@ -310,6 +313,7 @@ const StartScheduling = () => {
                 <ResourcesRequired
                   currentJobSchedulingObject={currentJobSchedulingObject}
                   handleChangeNumberTextField={handleChangeNumberTextField}
+                  handleSaveMainJobScheduling={handleSaveMainJobScheduling}
                 />
                 <TimeAndDateAllocation
                   currentJobSchedulingObject={currentJobSchedulingObject}
@@ -320,6 +324,7 @@ const StartScheduling = () => {
                     handleChangeJobSchedulingStringTextFields
                   }
                   handleChangeNumberTextField={handleChangeNumberTextField}
+                  handleSaveMainJobScheduling={handleSaveMainJobScheduling}
                 />
 
                 <JobScheduleList
@@ -331,6 +336,7 @@ const StartScheduling = () => {
                   allUsers={allUsers}
                   setCurrentJobScheduling={setCurrentJobScheduling}
                   initialUserList={initialUserList}
+                  handleSaveMainJobScheduling={handleSaveMainJobScheduling}
                 />
               </div>
             </div>
@@ -342,7 +348,7 @@ const StartScheduling = () => {
                 className={`btn btn-labeled btn-primary px-3 shadow ${
                   loading && "disabled"
                 }`}
-                onClick={handleSave}
+                onClick={handleSaveMainJobScheduling}
               >
                 <span className="btn-label me-2">
                   <i className="fa fa-check-circle"></i>

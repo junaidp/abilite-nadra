@@ -13,6 +13,7 @@ const initialState = {
   processAddSuccess: false,
   allProcess: [],
   allSubProcess: [],
+  subProcessAddSuccess: false,
 };
 
 export const setupAddProcess = createAsyncThunk(
@@ -45,8 +46,11 @@ export const slice = createSlice({
   name: "process",
   initialState,
   reducers: {
-    resetProcessAddSuccess: (state, action) => {
+    resetProcessAddSuccess: (state) => {
       state.processAddSuccess = false;
+    },
+    resetSubProcessAddSuccess: (state) => {
+      state.subProcessAddSuccess = false;
     },
     resetAllValues: (state) => {
       state.allProcess = [];
@@ -92,15 +96,15 @@ export const slice = createSlice({
     // Save Sub Process
     builder
       .addCase(setupSaveSubProcess.pending, (state) => {
-        state.loading = true;
+        state.subLoading = true;
       })
-      .addCase(setupSaveSubProcess.fulfilled, (state, action) => {
-        state.loading = false;
-        state.processAddSuccess = true;
+      .addCase(setupSaveSubProcess.fulfilled, (state) => {
+        state.subLoading = false;
+        state.subProcessAddSuccess = true;
         toast.success("Sub Process Added Successfully");
       })
-      .addCase(setupSaveSubProcess.rejected, (state, action) => {
-        state.loading = false;
+      .addCase(setupSaveSubProcess.rejected, (_, action) => {
+        state.subLoading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);
         } else {
@@ -139,6 +143,10 @@ export const slice = createSlice({
   },
 });
 
-export const { resetProcessAddSuccess, resetAllValues } = slice.actions;
+export const {
+  resetProcessAddSuccess,
+  resetAllValues,
+  resetSubProcessAddSuccess,
+} = slice.actions;
 
 export default slice.reducer;

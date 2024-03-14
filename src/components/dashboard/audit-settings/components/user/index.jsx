@@ -73,13 +73,14 @@ const UserManagement = ({
               <thead className="bg-secondary text-white">
                 <tr>
                   <th className="w-10">Sr No.</th>
+                  <th className="w-10">Id</th>
                   <th>Username</th>
                   <th>User Hierarchy</th>
                   <th>Designation</th>
                   <th>Email ID</th>
                   <th>Skill Set</th>
                   <th>Role</th>
-                  <th>Comapny</th>
+                  <th>Company</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -100,10 +101,11 @@ const UserManagement = ({
                     ?.filter((all) =>
                       all?.name?.toLowerCase().includes(nameVal?.toLowerCase())
                     )
-                    ?.slice((page - 1) * 5, page * 5)
+                    ?.slice((page - 1) * 15, page * 15)
                     ?.map((userItem, index) => {
                       return (
                         <tr key={index}>
+                          <td>{index + 1}</td>
                           <td>{userItem?.id}</td>
                           <td>{userItem?.name || ""}</td>
                           <td>{userItem?.employeeid?.userHierarchy || ""}</td>
@@ -129,7 +131,7 @@ const UserManagement = ({
               </tbody>
             </table>
             <Pagination
-              count={Math.ceil(allUsers?.length / 5)}
+              count={Math.ceil(allUsers?.length / 15)}
               page={page}
               onChange={handleChange}
             />

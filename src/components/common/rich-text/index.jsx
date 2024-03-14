@@ -1,9 +1,11 @@
 import React, { useState, useRef, useMemo } from "react";
 import JoditEditor from "jodit-react";
+import { useSelector } from "react-redux";
 
 const RichTextEditor = ({ onContentChange, initialValue, name, editable }) => {
   const editor = useRef(null);
   const [content, setContent] = React.useState(initialValue || "");
+  const { resetRichTextFieldState } = useSelector((state) => state?.common);
 
   const config = useMemo(
     () => ({
@@ -93,6 +95,12 @@ const RichTextEditor = ({ onContentChange, initialValue, name, editable }) => {
       onContentChange(name, newContent);
     }
   };
+
+  React.useEffect(() => {
+    if (resetRichTextFieldState === true) {
+      setContent("");
+    }
+  }, [resetRichTextFieldState]);
 
   return (
     <JoditEditor

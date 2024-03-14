@@ -12,6 +12,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import EditCheckListDialog from "../../../../modals/edit-checklist-dialog";
 import EditCheckListItemDialog from "../../../../modals/edit-sub-check-list-dialog";
+import ViewCheckListItemsDialog from "../../../../modals/view-checklist-items-dialog";
 import Pagination from "@mui/material/Pagination";
 import { CircularProgress } from "@mui/material";
 import AccordionItem from "./components/AccordionItem";
@@ -35,6 +36,8 @@ const CheckList = ({
   const [description, setDescription] = React.useState("");
   const [defaultRemarks, setDefaultRemarks] = React.useState("");
   const [showEditCheckListDialog, setShowEditCheckListDialog] =
+    React.useState(false);
+  const [showViewCheckListDialog, setShowViewCheckListDialog] =
     React.useState(false);
   const [showEditCheckListItemDialog, setShowEditCheckListItemDialog] =
     React.useState(false);
@@ -136,12 +139,20 @@ const CheckList = ({
           </div>
         </div>
       )}
+      {showViewCheckListDialog && (
+        <div className="dashboard-modal">
+          <div className="model-wrap">
+            <ViewCheckListItemsDialog
+              setShowViewCheckListDialog={setShowViewCheckListDialog}
+            />
+          </div>
+        </div>
+      )}
       <div className="row">
         <div className="col-lg-12">
           <div className="sub-heading  fw-bold">Checklist Management</div>
           <label className="fw-light">
-            Create and manage your dropdown list for your organisation Location
-            Division / Department
+            Create and Manage your multiple compliance checklist(s) here
           </label>
         </div>
       </div>
@@ -203,6 +214,7 @@ const CheckList = ({
                     changeCurrentSubListItem={changeCurrentSubListItem}
                     userHierarchy={userHierarchy}
                     userRole={userRole}
+                    setShowViewCheckListDialog={setShowViewCheckListDialog}
                   />
                 );
               })

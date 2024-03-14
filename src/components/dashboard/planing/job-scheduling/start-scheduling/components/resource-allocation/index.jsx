@@ -9,6 +9,7 @@ const ResourceAllocation = ({
   allUsers,
   setCurrentJobScheduling,
   initialUserList,
+  handleSaveMainJobScheduling,
 }) => {
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state?.planingJobScheduling);
@@ -21,6 +22,9 @@ const ResourceAllocation = ({
         )
       );
     }
+    setTimeout(() => {
+      handleSaveMainJobScheduling();
+    }, 2000);
   }
   return (
     <div className="accordion-item">

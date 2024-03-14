@@ -170,6 +170,7 @@ const initialState = {
   year: localStorage.getItem("year") || "",
   allCompanies: [],
   allUsers: [],
+  resetRichTextFieldState: false,
 };
 
 export const slice = createSlice({
@@ -178,6 +179,9 @@ export const slice = createSlice({
   reducers: {
     changeShowSidebar: (state, action) => {
       state.showSidebar = action.payload;
+    },
+    changeCommonRichTextFieldState: (state, action) => {
+      state.resetRichTextFieldState = action.payload;
     },
     changeCompany: (state, action) => {
       state.company = action.payload;
@@ -231,6 +235,7 @@ export const {
   InitialLoadSidebarActiveLink,
   changeCompany,
   changeYear,
+  changeCommonRichTextFieldState,
 } = slice.actions;
 
 export default slice.reducer;

@@ -154,7 +154,7 @@ const Location = ({ userHierarchy, userRole }) => {
               <p>No Location to show!</p>
             ) : (
               allLocations
-                ?.slice((page - 1) * 5, page * 5)
+                ?.slice((page - 1) * 15, page * 15)
                 ?.map((item, index) => {
                   return (
                     <div className="accordion-item" key={index}>
@@ -287,7 +287,7 @@ const Location = ({ userHierarchy, userRole }) => {
                 })
             )}
             <Pagination
-              count={Math.ceil(allLocations?.length / 5)}
+              count={Math.ceil(allLocations?.length / 15)}
               page={page}
               onChange={handleChange}
             />

@@ -7,6 +7,7 @@ const TimeAndDateAllocation = ({
   handleChangeJobSchedulingCheckFields,
   handleChangeJobSchedulingStringTextFields,
   handleChangeNumberTextField,
+  handleSaveMainJobScheduling,
 }) => {
   const dispatch = useDispatch();
   const [fieldWorkManHours, setFieldWorkManHours] = React.useState(0);
@@ -36,6 +37,9 @@ const TimeAndDateAllocation = ({
         })
       );
     }
+    setTimeout(() => {
+      handleSaveMainJobScheduling();
+    }, 2000);
   }
 
   React.useEffect(() => {

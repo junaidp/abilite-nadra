@@ -14,12 +14,14 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
     (state) => state.setttingsUserManagement
   );
   const [nullReportingTo, setNullReportingTo] = React.useState(false);
+  const [nullSkillSet, setNullSkillSet] = React.useState(false);
   const { user } = useSelector((state) => state?.auth);
 
   const initialState = {
     name: "",
     email: "",
     password: "",
+    confirmPassword: "",
     employeeName: "",
     designation: "",
     userHierarchy: "",
@@ -33,7 +35,15 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
     validationSchema: Yup.object({
       name: Yup.string().required("Name is required"),
       email: Yup.string().required("Email is required"),
-      password: Yup.string().required("Password is required"),
+      password: Yup.string()
+        .required("Password is required")
+        .matches(
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=])(?=\S+$).{8,}$/,
+          "Password must contain at least one uppercase letter, one lowercase letter, one numeric digit, one special character, and must be at least 8 characters long"
+        ),
+      confirmPassword: Yup.string()
+        .required("Confirm Password is required")
+        .oneOf([Yup.ref("password"), null], "Passwords must match"),
       employeeName: Yup.string().required("Employee is required"),
       designation: Yup.string().required("Designation is required"),
       userHierarchy: Yup.string().required("User Hierarchy is required"),
@@ -99,12 +109,41 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
   }, [formik.values]);
 
   React.useEffect(() => {
+    if (formik.values?.userHierarchy === "Management_Auditee") {
+      setNullSkillSet(true);
+    } else {
+      setNullSkillSet(false);
+    }
+  }, [formik.values]);
+
+  React.useEffect(() => {
     if (nullReportingTo) {
       formik.resetForm({ values: { ...formik.values, reportingTo: "null" } });
     } else {
       formik.resetForm({ values: { ...formik.values, reportingTo: "" } });
     }
   }, [nullReportingTo]);
+
+  React.useEffect(() => {
+    if (nullSkillSet) {
+      formik.resetForm({ values: { ...formik.values, skillSet: "null" } });
+    } else {
+      formik.resetForm({ values: { ...formik.values, skillSet: "" } });
+    }
+  }, [nullSkillSet]);
+
+  React.useEffect(() => {
+    if (user[0]?.token) {
+      if (user[0]?.userId?.company[0]) {
+        formik.resetForm({
+          values: {
+            ...formik.values,
+            company: user[0]?.userId?.company[0]?.companyName,
+          },
+        });
+      }
+    }
+  }, [user]);
 
   return (
     <div className="px-4 py-4">
@@ -120,6 +159,7 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
           allUsers={allUsers}
           nullReportingTo={nullReportingTo}
           loading={loading}
+          nullSkillSet={nullSkillSet}
         />
       )}
 

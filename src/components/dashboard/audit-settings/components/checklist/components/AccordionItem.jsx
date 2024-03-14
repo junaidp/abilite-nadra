@@ -15,6 +15,7 @@ const AccordionItem = ({
   subLoading,
   userHierarchy,
   userRole,
+  setShowViewCheckListDialog,
 }) => {
   return (
     <div className="accordion-item" id={"a" + index}>
@@ -51,7 +52,9 @@ const AccordionItem = ({
         <div>
           {(userRole === "ADMIN" || userHierarchy === "IAH") && (
             <div className="rows mt-4 mb-4 px-3">
-              <label>Default Remarks</label>
+              <label>
+                choose you checklist default remark for user display
+              </label>
               <select
                 className="col-lg-6 form-select px-3"
                 value={item?.defaultRemarks}
@@ -116,21 +119,27 @@ const AccordionItem = ({
                                 <td>{item?.area}</td>
                                 <td>{item?.subject}</td>
                                 <td>{item?.particulars}</td>
-                                {(userRole === "ADMIN" ||
-                                  userHierarchy === "IAH") && (
-                                  <td>
-                                    <div
+                                <td>
+                                  <i
+                                    className="fa-eye fa f-18 cursor-pointer"
+                                    onClick={() => {
+                                      dispatch(changeCurrentSubListItem(item));
+                                      setShowViewCheckListDialog(true);
+                                    }}
+                                  ></i>
+                                  {(userRole === "ADMIN" ||
+                                    userHierarchy === "IAH") && (
+                                    <i
+                                      className="fa fa-edit  px-3 f-18"
                                       onClick={() => {
                                         setShowEditCheckListItemDialog(true);
                                         dispatch(
                                           changeCurrentSubListItem(item)
                                         );
                                       }}
-                                    >
-                                      <i className="fa fa-edit  px-3 f-18"></i>
-                                    </div>
-                                  </td>
-                                )}
+                                    ></i>
+                                  )}
+                                </td>
                               </tr>
                             );
                           })
