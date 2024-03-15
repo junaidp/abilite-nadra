@@ -7,6 +7,7 @@ import TableRow from "./components/TableRow";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { baseUrl } from "../../../../../../constants/index";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -24,6 +25,7 @@ const ComplianceCheckList = ({
   setShowComplianceCheckListDialog,
   currentAuditEngagement,
   setComplianceCheckListMainId,
+  singleAuditEngagementObject,
 }) => {
   const dispatch = useDispatch();
   const fileInputRef = React.useRef(null);
@@ -64,13 +66,15 @@ const ComplianceCheckList = ({
     setDownloadLoading(true);
     try {
       const response = await axios.get(
-        `https://healthy-wolf-certainly.ngrok-free.app/auditEngagement/auditStepChecklist/downloadOfflineChecklist?auditStepChecklistId=${checkListId}`,
+        `${baseUrl}/auditEngagement/auditStepChecklist/downloadOfflineChecklist?auditStepChecklistId=${checkListId}`,
         { responseType: "blob" }
       );
+      const url = response.request.responseURL;
+      const fileNameFromUrl = url.substring(url.lastIndexOf("/") + 1);
       const blob = new Blob([response.data], { type: "text/csv" });
       const downloadLink = document.createElement("a");
       downloadLink.href = URL.createObjectURL(blob);
-      downloadLink.download = "yourFileName.csv";
+      downloadLink.download = fileNameFromUrl || "yourFileName.csv";
       document.body.appendChild(downloadLink);
       downloadLink.click();
       document.body.removeChild(downloadLink);
@@ -100,7 +104,7 @@ const ComplianceCheckList = ({
       const formData = new FormData();
       formData.append("file", file);
       await axios.post(
-        "https://healthy-wolf-certainly.ngrok-free.app/auditEngagement/auditStepChecklist/offlineUpdate",
+        `${baseUrl}/auditEngagement/auditStepChecklist/offlineUpdate`,
         formData
       );
       toast.success("File Updated Successfully");
@@ -135,6 +139,11 @@ const ComplianceCheckList = ({
         >
           <div className="d-flex w-100 me-3 align-items-center justify-content-between">
             <div className=" d-flex align-items-center">
+              {singleAuditEngagementObject?.auditStepChecklistList?.find(
+                (singleItem) => singleItem?.approved === true
+              ) && (
+                <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
+              )}
               Compliance Checklist
             </div>
           </div>

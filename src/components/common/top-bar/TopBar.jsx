@@ -68,23 +68,25 @@ const TopBar = () => {
             <img src={logo} className="light-logo" width="154" alt="" />
           </Link>
         </div>
-        {user[0]?.userId?.role[0]?.name === "USER" && (
-          <button
-            className="btn btn-light ml-100"
-            onClick={() => dispatch(changeShowSidebar(!showSidebar))}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              className="bi bi-list"
-              viewBox="0 0 16 16"
+        {user[0]?.userId?.role[0]?.name === "USER" &&
+          user[0]?.userId?.employeeid?.userHierarchy !==
+            "Management_Auditee" && (
+            <button
+              className="btn btn-light ml-100"
+              onClick={() => dispatch(changeShowSidebar(!showSidebar))}
             >
-              <path d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
-            </svg>
-          </button>
-        )}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className="bi bi-list"
+                viewBox="0 0 16 16"
+              >
+                <path d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
+              </svg>
+            </button>
+          )}
 
         <div
           className="collapse navbar-collapse justify-content-end"
@@ -138,18 +140,20 @@ const TopBar = () => {
                 </select>
               )}
 
-              {user[0]?.userId?.role[0]?.name === "USER" && (
-                <a
-                  className="nav-link f-20"
-                  onClick={() => {
-                    navigate("/audit/audit-settings");
-                    dispatch(changeShowSidebar(false));
-                  }}
-                >
-                  <i className="fa fa-gear f-18"></i>
-                  <div className="notification bg-primary rounded-circle"></div>
-                </a>
-              )}
+              {user[0]?.userId?.role[0]?.name === "USER" &&
+                user[0]?.userId?.employeeid?.userHierarchy !==
+                  "Management_Auditee" && (
+                  <a
+                    className="nav-link f-20"
+                    onClick={() => {
+                      navigate("/audit/audit-settings");
+                      dispatch(changeShowSidebar(false));
+                    }}
+                  >
+                    <i className="fa fa-gear f-18"></i>
+                    <div className="notification bg-primary rounded-circle"></div>
+                  </a>
+                )}
 
               <li
                 className="nav-item dropdown"
@@ -358,30 +362,32 @@ const TopBar = () => {
                         </div>
                       </div>
                       <div className="message-body d-grid hidden">
-                        {user[0]?.userId?.role[0]?.name === "USER" && (
-                          <Link
-                            to="/audit/user/profile"
-                            className="py-8 px-7 mt-8 d-flex align-items-center"
-                          >
-                            <span className="d-flex align-items-center justify-content-center bg-light rounded-1 p-6">
-                              <img
-                                src={accountIcon}
-                                alt=""
-                                width="24"
-                                height="24"
-                              />
-                            </span>
-                            <div className="w-75 d-inline-block v-middle ps-3">
-                              <h6 className="mb-1 bg-hover-primary fw-semibold">
-                                {" "}
-                                My Profile{" "}
-                              </h6>
-                              <span className="d-block text-dark">
-                                Account Settings
+                        {user[0]?.userId?.role[0]?.name === "USER" &&
+                          user[0]?.userId?.employeeid?.userHierarchy !==
+                            "Management_Auditee" && (
+                            <Link
+                              to="/audit/user/profile"
+                              className="py-8 px-7 mt-8 d-flex align-items-center"
+                            >
+                              <span className="d-flex align-items-center justify-content-center bg-light rounded-1 p-6">
+                                <img
+                                  src={accountIcon}
+                                  alt=""
+                                  width="24"
+                                  height="24"
+                                />
                               </span>
-                            </div>
-                          </Link>
-                        )}
+                              <div className="w-75 d-inline-block v-middle ps-3">
+                                <h6 className="mb-1 bg-hover-primary fw-semibold">
+                                  {" "}
+                                  My Profile{" "}
+                                </h6>
+                                <span className="d-block text-dark">
+                                  Account Settings
+                                </span>
+                              </div>
+                            </Link>
+                          )}
                         <button
                           className="btn btn-outline-primary w-75 my-3 logoutOut-btn"
                           onClick={handleLogout}

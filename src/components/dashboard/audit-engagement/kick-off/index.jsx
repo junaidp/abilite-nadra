@@ -308,6 +308,7 @@ const KickOff = () => {
                     }
                     currentAuditEngagement={currentAuditEngagement}
                     setComplianceCheckListMainId={setComplianceCheckListMainId}
+                    singleAuditEngagementObject={singleAuditEngagementObject}
                   />
                 )}
               </div>

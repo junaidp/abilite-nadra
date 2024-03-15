@@ -5,11 +5,12 @@ import TextField from "@mui/material/TextField";
 
 const Form = ({
   formik,
-  allUsers,
   nullReportingTo,
-  loading,
+  allUsers,
   user,
+  loading,
   nullSkillSet,
+  email,
 }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -43,73 +44,12 @@ const Form = ({
                 name="email"
                 type="text"
                 className="form-control"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.email}
+                value={email}
+                disabled
+                readOnly
               />
             </div>
           </div>
-          {formik.touched.email && formik.errors.email && (
-            <div className="error">{formik.errors.email}</div>
-          )}
-        </div>
-      </div>
-
-      <div className="row">
-        <div className="col-lg-6 mb-2">
-          <div className="col-lg-12">
-            <div className="form-group">
-              <label htmlFor="area">Password:</label>
-              <TextField
-                id="password"
-                name="password"
-                type="text"
-                className="form-control"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.password}
-              />
-            </div>
-          </div>
-          {formik.touched.password && formik.errors.password && (
-            <div className="error">{formik.errors.password}</div>
-          )}
-        </div>
-        <div className="mb-2 col-lg-6">
-          <div className="col-lg-12">
-            <div className="form-group">
-              <label htmlFor="area">Confirm Password:</label>
-              <TextField
-                id="confirmPassword"
-                name="confirmPassword"
-                type="text"
-                className="form-control"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.confirmPassword}
-              />
-            </div>
-          </div>
-          {formik.touched.confirmPassword && formik.errors.confirmPassword && (
-            <div className="error">{formik.errors.confirmPassword}</div>
-          )}
-        </div>
-        <div className="col-lg-12 mb-2">
-          <div className="form-group">
-            <label htmlFor="area">Employee Name:</label>
-            <TextField
-              id="employeeName"
-              name="employeeName"
-              type="text"
-              className="form-control"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.employeeName}
-            />
-          </div>
-          {formik.touched.employeeName && formik.errors.employeeName && (
-            <div className="error">{formik.errors.employeeName}</div>
-          )}
         </div>
       </div>
 
@@ -158,6 +98,7 @@ const Form = ({
           )}
         </div>
       </div>
+
       {nullSkillSet && (
         <div className="col-lg-12 mb-2">
           <label htmlFor="area">Skill Set:</label>
@@ -216,8 +157,12 @@ const Form = ({
               <MenuItem value="">Select User</MenuItem>
               {allUsers?.map((userVal, ind) => {
                 return (
-                  <MenuItem value={userVal?.name} key={ind} className="h-80">
-                    {userVal?.name}(
+                  <MenuItem
+                    value={userVal?.employeeid?.name}
+                    key={ind}
+                    className="h-80"
+                  >
+                    {userVal?.employeeid?.name}(
                     {userVal?.employeeid?.userHierarchy || "null"})
                   </MenuItem>
                 );
@@ -258,14 +203,14 @@ const Form = ({
             value={formik.values.company}
           >
             <MenuItem value="">Select Company</MenuItem>
-            {user[0]?.userId?.company?.map((userVal, ind) => {
+            {user[0]?.userId?.company?.map((company, index) => {
               return (
                 <MenuItem
-                  value={userVal?.companyName}
-                  key={ind}
+                  value={company?.companyName}
+                  key={index}
                   className="h-80"
                 >
-                  {userVal?.companyName}
+                  {company?.companyName}
                 </MenuItem>
               );
             })}
@@ -280,7 +225,7 @@ const Form = ({
         type="submit"
         className={`btn btn-primary ${loading && "disabled"} mt-4`}
       >
-        {loading ? "Loading..." : "Add User"}
+        {loading ? "Loading..." : "Update User"}
       </button>
     </form>
   );

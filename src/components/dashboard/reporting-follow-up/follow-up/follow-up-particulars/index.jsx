@@ -136,7 +136,12 @@ const ReportingParticulars = () => {
           <header className="section-header my-3 align-items-center  text-start d-flex ">
             <a
               className="text-primary"
-              onClick={() => navigate("/audit/follow-up")}
+              onClick={() =>
+                user[0]?.userId?.employeeid?.userHierarchy ===
+                "Management_Auditee"
+                  ? navigate("/audit/dashboard")
+                  : navigate("/audit/follow-up")
+              }
             >
               <i className="fa fa-arrow-left text-primary fs-5 pe-3"></i>
             </a>

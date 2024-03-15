@@ -41,7 +41,6 @@ const AuditSettings = () => {
     React.useState("docs");
   const { user } = useSelector((state) => state.auth);
   const { company } = useSelector((state) => state.common);
-  const [updateUserId, setUpdateUserId] = React.useState("");
   const [userManagementDialog, setUserManagementDialog] = React.useState(false);
   const [updateUserDialog, setUpdateUserDialog] = React.useState(false);
   const [addCompanyDialog, setAddCompantDialog] = React.useState(false);
@@ -50,6 +49,7 @@ const AuditSettings = () => {
   const [userHierarchy, setUserHierarchy] = React.useState("");
   const [showUpdateCompanyDialog, setShowUpdateCompanyDialog] =
     React.useState("");
+  const [updateUserObject, setUpdateUserObject] = React.useState({});
 
   // Calls
   React.useEffect(() => {
@@ -145,7 +145,7 @@ const AuditSettings = () => {
           <div className="model-wrap">
             <UpdateUserDialog
               setUpdateUserDialog={setUpdateUserDialog}
-              updateUserId={updateUserId}
+              updateUserObject={updateUserObject}
             />
           </div>
         </div>
@@ -392,8 +392,8 @@ const AuditSettings = () => {
               {userRole === "ADMIN" && (
                 <UserManagement
                   setUserManagementDialog={setUserManagementDialog}
-                  setUpdateUserId={setUpdateUserId}
                   setUpdateUserDialog={setUpdateUserDialog}
+                  setUpdateUserObject={setUpdateUserObject}
                 />
               )}
 

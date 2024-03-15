@@ -9,8 +9,8 @@ import Pagination from "@mui/material/Pagination";
 
 const UserManagement = ({
   setUserManagementDialog,
-  setUpdateUserId,
   setUpdateUserDialog,
+  setUpdateUserObject
 }) => {
   const dispatch = useDispatch();
   const { loading, addUserSuccess, allUsers } = useSelector(
@@ -118,7 +118,7 @@ const UserManagement = ({
                             <i
                               className="fa fa-edit   f-18 cursor-pointer"
                               onClick={() => {
-                                setUpdateUserId(userItem?.id);
+                                setUpdateUserObject(userItem)
                                 setUpdateUserDialog(true);
                               }}
                             ></i>

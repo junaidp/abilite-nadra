@@ -72,6 +72,17 @@ body {
   font-family: "Poppins", sans-serif !important;
   font-size: 15px !important;
 }
+.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled {
+  font-family: "Poppins", sans-serif !important;
+}
+
+.css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root {
+  font-family: "Poppins", sans-serif !important;
+  font-size: 15px !important;
+}
+.css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root:focus {
+  border: 1px solid black;
+}
 
 .h-120 {
   height: 120px !important;

@@ -57,7 +57,7 @@ const TableRow = ({
       </td>
       <td>
         <div className="mb-2">
-          <button
+          <div
             className={`btn btn-labeled btn-secondary px-3  shadow ${
               downloadLoading &&
               Number(mainItem?.id) === Number(downloadFileId) &&
@@ -65,10 +65,13 @@ const TableRow = ({
             }`}
             onClick={() => handleDownload(mainItem?.id)}
           >
+            <span className="btn-label me-2">
+              <i className="bi bi-box-arrow-down  f-18"></i>
+            </span>
             {downloadLoading && Number(mainItem?.id) === Number(downloadFileId)
               ? "Downloading..."
-              : "Offline Download"}
-          </button>
+              : "Download"}
+          </div>
         </div>
 
         {mainItem?.approved === true && (
