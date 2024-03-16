@@ -7,6 +7,7 @@ import { setupGetAllUsers } from "../../../global-redux/reducers/settings/user-m
 import { setupGetAllCPList } from "../../../global-redux/reducers/settings/cp-list/slice";
 import { setupGetAllRiskFactors } from "../../../global-redux/reducers/settings/risk-factor/slice";
 import AddCheckListManagementDialog from "../../modals/add-checklist-management-dialog/index";
+import { setupGetAllFiles } from "../../../global-redux/reducers/settings/supporting-docs/slice";
 import { handleReset } from "../../../global-redux/reducers/settings/risk-control-matrix/slice";
 import UserManagementDialog from "../../modals/add-user-dialog/index";
 import UpdateCompanyDialog from "../../modals/update-company-dialog";
@@ -75,6 +76,9 @@ const AuditSettings = () => {
       if (currentSettingOption === "cp-list") {
         dispatch(setupGetAllCPList(companyId));
       }
+      if (currentSettingOption === "docs") {
+        dispatch(setupGetAllFiles(`?companyId=${companyId}`));
+      }
       if (currentSettingOption === "risk-factor") {
         dispatch(setupGetAllRiskFactors(`?company_id=${companyId}`));
       }
@@ -92,8 +96,12 @@ const AuditSettings = () => {
 
   React.useEffect(() => {
     if (user[0]?.token) {
+      let companyId = user[0]?.company.find(
+        (all) => all?.companyName === company
+      )?.id;
       setUserHierarchy(user[0]?.userId?.employeeid?.userHierarchy);
       setUserRole(user[0]?.userId?.authorities[0]);
+      dispatch(setupGetAllFiles(`?companyId=${companyId}`));
     }
     return () => {
       dispatch(handleReset());
@@ -169,6 +177,7 @@ const AuditSettings = () => {
                   type="button"
                   role="tab"
                   aria-controls="nav-home"
+                  onClick={() => setCurrentSettingOption("docs")}
                 >
                   Supporting Doc
                 </button>

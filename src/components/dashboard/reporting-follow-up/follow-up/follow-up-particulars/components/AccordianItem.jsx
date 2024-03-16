@@ -147,7 +147,7 @@ const AccordianItem = ({
               value={item?.followUp?.recommendationsImplemented.toString()}
               name="recommendationsImplemented"
               onChange={(event) => handleChange(event, item?.id)}
-              disabled={item?.stepNo === 7 ? true : false}
+              disabled={item?.stepNo === 6 || item?.stepNo === 7 ? true : false}
             >
               <option value="">Select One</option>
               <option value="true">Yes</option>
@@ -165,7 +165,9 @@ const AccordianItem = ({
                 value={item?.followUp?.finalComments || ""}
                 name="finalComments"
                 onChange={(event) => handleChange(event, item?.id)}
-                disabled={item?.stepNo === 7 ? true : false}
+                disabled={
+                  item?.stepNo === 6 || item?.stepNo === 7 ? true : false
+                }
               ></textarea>
               <label className="word-limit-info label-text">
                 Maximum 1500 words
@@ -181,7 +183,7 @@ const AccordianItem = ({
               value={item?.followUp?.testInNextYear.toString()}
               name="testInNextYear"
               onChange={(event) => handleChange(event, item?.id)}
-              disabled={item?.stepNo === 7 ? true : false}
+              disabled={item?.stepNo === 6 || item?.stepNo === 7 ? true : false}
             >
               <option value="">Select One</option>
               <option value="true">Yes</option>
@@ -193,19 +195,6 @@ const AccordianItem = ({
             <div className="col-lg-12 text-end ">
               <div className="d-flex align-items-center place-end">
                 {item?.stepNo === 5 && (
-                  <button
-                    className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
-                      loading && "disabled"
-                    }`}
-                    onClick={() => handleSave(item)}
-                  >
-                    <span className="btn-label me-2">
-                      <i className="fa fa-check"></i>
-                    </span>
-                    {loading ? "Loading..." : "Save"}
-                  </button>
-                )}
-                {item?.stepNo === 6 && (
                   <button
                     className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
                       loading && "disabled"
@@ -238,12 +227,6 @@ const AccordianItem = ({
                     </button>
                   )}
                 {item?.stepNo === 6 &&
-                  curretItem?.followUp?.finalComments !== "" &&
-                  curretItem?.followUp?.finalComments !== null &&
-                  curretItem?.followUp?.recommendationsImplemented !== "" &&
-                  curretItem?.followUp?.recommendationsImplemented !== null &&
-                  curretItem?.followUp?.testInNextYear !== "" &&
-                  curretItem?.followUp?.testInNextYear !== null &&
                   (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
                     Number(user[0]?.userId?.id) ===
                       Number(

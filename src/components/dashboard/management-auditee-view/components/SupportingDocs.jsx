@@ -1,52 +1,36 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setupGetAllFiles } from "../../../../global-redux/reducers/settings/supporting-docs/slice";
+import { Pagination } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 
 const SupportingDocs = () => {
+  const dispatch = useDispatch();
+  const { allFiles, loading } = useSelector((state) => state?.settingsDocs);
+  const { user } = useSelector((state) => state.auth);
+  const { company } = useSelector((state) => state.common);
+  const [searchValue, setSearchValue] = React.useState("");
+  const [page, setPage] = React.useState(1);
+  const handleChangePage = (_, value) => {
+    setPage(value);
+  };
+
+  React.useEffect(() => {
+    if (user[0]?.token) {
+      const companyId = user[0]?.company?.find(
+        (item) => item?.companyName === company
+      )?.id;
+      dispatch(setupGetAllFiles(`?companyId=${companyId}`));
+    }
+  }, [user]);
+
   return (
     <div
-    className="tab-pane fade active show"
-    id="nav-home"
-    role="tabpanel"
-    aria-labelledby="nav-home-tab"
+      className="tab-pane fade active show"
+      id="nav-home"
+      role="tabpanel"
+      aria-labelledby="nav-home-tab"
     >
-      <div>
-        <div className="row my-3">
-          <div className="col-lg-12">
-            <div className="sub-heading  fw-bold">Supporting Documents</div>
-          </div>
-        </div>
-        <div className="row position-relative">
-          <div className="col-lg-12 text-center settings-form">
-            <form>
-              <input type="file" />
-              <p className="mb-0">
-                Drag your files here or click in this area.
-              </p>
-            </form>
-          </div>
-        </div>
-        <div className="row my-3">
-          <div className="col-lg-12 text-end">
-            <button className="btn btn-labeled btn-primary px-3 mt-3 shadow">
-              <span className="btn-label me-2">
-                <i className="fa fa-save"></i>
-              </span>
-              Submit
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div className="my-3">
-        <div className="flex">
-          <div className="row position-relative">
-            <div className="col-lg-12 text-center settings-form h-0 border-none">
-              <form>
-                <input type="file" />
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
       <div className="row mb-3">
         <div className="col-lg-6">
           <label className="w-100">Search File Name:</label>
@@ -54,6 +38,8 @@ const SupportingDocs = () => {
             className="form-control w-100"
             placeholder="Enter"
             type="text"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e?.target?.value)}
           />
         </div>
       </div>
@@ -65,34 +51,49 @@ const SupportingDocs = () => {
               <thead className="bg-secondary text-white">
                 <tr>
                   <th className="w-80">Sr No.</th>
+                  <th className="w-80">Id</th>
                   <th>File Name</th>
                   <th>File Location</th>
-                  <th className="w-180">Action</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>File Name here</td>
-                  <td>File Location here</td>
-                  <td>
-                    <i className="fa-eye fa f-18"></i>
-                    <i className="fa fa-trash text-danger f-18 px-3"></i>
-                    <i className="fa fa-download f-18 mx-2"></i>
-                  </td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>File Name here</td>
-                  <td>File Location here</td>
-                  <td>
-                    <i className="fa-eye fa f-18"></i>
-                    <i className="fa fa-trash text-danger f-18 px-3"></i>
-                    <i className="fa fa-download f-18 mx-2"></i>
-                  </td>
-                </tr>
+                {loading ? (
+                  <tr>
+                    <td className="w-300">
+                      <CircularProgress />
+                    </td>
+                  </tr>
+                ) : allFiles?.length === 0 ||
+                  allFiles[0]?.error === "Not Found" ? (
+                  <tr>
+                    <td className="w-300">No Files Added Yet</td>
+                  </tr>
+                ) : (
+                  allFiles
+                    ?.filter((all) =>
+                      all?.fileName
+                        ?.toLowerCase()
+                        .includes(searchValue?.toLowerCase())
+                    )
+                    ?.slice((page - 1) * 10, page * 10)
+                    ?.map((file, index) => {
+                      return (
+                        <tr key={index}>
+                          <td>{index + 1}</td>
+                          <td>{file?.id}</td>
+                          <td>{file?.fileName}</td>
+                          <td>{file?.location}</td>
+                        </tr>
+                      );
+                    })
+                )}
               </tbody>
             </table>
+            <Pagination
+              count={Math.ceil(allFiles?.length / 10)}
+              page={page}
+              onChange={handleChangePage}
+            />
           </div>
         </div>
       </div>

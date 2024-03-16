@@ -75,6 +75,26 @@ body {
 .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled {
   font-family: "Poppins", sans-serif !important;
 }
+.css-1ujsas3 {
+  font-family: "Poppins", sans-serif !important;
+  font-size: 10px !important;
+}
+.css-1hw9j7s {
+  background-color: #0a7386 !important;
+}
+.css-1e6y48t-MuiButtonBase-root-MuiButton-root {
+  font-size: 10px !important;
+  font-family: "Poppins", sans-serif !important;
+}
+.css-sghohy-MuiButtonBase-root-MuiButton-root {
+  font-size: 10px !important;
+  font-family: "Poppins", sans-serif !important;
+}
+
+.css-1hw9j7s{
+  font-size: 12px !important;
+  font-family: "Poppins", sans-serif !important;
+}
 
 .css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root {
   font-family: "Poppins", sans-serif !important;

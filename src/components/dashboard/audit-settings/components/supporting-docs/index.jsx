@@ -1,6 +1,94 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  setupUploadFile,
+  resetFileAddSuccess,
+  setupGetAllFiles,
+  setupUpdateFile,
+} from "../../../../../global-redux/reducers/settings/supporting-docs/slice";
+import { toast } from "react-toastify";
+import Table from "./components/Table";
 
 const SupportingDocs = ({ userHierarchy, userRole }) => {
+  const dispatch = useDispatch();
+  const fileInputRef = React.useRef(null);
+  const { allFiles, loading, fileAddSuccess } = useSelector(
+    (state) => state?.settingsDocs
+  );
+  const { user } = useSelector((state) => state.auth);
+  const { company } = useSelector((state) => state.common);
+  const [page, setPage] = React.useState(1);
+  const [selectedFile, setSelectedFile] = React.useState(null);
+  const [selectedUpdateFile, setSelectedUpdateFile] = React.useState(null);
+  const [searchValue, setSearchValue] = React.useState("");
+  const handleChangePage = (_, value) => {
+    setPage(value);
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+    }
+  };
+
+  const handleUpdateFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedUpdateFile(file);
+    }
+  };
+
+  const onApiCall = async (file) => {
+    if (!loading) {
+      const companyId = user[0]?.company?.find(
+        (item) => item?.companyName === company
+      )?.id;
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("companyId", Number(companyId));
+      dispatch(setupUploadFile(formData));
+    }
+  };
+
+  const updateFileApiCal = async (file, id) => {
+    if (!loading) {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("supportingDocId", Number(id));
+      dispatch(setupUpdateFile(formData));
+    }
+  };
+
+  const handleFileUpdate = (id) => {
+    if (selectedUpdateFile) {
+      updateFileApiCal(selectedUpdateFile, id);
+    } else {
+      toast.error("No file selected.");
+    }
+  };
+  const handleFileUpload = () => {
+    if (selectedFile) {
+      onApiCall(selectedFile);
+    } else {
+      toast.error("No file selected.");
+    }
+  };
+
+  React.useEffect(() => {
+    if (fileAddSuccess) {
+      const companyId = user[0]?.company?.find(
+        (item) => item?.companyName === company
+      )?.id;
+      dispatch(setupGetAllFiles(`?companyId=${companyId}`));
+      setSelectedFile(null);
+      setSelectedUpdateFile(null);
+      setPage(1);
+      setSearchValue("");
+      dispatch(resetFileAddSuccess());
+    }
+  }, [fileAddSuccess]);
+
   return (
     <div
       className="tab-pane fade active show"
@@ -18,20 +106,32 @@ const SupportingDocs = ({ userHierarchy, userRole }) => {
           <div className="row position-relative">
             <div className="col-lg-12 text-center settings-form">
               <form>
-                <input type="file" />
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                />
                 <p className="mb-0">
                   Drag your files here or click in this area.
                 </p>
               </form>
             </div>
+            <p className="my-2">
+              {selectedFile?.name ? selectedFile?.name : "Select file"}
+            </p>
           </div>
           <div className="row my-3">
             <div className="col-lg-12 text-end">
-              <button className="btn btn-labeled btn-primary px-3 mt-3 shadow">
+              <button
+                className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
+                  loading && "disabled"
+                }`}
+                onClick={handleFileUpload}
+              >
                 <span className="btn-label me-2">
                   <i className="fa fa-save"></i>
                 </span>
-                Submit
+                {loading ? "Loading..." : "Upload"}
               </button>
             </div>
           </div>
@@ -56,55 +156,24 @@ const SupportingDocs = ({ userHierarchy, userRole }) => {
             className="form-control w-100"
             placeholder="Enter"
             type="text"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e?.target?.value)}
           />
         </div>
       </div>
 
-      <div className="row my-3">
-        <div className="col-lg-12">
-          <div className="table-responsive">
-            <table className="table table-bordered   rounded">
-              <thead className="bg-secondary text-white">
-                <tr>
-                  <th className="w-80">Sr No.</th>
-                  <th>File Name</th>
-                  <th>File Location</th>
-                  <th className="w-180">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>File Name here</td>
-                  <td>File Location here</td>
-                  <td>
-                    <i className="fa-eye fa f-18"></i>
-
-                    {(userRole === "ADMIN" || userHierarchy === "IAH") && (
-                      <i className="fa fa-trash text-danger f-18 px-3"></i>
-                    )}
-                    <i className="fa fa-download f-18 mx-2"></i>
-                  </td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>File Name here</td>
-                  <td>File Location here</td>
-                  <td>
-                    <i className="fa-eye fa f-18"></i>
-
-                    {(userRole === "ADMIN" || userHierarchy === "IAH") && (
-                      <i className="fa fa-trash text-danger f-18 px-3"></i>
-                    )}
-
-                    <i className="fa fa-download f-18 mx-2"></i>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+      <Table
+        userRole={userRole}
+        userHierarchy={userHierarchy}
+        allFiles={allFiles}
+        loading={loading}
+        searchValue={searchValue}
+        handleUpdateFileChange={handleUpdateFileChange}
+        handleFileUpdate={handleFileUpdate}
+        handleChangePage={handleChangePage}
+        page={page}
+        selectedUpdateFile={selectedUpdateFile}
+      />
     </div>
   );
 };

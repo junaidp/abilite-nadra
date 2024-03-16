@@ -124,7 +124,10 @@ const AuditProgram = ({
   }, [currentAuditEngagement]);
 
   React.useEffect(() => {
-    if (singleAuditEngagementObject?.auditProgram !== null) {
+    if (
+      singleAuditEngagementObject?.auditProgram !== null &&
+      singleAuditEngagementObject?.auditProgram?.programList?.length !== 0
+    ) {
       let submit = true;
       singleAuditEngagementObject?.auditProgram?.programList?.forEach(
         (singleItem) => {

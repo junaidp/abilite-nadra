@@ -19,6 +19,7 @@ import reportingReducer from "../reducers/reporting/slice";
 import auditEngagementReducer from "../reducers/audit-engagement/slice";
 import settingCPListReducer from "../reducers/settings/cp-list/slice";
 import settingRiskFactorReducer from "../reducers/settings/risk-factor/slice";
+import settingsSupportingDocumentReducer from "../reducers/settings/supporting-docs/slice";
 export const store = configureStore({
   reducer: {
     common: commonReducer,
@@ -32,6 +33,7 @@ export const store = configureStore({
     settingsCompanyManagement: settingsCompanyReducer,
     settingsCPList: settingCPListReducer,
     settingsRiskFactor: settingRiskFactorReducer,
+    settingsDocs: settingsSupportingDocumentReducer,
     // planing
     planingEngagements: planingEngagementsReducers,
     planingRiskAssessments: planingRiskAssessmentReducer,

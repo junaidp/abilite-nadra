@@ -166,9 +166,7 @@ const AccordianItem = ({
                 value={item?.managementComments || ""}
                 name="managementComments"
                 onChange={(event) => handleChange(event, item?.id)}
-                disabled={
-                  item?.stepNo === 2 || item?.stepNo === 3 ? false : true
-                }
+                disabled={item?.stepNo === 2 ? false : true}
               ></textarea>
               <label className="word-limit-info label-text mb-3">
                 Maximum 1500 words
@@ -182,9 +180,7 @@ const AccordianItem = ({
                 value={moment(item?.implementationDate).format("YYYY-MM-DD")}
                 name="implementationDate"
                 onChange={(event) => handleChange(event, item?.id)}
-                disabled={
-                  item?.stepNo === 2 || item?.stepNo === 3 ? false : true
-                }
+                disabled={item?.stepNo === 2 ? false : true}
               />
             </div>
           )}
@@ -280,21 +276,6 @@ const AccordianItem = ({
                   </button>
                 </div>
               )}
-              {item?.stepNo === 3 && (
-                <div className="d-flex align-items-center place-end">
-                  <button
-                    className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
-                      loading && "disabled"
-                    }`}
-                    onClick={() => handleSaveStep2(item)}
-                  >
-                    <span className="btn-label me-2">
-                      <i className="fa fa-check"></i>
-                    </span>
-                    {loading ? "Loading..." : "Save"}
-                  </button>
-                </div>
-              )}
               {item?.stepNo === 2 &&
                 curretItem?.managementComments !== "" &&
                 curretItem?.managementComments !== null &&
@@ -316,10 +297,6 @@ const AccordianItem = ({
                 )}
 
               {item?.stepNo === 3 &&
-                curretItem?.managementComments !== "" &&
-                curretItem?.managementComments !== null &&
-                curretItem?.implementationDate !== "" &&
-                curretItem?.implementationDate !== null &&
                 (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
                   Number(user[0]?.userId?.id) ===
                     Number(
