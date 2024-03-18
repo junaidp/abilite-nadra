@@ -125,7 +125,9 @@ const JobScheduling = () => {
                               <span className="btn-label me-2">
                                 <i className="fa fa-play"></i>
                               </span>
-                              Start Scheduling
+                              {item?.complete === true
+                                ? "View Job Scheduling"
+                                : "Start Scheduling"}
                             </div>
                           </td>
                         </tr>

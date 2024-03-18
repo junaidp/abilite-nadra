@@ -6,6 +6,7 @@ const ResourcesRequired = ({
   currentJobSchedulingObject,
   handleChangeNumberTextField,
   handleSaveMainJobScheduling,
+  singleJobSchedulingObject,
 }) => {
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state?.planingJobScheduling);
@@ -33,6 +34,18 @@ const ResourcesRequired = ({
           aria-expanded="false"
           aria-controls="flush-collapseOne"
         >
+          {singleJobSchedulingObject?.numberOfResourcesRequired?.business !==
+            0 &&
+            singleJobSchedulingObject?.numberOfResourcesRequired?.finance !==
+              0 &&
+            singleJobSchedulingObject?.numberOfResourcesRequired?.fraud !== 0 &&
+            singleJobSchedulingObject?.numberOfResourcesRequired?.it !== 0 &&
+            singleJobSchedulingObject?.numberOfResourcesRequired?.operations !==
+              0 &&
+            singleJobSchedulingObject?.numberOfResourcesRequired?.other !==
+              0 && (
+              <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
+            )}
           Determination of Number of Resources Required
         </button>
       </h2>
@@ -48,6 +61,9 @@ const ResourcesRequired = ({
                 <label>IT</label>
                 <input
                   type="number"
+                  disabled={
+                    singleJobSchedulingObject?.complete !== true ? false : true
+                  }
                   className="form-control"
                   id="labeltext"
                   placeholder=""
@@ -64,6 +80,9 @@ const ResourcesRequired = ({
                 <label>Finance</label>
                 <input
                   type="number"
+                  disabled={
+                    singleJobSchedulingObject?.complete !== true ? false : true
+                  }
                   className="form-control"
                   id="labeltex"
                   placeholder=""
@@ -83,6 +102,9 @@ const ResourcesRequired = ({
                 <label>Business</label>
                 <input
                   type="number"
+                  disabled={
+                    singleJobSchedulingObject?.complete !== true ? false : true
+                  }
                   className="form-control"
                   id="labelt"
                   placeholder=""
@@ -100,6 +122,9 @@ const ResourcesRequired = ({
                 <label>Fraud</label>
                 <input
                   type="number"
+                  disabled={
+                    singleJobSchedulingObject?.complete !== true ? false : true
+                  }
                   className="form-control"
                   id="labelte"
                   placeholder=""
@@ -125,6 +150,9 @@ const ResourcesRequired = ({
                     currentJobSchedulingObject?.numberOfResourcesRequired
                       ?.operations
                   }
+                  disabled={
+                    singleJobSchedulingObject?.complete !== true ? false : true
+                  }
                   name="operations"
                   onChange={(event) =>
                     handleChangeNumberTextField(event, "resourcesRequired")
@@ -138,6 +166,9 @@ const ResourcesRequired = ({
                   className="form-control"
                   id="labe"
                   placeholder=""
+                  disabled={
+                    singleJobSchedulingObject?.complete !== true ? false : true
+                  }
                   value={
                     currentJobSchedulingObject?.numberOfResourcesRequired?.other
                   }
@@ -148,21 +179,23 @@ const ResourcesRequired = ({
                 />
               </div>
             </div>
-            <div className="row mt-3">
-              <div className="col-lg-12 justify-content-end text-end">
-                <div
-                  className={`btn btn-labeled btn-primary px-3 shadow ${
-                    loading && "disabled"
-                  }`}
-                  onClick={handleSave}
-                >
-                  <span className="btn-label me-2">
-                    <i className="fa fa-check-circle"></i>
-                  </span>
-                  {loading ? "Loading..." : "Save"}
+            {singleJobSchedulingObject?.complete !== true && (
+              <div className="row mt-3">
+                <div className="col-lg-12 justify-content-end text-end">
+                  <div
+                    className={`btn btn-labeled btn-primary px-3 shadow ${
+                      loading && "disabled"
+                    }`}
+                    onClick={handleSave}
+                  >
+                    <span className="btn-label me-2">
+                      <i className="fa fa-check-circle"></i>
+                    </span>
+                    {loading ? "Loading..." : "Save"}
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

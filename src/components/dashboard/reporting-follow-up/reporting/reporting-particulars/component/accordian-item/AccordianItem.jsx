@@ -42,6 +42,9 @@ const AccordianItem = ({
         >
           <div className="d-flex w-100 me-3 align-items-center justify-content-between">
             <div className=" d-flex align-items-center">
+              {Number(item?.stepNo) >= 4 && (
+                <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
+              )}
               {item?.observationTitle}
             </div>
           </div>

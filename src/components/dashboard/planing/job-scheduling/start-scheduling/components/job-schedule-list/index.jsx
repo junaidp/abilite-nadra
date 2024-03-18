@@ -13,6 +13,7 @@ const JobScheduleList = ({ currentJobSchedulingObject }) => {
           aria-expanded="false"
           aria-controls="flush-collapseFour"
         >
+          <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
           Job Schedule List
         </button>
       </h2>

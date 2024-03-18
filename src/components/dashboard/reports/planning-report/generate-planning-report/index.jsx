@@ -110,8 +110,7 @@ const GeneratePlanningReport = () => {
         data?.methodology === "" ||
         data?.riskAssesmentSummary === "" ||
         data?.orgnizationStrategy === "" ||
-        data?.summaryRisk === "" ||
-        data?.newHeading?.length === 0
+        data?.summaryRisk === ""
       ) {
         toast.error("Please Provide all the fields");
       } else {
@@ -144,8 +143,7 @@ const GeneratePlanningReport = () => {
         data?.methodology === "" ||
         data?.riskAssesmentSummary === "" ||
         data?.orgnizationStrategy === "" ||
-        data?.summaryRisk === "" ||
-        data?.newHeading?.length === 0
+        data?.summaryRisk === ""
       ) {
         toast.error("Please Provide all the fields");
       } else {

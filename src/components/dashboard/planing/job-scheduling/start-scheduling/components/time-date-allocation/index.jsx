@@ -8,6 +8,7 @@ const TimeAndDateAllocation = ({
   handleChangeJobSchedulingStringTextFields,
   handleChangeNumberTextField,
   handleSaveMainJobScheduling,
+  singleJobSchedulingObject,
 }) => {
   const dispatch = useDispatch();
   const [fieldWorkManHours, setFieldWorkManHours] = React.useState(0);
@@ -88,6 +89,21 @@ const TimeAndDateAllocation = ({
           aria-expanded="false"
           aria-controls="flush-collapseTwo"
         >
+          {singleJobSchedulingObject?.timeAndDateAllocation?.estimatedWeeks !==
+            0 &&
+            singleJobSchedulingObject?.timeAndDateAllocation
+              ?.fieldWorkManHours !== 0 &&
+            singleJobSchedulingObject?.timeAndDateAllocation
+              ?.internalAuditManagementHours !== 0 &&
+            singleJobSchedulingObject?.timeAndDateAllocation?.totalHours !==
+              0 &&
+            singleJobSchedulingObject?.timeAndDateAllocation
+              ?.totalWorkingManHours !== 0 &&
+            singleJobSchedulingObject?.timeAndDateAllocation?.travellingDays !==
+              0 &&
+            singleJobSchedulingObject?.timeAndDateAllocation?.placeOfWork && (
+              <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
+            )}
           Time and Date Allocation
         </button>
       </h2>
@@ -106,6 +122,9 @@ const TimeAndDateAllocation = ({
                   className="form-control"
                   id="lav"
                   placeholder=""
+                  disabled={
+                    singleJobSchedulingObject?.complete !== true ? false : true
+                  }
                   value={
                     currentJobSchedulingObject?.timeAndDateAllocation
                       ?.estimatedWeeks
@@ -138,6 +157,9 @@ const TimeAndDateAllocation = ({
                   className="form-control"
                   id="la"
                   placeholder=""
+                  disabled={
+                    singleJobSchedulingObject?.complete !== true ? false : true
+                  }
                   value={
                     currentJobSchedulingObject?.timeAndDateAllocation
                       ?.internalAuditManagementHours
@@ -172,6 +194,9 @@ const TimeAndDateAllocation = ({
                       ?.placeOfWork || ""
                   }
                   name="placeOfWork"
+                  disabled={
+                    singleJobSchedulingObject?.complete !== true ? false : true
+                  }
                   onChange={handleChangeJobSchedulingStringTextFields}
                 >
                   <option>Select One</option>
@@ -194,6 +219,9 @@ const TimeAndDateAllocation = ({
                       ?.travellingDays
                   }
                   name="travellingDays"
+                  disabled={
+                    singleJobSchedulingObject?.complete !== true ? false : true
+                  }
                   onChange={(event) =>
                     handleChangeNumberTextField(event, "timeAllocation")
                   }
@@ -225,6 +253,11 @@ const TimeAndDateAllocation = ({
                       currentJobSchedulingObject?.timeAndDateAllocation
                         ?.repeatJob
                     }
+                    disabled={
+                      singleJobSchedulingObject?.complete !== true
+                        ? false
+                        : true
+                    }
                     onChange={(event) =>
                       handleChangeJobSchedulingCheckFields(event, "repeatJob")
                     }
@@ -249,6 +282,11 @@ const TimeAndDateAllocation = ({
                         ?.frequency || ""
                     }
                     name="frequency"
+                    disabled={
+                      singleJobSchedulingObject?.complete !== true
+                        ? false
+                        : true
+                    }
                     onChange={handleChangeJobSchedulingStringTextFields}
                   >
                     <option value="">Select</option>
@@ -259,21 +297,23 @@ const TimeAndDateAllocation = ({
                 </div>
               )}
             </div>
-            <div className="row mt-3">
-              <div className="col-lg-12 justify-content-end text-end">
-                <div
-                  className={`btn btn-labeled btn-primary px-3 shadow ${
-                    loading && "disabled"
-                  }`}
-                  onClick={handleSave}
-                >
-                  <span className="btn-label me-2">
-                    <i className="fa fa-check-circle"></i>
-                  </span>
-                  {loading ? "Loading..." : "Save"}
+            {singleJobSchedulingObject?.complete !== true && (
+              <div className="row mt-3">
+                <div className="col-lg-12 justify-content-end text-end">
+                  <div
+                    className={`btn btn-labeled btn-primary px-3 shadow ${
+                      loading && "disabled"
+                    }`}
+                    onClick={handleSave}
+                  >
+                    <span className="btn-label me-2">
+                      <i className="fa fa-check-circle"></i>
+                    </span>
+                    {loading ? "Loading..." : "Save"}
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

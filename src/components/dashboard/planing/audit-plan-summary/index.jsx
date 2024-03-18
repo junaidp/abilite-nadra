@@ -99,20 +99,6 @@ const AuditPlanSummary = () => {
 
   React.useEffect(() => {
     if (allAuditPlanSummary?.length !== 0) {
-      allAuditPlanSummary?.forEach((element) => {
-        setTotals((pre) => {
-          return {
-            serviceProvider:
-              Number(pre.serviceProvider) + Number(element.serviceProvider),
-            iaa: Number(pre.iaa) + Number(element.iaa),
-            total: Number(pre.total) + Number(element.total),
-            q1: Number(pre.q1) + Number(element.q1),
-            q2: Number(pre.q2) + Number(element.q2),
-            q3: Number(pre.q3) + Number(element.q3),
-            q4: Number(pre.q4) + Number(element.q4),
-          };
-        });
-      });
       setData(
         allAuditPlanSummary?.map((item) => {
           return {
@@ -121,6 +107,33 @@ const AuditPlanSummary = () => {
           };
         })
       );
+    }
+  }, [allAuditPlanSummary]);
+
+  React.useEffect(() => {
+    if (allAuditPlanSummary?.length !== 0) {
+      let dummyData = {
+        serviceProvider: 0,
+        iaa: 0,
+        total: 0,
+        q1: 0,
+        q2: 0,
+        q3: 0,
+        q4: 0,
+      };
+      allAuditPlanSummary?.forEach((element) => {
+        dummyData = {
+          serviceProvider:
+            Number(dummyData.serviceProvider) + Number(element.serviceProvider),
+          iaa: Number(dummyData.iaa) + Number(element.iaa),
+          total: Number(dummyData.total) + Number(element.total),
+          q1: Number(dummyData.q1) + Number(element.q1),
+          q2: Number(dummyData.q2) + Number(element.q2),
+          q3: Number(dummyData.q3) + Number(element.q3),
+          q4: Number(dummyData.q4) + Number(element.q4),
+        };
+      });
+      setTotals(dummyData);
     }
   }, [allAuditPlanSummary]);
 
@@ -240,13 +253,15 @@ const AuditPlanSummary = () => {
                         <td className="fw-bold">{totals?.q3}</td>
                         <td className="fw-bold">{totals?.q4}</td>
                         <td className="fw-bold">
-                          {totals?.serviceProvider +
+                          {(totals?.serviceProvider +
                             totals?.iaa +
-                            totals?.total +
-                            totals?.q1 +
-                            totals?.q2 +
-                            totals?.q3 +
-                            totals?.q4}
+                            totals?.total) /
+                            4 +
+                            (totals?.q1 +
+                              totals?.q2 +
+                              totals?.q3 +
+                              totals?.q4) /
+                              4}
                         </td>
                       </tr>
                     </tbody>

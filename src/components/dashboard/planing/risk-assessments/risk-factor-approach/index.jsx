@@ -209,16 +209,17 @@ const RiskFactorApproach = () => {
               </a>
               <div className="mb-0 heading">Risk Factor Approach</div>
             </div>
-
-            <div
-              className="btn btn-labeled btn-primary px-3 shadow"
-              onClick={() => setShowAddRiskFactorDialog(true)}
-            >
-              <span className="btn-label me-2">
-                <i className="fa fa-plus-circle"></i>
-              </span>
-              Add Risk Factor
-            </div>
+            {performRiskAssessmentObject?.riskAssessments?.riskRating === 0 && (
+              <div
+                className="btn btn-labeled btn-primary px-3 shadow"
+                onClick={() => setShowAddRiskFactorDialog(true)}
+              >
+                <span className="btn-label me-2">
+                  <i className="fa fa-plus-circle"></i>
+                </span>
+                Add Risk Factor
+              </div>
+            )}
           </div>
           <div className="ps-3 sub-heading mb-2">
             {performRiskAssessmentObject?.riskAssessments?.jobDescription}

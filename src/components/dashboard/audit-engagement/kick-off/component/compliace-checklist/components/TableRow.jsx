@@ -23,7 +23,7 @@ const TableRow = ({
         <a
           className="fw-bold  text-primary  px-3 py-1 f-10"
           onClick={() => {
-            if (mainItem?.approved !== true) {
+            if (mainItem?.submitted !== true) {
               setComplianceCheckListMainId(mainItem?.id);
               setShowComplianceCheckListDialog(true);
             }
@@ -37,7 +37,7 @@ const TableRow = ({
         <a
           className="fw-bold  text-primary  px-3 py-1 f-10"
           onClick={() => {
-            if (mainItem?.approved !== true) {
+            if (mainItem?.submitted !== true) {
               setComplianceCheckListMainId(mainItem?.id);
               setShowComplianceCheckListDialog(true);
             }
@@ -56,23 +56,26 @@ const TableRow = ({
         )}
       </td>
       <td>
-        <div className="mb-2">
-          <div
-            className={`btn btn-labeled btn-secondary px-3  shadow ${
-              downloadLoading &&
-              Number(mainItem?.id) === Number(downloadFileId) &&
-              "disabled"
-            }`}
-            onClick={() => handleDownload(mainItem?.id)}
-          >
-            <span className="btn-label me-2">
-              <i className="bi bi-box-arrow-down  f-18"></i>
-            </span>
-            {downloadLoading && Number(mainItem?.id) === Number(downloadFileId)
-              ? "Downloading..."
-              : "Download"}
+        {mainItem?.submitted === false && (
+          <div className="mb-2">
+            <div
+              className={`btn btn-labeled btn-secondary px-3  shadow ${
+                downloadLoading &&
+                Number(mainItem?.id) === Number(downloadFileId) &&
+                "disabled"
+              }`}
+              onClick={() => handleDownload(mainItem?.id)}
+            >
+              <span className="btn-label me-2">
+                <i className="bi bi-box-arrow-down  f-18"></i>
+              </span>
+              {downloadLoading &&
+              Number(mainItem?.id) === Number(downloadFileId)
+                ? "Downloading..."
+                : "Download"}
+            </div>
           </div>
-        </div>
+        )}
 
         {mainItem?.approved === true && (
           <button

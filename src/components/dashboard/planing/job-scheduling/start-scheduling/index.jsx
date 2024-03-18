@@ -133,22 +133,23 @@ const StartScheduling = () => {
       };
       const hasNullValue = Object.values(object).includes(null);
       if (
-        hasNullValue ||
-        object?.timeAndDateAllocation?.placeOfWork === null ||
-        object?.timeAndDateAllocation?.frequency === null ||
-        object?.resourceAllocation?.resourcesList === null ||
-        object?.resourceAllocation?.headOfInternalAudit === null ||
-        object?.resourceAllocation?.backupHeadOfInternalAudit === null ||
-        object?.resourceAllocation?.proposedJobApprover === null
+        !hasNullValue &&
+        object?.timeAndDateAllocation?.placeOfWork !== null &&
+        object?.timeAndDateAllocation?.frequency !== null &&
+        object?.resourceAllocation?.resourcesList &&
+        object?.resourceAllocation?.resourcesList?.length !== 0 &&
+        object?.resourceAllocation?.headOfInternalAudit &&
+        object?.resourceAllocation?.proposedJobApprover &&
+        object?.locationList?.length !== 0
       ) {
         object = {
           ...object,
-          complete: false,
+          complete: true,
         };
       } else {
         object = {
           ...object,
-          complete: true,
+          complete: false,
         };
       }
       dispatch(setupUpdateJobScheduling(object));
@@ -238,6 +239,7 @@ const StartScheduling = () => {
     };
   }, []);
 
+
   return (
     <div>
       {initialLoading ? (
@@ -269,6 +271,7 @@ const StartScheduling = () => {
                 name="locationList"
                 setCurrentJobScheduling={setCurrentJobScheduling}
                 currentJobSchedulingObject={currentJobSchedulingObject}
+                singleJobSchedulingObject={singleJobSchedulingObject}
               />
             </div>
             <div className="col-lg-5">
@@ -279,6 +282,7 @@ const StartScheduling = () => {
                 name="subLocation"
                 setCurrentJobScheduling={setCurrentJobScheduling}
                 currentJobSchedulingObject={currentJobSchedulingObject}
+                singleJobSchedulingObject={singleJobSchedulingObject}
               />
             </div>
             <div className="col-lg-2">
@@ -295,7 +299,8 @@ const StartScheduling = () => {
                   }
                   disabled={
                     currentJobSchedulingObject?.jobPrioritization?.auditableUnit
-                      ?.engagement?.natureThrough === "Compliance Checklist"
+                      ?.engagement?.natureThrough === "Compliance Checklist" ||
+                    singleJobSchedulingObject?.complete === true
                       ? true
                       : false
                   }
@@ -314,6 +319,7 @@ const StartScheduling = () => {
                   currentJobSchedulingObject={currentJobSchedulingObject}
                   handleChangeNumberTextField={handleChangeNumberTextField}
                   handleSaveMainJobScheduling={handleSaveMainJobScheduling}
+                  singleJobSchedulingObject={singleJobSchedulingObject}
                 />
                 <TimeAndDateAllocation
                   currentJobSchedulingObject={currentJobSchedulingObject}
@@ -325,6 +331,7 @@ const StartScheduling = () => {
                   }
                   handleChangeNumberTextField={handleChangeNumberTextField}
                   handleSaveMainJobScheduling={handleSaveMainJobScheduling}
+                  singleJobSchedulingObject={singleJobSchedulingObject}
                 />
 
                 <JobScheduleList
@@ -337,26 +344,28 @@ const StartScheduling = () => {
                   setCurrentJobScheduling={setCurrentJobScheduling}
                   initialUserList={initialUserList}
                   handleSaveMainJobScheduling={handleSaveMainJobScheduling}
+                  singleJobSchedulingObject={singleJobSchedulingObject}
                 />
               </div>
             </div>
           </div>
-
-          <div className="row mt-3">
-            <div className="col-lg-12 justify-content-end text-end">
-              <div
-                className={`btn btn-labeled btn-primary px-3 shadow ${
-                  loading && "disabled"
-                }`}
-                onClick={handleSaveMainJobScheduling}
-              >
-                <span className="btn-label me-2">
-                  <i className="fa fa-check-circle"></i>
-                </span>
-                {loading ? "Loading..." : "Save"}
+          {singleJobSchedulingObject?.complete !== true && (
+            <div className="row mt-3">
+              <div className="col-lg-12 justify-content-end text-end">
+                <div
+                  className={`btn btn-labeled btn-primary px-3 shadow ${
+                    loading && "disabled"
+                  }`}
+                  onClick={handleSaveMainJobScheduling}
+                >
+                  <span className="btn-label me-2">
+                    <i className="fa fa-check-circle"></i>
+                  </span>
+                  {loading ? "Loading..." : "Save"}
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </form>
       )}
     </div>

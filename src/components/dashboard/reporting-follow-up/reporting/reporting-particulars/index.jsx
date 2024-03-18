@@ -200,15 +200,11 @@ const ReportingParticulars = () => {
                               item={item}
                               handleChange={handleChange}
                               loading={loading}
-                              allUsers={
-                                Number(item?.stepNo) === 0
-                                  ? allUsers?.filter(
-                                      (singleUser) =>
-                                        Number(singleUser?.id) !==
-                                        user[0]?.userId?.id
-                                    )
-                                  : allUsers
-                              }
+                              allUsers={allUsers?.filter(
+                                (singleUser) =>
+                                  singleUser?.employeeid?.userHierarchy ===
+                                  "Management_Auditee"
+                              )}
                               singleReport={singleReport}
                               reportingId={reportingId}
                               setReport={setReport}

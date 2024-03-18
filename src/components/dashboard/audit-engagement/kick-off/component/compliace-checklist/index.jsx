@@ -34,6 +34,8 @@ const ComplianceCheckList = ({
   const [downloadLoading, setDownloadLoading] = React.useState(false);
   const [downloadFileId, setDownloadFileId] = React.useState(false);
   const [selectedFile, setSelectedFile] = React.useState(null);
+  const [showUpdateButton, setShowUpdateButton] = React.useState(true);
+
   const { user } = useSelector((state) => state?.auth);
   function checkStaus(item) {
     let submit = true;
@@ -126,6 +128,23 @@ const ComplianceCheckList = ({
     }
   };
 
+  React.useEffect(() => {
+    if (
+      singleAuditEngagementObject?.auditStepChecklistList &&
+      singleAuditEngagementObject?.auditStepChecklistList?.length !== 0
+    ) {
+      const containsSubmittedFalse =
+        singleAuditEngagementObject?.auditStepChecklistList.some(
+          (item) => !item.submitted
+        );
+      if (containsSubmittedFalse) {
+        setShowUpdateButton(true);
+      } else {
+        setShowUpdateButton(false);
+      }
+    }
+  }, [singleAuditEngagementObject]);
+
   return (
     <div className="accordion-item">
       <h2 className="accordion-header" id="headingeight">
@@ -156,36 +175,37 @@ const ComplianceCheckList = ({
         data-bs-parent="#accordionFlushExample"
       >
         <div className="accordion-body">
-          {currentAuditEngagement?.auditStepChecklistList?.length !== 0 && (
-            <>
-              <div className="row">
-                <div className="mx-2 mb-2 col-lg-3">
-                  <Button
-                    component="label"
-                    role={undefined}
-                    variant="contained"
-                    tabIndex={-1}
-                    startIcon={<CloudUploadIcon />}
-                    ref={fileInputRef}
-                    onChange={handleFileChange}
-                  >
-                    File
-                    <VisuallyHiddenInput type="file" />
-                  </Button>
-                  <Button
-                    component="label"
-                    className="mx-2"
-                    onClick={handleFileUpdate}
-                  >
-                    Update File
-                  </Button>
+          {currentAuditEngagement?.auditStepChecklistList?.length !== 0 &&
+            showUpdateButton === true && (
+              <>
+                <div className="row">
+                  <div className="mx-2 mb-2 col-lg-3">
+                    <Button
+                      component="label"
+                      role={undefined}
+                      variant="contained"
+                      tabIndex={-1}
+                      startIcon={<CloudUploadIcon />}
+                      ref={fileInputRef}
+                      onChange={handleFileChange}
+                    >
+                      File
+                      <VisuallyHiddenInput type="file" />
+                    </Button>
+                    <Button
+                      component="label"
+                      className="mx-2"
+                      onClick={handleFileUpdate}
+                    >
+                      Update File
+                    </Button>
+                  </div>
                 </div>
-              </div>
-              <p className="mx-2">
-                {selectedFile?.name ? selectedFile?.name : "Select file"}
-              </p>
-            </>
-          )}
+                <p className="mx-2">
+                  {selectedFile?.name ? selectedFile?.name : "Select file"}
+                </p>
+              </>
+            )}
 
           <div className="container">
             <div className="row">

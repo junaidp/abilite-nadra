@@ -150,10 +150,10 @@ const ComplianceCheckListCard = () => {
                                       <thead className="bg-secondary text-white">
                                         <tr>
                                           <th className="w-80">Sr No.</th>
+                                          <th className="w-80">Id</th>
                                           <th>Area</th>
                                           <th>Subject</th>
                                           <th>Particulars</th>
-                                          <th>Observation</th>
                                         </tr>
                                       </thead>
                                       <tbody>
@@ -169,13 +169,11 @@ const ComplianceCheckListCard = () => {
                                               return (
                                                 <tr key={i}>
                                                   <td>{i + 1}</td>
+                                                  <td>{checkItem?.id}</td>
                                                   <td>{checkItem?.area}</td>
                                                   <td>{checkItem?.subject}</td>
                                                   <td>
                                                     {checkItem?.particulars}
-                                                  </td>
-                                                  <td>
-                                                    {checkItem?.observation}
                                                   </td>
                                                 </tr>
                                               );
@@ -240,10 +238,10 @@ const ComplianceCheckListCard = () => {
                               <thead className="bg-secondary text-white">
                                 <tr>
                                   <th className="w-80">Sr No.</th>
+                                  <th className="w-80">Id</th>
                                   <th>Area</th>
                                   <th>Subject</th>
                                   <th>Particulars</th>
-                                  <th>Observation</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -259,10 +257,10 @@ const ComplianceCheckListCard = () => {
                                       return (
                                         <tr key={ind}>
                                           <td>{ind + 1}</td>
+                                          <td>{checkItem?.id}</td>
                                           <td>{checkItem?.area}</td>
                                           <td>{checkItem?.subject}</td>
                                           <td>{checkItem?.particulars}</td>
-                                          <td>{checkItem?.observation}</td>
                                         </tr>
                                       );
                                     }

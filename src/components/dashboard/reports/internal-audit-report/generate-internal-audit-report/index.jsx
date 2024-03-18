@@ -8,6 +8,7 @@ import {
   setupSaveInternalAuditReport,
   resetInternalAuditReportAddSuccess,
 } from "../../../../../global-redux/reducers/reports/internal-audit-report/slice";
+import { htmlToText } from "html-to-text";
 import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
@@ -132,9 +133,6 @@ const GenerateInternalAuditReport = () => {
       if (reportObject?.auditPurpose === "" || !reportObject?.auditPurpose) {
         toast.error("Provide Audit Purpose");
       }
-      if (reportObject?.annexure === "" || !reportObject?.annexure) {
-        toast.error("Annexure Is Required");
-      }
       if (
         reportObject?.intAuditExtraFieldsList?.length === 0 ||
         !reportObject?.intAuditExtraFieldsList
@@ -147,8 +145,6 @@ const GenerateInternalAuditReport = () => {
         reportObject?.executiveSummary &&
         reportObject?.auditPurpose !== "" &&
         reportObject?.auditPurpose &&
-        reportObject?.annexure !== "" &&
-        reportObject?.annexure &&
         reportObject?.intAuditExtraFieldsList?.length !== 0 &&
         reportObject?.intAuditExtraFieldsList
       )
@@ -187,7 +183,17 @@ const GenerateInternalAuditReport = () => {
       Object.keys(internalAuditReportObject).length !== 0 &&
       internalAuditReportObject.constructor === Object;
     if (isNotNull) {
-      setReportObject(internalAuditReportObject);
+      setReportObject({
+        ...internalAuditReportObject,
+        keyFindingsList: internalAuditReportObject?.keyFindingsList?.map(
+          (finding) => {
+            return {
+              ...finding,
+              summaryOfKeyFinding: htmlToText(finding?.summaryOfKeyFinding),
+            };
+          }
+        ),
+      });
     }
   }, [internalAuditReportObject]);
 

@@ -32,6 +32,7 @@ export default function MultipleSelect({
   section,
   allUsers,
   currentJobSchedulingObject,
+  singleJobSchedulingObject,
 }) {
   const theme = useTheme();
   const [selectedArray, setSelectedArray] = React.useState(
@@ -92,6 +93,7 @@ export default function MultipleSelect({
           onChange={handleChange}
           input={<OutlinedInput label={title} />}
           MenuProps={MenuProps}
+          disabled={singleJobSchedulingObject?.complete !== true ? false : true}
         >
           {names.map((name) => (
             <MenuItem

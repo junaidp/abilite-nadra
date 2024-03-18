@@ -11,6 +11,7 @@ const SelectComponent = ({
   value,
   label,
   allUsers,
+  singleJobSchedulingObject,
 }) => {
   function handleChange(event) {
     setCurrentJobScheduling((pre) => {
@@ -33,6 +34,9 @@ const SelectComponent = ({
             id="demo-simple-select"
             value={value}
             onChange={handleChange}
+            disabled={
+              singleJobSchedulingObject?.complete !== true ? false : true
+            }
           >
             <MenuItem value="">Select User</MenuItem>
             {list?.map((item, index) => {

@@ -10,6 +10,7 @@ const ResourceAllocation = ({
   setCurrentJobScheduling,
   initialUserList,
   handleSaveMainJobScheduling,
+  singleJobSchedulingObject,
 }) => {
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state?.planingJobScheduling);
@@ -37,6 +38,15 @@ const ResourceAllocation = ({
           aria-expanded="false"
           aria-controls="flush-collapseThree"
         >
+          {singleJobSchedulingObject?.resourceAllocation
+            ?.backupHeadOfInternalAudit &&
+            singleJobSchedulingObject?.resourceAllocation
+              ?.proposedJobApprover &&
+            singleJobSchedulingObject?.resourceAllocation?.resourcesList &&
+            singleJobSchedulingObject?.resourceAllocation?.resourcesList
+              ?.length !== 0 && (
+              <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
+            )}
           Resource Allocation
         </button>
       </h2>
@@ -84,11 +94,15 @@ const ResourceAllocation = ({
                     currentJobSchedulingObject?.resourceAllocation
                       ?.backupHeadOfInternalAudit?.name || ""
                   }
+                  singleJobSchedulingObject={singleJobSchedulingObject}
                   setCurrentJobScheduling={setCurrentJobScheduling}
                   name="backupHeadOfInternalAudit"
                   list={allUsers
                     ?.filter(
-                      (userItem) => Number(userItem?.id) !== user[0]?.userId?.id
+                      (userItem) =>
+                        Number(userItem?.id) !== Number(user[0]?.userId?.id) &&
+                        userItem?.employeeid?.userHierarchy !==
+                          "Management_Auditee"
                     )
                     ?.map((all) => all?.name)}
                   allUsers={allUsers}
@@ -107,10 +121,14 @@ const ResourceAllocation = ({
                   name="proposedJobApprover"
                   list={allUsers
                     ?.filter(
-                      (userItem) => Number(userItem?.id) !== user[0]?.userId?.id
+                      (userItem) =>
+                        Number(userItem?.id) !== Number(user[0]?.userId?.id) &&
+                        userItem?.employeeid?.userHierarchy !==
+                          "Management_Auditee"
                     )
                     ?.map((all) => all?.name)}
                   allUsers={allUsers}
+                  singleJobSchedulingObject={singleJobSchedulingObject}
                 />
               </div>
               <div className="col-lg-6">
@@ -119,7 +137,9 @@ const ResourceAllocation = ({
                   names={allUsers
                     ?.filter(
                       (userItem) =>
-                        Number(userItem?.id) !== Number(user[0]?.userId?.id)
+                        Number(userItem?.id) !== Number(user[0]?.userId?.id) &&
+                        userItem?.employeeid?.userHierarchy !==
+                          "Management_Auditee"
                     )
                     ?.map((all) => all?.name)}
                   initialPersonalArray={initialUserList}
@@ -127,24 +147,27 @@ const ResourceAllocation = ({
                   setCurrentJobScheduling={setCurrentJobScheduling}
                   section="resourceAllocation"
                   allUsers={allUsers}
+                  singleJobSchedulingObject={singleJobSchedulingObject}
                 />
               </div>
             </div>
-            <div className="row mt-3">
-              <div className="col-lg-12 justify-content-end text-end">
-                <div
-                  className={`btn btn-labeled btn-primary px-3 shadow ${
-                    loading && "disabled"
-                  }`}
-                  onClick={handleSave}
-                >
-                  <span className="btn-label me-2">
-                    <i className="fa fa-check-circle"></i>
-                  </span>
-                  {loading ? "Loading..." : "Save"}
+            {singleJobSchedulingObject?.complete !== true && (
+              <div className="row mt-3">
+                <div className="col-lg-12 justify-content-end text-end">
+                  <div
+                    className={`btn btn-labeled btn-primary px-3 shadow ${
+                      loading && "disabled"
+                    }`}
+                    onClick={handleSave}
+                  >
+                    <span className="btn-label me-2">
+                      <i className="fa fa-check-circle"></i>
+                    </span>
+                    {loading ? "Loading..." : "Save"}
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
