@@ -31,7 +31,6 @@ export default function MultipleSelect({
   name,
   section,
   allUsers,
-  currentJobSchedulingObject,
   singleJobSchedulingObject,
 }) {
   const theme = useTheme();
@@ -74,12 +73,6 @@ export default function MultipleSelect({
   React.useEffect(() => {
     setSelectedArray(initialPersonalArray);
   }, [initialPersonalArray]);
-
-  // React.useEffect(() => {
-  //   if (name === "subLocation") {
-  //     setSelectedArray(currentJobSchedulingObject?.subLocation);
-  //   }
-  // }, [currentJobSchedulingObject?.locationList]);
 
   return (
     <div>

@@ -194,16 +194,30 @@ const StartScheduling = () => {
     let allSubLocations = locationArray.reduce((acc, item) => {
       return acc.concat(item.subLocations);
     }, []);
-    // setCurrentJobScheduling((pre) => {
-    //   return {
-    //     ...pre,
-    //     subLocation: allSubLocations
+    // if (
+    //   currentJobSchedulingObject?.subLocation &&
+    //   !currentJobSchedulingObject?.subLocation[0]?.description
+    // ) {
+    //   setInitialSubLocationList(
+    //     allSubLocations
     //       .filter((item) =>
     //         currentJobSchedulingObject?.subLocation?.includes(item?.description)
     //       )
-    //       ?.map((item) => item?.description),
-    //   };
-    // });
+    //       ?.map((item) => item?.description)
+    //   );
+    //   setCurrentJobScheduling((pre) => {
+    //     return {
+    //       ...pre,
+    //       subLocation: allSubLocations
+    //         .filter((item) =>
+    //           currentJobSchedulingObject?.subLocation?.includes(
+    //             item?.description
+    //           )
+    //         )
+    //         ?.map((item) => item?.description),
+    //     };
+    //   });
+    // }
     setAllSubLocations(allSubLocations);
   }, [currentJobSchedulingObject?.locationList]);
 
@@ -239,7 +253,6 @@ const StartScheduling = () => {
     };
   }, []);
 
-
   return (
     <div>
       {initialLoading ? (
@@ -270,7 +283,6 @@ const StartScheduling = () => {
                 initialPersonalArray={initialLocationList}
                 name="locationList"
                 setCurrentJobScheduling={setCurrentJobScheduling}
-                currentJobSchedulingObject={currentJobSchedulingObject}
                 singleJobSchedulingObject={singleJobSchedulingObject}
               />
             </div>
@@ -281,7 +293,6 @@ const StartScheduling = () => {
                 initialPersonalArray={initialSubLocationList}
                 name="subLocation"
                 setCurrentJobScheduling={setCurrentJobScheduling}
-                currentJobSchedulingObject={currentJobSchedulingObject}
                 singleJobSchedulingObject={singleJobSchedulingObject}
               />
             </div>

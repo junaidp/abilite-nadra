@@ -121,16 +121,32 @@ const ReportingParticulars = () => {
       Object.keys(singleReport).length === 0 &&
       singleReport.constructor === Object;
     if (!isEmptyObject && reportingId) {
-      setReport({
-        ...singleReport,
-        reportingList: singleReport?.reportingList?.map((singleItem) => {
-          return {
-            ...singleItem,
-            observationName: htmlToText(singleItem?.observationName),
-            observationTitle: htmlToText(singleItem?.observationTitle),
-          };
-        }),
-      });
+      if (user[0]?.userId?.employeeid?.userHierarchy !== "Management_Auditee") {
+        setReport({
+          ...singleReport,
+          reportingList: singleReport?.reportingList?.map((singleItem) => {
+            return {
+              ...singleItem,
+              observationName: htmlToText(singleItem?.observationName),
+              observationTitle: htmlToText(singleItem?.observationTitle),
+            };
+          }),
+        });
+      }
+      if (user[0]?.userId?.employeeid?.userHierarchy === "Management_Auditee") {
+        setReport({
+          ...singleReport,
+          reportingList: singleReport?.reportingList
+            ?.filter((all) => all?.stepNo === 2)
+            ?.map((singleItem) => {
+              return {
+                ...singleItem,
+                observationName: htmlToText(singleItem?.observationName),
+                observationTitle: htmlToText(singleItem?.observationTitle),
+              };
+            }),
+        });
+      }
     }
   }, [singleReport]);
 

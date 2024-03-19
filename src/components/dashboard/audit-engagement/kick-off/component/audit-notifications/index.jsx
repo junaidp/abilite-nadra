@@ -1,10 +1,10 @@
 import React from "react";
-import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { setupSaveAuditNotification } from "../../../../../../global-redux/reducers/audit-engagement/slice";
 
 const AuditNotifications = ({ currentAuditEngagement, auditEngagementId }) => {
   const { loading } = useSelector((state) => state?.auditEngagement);
+  const [showSubmitButton, setShowSubmitButton] = React.useState(true);
   const dispatch = useDispatch();
   const [data, setData] = React.useState({
     toEmail: "",
@@ -23,21 +23,12 @@ const AuditNotifications = ({ currentAuditEngagement, auditEngagementId }) => {
   }
 
   function handleSend() {
-    if (
-      data?.ccEmail === "" ||
-      data?.toEmail === "" ||
-      data?.subject === "" ||
-      data?.body === ""
-    ) {
-      toast.error("Please provide all values");
-    } else {
-      dispatch(
-        setupSaveAuditNotification({
-          ...data,
-          engagementId: Number(auditEngagementId),
-        })
-      );
-    }
+    dispatch(
+      setupSaveAuditNotification({
+        ...data,
+        engagementId: Number(auditEngagementId),
+      })
+    );
   }
 
   React.useEffect(() => {
@@ -52,6 +43,19 @@ const AuditNotifications = ({ currentAuditEngagement, auditEngagementId }) => {
       });
     }
   }, [currentAuditEngagement]);
+
+  React.useEffect(() => {
+    if (currentAuditEngagement?.auditNotification) {
+      let { body, ccEmail, subject, toEmail } =
+        currentAuditEngagement?.auditNotification;
+      if (!body || !ccEmail || !subject || !toEmail) {
+        setShowSubmitButton(true);
+      } else {
+        setShowSubmitButton(false);
+      }
+    }
+  }, [currentAuditEngagement]);
+
   return (
     <div className="accordion-item">
       <h2 className="accordion-header">
@@ -63,7 +67,7 @@ const AuditNotifications = ({ currentAuditEngagement, auditEngagementId }) => {
           aria-expanded="false"
           aria-controls="flush-collapseTwo"
         >
-          {currentAuditEngagement?.auditNotification !== null && (
+          {showSubmitButton === false && (
             <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
           )}
           Audit Notification
@@ -87,11 +91,7 @@ const AuditNotifications = ({ currentAuditEngagement, auditEngagementId }) => {
                     name="toEmail"
                     value={data?.toEmail}
                     onChange={(event) => handleChange(event)}
-                    disabled={
-                      currentAuditEngagement?.auditNotification !== null
-                        ? true
-                        : false
-                    }
+                    disabled={showSubmitButton === false ? true : false}
                   />
                 </div>
                 <div className="d-flex mb-2  align-items-center">
@@ -103,11 +103,7 @@ const AuditNotifications = ({ currentAuditEngagement, auditEngagementId }) => {
                     name="ccEmail"
                     value={data?.ccEmail}
                     onChange={(event) => handleChange(event)}
-                    disabled={
-                      currentAuditEngagement?.auditNotification !== null
-                        ? true
-                        : false
-                    }
+                    disabled={showSubmitButton === false ? true : false}
                   />
                 </div>
                 <div className="d-flex mb-2  align-items-center">
@@ -119,11 +115,7 @@ const AuditNotifications = ({ currentAuditEngagement, auditEngagementId }) => {
                     name="subject"
                     value={data?.subject}
                     onChange={(event) => handleChange(event)}
-                    disabled={
-                      currentAuditEngagement?.auditNotification !== null
-                        ? true
-                        : false
-                    }
+                    disabled={showSubmitButton === false ? true : false}
                   />
                 </div>
                 <div className="d-flex mb-2  align-items-center">
@@ -136,20 +128,12 @@ const AuditNotifications = ({ currentAuditEngagement, auditEngagementId }) => {
                     name="body"
                     value={data?.body}
                     onChange={(event) => handleChange(event)}
-                    disabled={
-                      currentAuditEngagement?.auditNotification !== null
-                        ? true
-                        : false
-                    }
+                    disabled={showSubmitButton === false ? true : false}
                   ></textarea>
                 </div>
 
                 <div className="d-flex justify-content-between">
-                  {/* <div className="ms-5 ps-5">
-                    <label htmlFor="fileInput">Add Attachment:</label>
-                    <input className="ms-3 f-10" type="file" id="fileInput" />
-                  </div> */}
-                  {currentAuditEngagement?.auditNotification === null && (
+                  {showSubmitButton && (
                     <button
                       className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
                         loading && "disabled"

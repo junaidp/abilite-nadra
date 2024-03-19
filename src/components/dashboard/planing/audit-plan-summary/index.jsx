@@ -253,15 +253,7 @@ const AuditPlanSummary = () => {
                         <td className="fw-bold">{totals?.q3}</td>
                         <td className="fw-bold">{totals?.q4}</td>
                         <td className="fw-bold">
-                          {(totals?.serviceProvider +
-                            totals?.iaa +
-                            totals?.total) /
-                            4 +
-                            (totals?.q1 +
-                              totals?.q2 +
-                              totals?.q3 +
-                              totals?.q4) /
-                              4}
+                          {totals?.q1 + totals?.q2 + totals?.q3 + totals?.q4}
                         </td>
                       </tr>
                     </tbody>
