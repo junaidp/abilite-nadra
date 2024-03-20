@@ -28,6 +28,7 @@ const StartScheduling = () => {
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
   const jobSchedulingId = searchParams.get("jobScheduling");
+
   const {
     loading,
     jobSchedulingAddSuccess,
@@ -332,6 +333,7 @@ const StartScheduling = () => {
                   handleSaveMainJobScheduling={handleSaveMainJobScheduling}
                   singleJobSchedulingObject={singleJobSchedulingObject}
                 />
+
                 <TimeAndDateAllocation
                   currentJobSchedulingObject={currentJobSchedulingObject}
                   handleChangeJobSchedulingCheckFields={
@@ -347,16 +349,31 @@ const StartScheduling = () => {
 
                 <JobScheduleList
                   currentJobSchedulingObject={currentJobSchedulingObject}
+                  setCurrentJobScheduling={setCurrentJobScheduling}
+                  handleSaveMainJobScheduling={handleSaveMainJobScheduling}
                 />
 
-                <ResourceAllocation
-                  currentJobSchedulingObject={currentJobSchedulingObject}
-                  allUsers={allUsers}
-                  setCurrentJobScheduling={setCurrentJobScheduling}
-                  initialUserList={initialUserList}
-                  handleSaveMainJobScheduling={handleSaveMainJobScheduling}
-                  singleJobSchedulingObject={singleJobSchedulingObject}
-                />
+                {singleJobSchedulingObject?.numberOfResourcesRequired &&
+                  (singleJobSchedulingObject?.numberOfResourcesRequired
+                    ?.finance > 0 ||
+                    singleJobSchedulingObject?.numberOfResourcesRequired
+                      ?.business > 0 ||
+                    singleJobSchedulingObject?.numberOfResourcesRequired
+                      ?.fraud > 0 ||
+                    singleJobSchedulingObject?.numberOfResourcesRequired
+                      ?.operations > 0 ||
+                    singleJobSchedulingObject?.numberOfResourcesRequired
+                      ?.other > 0 ||
+                    singleJobSchedulingObject?.numberOfResourcesRequired?.it >
+                      0) && (
+                    <ResourceAllocation
+                      currentJobSchedulingObject={currentJobSchedulingObject}
+                      setCurrentJobScheduling={setCurrentJobScheduling}
+                      initialUserList={initialUserList}
+                      handleSaveMainJobScheduling={handleSaveMainJobScheduling}
+                      allUsers={allUsers}
+                    />
+                  )}
               </div>
             </div>
           </div>

@@ -2,6 +2,7 @@ import React from "react";
 import Select from "../select/Select";
 import moment from "moment";
 import { useSelector } from "react-redux";
+import RichTextEditor from "../rich-text/RichText";
 
 const AccordianItem = ({
   item,
@@ -16,9 +17,11 @@ const AccordianItem = ({
   handleSaveToStep4,
   singleReport,
   reportingId,
+  handleObservationChange,
 }) => {
   const { user } = useSelector((state) => state?.auth);
   const [curretItem, setCurrentItem] = React.useState({});
+
   React.useEffect(() => {
     if (singleReport && reportingId) {
       setCurrentItem(
@@ -56,9 +59,9 @@ const AccordianItem = ({
         data-bs-parent="#accordionFlushExample"
       >
         <div className="accordion-body">
-          <p>
+          {/* <p>
             <label className="label-text f-14">{item?.observationName}</label>
-          </p>
+          </p> */}
 
           <div className="d-flex mb-3">
             <label className="pe-4">Location:</label>
@@ -82,7 +85,7 @@ const AccordianItem = ({
           </div>
 
           <label>Observation:</label>
-          <textarea
+          {/* <textarea
             className="form-control "
             placeholder="Enter Reason"
             id="exampleFor"
@@ -94,7 +97,16 @@ const AccordianItem = ({
           ></textarea>
           <label className="word-limit-info label-text mb-3">
             Maximum 1500 words
-          </label>
+          </label> */}
+
+          <div className="mb-4">
+            <RichTextEditor
+              onContentChange={handleObservationChange}
+              initialValue={item?.observationName}
+              id={item?.id}
+              editable={item?.stepNo !== 0 ? "false" : "true"}
+            />
+          </div>
 
           <div className="d-flex mb-3 align-items-center">
             <label className="pe-4">Implication Rating:</label>

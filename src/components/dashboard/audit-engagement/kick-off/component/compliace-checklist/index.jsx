@@ -45,7 +45,8 @@ const ComplianceCheckList = ({
         all?.remarks === null ||
         all?.observation === "" ||
         all?.observation === null ||
-        all?.remarks === "PARTIALLY_APPLICABLE"
+        all?.remarks === "PARTIALLY_APPLICABLE" ||
+        all?.remarks === "0"
       ) {
         submit = false;
       }

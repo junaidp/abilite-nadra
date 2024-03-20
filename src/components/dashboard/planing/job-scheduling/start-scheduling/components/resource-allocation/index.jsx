@@ -6,14 +6,16 @@ import { setUpupdateJobSchedulingResourcesAllocation } from "../../../../../../.
 import TextField from "@mui/material/TextField";
 const ResourceAllocation = ({
   currentJobSchedulingObject,
-  allUsers,
   setCurrentJobScheduling,
   initialUserList,
   handleSaveMainJobScheduling,
-  singleJobSchedulingObject,
+  allUsers,
 }) => {
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state?.planingJobScheduling);
+  const { loading, singleJobSchedulingObject } = useSelector(
+    (state) => state?.planingJobScheduling
+  );
+  const [selectedUsers, setSelectedUsers] = React.useState([]);
   const { user } = useSelector((state) => state?.auth);
   function handleSave() {
     if (!loading) {
@@ -27,6 +29,46 @@ const ResourceAllocation = ({
       handleSaveMainJobScheduling();
     }, 2000);
   }
+
+  React.useEffect(() => {
+    const isEmptyObject =
+      Object.keys(singleJobSchedulingObject).length === 0 &&
+      singleJobSchedulingObject.constructor === Object;
+    if (!isEmptyObject && user[0]?.token && allUsers?.length !== 0) {
+      let array = [];
+      if (singleJobSchedulingObject?.numberOfResourcesRequired?.finance > 0) {
+        array = [...array, "Finance"];
+      }
+      if (singleJobSchedulingObject?.numberOfResourcesRequired?.business > 0) {
+        array = [...array, "Business"];
+      }
+      if (singleJobSchedulingObject?.numberOfResourcesRequired?.fraud > 0) {
+        array = [...array, "Fraud"];
+      }
+      if (
+        singleJobSchedulingObject?.numberOfResourcesRequired?.operations > 0
+      ) {
+        array = [...array, "Operations"];
+      }
+      if (singleJobSchedulingObject?.numberOfResourcesRequired?.other > 0) {
+        array = [...array, "Other"];
+      }
+      if (singleJobSchedulingObject?.numberOfResourcesRequired?.it > 0) {
+        array = [...array, "IT"];
+      }
+
+      let filteredUser = allUsers.filter((item) =>
+        array.includes(item?.employeeid?.skillSet)
+      );
+      filteredUser = filteredUser?.filter(
+        (singleItem) =>
+          Number(singleItem?.id) !== Number(user[0]?.userId?.id) &&
+          singleItem?.employeeid?.userHierarchy !== "Management_Auditee"
+      );
+      setSelectedUsers(filteredUser);
+    }
+  }, [singleJobSchedulingObject, user, allUsers]);
+
   return (
     <div className="accordion-item">
       <h2 className="accordion-header">
@@ -88,67 +130,59 @@ const ResourceAllocation = ({
                 />
               </div>
               <div className="col-lg-6">
-                <Select
-                  label="Backup Head Of InternalAudit"
-                  value={
-                    currentJobSchedulingObject?.resourceAllocation
-                      ?.backupHeadOfInternalAudit?.name || ""
-                  }
-                  singleJobSchedulingObject={singleJobSchedulingObject}
-                  setCurrentJobScheduling={setCurrentJobScheduling}
-                  name="backupHeadOfInternalAudit"
-                  list={allUsers
-                    ?.filter(
-                      (userItem) =>
-                        Number(userItem?.id) !== Number(user[0]?.userId?.id) &&
-                        userItem?.employeeid?.userHierarchy !==
-                          "Management_Auditee"
-                    )
-                    ?.map((all) => all?.name)}
-                  allUsers={allUsers}
-                />
+                {selectedUsers?.length === 0 ? (
+                  <p>Please add users in resources required</p>
+                ) : (
+                  <Select
+                    label="Backup Head Of InternalAudit"
+                    value={
+                      currentJobSchedulingObject?.resourceAllocation
+                        ?.backupHeadOfInternalAudit?.name || ""
+                    }
+                    singleJobSchedulingObject={singleJobSchedulingObject}
+                    setCurrentJobScheduling={setCurrentJobScheduling}
+                    name="backupHeadOfInternalAudit"
+                    list={selectedUsers?.map((all) => all?.name)}
+                    allUsers={selectedUsers}
+                  />
+                )}
               </div>
             </div>
             <div className="row mb-3">
               <div className="col-lg-6">
-                <Select
-                  label="Proposed Job Approver"
-                  value={
-                    currentJobSchedulingObject?.resourceAllocation
-                      ?.proposedJobApprover?.name || ""
-                  }
-                  setCurrentJobScheduling={setCurrentJobScheduling}
-                  name="proposedJobApprover"
-                  list={allUsers
-                    ?.filter(
-                      (userItem) =>
-                        Number(userItem?.id) !== Number(user[0]?.userId?.id) &&
-                        userItem?.employeeid?.userHierarchy !==
-                          "Management_Auditee"
-                    )
-                    ?.map((all) => all?.name)}
-                  allUsers={allUsers}
-                  singleJobSchedulingObject={singleJobSchedulingObject}
-                />
+                {selectedUsers?.length === 0 ? (
+                  <p>Please add users in resources required</p>
+                ) : (
+                  <Select
+                    label="Proposed Job Approver"
+                    value={
+                      currentJobSchedulingObject?.resourceAllocation
+                        ?.proposedJobApprover?.name || ""
+                    }
+                    setCurrentJobScheduling={setCurrentJobScheduling}
+                    name="proposedJobApprover"
+                    list={selectedUsers?.map((all) => all?.name)}
+                    allUsers={selectedUsers}
+                    singleJobSchedulingObject={singleJobSchedulingObject}
+                  />
+                )}
               </div>
+
               <div className="col-lg-6">
-                <MultiSelect
-                  title="Resources List"
-                  names={allUsers
-                    ?.filter(
-                      (userItem) =>
-                        Number(userItem?.id) !== Number(user[0]?.userId?.id) &&
-                        userItem?.employeeid?.userHierarchy !==
-                          "Management_Auditee"
-                    )
-                    ?.map((all) => all?.name)}
-                  initialPersonalArray={initialUserList}
-                  name="resourcesList"
-                  setCurrentJobScheduling={setCurrentJobScheduling}
-                  section="resourceAllocation"
-                  allUsers={allUsers}
-                  singleJobSchedulingObject={singleJobSchedulingObject}
-                />
+                {selectedUsers?.length === 0 ? (
+                  <p>Please add users in resources required</p>
+                ) : (
+                  <MultiSelect
+                    title="Resources List"
+                    names={selectedUsers?.map((all) => all?.name)}
+                    initialPersonalArray={initialUserList}
+                    name="resourcesList"
+                    setCurrentJobScheduling={setCurrentJobScheduling}
+                    section="resourceAllocation"
+                    allUsers={selectedUsers}
+                    singleJobSchedulingObject={singleJobSchedulingObject}
+                  />
+                )}
               </div>
             </div>
             {singleJobSchedulingObject?.complete !== true && (

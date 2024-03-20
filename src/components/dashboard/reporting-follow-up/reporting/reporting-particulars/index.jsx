@@ -11,7 +11,6 @@ import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
 } from "../../../../../global-redux/reducers/common/slice";
-import { htmlToText } from "html-to-text";
 import { setupGetAllUsers } from "../../../../../global-redux/reducers/settings/user-management/slice";
 import { useDispatch, useSelector } from "react-redux";
 import AccordianItem from "./component/accordian-item/AccordianItem";
@@ -36,6 +35,19 @@ const ReportingParticulars = () => {
         reportingList: pre?.reportingList?.map((report) =>
           Number(report?.id) === Number(id)
             ? { ...report, [event?.target?.name]: event?.target?.value }
+            : report
+        ),
+      };
+    });
+  }
+
+  function handleObservationChange(id, content) {
+    setReport((pre) => {
+      return {
+        ...pre,
+        reportingList: pre?.reportingList?.map((report) =>
+          Number(report?.id) === Number(id)
+            ? { ...report, observationName: content }
             : report
         ),
       };
@@ -122,29 +134,14 @@ const ReportingParticulars = () => {
       singleReport.constructor === Object;
     if (!isEmptyObject && reportingId) {
       if (user[0]?.userId?.employeeid?.userHierarchy !== "Management_Auditee") {
-        setReport({
-          ...singleReport,
-          reportingList: singleReport?.reportingList?.map((singleItem) => {
-            return {
-              ...singleItem,
-              observationName: htmlToText(singleItem?.observationName),
-              observationTitle: htmlToText(singleItem?.observationTitle),
-            };
-          }),
-        });
+        setReport(singleReport);
       }
       if (user[0]?.userId?.employeeid?.userHierarchy === "Management_Auditee") {
         setReport({
           ...singleReport,
-          reportingList: singleReport?.reportingList
-            ?.filter((all) => all?.stepNo === 2)
-            ?.map((singleItem) => {
-              return {
-                ...singleItem,
-                observationName: htmlToText(singleItem?.observationName),
-                observationTitle: htmlToText(singleItem?.observationTitle),
-              };
-            }),
+          reportingList: singleReport?.reportingList?.filter(
+            (all) => Number(all?.stepNo) === 2
+          ),
         });
       }
     }
@@ -229,6 +226,7 @@ const ReportingParticulars = () => {
                               handleSaveStep2={handleSaveStep2}
                               handleSaveToStep3={handleSaveToStep3}
                               handleSaveToStep4={handleSaveToStep4}
+                              handleObservationChange={handleObservationChange}
                             />
                           );
                         })}

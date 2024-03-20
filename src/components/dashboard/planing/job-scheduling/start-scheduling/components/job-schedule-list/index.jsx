@@ -1,7 +1,45 @@
 import React from "react";
-import moment from "moment";
+import { useSelector } from "react-redux";
 
-const JobScheduleList = ({ currentJobSchedulingObject }) => {
+const JobScheduleList = ({
+  currentJobSchedulingObject,
+  setCurrentJobScheduling,
+  handleSaveMainJobScheduling,
+}) => {
+  const { loading, singleJobSchedulingObject } = useSelector(
+    (state) => state?.planingJobScheduling
+  );
+
+  function handleSaveJobScheduling() {
+    if (!loading) {
+      handleSaveMainJobScheduling();
+    }
+  }
+
+  function handleChangeDate(event, id) {
+    const currentValue = event?.target?.value;
+    const totalWeeks = Number(
+      singleJobSchedulingObject?.timeAndDateAllocation?.estimatedWeeks
+    );
+    const newDate = currentValue ? new Date(currentValue) : null;
+    const endDate = new Date(newDate);
+    endDate.setDate(endDate.getDate() + totalWeeks * 7);
+    setCurrentJobScheduling((pre) => {
+      return {
+        ...pre,
+        jobScheduleList: pre?.jobScheduleList?.map((singleItem) =>
+          Number(singleItem?.id) === Number(id)
+            ? {
+                ...singleItem,
+                plannedJobStartDate: event?.target?.value,
+                plannedJobEndDate: endDate,
+              }
+            : singleItem
+        ),
+      };
+    });
+  }
+
   return (
     <div className="accordion-item">
       <h2 className="accordion-header">
@@ -38,10 +76,17 @@ const JobScheduleList = ({ currentJobSchedulingObject }) => {
                         type="date"
                         className="form-control"
                         placeholder="Select Date"
-                        value={moment(list?.plannedJobStartDate).format(
-                          "YYYY-MM-DD"
-                        )}
-                        readOnly
+                        value={
+                          new Date(list?.plannedJobStartDate)
+                            .toISOString()
+                            .split("T")[0]
+                        }
+                        disabled={
+                          singleJobSchedulingObject?.complete !== true
+                            ? false
+                            : true
+                        }
+                        onChange={(event) => handleChangeDate(event, list?.id)}
                       />
                     </div>
                     <div className="col-lg-6">
@@ -52,15 +97,35 @@ const JobScheduleList = ({ currentJobSchedulingObject }) => {
                         type="date"
                         className="form-control"
                         placeholder="Select Date"
-                        value={moment(list?.plannedJobEndDate).format(
-                          "YYYY-MM-DD"
-                        )}
+                        value={
+                          new Date(list?.plannedJobEndDate)
+                            .toISOString()
+                            .split("T")[0]
+                        }
                         readOnly
+                        disabled
                       />
                     </div>
                   </div>
                 );
               })}
+            </div>
+          )}
+          {singleJobSchedulingObject?.complete !== true && (
+            <div className="row mt-3">
+              <div className="col-lg-12 justify-content-end text-end">
+                <div
+                  className={`btn btn-labeled btn-primary px-3 shadow ${
+                    loading && "disabled"
+                  }`}
+                  onClick={handleSaveJobScheduling}
+                >
+                  <span className="btn-label me-2">
+                    <i className="fa fa-check-circle"></i>
+                  </span>
+                  {loading ? "Loading..." : "Save"}
+                </div>
+              </div>
             </div>
           )}
         </div>
