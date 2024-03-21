@@ -105,6 +105,8 @@ const AccordianItem = ({
               initialValue={item?.observationName}
               id={item?.id}
               editable={item?.stepNo !== 0 ? "false" : "true"}
+              singleReport={singleReport}
+              item={item}
             />
           </div>
 

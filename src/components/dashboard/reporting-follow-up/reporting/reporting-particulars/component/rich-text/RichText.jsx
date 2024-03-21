@@ -1,19 +1,22 @@
-import React, { useState, useRef, useMemo } from "react";
+import React, { useRef, useMemo } from "react";
 import JoditEditor from "jodit-react";
-import { useSelector } from "react-redux";
 
-const RichTextEditor = ({ onContentChange, initialValue, id, editable }) => {
+const RichTextEditor = ({
+  onContentChange,
+  initialValue,
+  id,
+  editable,
+  singleReport,
+  item,
+}) => {
   const editor = useRef(null);
   const [content, setContent] = React.useState(initialValue || "");
-  const { resetRichTextFieldState } = useSelector((state) => state?.common);
-  const { reportingAddSuccess } = useSelector((state) => state?.reporting);
 
   const config = useMemo(
     () => ({
       uploader: {
-        insertImageAsBase64URI: true, // Converts the image to base64 and embeds it
+        insertImageAsBase64URI: true,
       },
-      // askBeforePasteHTML: false,
       controls: {
         font: {
           list: {
@@ -23,9 +26,6 @@ const RichTextEditor = ({ onContentChange, initialValue, id, editable }) => {
         },
       },
       toolbarAdaptive: false,
-      // processPasteHTML: false,
-      // scrollToPastedContent: false,
-      // nl2brInPlainText: true,
       readonly: editable === "false" ? true : false,
       spellcheck: true,
       buttons: [
@@ -83,7 +83,7 @@ const RichTextEditor = ({ onContentChange, initialValue, id, editable }) => {
       events: {},
       textIcons: false,
     }),
-    [reportingAddSuccess]
+    [singleReport, item?.stepNo]
   );
 
   React.useEffect(() => {
@@ -96,12 +96,6 @@ const RichTextEditor = ({ onContentChange, initialValue, id, editable }) => {
       onContentChange(id, newContent);
     }
   };
-
-  React.useEffect(() => {
-    if (resetRichTextFieldState === true) {
-      setContent("");
-    }
-  }, [resetRichTextFieldState]);
 
   return (
     <JoditEditor

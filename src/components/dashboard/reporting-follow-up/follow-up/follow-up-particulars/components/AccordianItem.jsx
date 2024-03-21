@@ -1,6 +1,7 @@
 import React from "react";
 import moment from "moment";
 import { useSelector } from "react-redux";
+import RichTextEditor from "../../../../../../components/common/rich-text";
 
 const AccordianItem = ({
   index,
@@ -64,7 +65,7 @@ const AccordianItem = ({
               />
             </div>
           </div>
-          <div className="mb-3">
+          {/* <div className="mb-3">
             <label>Observation:</label>
             <textarea
               className="form-control "
@@ -74,6 +75,15 @@ const AccordianItem = ({
               value={item?.observationName}
               disabled
             ></textarea>
+          </div> */}
+
+          <div className="mb-3">
+            <label>Observation</label>
+            <RichTextEditor
+              initialValue={item?.observationName}
+              editable="false"
+              name="observation"
+            />
           </div>
 
           <div className="mb-3 align-items-center">

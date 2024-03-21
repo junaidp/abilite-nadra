@@ -1,5 +1,6 @@
 import React from "react";
 import moment from "moment";
+import Chip from "@mui/material/Chip";
 const JobName = ({ currentAuditEngagement }) => {
   return (
     <div className="accordion-item">
@@ -62,6 +63,17 @@ const JobName = ({ currentAuditEngagement }) => {
                 <div className="col-lg-6 px-3 d-flex justify-content-between">
                   <div className="fw-bold">Location:</div>
                   <div className="">
+                    {[
+                      ...new Set(
+                        currentAuditEngagement?.subLocationList?.map(
+                          (item) => item?.locationid?.description
+                        )
+                      ),
+                    ]?.map((locationItem) => {
+                      return (
+                        <Chip label={locationItem} className="mx-2 mb-2" />
+                      );
+                    })}
                     {
                       currentAuditEngagement?.subLocation?.locationid
                         ?.description
@@ -75,9 +87,13 @@ const JobName = ({ currentAuditEngagement }) => {
             (currentAuditEngagement?.auditStepChecklistList?.length === 0 && (
               <div className="row mb-3 f-13">
                 <div className="col-lg-6 px-3 d-flex justify-content-between">
-                  <div className="fw-bold">Sub-Location:</div>
+                  <div className="fw-bold mt-2">Sub-Location:</div>
                   <div className="">
-                    {currentAuditEngagement?.subLocation?.description}
+                    {currentAuditEngagement?.subLocationList?.map((item) => {
+                      return (
+                        <Chip label={item?.description} className="mx-2 mb-2" />
+                      );
+                    })}
                   </div>
                 </div>
               </div>
