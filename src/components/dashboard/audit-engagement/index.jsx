@@ -63,7 +63,7 @@ const AuditEngagement = () => {
         );
       }
     }
-  }, [user, year,company]);
+  }, [user, year, company]);
 
   return (
     <div>
@@ -104,6 +104,7 @@ const AuditEngagement = () => {
                     <thead className="bg-secondary text-white">
                       <tr>
                         <th className="w-80">Sr No.</th>
+                        <th className="w-80">Id</th>
                         <th>job Name</th>
                         <th>planned Start Date </th>
                         <th>planned End Date </th>
@@ -126,10 +127,11 @@ const AuditEngagement = () => {
                         </tr>
                       ) : (
                         allAuditEngagement
-                          ?.slice((page - 1) * 5, page * 5)
+                          ?.slice((page - 1) * 10, page * 10)
                           ?.map((item, index) => {
                             return (
                               <tr key={index}>
+                                <td>{index + 1}</td>
                                 <td>{item?.id}</td>
                                 <td>{item?.title}</td>
                                 <td>
@@ -168,7 +170,7 @@ const AuditEngagement = () => {
                     </tbody>
                   </table>
                   <Pagination
-                    count={Math.ceil(allAuditEngagement?.length / 5)}
+                    count={Math.ceil(allAuditEngagement?.length / 10)}
                     page={page}
                     onChange={handleChange}
                   />

@@ -81,6 +81,7 @@ const Reporting = () => {
                   <thead>
                     <tr>
                       <th className="sr-col">Sr. #</th>
+                      <th className="sr-col">Id</th>
                       <th>Particulars</th>
                       <th>Status</th>
                       <th>No. of Observations</th>
@@ -89,10 +90,13 @@ const Reporting = () => {
                   </thead>
                   <tbody>
                     {allReporting
-                      ?.slice((page - 1) * 5, page * 5)
+                      ?.slice((page - 1) * 10, page * 10)
                       ?.map((item, index) => {
                         return (
                           <tr key={index}>
+                            <td>
+                              <label>{index + 1}</label>
+                            </td>
                             <td>
                               <label>{item?.id}</label>
                             </td>
@@ -109,7 +113,7 @@ const Reporting = () => {
                               </a>
                             </td>
                             <td>null</td>
-                            <td>{total}</td>
+                            <td>{item?.reportingList?.length}</td>
                             <td>null</td>
                           </tr>
                         );
@@ -118,7 +122,7 @@ const Reporting = () => {
                 </table>
               )}
               <Pagination
-                count={Math.ceil(allReporting?.length / 5)}
+                count={Math.ceil(allReporting?.length / 10)}
                 page={page}
                 onChange={handleChange}
               />

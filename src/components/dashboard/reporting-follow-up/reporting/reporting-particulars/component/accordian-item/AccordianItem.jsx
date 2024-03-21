@@ -59,10 +59,6 @@ const AccordianItem = ({
         data-bs-parent="#accordionFlushExample"
       >
         <div className="accordion-body">
-          {/* <p>
-            <label className="label-text f-14">{item?.observationName}</label>
-          </p> */}
-
           <div className="d-flex mb-3">
             <label className="pe-4">Location:</label>
             <label className="fw-normal">

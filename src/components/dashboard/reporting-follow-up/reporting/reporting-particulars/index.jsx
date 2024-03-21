@@ -66,6 +66,7 @@ const ReportingParticulars = () => {
             item?.observationName !== null &&
             item?.implicationRating !== "" &&
             item?.implicationRating !== null &&
+            Number(item?.implicationRating) !== 0 &&
             item?.implication !== null &&
             item?.implication !== "" &&
             item?.recommendedActionStep !== "" &&
