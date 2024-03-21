@@ -53,7 +53,10 @@ const UpdateUsertDialog = ({ setUpdateUserDialog, updateUserObject }) => {
           dispatch(
             setupUpdateUser({
               ...currentUserObject,
-              name: values?.name,
+              userDto: {
+                userName: values?.name,
+                companyId: currentUserObject?.company[0]?.id,
+              },
               employeeid: {
                 ...currentUserObject?.employeeid,
                 name: values?.employeeName,

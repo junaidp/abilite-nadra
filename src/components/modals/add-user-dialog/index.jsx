@@ -63,7 +63,10 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
         );
         dispatch(
           setupAddUser({
-            name: values?.name,
+            userDto: {
+              userName: values?.name,
+              companyId: currentCompany?.id,
+            },
             email: values?.email,
             password: values?.password,
             employeeid: {
