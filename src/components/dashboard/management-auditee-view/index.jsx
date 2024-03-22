@@ -40,17 +40,6 @@ const ManagementAuditeeView = () => {
                 </button>
                 <button
                   className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
-                  id="nav-follow-up-tab"
-                  data-bs-toggle="tab"
-                  data-bs-target="#nav-follow-up"
-                  type="button"
-                  role="tab"
-                  aria-controls="nav-follow-up"
-                >
-                  Follow Up
-                </button>
-                <button
-                  className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
                   id="nav-reporting-tab"
                   data-bs-toggle="tab"
                   data-bs-target="#nav-reporting"
@@ -59,6 +48,17 @@ const ManagementAuditeeView = () => {
                   aria-controls="nav-reporting"
                 >
                   Reporting
+                </button>
+                <button
+                  className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
+                  id="nav-follow-up-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#nav-follow-up"
+                  type="button"
+                  role="tab"
+                  aria-controls="nav-follow-up"
+                >
+                  Follow Up
                 </button>
                 <button
                   className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "

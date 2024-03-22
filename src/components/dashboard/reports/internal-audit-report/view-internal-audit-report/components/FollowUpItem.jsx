@@ -1,5 +1,6 @@
 import React from "react";
 import moment from "moment";
+import RichTextEditor from "./RichText";
 
 const FollowUpItem = ({ item }) => {
   return (
@@ -18,14 +19,7 @@ const FollowUpItem = ({ item }) => {
       </div>
       <div className="mb-3">
         <label>Observation:</label>
-        <textarea
-          className="form-control "
-          placeholder="Enter Reason"
-          id="exampleFor"
-          rows="3"
-          value={item?.observationName}
-          disabled
-        ></textarea>
+        <RichTextEditor initialValue={item?.observationName} />
       </div>
 
       <div className="mb-3 align-items-center">

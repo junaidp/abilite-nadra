@@ -221,8 +221,6 @@ const AccordianItem = ({
                   </button>
                 )}
                 {item?.stepNo === 5 &&
-                  curretItem?.followUp?.finalComments !== "" &&
-                  curretItem?.followUp?.finalComments !== null &&
                   curretItem?.followUp?.recommendationsImplemented !== "" &&
                   curretItem?.followUp?.recommendationsImplemented !== null &&
                   curretItem?.followUp?.testInNextYear !== "" &&

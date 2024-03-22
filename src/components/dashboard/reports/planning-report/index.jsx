@@ -5,7 +5,7 @@ import {
   setupGetAllReports,
   resetReportAddSuccess,
   setupGetIAHReports,
-  setupUpdateSingleReport  
+  setupUpdateSingleReport,
 } from "../../../../global-redux/reducers/reports/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
@@ -159,6 +159,7 @@ const PlanningReport = () => {
               <thead className="bg-secondary text-white">
                 <tr>
                   <th className="w-80">Sr. #</th>
+                  <th className="w-80">Id</th>
                   <th>Report Name</th>
                   <th>Report Date</th>
                   <th>Created By</th>
@@ -188,10 +189,11 @@ const PlanningReport = () => {
                         ?.toLowerCase()
                         .includes(reportNameValue?.toLowerCase())
                     )
-                    ?.slice((page - 1) * 5, page * 5)
+                    ?.slice((page - 1) * 10, page * 10)
                     ?.map((item, index) => {
                       return (
                         <tr className="h-40" key={index}>
+                          <td>{index + 1}</td>
                           <td>{item?.id}</td>
                           <td>{item?.reportName}</td>
                           <td>
@@ -280,7 +282,7 @@ const PlanningReport = () => {
           </div>
         </div>
         <Pagination
-          count={Math.ceil(allReports?.length / 5)}
+          count={Math.ceil(allReports?.length / 10)}
           page={page}
           onChange={handleChange}
         />

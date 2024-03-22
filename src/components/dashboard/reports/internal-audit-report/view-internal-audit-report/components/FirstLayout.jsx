@@ -1,5 +1,6 @@
 import React from "react";
 import moment from "moment";
+import Chip from "@mui/material/Chip";
 
 const ReportFirstLayout = ({ singleInternalAuditReport }) => {
   return (
@@ -78,12 +79,6 @@ const ReportFirstLayout = ({ singleInternalAuditReport }) => {
 
         <div className="row mb-3">
           <div className="col-lg-12">
-            <div></div>
-          </div>
-        </div>
-
-        <div className="row mb-3">
-          <div className="col-lg-12">
             <div>
               <label className="me-3">Planned Hours:</label>
               <input
@@ -105,18 +100,23 @@ const ReportFirstLayout = ({ singleInternalAuditReport }) => {
                 className="form-control w-100"
                 placeholder="Enter Risk Approach"
                 type="text"
+                value={
+                  singleInternalAuditReport?.riskApproach ||
+                  "No Risk Approach Provided"
+                }
                 disabled
               />
             </div>
           </div>
           <div className="col-lg-6">
             <div>
-              <label className="me-3   ">Risk Rating:</label>
+              <label className="me-3">Risk Rating:</label>
               <input
                 className="form-control w-100"
                 placeholder="Enter Risk Rating"
                 type="text"
                 disabled
+                value={singleInternalAuditReport?.riskRating || "No Rating"}
               />
             </div>
           </div>
@@ -125,26 +125,32 @@ const ReportFirstLayout = ({ singleInternalAuditReport }) => {
         <div className="row mb-3">
           <div className="col-lg-6">
             <div>
-              <label className="me-3   ">Department/Division/ Location:</label>
-              <input
-                className="form-control w-100"
-                placeholder="Enter Department/Division/ Location"
-                type="text"
-                disabled
-              />
+              <div className="row mb-3 f-13">
+                <div className="col-lg-6 px-3 d-flex justify-content-between">
+                  <label className="mt-2">Location:</label>
+                  <div>
+                    {[
+                      ...new Set(
+                        singleInternalAuditReport?.subLocationList?.map(
+                          (item) => item?.locationid?.description
+                        )
+                      ),
+                    ]?.map((locationItem) => {
+                      return (
+                        <Chip label={locationItem} className="mx-2 mb-2" />
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <div className="col-lg-6">
-            <div>
-              <label className="me-3   ">
-                Sub-Department/Sub-Division/Sub-Location:
-              </label>
-              <input
-                className="form-control w-100"
-                placeholder="Enter Sub-Department/Sub-Division/Sub-Location"
-                type="text"
-                disabled
-              />
+          <div className="col-lg-6 px-3 d-flex justify-content-between">
+            <label className="mt-2">Sub-Location:</label>
+            <div className="">
+              {singleInternalAuditReport?.subLocationList?.map((item) => {
+                return <Chip label={item?.description} className="mx-2 mb-2" />;
+              })}
             </div>
           </div>
         </div>

@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   setupGetAllInternalAuditReports,
   resetInternalAuditReportAddSuccess,
+  setupSaveInternalAuditReport,
 } from "../../../../global-redux/reducers/reports/internal-audit-report/slice";
 import { CircularProgress } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
@@ -29,6 +30,16 @@ const InternalAuditReport = () => {
   const handleChange = (_, value) => {
     setPage(value);
   };
+  function handleSubmitReport(item) {
+    if (!loading) {
+      dispatch(setupSaveInternalAuditReport({ ...item, submitted: true }));
+    }
+  }
+  function handleApproveReport(item) {
+    if (!loading) {
+      dispatch(setupSaveInternalAuditReport({ ...item, approved: true }));
+    }
+  }
 
   React.useEffect(() => {
     if (internalAuditReportAddSuccess) {
@@ -99,6 +110,7 @@ const InternalAuditReport = () => {
               <thead className="bg-secondary text-white">
                 <tr>
                   <th className="w-80">Sr No.</th>
+                  <th className="w-80">Id</th>
                   <th>Job Name</th>
                   <th>Report Name</th>
                   <th>Report Date</th>
@@ -126,6 +138,7 @@ const InternalAuditReport = () => {
                     ?.map((item, index) => {
                       return (
                         <tr key={index}>
+                          <td>{index + 1}</td>
                           <td>{item?.id}</td>
                           <td>{item?.jobName || ""}</td>
                           <td>{item?.reportName || ""}</td>
@@ -134,7 +147,7 @@ const InternalAuditReport = () => {
                           </td>
                           <td>{item?.preparedBy || ""}</td>
                           <td>null</td>
-                          <td>Draft</td>
+                          <td>{item?.status}</td>
                           <td>
                             <i
                               className="fa-eye fa f-18 cursor-pointer"
@@ -144,21 +157,60 @@ const InternalAuditReport = () => {
                                 )
                               }
                             ></i>
+                            {item?.submitted === false && (
+                              <i
+                                className="fa fa-edit px-3 f-18 cursor-pointer "
+                                onClick={() =>
+                                  navigate(
+                                    `/audit/update-internal-audit-report?reportId=${item?.id}`
+                                  )
+                                }
+                              ></i>
+                            )}
                             <i
-                              className="fa fa-edit  px-3 f-18 cursor-pointer "
-                              onClick={() =>
-                                navigate(
-                                  `/audit/update-internal-audit-report?reportId=${item?.id}`
-                                )
-                              }
-                            ></i>
-                            <i
-                              className="fa fa-trash text-danger cursor-pointer f-18"
+                              className={`fa fa-trash text-danger cursor-pointer ${
+                                item?.submitted === true && "px-3"
+                              } f-18`}
                               onClick={() => {
                                 setDeleteInternalAuditReportId(item?.id);
                                 setShowDeleteInternalAuditReportDialog(true);
                               }}
                             ></i>
+                            {item?.reportName &&
+                              item?.reportName !== "" &&
+                              item?.executiveSummary &&
+                              item?.executiveSummary !== "" &&
+                              item?.auditPurpose &&
+                              item?.auditPurpose !== "" &&
+                              item?.intAuditExtraFieldsList &&
+                              item?.intAuditExtraFieldsList?.length !== 0 &&
+                              item?.submitted === false &&
+                              Number(item?.createdBy) ===
+                                Number(user[0]?.userId?.id) && (
+                                <div
+                                  className={`btn btn-labeled btn-primary px-3 shadow mx-2 `}
+                                  onClick={() => handleSubmitReport(item)}
+                                >
+                                  <span className="btn-label me-2">
+                                    <i className="fa fa-check-circle f-18"></i>
+                                  </span>
+                                  Submit
+                                </div>
+                              )}
+                            {item?.submitted === true &&
+                              item?.approved === false &&
+                              user[0]?.userId?.employeeid?.userHierarchy ===
+                                "IAH" && (
+                                <div
+                                  className={`btn btn-labeled btn-primary px-3 shadow mx-2 `}
+                                  onClick={() => handleApproveReport(item)}
+                                >
+                                  <span className="btn-label me-2">
+                                    <i className="fa fa-check-circle f-18"></i>
+                                  </span>
+                                  Approve
+                                </div>
+                              )}
                           </td>
                         </tr>
                       );
