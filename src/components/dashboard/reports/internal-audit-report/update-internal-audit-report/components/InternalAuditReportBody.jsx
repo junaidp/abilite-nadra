@@ -10,6 +10,8 @@ import {
   setupUpdateExtraField,
 } from "../../../../../../global-redux/reducers/reports/internal-audit-report/slice";
 import { v4 as uuidv4 } from "uuid";
+import PDFGenerator from "./PDFGenerator";
+import { PDFViewer } from "@react-pdf/renderer";
 
 const InternalAuditReportBody = ({
   reportObject,
@@ -26,6 +28,19 @@ const InternalAuditReportBody = ({
   let [extraFieldsArray, setExtraFieldsArray] = React.useState([]);
   const { createExtraFieldsLoading, internalAuditReportExtraFieldsAddSuccess } =
     useSelector((state) => state?.internalAuditReports);
+
+  const generatePDF = () => {
+    const pdfBlob = PDFGenerator().toBlob();
+
+    if (pdfBlob) {
+      const url = URL.createObjectURL(pdfBlob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "sample.pdf");
+      document.body.appendChild(link);
+      link.click();
+    }
+  };
 
   function handleUpdateExtraField(item) {
     if (!createExtraFieldsLoading) {
@@ -325,7 +340,10 @@ const InternalAuditReportBody = ({
 
       <div className="row my-3">
         <div className="col-lg-12 d-flex justify-content-between">
-          <div className="btn btn-labeled btn-primary px-3 shadow fitContent">
+          <div
+            className="btn btn-labeled btn-primary px-3 shadow fitContent"
+            onClick={generatePDF}
+          >
             <span className="btn-label me-2">
               <i className="fa fa-file-pdf f-18"></i>
             </span>
@@ -344,6 +362,9 @@ const InternalAuditReportBody = ({
           </div>
         </div>
       </div>
+      <PDFViewer style={{ width: "100%", height: "500px" }}>
+        <PDFGenerator />
+      </PDFViewer>
     </div>
   );
 };
