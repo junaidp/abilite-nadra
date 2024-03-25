@@ -129,17 +129,22 @@ const ReportFirstLayout = ({ singleInternalAuditReport }) => {
                 <div className="col-lg-6 px-3 d-flex justify-content-between">
                   <label className="mt-2">Location:</label>
                   <div>
-                    {[
-                      ...new Set(
-                        singleInternalAuditReport?.subLocationList?.map(
-                          (item) => item?.locationid?.description
-                        )
-                      ),
-                    ]?.map((locationItem) => {
-                      return (
-                        <Chip label={locationItem} className="mx-2 mb-2" />
-                      );
-                    })}
+                    {!singleInternalAuditReport?.subLocationList ||
+                    singleInternalAuditReport?.subLocationList?.length === 0 ? (
+                      <p className="mt-2">No Location To Show</p>
+                    ) : (
+                      [
+                        ...new Set(
+                          singleInternalAuditReport?.subLocationList?.map(
+                            (item) => item?.locationid?.description
+                          )
+                        ),
+                      ]?.map((locationItem) => {
+                        return (
+                          <Chip label={locationItem} className="mx-2 mb-2" />
+                        );
+                      })
+                    )}
                   </div>
                 </div>
               </div>
@@ -148,9 +153,16 @@ const ReportFirstLayout = ({ singleInternalAuditReport }) => {
           <div className="col-lg-6 px-3 d-flex justify-content-between">
             <label className="mt-2">Sub-Location:</label>
             <div className="">
-              {singleInternalAuditReport?.subLocationList?.map((item) => {
-                return <Chip label={item?.description} className="mx-2 mb-2" />;
-              })}
+              {!singleInternalAuditReport?.subLocationList ||
+              singleInternalAuditReport?.subLocationList?.length === 0 ? (
+                <p className="mt-2">No Sub Location To Show</p>
+              ) : (
+                singleInternalAuditReport?.subLocationList?.map((item) => {
+                  return (
+                    <Chip label={item?.description} className="mx-2 mb-2" />
+                  );
+                })
+              )}
             </div>
           </div>
         </div>

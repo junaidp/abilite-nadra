@@ -10,6 +10,10 @@ import {
   setupUpdateExtraField,
 } from "../../../../../../global-redux/reducers/reports/internal-audit-report/slice";
 import { v4 as uuidv4 } from "uuid";
+import KeyKindings from "./KeyFindings";
+import ExtraFields from "./ExtraFields";
+import { PDFViewer } from "@react-pdf/renderer";
+import PDFGenerator from "./PDFGenerator";
 
 const InternalAuditReportBody = ({
   reportObject,
@@ -113,36 +117,11 @@ const InternalAuditReportBody = ({
       {/* Editors Ends */}
 
       {/* Findings Start */}
-      <div className="row my-3">
-        <div className="col-lg-12">
-          <div className="sub-heading   fw-bold">Summary of key Finding(s)</div>
-        </div>
-      </div>
+      <KeyKindings
+        reportObject={reportObject}
+        handleChangeSummaryOfKeyFinding={handleChangeSummaryOfKeyFinding}
+      />
 
-      <div className="border px-3 py-2  mt-3 rounded">
-        {reportObject?.keyFindingsList?.map((item, index) => {
-          return (
-            <div className="row mb-3" key={index}>
-              <div className="col-lg-12">
-                <label>Finding {index + 1}</label>
-                <textarea
-                  className="form-control"
-                  placeholder="Enter Finding"
-                  id="exampleFormControlTextarea1"
-                  rows="3"
-                  value={item?.summaryOfKeyFinding}
-                  onChange={(event) =>
-                    handleChangeSummaryOfKeyFinding(event, item?.id)
-                  }
-                ></textarea>
-                <label className="word-limit-info label-text">
-                  Maximum 5000 words
-                </label>
-              </div>
-            </div>
-          );
-        })}
-      </div>
       {/* Findings Ends */}
       {/* Reporting And Follow Up Starts */}
       <div className="row my-3">
@@ -156,157 +135,17 @@ const InternalAuditReportBody = ({
       {/* Reporting And Follow Up Ends */}
 
       {/* Extra Fields Starts */}
-      <div className="row my-3">
-        <div className="col-lg-12">
-          <div className="sub-heading  fw-bold">Audit Extra Fields List</div>
-        </div>
-      </div>
-      {reportObject?.intAuditExtraFieldsList?.length === 0 ? (
-        <p>No Extra Field Added Till Now</p>
-      ) : (
-        reportObject?.intAuditExtraFieldsList !== null &&
-        reportObject?.intAuditExtraFieldsList?.length !== 0 &&
-        reportObject?.intAuditExtraFieldsList &&
-        reportObject?.intAuditExtraFieldsList?.map((item, index) => {
-          return (
-            <div className="border px-3 py-2  mt-3 rounded" key={index}>
-              <div className="row mb-3">
-                <div className="col-lg-12">
-                  <label>Heading</label>
-                  <textarea
-                    className="form-control"
-                    placeholder="Enter heading"
-                    id="exampleFormControlTextarea1"
-                    rows="3"
-                    value={item?.heading || ""}
-                    name="heading"
-                    onChange={(event) =>
-                      handleChangeExtraFields(event, item?.id)
-                    }
-                  ></textarea>
-                </div>
-              </div>
-              <div className="row mb-3">
-                <div className="col-lg-12">
-                  <label>Data</label>
-                  <textarea
-                    className="form-control"
-                    placeholder="Enter heading"
-                    id="exampleFormControlTextarea1"
-                    rows="3"
-                    value={item?.data || ""}
-                    name="data"
-                    onChange={(event) =>
-                      handleChangeExtraFields(event, item?.id)
-                    }
-                  ></textarea>
-                </div>
-              </div>
-              <div className="col-lg-4">
-                <div
-                  className={`btn btn-labeled btn-primary px-3 shadow  my-4 ${
-                    createExtraFieldsLoading && "disabled"
-                  }`}
-                  onClick={() => handleUpdateExtraField(item)}
-                >
-                  <span className="btn-label me-2">
-                    <i className="fa fa-check-circle f-18"></i>
-                  </span>
-                  {createExtraFieldsLoading
-                    ? "Loading.."
-                    : "Update Extra Field"}
-                </div>
-              </div>
-            </div>
-          );
-        })
-      )}
-      {/* Add Extra Fields */}
-
-      <div className="col-lg-2 mb4">
-        <div
-          className={`btn btn-labeled btn-primary px-3 shadow  my-4 `}
-          onClick={handleAddExtraFieldInArray}
-        >
-          <span className="btn-label me-2">
-            <i className="fa fa-check-circle f-18"></i>
-          </span>
-          Add Extra Field
-        </div>
-      </div>
-      <div className="border mb-4">
-        {extraFieldsArray?.length === 0 ? (
-          <p className="p-4">Extra Fields Will Display Here</p>
-        ) : (
-          extraFieldsArray?.map((singleItem, index) => {
-            return (
-              <div className="px-3 py-2  mt-3 rounded" key={index}>
-                <div>
-                  <i
-                    className="fa fa-trash text-danger mx-2 f-18 cursor-pointer"
-                    onClick={() => handleDeleteExtraField(singleItem?.id)}
-                  ></i>
-                </div>
-                <div className="row mb-3">
-                  <div className="col-lg-12">
-                    <label>Add heading here</label>
-                    <textarea
-                      className="form-control"
-                      placeholder="Enter heading"
-                      id="exampleFormControlTextarea1"
-                      rows="3"
-                      name="heading"
-                      value={singleItem?.heading}
-                      onChange={(event) =>
-                        handleChangeExtraField(event, singleItem?.id)
-                      }
-                    ></textarea>
-                    <label className="word-limit-info label-text">
-                      Maximum 5000 words
-                    </label>
-                  </div>
-                </div>
-                <div className="row mb-3">
-                  <div className="col-lg-12">
-                    <label>Add data here</label>
-                    <textarea
-                      className="form-control"
-                      placeholder="Enter heading"
-                      id="exampleFormControlTextarea1"
-                      rows="3"
-                      value={singleItem?.data}
-                      name="data"
-                      onChange={(event) =>
-                        handleChangeExtraField(event, singleItem?.id)
-                      }
-                    ></textarea>
-                    <label className="word-limit-info label-text">
-                      Maximum 5000 words
-                    </label>
-                  </div>
-                </div>
-                <hr />
-              </div>
-            );
-          })
-        )}
-        {extraFieldsArray?.length !== 0 && (
-          <div className="col-lg-2 px-3 py-2">
-            <div
-              className={`btn btn-labeled btn-primary px-3 shadow  my-4 ${
-                createExtraFieldsLoading && "disabled"
-              }`}
-              onClick={handleAddExtraField}
-            >
-              <span className="btn-label me-2">
-                <i className="fa fa-check-circle f-18"></i>
-              </span>
-              {createExtraFieldsLoading ? "Loading.." : "Save"}
-            </div>
-          </div>
-        )}
-      </div>
-
+      <ExtraFields
+        reportObject={reportObject}
+        handleChangeExtraFields={handleChangeExtraFields}
+        createExtraFieldsLoading={createExtraFieldsLoading}
+        handleUpdateExtraField={handleUpdateExtraField}
+        handleAddExtraFieldInArray={handleAddExtraFieldInArray}
+        extraFieldsArray={extraFieldsArray}
+        handleDeleteExtraField={handleDeleteExtraField}
+        handleChangeExtraField={handleChangeExtraField}
+        handleAddExtraField={handleAddExtraField}
+      />
       {/* Add Extra Fields */}
 
       {/* Extra Fields Ends */}
@@ -344,6 +183,9 @@ const InternalAuditReportBody = ({
           </div>
         </div>
       </div>
+      <PDFViewer style={{ width: "100%", height: "500px" }}>
+        <PDFGenerator />
+      </PDFViewer>
     </div>
   );
 };

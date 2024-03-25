@@ -7,7 +7,6 @@ import {
   setupGetSingleInternalAuditReport,
   handleResetData,
 } from "../../../../../global-redux/reducers/reports/internal-audit-report/slice";
-import { htmlToText } from "html-to-text";
 import { CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import React from "react";
@@ -43,13 +42,13 @@ const UpdateInternalAuditReport = () => {
       };
     });
   }
-  function handleChangeSummaryOfKeyFinding(event, id) {
+  function handleChangeSummaryOfKeyFinding(value, id) {
     setReportObject((pre) => {
       return {
         ...pre,
         keyFindingsList: pre?.keyFindingsList?.map((keyObject) =>
           Number(keyObject?.id) === Number(id)
-            ? { ...keyObject, summaryOfKeyFinding: event?.target?.value }
+            ? { ...keyObject, summaryOfKeyFinding: value }
             : keyObject
         ),
       };
@@ -140,17 +139,7 @@ const UpdateInternalAuditReport = () => {
       Object.keys(singleInternalAuditReport).length !== 0 &&
       singleInternalAuditReport.constructor === Object;
     if (isNotNull) {
-      setReportObject({
-        ...singleInternalAuditReport,
-        keyFindingsList: singleInternalAuditReport?.keyFindingsList?.map(
-          (finding) => {
-            return {
-              ...finding,
-              summaryOfKeyFinding: htmlToText(finding?.summaryOfKeyFinding),
-            };
-          }
-        ),
-      });
+      setReportObject(singleInternalAuditReport);
     }
   }, [singleInternalAuditReport]);
 

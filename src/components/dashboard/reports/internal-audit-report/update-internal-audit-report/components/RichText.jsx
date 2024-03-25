@@ -6,6 +6,8 @@ const RichTextEditor = ({
   initialValue,
   handleChangeAuditPurpose,
   handleChangeAnnexure,
+  handleChangeSummaryOfKeyFinding,
+  keyFindingId,
 }) => {
   const editor = useRef(null);
   const [content, setContent] = React.useState("");
@@ -98,6 +100,9 @@ const RichTextEditor = ({
     }
     if (handleChangeAnnexure) {
       handleChangeAnnexure(newContent);
+    }
+    if (handleChangeSummaryOfKeyFinding) {
+      handleChangeSummaryOfKeyFinding(newContent, keyFindingId);
     }
   };
 

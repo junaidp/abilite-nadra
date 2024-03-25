@@ -71,11 +71,16 @@ const ViewInternalAuditReport = () => {
           <AuditExtraFields
             singleInternalAuditReport={singleInternalAuditReport}
           />
-          {singleInternalAuditReport?.reportingAndFollowUp?.reportingList?.map(
-            (item, index) => {
-              return <FollowUpItem key={index} item={item} />;
-            }
-          )}
+          <div>
+            <div className="col-lg-12 mt-4">
+              <div className="sub-heading  fw-bold">Reporting & Follow Up</div>
+            </div>
+            {singleInternalAuditReport?.reportingAndFollowUp?.reportingList?.map(
+              (item, index) => {
+                return <FollowUpItem key={index} item={item} />;
+              }
+            )}
+          </div>
         </div>
       )}
     </div>

@@ -130,17 +130,22 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
                 <div className="col-lg-6 px-3 d-flex justify-content-between">
                   <label className="mt-2">Location:</label>
                   <div>
-                    {[
-                      ...new Set(
-                        reportObject?.subLocationList?.map(
-                          (item) => item?.locationid?.description
-                        )
-                      ),
-                    ]?.map((locationItem) => {
-                      return (
-                        <Chip label={locationItem} className="mx-2 mb-2" />
-                      );
-                    })}
+                    {!reportObject?.subLocationList ||
+                    reportObject?.subLocationList?.length === 0 ? (
+                      <p className="mt-2">No Location To Show</p>
+                    ) : (
+                      [
+                        ...new Set(
+                          reportObject?.subLocationList?.map(
+                            (item) => item?.locationid?.description
+                          )
+                        ),
+                      ]?.map((locationItem) => {
+                        return (
+                          <Chip label={locationItem} className="mx-2 mb-2" />
+                        );
+                      })
+                    )}
                   </div>
                 </div>
               </div>
@@ -149,9 +154,16 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
           <div className="col-lg-6 px-3 d-flex justify-content-between">
             <label className="mt-2">Sub-Location:</label>
             <div className="">
-              {reportObject?.subLocationList?.map((item) => {
-                return <Chip label={item?.description} className="mx-2 mb-2" />;
-              })}
+              {!reportObject?.subLocationList ||
+              reportObject?.subLocationList?.length == 0 ? (
+                <p className="mt-2">No Sub Location To Show</p>
+              ) : (
+                reportObject?.subLocationList?.map((item) => {
+                  return (
+                    <Chip label={item?.description} className="mx-2 mb-2" />
+                  );
+                })
+              )}
             </div>
           </div>
         </div>

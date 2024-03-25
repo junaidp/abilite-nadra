@@ -8,7 +8,6 @@ import {
   setupSaveInternalAuditReport,
   resetInternalAuditReportAddSuccess,
 } from "../../../../../global-redux/reducers/reports/internal-audit-report/slice";
-import { htmlToText } from "html-to-text";
 import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
@@ -67,13 +66,13 @@ const GenerateInternalAuditReport = () => {
       };
     });
   }
-  function handleChangeSummaryOfKeyFinding(event, id) {
+  function handleChangeSummaryOfKeyFinding(value, id) {
     setReportObject((pre) => {
       return {
         ...pre,
         keyFindingsList: pre?.keyFindingsList?.map((keyObject) =>
           Number(keyObject?.id) === Number(id)
-            ? { ...keyObject, summaryOfKeyFinding: event?.target?.value }
+            ? { ...keyObject, summaryOfKeyFinding: value }
             : keyObject
         ),
       };
@@ -173,9 +172,6 @@ const GenerateInternalAuditReport = () => {
         )
       );
     }
-    return () => {
-      dispatch(handleResetData());
-    };
   }, [user, year, company]);
 
   React.useEffect(() => {
@@ -183,17 +179,7 @@ const GenerateInternalAuditReport = () => {
       Object.keys(internalAuditReportObject).length !== 0 &&
       internalAuditReportObject.constructor === Object;
     if (isNotNull) {
-      setReportObject({
-        ...internalAuditReportObject,
-        keyFindingsList: internalAuditReportObject?.keyFindingsList?.map(
-          (finding) => {
-            return {
-              ...finding,
-              summaryOfKeyFinding: htmlToText(finding?.summaryOfKeyFinding),
-            };
-          }
-        ),
-      });
+      setReportObject(internalAuditReportObject);
     }
   }, [internalAuditReportObject]);
 
@@ -220,6 +206,9 @@ const GenerateInternalAuditReport = () => {
   React.useEffect(() => {
     dispatch(changeActiveLink("li-internal-audit-report"));
     dispatch(InitialLoadSidebarActiveLink("li-reports"));
+    return () => {
+      dispatch(handleResetData());
+    };
   }, []);
 
   return (
