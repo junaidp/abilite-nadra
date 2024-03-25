@@ -1,5 +1,8 @@
 import logo from "../../../../../../assets/logo.png";
+import moment from "moment";
 import React from "react";
+import font from "../../../../../../font/Poppins-Medium.ttf";
+
 import {
   Document,
   Page,
@@ -7,12 +10,22 @@ import {
   StyleSheet,
   View,
   Image,
+  Font,
 } from "@react-pdf/renderer";
+import { convert } from "html-to-text";
+Font.register({
+  family: "Poppins",
+  src: font,
+});
 const styles = StyleSheet.create({
   page: {
     flexDirection: "column",
     backgroundColor: "#FFFFFF",
-    padding: 20,
+    fontFamily: "Poppins",
+    paddingTop: 20,
+    paddingBottom: 20,
+    paddingLeft: 35,
+    paddingRight: 35,
   },
   reportInfoView: {
     flexDirection: "column",
@@ -20,6 +33,11 @@ const styles = StyleSheet.create({
   reportInfoViewItem: {
     flexDirection: "row",
     marginTop: 10,
+  },
+  plannedEndDateWrap: {
+    flexDirection: "row",
+    marginTop: 10,
+    marginBottom: 10,
   },
   header: {
     flexDirection: "column",
@@ -42,11 +60,11 @@ const styles = StyleSheet.create({
 
   reportInfoTitle: {
     color: "#0a7386",
-    fontSize: 10,
+    fontSize: 15,
   },
   reportInfoSubTitle: {
-    fontSize: 8,
-    marginTop: 1,
+    fontSize: 13,
+    marginTop: 2,
     marginLeft: 2,
   },
   reportTitle: {
@@ -57,15 +75,39 @@ const styles = StyleSheet.create({
   },
   summary: {
     flexDirection: "column",
-    marginTop: 14,
+    marginTop: 8,
+  },
+  annexureSummary: {
+    flexDirection: "column",
+    marginTop: 8,
+    marginBottom: 10,
+  },
+  reportingView: {
+    marginTop: 8,
+    marginBottom: 12,
+  },
+  extraFieldsHeader: {
+    fontSize: 18,
+    marginBottom: 7,
+    color: "#0a7386",
+    marginTop: 12,
+  },
+  findingView: {
+    marginTop: 8,
+    marginBottom: 12,
   },
   summaryHeader: {
-    fontSize: 12,
-    marginBottom: 3,
+    fontSize: 18,
+    marginBottom: 7,
+    color: "#0a7386",
   },
   summaryPara: {
-    fontSize: 10,
-    color: "#0a7386",
+    fontSize: 13,
+  },
+  horizontalLine: {
+    height: 2,
+    width: "100%",
+    backgroundColor: "#0a7386",
   },
   findHeader: {
     fontSize: 20,
@@ -74,6 +116,12 @@ const styles = StyleSheet.create({
   },
   summaryInfoWrap: {
     marginTop: 15,
+  },
+  indexNumber: {
+    fontSize: 18,
+    marginBottom: 7,
+    color: "#0a7386",
+    textDecoration: "underline",
   },
   findingsHeaderInfo: {
     flexDirection: "row",
@@ -85,12 +133,17 @@ const styles = StyleSheet.create({
     gap: 2,
     alignItems: "center",
   },
+  pdfHeaderWrap: {
+    color: "#0a7386",
+    fontSize: 15,
+    marginBottom: 10,
+  },
   singleFindingsHeaderInfoHeader: {
-    fontSize: 12,
+    fontSize: 16,
     color: "#0a7386",
   },
   singleFindingsHeaderInfoPara: {
-    fontSize: 10,
+    fontSize: 13,
   },
   singleFindSummaryWrap: {
     flexDirection: "column",
@@ -98,324 +151,181 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   singleFindSummaryHeader: {
-    fontSize: 14,
+    fontSize: 16,
     color: "#0a7386",
   },
   singleFindSummaryPara: {
-    fontSize: 10,
+    fontSize: 13,
   },
   findings: {
     marginTop: 15,
   },
 });
 
-const PDFGenerator = () => {
+const PDFGenerator = ({ reportObject }) => {
   return (
     <Document>
       <Page style={styles.page} size="A4">
         <View style={styles.header}>
           <Image src={logo} style={styles.logo} />
-          <Text style={styles.title}>Internal Audit Report</Text>
         </View>
-        <View style={styles.reportNameView}>
-          <Text style={styles.reportTitle}>
-            Internal Audit Report Lorem Ipsum is simply dummy text of the
-            printing and typesetting industry. Lorem Ipsum has been the
-            industry's standard dummy text ever since the 1500s, when an unknown
-            printer took a galley of type and scrambled it to make a type
-            specimen book.
-          </Text>
+        <View style={styles.pdfHeaderWrap}>
+          <Text style={styles.title}>Internal Audit Report</Text>
         </View>
         <View style={styles.reportNameView}>
           <View style={styles.reportInfoViewItem}>
             <Text style={styles.reportInfoTitle}>Report Name:</Text>
-            <Text style={styles.reportInfoSubTitle}>Dummy Name</Text>
+            <Text style={styles.reportInfoSubTitle}>
+              {reportObject?.reportName}
+            </Text>
           </View>
           <View style={styles.reportInfoViewItem}>
             <Text style={styles.reportInfoTitle}>Report Date:</Text>
-            <Text style={styles.reportInfoSubTitle}>4-1-124</Text>
+            <Text style={styles.reportInfoSubTitle}>
+              {moment(reportObject?.reportDate).format("DD-MM-YYYY")}
+            </Text>
           </View>
           <View style={styles.reportInfoViewItem}>
             <Text style={styles.reportInfoTitle}>Planned Start Date:</Text>
-            <Text style={styles.reportInfoSubTitle}>4-1-124</Text>
+            <Text style={styles.reportInfoSubTitle}>
+              {moment(reportObject?.plannedStartDate).format("DD-MM-YYYY")}
+            </Text>
           </View>
-          <View style={styles.reportInfoViewItem}>
+          <View style={styles.plannedEndDateWrap}>
             <Text style={styles.reportInfoTitle}>Planned End Date:</Text>
-            <Text style={styles.reportInfoSubTitle}>4-1-124</Text>
+            <Text style={styles.reportInfoSubTitle}>
+              {moment(reportObject?.plannedEndDate).format("DD-MM-YYYY")}
+            </Text>
           </View>
         </View>
+        <View style={styles.horizontalLine}></View>
         <View style={styles.summary}>
           <Text style={styles.summaryHeader}>Executive Summary</Text>
           <Text style={styles.summaryPara}>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum is simply dummy text of the printing and
-            typesetting industry. Lorem Ipsum is simply dummy text of the
-            printing and typesetting industry.
+            {convert(reportObject?.executiveSummary, { tables: true })}
           </Text>
         </View>
         <View style={styles.summary}>
           <Text style={styles.summaryHeader}>Audit Purpose</Text>
           <Text style={styles.summaryPara}>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum is simply dummy text of the printing and
-            typesetting industry. Lorem Ipsum is simply dummy text of the
-            printing and typesetting industry.
+            {convert(reportObject?.auditPurpose, { tables: true })}
           </Text>
         </View>
-        <View style={styles.summary}>
+        <View style={styles.annexureSummary}>
           <Text style={styles.summaryHeader}>Annexure</Text>
           <Text style={styles.summaryPara}>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum is simply dummy text of the printing and
-            typesetting industry. Lorem Ipsum is simply dummy text of the
-            printing and typesetting industry.
+            {reportObject?.annexure
+              ? convert(reportObject?.annexure, { tables: true })
+              : "No Annexure Provided"}
           </Text>
         </View>
-        <Text style={styles.findHeader}>All Findings</Text>
-        <View style={styles.findings}>
-          <Text style={styles.summaryHeader}>Finding 1</Text>
-          <View style={styles.summaryInfoWrap}>
-            <View style={styles.findingsHeaderInfo}>
-              <View style={styles.singleFindingsHeaderInfo}>
-                <Text style={styles.singleFindingsHeaderInfoHeader}>
-                  Responsible Person:
-                </Text>
-                <Text style={styles.singleFindingsHeaderInfoPara}>
-                  Management1
-                </Text>
-              </View>
-              <View style={styles.singleFindingsHeaderInfo}>
-                <Text style={styles.singleFindingsHeaderInfoHeader}>
-                  Implementation Date:
-                </Text>
-                <Text style={styles.singleFindingsHeaderInfoPara}>
-                  2024-01-11
-                </Text>
-              </View>
-            </View>
-            <View style={styles.singleFindSummaryWrap}>
-              <Text style={styles.singleFindSummaryHeader}>Observation</Text>
-              <Text style={styles.singleFindSummaryPara}>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum is simply dummy text of the
-                printing and typesetting industry.
-              </Text>
-            </View>
-            <View style={styles.singleFindSummaryWrap}>
-              <Text style={styles.singleFindSummaryHeader}>Implication</Text>
-              <Text style={styles.singleFindSummaryPara}>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum is simply dummy text of the
-                printing and typesetting industry.
-              </Text>
-            </View>
-            <View style={styles.singleFindSummaryWrap}>
-              <Text style={styles.singleFindSummaryHeader}>Recomendation</Text>
-              <Text style={styles.singleFindSummaryPara}>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum is simply dummy text of the
-                printing and typesetting industry.
-              </Text>
-            </View>
-            <View style={styles.singleFindSummaryWrap}>
-              <Text style={styles.singleFindSummaryHeader}>
-                Management Comments
-              </Text>
-              <Text style={styles.singleFindSummaryPara}>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum is simply dummy text of the
-                printing and typesetting industry.
-              </Text>
-            </View>
-          </View>
+        <View style={styles.horizontalLine}></View>
+
+        <View style={styles.reportingView}>
+          <Text style={styles.summaryHeader}>Reporting & Follow Up</Text>
+          {reportObject?.reportingAndFollowUp?.reportingList?.map(
+            (followUpItem, index) => {
+              return (
+                <View style={styles.findings}>
+                  <Text style={styles.indexNumber}>Reporting {index + 1}</Text>
+                  <View style={styles.summaryInfoWrap}>
+                    <View style={styles.findingsHeaderInfo}>
+                      <View style={styles.singleFindingsHeaderInfo}>
+                        <Text style={styles.singleFindingsHeaderInfoHeader}>
+                          Responsible Person:
+                        </Text>
+                        <Text style={styles.singleFindingsHeaderInfoPara}>
+                          Management1
+                        </Text>
+                      </View>
+                      <View style={styles.singleFindingsHeaderInfo}>
+                        <Text style={styles.singleFindingsHeaderInfoHeader}>
+                          Implementation Date:
+                        </Text>
+                        <Text style={styles.singleFindingsHeaderInfoPara}>
+                          {moment(followUpItem?.implementationDate).format(
+                            "YYYY-MM-DD"
+                          )}
+                        </Text>
+                      </View>
+                    </View>
+                    <View style={styles.singleFindSummaryWrap}>
+                      <Text style={styles.singleFindSummaryHeader}>
+                        Observation
+                      </Text>
+                      <Text style={styles.singleFindSummaryPara}>
+                        {convert(followUpItem?.observationName, {
+                          tables: true,
+                        })}
+                      </Text>
+                    </View>
+                    <View style={styles.singleFindSummaryWrap}>
+                      <Text style={styles.singleFindSummaryHeader}>
+                        Implication
+                      </Text>
+                      <Text style={styles.singleFindSummaryPara}>
+                        {followUpItem?.implication}
+                      </Text>
+                    </View>
+                    <View style={styles.singleFindSummaryWrap}>
+                      <Text style={styles.singleFindSummaryHeader}>
+                        Management Comments
+                      </Text>
+                      <Text style={styles.singleFindSummaryPara}>
+                        {followUpItem?.managementComments
+                          ? followUpItem?.managementComments
+                          : "No Management Comments Provided"}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              );
+            }
+          )}
         </View>
-        <View break style={styles.findings}>
-          <Text style={styles.summaryHeader}>Finding 2</Text>
-          <View style={styles.summaryInfoWrap}>
-            <View style={styles.findingsHeaderInfo}>
-              <View style={styles.singleFindingsHeaderInfo}>
-                <Text style={styles.singleFindingsHeaderInfoHeader}>
-                  Responsible Person:
-                </Text>
-                <Text style={styles.singleFindingsHeaderInfoPara}>
-                  Management1
-                </Text>
+        <View style={styles.horizontalLine}></View>
+
+        <View style={styles.findingView}>
+          <Text style={styles.summaryHeader}>All Findings</Text>
+          {reportObject?.keyFindingsList?.map((item, index) => {
+            return (
+              <View style={styles.findings}>
+                <Text style={styles.indexNumber}>Finding {index + 1}</Text>
+                <View style={styles.summaryInfoWrap}>
+                  <View style={styles.singleFindSummaryWrap}>
+                    <Text style={styles.singleFindSummaryHeader}>
+                      Summary Of Key Finding
+                    </Text>
+                    <Text style={styles.singleFindSummaryPara}>
+                      {convert(item?.summaryOfKeyFinding, { tables: true })}
+                    </Text>
+                  </View>
+                </View>
               </View>
-              <View style={styles.singleFindingsHeaderInfo}>
-                <Text style={styles.singleFindingsHeaderInfoHeader}>
-                  Implementation Date:
-                </Text>
-                <Text style={styles.singleFindingsHeaderInfoPara}>
-                  2024-01-11
-                </Text>
-              </View>
-            </View>
-            <View style={styles.singleFindSummaryWrap}>
-              <Text style={styles.singleFindSummaryHeader}>Observation</Text>
-              <Text style={styles.singleFindSummaryPara}>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum is simply dummy text of the
-                printing and typesetting industry.
-              </Text>
-            </View>
-            <View style={styles.singleFindSummaryWrap}>
-              <Text style={styles.singleFindSummaryHeader}>Implication</Text>
-              <Text style={styles.singleFindSummaryPara}>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum is simply dummy text of the
-                printing and typesetting industry.
-              </Text>
-            </View>
-            <View style={styles.singleFindSummaryWrap}>
-              <Text style={styles.singleFindSummaryHeader}>Recomendation</Text>
-              <Text style={styles.singleFindSummaryPara}>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum is simply dummy text of the
-                printing and typesetting industry.
-              </Text>
-            </View>
-            <View style={styles.singleFindSummaryWrap}>
-              <Text style={styles.singleFindSummaryHeader}>
-                Management Comments
-              </Text>
-              <Text style={styles.singleFindSummaryPara}>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum is simply dummy text of the
-                printing and typesetting industry.
-              </Text>
-            </View>
-          </View>
+            );
+          })}
         </View>
-        <View style={styles.findings}>
-          <Text style={styles.summaryHeader}>Finding 3</Text>
-          <View style={styles.summaryInfoWrap}>
-            <View style={styles.findingsHeaderInfo}>
-              <View style={styles.singleFindingsHeaderInfo}>
-                <Text style={styles.singleFindingsHeaderInfoHeader}>
-                  Responsible Person:
-                </Text>
-                <Text style={styles.singleFindingsHeaderInfoPara}>
-                  Management1
-                </Text>
-              </View>
-              <View style={styles.singleFindingsHeaderInfo}>
-                <Text style={styles.singleFindingsHeaderInfoHeader}>
-                  Implementation Date:
-                </Text>
-                <Text style={styles.singleFindingsHeaderInfoPara}>
-                  2024-01-11
-                </Text>
+        <View style={styles.horizontalLine}></View>
+        <Text style={styles.extraFieldsHeader}>Audit Extra Fields List</Text>
+        {reportObject?.intAuditExtraFieldsList?.map((item, index) => {
+          return (
+            <View style={styles.findings}>
+              <Text style={styles.indexNumber}>Field {index + 1}</Text>
+              <View style={styles.summaryInfoWrap}>
+                <View style={styles.singleFindSummaryWrap}>
+                  <Text style={styles.singleFindSummaryHeader}>Heading</Text>
+                  <Text style={styles.singleFindSummaryPara}>
+                    {item?.heading}
+                  </Text>
+                </View>
+                <View style={styles.singleFindSummaryWrap}>
+                  <Text style={styles.singleFindSummaryHeader}>Data</Text>
+                  <Text style={styles.singleFindSummaryPara}>{item?.data}</Text>
+                </View>
               </View>
             </View>
-            <View style={styles.singleFindSummaryWrap}>
-              <Text style={styles.singleFindSummaryHeader}>Observation</Text>
-              <Text style={styles.singleFindSummaryPara}>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum is simply dummy text of the
-                printing and typesetting industry.
-              </Text>
-            </View>
-            <View style={styles.singleFindSummaryWrap}>
-              <Text style={styles.singleFindSummaryHeader}>Implication</Text>
-              <Text style={styles.singleFindSummaryPara}>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum is simply dummy text of the
-                printing and typesetting industry.
-              </Text>
-            </View>
-            <View style={styles.singleFindSummaryWrap}>
-              <Text style={styles.singleFindSummaryHeader}>Recomendation</Text>
-              <Text style={styles.singleFindSummaryPara}>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum is simply dummy text of the
-                printing and typesetting industry.
-              </Text>
-            </View>
-            <View style={styles.singleFindSummaryWrap}>
-              <Text style={styles.singleFindSummaryHeader}>
-                Management Comments
-              </Text>
-              <Text style={styles.singleFindSummaryPara}>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum is simply dummy text of the
-                printing and typesetting industry.
-              </Text>
-            </View>
-          </View>
-        </View>
-        <View style={styles.findings}>
-          <Text style={styles.summaryHeader}>Finding 4</Text>
-          <View style={styles.summaryInfoWrap}>
-            <View style={styles.findingsHeaderInfo}>
-              <View style={styles.singleFindingsHeaderInfo}>
-                <Text style={styles.singleFindingsHeaderInfoHeader}>
-                  Responsible Person:
-                </Text>
-                <Text style={styles.singleFindingsHeaderInfoPara}>
-                  Management1
-                </Text>
-              </View>
-              <View style={styles.singleFindingsHeaderInfo}>
-                <Text style={styles.singleFindingsHeaderInfoHeader}>
-                  Implementation Date:
-                </Text>
-                <Text style={styles.singleFindingsHeaderInfoPara}>
-                  2024-01-11
-                </Text>
-              </View>
-            </View>
-            <View style={styles.singleFindSummaryWrap}>
-              <Text style={styles.singleFindSummaryHeader}>Observation</Text>
-              <Text style={styles.singleFindSummaryPara}>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum is simply dummy text of the
-                printing and typesetting industry.
-              </Text>
-            </View>
-            <View style={styles.singleFindSummaryWrap}>
-              <Text style={styles.singleFindSummaryHeader}>Implication</Text>
-              <Text style={styles.singleFindSummaryPara}>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum is simply dummy text of the
-                printing and typesetting industry.
-              </Text>
-            </View>
-            <View style={styles.singleFindSummaryWrap}>
-              <Text style={styles.singleFindSummaryHeader}>Recomendation</Text>
-              <Text style={styles.singleFindSummaryPara}>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum is simply dummy text of the
-                printing and typesetting industry.
-              </Text>
-            </View>
-            <View style={styles.singleFindSummaryWrap}>
-              <Text style={styles.singleFindSummaryHeader}>
-                Management Comments
-              </Text>
-              <Text style={styles.singleFindSummaryPara}>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum is simply dummy text of the
-                printing and typesetting industry.
-              </Text>
-            </View>
-          </View>
-        </View>
+          );
+        })}
       </Page>
     </Document>
   );

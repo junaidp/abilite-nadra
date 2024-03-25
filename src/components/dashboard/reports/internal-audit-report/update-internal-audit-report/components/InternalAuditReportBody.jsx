@@ -27,22 +27,10 @@ const InternalAuditReportBody = ({
   handleChangeAnnexure,
 }) => {
   const dispatch = useDispatch();
-  let [extraFieldsArray, setExtraFieldsArray] = React.useState([]);
+  const [extraFieldsArray, setExtraFieldsArray] = React.useState([]);
   const { createExtraFieldsLoading, internalAuditReportExtraFieldsAddSuccess } =
     useSelector((state) => state?.internalAuditReports);
-
-  const generatePDF = () => {
-    const pdfBlob = PDFGenerator().toBlob();
-
-    if (pdfBlob) {
-      const url = URL.createObjectURL(pdfBlob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", "sample.pdf");
-      document.body.appendChild(link);
-      link.click();
-    }
-  };
+  const [viewPdf, setViewPdf] = React.useState(false);
 
   function handleUpdateExtraField(item) {
     if (!createExtraFieldsLoading) {
@@ -176,12 +164,9 @@ const InternalAuditReportBody = ({
         <div className="col-lg-12 d-flex justify-content-between">
           <div
             className="btn btn-labeled btn-primary px-3 shadow fitContent"
-            onClick={generatePDF}
+            onClick={() => setViewPdf((pre) => !pre)}
           >
-            <span className="btn-label me-2">
-              <i className="fa fa-file-pdf f-18"></i>
-            </span>
-            Download PDF
+            {viewPdf ? "Remove Pdf View" : "View Pdf"}
           </div>
           <div
             className={`btn btn-labeled btn-primary px-3 shadow me-3 fitContent ${
@@ -196,9 +181,11 @@ const InternalAuditReportBody = ({
           </div>
         </div>
       </div>
-      <PDFViewer style={{ width: "100%", height: "500px" }}>
-        <PDFGenerator />
-      </PDFViewer>
+      {viewPdf && (
+        <PDFViewer style={{ width: "100%", height: "500px" }}>
+          <PDFGenerator reportObject={reportObject} />
+        </PDFViewer>
+      )}
     </div>
   );
 };

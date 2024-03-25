@@ -157,6 +157,7 @@ const UpdateInternalAuditReport = () => {
           auditPurpose: pre?.auditPurpose,
           annexure: pre?.annexure,
           keyFindingsList: pre?.keyFindingsList,
+          reportingAndFollowUp: pre?.reportingAndFollowUp,
         };
       });
     }
