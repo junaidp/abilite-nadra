@@ -55,6 +55,10 @@ import {
 import JobTimeAllocationPage from "./pages/dashboard/report/job-time-allocation/JobTimeAllocation";
 import AuditPlaningSummaryPage from "./pages/dashboard/report/audit-planing-summary/AuditPlaningSummary";
 import AuditExceptionPage from "./pages/dashboard/report/audit-exception/AuditException";
+import InternalAuditConsolidationReport from "./components/dashboard/reports/internal-audit-consolidation-report/index";
+import GenerateInternalAuditConsolidationReport from "./components/dashboard/reports/internal-audit-consolidation-report/generate-internal-audit-report";
+import ViewInternalAuditConsolidationReport from "./components/dashboard/reports/internal-audit-consolidation-report/view-internal-audit-report";
+import UpdateInternalAuditConsolidationReport from "./components/dashboard/reports/internal-audit-consolidation-report/update-internal-audit-report";
 
 const App = () => {
   let dispatch = useDispatch();
@@ -207,6 +211,23 @@ const App = () => {
             <Route
               path="update-internal-audit-report"
               element={<UpdateInternalAuditReportPage />}
+            />
+
+            <Route
+              path="internal-audit-consolidation-report"
+              element={<InternalAuditConsolidationReport />}
+            />
+            <Route
+              path="generate-internal-audit-consolidation-report"
+              element={<GenerateInternalAuditConsolidationReport />}
+            />
+            <Route
+              path="view-internal-audit-consolidation-report"
+              element={<ViewInternalAuditConsolidationReport />}
+            />
+            <Route
+              path="update-internal-audit-consolidation-report"
+              element={<UpdateInternalAuditConsolidationReport />}
             />
 
             <Route
