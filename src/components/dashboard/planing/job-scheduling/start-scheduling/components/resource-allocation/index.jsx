@@ -62,7 +62,6 @@ const ResourceAllocation = ({
       );
       filteredUser = filteredUser?.filter(
         (singleItem) =>
-          Number(singleItem?.id) !== Number(user[0]?.userId?.id) &&
           singleItem?.employeeid?.userHierarchy !== "Management_Auditee"
       );
       setSelectedUsers(filteredUser);
