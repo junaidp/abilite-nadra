@@ -10,8 +10,6 @@ import {
   setupUpdateExtraField,
 } from "../../../../../../global-redux/reducers/reports/internal-audit-report/slice";
 import { v4 as uuidv4 } from "uuid";
-import PDFGenerator from "./PDFGenerator";
-import { PDFViewer } from "@react-pdf/renderer";
 import KeyFindings from "./KeyFindings";
 import ExtraFields from "./ExtraFields";
 
@@ -30,7 +28,6 @@ const InternalAuditReportBody = ({
   const [extraFieldsArray, setExtraFieldsArray] = React.useState([]);
   const { createExtraFieldsLoading, internalAuditReportExtraFieldsAddSuccess } =
     useSelector((state) => state?.internalAuditReports);
-  const [viewPdf, setViewPdf] = React.useState(false);
 
   function handleUpdateExtraField(item) {
     if (!createExtraFieldsLoading) {
@@ -163,12 +160,6 @@ const InternalAuditReportBody = ({
       <div className="row my-3">
         <div className="col-lg-12 d-flex justify-content-between">
           <div
-            className="btn btn-labeled btn-primary px-3 shadow fitContent"
-            onClick={() => setViewPdf((pre) => !pre)}
-          >
-            {viewPdf ? "Remove Pdf View" : "View Pdf"}
-          </div>
-          <div
             className={`btn btn-labeled btn-primary px-3 shadow me-3 fitContent ${
               addReportLoading && "disabled"
             }`}
@@ -181,11 +172,6 @@ const InternalAuditReportBody = ({
           </div>
         </div>
       </div>
-      {viewPdf && (
-        <PDFViewer style={{ width: "100%", height: "500px" }}>
-          <PDFGenerator reportObject={reportObject} />
-        </PDFViewer>
-      )}
     </div>
   );
 };

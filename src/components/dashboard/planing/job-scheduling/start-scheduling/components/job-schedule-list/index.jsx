@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-
+import Chip from "@mui/material/Chip";
 const JobScheduleList = ({
   currentJobSchedulingObject,
   setCurrentJobScheduling,
@@ -23,7 +23,7 @@ const JobScheduleList = ({
     );
     const newDate = currentValue ? new Date(currentValue) : null;
     const endDate = new Date(newDate);
-    endDate.setDate(endDate.getDate() + totalWeeks * 7);
+    endDate.setDate(endDate.getDate() + totalWeeks * 5);
     setCurrentJobScheduling((pre) => {
       return {
         ...pre,
@@ -32,7 +32,7 @@ const JobScheduleList = ({
             ? {
                 ...singleItem,
                 plannedJobStartDate: event?.target?.value,
-                plannedJobEndDate: endDate,
+                plannedJobEndDate: endDate || singleItem?.plannedJobEndDate,
               }
             : singleItem
         ),
@@ -69,9 +69,18 @@ const JobScheduleList = ({
                 return (
                   <div className="row mb-4" key={ind}>
                     <div className="col-lg-6">
-                      <label className="form-label me-2">
-                        {ind + 1}. Start Date
-                      </label>
+                      <div>
+                        <label className="form-label me-2">
+                          {ind + 1}. Start Date
+                        </label>
+                        {list?.subLocation?.description &&
+                          list?.subLocation?.description !== "" && (
+                            <Chip
+                              label={list?.subLocation?.description}
+                              className="float-end mb-2"
+                            />
+                          )}
+                      </div>
                       <input
                         type="date"
                         className="form-control"

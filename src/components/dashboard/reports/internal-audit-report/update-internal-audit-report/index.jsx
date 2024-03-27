@@ -96,7 +96,7 @@ const UpdateInternalAuditReport = () => {
 
   function handleSaveInternalAuditReport() {
     if (!loading) {
-      if (reportObject?.jobName === "") {
+      if (reportObject?.jobName === "" || !reportObject?.jobName) {
         toast.error("Provide Job Name");
       }
       if (
@@ -115,6 +115,7 @@ const UpdateInternalAuditReport = () => {
         toast.error("Provide Audit Extra Fields List");
       }
       if (
+        reportObject?.jobName &&
         reportObject?.jobName !== "" &&
         reportObject?.executiveSummary !== "" &&
         reportObject?.executiveSummary &&

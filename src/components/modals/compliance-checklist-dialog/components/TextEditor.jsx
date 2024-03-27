@@ -95,7 +95,8 @@ const RichTextEditor = ({ onContentChange, initialValue, singleItem }) => {
       config={config}
       tabIndex={1}
       value={content}
-      onChange={handleEditorChange}
+      onChange={(newContent) => {}}
+      onBlur={handleEditorChange}
     />
   );
 };

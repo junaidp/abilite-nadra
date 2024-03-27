@@ -17,6 +17,8 @@ import KeyFindings from "./components/KeyFindings";
 import AuditExtraFields from "./components/AuditExtraFields";
 import Header from "./components/Header";
 import FollowUpItem from "./components/FollowUpItem";
+import PDFGenerator from "./components/PDFGenerator";
+import { PDFViewer } from "@react-pdf/renderer";
 
 const ViewInternalAuditReport = () => {
   const dispatch = useDispatch();
@@ -27,6 +29,8 @@ const ViewInternalAuditReport = () => {
   const { loading, singleInternalAuditReport } = useSelector(
     (state) => state?.internalAuditReports
   );
+
+  const [viewPdf, setViewPdf] = React.useState(false);
 
   React.useEffect(() => {
     if (!reportId) {
@@ -82,6 +86,21 @@ const ViewInternalAuditReport = () => {
             )}
           </div>
         </div>
+      )}
+      {singleInternalAuditReport?.approved === true && (
+        <div className="row my-3">
+          <div
+            className="btn btn-labeled btn-primary px-3 shadow fitContent"
+            onClick={() => setViewPdf((pre) => !pre)}
+          >
+            {viewPdf ? "Remove Pdf View" : "View Pdf"}
+          </div>
+        </div>
+      )}
+      {viewPdf && singleInternalAuditReport?.approved === true && (
+        <PDFViewer style={{ width: "100%", height: "500px" }}>
+          <PDFGenerator reportObject={singleInternalAuditReport} />
+        </PDFViewer>
       )}
     </div>
   );

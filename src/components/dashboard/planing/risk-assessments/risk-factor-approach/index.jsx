@@ -207,7 +207,9 @@ const RiskFactorApproach = () => {
               >
                 <i className="fa fa-arrow-left text-primary fs-5 pe-3"></i>
               </a>
-              <div className="mb-0 heading">Risk Factor Approach</div>
+              <div className="mb-0 heading">
+                {performRiskAssessmentObject?.riskAssessments?.jobDescription}
+              </div>
             </div>
             {performRiskAssessmentObject?.riskAssessments?.riskRating === 0 && (
               <div
@@ -220,9 +222,6 @@ const RiskFactorApproach = () => {
                 Add Risk Factor
               </div>
             )}
-          </div>
-          <div className="ps-3 sub-heading mb-2">
-            {performRiskAssessmentObject?.riskAssessments?.jobDescription}
           </div>
           <div className="container">
             <div className="row mb-5">
