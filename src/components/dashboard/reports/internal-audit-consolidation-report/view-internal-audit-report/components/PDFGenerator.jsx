@@ -2,6 +2,7 @@ import logo from "../../../../../../assets/logo.png";
 import moment from "moment";
 import React from "react";
 import font from "../../../../../../font/Poppins-Medium.ttf";
+import Chip from "@mui/material/Chip";
 
 import {
   Document,
@@ -101,6 +102,9 @@ const styles = StyleSheet.create({
     marginBottom: 7,
     color: "#0a7386",
   },
+  reportingNotFoundText: {
+    fontSize: 13,
+  },
   summaryPara: {
     fontSize: 13,
   },
@@ -115,11 +119,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   summaryInfoWrap: {
-    marginTop: 15,
+    marginTop: 5,
   },
   indexNumber: {
     fontSize: 18,
-    marginBottom: 7,
+    marginBottom: 3,
     color: "#0a7386",
     textDecoration: "underline",
   },
@@ -220,71 +224,6 @@ const PDFGenerator = ({ reportObject }) => {
           </Text>
         </View>
         <View style={styles.horizontalLine}></View>
-
-        <View style={styles.reportingView}>
-          <Text style={styles.summaryHeader}>Reporting & Follow Up</Text>
-          {reportObject?.consolidatedIARKeyFindingsList?.map((singleIAR) => {
-            return singleIAR?.reportingList?.map((followUpItem, index) => {
-              return (
-                <View style={styles.findings}>
-                  <Text style={styles.indexNumber}>Reporting {index + 1}</Text>
-                  <View style={styles.summaryInfoWrap}>
-                    <View style={styles.findingsHeaderInfo}>
-                      <View style={styles.singleFindingsHeaderInfo}>
-                        <Text style={styles.singleFindingsHeaderInfoHeader}>
-                          Responsible Person:
-                        </Text>
-                        <Text style={styles.singleFindingsHeaderInfoPara}>
-                          Management1
-                        </Text>
-                      </View>
-                      <View style={styles.singleFindingsHeaderInfo}>
-                        <Text style={styles.singleFindingsHeaderInfoHeader}>
-                          Implementation Date:
-                        </Text>
-                        <Text style={styles.singleFindingsHeaderInfoPara}>
-                          {moment(followUpItem?.implementationDate).format(
-                            "YYYY-MM-DD"
-                          )}
-                        </Text>
-                      </View>
-                    </View>
-                    <View style={styles.singleFindSummaryWrap}>
-                      <Text style={styles.singleFindSummaryHeader}>
-                        Observation
-                      </Text>
-                      <Text style={styles.singleFindSummaryPara}>
-                        {convert(followUpItem?.observationName, {
-                          tables: true,
-                        })}
-                      </Text>
-                    </View>
-                    <View style={styles.singleFindSummaryWrap}>
-                      <Text style={styles.singleFindSummaryHeader}>
-                        Implication
-                      </Text>
-                      <Text style={styles.singleFindSummaryPara}>
-                        {followUpItem?.implication}
-                      </Text>
-                    </View>
-                    <View style={styles.singleFindSummaryWrap}>
-                      <Text style={styles.singleFindSummaryHeader}>
-                        Management Comments
-                      </Text>
-                      <Text style={styles.singleFindSummaryPara}>
-                        {followUpItem?.managementComments
-                          ? followUpItem?.managementComments
-                          : "No Management Comments Provided"}
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-              );
-            });
-          })}
-        </View>
-        <View style={styles.horizontalLine}></View>
-
         <View style={styles.findingView}>
           <Text style={styles.summaryHeader}>All Findings</Text>
           {reportObject?.consolidatedIARKeyFindingsList?.map((item, index) => {
@@ -300,6 +239,84 @@ const PDFGenerator = ({ reportObject }) => {
                       {convert(item?.summaryOfKeyFinding, { tables: true })}
                     </Text>
                   </View>
+                </View>
+                <View style={styles.reportingView}>
+                  <Text style={styles.summaryHeader}>
+                    Reporting & Follow Up
+                  </Text>
+                  {!item?.reportingList || item?.reportingList?.length === 0 ? (
+                    <Text style={styles.reportingNotFoundText}>
+                      Reporting Not Available
+                    </Text>
+                  ) : (
+                    item?.reportingList?.map((followUpItem, index) => {
+                      return (
+                        <View style={styles.findings}>
+                          <Text style={styles.indexNumber}>
+                            Reporting {index + 1}
+                          </Text>
+                          <View style={styles.summaryInfoWrap}>
+                            <View style={styles.findingsHeaderInfo}>
+                              <View style={styles.singleFindingsHeaderInfo}>
+                                <Text
+                                  style={styles.singleFindingsHeaderInfoHeader}
+                                >
+                                  Responsible Person:
+                                </Text>
+                                <Text
+                                  style={styles.singleFindingsHeaderInfoPara}
+                                >
+                                  Management1
+                                </Text>
+                              </View>
+                              <View style={styles.singleFindingsHeaderInfo}>
+                                <Text
+                                  style={styles.singleFindingsHeaderInfoHeader}
+                                >
+                                  Implementation Date:
+                                </Text>
+                                <Text
+                                  style={styles.singleFindingsHeaderInfoPara}
+                                >
+                                  {moment(
+                                    followUpItem?.implementationDate
+                                  ).format("YYYY-MM-DD")}
+                                </Text>
+                              </View>
+                            </View>
+                            <View style={styles.singleFindSummaryWrap}>
+                              <Text style={styles.singleFindSummaryHeader}>
+                                Observation
+                              </Text>
+                              <Text style={styles.singleFindSummaryPara}>
+                                {convert(followUpItem?.observationName, {
+                                  tables: true,
+                                })}
+                              </Text>
+                            </View>
+                            <View style={styles.singleFindSummaryWrap}>
+                              <Text style={styles.singleFindSummaryHeader}>
+                                Implication
+                              </Text>
+                              <Text style={styles.singleFindSummaryPara}>
+                                {followUpItem?.implication}
+                              </Text>
+                            </View>
+                            <View style={styles.singleFindSummaryWrap}>
+                              <Text style={styles.singleFindSummaryHeader}>
+                                Management Comments
+                              </Text>
+                              <Text style={styles.singleFindSummaryPara}>
+                                {followUpItem?.managementComments
+                                  ? followUpItem?.managementComments
+                                  : "No Management Comments Provided"}
+                              </Text>
+                            </View>
+                          </View>
+                        </View>
+                      );
+                    })
+                  )}
                 </View>
               </View>
             );
