@@ -8,11 +8,11 @@ const Header = () => {
       <div className="mb-0 heading">
         <a
           className="text-primary"
-          onClick={() => navigate("/audit/internal-audit-report")}
+          onClick={() => navigate("/audit/internal-audit-consolidation-report")}
         >
           <i className="fa fa-arrow-left text-primary fs-5 pe-3"></i>
         </a>
-        View Internal Audit Report
+        View Internal Audit Consolidation Report
       </div>
     </header>
   );

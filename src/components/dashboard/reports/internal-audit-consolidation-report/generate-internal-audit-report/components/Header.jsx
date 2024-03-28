@@ -14,18 +14,6 @@ const Header = () => {
         </a>
         Internal Audit Consolidation Report
       </div>
-      <div className="">
-        <div className="btn btn-labeled btn-primary px-3 shadow">
-          <span className="btn-label me-2">
-            <i className="fa fa-plus"></i>
-          </span>
-          Add Section
-        </div>
-        <i
-          className="fa fa-info-circle ps-3 text-secondary cursor-pointer"
-          title="Info"
-        ></i>
-      </div>
     </header>
   );
 };

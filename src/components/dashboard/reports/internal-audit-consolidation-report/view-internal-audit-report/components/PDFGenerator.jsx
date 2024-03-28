@@ -2,6 +2,7 @@ import logo from "../../../../../../assets/logo.png";
 import moment from "moment";
 import React from "react";
 import font from "../../../../../../font/Poppins-Medium.ttf";
+
 import {
   Document,
   Page,
@@ -85,6 +86,12 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 12,
   },
+  extraFieldsHeader: {
+    fontSize: 18,
+    marginBottom: 7,
+    color: "#0a7386",
+    marginTop: 12,
+  },
   findingView: {
     marginTop: 8,
     marginBottom: 12,
@@ -93,13 +100,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 7,
     color: "#0a7386",
-  },
-
-  extraFieldsHeader: {
-    fontSize: 18,
-    marginBottom: 7,
-    color: "#0a7386",
-    marginTop: 12,
   },
   summaryPara: {
     fontSize: 13,
@@ -223,8 +223,8 @@ const PDFGenerator = ({ reportObject }) => {
 
         <View style={styles.reportingView}>
           <Text style={styles.summaryHeader}>Reporting & Follow Up</Text>
-          {reportObject?.reportingAndFollowUp?.reportingList?.map(
-            (followUpItem, index) => {
+          {reportObject?.consolidatedIARKeyFindingsList?.map((singleIAR) => {
+            return singleIAR?.reportingList?.map((followUpItem, index) => {
               return (
                 <View style={styles.findings}>
                   <Text style={styles.indexNumber}>Reporting {index + 1}</Text>
@@ -280,16 +280,16 @@ const PDFGenerator = ({ reportObject }) => {
                   </View>
                 </View>
               );
-            }
-          )}
+            });
+          })}
         </View>
         <View style={styles.horizontalLine}></View>
 
         <View style={styles.findingView}>
           <Text style={styles.summaryHeader}>All Findings</Text>
-          {reportObject?.keyFindingsList?.map((item, index) => {
+          {reportObject?.consolidatedIARKeyFindingsList?.map((item, index) => {
             return (
-              <View style={styles.findings}>
+              <View style={styles.findings} key={index}>
                 <Text style={styles.indexNumber}>Finding {index + 1}</Text>
                 <View style={styles.summaryInfoWrap}>
                   <View style={styles.singleFindSummaryWrap}>

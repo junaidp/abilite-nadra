@@ -155,20 +155,20 @@ const InternalAuditReport = () => {
                           <td>
                             <i
                               className="fa-eye fa f-18 cursor-pointer"
-                              // onClick={() =>
-                              //   navigate(
-                              //     `/audit/view-internal-audit-consolidation-report?reportId=${item?.id}`
-                              //   )
-                              // }
+                              onClick={() =>
+                                navigate(
+                                  `/audit/view-internal-audit-consolidation-report?reportId=${item?.id}`
+                                )
+                              }
                             ></i>
                             {item?.submitted === false && (
                               <i
                                 className="fa fa-edit px-3 f-18 cursor-pointer "
-                                // onClick={() =>
-                                //   navigate(
-                                //     `/audit/update-internal-audit-consolidation-report?reportId=${item?.id}`
-                                //   )
-                                // }
+                                onClick={() =>
+                                  navigate(
+                                    `/audit/update-internal-audit-consolidation-report?reportId=${item?.id}`
+                                  )
+                                }
                               ></i>
                             )}
                             <i

@@ -4,19 +4,7 @@ import RichTextEditor from "../../view-internal-audit-report/components/RichText
 
 const FollowUpItem = ({ item }) => {
   return (
-    <div className="border px-3 py-2  mt-3 rounded">
-      <div className="row mb-3">
-        <div className="col-lg-12">
-          <label>Observation Title:</label>
-          <input
-            className="form-control w-100"
-            placeholder="Enter Observation Title here"
-            type="text"
-            value={item?.observationTitle}
-            disabled
-          />
-        </div>
-      </div>
+    <div className="py-2  mt-3">
       <div className="mb-3">
         <label>Observation:</label>
         <RichTextEditor initialValue={item?.observationName} />

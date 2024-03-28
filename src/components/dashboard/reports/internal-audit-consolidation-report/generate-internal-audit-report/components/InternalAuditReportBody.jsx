@@ -1,5 +1,4 @@
 import React from "react";
-import FollowUpItem from "./FollowUpItem";
 import ReportFirstLayout from "./ReportFirstLayout";
 import RichTextEditor from "./RichText";
 import { useSelector, useDispatch } from "react-redux";
@@ -12,8 +11,6 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import KeyKindings from "./KeyFindings";
 import ExtraFields from "./ExtraFields";
-import { PDFViewer } from "@react-pdf/renderer";
-import PDFGenerator from "./PDFGenerator";
 
 const InternalAuditReportBody = ({
   reportObject,
@@ -29,8 +26,7 @@ const InternalAuditReportBody = ({
   const dispatch = useDispatch();
   const [extraFieldsArray, setExtraFieldsArray] = React.useState([]);
   const { createExtraFieldsLoading, internalAuditReportExtraFieldsAddSuccess } =
-    useSelector((state) => state?.internalAuditReports);
-  const [viewPdf, setViewPdf] = React.useState(false);
+    useSelector((state) => state?.consolidationReports);
 
   function handleUpdateExtraField(item) {
     if (!createExtraFieldsLoading) {
@@ -57,8 +53,13 @@ const InternalAuditReportBody = ({
       if (!createExtraFieldsLoading) {
         dispatch(
           setupCreateExtraFields({
-            reportId: reportObject?.id,
-            extraFieldsArray: extraFieldsArray,
+            consolidatedInternalAuditReportId: reportObject?.id,
+            extraFieldsArray: extraFieldsArray.map((item) => {
+              return {
+                data: item?.data,
+                heading: item?.heading,
+              };
+            }),
           })
         );
       }
@@ -123,18 +124,6 @@ const InternalAuditReportBody = ({
         handleChangeSummaryOfKeyFinding={handleChangeSummaryOfKeyFinding}
       />
 
-      {/* Findings Ends */}
-      {/* Reporting And Follow Up Starts */}
-      <div className="row my-3">
-        <div className="col-lg-12">
-          <div className="sub-heading  fw-bold">Reporting & Follow Up</div>
-        </div>
-      </div>
-      {reportObject?.reportingAndFollowUp?.reportingList?.map((item, index) => {
-        return <FollowUpItem key={index} item={item} />;
-      })}
-      {/* Reporting And Follow Up Ends */}
-
       {/* Extra Fields Starts */}
       <ExtraFields
         reportObject={reportObject}
@@ -163,14 +152,8 @@ const InternalAuditReportBody = ({
         </div>
       </div>
 
-      {/* <div className="row my-3">
+      <div className="row my-3">
         <div className="col-lg-12 d-flex justify-content-between">
-          <div
-            className="btn btn-labeled btn-primary px-3 shadow fitContent"
-            onClick={() => setViewPdf((pre) => !pre)}
-          >
-            {viewPdf ? "Remove Pdf View" : "View Pdf"}
-          </div>
           <div
             className={`btn btn-labeled btn-primary px-3 shadow me-3 fitContent ${
               addReportLoading && "disabled"
@@ -184,11 +167,6 @@ const InternalAuditReportBody = ({
           </div>
         </div>
       </div>
-      {viewPdf && (
-        <PDFViewer style={{ width: "100%", height: "500px" }}>
-          <PDFGenerator reportObject={reportObject} />
-        </PDFViewer>
-      )} */}
     </div>
   );
 };

@@ -54,7 +54,12 @@ const InternalAuditReportBody = ({
         dispatch(
           setupCreateExtraFields({
             reportId: reportObject?.id,
-            extraFieldsArray: extraFieldsArray,
+            extraFieldsArray: extraFieldsArray.map((item) => {
+              return {
+                data: item?.data,
+                heading: item?.heading,
+              };
+            }),
           })
         );
       }

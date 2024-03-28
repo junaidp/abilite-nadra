@@ -129,12 +129,10 @@ export const createExtraFields = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
-      `${baseUrl}/consolidatedReports/report/createExtraField?internalAuditReportId=${Number(
-        data?.reportId
+      `${baseUrl}/consolidatedReports/report/createExtraField?consolidatedInternalAuditReportId=${Number(
+        data?.consolidatedInternalAuditReportId
       )}`,
-
       data?.extraFieldsArray,
-
       {
         headers: {
           Authorization: `Bearer ${user[0]?.token}`,

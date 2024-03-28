@@ -70,11 +70,12 @@ const GenerateInternalAuditReport = () => {
     setReportObject((pre) => {
       return {
         ...pre,
-        keyFindingsList: pre?.keyFindingsList?.map((keyObject) =>
-          Number(keyObject?.id) === Number(id)
-            ? { ...keyObject, summaryOfKeyFinding: value }
-            : keyObject
-        ),
+        consolidatedIARKeyFindingsList:
+          pre?.consolidatedIARKeyFindingsList?.map((keyObject) =>
+            Number(keyObject?.id) === Number(id)
+              ? { ...keyObject, summaryOfKeyFinding: value }
+              : keyObject
+          ),
       };
     });
   }
@@ -120,8 +121,8 @@ const GenerateInternalAuditReport = () => {
 
   function handleSaveInternalAuditReport() {
     if (!loading) {
-      if (reportObject?.jobName === "") {
-        toast.error("Provide Job Name");
+      if (reportObject?.reportName === "" || !reportObject?.reportName) {
+        toast.error("Provide Report Name");
       }
       if (
         reportObject?.executiveSummary === "" ||
@@ -139,7 +140,8 @@ const GenerateInternalAuditReport = () => {
         toast.error("Provide Audit Extra Fields List");
       }
       if (
-        reportObject?.jobName !== "" &&
+        reportObject?.reportName &&
+        reportObject?.reportName !== "" &&
         reportObject?.executiveSummary !== "" &&
         reportObject?.executiveSummary &&
         reportObject?.auditPurpose !== "" &&
@@ -154,7 +156,7 @@ const GenerateInternalAuditReport = () => {
   React.useEffect(() => {
     if (internalAuditReportAddSuccess) {
       dispatch(resetInternalAuditReportAddSuccess());
-      navigate("/audit/internal-audit-report");
+      navigate("/audit/internal-audit-consolidation-report");
     }
   }, [internalAuditReportAddSuccess]);
 
@@ -196,8 +198,7 @@ const GenerateInternalAuditReport = () => {
           executiveSummary: pre?.executiveSummary,
           auditPurpose: pre?.auditPurpose,
           annexure: pre?.annexure,
-          keyFindingsList: pre?.keyFindingsList,
-          reportingAndFollowUp: pre?.reportingAndFollowUp,
+          consolidatedIARKeyFindingsList: pre?.consolidatedIARKeyFindingsList,
         };
       });
     }

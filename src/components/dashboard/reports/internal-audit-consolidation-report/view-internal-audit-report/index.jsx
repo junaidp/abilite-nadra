@@ -7,7 +7,7 @@ import { useSearchParams } from "react-router-dom";
 import {
   setupGetSingleInternalAuditReport,
   handleResetData,
-} from "../../../../../global-redux/reducers/reports/internal-audit-report/slice";
+} from "../../../../../global-redux/reducers/reports/consolidation-report/slice";
 import { useDispatch, useSelector } from "react-redux";
 import { CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -16,21 +16,23 @@ import RichTextFields from "./components/RichTextElements";
 import KeyFindings from "./components/KeyFindings";
 import AuditExtraFields from "./components/AuditExtraFields";
 import Header from "./components/Header";
-import FollowUpItem from "./components/FollowUpItem";
+import PDFGenerator from "./components/PDFGenerator";
+import { PDFViewer } from "@react-pdf/renderer";
 
 const ViewInternalAuditReport = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const reportId = searchParams.get("reportId");
+  const [viewPdf, setViewPdf] = React.useState(false);
   const { user } = useSelector((state) => state?.auth);
   const { loading, singleInternalAuditReport } = useSelector(
-    (state) => state?.internalAuditReports
+    (state) => state?.consolidationReports
   );
 
   React.useEffect(() => {
     if (!reportId) {
-      navigate("/audit/internal-audit-report");
+      navigate("/audit/internal-audit-consolidation-report");
     }
   }, [reportId]);
 
@@ -57,7 +59,7 @@ const ViewInternalAuditReport = () => {
       ) : singleInternalAuditReport[0]?.error === "Not Found" ||
         (Object.keys(singleInternalAuditReport).length === 0 &&
           singleInternalAuditReport.constructor === Object) ? (
-        "Interal Audit Report Not Found"
+        "Internal Audit Consolidation  Report Not Found"
       ) : (
         <div className="mb-4">
           <Header />
@@ -71,16 +73,21 @@ const ViewInternalAuditReport = () => {
           <AuditExtraFields
             singleInternalAuditReport={singleInternalAuditReport}
           />
-          <div>
-            <div className="col-lg-12 mt-4">
-              <div className="sub-heading  fw-bold">Reporting & Follow Up</div>
+          {singleInternalAuditReport?.approved === true && (
+            <div className="row my-3">
+              <div
+                className="btn btn-labeled btn-primary px-3 shadow fitContent"
+                onClick={() => setViewPdf((pre) => !pre)}
+              >
+                {viewPdf ? "Remove Pdf View" : "View Pdf"}
+              </div>
             </div>
-            {singleInternalAuditReport?.reportingAndFollowUp?.reportingList?.map(
-              (item, index) => {
-                return <FollowUpItem key={index} item={item} />;
-              }
-            )}
-          </div>
+          )}
+          {viewPdf && singleInternalAuditReport?.approved === true && (
+            <PDFViewer style={{ width: "100%", height: "500px" }}>
+              <PDFGenerator reportObject={singleInternalAuditReport} />
+            </PDFViewer>
+          )}
         </div>
       )}
     </div>

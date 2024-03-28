@@ -2,19 +2,17 @@ import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
 } from "../../../../../global-redux/reducers/common/slice";
-import { useSearchParams } from "react-router-dom";
 import {
   setupGetSingleInternalAuditReport,
   handleResetData,
-} from "../../../../../global-redux/reducers/reports/internal-audit-report/slice";
+  setupSaveInternalAuditReport,
+  resetInternalAuditReportAddSuccess,
+} from "../../../../../global-redux/reducers/reports/consolidation-report/slice";
+import { useSearchParams } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  setupSaveInternalAuditReport,
-  resetInternalAuditReportAddSuccess,
-} from "../../../../../global-redux/reducers/reports/internal-audit-report/slice";
 import InternalAuditReportBody from "./components/InternalAuditReportBody";
 import Header from "./components/Header";
 import { toast } from "react-toastify";
@@ -31,7 +29,7 @@ const UpdateInternalAuditReport = () => {
     addReportLoading,
     internalAuditReportExtraFieldsObject,
     singleInternalAuditReport,
-  } = useSelector((state) => state?.internalAuditReports);
+  } = useSelector((state) => state?.consolidationReports);
   const [reportObject, setReportObject] = React.useState({});
 
   function handleChangeReportObject(event) {
@@ -46,11 +44,12 @@ const UpdateInternalAuditReport = () => {
     setReportObject((pre) => {
       return {
         ...pre,
-        keyFindingsList: pre?.keyFindingsList?.map((keyObject) =>
-          Number(keyObject?.id) === Number(id)
-            ? { ...keyObject, summaryOfKeyFinding: value }
-            : keyObject
-        ),
+        consolidatedIARKeyFindingsList:
+          pre?.consolidatedIARKeyFindingsList?.map((keyObject) =>
+            Number(keyObject?.id) === Number(id)
+              ? { ...keyObject, summaryOfKeyFinding: value }
+              : keyObject
+          ),
       };
     });
   }
@@ -96,8 +95,8 @@ const UpdateInternalAuditReport = () => {
 
   function handleSaveInternalAuditReport() {
     if (!loading) {
-      if (reportObject?.jobName === "") {
-        toast.error("Provide Job Name");
+      if (reportObject?.reportName === "" || !reportObject?.reportName) {
+        toast.error("Provide Report Name");
       }
       if (
         reportObject?.executiveSummary === "" ||
@@ -115,7 +114,8 @@ const UpdateInternalAuditReport = () => {
         toast.error("Provide Audit Extra Fields List");
       }
       if (
-        reportObject?.jobName !== "" &&
+        reportObject?.reportName &&
+        reportObject?.reportName !== "" &&
         reportObject?.executiveSummary !== "" &&
         reportObject?.executiveSummary &&
         reportObject?.auditPurpose !== "" &&
@@ -130,7 +130,7 @@ const UpdateInternalAuditReport = () => {
   React.useEffect(() => {
     if (internalAuditReportAddSuccess) {
       dispatch(resetInternalAuditReportAddSuccess());
-      navigate("/audit/internal-audit-report");
+      navigate("/audit/internal-audit-consolidation-report");
     }
   }, [internalAuditReportAddSuccess]);
 
@@ -156,8 +156,7 @@ const UpdateInternalAuditReport = () => {
           executiveSummary: pre?.executiveSummary,
           auditPurpose: pre?.auditPurpose,
           annexure: pre?.annexure,
-          keyFindingsList: pre?.keyFindingsList,
-          reportingAndFollowUp: pre?.reportingAndFollowUp,
+          consolidatedIARKeyFindingsList: pre?.consolidatedIARKeyFindingsList,
         };
       });
     }
@@ -165,7 +164,7 @@ const UpdateInternalAuditReport = () => {
 
   React.useEffect(() => {
     if (!reportId) {
-      navigate("/audit/internal-audit-report");
+      navigate("/audit/internal-audit-consolidation-report");
     }
   }, [reportId]);
 
@@ -192,7 +191,7 @@ const UpdateInternalAuditReport = () => {
       ) : singleInternalAuditReport[0]?.error === "Not Found" ||
         (Object.keys(singleInternalAuditReport).length === 0 &&
           singleInternalAuditReport.constructor === Object) ? (
-        "Interal Audit Report Not Found"
+        "Interal Audit Consolidation Report Not Found"
       ) : (
         <div className="mb-4">
           <Header />
