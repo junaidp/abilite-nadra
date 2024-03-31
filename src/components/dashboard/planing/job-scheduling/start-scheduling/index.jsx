@@ -22,6 +22,7 @@ import TimeAndDateAllocation from "./components/time-date-allocation";
 import JobScheduleList from "./components/job-schedule-list";
 import ResourceAllocation from "./components/resource-allocation";
 import { CircularProgress } from "@mui/material";
+import { toast } from "react-toastify";
 
 const StartScheduling = () => {
   const navigate = useNavigate();
@@ -51,18 +52,31 @@ const StartScheduling = () => {
 
   function handleChangeNumberTextField(event, section) {
     if (section === "resourcesRequired") {
-      if (/^\d*\.?\d*$/.test(event?.target?.value)) {
-        setCurrentJobScheduling((pre) => {
-          return {
-            ...pre,
-            numberOfResourcesRequired: {
-              ...pre?.numberOfResourcesRequired,
-              [event?.target?.name]: Number(event?.target?.value),
-            },
-          };
-        });
+      let ifUsersExists = allUsers?.some(
+        (userItem) =>
+          userItem?.employeeid?.skillSet?.toUpperCase() ===
+          event?.target?.name?.toUpperCase()
+      );
+
+      if (!ifUsersExists) {
+        toast.error("No resource available in Operations");
+      }
+
+      if (ifUsersExists) {
+        if (/^\d*\.?\d*$/.test(event?.target?.value)) {
+          setCurrentJobScheduling((pre) => {
+            return {
+              ...pre,
+              numberOfResourcesRequired: {
+                ...pre?.numberOfResourcesRequired,
+                [event?.target?.name]: Number(event?.target?.value),
+              },
+            };
+          });
+        }
       }
     }
+
     if (section === "timeAllocation") {
       if (/^\d*\.?\d*$/.test(event?.target?.value)) {
         setCurrentJobScheduling((pre) => {
@@ -135,12 +149,13 @@ const StartScheduling = () => {
       const hasNullValue = Object.values(object).includes(null);
       if (
         !hasNullValue &&
-        object?.timeAndDateAllocation?.placeOfWork !== null &&
-        object?.timeAndDateAllocation?.frequency !== null &&
+        object?.timeAndDateAllocation?.placeOfWork &&
+        object?.timeAndDateAllocation?.placeOfWork !== "" &&
+        object?.timeAndDateAllocation?.frequency &&
+        object?.timeAndDateAllocation?.frequency !== "" &&
         object?.resourceAllocation?.resourcesList &&
         object?.resourceAllocation?.resourcesList?.length !== 0 &&
-        object?.resourceAllocation?.headOfInternalAudit &&
-        object?.resourceAllocation?.proposedJobApprover &&
+        object?.locationList &&
         object?.locationList?.length !== 0
       ) {
         object = {

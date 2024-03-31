@@ -128,7 +128,6 @@ const CPList = ({ userHierarchy, userRole }) => {
                 <thead className="bg-secondary text-white">
                   <tr>
                     <th className="w-80">Sr No.</th>
-                    <th className="w-80">Id</th>
                     <th>Criteria for Risk Management and Control Processes</th>
                     <th>Action</th>
                   </tr>
@@ -140,7 +139,6 @@ const CPList = ({ userHierarchy, userRole }) => {
                       return (
                         <tr key={index}>
                           <td>{index + 1}</td>
-                          <td>{item?.id}</td>
                           <td>
                             <textarea
                               className="form-control"

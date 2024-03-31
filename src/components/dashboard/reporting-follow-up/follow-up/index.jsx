@@ -86,7 +86,6 @@ const Reporting = () => {
                   <thead>
                     <tr>
                       <th className="sr-col">Sr. #</th>
-                      <th className="sr-col">Id</th>
                       <th>Particulars</th>
                       <th>Status</th>
                       <th>No. of Observations</th>
@@ -101,9 +100,6 @@ const Reporting = () => {
                           <tr key={index}>
                             <td>
                               <label>{index + 1}</label>
-                            </td>
-                            <td>
-                              <label>{item?.id}</label>
                             </td>
                             <td>
                               <a

@@ -100,22 +100,6 @@ const ResourceAllocation = ({
           <div className="container overflow-x-auto">
             <div className="row mb-3">
               <div className="col-lg-6">
-                {/* <Select
-                  label="Head Of Internal Audit"
-                  value={
-                    currentJobSchedulingObject?.resourceAllocation
-                      ?.headOfInternalAudit?.name || ""
-                  }
-                  disabled={true}
-                  setCurrentJobScheduling={setCurrentJobScheduling}
-                  name="headOfInternalAudit"
-                  list={allUsers
-                    ?.filter(
-                      (userItem) => Number(userItem?.id) !== user[0]?.userId?.id
-                    )
-                    ?.map((all) => all?.name)}
-                  allUsers={allUsers}
-                /> */}
                 <TextField
                   id="filled-basic"
                   label="Head Of Internal Audit"
@@ -129,42 +113,54 @@ const ResourceAllocation = ({
                 />
               </div>
               <div className="col-lg-6">
-                {selectedUsers?.length === 0 ? (
-                  <p>Please add users in resources required</p>
-                ) : (
-                  <Select
-                    label="Backup Head Of InternalAudit"
-                    value={
-                      currentJobSchedulingObject?.resourceAllocation
-                        ?.backupHeadOfInternalAudit?.name || ""
-                    }
-                    singleJobSchedulingObject={singleJobSchedulingObject}
-                    setCurrentJobScheduling={setCurrentJobScheduling}
-                    name="backupHeadOfInternalAudit"
-                    list={selectedUsers?.map((all) => all?.name)}
-                    allUsers={selectedUsers}
-                  />
-                )}
+                <Select
+                  label="Backup Head Of InternalAudit"
+                  value={
+                    currentJobSchedulingObject?.resourceAllocation
+                      ?.backupHeadOfInternalAudit?.name || ""
+                  }
+                  singleJobSchedulingObject={singleJobSchedulingObject}
+                  setCurrentJobScheduling={setCurrentJobScheduling}
+                  name="backupHeadOfInternalAudit"
+                  list={allUsers
+                    ?.filter(
+                      (singleItem) =>
+                        singleItem?.employeeid?.userHierarchy !==
+                        "Management_Auditee"
+                    )
+                    ?.map((all) => all?.name)}
+                  allUsers={allUsers?.filter(
+                    (singleItem) =>
+                      singleItem?.employeeid?.userHierarchy !==
+                      "Management_Auditee"
+                  )}
+                />
               </div>
             </div>
             <div className="row mb-3">
               <div className="col-lg-6">
-                {selectedUsers?.length === 0 ? (
-                  <p>Please add users in resources required</p>
-                ) : (
-                  <Select
-                    label="Proposed Job Approver"
-                    value={
-                      currentJobSchedulingObject?.resourceAllocation
-                        ?.proposedJobApprover?.name || ""
-                    }
-                    setCurrentJobScheduling={setCurrentJobScheduling}
-                    name="proposedJobApprover"
-                    list={selectedUsers?.map((all) => all?.name)}
-                    allUsers={selectedUsers}
-                    singleJobSchedulingObject={singleJobSchedulingObject}
-                  />
-                )}
+                <Select
+                  label="Proposed Job Approver"
+                  value={
+                    currentJobSchedulingObject?.resourceAllocation
+                      ?.proposedJobApprover?.name || ""
+                  }
+                  setCurrentJobScheduling={setCurrentJobScheduling}
+                  name="proposedJobApprover"
+                  list={allUsers
+                    ?.filter(
+                      (singleItem) =>
+                        singleItem?.employeeid?.userHierarchy !==
+                        "Management_Auditee"
+                    )
+                    ?.map((all) => all?.name)}
+                  allUsers={allUsers?.filter(
+                    (singleItem) =>
+                      singleItem?.employeeid?.userHierarchy !==
+                      "Management_Auditee"
+                  )}
+                  singleJobSchedulingObject={singleJobSchedulingObject}
+                />
               </div>
 
               <div className="col-lg-6">

@@ -104,7 +104,6 @@ const AuditEngagement = () => {
                     <thead className="bg-secondary text-white">
                       <tr>
                         <th className="w-80">Sr No.</th>
-                        <th className="w-80">Id</th>
                         <th>job Name</th>
                         <th>planned Start Date </th>
                         <th>planned End Date </th>
@@ -132,7 +131,6 @@ const AuditEngagement = () => {
                             return (
                               <tr key={index}>
                                 <td>{index + 1}</td>
-                                <td>{item?.id}</td>
                                 <td>{item?.title}</td>
                                 <td>
                                   {item?.plannedStartDate

@@ -153,12 +153,12 @@ const JobPrioritization = () => {
               <thead>
                 <tr>
                   <th className="sr-col">Sr. #</th>
-                  <th>Auditable Unit:</th>
+                  <th>Auditable Unit</th>
                   <th>Business Objective</th>
                   <th>Risk Rating</th>
-                  <th> for Audit</th>
+                  <th>Select for Audit</th>
                   <th>Comments</th>
-                  <th>Year</th>
+                  <th>Select Year</th>
                   <th>Action</th>
                 </tr>
               </thead>

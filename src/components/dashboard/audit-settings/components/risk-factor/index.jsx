@@ -130,7 +130,6 @@ const RiskFactor = () => {
                 <thead className="bg-secondary text-white">
                   <tr>
                     <th className="w-80">Sr No.</th>
-                    <th className="w-80">Id</th>
                     <th>Risk Factor</th>
                     <th>Action</th>
                   </tr>
@@ -142,7 +141,6 @@ const RiskFactor = () => {
                       return (
                         <tr key={index}>
                           <td>{index + 1}</td>
-                          <td>{item?.id}</td>
                           <td>
                             <textarea
                               className="form-control"
