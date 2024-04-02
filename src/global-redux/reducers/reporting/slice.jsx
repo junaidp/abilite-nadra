@@ -67,6 +67,14 @@ export const slice = createSlice({
     resetReportingAddSuccess: (state) => {
       state.reportingAddSuccess = false;
     },
+    resetReports: (state) => {
+      (state.loading = false),
+        (state.initialLoading = false),
+        (state.reportingAddSuccess = false),
+        (state.allReporting = []),
+        (state.allFollowUp = []),
+        (state.singleReport = {});
+    },
   },
   extraReducers: (builder) => {
     // Get All Reporting
@@ -179,6 +187,6 @@ export const slice = createSlice({
   },
 });
 
-export const { resetReportingAddSuccess } = slice.actions;
+export const { resetReportingAddSuccess, resetReports } = slice.actions;
 
 export default slice.reducer;

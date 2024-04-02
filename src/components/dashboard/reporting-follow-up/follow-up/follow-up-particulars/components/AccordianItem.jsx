@@ -65,17 +65,6 @@ const AccordianItem = ({
               />
             </div>
           </div>
-          {/* <div className="mb-3">
-            <label>Observation:</label>
-            <textarea
-              className="form-control "
-              placeholder="Enter Reason"
-              id="exampleFor"
-              rows="3"
-              value={item?.observationName}
-              disabled
-            ></textarea>
-          </div> */}
 
           <div className="mb-3">
             <label>Observation</label>
@@ -222,9 +211,9 @@ const AccordianItem = ({
                 )}
                 {item?.stepNo === 5 &&
                   curretItem?.followUp?.recommendationsImplemented !== "" &&
-                  curretItem?.followUp?.recommendationsImplemented !== null &&
+                  curretItem?.followUp?.recommendationsImplemented &&
                   curretItem?.followUp?.testInNextYear !== "" &&
-                  curretItem?.followUp?.testInNextYear !== null && (
+                  curretItem?.followUp?.testInNextYear && (
                     <button
                       className={`btn btn-labeled btn-primary px-3 mx-2 mt-3 shadow ${
                         loading && "disabled"

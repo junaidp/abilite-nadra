@@ -20,7 +20,7 @@ const AccordianItem = ({
   handleObservationChange,
 }) => {
   const { user } = useSelector((state) => state?.auth);
-  const [curretItem, setCurrentItem] = React.useState({});
+  const [currentItem, setCurrentItem] = React.useState({});
 
   React.useEffect(() => {
     if (singleReport && reportingId) {
@@ -79,22 +79,7 @@ const AccordianItem = ({
               />
             </div>
           </div>
-
           <label>Observation:</label>
-          {/* <textarea
-            className="form-control "
-            placeholder="Enter Reason"
-            id="exampleFor"
-            rows="3"
-            value={item?.observationName}
-            name="observationName"
-            onChange={(event) => handleChange(event, item?.id)}
-            disabled={item?.stepNo !== 0 ? true : false}
-          ></textarea>
-          <label className="word-limit-info label-text mb-3">
-            Maximum 1500 words
-          </label> */}
-
           <div className="mb-4">
             <RichTextEditor
               onContentChange={handleObservationChange}
@@ -168,7 +153,36 @@ const AccordianItem = ({
               disabled={item?.stepNo !== 0 ? true : false}
             />
           </div>
-          {item?.stepNo !== 0 && item?.stepNo !== 1 && (
+          {item?.stepNo === 2 &&
+            Number(user[0]?.userId?.id) ===
+              Number(currentItem?.auditee?.id) && (
+              <div className="mb-4">
+                <label>Management Comments:</label>
+                <textarea
+                  className="form-control "
+                  placeholder="Enter Reason"
+                  id="exampleFormControlTextarea1"
+                  rows="3"
+                  value={item?.managementComments || ""}
+                  name="managementComments"
+                  onChange={(event) => handleChange(event, item?.id)}
+                ></textarea>
+                <label className="word-limit-info label-text mb-3">
+                  Maximum 1500 words
+                </label>
+                <br />
+                <label className="py-1">Implementation Date:</label>
+                <input
+                  type="date"
+                  className="form-control"
+                  id="exampleFormControlInput1"
+                  value={moment(item?.implementationDate).format("YYYY-MM-DD")}
+                  name="implementationDate"
+                  onChange={(event) => handleChange(event, item?.id)}
+                />
+              </div>
+            )}
+          {item?.stepNo !== 0 && item?.stepNo !== 1 && item?.stepNo !== 2 && (
             <div className="mb-4">
               <label>Management Comments:</label>
               <textarea
@@ -178,8 +192,8 @@ const AccordianItem = ({
                 rows="3"
                 value={item?.managementComments || ""}
                 name="managementComments"
-                onChange={(event) => handleChange(event, item?.id)}
-                disabled={item?.stepNo === 2 ? false : true}
+                disabled
+                readOnly
               ></textarea>
               <label className="word-limit-info label-text mb-3">
                 Maximum 1500 words
@@ -192,8 +206,8 @@ const AccordianItem = ({
                 id="exampleFormControlInput1"
                 value={moment(item?.implementationDate).format("YYYY-MM-DD")}
                 name="implementationDate"
-                onChange={(event) => handleChange(event, item?.id)}
-                disabled={item?.stepNo === 2 ? false : true}
+                disabled
+                readOnly
               />
             </div>
           )}
@@ -274,26 +288,30 @@ const AccordianItem = ({
                     </button>
                   </div>
                 )}
-              {item?.stepNo === 2 && (
-                <div className="d-flex align-items-center place-end">
-                  <button
-                    className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
-                      loading && "disabled"
-                    }`}
-                    onClick={() => handleSaveStep2(item)}
-                  >
-                    <span className="btn-label me-2">
-                      <i className="fa fa-check"></i>
-                    </span>
-                    {loading ? "Loading..." : "Save"}
-                  </button>
-                </div>
-              )}
               {item?.stepNo === 2 &&
-                curretItem?.managementComments !== "" &&
-                curretItem?.managementComments !== null &&
-                curretItem?.implementationDate !== "" &&
-                curretItem?.implementationDate !== null && (
+                Number(user[0]?.userId?.id) ===
+                  Number(currentItem?.auditee?.id) && (
+                  <div className="d-flex align-items-center place-end">
+                    <button
+                      className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
+                        loading && "disabled"
+                      }`}
+                      onClick={() => handleSaveStep2(item)}
+                    >
+                      <span className="btn-label me-2">
+                        <i className="fa fa-check"></i>
+                      </span>
+                      {loading ? "Loading..." : "Save"}
+                    </button>
+                  </div>
+                )}
+              {item?.stepNo === 2 &&
+                Number(user[0]?.userId?.id) ===
+                  Number(currentItem?.auditee?.id) &&
+                currentItem?.managementComments !== "" &&
+                currentItem?.managementComments &&
+                currentItem?.implementationDate !== "" &&
+                currentItem?.implementationDate && (
                   <div className="d-flex align-items-center place-end">
                     <button
                       className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${

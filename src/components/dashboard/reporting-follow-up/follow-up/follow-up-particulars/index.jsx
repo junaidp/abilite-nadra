@@ -6,6 +6,7 @@ import {
   setupGetSingleReport,
   setupUpdateReporting,
   setupUpdateFollowUp,
+  resetReports,
 } from "../../../../../global-redux/reducers/reporting/slice";
 import {
   changeActiveLink,
@@ -121,6 +122,9 @@ const ReportingParticulars = () => {
   React.useEffect(() => {
     dispatch(changeActiveLink("li-followup"));
     dispatch(InitialLoadSidebarActiveLink("li-reporting-and-followup"));
+    return () => {
+      dispatch(resetReports());
+    };
   }, []);
 
   return (

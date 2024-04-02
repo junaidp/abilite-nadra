@@ -5,6 +5,7 @@ import {
   setupGetSingleReport,
   setupUpdateReporting,
   setupGetInitialSingleReport,
+  resetReports,
 } from "../../../../../global-redux/reducers/reporting/slice";
 import { useSearchParams } from "react-router-dom";
 import {
@@ -61,17 +62,18 @@ const ReportingParticulars = () => {
           ...item,
           stepNo:
             item?.observationTitle !== "" &&
-            item?.observationTitle !== null &&
+            item?.observationTitle &&
             item?.observationName !== "" &&
-            item?.observationName !== null &&
+            item?.observationName &&
             item?.implicationRating !== "" &&
-            item?.implicationRating !== null &&
+            item?.implicationRating &&
             Number(item?.implicationRating) !== 0 &&
-            item?.implication !== null &&
+            item?.implication &&
             item?.implication !== "" &&
             item?.recommendedActionStep !== "" &&
-            item?.recommendedActionStep !== null &&
-            item?.auditee !== null
+            item?.recommendedActionStep &&
+            item?.auditee &&
+            item?.auditee?.name
               ? 1
               : 0,
         })
@@ -171,6 +173,9 @@ const ReportingParticulars = () => {
   React.useEffect(() => {
     dispatch(changeActiveLink("li-reporting"));
     dispatch(InitialLoadSidebarActiveLink("li-reporting-and-followup"));
+    return () => {
+      dispatch(resetReports());
+    };
   }, []);
 
   return (
