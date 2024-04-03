@@ -146,9 +146,7 @@ const StartScheduling = () => {
         }),
         subLocation: filteredSubLocationArray,
       };
-      const hasNullValue = Object.values(object).includes(null);
       if (
-        !hasNullValue &&
         object?.timeAndDateAllocation?.placeOfWork &&
         object?.timeAndDateAllocation?.placeOfWork !== "" &&
         object?.timeAndDateAllocation?.frequency &&
@@ -286,7 +284,7 @@ const StartScheduling = () => {
                 className="fa fa-arrow-left text-primary fs-5 pe-3 cursor-pointer"
               ></i>
               <span className="me-3">
-                {currentJobSchedulingObject?.jobPrioritization?.unit?.reason}
+                {currentJobSchedulingObject?.auditableUnitTitle}
               </span>
             </div>
           </header>

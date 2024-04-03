@@ -102,7 +102,7 @@ const JobScheduling = () => {
                 ) : (
                   allJobScheduling
                     ?.filter((all) =>
-                      all?.jobPrioritization?.unit?.reason
+                      all?.auditableUnitTitle
                         ?.toLowerCase()
                         .includes(searchValue?.toLowerCase())
                     )
@@ -111,8 +111,8 @@ const JobScheduling = () => {
                       return (
                         <tr className="h-40" key={index}>
                           <td>{item?.id}</td>
-                          <td>{item?.jobPrioritization?.unit?.reason}</td>
-                          <td>{item?.jobPrioritization?.year}</td>
+                          <td>{item?.auditableUnitTitle}</td>
+                          <td>{item?.year}</td>
                           <td>
                             <div
                               className="btn btn-outline-light text-primary  px-3 shadow"
