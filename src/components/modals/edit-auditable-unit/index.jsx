@@ -28,8 +28,6 @@ const AuditableUnitRatingDialog = ({
   const [auditableUnitName, setAuditableUnitName] = React.useState("");
   const [processId, setProcessId] = React.useState("");
   const [subProcessId, setSubProcessId] = React.useState("");
-  const [process, setProcess] = React.useState("");
-  const [subProcess, setSubProcess] = React.useState("");
   const [data, setData] = React.useState({
     reason: "",
     jobType: "",
@@ -48,20 +46,12 @@ const AuditableUnitRatingDialog = ({
     if (
       data?.jobType === "" ||
       data?.reason === "" ||
-      process === "" ||
-      subProcess === "" ||
       processId === "" ||
       subProcessId === ""
     ) {
       toast.error("Provide all value");
     } else {
       if (!loading) {
-        const selectedProcess = allProcess?.find(
-          (all) => Number(all?.id) === Number(processId)
-        );
-        const selectedSubProcess = allSubProcess?.find(
-          (all) => Number(all?.id) === Number(subProcessId)
-        );
         const currentAuditableUnit = allAuditableUnits?.find(
           (all) => all?.id === selectedAuditableUnitId
         );
@@ -74,8 +64,8 @@ const AuditableUnitRatingDialog = ({
             id: selectedAuditableSubUnitId,
             reason: data?.reason,
             jobType: data?.jobType,
-            processid: selectedProcess,
-            subProcessid: selectedSubProcess,
+            processid: processId,
+            subProcessid: subProcessId,
           },
         ];
 
@@ -91,12 +81,7 @@ const AuditableUnitRatingDialog = ({
 
   function handleChangeProcess(event) {
     if (event?.target?.value) {
-      setProcess(event?.target?.value);
-      const selectedProcess = allProcess?.find(
-        (all) => all?.description === event?.target?.value
-      );
-      setProcessId(selectedProcess?.id);
-      setSubProcess("");
+      setProcessId(event?.target?.value);
       setSubProcessId("");
     }
   }
@@ -108,21 +93,11 @@ const AuditableUnitRatingDialog = ({
         reason: "",
       });
       setShowEditAuditableUnit(false);
-      setProcess("");
-      setSubProcess("");
       setProcessId("");
       setSubProcessId("");
       dispatch(resetAllValues());
     }
   }, [auditableUnitAddSuccess]);
-
-  React.useEffect(() => {
-    if (subProcess && allSubProcess?.length !== 0) {
-      setSubProcessId(
-        allSubProcess?.find((all) => all?.description === subProcess)?.id
-      );
-    }
-  }, [subProcess, allSubProcess]);
 
   React.useEffect(() => {
     if (processId !== "") {
@@ -136,30 +111,12 @@ const AuditableUnitRatingDialog = ({
         ?.find((all) => all?.id === selectedAuditableUnitId)
         ?.unitList.filter((unit) => unit.id === selectedAuditableSubUnitId)[0];
       setData({ reason: selectedItem?.reason, jobType: selectedItem?.jobType });
-      setProcess(selectedItem?.processid?.description);
-      setProcessId(selectedItem?.processid?.id);
-      setSubProcess(selectedItem?.subProcessid?.description);
+      setProcessId(selectedItem?.processid);
+      setSubProcessId(selectedItem?.subProcessid);
       const selectedSingleItem = allAuditableUnits?.find(
         (all) => all?.id === selectedAuditableUnitId
       );
       setAuditableUnitName(selectedSingleItem?.jobName);
-
-      if (selectedItem?.engagement?.natureThrough === "Compliance Checklist") {
-        setData((pre) => {
-          return {
-            ...pre,
-            jobType: "Compliance Checklist",
-          };
-        });
-      }
-      if (selectedItem?.engagement?.natureThrough === "Special Project/Audit") {
-        setData((pre) => {
-          return {
-            ...pre,
-            jobType: "Special Audit",
-          };
-        });
-      }
     }
   }, [allProcess]);
 
@@ -194,8 +151,6 @@ const AuditableUnitRatingDialog = ({
                   onClick={() => {
                     setShowEditAuditableUnit(false);
                     setData({ jobType: "", reason: "" });
-                    setProcess("");
-                    setSubProcess("");
                     setProcessId("");
                     setSubProcessId("");
                     dispatch(resetAllValues());
@@ -233,7 +188,7 @@ const AuditableUnitRatingDialog = ({
                   <div className="row mb-3">
                     {allAuditableUnits?.find(
                       (all) => all?.id === selectedAuditableUnitId
-                    )?.engagement?.natureThrough === "Compliance Checklist" && (
+                    )?.natureThrough === "Compliance Checklist" && (
                       <div className="col-lg-12">
                         <label>Job Type</label>
                         <select
@@ -250,8 +205,7 @@ const AuditableUnitRatingDialog = ({
                     )}
                     {allAuditableUnits?.find(
                       (all) => all?.id === selectedAuditableUnitId
-                    )?.engagement?.natureThrough ===
-                      "Special Project/Audit" && (
+                    )?.natureThrough === "Special Project/Audit" && (
                       <div className="col-lg-12">
                         <label>Job Type</label>
                         <select
@@ -266,7 +220,7 @@ const AuditableUnitRatingDialog = ({
                     )}
                     {allAuditableUnits?.find(
                       (all) => all?.id === selectedAuditableUnitId
-                    )?.engagement?.natureThrough === "Business Objective" && (
+                    )?.natureThrough === "Business Objective" && (
                       <div className="col-lg-12">
                         <label>Job Type</label>
                         <select
@@ -297,13 +251,13 @@ const AuditableUnitRatingDialog = ({
                       <select
                         className="form-select"
                         aria-label="Default select example"
-                        value={process}
+                        value={processId}
                         onChange={(event) => handleChangeProcess(event)}
                       >
                         <option value="">Select Process</option>
                         {allProcess?.map((item, index) => {
                           return (
-                            <option value={item?.description} key={index}>
+                            <option value={item?.id} key={index}>
                               {item?.description}
                             </option>
                           );
@@ -316,17 +270,17 @@ const AuditableUnitRatingDialog = ({
                       <select
                         className="form-select"
                         aria-label="Default select example"
-                        value={subProcess}
+                        value={subProcessId}
                         onChange={(event) => {
                           if (event?.target?.value) {
-                            setSubProcess(event?.target?.value);
+                            setSubProcessId(event?.target?.value);
                           }
                         }}
                       >
                         <option value="">Select SubProcess</option>
                         {allSubProcess?.map((item, index) => {
                           return (
-                            <option key={index} value={item?.description}>
+                            <option key={index} value={item?.id}>
                               {item?.description}
                             </option>
                           );

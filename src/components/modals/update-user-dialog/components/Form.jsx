@@ -99,6 +99,28 @@ const Form = ({
         </div>
       </div>
 
+      <div>
+        <div className="mb-2">
+          <div className="col-lg-12">
+            <div className="form-group">
+              <label htmlFor="area">Employee Name:</label>
+              <TextField
+                id="employeeName"
+                name="employeeName"
+                type="text"
+                className="form-control w-100"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.employeeName}
+              />
+            </div>
+          </div>
+          {formik.touched.employeeName && formik.errors.employeeName && (
+            <div className="error">{formik.errors.employeeName}</div>
+          )}
+        </div>
+      </div>
+
       {nullSkillSet && (
         <div className="col-lg-12 mb-2">
           <label htmlFor="area">Skill Set:</label>
@@ -157,12 +179,8 @@ const Form = ({
               <MenuItem value="">Select User</MenuItem>
               {allUsers?.map((userVal, ind) => {
                 return (
-                  <MenuItem
-                    value={userVal?.employeeid?.name}
-                    key={ind}
-                    className="h-80"
-                  >
-                    {userVal?.employeeid?.name}(
+                  <MenuItem value={userVal?.name} key={ind} className="h-80">
+                    {userVal?.name}(
                     {userVal?.employeeid?.userHierarchy || "null"})
                   </MenuItem>
                 );

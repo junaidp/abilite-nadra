@@ -119,7 +119,7 @@ const AuditableUnitRatingDialog = ({
     );
     setAuditableUnitName(selectedItem?.jobName);
 
-    if (selectedItem?.engagement?.natureThrough === "Compliance Checklist") {
+    if (selectedItem?.natureThrough === "Compliance Checklist") {
       setData((pre) => {
         return {
           ...pre,
@@ -127,7 +127,7 @@ const AuditableUnitRatingDialog = ({
         };
       });
     }
-    if (selectedItem?.engagement?.natureThrough === "Special Project/Audit") {
+    if (selectedItem?.natureThrough === "Special Project/Audit") {
       setData((pre) => {
         return {
           ...pre,
@@ -203,7 +203,7 @@ const AuditableUnitRatingDialog = ({
                 <div className="row mb-3">
                   {allAuditableUnits?.find(
                     (all) => all?.id === selectedAuditableUnitId
-                  )?.engagement?.natureThrough === "Compliance Checklist" && (
+                  )?.natureThrough === "Compliance Checklist" && (
                     <div className="col-lg-12">
                       <label>Job Type</label>
                       <select
@@ -220,7 +220,7 @@ const AuditableUnitRatingDialog = ({
                   )}
                   {allAuditableUnits?.find(
                     (all) => all?.id === selectedAuditableUnitId
-                  )?.engagement?.natureThrough === "Special Project/Audit" && (
+                  )?.natureThrough === "Special Project/Audit" && (
                     <div className="col-lg-12">
                       <label>Job Type</label>
                       <select
@@ -235,7 +235,7 @@ const AuditableUnitRatingDialog = ({
                   )}
                   {allAuditableUnits?.find(
                     (all) => all?.id === selectedAuditableUnitId
-                  )?.engagement?.natureThrough === "Business Objective" && (
+                  )?.natureThrough === "Business Objective" && (
                     <div className="col-lg-12">
                       <label>Job Type</label>
                       <select

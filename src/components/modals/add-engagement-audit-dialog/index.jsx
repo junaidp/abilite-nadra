@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import "./index.css";
 import {
   setupAddNewEngagement,
-  setupGetAllEngagements,
   resetAddEngagementSuccess,
 } from "../../../global-redux/reducers/planing/engagement/slice";
 import { useDispatch, useSelector } from "react-redux";
@@ -37,21 +36,12 @@ const AddEngagementAuditDialog = ({ setBusinessObjectiveDialog }) => {
 
   React.useEffect(() => {
     if (engagementAddSuccess) {
-      const companyId = user[0]?.company.find(
-        (item) => item?.companyName === company
-      )?.id;
-      dispatch(setupGetAllEngagements(companyId));
-    }
-  }, [engagementAddSuccess]);
-
-  React.useEffect(() => {
-    if (engagementAddSuccess) {
-      if (planingEngagementSingleObject?.engagement?.id) {
+      dispatch(resetAddEngagementSuccess());
+      if (planingEngagementSingleObject?.engagement) {
         navigate(
-          `${route}?engagementId=${planingEngagementSingleObject?.engagement?.id}`
+          `${route}?engagementId=${planingEngagementSingleObject?.engagement}`
         );
       }
-      dispatch(resetAddEngagementSuccess());
     }
   }, [planingEngagementSingleObject]);
 

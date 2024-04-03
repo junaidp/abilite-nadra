@@ -57,7 +57,7 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
       if (!loading) {
         const reportingObj = allUsers?.find(
           (all) => all?.name === values?.reportingTo
-        )?.employeeid;
+        );
         const currentCompany = user[0]?.userId?.company?.find(
           (item) => item?.companyName === values?.company
         );
@@ -74,7 +74,7 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
               designation: values?.designation,
               userHierarchy: values?.userHierarchy,
               skillSet: values?.skillSet === "null" ? null : values?.skillSet,
-              reportingTo: reportingObj ? reportingObj : null,
+              reportingTo: reportingObj?.id ? reportingObj?.id : null,
             },
             client: currentCompany?.clientId,
             resetToken: "string",

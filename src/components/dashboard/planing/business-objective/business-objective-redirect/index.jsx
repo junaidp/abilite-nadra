@@ -150,10 +150,6 @@ const BusinessObjectiveRedirect = () => {
           ...planingEngagementSingleObject,
           industryUpdate: object?.industryUpdate,
           companyUpdate: object?.companyUpdate,
-          engagement: {
-            ...planingEngagementSingleObject?.engagement,
-            engagementName: object?.engagementName,
-          },
         })
       );
     }
@@ -277,7 +273,7 @@ const BusinessObjectiveRedirect = () => {
           </header>
 
           <div className="row px-4">
-            <div className="row">
+            {/* <div className="row">
               <div className="mb-4 col-lg-12">
                 <div className="col-lg-2 label-text w-100 mb-2">
                   Engagement Name
@@ -296,7 +292,7 @@ const BusinessObjectiveRedirect = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
             <div className="col-md-12">
               <div className="accordion" id="accordionFlushExample">
                 <IndustryUpdates

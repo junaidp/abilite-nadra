@@ -253,9 +253,6 @@ const JobPrioritization = () => {
                                 }`}
                                 onClick={() => handleUpdate(item?.id)}
                               >
-                                <span className="btn-label me-2">
-                                  <i className="fa fa-check-circle"></i>
-                                </span>
                                 {loading && currentId === item?.id
                                   ? "Loading..."
                                   : "Save"}
