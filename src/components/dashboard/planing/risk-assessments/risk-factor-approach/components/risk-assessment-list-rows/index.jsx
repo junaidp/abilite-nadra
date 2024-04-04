@@ -1,10 +1,12 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 const RiskAssessmentListRows = ({
   item,
   handleChangeSingleRiskAssessmentItem,
   performRiskAssessmentObject,
 }) => {
+  const { user } = useSelector((state) => state?.auth);
   return (
     <tr>
       <td>{item?.id}</td>
@@ -21,9 +23,12 @@ const RiskAssessmentListRows = ({
             handleChangeSingleRiskAssessmentItem(event, item?.id)
           }
           disabled={
-            performRiskAssessmentObject?.riskAssessments?.riskRating === 0
-              ? false
-              : true
+            performRiskAssessmentObject?.riskAssessments?.locked === true ||
+            (performRiskAssessmentObject?.riskAssessments?.complete === true &&
+              performRiskAssessmentObject?.riskAssessments?.locked === false &&
+              user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+              ? true
+              : false
           }
         >
           <option value={0}>0</option>
@@ -49,9 +54,12 @@ const RiskAssessmentListRows = ({
             handleChangeSingleRiskAssessmentItem(event, item?.id)
           }
           disabled={
-            performRiskAssessmentObject?.riskAssessments?.riskRating === 0
-              ? false
-              : true
+            performRiskAssessmentObject?.riskAssessments?.locked === true ||
+            (performRiskAssessmentObject?.riskAssessments?.complete === true &&
+              performRiskAssessmentObject?.riskAssessments?.locked === false &&
+              user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+              ? true
+              : false
           }
         >
           <option value={0}>0</option>
@@ -82,15 +90,15 @@ const RiskAssessmentListRows = ({
             handleChangeSingleRiskAssessmentItem(event, item?.id)
           }
           disabled={
-            performRiskAssessmentObject?.riskAssessments?.riskRating === 0
-              ? false
-              : true
+            performRiskAssessmentObject?.riskAssessments?.locked === true ||
+            (performRiskAssessmentObject?.riskAssessments?.complete === true &&
+              performRiskAssessmentObject?.riskAssessments?.locked === false &&
+              user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+              ? true
+              : false
           }
         ></textarea>
         <label className="word-limit-info label-text">Maximum 1500 words</label>
-      </td>
-      <td className="text-center justify-content-center pt-3">
-        <i className="fa fa-trash text-danger f-18"></i>
       </td>
     </tr>
   );

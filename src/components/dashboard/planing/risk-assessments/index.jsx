@@ -116,9 +116,13 @@ const RiskAssessments = () => {
                               <span className="btn-label me-2">
                                 <i className="fa fa-play"></i>
                               </span>
-                              {item?.riskRating === 0
-                                ? "Perform Risk"
-                                : "View Risk"}
+                              {item?.locked === true ||
+                              (item?.complete === true &&
+                                item?.locked === false &&
+                                user[0]?.userId?.employeeid?.userHierarchy !==
+                                  "IAH")
+                                ? "View Risk"
+                                : "Perform Risk"}
                             </div>
                           </td>
                           <td className="text-center pt-3">

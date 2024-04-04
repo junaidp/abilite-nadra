@@ -1,11 +1,13 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 const CPListRows = ({
   cpItem,
   handleChangeCpList,
   handleChangeCpListComments,
-  performRiskAssessmentObject
+  performRiskAssessmentObject,
 }) => {
+  const { user } = useSelector((state) => state?.auth);
   return (
     <tr>
       <td>{cpItem?.id}</td>
@@ -20,9 +22,14 @@ const CPListRows = ({
             name="inadequate"
             onChange={(event) => handleChangeCpList(event, cpItem?.id)}
             disabled={
-              performRiskAssessmentObject?.riskAssessments?.riskRating === 0
-                ? false
-                : true
+              performRiskAssessmentObject?.riskAssessments?.locked === true ||
+              (performRiskAssessmentObject?.riskAssessments?.complete ===
+                true &&
+                performRiskAssessmentObject?.riskAssessments?.locked ===
+                  false &&
+                user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                ? true
+                : false
             }
           />
           <label
@@ -40,8 +47,16 @@ const CPListRows = ({
             id="flexCheckDefault"
             onChange={(event) => handleChangeCpList(event, cpItem?.id)}
             name="needsImprovement"
-            disabled={performRiskAssessmentObject?.riskAssessments?.riskRating===0?false:true}
-
+            disabled={
+              performRiskAssessmentObject?.riskAssessments?.locked === true ||
+              (performRiskAssessmentObject?.riskAssessments?.complete ===
+                true &&
+                performRiskAssessmentObject?.riskAssessments?.locked ===
+                  false &&
+                user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                ? true
+                : false
+            }
           />
           <label
             className="form-check-label"
@@ -58,8 +73,16 @@ const CPListRows = ({
             id="flexCheckDefault"
             name="adequate"
             onChange={(event) => handleChangeCpList(event, cpItem?.id)}
-            disabled={performRiskAssessmentObject?.riskAssessments?.riskRating===0?false:true}
-
+            disabled={
+              performRiskAssessmentObject?.riskAssessments?.locked === true ||
+              (performRiskAssessmentObject?.riskAssessments?.complete ===
+                true &&
+                performRiskAssessmentObject?.riskAssessments?.locked ===
+                  false &&
+                user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                ? true
+                : false
+            }
           />
           <label
             className="form-check-label"
@@ -76,8 +99,14 @@ const CPListRows = ({
           value={cpItem?.comments || ""}
           onChange={(event) => handleChangeCpListComments(event, cpItem?.id)}
           name="comments"
-          disabled={performRiskAssessmentObject?.riskAssessments?.riskRating===0?false:true}
-
+          disabled={
+            performRiskAssessmentObject?.riskAssessments?.locked === true ||
+            (performRiskAssessmentObject?.riskAssessments?.complete === true &&
+              performRiskAssessmentObject?.riskAssessments?.locked === false &&
+              user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+              ? true
+              : false
+          }
         ></textarea>
         <label className="word-limit-info label-text">Maximum 1500 words</label>
       </td>

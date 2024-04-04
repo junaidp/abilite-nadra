@@ -30,20 +30,6 @@ const JobPrioritization = () => {
   function handleUpdate(id) {
     setCurrentId(id);
     let object = data?.find((item) => item?.id === id);
-    if (
-      object?.selectedForAudit !== null &&
-      object?.comments !== null &&
-      object?.year !== null
-    ) {
-      object = { ...object, completed: true };
-    }
-    if (
-      object?.selectedForAudit === null ||
-      object?.comments === null ||
-      object?.year === null
-    ) {
-      object = { ...object, completed: false };
-    }
     object = {
       ...object,
       year: Number(object?.year),
@@ -52,7 +38,30 @@ const JobPrioritization = () => {
       dispatch(setupUpdateJobPrioritization(object));
     }
   }
+  function handleSubmit(id) {
+    setCurrentId(id);
+    let object = data?.find((item) => item?.id === id);
+    object = {
+      ...object,
+      year: Number(object?.year),
+      completed: true,
+    };
+    if (!loading) {
+      dispatch(setupUpdateJobPrioritization(object));
+    }
+  }
 
+  function handleChangeYearValue(event, id) {
+    if (event?.target?.value) {
+      setData((pre) =>
+        pre?.map((item) =>
+          item?.id === id
+            ? { ...item, [event?.target?.name]: event?.target?.value }
+            : item
+        )
+      );
+    }
+  }
   function handleChangeValue(event, id) {
     setData((pre) =>
       pre?.map((item) =>
@@ -224,7 +233,7 @@ const JobPrioritization = () => {
                               aria-label="Default select example"
                               value={item?.year || new Date()}
                               onChange={(event) =>
-                                handleChangeValue(event, item?.id)
+                                handleChangeYearValue(event, item?.id)
                               }
                               disabled={item?.editable === true ? false : true}
                               name="year"
@@ -237,28 +246,57 @@ const JobPrioritization = () => {
                               <option value={2028}>2028</option>
                             </select>
                           </td>
-                          <td>
-                            {item?.editable === false && (
-                              <i
-                                className="fa fa-edit  px-3 f-18 cursor-pointer"
-                                onClick={() => handleEditable(item?.id)}
-                              ></i>
-                            )}
-                            {item?.editable === true && (
-                              <div
-                                className={`btn btn-labeled btn-primary px-3 shadow ${
-                                  loading &&
-                                  currentId === item?.id &&
-                                  "disabled"
-                                }`}
-                                onClick={() => handleUpdate(item?.id)}
-                              >
-                                {loading && currentId === item?.id
-                                  ? "Loading..."
-                                  : "Save"}
+                          {(allJobPrioritization[index]?.completed === false ||
+                            (allJobPrioritization[index]?.completed === true &&
+                              allJobPrioritization[index]?.locked === false &&
+                              user[0]?.userId?.employeeid?.userHierarchy ===
+                                "IAH")) && (
+                            <td>
+                              {item?.editable === false && (
+                                <i
+                                  className="fa fa-edit  px-3 f-18 cursor-pointer"
+                                  onClick={() => handleEditable(item?.id)}
+                                ></i>
+                              )}
+                              {item?.editable === true && (
+                                <div
+                                  className={`btn btn-labeled btn-primary px-3 shadow ${
+                                    loading &&
+                                    currentId === item?.id &&
+                                    "disabled"
+                                  }`}
+                                  onClick={() => handleUpdate(item?.id)}
+                                >
+                                  {loading && currentId === item?.id
+                                    ? "Loading..."
+                                    : "Save"}
+                                </div>
+                              )}
+                              <div>
+                                {allJobPrioritization[index]?.completed ===
+                                  false &&
+                                  allJobPrioritization[index]?.comments &&
+                                  allJobPrioritization[index]?.comments !==
+                                    "" &&
+                                  allJobPrioritization[index]?.year &&
+                                  allJobPrioritization[index]?.year !== 0 &&
+                                  allJobPrioritization[index]?.year !== "" && (
+                                    <div
+                                      className={`btn btn-labeled btn-primary px-3 mt-2 shadow ${
+                                        loading &&
+                                        currentId === item?.id &&
+                                        "disabled"
+                                      }`}
+                                      onClick={() => handleSubmit(item?.id)}
+                                    >
+                                      {loading && currentId === item?.id
+                                        ? "Loading..."
+                                        : "Submit"}
+                                    </div>
+                                  )}
                               </div>
-                            )}
-                          </td>
+                            </td>
+                          )}
                         </tr>
                       );
                     })

@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 const SetMeetingTime = ({
   planingEngagementSingleObject,
@@ -9,6 +10,7 @@ const SetMeetingTime = ({
   handleSaveMinuteMeetings,
   loading,
 }) => {
+  const { user } = useSelector((state) => state?.auth);
   return (
     <div className="accordion-item">
       <h2 className="accordion-header">
@@ -50,6 +52,14 @@ const SetMeetingTime = ({
                 name="location_Id"
                 value={object?.location_Id}
                 onChange={handleChange}
+                disabled={
+                  planingEngagementSingleObject?.locked === true ||
+                  (planingEngagementSingleObject?.complete === true &&
+                    planingEngagementSingleObject?.locked === false &&
+                    user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                    ? true
+                    : false
+                }
               >
                 <option>List of Locations</option>
                 {allLocations?.map((item, ind) => {
@@ -69,6 +79,14 @@ const SetMeetingTime = ({
                 name="subLocation_Id"
                 onChange={handleChange}
                 value={object?.subLocation_Id}
+                disabled={
+                  planingEngagementSingleObject?.locked === true ||
+                  (planingEngagementSingleObject?.complete === true &&
+                    planingEngagementSingleObject?.locked === false &&
+                    user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                    ? true
+                    : false
+                }
               >
                 <option>List of Sub Locations</option>
                 {allSubLocations?.map((item, index) => {
@@ -91,6 +109,14 @@ const SetMeetingTime = ({
                 name="meetingDateTimeFrom"
                 value={object?.meetingDateTimeFrom}
                 onChange={handleChange}
+                disabled={
+                  planingEngagementSingleObject?.locked === true ||
+                  (planingEngagementSingleObject?.complete === true &&
+                    planingEngagementSingleObject?.locked === false &&
+                    user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                    ? true
+                    : false
+                }
               />
             </div>
             <div className="col-lg-6">
@@ -102,21 +128,33 @@ const SetMeetingTime = ({
                 name="meetingDateTimeTo"
                 value={object?.meetingDateTimeTo}
                 onChange={handleChange}
+                disabled={
+                  planingEngagementSingleObject?.locked === true ||
+                  (planingEngagementSingleObject?.complete === true &&
+                    planingEngagementSingleObject?.locked === false &&
+                    user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                    ? true
+                    : false
+                }
               />
             </div>
           </div>
-
-          <button
-            className={`btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow ${
-              loading && "disabled"
-            }`}
-            onClick={handleSaveMinuteMeetings}
-          >
-            <span className="btn-label me-2">
-              <i className="fa fa-check-circle"></i>
-            </span>
-            {loading ? "loading..." : "Save"}
-          </button>
+          {(planingEngagementSingleObject?.complete === false ||
+            (planingEngagementSingleObject?.complete === true &&
+              planingEngagementSingleObject?.locked === false &&
+              user[0]?.userId?.employeeid?.userHierarchy === "IAH")) && (
+            <button
+              className={`btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow ${
+                loading && "disabled"
+              }`}
+              onClick={handleSaveMinuteMeetings}
+            >
+              <span className="btn-label me-2">
+                <i className="fa fa-check-circle"></i>
+              </span>
+              {loading ? "loading..." : "Save"}
+            </button>
+          )}
         </div>
       </div>
     </div>

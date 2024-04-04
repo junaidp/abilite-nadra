@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 const CompanyUpdates = ({
   planingEngagementSingleObject,
@@ -7,6 +8,7 @@ const CompanyUpdates = ({
   handleUpdateBusinessObjective,
   loading,
 }) => {
+  const { user } = useSelector((state) => state?.auth);
   return (
     <div className="accordion-item">
       <h2 className="accordion-header">
@@ -43,19 +45,32 @@ const CompanyUpdates = ({
             name="companyUpdate"
             value={object?.companyUpdate}
             onChange={handleChange}
+            disabled={
+              planingEngagementSingleObject?.locked === true ||
+              (planingEngagementSingleObject?.complete === true &&
+                planingEngagementSingleObject?.locked === false &&
+                user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                ? true
+                : false
+            }
           ></textarea>
           <p className="word-limit-info mb-0">Maximum 1500 words</p>
-          <button
-            className={`btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow ${
-              loading && "disabled"
-            }`}
-            onClick={handleUpdateBusinessObjective}
-          >
-            <span className="btn-label me-2">
-              <i className="fa fa-check-circle"></i>
-            </span>
-            {loading ? "loading..." : "Save"}
-          </button>
+          {(planingEngagementSingleObject?.complete === false ||
+            (planingEngagementSingleObject?.complete === true &&
+              planingEngagementSingleObject?.locked === false &&
+              user[0]?.userId?.employeeid?.userHierarchy === "IAH")) && (
+            <button
+              className={`btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow ${
+                loading && "disabled"
+              }`}
+              onClick={handleUpdateBusinessObjective}
+            >
+              <span className="btn-label me-2">
+                <i className="fa fa-check-circle"></i>
+              </span>
+              {loading ? "loading..." : "Save"}
+            </button>
+          )}
         </div>
       </div>
     </div>

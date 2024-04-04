@@ -90,18 +90,6 @@ const SpecialProjectAudit = () => {
     });
   }
 
-  function handleDeleteSingleMapItem(id) {
-    setObject((pre) => {
-      return {
-        ...pre,
-        businessObjectiveAndMapProcessList:
-          pre.businessObjectiveAndMapProcessList.filter(
-            (all) => all?.id !== id
-          ),
-      };
-    });
-  }
-
   function handleSaveMinuteMeetings() {
     if (!loading) {
       if (
@@ -138,21 +126,28 @@ const SpecialProjectAudit = () => {
     }
   }
 
-  // function handleUpdateSpecialProjectAudit() {
-  //   if (!loading) {
-  //     dispatch(
-  //       setupUpdateSpecialProjectAudit({
-  //         ...planingEngagementSingleObject,
-  //         engagement: {
-  //           ...planingEngagementSingleObject?.engagement,
-  //           engagementName: object?.engagementName,
-  //         },
-  //       })
-  //     );
-  //   }
-  // }
+  function handleUpdateSpecialProjectAudit() {
+    if (!loading) {
+      dispatch(
+        setupUpdateSpecialProjectAudit({
+          ...planingEngagementSingleObject,
+          engagementName: object?.engagementName,
+        })
+      );
+    }
+  }
+  function handleSubmitSpecialAuditObjective() {
+    if (!loading) {
+      dispatch(
+        setupUpdateSpecialProjectAudit({
+          ...planingEngagementSingleObject,
+          complete: true,
+        })
+      );
+    }
+  }
 
-  function handleSaveBusinessObjectiveMapProcess() {
+  function handleSaveBusinessObjectiveMapProcess(item) {
     if (!loading) {
       if (description === "" || domain === "") {
         toast.error("Provide all values");
@@ -162,6 +157,7 @@ const SpecialProjectAudit = () => {
             specialProjectOrAudit: planingEngagementSingleObject,
             domain,
             description,
+            id: typeof item?.id === "number" ? item?.id : 0,
           })
         );
       }
@@ -172,8 +168,7 @@ const SpecialProjectAudit = () => {
     setObject((pre) => {
       return {
         ...pre,
-        engagementName:
-          planingEngagementSingleObject?.engagement?.engagementName || "",
+        engagementName: planingEngagementSingleObject?.engagementName || "",
         businessObjectiveAndMapProcessList:
           planingEngagementSingleObject?.businessObjectiveAndMapProcessList ||
           [],
@@ -222,8 +217,12 @@ const SpecialProjectAudit = () => {
       let companyId = user[0]?.company.find(
         (all) => all?.companyName === company
       )?.id;
-      dispatch(setupGetInitialSingleSpecialProjectAuditObjective(engagementId));
-      dispatch(setupGetAllLocations(`?companyId=${companyId}`));
+      if (companyId) {
+        dispatch(
+          setupGetInitialSingleSpecialProjectAuditObjective(engagementId)
+        );
+        dispatch(setupGetAllLocations(`?companyId=${companyId}`));
+      }
     }
   }, [engagementId, user]);
 
@@ -267,12 +266,10 @@ const SpecialProjectAudit = () => {
             <div className="mb-0 heading">Special Project/Audit</div>
           </header>
 
-          <div className="row px-4">
-            {/* <div className="row">
+          <div className="px-4">
+            <div>
               <div className="mb-4 col-lg-12">
-                <div className="col-lg-2 label-text w-100 mb-2">
-                  Engagement Name
-                </div>
+                <div className="label-text w-100 mb-2">Engagement Name</div>
                 <div className="col-lg-12">
                   <div className="form-group">
                     <input
@@ -283,11 +280,19 @@ const SpecialProjectAudit = () => {
                       name="engagementName"
                       className="form-control h-40"
                       placeholder="Enter"
+                      disabled={
+                        planingEngagementSingleObject?.locked === true ||
+                        (planingEngagementSingleObject?.complete === true &&
+                          planingEngagementSingleObject?.locked === false &&
+                          user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                          ? true
+                          : false
+                      }
                     />
                   </div>
                 </div>
               </div>
-            </div> */}
+            </div>
             <div className="col-md-12">
               <div className="accordion" id="accordionFlushExample">
                 <SetMeetingTime
@@ -307,25 +312,46 @@ const SpecialProjectAudit = () => {
                   domain={domain}
                   setDomain={setDomain}
                   setDescription={setDescription}
-                  handleDeleteSingleMapItem={handleDeleteSingleMapItem}
                   handleSaveBusinessObjectiveMapProcess={
                     handleSaveBusinessObjectiveMapProcess
                   }
                   loading={loading}
+                  planingEngagementSingleObject={planingEngagementSingleObject}
                 />
               </div>
-              {/* <button
-                className={`btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow float-end ${
-                  loading && "disabled"
-                }`}
-                onClick={handleUpdateSpecialProjectAudit}
-              >
-                <span className="btn-label me-2">
-                  <i className="fa fa-check-circle"></i>
-                </span>
-                {loading ? "loading..." : "Save"}
-              </button> */}
+              {(planingEngagementSingleObject?.complete === false ||
+                (planingEngagementSingleObject?.complete === true &&
+                  planingEngagementSingleObject?.locked === false &&
+                  user[0]?.userId?.employeeid?.userHierarchy === "IAH")) && (
+                <button
+                  className={`btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow float-end ${
+                    loading && "disabled"
+                  }`}
+                  onClick={handleUpdateSpecialProjectAudit}
+                >
+                  <span className="btn-label me-2">
+                    <i className="fa fa-check-circle"></i>
+                  </span>
+                  {loading ? "loading..." : "Save"}
+                </button>
+              )}
             </div>
+            {planingEngagementSingleObject?.complete === false &&
+              planingEngagementSingleObject?.businessObjectiveAndMapProcessList &&
+              planingEngagementSingleObject?.businessObjectiveAndMapProcessList
+                ?.length > 0 && (
+                <button
+                  className={`btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow mx-4 float-end ${
+                    loading && "disabled"
+                  }`}
+                  onClick={handleSubmitSpecialAuditObjective}
+                >
+                  <span className="btn-label me-2">
+                    <i className="fa fa-check-circle"></i>
+                  </span>
+                  {loading ? "loading..." : "Submit"}
+                </button>
+              )}
           </div>
         </>
       )}

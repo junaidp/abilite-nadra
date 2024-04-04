@@ -1,4 +1,6 @@
 import React from "react";
+import { setupEditAuditableUnit } from "../../../../../../global-redux/reducers/planing/auditable-units/slice";
+import { useDispatch, useSelector } from "react-redux";
 
 const AuditableUnitRow = ({
   setSelectedAuditableUnitId,
@@ -7,8 +9,20 @@ const AuditableUnitRow = ({
   setSelectedAuditableSubUnitId,
   setShowEditAuditableUnit,
   index,
-  loading
+  loading,
 }) => {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state?.auth);
+  function handleSubmitAuditableUnit(object) {
+    if (!loading) {
+      dispatch(
+        setupEditAuditableUnit({
+          ...object,
+          completed: true,
+        })
+      );
+    }
+  }
   return (
     <div className="accordion-item">
       <h2 className="accordion-header">
@@ -30,17 +44,37 @@ const AuditableUnitRow = ({
         data-bs-parent="#accordionFlushExample"
       >
         <div className="accordion-body">
-          <div
-            className={`btn btn-labeled btn-primary px-3 shadow  my-4 ${
-              loading && "disabled"
-            }`}
-            onClick={() => setAuditableUnitRatingDialog(true)}
-          >
-            <span className="btn-label me-2">
-              <i className="fa fa-check-circle f-18"></i>
-            </span>
-            {loading ? "Loading.." : "Add Auditable Unit"}
-          </div>
+          {(item?.completed === false ||
+            (item?.completed === true &&
+              item?.locked === false &&
+              user[0]?.userId?.employeeid?.userHierarchy === "IAH")) && (
+            <div
+              className={`btn btn-labeled btn-primary px-3 shadow  my-4 ${
+                loading && "disabled"
+              }`}
+              onClick={() => setAuditableUnitRatingDialog(true)}
+            >
+              <span className="btn-label me-2">
+                <i className="fa fa-check-circle f-18"></i>
+              </span>
+              {loading ? "Loading.." : "Add Auditable Unit"}
+            </div>
+          )}
+          {item?.completed === false &&
+            item?.unitList &&
+            item?.unitList?.length > 0 && (
+              <div
+                className={`btn btn-labeled btn-primary px-3 shadow mx-4  my-4 ${
+                  loading && "disabled"
+                }`}
+                onClick={() => handleSubmitAuditableUnit(item)}
+              >
+                <span className="btn-label me-2">
+                  <i className="fa fa-check-circle f-18"></i>
+                </span>
+                {loading ? "Loading.." : "Submit Auditable Unit"}
+              </div>
+            )}
           <div className="table-responsive">
             <table className="table table-bordered  table-hover rounded">
               <thead className="bg-secondary text-white">
@@ -48,7 +82,11 @@ const AuditableUnitRow = ({
                   <th className="w-80">Sr. #</th>
                   <th>Auditable Unit</th>
                   <th>Job Type</th>
-                  <th>Actions</th>
+                  {(item?.completed === false ||
+                    (item?.completed === true &&
+                      item?.locked === false &&
+                      user[0]?.userId?.employeeid?.userHierarchy ===
+                        "IAH")) && <th>Actions</th>}
                 </tr>
               </thead>
               <tbody>
@@ -63,15 +101,21 @@ const AuditableUnitRow = ({
                         <td>{unit?.id}</td>
                         <td className="cursor-pointer">{unit?.reason}</td>
                         <td>{unit?.jobType}</td>
-                        <td>
-                          <i
-                            className="fa fa-edit  px-3 f-18 cursor-pointer"
-                            onClick={() => {
-                              setSelectedAuditableSubUnitId(unit?.id);
-                              setShowEditAuditableUnit(true);
-                            }}
-                          ></i>
-                        </td>
+                        {(item?.completed === false ||
+                          (item?.completed === true &&
+                            item?.locked === false &&
+                            user[0]?.userId?.employeeid?.userHierarchy ===
+                              "IAH")) && (
+                          <td>
+                            <i
+                              className="fa fa-edit  px-3 f-18 cursor-pointer"
+                              onClick={() => {
+                                setSelectedAuditableSubUnitId(unit?.id);
+                                setShowEditAuditableUnit(true);
+                              }}
+                            ></i>
+                          </td>
+                        )}
                       </tr>
                     );
                   })

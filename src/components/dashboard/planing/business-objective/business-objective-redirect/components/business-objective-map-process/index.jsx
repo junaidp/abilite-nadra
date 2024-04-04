@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 const BusinessObjectiveMapProcess = ({
   handleSumMapProcess,
@@ -10,37 +11,43 @@ const BusinessObjectiveMapProcess = ({
   description,
   setDomain,
   setDescription,
-  handleDeleteSingleMapItem,
+  planingEngagementSingleObject,
 }) => {
+  const { user } = useSelector((state) => state?.auth);
   return (
     <div>
-      <header className="section-header my-3 align-items-center text-start d-flex">
-        <div className="mb-0 sub-heading">
-          Define Business Objective and Map Process
-        </div>
-        <div
-          className="btn btn-labeled btn-primary ms-3 px-3 shadow"
-          onClick={handleSumMapProcess}
-        >
-          <span className="btn-label me-2">
-            <i className="fa fa-plus-circle"></i>
-          </span>
-          Add
-        </div>
-        <div
-          className="btn btn-labeled btn-primary ms-3 px-3 shadow"
-          onClick={() => setShowObjectiveListDialog(true)}
-        >
-          <span className="btn-label me-2">
-            <i className="fa fa-list"></i>
-          </span>
-          Objective List
-        </div>
-        <i
-          title="Info"
-          className="fa fa-info-circle ps-3 text-secondary cursor-pointer"
-        ></i>
-      </header>
+      {(planingEngagementSingleObject?.complete === false ||
+        (planingEngagementSingleObject?.complete === true &&
+          planingEngagementSingleObject?.locked === false &&
+          user[0]?.userId?.employeeid?.userHierarchy === "IAH")) && (
+        <header className="section-header my-3 align-items-center text-start d-flex">
+          <div className="mb-0 sub-heading">
+            Define Business Objective and Map Process
+          </div>
+          <div
+            className="btn btn-labeled btn-primary ms-3 px-3 shadow"
+            onClick={handleSumMapProcess}
+          >
+            <span className="btn-label me-2">
+              <i className="fa fa-plus-circle"></i>
+            </span>
+            Add
+          </div>
+          <div
+            className="btn btn-labeled btn-primary ms-3 px-3 shadow"
+            onClick={() => setShowObjectiveListDialog(true)}
+          >
+            <span className="btn-label me-2">
+              <i className="fa fa-list"></i>
+            </span>
+            Objective List
+          </div>
+          <i
+            title="Info"
+            className="fa fa-info-circle ps-3 text-secondary cursor-pointer"
+          ></i>
+        </header>
+      )}
 
       {object?.businessObjectiveAndMapProcessList?.map((item, index) => {
         return (
@@ -65,14 +72,7 @@ const BusinessObjectiveMapProcess = ({
                       {item?.description && item?.domain && (
                         <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
                       )}
-                      <div className="d-flex w-100 me-3 align-items-center justify-content-between">
-                        <div>Define Business Objective and Map Process</div>
-                        <div
-                          onClick={() => handleDeleteSingleMapItem(item?.id)}
-                        >
-                          <i className="fa fa-trash text-danger f-18 cursor-pointer"></i>
-                        </div>
-                      </div>
+                      <div>Define Business Objective and Map Process</div>
                     </div>
                   </div>
                 </button>
@@ -98,6 +98,14 @@ const BusinessObjectiveMapProcess = ({
                       name="mapProcessDescription"
                       value={description}
                       onChange={(event) => setDescription(event?.target?.value)}
+                      disabled={
+                        planingEngagementSingleObject?.locked === true ||
+                        (planingEngagementSingleObject?.complete === true &&
+                          planingEngagementSingleObject?.locked === false &&
+                          user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                          ? true
+                          : false
+                      }
                     ></textarea>
                     <p className="word-limit-info mb-0">Maximum 1500 words</p>
                   </div>
@@ -110,24 +118,37 @@ const BusinessObjectiveMapProcess = ({
                       name="mapProcessDomain"
                       value={domain}
                       onChange={(event) => setDomain(event?.target?.value)}
+                      disabled={
+                        planingEngagementSingleObject?.locked === true ||
+                        (planingEngagementSingleObject?.complete === true &&
+                          planingEngagementSingleObject?.locked === false &&
+                          user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                          ? true
+                          : false
+                      }
                     >
                       <option>Select</option>
                       <option value="strategic">strategic</option>
                       <option value="operation">operation</option>
                     </select>
                   </div>
-
-                  <button
-                    className={`btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow ${
-                      loading && "disabled"
-                    }`}
-                    onClick={handleSaveBusinessObjectiveMapProcess}
-                  >
-                    <span className="btn-label me-2">
-                      <i className="fa fa-check-circle"></i>
-                    </span>
-                    {loading ? "loading..." : "Save"}
-                  </button>
+                  {(planingEngagementSingleObject?.complete === false ||
+                    (planingEngagementSingleObject?.complete === true &&
+                      planingEngagementSingleObject?.locked === false &&
+                      user[0]?.userId?.employeeid?.userHierarchy ===
+                        "IAH")) && (
+                    <button
+                      className={`btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow ${
+                        loading && "disabled"
+                      }`}
+                      onClick={()=>handleSaveBusinessObjectiveMapProcess(item)}
+                    >
+                      <span className="btn-label me-2">
+                        <i className="fa fa-check-circle"></i>
+                      </span>
+                      {loading ? "loading..." : "Save"}
+                    </button>
+                  )}
                 </div>
               </div>
             </div>

@@ -95,18 +95,6 @@ const BusinessObjectiveRedirect = () => {
     });
   }
 
-  function handleDeleteSingleMapItem(id) {
-    setObject((pre) => {
-      return {
-        ...pre,
-        businessObjectiveAndMapProcessList:
-          pre.businessObjectiveAndMapProcessList.filter(
-            (all) => all?.id !== id
-          ),
-      };
-    });
-  }
-
   function handleSaveMinuteMeetings() {
     if (!loading) {
       if (
@@ -150,12 +138,23 @@ const BusinessObjectiveRedirect = () => {
           ...planingEngagementSingleObject,
           industryUpdate: object?.industryUpdate,
           companyUpdate: object?.companyUpdate,
+          engagementName: object?.engagementName,
+        })
+      );
+    }
+  }
+  function handleSubmitBusinessObjective() {
+    if (!loading) {
+      dispatch(
+        setupUpdateBusinessObjective({
+          ...planingEngagementSingleObject,
+          complete: true,
         })
       );
     }
   }
 
-  function handleSaveBusinessObjectiveMapProcess() {
+  function handleSaveBusinessObjectiveMapProcess(item) {
     if (!loading) {
       if (description === "" || domain === "") {
         toast.error("Provide all values");
@@ -165,6 +164,7 @@ const BusinessObjectiveRedirect = () => {
             businessObjective: planingEngagementSingleObject,
             description,
             domain,
+            id: typeof item?.id === "number" ? item?.id : 0,
           })
         );
       }
@@ -177,8 +177,7 @@ const BusinessObjectiveRedirect = () => {
         ...pre,
         industryUpdate: planingEngagementSingleObject?.industryUpdate || "",
         companyUpdate: planingEngagementSingleObject?.companyUpdate || "",
-        engagementName:
-          planingEngagementSingleObject?.engagement?.engagementName || "",
+        engagementName: planingEngagementSingleObject?.engagementName || "",
         businessObjectiveAndMapProcessList:
           planingEngagementSingleObject?.businessObjectiveAndMapProcessList ||
           [],
@@ -273,26 +272,34 @@ const BusinessObjectiveRedirect = () => {
           </header>
 
           <div className="row px-4">
-            {/* <div className="row">
-              <div className="mb-4 col-lg-12">
+            <div>
+              <div className="mb-4">
                 <div className="col-lg-2 label-text w-100 mb-2">
                   Engagement Name
                 </div>
                 <div className="col-lg-12">
-                  <div className="form-group">
+                  <div className="form-group w-100">
                     <input
                       type="text"
                       id="description"
                       value={object?.engagementName}
                       onChange={handleChange}
                       name="engagementName"
-                      className="form-control h-40"
+                      className="form-control h-40 w-100"
                       placeholder="Enter"
+                      disabled={
+                        planingEngagementSingleObject?.locked === true ||
+                        (planingEngagementSingleObject?.complete === true &&
+                          planingEngagementSingleObject?.locked === false &&
+                          user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                          ? true
+                          : false
+                      }
                     />
                   </div>
                 </div>
               </div>
-            </div> */}
+            </div>
             <div className="col-md-12">
               <div className="accordion" id="accordionFlushExample">
                 <IndustryUpdates
@@ -331,20 +338,41 @@ const BusinessObjectiveRedirect = () => {
                   description={description}
                   setDomain={setDomain}
                   setDescription={setDescription}
-                  handleDeleteSingleMapItem={handleDeleteSingleMapItem}
+                  planingEngagementSingleObject={planingEngagementSingleObject}
                 />
               </div>
-              <button
-                className={`btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow float-end ${
-                  loading && "disabled"
-                }`}
-                onClick={handleUpdateBusinessObjective}
-              >
-                <span className="btn-label me-2">
-                  <i className="fa fa-check-circle"></i>
-                </span>
-                {loading ? "loading..." : "Save"}
-              </button>
+              {(planingEngagementSingleObject?.complete === false ||
+                (planingEngagementSingleObject?.complete === true &&
+                  planingEngagementSingleObject?.locked === false &&
+                  user[0]?.userId?.employeeid?.userHierarchy === "IAH")) && (
+                <button
+                  className={`btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow float-end ${
+                    loading && "disabled"
+                  }`}
+                  onClick={handleUpdateBusinessObjective}
+                >
+                  <span className="btn-label me-2">
+                    <i className="fa fa-check-circle"></i>
+                  </span>
+                  {loading ? "loading..." : "Save"}
+                </button>
+              )}
+              {planingEngagementSingleObject?.complete === false &&
+                planingEngagementSingleObject?.businessObjectiveAndMapProcessList &&
+                planingEngagementSingleObject
+                  ?.businessObjectiveAndMapProcessList?.length > 0 && (
+                  <button
+                    className={`btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow mx-4 float-end ${
+                      loading && "disabled"
+                    }`}
+                    onClick={handleSubmitBusinessObjective}
+                  >
+                    <span className="btn-label me-2">
+                      <i className="fa fa-check-circle"></i>
+                    </span>
+                    {loading ? "loading..." : "Submit"}
+                  </button>
+                )}
             </div>
           </div>
         </>

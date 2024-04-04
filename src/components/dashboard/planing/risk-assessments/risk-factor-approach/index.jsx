@@ -112,6 +112,19 @@ const RiskFactorApproach = () => {
       );
     }
   }
+  function handleSubmitRiskAssessment() {
+    if (!loading) {
+      dispatch(
+        setupUpdateRiskAssessment({
+          ...performRiskAssessmentObject,
+          riskAssessments: {
+            ...performRiskAssessmentObject?.riskAssessments,
+            complete: true,
+          },
+        })
+      );
+    }
+  }
 
   React.useEffect(() => {
     setData((pre) => {
@@ -211,7 +224,13 @@ const RiskFactorApproach = () => {
                 {performRiskAssessmentObject?.riskAssessments?.jobDescription}
               </div>
             </div>
-            {performRiskAssessmentObject?.riskAssessments?.riskRating === 0 && (
+            {(performRiskAssessmentObject?.riskAssessments?.complete ===
+              false ||
+              (performRiskAssessmentObject?.riskAssessments?.complete ===
+                true &&
+                performRiskAssessmentObject?.riskAssessments?.locked ===
+                  false &&
+                user[0]?.userId?.employeeid?.userHierarchy === "IAH")) && (
               <div
                 className="btn btn-labeled btn-primary px-3 shadow"
                 onClick={() => setShowAddRiskFactorDialog(true)}
@@ -237,7 +256,6 @@ const RiskFactorApproach = () => {
                           <th>Impact</th>
                           <th>Score</th>
                           <th>Comments</th>
-                          <th className="text-center">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -366,8 +384,14 @@ const RiskFactorApproach = () => {
                       />
                     </div>
                   </div>
-                  {performRiskAssessmentObject?.riskAssessments?.riskRating ===
-                    0 && (
+                  {(performRiskAssessmentObject?.riskAssessments?.complete ===
+                    false ||
+                    (performRiskAssessmentObject?.riskAssessments?.complete ===
+                      true &&
+                      performRiskAssessmentObject?.riskAssessments?.locked ===
+                        false &&
+                      user[0]?.userId?.employeeid?.userHierarchy ===
+                        "IAH")) && (
                     <div
                       className={`btn btn-labeled btn-primary px-3 shadow float-end my-4 ${
                         loading && "disabled"
@@ -380,6 +404,23 @@ const RiskFactorApproach = () => {
                       {loading ? "Loading.." : "Save"}
                     </div>
                   )}
+                  {performRiskAssessmentObject?.riskAssessments?.complete ===
+                    false &&
+                    Number(
+                      performRiskAssessmentObject?.riskAssessments?.riskRating
+                    ) > 0 && (
+                      <div
+                        className={`btn btn-labeled btn-primary px-3 shadow float-end my-4 mx-4 ${
+                          loading && "disabled"
+                        }`}
+                        onClick={handleSubmitRiskAssessment}
+                      >
+                        <span className="btn-label me-2">
+                          <i className="fa fa-check-circle f-18"></i>
+                        </span>
+                        {loading ? "Loading.." : "Submit"}
+                      </div>
+                    )}
                 </div>
               </div>
             </div>

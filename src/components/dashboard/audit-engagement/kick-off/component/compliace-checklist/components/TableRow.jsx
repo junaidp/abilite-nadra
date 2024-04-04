@@ -19,7 +19,7 @@ const TableRow = ({
   return (
     <tr>
       <td>{mainItem?.id}</td>
-      <td>
+      {/* <td>
         <a
           className="fw-bold  text-primary  px-3 py-1 f-10"
           onClick={() => {
@@ -32,7 +32,7 @@ const TableRow = ({
           {mainItem?.subLocation?.locationid?.description ||
             "No Location Provided"}
         </a>
-      </td>
+      </td> */}
       <td>
         <a
           className="fw-bold  text-primary  px-3 py-1 f-10"
@@ -43,7 +43,7 @@ const TableRow = ({
             }
           }}
         >
-          {mainItem?.subLocation?.description || "No Sub Location Provided"}
+          {mainItem?.subLocationDescription || "No Sub Location Provided"}
         </a>
       </td>
       <td>null</td>

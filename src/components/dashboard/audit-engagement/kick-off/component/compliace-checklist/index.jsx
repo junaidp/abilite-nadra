@@ -216,7 +216,7 @@ const ComplianceCheckList = ({
                     <thead className="bg-secondary text-white">
                       <tr>
                         <th className="f-80">Sr No.</th>
-                        <th>Location Name</th>
+                        {/* <th>Location Name</th> */}
                         <th>Sub Location Name</th>
                         <th>Status</th>
                         <th>Change Request</th>
