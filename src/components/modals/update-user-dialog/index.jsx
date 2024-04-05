@@ -165,7 +165,9 @@ const UpdateUsertDialog = ({ setUpdateUserDialog, updateUserObject }) => {
         formik={formik}
         nullReportingTo={nullReportingTo}
         allUsers={allUsers?.filter(
-          (all) => Number(all?.id) !== Number(updateUserObject?.id)
+          (all) =>
+            Number(all?.id) !== Number(updateUserObject?.id) &&
+            all?.employeeid?.userHierarchy !== "Management_Auditee"
         )}
         loading={loading}
         nullSkillSet={nullSkillSet}

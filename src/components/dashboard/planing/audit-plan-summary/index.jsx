@@ -74,7 +74,13 @@ const AuditPlanSummary = () => {
   function handleSubmit(item) {
     if (!loading) {
       setCurrentId(item?.id);
-      dispatch(setupUpdateAuditPlanSummary({ ...item, submitted: true }));
+      dispatch(
+        setupUpdateAuditPlanSummary({
+          ...item,
+          submitted: true,
+          completed: true,
+        })
+      );
     }
   }
 

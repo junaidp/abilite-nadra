@@ -176,27 +176,22 @@ const Form = ({
               onBlur={formik.handleBlur}
               value={formik.values.reportingTo}
             >
-              <MenuItem value="">Select User</MenuItem>{" "}
-              {allUsers
-                ?.filter(
-                  (singleUserItem) =>
-                    singleUserItem?.employeeid?.userHierarchy !==
-                    "Management_Auditee"
-                )
-                ?.map((userVal, ind) => {
-                  return (
-                    <MenuItem value={userVal?.name} key={ind} className="h-80">
-                      {userVal?.name}(
-                      {userVal?.employeeid?.userHierarchy || "null"})
-                    </MenuItem>
-                  );
-                })}
+              <MenuItem value="">Select User</MenuItem>
+              {allUsers?.map((userVal, ind) => {
+                return (
+                  <MenuItem value={userVal?.name} key={ind} className="h-80">
+                    {userVal?.name}(
+                    {userVal?.employeeid?.userHierarchy || "null"})
+                  </MenuItem>
+                );
+              })}
             </Select>
             {formik.touched.reportingTo && formik.errors.reportingTo && (
               <div className="error">{formik.errors.reportingTo}</div>
             )}
           </div>
         )}
+
         {nullReportingTo && (
           <div className="col-lg-6">
             <label htmlFor="area">Reporting To:</label>

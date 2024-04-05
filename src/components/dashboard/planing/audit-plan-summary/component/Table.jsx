@@ -27,9 +27,7 @@ const Table = ({
             name="priority"
             value={item?.priority || ""}
             onChange={(event) => handleChangePriority(event, item?.id)}
-            disabled={
-              item?.locked === true || item?.editable === false ? true : false
-            }
+            disabled={item?.editable === false ? true : false}
           >
             <option value="">Select One</option>
             <option value="High">High</option>
@@ -44,9 +42,7 @@ const Table = ({
               type="checkbox"
               value=""
               id="flexCheckDefault"
-              disabled={
-                item?.locked === true || item?.editable === false ? true : false
-              }
+              disabled={item?.editable === false ? true : false}
               checked={item?.threeYearsAgo || false}
               name="threeYearsAgo"
               onChange={(event) => handleChangeYear(event, item?.id)}
@@ -64,9 +60,7 @@ const Table = ({
               type="checkbox"
               value=""
               id="flex"
-              disabled={
-                item?.locked === true || item?.editable === false ? true : false
-              }
+              disabled={item?.editable === false ? true : false}
               checked={item?.twoYearsAgo || false}
               name="twoYearsAgo"
               onChange={(event) => handleChangeYear(event, item?.id)}
@@ -86,9 +80,7 @@ const Table = ({
               checked={item?.lastYear || false}
               id="lastYear"
               name="lastYear"
-              disabled={
-                item?.locked === true || item?.editable === false ? true : false
-              }
+              disabled={item?.editable === false ? true : false}
               onChange={(event) => handleChangeYear(event, item?.id)}
             />
             <label
@@ -105,42 +97,25 @@ const Table = ({
         <td className="normal-text">{item?.q3}</td>
         <td className="normal-text">{item?.q4}</td>
         <td className="normal-text"></td>
-        <td className="normal-text ">
-          <div className="row">
-            {item?.locked !== true && item?.editable === false && (
-              <div className="mt-3">
-                <div className="justify-content-end text-end">
-                  <i
-                    className="fa fa-edit  px-3 f-18 cursor-pointer"
-                    onClick={() => handleEditEditable(item)}
-                  ></i>
-                </div>
-              </div>
-            )}
-            {item?.locked !== true && item?.editable === true && (
-              <div className="mt-3">
-                <div className="justify-content-end text-end">
-                  <div
-                    className={`btn btn-labeled btn-primary px-3 shadow ${
-                      loading &&
-                      Number(currentId) === Number(item?.id) &&
-                      "disabled"
-                    }`}
-                    onClick={() => handleEdit(item)}
-                  >
-                    {loading && Number(currentId) === Number(item?.id)
-                      ? "Loading..."
-                      : "Save"}
+        {(allAuditPlanSummary[index]?.completed === false ||
+          (allAuditPlanSummary[index]?.completed === true &&
+            allAuditPlanSummary[index]?.locked === false &&
+            (Number(item?.initiatorTLEB) ===
+              Number(user[0]?.userId?.employeeid?.id) ||
+              user[0]?.userId?.employeeid?.userHierarchy === "IAH"))) && (
+          <td className="normal-text ">
+            <div className="row">
+              {item?.editable === false && (
+                <div className="mt-3">
+                  <div className="justify-content-end text-end">
+                    <i
+                      className="fa fa-edit  px-3 f-18 cursor-pointer"
+                      onClick={() => handleEditEditable(item)}
+                    ></i>
                   </div>
                 </div>
-              </div>
-            )}
-            {allAuditPlanSummary[index]?.submitted === false &&
-              allAuditPlanSummary[index]?.priority !== null &&
-              allAuditPlanSummary[index]?.priority !== "" &&
-              allAuditPlanSummary[index]?.threeYearsAgo !== null &&
-              allAuditPlanSummary[index]?.twoYearsAgo !== null &&
-              allAuditPlanSummary[index]?.lastYear !== null && (
+              )}
+              {item?.editable === true && (
                 <div className="mt-3">
                   <div className="justify-content-end text-end">
                     <div
@@ -149,44 +124,71 @@ const Table = ({
                         Number(currentId) === Number(item?.id) &&
                         "disabled"
                       }`}
-                      onClick={() => handleSubmit(item)}
+                      onClick={() => handleEdit(item)}
                     >
                       {loading && Number(currentId) === Number(item?.id)
                         ? "Loading..."
-                        : "Submit"}
+                        : "Save"}
                     </div>
                   </div>
                 </div>
               )}
-            {allAuditPlanSummary[index]?.submitted === true &&
-              allAuditPlanSummary[index]?.approved === false &&
-              allAuditPlanSummary[index]?.priority !== null &&
-              allAuditPlanSummary[index]?.priority !== "" &&
-              allAuditPlanSummary[index]?.threeYearsAgo !== null &&
-              allAuditPlanSummary[index]?.twoYearsAgo !== null &&
-              allAuditPlanSummary[index]?.lastYear !== null &&
-              (Number(item?.initiatorTLEB) ===
-                Number(user[0]?.userId?.employeeid?.id) ||
-                user[0]?.userId?.employeeid?.userHierarchy === "IAH") && (
-                <div className="mt-3">
-                  <div className="justify-content-end text-end">
-                    <div
-                      className={`btn btn-labeled btn-primary px-3 shadow ${
-                        loading &&
-                        Number(currentId) === Number(item?.id) &&
-                        "disabled"
-                      }`}
-                      onClick={() => handleApprove(item)}
-                    >
-                      {loading && Number(currentId) === Number(item?.id)
-                        ? "Loading..."
-                        : "Approve"}
+              {allAuditPlanSummary[index]?.submitted === false &&
+                allAuditPlanSummary[index]?.completed === false &&
+                allAuditPlanSummary[index]?.priority &&
+                allAuditPlanSummary[index]?.priority !== "" &&
+                allAuditPlanSummary[index]?.threeYearsAgo !== null &&
+                allAuditPlanSummary[index]?.twoYearsAgo !== null &&
+                allAuditPlanSummary[index]?.lastYear !== null && (
+                  <div className="mt-3">
+                    <div className="justify-content-end text-end">
+                      <div
+                        className={`btn btn-labeled btn-primary px-3 shadow ${
+                          loading &&
+                          Number(currentId) === Number(item?.id) &&
+                          "disabled"
+                        }`}
+                        onClick={() => handleSubmit(item)}
+                      >
+                        {loading && Number(currentId) === Number(item?.id)
+                          ? "Loading..."
+                          : "Submit"}
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
-          </div>
-        </td>
+                )}
+              {allAuditPlanSummary[index]?.submitted === true &&
+                allAuditPlanSummary[index]?.completed === true &&
+                allAuditPlanSummary[index]?.approved === false &&
+                allAuditPlanSummary[index]?.locked === false &&
+                allAuditPlanSummary[index]?.priority &&
+                allAuditPlanSummary[index]?.priority !== "" &&
+                allAuditPlanSummary[index]?.threeYearsAgo !== null &&
+                allAuditPlanSummary[index]?.twoYearsAgo !== null &&
+                allAuditPlanSummary[index]?.lastYear !== null &&
+                (Number(item?.initiatorTLEB) ===
+                  Number(user[0]?.userId?.employeeid?.id) ||
+                  user[0]?.userId?.employeeid?.userHierarchy === "IAH") && (
+                  <div className="mt-3">
+                    <div className="justify-content-end text-end">
+                      <div
+                        className={`btn btn-labeled btn-primary px-3 shadow ${
+                          loading &&
+                          Number(currentId) === Number(item?.id) &&
+                          "disabled"
+                        }`}
+                        onClick={() => handleApprove(item)}
+                      >
+                        {loading && Number(currentId) === Number(item?.id)
+                          ? "Loading..."
+                          : "Approve"}
+                      </div>
+                    </div>
+                  </div>
+                )}
+            </div>
+          </td>
+        )}
       </tr>
     </tbody>
   );

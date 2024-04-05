@@ -3,6 +3,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { useSelector } from "react-redux";
 
 const SelectComponent = ({
   list,
@@ -13,6 +14,7 @@ const SelectComponent = ({
   allUsers,
   singleJobSchedulingObject,
 }) => {
+  const { user } = useSelector((state) => state?.auth);
   function handleChange(event) {
     setCurrentJobScheduling((pre) => {
       return {
@@ -35,7 +37,12 @@ const SelectComponent = ({
             value={value}
             onChange={handleChange}
             disabled={
-              singleJobSchedulingObject?.complete !== true ? false : true
+              singleJobSchedulingObject?.locked === true ||
+              (singleJobSchedulingObject?.complete === true &&
+                singleJobSchedulingObject?.locked === false &&
+                user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                ? true
+                : false
             }
           >
             <MenuItem value="">Select User</MenuItem>

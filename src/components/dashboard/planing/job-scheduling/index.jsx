@@ -125,7 +125,12 @@ const JobScheduling = () => {
                               <span className="btn-label me-2">
                                 <i className="fa fa-play"></i>
                               </span>
-                              {item?.complete === true
+
+                              {item?.locked === true ||
+                              (item?.complete === true &&
+                                item?.locked === false &&
+                                user[0]?.userId?.employeeid?.userHierarchy !==
+                                  "IAH")
                                 ? "View Job Scheduling"
                                 : "Start Scheduling"}
                             </div>

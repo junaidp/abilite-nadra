@@ -5,6 +5,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { useSelector } from "react-redux";
 
 const MenuProps = {
   PaperProps: {
@@ -34,6 +35,7 @@ export default function MultipleSelect({
   singleJobSchedulingObject,
 }) {
   const theme = useTheme();
+  const { user } = useSelector((state) => state?.auth);
   const [selectedArray, setSelectedArray] = React.useState(
     initialPersonalArray || []
   );
@@ -86,7 +88,14 @@ export default function MultipleSelect({
           onChange={handleChange}
           input={<OutlinedInput label={title} />}
           MenuProps={MenuProps}
-          disabled={singleJobSchedulingObject?.complete !== true ? false : true}
+          disabled={
+            singleJobSchedulingObject?.locked === true ||
+            (singleJobSchedulingObject?.complete === true &&
+              singleJobSchedulingObject?.locked === false &&
+              user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+              ? true
+              : false
+          }
         >
           {names.map((name) => (
             <MenuItem

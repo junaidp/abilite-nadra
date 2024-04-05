@@ -9,6 +9,7 @@ const JobScheduleList = ({
   const { loading, singleJobSchedulingObject } = useSelector(
     (state) => state?.planingJobScheduling
   );
+  const { user } = useSelector((state) => state?.auth);
 
   function handleSaveJobScheduling() {
     if (!loading) {
@@ -91,9 +92,13 @@ const JobScheduleList = ({
                             .split("T")[0]
                         }
                         disabled={
-                          singleJobSchedulingObject?.complete !== true
-                            ? false
-                            : true
+                          singleJobSchedulingObject?.locked === true ||
+                          (singleJobSchedulingObject?.complete === true &&
+                            singleJobSchedulingObject?.locked === false &&
+                            user[0]?.userId?.employeeid?.userHierarchy !==
+                              "IAH")
+                            ? true
+                            : false
                         }
                         onChange={(event) => handleChangeDate(event, list?.id)}
                       />
@@ -120,7 +125,10 @@ const JobScheduleList = ({
               })}
             </div>
           )}
-          {singleJobSchedulingObject?.complete !== true && (
+          {(singleJobSchedulingObject?.complete === false ||
+            (singleJobSchedulingObject?.complete === true &&
+              singleJobSchedulingObject?.locked === false &&
+              user[0]?.userId?.employeeid?.userHierarchy === "IAH")) && (
             <div className="row mt-3">
               <div className="col-lg-12 justify-content-end text-end">
                 <div

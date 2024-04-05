@@ -10,6 +10,7 @@ const ResourcesRequired = ({
 }) => {
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state?.planingJobScheduling);
+  const { user } = useSelector((state) => state?.auth);
   function handleSave() {
     if (!loading) {
       dispatch(
@@ -62,7 +63,12 @@ const ResourcesRequired = ({
                 <input
                   type="number"
                   disabled={
-                    singleJobSchedulingObject?.complete !== true ? false : true
+                    singleJobSchedulingObject?.locked === true ||
+                    (singleJobSchedulingObject?.complete === true &&
+                      singleJobSchedulingObject?.locked === false &&
+                      user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                      ? true
+                      : false
                   }
                   className="form-control"
                   id="labeltext"
@@ -81,7 +87,12 @@ const ResourcesRequired = ({
                 <input
                   type="number"
                   disabled={
-                    singleJobSchedulingObject?.complete !== true ? false : true
+                    singleJobSchedulingObject?.locked === true ||
+                    (singleJobSchedulingObject?.complete === true &&
+                      singleJobSchedulingObject?.locked === false &&
+                      user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                      ? true
+                      : false
                   }
                   className="form-control"
                   id="labeltex"
@@ -103,7 +114,12 @@ const ResourcesRequired = ({
                 <input
                   type="number"
                   disabled={
-                    singleJobSchedulingObject?.complete !== true ? false : true
+                    singleJobSchedulingObject?.locked === true ||
+                    (singleJobSchedulingObject?.complete === true &&
+                      singleJobSchedulingObject?.locked === false &&
+                      user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                      ? true
+                      : false
                   }
                   className="form-control"
                   id="labelt"
@@ -123,7 +139,12 @@ const ResourcesRequired = ({
                 <input
                   type="number"
                   disabled={
-                    singleJobSchedulingObject?.complete !== true ? false : true
+                    singleJobSchedulingObject?.locked === true ||
+                    (singleJobSchedulingObject?.complete === true &&
+                      singleJobSchedulingObject?.locked === false &&
+                      user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                      ? true
+                      : false
                   }
                   className="form-control"
                   id="labelte"
@@ -151,7 +172,12 @@ const ResourcesRequired = ({
                       ?.operations
                   }
                   disabled={
-                    singleJobSchedulingObject?.complete !== true ? false : true
+                    singleJobSchedulingObject?.locked === true ||
+                    (singleJobSchedulingObject?.complete === true &&
+                      singleJobSchedulingObject?.locked === false &&
+                      user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                      ? true
+                      : false
                   }
                   name="operations"
                   onChange={(event) =>
@@ -167,7 +193,12 @@ const ResourcesRequired = ({
                   id="labe"
                   placeholder=""
                   disabled={
-                    singleJobSchedulingObject?.complete !== true ? false : true
+                    singleJobSchedulingObject?.locked === true ||
+                    (singleJobSchedulingObject?.complete === true &&
+                      singleJobSchedulingObject?.locked === false &&
+                      user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                      ? true
+                      : false
                   }
                   value={
                     currentJobSchedulingObject?.numberOfResourcesRequired?.other
@@ -179,7 +210,10 @@ const ResourcesRequired = ({
                 />
               </div>
             </div>
-            {singleJobSchedulingObject?.complete !== true && (
+            {(singleJobSchedulingObject?.complete === false ||
+              (singleJobSchedulingObject?.complete === true &&
+                singleJobSchedulingObject?.locked === false &&
+                user[0]?.userId?.employeeid?.userHierarchy === "IAH")) && (
               <div className="row mt-3">
                 <div className="col-lg-12 justify-content-end text-end">
                   <div

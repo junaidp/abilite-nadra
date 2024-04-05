@@ -62,7 +62,8 @@ const ResourceAllocation = ({
       );
       filteredUser = filteredUser?.filter(
         (singleItem) =>
-          singleItem?.employeeid?.userHierarchy !== "Management_Auditee"
+          singleItem?.employeeid?.userHierarchy !== "Management_Auditee" &&
+          singleItem?.employeeid?.userHierarchy !== "IAH"
       );
       setSelectedUsers(filteredUser);
     }
@@ -126,13 +127,15 @@ const ResourceAllocation = ({
                     ?.filter(
                       (singleItem) =>
                         singleItem?.employeeid?.userHierarchy !==
-                        "Management_Auditee"
+                          "Management_Auditee" &&
+                        singleItem?.employeeid?.userHierarchy !== "IAH"
                     )
                     ?.map((all) => all?.name)}
                   allUsers={allUsers?.filter(
                     (singleItem) =>
                       singleItem?.employeeid?.userHierarchy !==
-                      "Management_Auditee"
+                        "Management_Auditee" &&
+                      singleItem?.employeeid?.userHierarchy !== "IAH"
                   )}
                 />
               </div>
@@ -151,13 +154,15 @@ const ResourceAllocation = ({
                     ?.filter(
                       (singleItem) =>
                         singleItem?.employeeid?.userHierarchy !==
-                        "Management_Auditee"
+                          "Management_Auditee" &&
+                        singleItem?.employeeid?.userHierarchy !== "IAH"
                     )
                     ?.map((all) => all?.name)}
                   allUsers={allUsers?.filter(
                     (singleItem) =>
                       singleItem?.employeeid?.userHierarchy !==
-                      "Management_Auditee"
+                        "Management_Auditee" &&
+                      singleItem?.employeeid?.userHierarchy !== "IAH"
                   )}
                   singleJobSchedulingObject={singleJobSchedulingObject}
                 />
@@ -180,7 +185,10 @@ const ResourceAllocation = ({
                 )}
               </div>
             </div>
-            {singleJobSchedulingObject?.complete !== true && (
+            {(singleJobSchedulingObject?.complete === false ||
+              (singleJobSchedulingObject?.complete === true &&
+                singleJobSchedulingObject?.locked === false &&
+                user[0]?.userId?.employeeid?.userHierarchy === "IAH")) && (
               <div className="row mt-3">
                 <div className="col-lg-12 justify-content-end text-end">
                   <div

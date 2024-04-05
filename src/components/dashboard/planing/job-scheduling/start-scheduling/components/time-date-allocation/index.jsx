@@ -15,6 +15,7 @@ const TimeAndDateAllocation = ({
   const [totalWorkingManHours, setTotalWorkingManHours] = React.useState(0);
   const [totalHours, setTotalHours] = React.useState(0);
   const { loading } = useSelector((state) => state?.planingJobScheduling);
+  const { user } = useSelector((state) => state?.auth);
   function handleSave() {
     if (!loading) {
       dispatch(
@@ -123,7 +124,12 @@ const TimeAndDateAllocation = ({
                   id="lav"
                   placeholder=""
                   disabled={
-                    singleJobSchedulingObject?.complete !== true ? false : true
+                    singleJobSchedulingObject?.locked === true ||
+                    (singleJobSchedulingObject?.complete === true &&
+                      singleJobSchedulingObject?.locked === false &&
+                      user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                      ? true
+                      : false
                   }
                   value={
                     currentJobSchedulingObject?.timeAndDateAllocation
@@ -158,7 +164,12 @@ const TimeAndDateAllocation = ({
                   id="la"
                   placeholder=""
                   disabled={
-                    singleJobSchedulingObject?.complete !== true ? false : true
+                    singleJobSchedulingObject?.locked === true ||
+                    (singleJobSchedulingObject?.complete === true &&
+                      singleJobSchedulingObject?.locked === false &&
+                      user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                      ? true
+                      : false
                   }
                   value={
                     currentJobSchedulingObject?.timeAndDateAllocation
@@ -195,7 +206,12 @@ const TimeAndDateAllocation = ({
                   }
                   name="placeOfWork"
                   disabled={
-                    singleJobSchedulingObject?.complete !== true ? false : true
+                    singleJobSchedulingObject?.locked === true ||
+                    (singleJobSchedulingObject?.complete === true &&
+                      singleJobSchedulingObject?.locked === false &&
+                      user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                      ? true
+                      : false
                   }
                   onChange={handleChangeJobSchedulingStringTextFields}
                 >
@@ -220,7 +236,12 @@ const TimeAndDateAllocation = ({
                   }
                   name="travellingDays"
                   disabled={
-                    singleJobSchedulingObject?.complete !== true ? false : true
+                    singleJobSchedulingObject?.locked === true ||
+                    (singleJobSchedulingObject?.complete === true &&
+                      singleJobSchedulingObject?.locked === false &&
+                      user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                      ? true
+                      : false
                   }
                   onChange={(event) =>
                     handleChangeNumberTextField(event, "timeAllocation")
@@ -254,9 +275,12 @@ const TimeAndDateAllocation = ({
                         ?.repeatJob
                     }
                     disabled={
-                      singleJobSchedulingObject?.complete !== true
-                        ? false
-                        : true
+                      singleJobSchedulingObject?.locked === true ||
+                      (singleJobSchedulingObject?.complete === true &&
+                        singleJobSchedulingObject?.locked === false &&
+                        user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                        ? true
+                        : false
                     }
                     onChange={(event) =>
                       handleChangeJobSchedulingCheckFields(event, "repeatJob")
@@ -283,9 +307,12 @@ const TimeAndDateAllocation = ({
                     }
                     name="frequency"
                     disabled={
-                      singleJobSchedulingObject?.complete !== true
-                        ? false
-                        : true
+                      singleJobSchedulingObject?.locked === true ||
+                      (singleJobSchedulingObject?.complete === true &&
+                        singleJobSchedulingObject?.locked === false &&
+                        user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                        ? true
+                        : false
                     }
                     onChange={handleChangeJobSchedulingStringTextFields}
                   >
@@ -297,7 +324,10 @@ const TimeAndDateAllocation = ({
                 </div>
               )}
             </div>
-            {singleJobSchedulingObject?.complete !== true && (
+            {(singleJobSchedulingObject?.complete === false ||
+              (singleJobSchedulingObject?.complete === true &&
+                singleJobSchedulingObject?.locked === false &&
+                user[0]?.userId?.employeeid?.userHierarchy === "IAH")) && (
               <div className="row mt-3">
                 <div className="col-lg-12 justify-content-end text-end">
                   <div

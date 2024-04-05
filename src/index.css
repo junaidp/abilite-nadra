@@ -14,11 +14,14 @@ body {
 .css-1rgmeur {
   font-family: "Poppins", sans-serif !important;
 }
-.css-9iedg7{
+.css-9iedg7 {
   font-family: "Poppins", sans-serif !important;
-
 }
-.css-6od3lo-MuiChip-label{
+
+.mright-4 {
+  margin-right: -45px !important;
+}
+.css-6od3lo-MuiChip-label {
   font-family: "Poppins", sans-serif !important;
 }
 .css-17gq4vl.MuiSelect-select {
@@ -98,7 +101,7 @@ body {
   font-family: "Poppins", sans-serif !important;
 }
 
-.css-1hw9j7s{
+.css-1hw9j7s {
   font-size: 12px !important;
   font-family: "Poppins", sans-serif !important;
 }

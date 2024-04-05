@@ -146,26 +146,30 @@ const StartScheduling = () => {
         }),
         subLocation: filteredSubLocationArray,
       };
-      if (
-        object?.timeAndDateAllocation?.placeOfWork &&
-        object?.timeAndDateAllocation?.placeOfWork !== "" &&
-        object?.timeAndDateAllocation?.frequency &&
-        object?.timeAndDateAllocation?.frequency !== "" &&
-        object?.resourceAllocation?.resourcesList &&
-        object?.resourceAllocation?.resourcesList?.length !== 0 &&
-        object?.locationList &&
-        object?.locationList?.length !== 0
-      ) {
-        object = {
-          ...object,
-          complete: true,
-        };
-      } else {
-        object = {
-          ...object,
-          complete: false,
-        };
-      }
+      dispatch(setupUpdateJobScheduling(object));
+    }
+  }
+  function handleSubmitJobScheduling() {
+    if (!loading) {
+      const filteredLocationArray = allLocations.filter((item) =>
+        currentJobSchedulingObject?.locationList.includes(item?.description)
+      );
+      const filteredSubLocationArray = allSubLocations.filter((item) =>
+        currentJobSchedulingObject?.subLocation.includes(item?.description)
+      );
+      let object;
+      object = {
+        ...currentJobSchedulingObject,
+        locationList: filteredLocationArray.map((list) => {
+          return {
+            id: list?.id,
+            description: list?.description,
+            companyid: list?.companyid,
+          };
+        }),
+        subLocation: filteredSubLocationArray,
+        complete: true,
+      };
       dispatch(setupUpdateJobScheduling(object));
     }
   }
@@ -323,9 +327,12 @@ const StartScheduling = () => {
                     handleChangeJobSchedulingCheckFields(event, "seprateJob")
                   }
                   disabled={
-                    currentJobSchedulingObject?.jobPrioritization?.auditableUnit
-                      ?.engagement?.natureThrough === "Compliance Checklist" ||
-                    singleJobSchedulingObject?.complete === true
+                    singleJobSchedulingObject?.locked === true ||
+                    singleJobSchedulingObject?.natureThrough ===
+                      "Compliance Checklist" ||
+                    (singleJobSchedulingObject?.complete === true &&
+                      singleJobSchedulingObject?.locked === false &&
+                      user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
                       ? true
                       : false
                   }
@@ -390,23 +397,57 @@ const StartScheduling = () => {
               </div>
             </div>
           </div>
-          {singleJobSchedulingObject?.complete !== true && (
-            <div className="row mt-3">
-              <div className="col-lg-12 justify-content-end text-end">
-                <div
-                  className={`btn btn-labeled btn-primary px-3 shadow ${
-                    loading && "disabled"
-                  }`}
-                  onClick={handleSaveMainJobScheduling}
-                >
-                  <span className="btn-label me-2">
-                    <i className="fa fa-check-circle"></i>
-                  </span>
-                  {loading ? "Loading..." : "Save"}
-                </div>
-              </div>
+          <div className="row flex mb-2">
+            <div className="col-lg-10 ">
+              {singleJobSchedulingObject?.complete === false &&
+                singleJobSchedulingObject?.timeAndDateAllocation?.placeOfWork &&
+                singleJobSchedulingObject?.timeAndDateAllocation
+                  ?.placeOfWork !== "" &&
+                singleJobSchedulingObject?.resourceAllocation?.resourcesList &&
+                singleJobSchedulingObject?.resourceAllocation?.resourcesList
+                  ?.length !== 0 &&
+                singleJobSchedulingObject?.locationList &&
+                singleJobSchedulingObject?.locationList?.length !== 0 && (
+                  <div className=" mt-3">
+                    <div className="col-lg-12 justify-content-end text-end">
+                      <div
+                        className={`btn btn-labeled btn-primary mright-4 px-3 shadow ${
+                          loading && "disabled"
+                        }`}
+                        onClick={handleSubmitJobScheduling}
+                      >
+                        <span className="btn-label me-2">
+                          <i className="fa fa-check-circle"></i>
+                        </span>
+                        {loading ? "Loading..." : "Submit"}
+                      </div>
+                    </div>
+                  </div>
+                )}
             </div>
-          )}
+            <div className="col-lg-2 ">
+              {(singleJobSchedulingObject?.complete === false ||
+                (singleJobSchedulingObject?.complete === true &&
+                  singleJobSchedulingObject?.locked === false &&
+                  user[0]?.userId?.employeeid?.userHierarchy === "IAH")) && (
+                <div className=" mt-3 ">
+                  <div className="col-lg-12 justify-content-end text-end">
+                    <div
+                      className={`btn btn-labeled btn-primary px-3  shadow ${
+                        loading && "disabled"
+                      }`}
+                      onClick={handleSaveMainJobScheduling}
+                    >
+                      <span className="btn-label me-2">
+                        <i className="fa fa-check-circle"></i>
+                      </span>
+                      {loading ? "Loading..." : "Save"}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         </form>
       )}
     </div>
