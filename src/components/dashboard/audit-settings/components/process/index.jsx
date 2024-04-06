@@ -11,6 +11,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import { toast } from "react-toastify";
+import AccordionItem from "./AccordionItem";
+import EditSubProcessDialog from "./EditSubProcessDialog";
+import ProcessDeleteDialog from "./DeleteDialog";
 
 const Process = ({ userHierarchy, userRole }) => {
   const dispatch = useDispatch();
@@ -26,6 +29,10 @@ const Process = ({ userHierarchy, userRole }) => {
   const { company } = useSelector((state) => state?.common);
   const [processText, setProcessText] = React.useState("");
   const [subProcessText, setSubProcessText] = React.useState("");
+  const [subProcessId, setSubProcessId] = React.useState("");
+  const [subProcessDialog, setShowSubProcessDialog] = React.useState(false);
+  const [processDeleteDialog, setShowProcessDeleteDialog] =
+    React.useState(false);
   const [processId, setProcessId] = React.useState("");
   const [page, setPage] = React.useState(1);
   const handleChange = (event, value) => {
@@ -52,11 +59,11 @@ const Process = ({ userHierarchy, userRole }) => {
   }
 
   function handleAddSubProcess() {
-    if (!loading) {
+    if (!subLoading) {
       if (subProcessText === "") {
         toast.error("Please Add Sub Process");
       }
-      if (!loading && subProcessText !== "") {
+      if (!subLoading && subProcessText !== "") {
         dispatch(
           setupSaveSubProcess({
             description: subProcessText,
@@ -84,6 +91,7 @@ const Process = ({ userHierarchy, userRole }) => {
       setProcessId("");
       setProcessText("");
       setSubProcessText("");
+      setSubProcessId("");
       dispatch(resetProcessAddSuccess());
     }
   }, [processAddSuccess]);
@@ -105,6 +113,26 @@ const Process = ({ userHierarchy, userRole }) => {
       role="tabpanel"
       aria-labelledby="nav-profile-tab"
     >
+      {subProcessDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <EditSubProcessDialog
+              setShowSubProcessDialog={setShowSubProcessDialog}
+              subProcessId={subProcessId}
+            />
+          </div>
+        </div>
+      )}
+      {processDeleteDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <ProcessDeleteDialog
+              setShowProcessDeleteDialog={setShowProcessDeleteDialog}
+              processId={processId}
+            />
+          </div>
+        </div>
+      )}
       <div className="row">
         <div className="col-lg-12">
           <div className="sub-heading  fw-bold">
@@ -159,125 +187,23 @@ const Process = ({ userHierarchy, userRole }) => {
                 ?.slice((page - 1) * 15, page * 15)
                 ?.map((item, index) => {
                   return (
-                    <div className="accordion-item" key={index}>
-                      <h2 className="accordion-header" id={"c" + index}>
-                        <button
-                          className="accordion-button collapsed"
-                          type="button"
-                          data-bs-toggle="collapse"
-                          data-bs-target={`#flush-collapse${"c" + index}`}
-                          aria-expanded="false"
-                          aria-controls={`flush-collapse${"c" + index}`}
-                          onClick={() => {
-                            setSubProcessText("");
-                            setProcessId(item?.id);
-                          }}
-                        >
-                          <div className="d-flex w-100 me-3 align-items-center justify-content-between">
-                            <div className=" d-flex align-items-center">
-                              {item?.description}
-                            </div>
-                          </div>
-                        </button>
-                      </h2>
-                      <div
-                        id={`flush-collapse${"c" + index}`}
-                        className="accordion-collapse collapse"
-                        data-bs-parent="#accordionProcessExample"
-                      >
-                        <div className="accordion-body">
-                          {(userRole === "ADMIN" ||
-                            userHierarchy === "IAH" ||
-                            userHierarchy === "Team_Lead") && (
-                            <div className="row mt-3 mb-3">
-                              <div className="col-lg-6">
-                                <label className="w-100 ">
-                                  Add SubProcess:
-                                </label>
-                                <input
-                                  className="form-control w-100"
-                                  placeholder="Enter"
-                                  type="text"
-                                  value={subProcessText}
-                                  onChange={(event) =>
-                                    setSubProcessText(event?.target?.value)
-                                  }
-                                />
-                              </div>
-                              <div className="col-lg-6 text-end float-end align-self-end">
-                                <div
-                                  className={`btn btn-labeled btn-primary px-3 shadow ${
-                                    loading && "disabled"
-                                  }`}
-                                  onClick={handleAddSubProcess}
-                                >
-                                  <span className="btn-label me-2">
-                                    <i className="fa fa-plus"></i>
-                                  </span>
-                                  {loading ? "Loading..." : "Add"}
-                                </div>
-                              </div>
-                            </div>
-                          )}
-
-                          <div className="row">
-                            {subLoading ? (
-                              <CircularProgress />
-                            ) : (
-                              <div className="col-lg-12">
-                                <div className="table-responsive">
-                                  <table className="table table-bordered  table-hover rounded">
-                                    <thead className="bg-secondary text-white">
-                                      <tr>
-                                        <th className="w-80">Sr No.</th>
-                                        <th className="w-80">Id</th>
-                                        <th>Particulars</th>
-                                        <th>Actions</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                      {allSubProcess?.length === 0 ||
-                                      allSubProcess[0]?.error ===
-                                        "Not Found" ? (
-                                        <tr>
-                                          <td className="w-300">
-                                            No sub-process to show!
-                                          </td>
-                                        </tr>
-                                      ) : (
-                                        allSubProcess?.map((subItem, ind) => {
-                                          return (
-                                            <tr key={ind}>
-                                              <td>{ind + 1}</td>
-                                              <td>{subItem?.id}</td>
-                                              <td>{subItem?.description}</td>
-                                              <td>
-                                                {(userRole === "ADMIN" ||
-                                                  userHierarchy === "IAH" ||
-                                                  userHierarchy ===
-                                                    "Team_Lead") && (
-                                                  <i className="fa fa-edit  px-3 f-18"></i>
-                                                )}
-                                                {(userRole === "ADMIN" ||
-                                                  userHierarchy === "IAH" ||
-                                                  userHierarchy ===
-                                                    "Team_Lead") && (
-                                                  <i className="fa fa-trash text-danger f-18"></i>
-                                                )}
-                                              </td>
-                                            </tr>
-                                          );
-                                        })
-                                      )}
-                                    </tbody>
-                                  </table>
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    <AccordionItem
+                      item={item}
+                      key={index}
+                      index={index}
+                      setSubProcessText={setSubProcessText}
+                      setProcessId={setProcessId}
+                      userRole={userRole}
+                      userHierarchy={userHierarchy}
+                      subProcessText={subProcessText}
+                      handleAddSubProcess={handleAddSubProcess}
+                      subLoading={subLoading}
+                      loading={loading}
+                      allSubProcess={allSubProcess}
+                      setSubProcessId={setSubProcessId}
+                      setShowSubProcessDialog={setShowSubProcessDialog}
+                      setShowProcessDeleteDialog={setShowProcessDeleteDialog}
+                    />
                   );
                 })
             )}

@@ -6,6 +6,8 @@ import {
   addCheckListItem,
   getAllCheckListItems,
   editCheckListItem,
+  deleteCheckList,
+  deleteSubCheckList,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
@@ -65,6 +67,18 @@ export const setupEditCheckListItem = createAsyncThunk(
   "settingsCheckList/editCheckListItem",
   async (data, thunkAPI) => {
     return editCheckListItem(data, thunkAPI);
+  }
+);
+export const setupDeleteCheckList = createAsyncThunk(
+  "settingsCheckList/deleteCheckList",
+  async (data, thunkAPI) => {
+    return deleteCheckList(data, thunkAPI);
+  }
+);
+export const setupDeleteSubCheckList = createAsyncThunk(
+  "settingsCheckList/deleteSubCheckList",
+  async (data, thunkAPI) => {
+    return deleteSubCheckList(data, thunkAPI);
   }
 );
 
@@ -208,6 +222,41 @@ export const slice = createSlice({
       })
       .addCase(setupEditCheckListItem.rejected, (state, { payload }) => {
         state.editLoading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Delete CheckList
+    builder
+      .addCase(setupDeleteCheckList.pending, (state) => {
+        state.editLoading = true;
+      })
+      .addCase(setupDeleteCheckList.fulfilled, (state) => {
+        state.editLoading = false;
+        state.checkListAddSuccess = true;
+        state.checkListId = "";
+        state.currentSubCheckListItem = {};
+        toast.success("Check List  Deleted Successfully");
+      })
+      .addCase(setupDeleteCheckList.rejected, (state, { payload }) => {
+        state.editLoading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Delete Sub CheckList
+    builder
+      .addCase(setupDeleteSubCheckList.fulfilled, (state) => {
+        state.checkListAddSuccess = true;
+        state.checkListId = "";
+        state.currentSubCheckListItem = {};
+        toast.success("Check List Item  Deleted Successfully");
+      })
+      .addCase(setupDeleteSubCheckList.rejected, (state, { payload }) => {
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
         } else {

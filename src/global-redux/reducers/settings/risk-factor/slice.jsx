@@ -1,5 +1,10 @@
 import { toast } from "react-toastify";
-import { createRiskFactor, getAllRiskFactors, updateRiskFactor } from "./thunk";
+import {
+  createRiskFactor,
+  getAllRiskFactors,
+  updateRiskFactor,
+  deleteRiskFactor,
+} from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -25,6 +30,12 @@ export const setupUpdateRiskFactor = createAsyncThunk(
   "riskFactor/updateRiskFactor",
   async (data, thunkAPI) => {
     return updateRiskFactor(data, thunkAPI);
+  }
+);
+export const setupDeleteRiskFactor = createAsyncThunk(
+  "riskFactor/deleteRiskFactor",
+  async (data, thunkAPI) => {
+    return deleteRiskFactor(data, thunkAPI);
   }
 );
 
@@ -83,6 +94,24 @@ export const slice = createSlice({
         toast.success("Risk Factor Updated Successfully");
       })
       .addCase(setupUpdateRiskFactor.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Delete Risk Factors
+    builder
+      .addCase(setupDeleteRiskFactor.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupDeleteRiskFactor.fulfilled, (state) => {
+        state.loading = false;
+        state.riskFactorAddSuccess = true;
+        toast.success("Risk Factor Deleted Successfully");
+      })
+      .addCase(setupDeleteRiskFactor.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);

@@ -9,12 +9,16 @@ import {
   setupGetAllCPList,
   resetCpListAddSuccess,
 } from "../../../../../global-redux/reducers/settings/cp-list/slice";
+import DeleteCpListDialog from "./DeleteDialog";
 
 const CPList = ({ userHierarchy, userRole }) => {
   const dispatch = useDispatch();
   const { loading, allCPList, cpListAddSuccess } = useSelector(
     (state) => state?.settingsCPList
   );
+  const [currentCpListId, setCurrentCpListId] = React.useState("");
+  const [showDeleteCpListDialog, setShowDeleteCpListDialog] =
+    React.useState(false);
   const { company } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
   const [cpLists, setCPLists] = React.useState([]);
@@ -64,6 +68,7 @@ const CPList = ({ userHierarchy, userRole }) => {
       setDescription("");
       dispatch(setupGetAllCPList(companyId));
       dispatch(resetCpListAddSuccess());
+      setPage(1);
     }
   }, [cpListAddSuccess]);
 
@@ -79,6 +84,16 @@ const CPList = ({ userHierarchy, userRole }) => {
       role="tabpanel"
       aria-labelledby="cp-list-tab"
     >
+      {showDeleteCpListDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <DeleteCpListDialog
+              setShowDeleteCpListDialog={setShowDeleteCpListDialog}
+              currentCpListId={currentCpListId}
+            />
+          </div>
+        </div>
+      )}
       <div className="row">
         <div className="col-lg-12">
           <div className="sub-heading  fw-bold"> Residual Risk</div>
@@ -161,6 +176,21 @@ const CPList = ({ userHierarchy, userRole }) => {
                               </span>
                               Save
                             </div>
+                            {(userRole === "ADMIN" ||
+                              userHierarchy === "IAH") && (
+                              <div
+                                className={`btn btn-labeled btn-danger mx-4 px-3 shadow  my-4 `}
+                                onClick={() => {
+                                  setCurrentCpListId(item?.id);
+                                  setShowDeleteCpListDialog(true);
+                                }}
+                              >
+                                <span className="btn-label me-2">
+                                  <i className="fa fa-check-circle f-18"></i>
+                                </span>
+                                Delete
+                              </div>
+                            )}
                           </td>
                         </tr>
                       );

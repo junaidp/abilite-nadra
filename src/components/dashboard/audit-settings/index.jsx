@@ -385,7 +385,7 @@ const AuditSettings = () => {
               {/* <ResidualRisk /> */}
               <RCMLibrary userHierarchy={userHierarchy} userRole={userRole} />
 
-              <RiskFactor />
+              <RiskFactor userHierarchy={userHierarchy} userRole={userRole} />
               {/* <EmailManagement
                 activeEmailTab={activeEmailTab}
                 setActiveEmailTab={setActiveEmailTab}

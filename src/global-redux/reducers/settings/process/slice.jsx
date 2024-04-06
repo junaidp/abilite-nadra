@@ -4,6 +4,9 @@ import {
   getAllProcess,
   saveSubProcess,
   getAllSubProcess,
+  editSubProcess,
+  deleteProcess,
+  deleteSubProcess,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -39,6 +42,24 @@ export const setupGetAllSubProcess = createAsyncThunk(
   "process/getAllSubProcess",
   async (data, thunkAPI) => {
     return getAllSubProcess(data, thunkAPI);
+  }
+);
+export const setupEditSubProcess = createAsyncThunk(
+  "process/editSubProcess",
+  async (data, thunkAPI) => {
+    return editSubProcess(data, thunkAPI);
+  }
+);
+export const setupDeleteProcess = createAsyncThunk(
+  "process/deleteProcess",
+  async (data, thunkAPI) => {
+    return deleteProcess(data, thunkAPI);
+  }
+);
+export const setupDeleteSubProcess = createAsyncThunk(
+  "process/deleteSubProcess",
+  async (data, thunkAPI) => {
+    return deleteSubProcess(data, thunkAPI);
   }
 );
 
@@ -134,6 +155,60 @@ export const slice = createSlice({
       })
       .addCase(setupGetAllSubProcess.rejected, (state, action) => {
         state.subLoading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Edit Sub Process
+    builder
+      .addCase(setupEditSubProcess.pending, (state) => {
+        state.subLoading = true;
+      })
+      .addCase(setupEditSubProcess.fulfilled, (state) => {
+        state.subLoading = false;
+        state.subProcessAddSuccess = true;
+        toast.success("Sub Process Updated Successfully");
+      })
+      .addCase(setupEditSubProcess.rejected, (_, action) => {
+        state.subLoading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Delete Sub Process
+    builder
+      .addCase(setupDeleteSubProcess.pending, (state) => {
+        state.subLoading = true;
+      })
+      .addCase(setupDeleteSubProcess.fulfilled, (state) => {
+        state.subLoading = false;
+        state.subProcessAddSuccess = true;
+        toast.success("Sub Process Deleted Successfully");
+      })
+      .addCase(setupDeleteSubProcess.rejected, (_, action) => {
+        state.subLoading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Delete  Process
+    builder
+      .addCase(setupDeleteProcess.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupDeleteProcess.fulfilled, (state) => {
+        state.loading = false;
+        state.processAddSuccess = true;
+        toast.success("Process Deleted Successfully");
+      })
+      .addCase(setupDeleteProcess.rejected, (_, action) => {
+        state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);
         } else {

@@ -210,10 +210,8 @@ const AccordianItem = ({
                   </button>
                 )}
                 {item?.stepNo === 5 &&
-                  curretItem?.followUp?.recommendationsImplemented !== "" &&
-                  curretItem?.followUp?.recommendationsImplemented &&
-                  curretItem?.followUp?.testInNextYear !== "" &&
-                  curretItem?.followUp?.testInNextYear && (
+                  curretItem?.followUp?.recommendationsImplemented !== null &&
+                  curretItem?.followUp?.testInNextYear !== null && (
                     <button
                       className={`btn btn-labeled btn-primary px-3 mx-2 mt-3 shadow ${
                         loading && "disabled"

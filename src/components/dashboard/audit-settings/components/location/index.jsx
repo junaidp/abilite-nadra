@@ -12,6 +12,8 @@ import { CircularProgress } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import EditLocationDialog from "../../../../modals/edit-location-dialog";
 import EditSubLocationDialog from "../../../../modals/edit-sub-location-dialog";
+import AccordionItem from "./AccordionItem";
+import DeleteLocationDialog from "./DeleteDialog";
 
 const Location = ({ userHierarchy, userRole }) => {
   const dispatch = useDispatch();
@@ -21,6 +23,8 @@ const Location = ({ userHierarchy, userRole }) => {
   const { company } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
   const [locationDescription, setLocationDescription] = React.useState("");
+  const [deleteLocationDialog, setShowDeleteLocationDialog] =
+    React.useState(false);
   const [subLocationText, setSubLocationText] = React.useState("");
   const [LocationId, setLocationId] = React.useState("");
   const [SubLocationId, setSubLocationId] = React.useState("");
@@ -74,6 +78,7 @@ const Location = ({ userHierarchy, userRole }) => {
       setLocationDescription("");
       dispatch(setupGetAllLocations(`?companyId=${companyId}`));
       dispatch(resetLocationAddSuccess());
+      setPage(1);
     }
   }, [locationAddSuccess]);
 
@@ -84,6 +89,16 @@ const Location = ({ userHierarchy, userRole }) => {
       role="tabpanel"
       aria-labelledby="nav-profile-tab"
     >
+      {deleteLocationDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <DeleteLocationDialog
+              setShowDeleteLocationDialog={setShowDeleteLocationDialog}
+              LocationId={LocationId}
+            />
+          </div>
+        </div>
+      )}
       {showEditLocationDialog && (
         <div className="dashboard-modal">
           <div className="model-wrap">
@@ -157,132 +172,24 @@ const Location = ({ userHierarchy, userRole }) => {
                 ?.slice((page - 1) * 15, page * 15)
                 ?.map((item, index) => {
                   return (
-                    <div className="accordion-item" key={index}>
-                      <h2 className="accordion-header" id={"b" + index}>
-                        <button
-                          className="accordion-button collapsed"
-                          type="button"
-                          data-bs-toggle="collapse"
-                          data-bs-target={`#flush-collapse${"b" + index}`}
-                          aria-expanded="false"
-                          aria-controls={`flush-collapse${"b" + index}`}
-                          onClick={() => {
-                            setLocationId(item?.id);
-                            setSubLocationText("");
-                          }}
-                        >
-                          <div className="d-flex w-100 me-3 align-items-center justify-content-between">
-                            <div className=" d-flex align-items-center">
-                              {item?.description}
-                            </div>
-
-                            <div
-                              className=" d-flex align-items-center underline"
-                              onClick={() => setShowEditLocationDialog(true)}
-                            >
-                              Rename Location
-                            </div>
-                          </div>
-                        </button>
-                      </h2>
-                      <div
-                        id={`flush-collapse${"b" + index}`}
-                        className="accordion-collapse collapse"
-                        data-bs-parent="#accordionLocationExample"
-                      >
-                        <div className="accordion-body">
-                          <div className="row mb-3">
-                            <div className="col-lg-6">
-                              <label className="w-100">Add SubLocation:</label>
-                              <input
-                                className="form-control w-100"
-                                placeholder="Enter"
-                                type="text"
-                                value={subLocationText}
-                                onChange={(event) =>
-                                  setSubLocationText(event?.target?.value)
-                                }
-                              />
-                            </div>
-                            <div className="col-lg-6 text-end float-end align-self-end">
-                              <div
-                                className={`btn btn-labeled btn-primary px-3 shadow ${
-                                  loading && "disabled"
-                                }`}
-                                onClick={handleAddSubLocation}
-                              >
-                                <span className="btn-label me-2">
-                                  <i className="fa fa-plus"></i>
-                                </span>
-                                {loading ? "Loading.." : "Add"}
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="row">
-                            <div className="col-lg-12">
-                              <div className="table-responsive">
-                                <table className="table table-bordered  table-hover rounded">
-                                  <thead className="bg-secondary text-white">
-                                    <tr>
-                                      <th className="w-80">Sr No.</th>
-                                      <th>Particulars</th>
-                                      <th>Actions</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    {item?.subLocations?.length === 0 ? (
-                                      <tr>
-                                        <td className="w-300">
-                                          No sub location to show!
-                                        </td>
-                                      </tr>
-                                    ) : (
-                                      item?.subLocations?.map(
-                                        (subItem, subIndex) => {
-                                          return (
-                                            <tr key={subIndex}>
-                                              <td>{subItem?.id}</td>
-                                              <td>{subItem?.description}</td>
-                                              <td>
-                                                <i
-                                                  className="fa fa-edit  px-3 f-18 cursor-pointer"
-                                                  onClick={() => {
-                                                    setSubLocationId(
-                                                      subItem?.id
-                                                    );
-                                                    setShowEditSubLocationDialog(
-                                                      true
-                                                    );
-                                                  }}
-                                                ></i>
-                                                {(userRole === "ADMIN" ||
-                                                  userHierarchy === "IAH") && (
-                                                  <i
-                                                    className="fa fa-trash text-danger f-18 cusrsor-pointer"
-                                                    onClick={() => {
-                                                      dispatch(
-                                                        setupDeleteSubLocation(
-                                                          `?deleteId=${subItem?.id}`
-                                                        )
-                                                      );
-                                                    }}
-                                                  ></i>
-                                                )}
-                                              </td>
-                                            </tr>
-                                          );
-                                        }
-                                      )
-                                    )}
-                                  </tbody>
-                                </table>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    <AccordionItem
+                      index={index}
+                      setLocationId={setLocationId}
+                      setSubLocationText={setSubLocationText}
+                      item={item}
+                      subLocationText={subLocationText}
+                      handleAddSubLocation={handleAddSubLocation}
+                      loading={loading}
+                      setSubLocationId={setSubLocationId}
+                      setShowEditLocationDialog={setShowEditLocationDialog}
+                      setShowEditSubLocationDialog={
+                        setShowEditSubLocationDialog
+                      }
+                      setupDeleteSubLocation={setupDeleteSubLocation}
+                      userRole={userRole}
+                      userHierarchy={userHierarchy}
+                      setShowDeleteLocationDialog={setShowDeleteLocationDialog}
+                    />
                   );
                 })
             )}

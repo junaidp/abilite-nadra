@@ -9,12 +9,16 @@ import {
   setupGetAllRiskFactors,
   resetRiskFactorAddSuccess,
 } from "../../../../../global-redux/reducers/settings/risk-factor/slice";
+import DeleteRiskFactorDialog from "./DeleteDialog";
 
-const RiskFactor = () => {
+const RiskFactor = ({ userHierarchy, userRole }) => {
   const dispatch = useDispatch();
   const { loading, allRiskFactors, riskFactorAddSuccess } = useSelector(
     (state) => state?.settingsRiskFactor
   );
+  const [currentRiskFactorId, setCurrentRiskFactorId] = React.useState("");
+  const [showDeleteRiskFactorDialog, setShowDeleteRiskFactorDialog] =
+    React.useState(false);
   const { company } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
   const [riskFactorList, setRiskFactorList] = React.useState([]);
@@ -66,6 +70,7 @@ const RiskFactor = () => {
       setDescription("");
       dispatch(setupGetAllRiskFactors(`?company_id=${companyId}`));
       dispatch(resetRiskFactorAddSuccess());
+      setPage(1);
     }
   }, [riskFactorAddSuccess]);
 
@@ -81,6 +86,16 @@ const RiskFactor = () => {
       role="tabpanel"
       aria-labelledby="nav-risk-factor-tab"
     >
+      {showDeleteRiskFactorDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <DeleteRiskFactorDialog
+              setShowDeleteRiskFactorDialog={setShowDeleteRiskFactorDialog}
+              currentRiskFactorId={currentRiskFactorId}
+            />
+          </div>
+        </div>
+      )}
       <div className="row">
         <div className="col-lg-12">
           <div className="sub-heading  fw-bold">Risk Factor</div>
@@ -163,6 +178,21 @@ const RiskFactor = () => {
                               </span>
                               Save
                             </div>
+                            {(userRole === "ADMIN" ||
+                              userHierarchy === "IAH") && (
+                              <div
+                                className={`btn btn-labeled btn-danger mx-4 px-3 shadow  my-4 `}
+                                onClick={() => {
+                                  setCurrentRiskFactorId(item?.id);
+                                  setShowDeleteRiskFactorDialog(true);
+                                }}
+                              >
+                                <span className="btn-label me-2">
+                                  <i className="fa fa-check-circle f-18"></i>
+                                </span>
+                                Delete
+                              </div>
+                            )}
                           </td>
                         </tr>
                       );

@@ -6,6 +6,7 @@ import {
   saveSubLocation,
   updateSubLocation,
   deleteSubLocation,
+  deleteLocation,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -53,6 +54,12 @@ export const setupDeleteSubLocation = createAsyncThunk(
   "location/deleteSubLocation",
   async (data, thunkAPI) => {
     return deleteSubLocation(data, thunkAPI);
+  }
+);
+export const setupDeleteLocation = createAsyncThunk(
+  "location/deleteLocation",
+  async (data, thunkAPI) => {
+    return deleteLocation(data, thunkAPI);
   }
 );
 
@@ -170,6 +177,24 @@ export const slice = createSlice({
         toast.success("Sub Location Deleted Successfully");
       })
       .addCase(setupDeleteSubLocation.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Delete  Location
+    builder
+      .addCase(setupDeleteLocation.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupDeleteLocation.fulfilled, (state) => {
+        state.loading = false;
+        state.locationAddSuccess = true;
+        toast.success("Location Deleted Successfully");
+      })
+      .addCase(setupDeleteLocation.rejected, (state, { payload }) => {
         state.loading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);

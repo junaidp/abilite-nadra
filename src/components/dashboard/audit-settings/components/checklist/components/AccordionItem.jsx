@@ -1,5 +1,6 @@
 import { CircularProgress } from "@mui/material";
 import React from "react";
+import { setupDeleteSubCheckList } from "../../../../../../global-redux/reducers/settings/check-list/slice";
 
 const AccordionItem = ({
   item,
@@ -16,6 +17,7 @@ const AccordionItem = ({
   userHierarchy,
   userRole,
   setShowViewCheckListDialog,
+  setShowDeleteCheckListDialog,
 }) => {
   return (
     <div className="accordion-item" id={"a" + index}>
@@ -33,14 +35,6 @@ const AccordionItem = ({
             <div className=" d-flex align-items-center">
               {item?.description}
             </div>
-            {(userRole === "ADMIN" || userHierarchy === "IAH") && (
-              <div
-                className=" d-flex align-items-center underline"
-                onClick={() => setShowEditCheckListDialog(true)}
-              >
-                Rename Checklist
-              </div>
-            )}
           </div>
         </button>
       </h2>
@@ -51,24 +45,54 @@ const AccordionItem = ({
       >
         <div>
           {(userRole === "ADMIN" || userHierarchy === "IAH") && (
-            <div className="rows mt-4 mb-4 px-3">
-              <label>
-                choose you checklist default remark for user display
-              </label>
-              <select
-                className="col-lg-6 form-select px-3"
-                value={item?.defaultRemarks}
-                onChange={(e) => {
-                  handleChangeCurrentCheckListId(item?.id);
-                  handleChangeCheckListRemarks(e);
-                }}
-              >
-                <option value="">Select One</option>
-                <option value={1}>Yes</option>
-                <option value={2}>Partially Applicable</option>
-                <option value={3}>No</option>
-                <option value={4}>Not Applicable</option>
-              </select>
+            <div className="row">
+              <div className="col-lg-12 mt-4">
+                <div
+                  className={`btn btn-labeled btn-primary  mx-4  shadow`}
+                  onClick={() => {
+                    setShowEditCheckListDialog(true);
+                    handleChangeCurrentCheckListId(item?.id);
+                  }}
+                >
+                  <span className="btn-label me-2">
+                    <i className="fa fa-check-circle f-18"></i>
+                  </span>
+                  Edit
+                </div>
+                <div
+                  className={`btn btn-labeled btn-danger mx-2 shadow`}
+                  onClick={() => {
+                    setShowDeleteCheckListDialog(true);
+                    handleChangeCurrentCheckListId(item?.id);
+                  }}
+                >
+                  <span className="btn-label me-2">
+                    <i className="fa fa-check-circle f-18"></i>
+                  </span>
+                  Delete
+                </div>
+              </div>
+              <div className="col-lg-12">
+                <div className="rows mt-4 mb-4 px-4">
+                  <label>
+                    choose you checklist default remark for user display
+                  </label>
+                  <select
+                    className="col-lg-6 form-select px-3"
+                    value={item?.defaultRemarks}
+                    onChange={(e) => {
+                      handleChangeCurrentCheckListId(item?.id);
+                      handleChangeCheckListRemarks(e);
+                    }}
+                  >
+                    <option value="">Select One</option>
+                    <option value={1}>Yes</option>
+                    <option value={2}>Partially Applicable</option>
+                    <option value={3}>No</option>
+                    <option value={4}>Not Applicable</option>
+                  </select>
+                </div>
+              </div>
             </div>
           )}
 
@@ -99,8 +123,7 @@ const AccordionItem = ({
                           <th>Area</th>
                           <th>Subject</th>
                           <th>Particulars</th>
-                          {(userRole === "ADMIN" ||
-                            userHierarchy === "IAH") && <th>Actions</th>}
+                          <th>Actions</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -135,6 +158,17 @@ const AccordionItem = ({
                                         setShowEditCheckListItemDialog(true);
                                         dispatch(
                                           changeCurrentSubListItem(item)
+                                        );
+                                      }}
+                                    ></i>
+                                  )}
+                                  {(userRole === "ADMIN" ||
+                                    userHierarchy === "IAH") && (
+                                    <i
+                                      className="fa fa-trash text-danger f-18"
+                                      onClick={() => {
+                                        dispatch(
+                                          setupDeleteSubCheckList(item?.id)
                                         );
                                       }}
                                     ></i>

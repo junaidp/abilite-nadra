@@ -16,6 +16,7 @@ import ViewCheckListItemsDialog from "../../../../modals/view-checklist-items-di
 import Pagination from "@mui/material/Pagination";
 import { CircularProgress } from "@mui/material";
 import AccordionItem from "./components/AccordionItem";
+import DeleteCheckListDialog from "./components/DeleteDialog";
 
 const CheckList = ({
   setCheckListManagementDialog,
@@ -36,6 +37,8 @@ const CheckList = ({
   const [description, setDescription] = React.useState("");
   const [defaultRemarks, setDefaultRemarks] = React.useState("");
   const [showEditCheckListDialog, setShowEditCheckListDialog] =
+    React.useState(false);
+  const [deleteCheckListDialog, setShowDeleteCheckListDialog] =
     React.useState(false);
   const [showViewCheckListDialog, setShowViewCheckListDialog] =
     React.useState(false);
@@ -91,6 +94,7 @@ const CheckList = ({
       setDefaultRemarks("");
       dispatch(resetAddCheckListSuccess());
       setDescription("");
+      setPage(1);
       let email = user[0]?.email;
       let companyId = user[0]?.company.find(
         (all) => all?.companyName === company
@@ -121,6 +125,15 @@ const CheckList = ({
       role="tabpanel"
       aria-labelledby="nav-check-tab"
     >
+      {deleteCheckListDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <DeleteCheckListDialog
+              setShowDeleteCheckListDialog={setShowDeleteCheckListDialog}
+            />
+          </div>
+        </div>
+      )}
       {showEditCheckListDialog && (
         <div className="dashboard-modal">
           <div className="model-wrap">
@@ -215,6 +228,7 @@ const CheckList = ({
                     userHierarchy={userHierarchy}
                     userRole={userRole}
                     setShowViewCheckListDialog={setShowViewCheckListDialog}
+                    setShowDeleteCheckListDialog={setShowDeleteCheckListDialog}
                   />
                 );
               })
