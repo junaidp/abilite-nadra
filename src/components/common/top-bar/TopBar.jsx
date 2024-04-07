@@ -64,9 +64,7 @@ const TopBar = () => {
         <a className="text-nowrap mx-auto logo-img"></a>
 
         <div>
-          <Link to="/">
-            <img src={logo} className="light-logo" width="154" alt="" />
-          </Link>
+          <img src={logo} className="light-logo" width="154" alt="" />
         </div>
         {user[0]?.userId?.role[0]?.name === "USER" &&
           user[0]?.userId?.employeeid?.userHierarchy !==

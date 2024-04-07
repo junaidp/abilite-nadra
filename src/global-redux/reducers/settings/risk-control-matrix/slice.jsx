@@ -12,6 +12,11 @@ import {
   updateControl,
   createProgram,
   updateProgram,
+  deleteRCM,
+  deleteRCMObjective,
+  deleteRCMRisk,
+  deleteRCMControl,
+  deleteRCMProgram,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -96,6 +101,36 @@ export const setupUpdateProgram = createAsyncThunk(
   "rcm/updateProgram",
   async (data, thunkAPI) => {
     return updateProgram(data, thunkAPI);
+  }
+);
+export const setupDeleteRCM = createAsyncThunk(
+  "rcm/deleteRCM",
+  async (data, thunkAPI) => {
+    return deleteRCM(data, thunkAPI);
+  }
+);
+export const setupDeleteRCMObjective = createAsyncThunk(
+  "rcm/deleteRCMObjective",
+  async (data, thunkAPI) => {
+    return deleteRCMObjective(data, thunkAPI);
+  }
+);
+export const setupDeleteRCMRisk = createAsyncThunk(
+  "rcm/deleteRCMRisk",
+  async (data, thunkAPI) => {
+    return deleteRCMRisk(data, thunkAPI);
+  }
+);
+export const setupDeleteRCMControl = createAsyncThunk(
+  "rcm/deleteRCMControl",
+  async (data, thunkAPI) => {
+    return deleteRCMControl(data, thunkAPI);
+  }
+);
+export const setupDeleteRCMProgram = createAsyncThunk(
+  "rcm/deleteRCMProgram",
+  async (data, thunkAPI) => {
+    return deleteRCMProgram(data, thunkAPI);
   }
 );
 
@@ -332,9 +367,99 @@ export const slice = createSlice({
           toast.error("An Error has occurred");
         }
       });
+    //   Delete RCM
+    builder
+      .addCase(setupDeleteRCM.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupDeleteRCM.fulfilled, (state) => {
+        state.loading = false;
+        state.rcmAddSuccess = true;
+        toast.success("Risk Control Matrix Deleted Successfully");
+      })
+      .addCase(setupDeleteRCM.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    //   Delete RCM Objective
+    builder
+      .addCase(setupDeleteRCMObjective.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupDeleteRCMObjective.fulfilled, (state) => {
+        state.loading = false;
+        state.rcmAddSuccess = true;
+        toast.success("Risk Control Matrix Objective Deleted Successfully");
+      })
+      .addCase(setupDeleteRCMObjective.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    //   Delete RCM Risk
+    builder
+      .addCase(setupDeleteRCMRisk.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupDeleteRCMRisk.fulfilled, (state) => {
+        state.loading = false;
+        state.rcmAddSuccess = true;
+        toast.success("Risk Control Matrix Risk Deleted Successfully");
+      })
+      .addCase(setupDeleteRCMRisk.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    //   Delete RCM Control
+    builder
+      .addCase(setupDeleteRCMControl.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupDeleteRCMControl.fulfilled, (state) => {
+        state.loading = false;
+        state.rcmAddSuccess = true;
+        toast.success("Risk Control Matrix Control Deleted Successfully");
+      })
+      .addCase(setupDeleteRCMControl.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    //   Delete RCM Program
+    builder
+      .addCase(setupDeleteRCMProgram.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupDeleteRCMProgram.fulfilled, (state) => {
+        state.loading = false;
+        state.rcmAddSuccess = true;
+        toast.success("Risk Control Matrix Program Deleted Successfully");
+      })
+      .addCase(setupDeleteRCMProgram.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
   },
 });
 
-export const { resetRCMAddSuccess,handleReset } = slice.actions;
+export const { resetRCMAddSuccess, handleReset } = slice.actions;
 
 export default slice.reducer;

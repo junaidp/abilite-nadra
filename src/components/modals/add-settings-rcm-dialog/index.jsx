@@ -61,6 +61,7 @@ const AddSettingsRCMDialog = ({ setShowCreateRCMDialog }) => {
 
   React.useEffect(() => {
     if (processId && processId !== "") {
+      setSubProcessId("");
       dispatch(setupGetAllSubProcess(`?processId=${Number(processId)}`));
     }
   }, [processId]);

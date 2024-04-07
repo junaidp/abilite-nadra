@@ -61,7 +61,7 @@ export const deleteCpList = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.delete(
-      `${baseUrl}/configurations/CriteriaForRiskManagementCP/${data}`,
+      `${baseUrl}/configurations/CriteriaForRiskManagementCP/delete/${data}`,
       {
         headers: {
           "Content-Type": "application/json",

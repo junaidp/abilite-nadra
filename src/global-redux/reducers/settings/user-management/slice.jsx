@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { addUser, getAllUsers, updateUser } from "./thunk";
+import { addUser, getAllUsers, updateUser, deleteUser } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -18,6 +18,12 @@ export const setupUpdateUser = createAsyncThunk(
   "userManagement/updateUser",
   async (data, thunkAPI) => {
     return updateUser(data, thunkAPI);
+  }
+);
+export const setupDeleteUser = createAsyncThunk(
+  "userManagement/deleteUser",
+  async (data, thunkAPI) => {
+    return deleteUser(data, thunkAPI);
   }
 );
 export const setupGetAllUsers = createAsyncThunk(
@@ -72,6 +78,24 @@ export const slice = createSlice({
         toast.success("User Updated Successfully");
       })
       .addCase(setupUpdateUser.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Delete User
+    builder
+      .addCase(setupDeleteUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupDeleteUser.fulfilled, (state) => {
+        state.loading = false;
+        state.addUserSuccess = true;
+        toast.success("User Deleted Successfully");
+      })
+      .addCase(setupDeleteUser.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);

@@ -9,6 +9,7 @@ const Control = ({
   rcmAddSuccess,
   userHierarchy,
   userRole,
+  deleteRCMControl,
 }) => {
   const [currentButtonControlId, setCurrentButtonControlId] =
     React.useState("");
@@ -48,13 +49,19 @@ const Control = ({
                     id="exampleFormCon"
                     rows="3"
                   ></textarea>
-                  <div>
-                    {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+                  {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+                    <div>
                       <div className="btn btn-labeled btn-primary  shadow mt-2 float-end mb-2">
                         Get RCM
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
+                  {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+                    <div className="float-end w-100 mb-2">
+                      <i className="fa fa-trash text-danger f-18 mb-2 cursor-pointer"></i>
+                      <hr />
+                    </div>
+                  )}
                 </div>
               </div>
             )}
@@ -138,6 +145,15 @@ const Control = ({
                         )}
                       </div>
                     )}
+                    {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+                      <div className="float-end w-100">
+                        <i
+                          className="fa fa-trash text-danger f-18 mb-2 cursor-pointer"
+                          onClick={() => deleteRCMControl(control?.id)}
+                        ></i>
+                        <hr />
+                      </div>
+                    )}
                     {/* Hidden Only */}
                     <div className="visibility-0">
                       {control?.rcmLibraryAuditProgramsList
@@ -173,6 +189,13 @@ const Control = ({
                                 userHierarchy === "IAH") && (
                                 <div className="btn btn-labeled btn-primary  shadow mt-2 float-end mb-2 mt-2">
                                   Save
+                                </div>
+                              )}
+                              {(userRole === "ADMIN" ||
+                                userHierarchy === "IAH") && (
+                                <div className="float-end w-100 mb-2">
+                                  <i className="fa fa-trash text-danger f-18  cursor-pointer"></i>
+                                  <hr />
                                 </div>
                               )}
                             </div>

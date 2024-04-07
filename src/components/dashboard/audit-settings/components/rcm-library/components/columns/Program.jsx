@@ -9,6 +9,7 @@ const Program = ({
   rcmAddSuccess,
   userHierarchy,
   userRole,
+  deleteRCMProgram,
 }) => {
   const [currentButtonProgramId, setCurrentButtonProgramId] =
     React.useState("");
@@ -53,6 +54,12 @@ const Program = ({
                       Get RCM
                     </div>
                   )}
+                  {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+                    <div className="float-end w-100 mb-2">
+                      <i className="fa fa-trash text-danger f-18  cursor-pointer"></i>
+                      <hr />
+                    </div>
+                  )}
                 </div>
               </div>
             )}
@@ -91,6 +98,12 @@ const Program = ({
                         {(userRole === "ADMIN" || userHierarchy === "IAH") && (
                           <div className="btn btn-labeled btn-primary  shadow mt-2 float-end mb-2">
                             Get RCM
+                          </div>
+                        )}
+                        {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+                          <div className="float-end w-100 mb-2">
+                            <i className="fa fa-trash text-danger f-18  cursor-pointer"></i>
+                            <hr />
                           </div>
                         )}
                       </div>
@@ -183,6 +196,16 @@ const Program = ({
                                   <i className="fa fa-edit mb-4  f-18"></i>
                                 </div>
                               )}
+                            </div>
+                          )}
+                          {(userRole === "ADMIN" ||
+                            userHierarchy === "IAH") && (
+                            <div className="float-end w-100">
+                              <i
+                                className="fa fa-trash text-danger f-18 mb-2 cursor-pointer"
+                                onClick={() => deleteRCMProgram(program?.id)}
+                              ></i>
+                              <hr />
                             </div>
                           )}
                         </div>

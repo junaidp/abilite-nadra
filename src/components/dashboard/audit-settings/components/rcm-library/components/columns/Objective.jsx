@@ -9,6 +9,7 @@ const Objective = ({
   rcmAddSuccess,
   userHierarchy,
   userRole,
+  deleteRCMObjective,
 }) => {
   const [currentButtonObjectiveId, setCurrentButtonObjectiveId] =
     React.useState("");
@@ -74,6 +75,14 @@ const Objective = ({
                 <i className="fa fa-edit  f-18"></i>
               </div>
             )}
+          </div>
+        )}
+        {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+          <div className="float-end w-100">
+            <i
+              className="fa fa-trash text-danger f-18  cursor-pointer"
+              onClick={() => deleteRCMObjective(objective?.id)}
+            ></i>
           </div>
         )}
       </div>

@@ -3,6 +3,13 @@ import ObjectiveColumn from "./columns/Objective";
 import RiskColumn from "./columns/Risk";
 import ControlColumn from "./columns/Control";
 import Program from "./columns/Program";
+import {
+  setupDeleteRCMObjective,
+  setupDeleteRCMRisk,
+  setupDeleteRCMControl,
+  setupDeleteRCMProgram,
+} from "../../../../.././../global-redux/reducers/settings/risk-control-matrix/slice";
+import { useDispatch } from "react-redux";
 
 const TableBody = ({
   objective,
@@ -23,6 +30,27 @@ const TableBody = ({
   userHierarchy,
   userRole,
 }) => {
+  const dispatch = useDispatch();
+  function deleteRCMObjective(id) {
+    if (!loading) {
+      dispatch(setupDeleteRCMObjective(Number(id)));
+    }
+  }
+  function deleteRCMRisk(id) {
+    if (!loading) {
+      dispatch(setupDeleteRCMRisk(Number(id)));
+    }
+  }
+  function deleteRCMControl(id) {
+    if (!loading) {
+      dispatch(setupDeleteRCMControl(Number(id)));
+    }
+  }
+  function deleteRCMProgram(id) {
+    if (!loading) {
+      dispatch(setupDeleteRCMProgram(Number(id)));
+    }
+  }
   return (
     <tr>
       {/* First Colimn */}
@@ -35,6 +63,7 @@ const TableBody = ({
         rcmAddSuccess={rcmAddSuccess}
         userHierarchy={userHierarchy}
         userRole={userRole}
+        deleteRCMObjective={deleteRCMObjective}
       />
       {/* Second Colimn */}
 
@@ -47,6 +76,7 @@ const TableBody = ({
         rcmAddSuccess={rcmAddSuccess}
         userHierarchy={userHierarchy}
         userRole={userRole}
+        deleteRCMRisk={deleteRCMRisk}
       />
       {/* Third Column */}
 
@@ -59,6 +89,7 @@ const TableBody = ({
         rcmAddSuccess={rcmAddSuccess}
         userHierarchy={userHierarchy}
         userRole={userRole}
+        deleteRCMControl={deleteRCMControl}
       />
       {/* Last Column */}
 
@@ -71,6 +102,7 @@ const TableBody = ({
         rcmAddSuccess={rcmAddSuccess}
         userHierarchy={userHierarchy}
         userRole={userRole}
+        deleteRCMProgram={deleteRCMProgram}
       />
     </tr>
   );

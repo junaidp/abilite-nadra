@@ -17,6 +17,7 @@ import AddSettingsRiskRCMDialog from "../../../../modals/add-settings-rcm-risk-d
 import AddSettingsControlRCMDialog from "../../../../modals/add-settings-rcm-control-dialog";
 import AddSettingsProgramRCMDialog from "../../../../modals/add-settings-rcm-program-dialog";
 import AddButtons from "./components/AddButtons";
+import DeleteRCMDialog from "./components/DeleteRCMDialog";
 
 const RCMLibraray = ({ userHierarchy, userRole }) => {
   const dispatch = useDispatch();
@@ -31,6 +32,7 @@ const RCMLibraray = ({ userHierarchy, userRole }) => {
   const [processId, setProcessId] = React.useState("");
   const [subProcessId, setSubProcessId] = React.useState("");
   const [riskControlMatrix, setRiskControlMatrix] = React.useState([]);
+  const [showDeleteRCMDialog, setShowDeleteRCMDialog] = React.useState(false);
   const [showCreateRCMDialog, setShowCreateRCMDialog] = React.useState(false);
   const [showUpdateRCMDialog, setShowUpdateRCMDialog] = React.useState(false);
   const [showRCMObjectiveDialog, setShowRCMObjectiveDialog] =
@@ -222,6 +224,16 @@ const RCMLibraray = ({ userHierarchy, userRole }) => {
           </div>
         </div>
       )}
+      {showDeleteRCMDialog && (
+        <div className="modal-compliance-check-list">
+          <div className="model-wrap-compliance-check-list">
+            <DeleteRCMDialog
+              setShowDeleteRCMDialog={setShowDeleteRCMDialog}
+              updatedRCMId={updatedRCMId}
+            />
+          </div>
+        </div>
+      )}
       <div className="row">
         <div className="col-lg-12">
           <div className="sub-heading  fw-bold">RCM Library</div>
@@ -284,6 +296,7 @@ const RCMLibraray = ({ userHierarchy, userRole }) => {
                     rcmAddSuccess={rcmAddSuccess}
                     userHierarchy={userHierarchy}
                     userRole={userRole}
+                    setShowDeleteRCMDialog={setShowDeleteRCMDialog}
                   />
                 );
               })}

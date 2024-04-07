@@ -6,6 +6,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
+import DeleteUserDialog from "./DeleteDialog";
 
 const UserManagement = ({
   setUserManagementDialog,
@@ -18,6 +19,8 @@ const UserManagement = ({
   );
   const [nameVal, setNameVal] = React.useState("");
   const [page, setPage] = React.useState(1);
+  const [currentUserId, setCurrentUserId] = React.useState("");
+  const [userDeleteDialog, setUserDeleteDialog] = React.useState(false);
   const handleChange = (event, value) => {
     setPage(value);
   };
@@ -25,6 +28,7 @@ const UserManagement = ({
   React.useEffect(() => {
     if (addUserSuccess) {
       dispatch(resetAddUserSuccess());
+      setPage(1);
       dispatch(setupGetAllUsers({ shareWith: true }));
     }
   }, [addUserSuccess]);
@@ -36,6 +40,16 @@ const UserManagement = ({
       role="tabpanel"
       aria-labelledby="nav-user-tab"
     >
+      {userDeleteDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <DeleteUserDialog
+              setUserDeleteDialog={setUserDeleteDialog}
+              currentUserId={currentUserId}
+            />
+          </div>
+        </div>
+      )}
       <div className="row">
         <div className="col-lg-12">
           <div className="sub-heading  fw-bold">User Management</div>
@@ -120,7 +134,13 @@ const UserManagement = ({
                                 setUpdateUserDialog(true);
                               }}
                             ></i>
-                            <i className="fa fa-trash text-danger mx-2 f-18 cursor-pointer"></i>
+                            <i
+                              className="fa fa-trash text-danger mx-2 f-18 cursor-pointer"
+                              onClick={() => {
+                                setCurrentUserId(userItem?.id);
+                                setUserDeleteDialog(true);
+                              }}
+                            ></i>
                           </td>
                         </tr>
                       );

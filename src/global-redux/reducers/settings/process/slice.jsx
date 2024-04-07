@@ -7,6 +7,7 @@ import {
   editSubProcess,
   deleteProcess,
   deleteSubProcess,
+  editProcess,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -23,6 +24,12 @@ export const setupAddProcess = createAsyncThunk(
   "process/addProcess",
   async (data, thunkAPI) => {
     return addProcess(data, thunkAPI);
+  }
+);
+export const setupEditProcess = createAsyncThunk(
+  "process/editProcess",
+  async (data, thunkAPI) => {
+    return editProcess(data, thunkAPI);
   }
 );
 export const setupGetAllProcess = createAsyncThunk(
@@ -90,6 +97,24 @@ export const slice = createSlice({
         toast.success("Process Added Successfully");
       })
       .addCase(setupAddProcess.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Edit Process
+    builder
+      .addCase(setupEditProcess.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupEditProcess.fulfilled, (state) => {
+        state.loading = false;
+        state.processAddSuccess = true;
+        toast.success("Process Updated Successfully");
+      })
+      .addCase(setupEditProcess.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);

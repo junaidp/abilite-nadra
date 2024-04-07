@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { uploadFile, updateFile, getAllFiles } from "./thunk";
+import { uploadFile, updateFile, getAllFiles, deleteFile } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -26,6 +26,12 @@ export const setupGetAllFiles = createAsyncThunk(
   "docs/getAllFiles",
   async (data, thunkAPI) => {
     return getAllFiles(data, thunkAPI);
+  }
+);
+export const setupDeleteFile = createAsyncThunk(
+  "docs/deleteFile",
+  async (data, thunkAPI) => {
+    return deleteFile(data, thunkAPI);
   }
 );
 
@@ -84,6 +90,24 @@ export const slice = createSlice({
         state.allFiles = payload?.data || [{ error: "Not Found" }];
       })
       .addCase(setupGetAllFiles.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Delete File
+    builder
+      .addCase(setupDeleteFile.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupDeleteFile.fulfilled, (state) => {
+        state.loading = false;
+        state.fileAddSuccess = true;
+        toast.success("File Deleted Successfully");
+      })
+      .addCase(setupDeleteFile.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);

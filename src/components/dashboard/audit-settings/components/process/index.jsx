@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 import AccordionItem from "./AccordionItem";
 import EditSubProcessDialog from "./EditSubProcessDialog";
 import ProcessDeleteDialog from "./DeleteDialog";
+import EditProcessDialog from "./EditProcessDialog";
 
 const Process = ({ userHierarchy, userRole }) => {
   const dispatch = useDispatch();
@@ -31,6 +32,7 @@ const Process = ({ userHierarchy, userRole }) => {
   const [subProcessText, setSubProcessText] = React.useState("");
   const [subProcessId, setSubProcessId] = React.useState("");
   const [subProcessDialog, setShowSubProcessDialog] = React.useState(false);
+  const [editProcessDialog, setEditProcessDialog] = React.useState("");
   const [processDeleteDialog, setShowProcessDeleteDialog] =
     React.useState(false);
   const [processId, setProcessId] = React.useState("");
@@ -92,6 +94,7 @@ const Process = ({ userHierarchy, userRole }) => {
       setProcessText("");
       setSubProcessText("");
       setSubProcessId("");
+      setPage(1);
       dispatch(resetProcessAddSuccess());
     }
   }, [processAddSuccess]);
@@ -128,6 +131,16 @@ const Process = ({ userHierarchy, userRole }) => {
           <div className="model-wrap">
             <ProcessDeleteDialog
               setShowProcessDeleteDialog={setShowProcessDeleteDialog}
+              processId={processId}
+            />
+          </div>
+        </div>
+      )}
+      {editProcessDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <EditProcessDialog
+              setEditProcessDialog={setEditProcessDialog}
               processId={processId}
             />
           </div>
@@ -189,6 +202,7 @@ const Process = ({ userHierarchy, userRole }) => {
                   return (
                     <AccordionItem
                       item={item}
+                      setEditProcessDialog={setEditProcessDialog}
                       key={index}
                       index={index}
                       setSubProcessText={setSubProcessText}

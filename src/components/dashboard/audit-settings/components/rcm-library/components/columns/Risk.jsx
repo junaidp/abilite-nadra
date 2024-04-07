@@ -9,6 +9,7 @@ const Risk = ({
   rcmAddSuccess,
   userHierarchy,
   userRole,
+  deleteRCMRisk,
 }) => {
   const [currentButtonRiskId, setCurrentButtonRiskId] = React.useState("");
   React.useEffect(() => {
@@ -80,6 +81,15 @@ const Risk = ({
                   )}
                 </div>
               )}
+              {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+                <div className="float-end w-100 mb-2">
+                  <i
+                    className="fa fa-trash text-danger f-18  cursor-pointer"
+                    onClick={() => deleteRCMRisk(risk?.id)}
+                  ></i>
+                  <hr />
+                </div>
+              )}
               {/* Hidden  Only */}
               <div className="visibility-0">
                 {risk?.rcmLibraryControlRisk
@@ -111,14 +121,17 @@ const Risk = ({
                           rows="3"
                           readOnly
                         ></textarea>
-                        <div>
-                          {(userRole === "ADMIN" ||
-                            userHierarchy === "IAH") && (
-                            <div className="btn btn-labeled btn-primary  shadow mt-2 float-end  mt-2 mb-2">
-                              Save
-                            </div>
-                          )}
-                        </div>
+                        {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+                          <div className="btn btn-labeled btn-primary  shadow mt-2 float-end  mt-2 mb-2">
+                            Save
+                          </div>
+                        )}
+                        {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+                          <div className="float-end w-100 mb-2">
+                            <i className="fa fa-trash text-danger f-18  cursor-pointer"></i>
+                            <hr />
+                          </div>
+                        )}
                       </div>
                     );
                   })}

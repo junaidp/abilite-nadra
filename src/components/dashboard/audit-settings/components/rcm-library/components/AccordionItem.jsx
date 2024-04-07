@@ -18,6 +18,7 @@ const AccordionItem = ({
   rcmAddSuccess,
   userHierarchy,
   userRole,
+  setShowDeleteRCMDialog,
 }) => {
   const dispatch = useDispatch();
   function handleEditableObjective(objectiveId) {
@@ -354,15 +355,28 @@ const AccordionItem = ({
       >
         <div className="accordion-body">
           {(userRole === "ADMIN" || userHierarchy === "IAH") && (
-            <div
-              className="col-lg-12"
-              onClick={() => {
-                setShowUpdateRCMDialog(true);
-                setUpdatedRCMId(item?.id);
-              }}
-            >
-              <div className="btn btn-labeled btn-primary  shadow">
-                Update RCM
+            <div className="row mx-0">
+              <div
+                className="col-lg-2"
+                onClick={() => {
+                  setShowUpdateRCMDialog(true);
+                  setUpdatedRCMId(item?.id);
+                }}
+              >
+                <div className="btn btn-labeled btn-primary  shadow">
+                  Update RCM
+                </div>
+              </div>
+              <div className="col-lg-2">
+                <div
+                  className={`btn btn-labeled btn-danger  shadow`}
+                  onClick={() => {
+                    setShowDeleteRCMDialog(true);
+                    setUpdatedRCMId(item?.id);
+                  }}
+                >
+                  Delete RCM
+                </div>
               </div>
             </div>
           )}

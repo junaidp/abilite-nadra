@@ -18,6 +18,7 @@ const AccordionItem = ({
   setSubProcessId,
   setShowSubProcessDialog,
   setShowProcessDeleteDialog,
+  setEditProcessDialog,
 }) => {
   const dispatch = useDispatch();
   return (
@@ -52,9 +53,10 @@ const AccordionItem = ({
             userHierarchy === "IAH" ||
             userHierarchy === "Team_Lead") && (
             <div className="row">
-              <div className="float-end mb-2 col-lg-12">
+              <div className="float-end  col-lg-12">
                 <div
                   className={`btn btn-labeled btn-primary px-3 shadow  my-4 `}
+                  onClick={() => setEditProcessDialog(true)}
                 >
                   <span className="btn-label me-2">
                     <i className="fa fa-check-circle f-18"></i>
@@ -72,7 +74,7 @@ const AccordionItem = ({
                 </div>
               </div>
               <div className="col-lg-12">
-                <div className="row mt-3 mb-3">
+                <div className="row  mb-3">
                   <div className="col-lg-6">
                     <label className="w-100 ">Add SubProcess:</label>
                     <input
@@ -113,7 +115,6 @@ const AccordionItem = ({
                     <thead className="bg-secondary text-white">
                       <tr>
                         <th className="w-80">Sr No.</th>
-                        <th className="w-80">Id</th>
                         <th>Particulars</th>
                         {(userRole === "ADMIN" ||
                           userHierarchy === "IAH" ||
@@ -131,7 +132,6 @@ const AccordionItem = ({
                           return (
                             <tr key={ind}>
                               <td>{ind + 1}</td>
-                              <td>{subItem?.id}</td>
                               <td>{subItem?.description}</td>
                               {(userRole === "ADMIN" ||
                                 userHierarchy === "IAH" ||

@@ -15,6 +15,13 @@ const SupportingDocs = () => {
     setPage(value);
   };
 
+  const openLinkInNewTab = (id) => {
+    window.open(
+      `https://healthy-wolf-certainly.ngrok-free.app/abiliteconfig/supporting/doc/download?id=${id}`,
+      "_blank"
+    );
+  };
+
   React.useEffect(() => {
     if (user[0]?.token) {
       const companyId = user[0]?.company?.find(
@@ -51,9 +58,8 @@ const SupportingDocs = () => {
               <thead className="bg-secondary text-white">
                 <tr>
                   <th className="w-80">Sr No.</th>
-                  <th className="w-80">Id</th>
                   <th>File Name</th>
-                  <th>File Location</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -80,9 +86,13 @@ const SupportingDocs = () => {
                       return (
                         <tr key={index}>
                           <td>{index + 1}</td>
-                          <td>{file?.id}</td>
                           <td>{file?.fileName}</td>
-                          <td>{file?.location}</td>
+                          <td>
+                            <i
+                              className="fa fa-download f-18 mx-2 cursor-pointer"
+                              onClick={() => openLinkInNewTab(file?.id)}
+                            ></i>
+                          </td>
                         </tr>
                       );
                     })
