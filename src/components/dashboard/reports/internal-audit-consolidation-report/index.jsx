@@ -11,6 +11,8 @@ import { CircularProgress } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import moment from "moment";
 import DeleteInternalAuditConsolidationReportDialog from "../../../modals/delete-internal-audit-consolidation-report-dialog";
+import MyDocument from "./view-internal-audit-report/components/PDFGenerator";
+import { PDFDownloadLink } from "@react-pdf/renderer";
 
 const InternalAuditReport = () => {
   const navigate = useNavigate();
@@ -26,6 +28,7 @@ const InternalAuditReport = () => {
   ] = React.useState(false);
   const [deleteInternalAuditReportId, setDeleteInternalAuditReportId] =
     React.useState("");
+  console.log(allInternalAuditReports);
 
   const handleChange = (_, value) => {
     setPage(value);
@@ -215,6 +218,16 @@ const InternalAuditReport = () => {
                                   Approve
                                 </div>
                               )}
+                            {item?.approved === true && (
+                              <PDFDownloadLink
+                                document={<MyDocument reportObject={item} />}
+                                fileName="consolidation.pdf"
+                              >
+                                {({ blob, url, loading, error }) =>
+                                  "Download pdf!"
+                                }
+                              </PDFDownloadLink>
+                            )}
                           </td>
                         </tr>
                       );

@@ -118,7 +118,10 @@ const ReportingParticulars = () => {
   }
 
   React.useEffect(() => {
-    if (reportingAddSuccess) {
+    if (
+      reportingAddSuccess &&
+      user[0]?.userId?.employeeid?.userHierarchy !== "Management_Auditee"
+    ) {
       const companyId = user[0]?.company?.find(
         (item) => item?.companyName === company
       )?.id;
@@ -128,6 +131,13 @@ const ReportingParticulars = () => {
         );
       }
       dispatch(resetReportingAddSuccess());
+    }
+    if (
+      reportingAddSuccess &&
+      user[0]?.userId?.employeeid?.userHierarchy === "Management_Auditee"
+    ) {
+      dispatch(resetReportingAddSuccess());
+      navigate("/audit/dashboard");
     }
   }, [reportingAddSuccess]);
 
