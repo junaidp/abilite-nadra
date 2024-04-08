@@ -28,7 +28,6 @@ const InternalAuditReport = () => {
   ] = React.useState(false);
   const [deleteInternalAuditReportId, setDeleteInternalAuditReportId] =
     React.useState("");
-  console.log(allInternalAuditReports);
 
   const handleChange = (_, value) => {
     setPage(value);

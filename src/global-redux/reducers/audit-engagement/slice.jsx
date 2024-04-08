@@ -18,6 +18,13 @@ import {
   updateRiskControlMatrixApproval,
   updateAuditProgramApproval,
   updateAuditStepApproval,
+  uploadAuditStepFile,
+  auditStepProcedureFileUpload,
+  auditStepProcedureFileDelete,
+  auditStepProcedureFileUpdate,
+  auditStepSamplingFileUpload,
+  auditStepSamplingFileDelete,
+  auditStepSamplingFileUpdate,
 } from "./thunk";
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
@@ -159,6 +166,51 @@ export const setupUpdateAuditStepApproval = createAsyncThunk(
   "auditEngagement/updateAuditStepApproval",
   async (data, thunkAPI) => {
     return updateAuditStepApproval(data, thunkAPI);
+  }
+);
+export const setupUploadAuditStepFile = createAsyncThunk(
+  "auditEngagement/uploadAuditStepFile",
+  async (data, thunkAPI) => {
+    return uploadAuditStepFile(data, thunkAPI);
+  }
+);
+export const setupAuditStepProcedureFileUpload = createAsyncThunk(
+  "auditEngagement/auditStepProcedureFileUpload",
+  async (data, thunkAPI) => {
+    return auditStepProcedureFileUpload(data, thunkAPI);
+  }
+);
+export const setupAuditStepProcedureFileDelete = createAsyncThunk(
+  "auditEngagement/auditStepProcedureFileDelete",
+  async (data, thunkAPI) => {
+    return auditStepProcedureFileDelete(data, thunkAPI);
+  }
+);
+
+export const setupAuditStepProcedureFileUpdate = createAsyncThunk(
+  "auditEngagement/auditStepProcedureFileUpdate",
+  async (data, thunkAPI) => {
+    return auditStepProcedureFileUpdate(data, thunkAPI);
+  }
+);
+
+//
+export const setupAuditStepSamplingFileUpload = createAsyncThunk(
+  "auditEngagement/auditStepSamplingFileUpload",
+  async (data, thunkAPI) => {
+    return auditStepSamplingFileUpload(data, thunkAPI);
+  }
+);
+export const setupAuditStepSamplingFileDelete = createAsyncThunk(
+  "auditEngagement/auditStepSamplingFileDelete",
+  async (data, thunkAPI) => {
+    return auditStepSamplingFileDelete(data, thunkAPI);
+  }
+);
+export const setupAuditStepSamplingFileUpdate = createAsyncThunk(
+  "auditEngagement/auditStepSamplingFileUpdate",
+  async (data, thunkAPI) => {
+    return auditStepSamplingFileUpdate(data, thunkAPI);
   }
 );
 
@@ -542,6 +594,132 @@ export const slice = createSlice({
         toast.success("Audit Step Updated Successfully");
       })
       .addCase(setupUpdateAuditStepApproval.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Audit Step Upload File
+    builder
+      .addCase(setupUploadAuditStepFile.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupUploadAuditStepFile.fulfilled, (state) => {
+        state.loading = false;
+        state.auditEngagementObservationAddSuccess = true;
+        toast.success("Audit Step File Uploaded Successfully");
+      })
+      .addCase(setupUploadAuditStepFile.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Audit Step Procedure Upload File
+    builder
+      .addCase(setupAuditStepProcedureFileUpload.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupAuditStepProcedureFileUpload.fulfilled, (state) => {
+        state.loading = false;
+        state.auditEngagementObservationAddSuccess = true;
+        toast.success("Audit Step Procedure File Uploaded Successfully");
+      })
+      .addCase(setupAuditStepProcedureFileUpload.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Audit Step Procedure  File Delete
+    builder
+      .addCase(setupAuditStepProcedureFileDelete.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupAuditStepProcedureFileDelete.fulfilled, (state) => {
+        state.loading = false;
+        state.auditEngagementObservationAddSuccess = true;
+        toast.success("Audit Step Procedure File Deleted Successfully");
+      })
+      .addCase(setupAuditStepProcedureFileDelete.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Audit Step Procedure  File Update
+    builder
+      .addCase(setupAuditStepProcedureFileUpdate.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupAuditStepProcedureFileUpdate.fulfilled, (state) => {
+        state.loading = false;
+        state.auditEngagementObservationAddSuccess = true;
+        toast.success("Audit Step Procedure File Updated Successfully");
+      })
+      .addCase(setupAuditStepProcedureFileUpdate.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Audit Step Sampling File Upload
+    builder
+      .addCase(setupAuditStepSamplingFileUpload.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupAuditStepSamplingFileUpload.fulfilled, (state) => {
+        state.loading = false;
+        state.auditEngagementObservationAddSuccess = true;
+        toast.success("Audit Step Sampling File Uploaded Successfully");
+      })
+      .addCase(setupAuditStepSamplingFileUpload.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Audit Step Sampling File Delete
+    builder
+      .addCase(setupAuditStepSamplingFileDelete.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupAuditStepSamplingFileDelete.fulfilled, (state) => {
+        state.loading = false;
+        state.auditEngagementObservationAddSuccess = true;
+        toast.success("Audit Step Sampling File Deleted Successfully");
+      })
+      .addCase(setupAuditStepSamplingFileDelete.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Audit Step Sampling File Update
+    builder
+      .addCase(setupAuditStepSamplingFileUpdate.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupAuditStepSamplingFileUpdate.fulfilled, (state) => {
+        state.loading = false;
+        state.auditEngagementObservationAddSuccess = true;
+        toast.success("Audit Step Sampling File Updated Successfully");
+      })
+      .addCase(setupAuditStepSamplingFileUpdate.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);

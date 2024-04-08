@@ -6,6 +6,8 @@ import {
   setupUpdateAuditStepObservation,
 } from "../../../global-redux/reducers/audit-engagement/slice";
 import { toast } from "react-toastify";
+import FirstLayout from "./components/FirstLayout";
+import ObservationFileUpload from "./components/ObservationFileUpload";
 const AuditStepsDialog = ({
   setShowAuditStepsDialog,
   auditStepId,
@@ -25,7 +27,7 @@ const AuditStepsDialog = ({
     setCurrentAuditStep((pre) => {
       return {
         ...pre,
-        [event?.target?.name]: Number(event?.target?.value),
+        [event?.target?.name]: event?.target?.value,
       };
     });
   }
@@ -104,195 +106,10 @@ const AuditStepsDialog = ({
   }, [auditEngagementObservationAddSuccess]);
   return (
     <div className="mx-5">
-      <header className="section-header mt-3  text-start d-flex align-items-center justify-content-between">
-        <div className="mb-0 heading d-flex align-items-center">
-          <h2 className=" heading">AUDIT STEP</h2>
-        </div>
-      </header>
-
-      <div className="row mb-3">
-        <div className="col-lg-12">
-          <div className="sub-heading">
-            {currentAuditStep?.program?.description}
-          </div>
-        </div>
-      </div>
-
-      <div className="row mb-3">
-        <div className="col-lg-6">
-          <div>
-            <label className="me-3">Perform Sampling</label>
-            <select
-              className="form-select"
-              aria-label="Default select example"
-              value={currentAuditStep?.sampling}
-              name="sampling"
-              onChange={(event) => handleChange(event)}
-            >
-              <option value="">Select One</option>
-              <option value={1}>Yes</option>
-              <option value={2}>No</option>
-            </select>
-          </div>
-        </div>
-        <div className="col-lg-6">
-          <div>
-            <label className="me-3">Sampling Method</label>
-            <select
-              className="form-select"
-              onChange={(event) => handleChange(event)}
-              aria-label="Default select example"
-              value={currentAuditStep?.samplingMethod}
-              name="samplingMethod"
-            >
-              <option value="">Select One</option>
-              <option value={1}>Simple Random Sampling</option>
-              <option value={2}>Systematic Sampling</option>
-              <option value={3}>Cluster Samling</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <div className="row mb-3">
-        <div className="col-lg-6">
-          <div>
-            <label className="me-3">Control Risk</label>
-            <select
-              className="form-select"
-              aria-label="Default select example"
-              value={currentAuditStep?.controlRisk}
-              onChange={(event) => handleChange(event)}
-              name="controlRisk"
-            >
-              <option value="">Select One</option>
-              <option value={1}>High</option>
-              <option value={2}>Medium</option>
-              <option value={3}>Low</option>
-            </select>
-          </div>
-        </div>
-        <div className="col-lg-6">
-          <div>
-            <label className="me-3">Frequency</label>
-            <select
-              className="form-select"
-              aria-label="Default select example"
-              value={currentAuditStep?.frequency}
-              onChange={(event) => handleChange(event)}
-              name="frequency"
-            >
-              <option value="">Select One</option>
-              <option value={1}>Annually</option>
-              <option value={2}>Bi-annyally</option>
-              <option value={3}>Quarterly</option>
-              <option value={4}>Monthly</option>
-              <option value={5}>Weekly</option>
-              <option value={6}>Daily</option>
-              <option value={7}>Recurring</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <div className="row mb-3">
-        <div className="col-lg-12">
-          <div>
-            <label className="me-3 fw-normal  ">Population size:</label>
-            <label className="fw-bolder">50</label>
-          </div>
-        </div>
-        <div className="col-lg-12">
-          <div>
-            <label className="me-3 fw-normal  ">Sample Size</label>
-            <label className="fw-bolder">50</label>
-          </div>
-        </div>
-      </div>
-      <div className="row mb-3">
-        <div className="col-lg-12">
-          <div>
-            <label className="form-label me-3 mb-3">Attach files</label>
-
-            <input type="file" id="fileInput" className="f-10 w-180" />
-            <a className="form-label label-text underline">View Sample</a>
-          </div>
-
-          <div className="table-responsive">
-            <table className="table table-bordered  table-hover rounded">
-              <thead className="bg-secondary text-white">
-                <tr>
-                  <th>Uploaded File </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <a href="#">Loram File will be displayed here</a>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <div className="row mb-3">
-        <div className="col-lg-12">
-          <label className="me-3   ">Audit Procedure Performed</label>
-          <textarea
-            className="form-control"
-            placeholder="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-            id="exampleFormControlT"
-            rows="3"
-          ></textarea>
-          <p className="word-limit-info mb-0">Maximum 1500 words</p>
-        </div>
-      </div>
-
-      <div className="row mb-3">
-        <div className="col-lg-12">
-          <label className="form-label me-3 mb-3">Attach files</label>
-
-          <input className="f-10" type="file" id="fileInpu" />
-
-          <div className="table-responsive">
-            <table className="table table-bordered  table-hover rounded">
-              <thead className="bg-secondary text-white">
-                <tr>
-                  <th className="sr-col">Sr No.</th>
-                  <th>Attach Files </th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>
-                    <a href="#">Loram File will be displayed here</a>
-                  </td>
-                  <td className="w-130">
-                    <i className="fa fa-eye text-primary f-18"></i>
-                    <i className="fa fa-edit mx-3 text-secondary f-18"></i>
-                    <i className="fa fa-trash text-danger f-18"></i>
-                  </td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>
-                    <a href="#">Loram File will be displayed here</a>
-                  </td>
-                  <td className="w-130">
-                    <i className="fa fa-eye text-primary f-18"></i>
-                    <i className="fa fa-edit mx-3 text-secondary f-18"></i>
-                    <i className="fa fa-trash text-danger f-18"></i>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+      <FirstLayout
+        currentAuditStep={currentAuditStep}
+        handleChange={handleChange}
+      />
 
       <div className="row mb-3">
         <div className="col-lg-2">
@@ -324,14 +141,14 @@ const AuditStepsDialog = ({
         </div>
       </div>
 
-      <h3>Audit Step Observation List</h3>
+      <h3 className="heading">Audit Step Observation List</h3>
       {currentAuditStep?.auditStepObservationsList?.length === 0 ? (
         <p>No observation to show</p>
       ) : (
         currentAuditStep?.auditStepObservationsList?.map((item, i) => {
           return (
             <div key={i}>
-              {`${i+1})`}
+              {`${i + 1})`}
               <div className="row mb-3">
                 <div className="col-lg-11">
                   <textarea
@@ -359,37 +176,7 @@ const AuditStepsDialog = ({
                   </button>
                 </div>
               </div>
-
-              <div className="row mb-3">
-                <div className="col-lg-12">
-                  <label className="form-label me-3 mb-3">Attach files</label>
-
-                  <input type="file" id="fileInpu" className="f-10" />
-
-                  <div className="table-responsive">
-                    <table className="table table-bordered  table-hover rounded">
-                      <thead className="bg-secondary text-white">
-                        <tr>
-                          <th>Attach Files </th>
-                          <th>Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>
-                            <a href="#">Loram File will be displayed here</a>
-                          </td>
-                          <td className="w-130">
-                            <i className="fa fa-eye text-primary f-18"></i>
-                            <i className="fa fa-edit mx-3 text-secondary f-18"></i>
-                            <i className="fa fa-trash text-danger f-18"></i>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
+              <ObservationFileUpload item={item} />
               {i !==
                 currentAuditStep?.auditStepObservationsList?.length - 1 && (
                 <hr />
