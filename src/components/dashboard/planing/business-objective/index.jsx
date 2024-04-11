@@ -4,14 +4,18 @@ import { useSelector, useDispatch } from "react-redux";
 import BusinessObjectiveModal from "../../../modals/add-engagement-audit-dialog/index";
 import { useNavigate } from "react-router-dom";
 import Pagination from "@mui/material/Pagination";
-import { setupGetAllEngagements } from "../../../../global-redux/reducers/planing/engagement/slice";
+import {
+  setupGetAllEngagements,
+  resetAddEngagementSuccess,
+} from "../../../../global-redux/reducers/planing/engagement/slice";
 import { CircularProgress } from "@mui/material";
 import TableRow from "./components/table-row";
+import DeleteEngagementDialog from "./components/DeleteDialog";
 
 const BusinessObjective = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { allEngagements, loading } = useSelector(
+  const { allEngagements, loading, engagementAddSuccess } = useSelector(
     (state) => state.planingEngagements
   );
   const { company } = useSelector((state) => state?.common);
@@ -19,7 +23,9 @@ const BusinessObjective = () => {
   const [page, setPage] = React.useState(1);
   const [businessObjectiveDialog, setBusinessObjectiveDialog] =
     React.useState(false);
-
+  const [deleteEngagementDialog, setShowDeleteEngagementDialog] =
+    React.useState(false);
+  const [currentEngagementId, setCurrentEngagementId] = React.useState("");
   const handleChange = (event, value) => {
     setPage(value);
   };
@@ -44,6 +50,18 @@ const BusinessObjective = () => {
     }
   }, [user, company]);
 
+  React.useEffect(() => {
+    if (engagementAddSuccess) {
+      const companyId = user[0]?.company?.find(
+        (item) => item?.companyName === company
+      )?.id;
+      if (companyId) {
+        dispatch(setupGetAllEngagements(companyId));
+        dispatch(resetAddEngagementSuccess());
+      }
+    }
+  }, [engagementAddSuccess]);
+
   return (
     <div>
       {businessObjectiveDialog && (
@@ -51,6 +69,16 @@ const BusinessObjective = () => {
           <div className="model-wrap">
             <BusinessObjectiveModal
               setBusinessObjectiveDialog={setBusinessObjectiveDialog}
+            />
+          </div>
+        </div>
+      )}
+      {deleteEngagementDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <DeleteEngagementDialog
+              setShowDeleteEngagementDialog={setShowDeleteEngagementDialog}
+              currentEngagementId={currentEngagementId}
             />
           </div>
         </div>
@@ -91,6 +119,7 @@ const BusinessObjective = () => {
                         <th>Engagement Name</th>
                         <th>Nature Through</th>
                         <th>Initiated By</th>
+                        <th>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -113,6 +142,10 @@ const BusinessObjective = () => {
                                 key={index}
                                 item={item}
                                 handleClickEngagement={handleClickEngagement}
+                                setShowDeleteEngagementDialog={
+                                  setShowDeleteEngagementDialog
+                                }
+                                setCurrentEngagementId={setCurrentEngagementId}
                               />
                             );
                           })

@@ -25,6 +25,12 @@ import {
   auditStepSamplingFileUpload,
   auditStepSamplingFileDelete,
   auditStepSamplingFileUpdate,
+  auditStepObservationDelete,
+  deleteAuditStepFile,
+  updateAuditStepFile,
+  uploadAuditStepCheckListFile,
+  deleteAuditStepCheckListFile,
+  updateAuditStepCheckListFile,
 } from "./thunk";
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
@@ -211,6 +217,42 @@ export const setupAuditStepSamplingFileUpdate = createAsyncThunk(
   "auditEngagement/auditStepSamplingFileUpdate",
   async (data, thunkAPI) => {
     return auditStepSamplingFileUpdate(data, thunkAPI);
+  }
+);
+export const setupAuditStepObservationDelete = createAsyncThunk(
+  "auditEngagement/auditStepObservationDelete",
+  async (data, thunkAPI) => {
+    return auditStepObservationDelete(data, thunkAPI);
+  }
+);
+export const setupDeleteAuditStepFile = createAsyncThunk(
+  "auditEngagement/deleteAuditStepFile",
+  async (data, thunkAPI) => {
+    return deleteAuditStepFile(data, thunkAPI);
+  }
+);
+export const setupUpdateAuditStepFile = createAsyncThunk(
+  "auditEngagement/updateAuditStepFile",
+  async (data, thunkAPI) => {
+    return updateAuditStepFile(data, thunkAPI);
+  }
+);
+export const setupUploadAuditStepCheckListFile = createAsyncThunk(
+  "auditEngagement/uploadAuditStepCheckListFile",
+  async (data, thunkAPI) => {
+    return uploadAuditStepCheckListFile(data, thunkAPI);
+  }
+);
+export const setupDeleteAuditStepCheckListFile = createAsyncThunk(
+  "auditEngagement/deleteAuditStepCheckListFile",
+  async (data, thunkAPI) => {
+    return deleteAuditStepCheckListFile(data, thunkAPI);
+  }
+);
+export const setupUpdateAuditStepCheckListFile = createAsyncThunk(
+  "auditEngagement/updateAuditStepCheckListFile",
+  async (data, thunkAPI) => {
+    return updateAuditStepCheckListFile(data, thunkAPI);
   }
 );
 
@@ -720,6 +762,114 @@ export const slice = createSlice({
         toast.success("Audit Step Sampling File Updated Successfully");
       })
       .addCase(setupAuditStepSamplingFileUpdate.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Audit Step Observation Delete
+    builder
+      .addCase(setupAuditStepObservationDelete.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupAuditStepObservationDelete.fulfilled, (state) => {
+        state.loading = false;
+        state.auditEngagementObservationAddSuccess = true;
+        toast.success("Audit Step Observation Deleted Successfully");
+      })
+      .addCase(setupAuditStepObservationDelete.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Audit Step Observation File Delete
+    builder
+      .addCase(setupDeleteAuditStepFile.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupDeleteAuditStepFile.fulfilled, (state) => {
+        state.loading = false;
+        state.auditEngagementObservationAddSuccess = true;
+        toast.success("Audit Step Observation File Deleted Successfully");
+      })
+      .addCase(setupDeleteAuditStepFile.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Audit Step Observation File Update
+    builder
+      .addCase(setupUpdateAuditStepFile.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupUpdateAuditStepFile.fulfilled, (state) => {
+        state.loading = false;
+        state.auditEngagementObservationAddSuccess = true;
+        toast.success("Audit Step Observation File Updated Successfully");
+      })
+      .addCase(setupUpdateAuditStepFile.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Audit Step Observation Checklist File Upload
+    builder
+      .addCase(setupUploadAuditStepCheckListFile.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupUploadAuditStepCheckListFile.fulfilled, (state) => {
+        state.loading = false;
+        state.auditEngagementObservationAddSuccess = true;
+        toast.success("Audit Step CheckList File Uploaded Successfully");
+      })
+      .addCase(setupUploadAuditStepCheckListFile.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Audit Step Observation Checklist File Delete
+    builder
+      .addCase(setupDeleteAuditStepCheckListFile.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupDeleteAuditStepCheckListFile.fulfilled, (state) => {
+        state.loading = false;
+        state.auditEngagementObservationAddSuccess = true;
+        toast.success("Audit Step CheckList File Deleted Successfully");
+      })
+      .addCase(setupDeleteAuditStepCheckListFile.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Audit Step Observation Checklist File Updated
+    builder
+      .addCase(setupUpdateAuditStepCheckListFile.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupUpdateAuditStepCheckListFile.fulfilled, (state) => {
+        state.loading = false;
+        state.auditEngagementObservationAddSuccess = true;
+        toast.success("Audit Step CheckList File Updated Successfully");
+      })
+      .addCase(setupUpdateAuditStepCheckListFile.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);

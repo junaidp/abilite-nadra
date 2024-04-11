@@ -31,8 +31,6 @@ const ComplianceCheckList = ({
   const fileInputRef = React.useRef(null);
   const { loading } = useSelector((state) => state?.auditEngagement);
   const [currentButtonId, setCurrentButtonId] = React.useState("");
-  const [downloadLoading, setDownloadLoading] = React.useState(false);
-  const [downloadFileId, setDownloadFileId] = React.useState(false);
   const [selectedFile, setSelectedFile] = React.useState(null);
   const [showUpdateButton, setShowUpdateButton] = React.useState(true);
 
@@ -65,34 +63,10 @@ const ComplianceCheckList = ({
     }
   }
   const handleDownload = async (checkListId) => {
-    setDownloadFileId(checkListId);
-    setDownloadLoading(true);
-    try {
-      const response = await axios.get(
-        `${baseUrl}/auditEngagement/auditStepChecklist/downloadOfflineChecklist?auditStepChecklistId=${checkListId}`,
-        { responseType: "blob" }
-      );
-      const url = response.request.responseURL;
-      const fileNameFromUrl = url.substring(url.lastIndexOf("/") + 1);
-      const blob = new Blob([response.data], { type: "text/csv" });
-      const downloadLink = document.createElement("a");
-      downloadLink.href = URL.createObjectURL(blob);
-      downloadLink.download = fileNameFromUrl || "yourFileName.csv";
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-      document.body.removeChild(downloadLink);
-      toast.success("File downloaded successfully");
-      setDownloadLoading(false);
-      setDownloadFileId("");
-    } catch (error) {
-      if (error?.message) {
-        toast.error(error.message);
-      } else {
-        toast.error("An Error has occurred");
-      }
-      setDownloadFileId("");
-      setDownloadLoading(false);
-    }
+    window.open(
+      `${baseUrl}/auditEngagement/auditStepChecklist/downloadOfflineChecklist?auditStepChecklistId=${checkListId}`,
+      "_blank"
+    );
   };
 
   const handleFileChange = (event) => {
@@ -216,7 +190,6 @@ const ComplianceCheckList = ({
                     <thead className="bg-secondary text-white">
                       <tr>
                         <th className="f-80">Sr No.</th>
-                        {/* <th>Location Name</th> */}
                         <th>Sub Location Name</th>
                         <th>Status</th>
                         <th>Change Request</th>
@@ -245,8 +218,6 @@ const ComplianceCheckList = ({
                                 }
                                 checkStaus={checkStaus}
                                 setCurrentButtonId={setCurrentButtonId}
-                                downloadLoading={downloadLoading}
-                                downloadFileId={downloadFileId}
                                 user={user}
                                 loading={loading}
                                 currentButtonId={currentButtonId}

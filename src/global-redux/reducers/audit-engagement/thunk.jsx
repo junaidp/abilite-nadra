@@ -356,6 +356,24 @@ export const updateAuditStepApproval = async (data, thunkAPI) => {
   }
 };
 
+export const auditStepObservationDelete = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.delete(
+      `${baseUrl}/auditEngagement/auditStep/auditStepObservations/delete?auditStepObservationId=${data}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
 // Audit Step---->Audit Observations Files
 
 export const uploadAuditStepFile = async (data, thunkAPI) => {
@@ -363,6 +381,96 @@ export const uploadAuditStepFile = async (data, thunkAPI) => {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
       `${baseUrl}/auditEngagement/auditStep/auditStepObservations/ObservationAttachments/upload?auditStepObservationId=${data?.id}`,
+      data?.formData,
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+export const deleteAuditStepFile = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.delete(
+      `${baseUrl}/auditEngagement/auditStep/auditStepObservations/ObservationAttachments/delete?fileId=${data?.fileId}&auditStepObservationId=${data?.auditStepObservationId}`,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+export const updateAuditStepFile = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.post(
+      `${baseUrl}/auditEngagement/auditStep/auditStepObservations/ObservationAttachments/update?fileId=${data?.id}`,
+      data?.formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+// Audit Step---->Audit Checklist Files
+
+export const uploadAuditStepCheckListFile = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.post(
+      `${baseUrl}/auditEngagement/auditStep/auditStepChecklist/ObservationDataAttachments/upload?ChecklistObservationsId=${data?.id}`,
+      data?.formData,
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+export const deleteAuditStepCheckListFile = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.delete(
+      `${baseUrl}/auditEngagement/auditStep/auditStepChecklist/ObservationDataAttachments/delete?fileId=${data?.fileId}&ChecklistObservationsId=${data?.ChecklistObservationsId}`,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+export const updateAuditStepCheckListFile = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.post(
+      `${baseUrl}/auditEngagement/auditStep/auditStepChecklist/ObservationDataAttachments/update?fileId=${data?.id}`,
       data?.formData,
       {
         headers: {

@@ -2,6 +2,7 @@ import React from "react";
 import { setupUpdateComplianceCheckList } from "../../../global-redux/reducers/audit-engagement/slice";
 import { useDispatch, useSelector } from "react-redux";
 import RichTextEditor from "./components/TextEditor";
+import ObservationFileUpload from "./components/ObservationFileUpload";
 
 const ComplianceCheckListDialog = ({
   setShowComplianceCheckListDialog,
@@ -96,6 +97,7 @@ const ComplianceCheckListDialog = ({
                                 <td>{singleItem?.area}</td>
                                 <td>{singleItem?.subject || "null"}</td>
                                 <td>{singleItem?.particulars}</td>
+                                <ObservationFileUpload item={singleItem} />
                                 <td>
                                   <select
                                     className="form-select mb-2"
@@ -121,22 +123,6 @@ const ComplianceCheckListDialog = ({
                                     onContentChange={onContentChange}
                                     singleItem={singleItem}
                                   />
-                                </td>
-                                <td>
-                                  <div className="d-flex">
-                                    <div className="w-75 d-grid">
-                                      <a href="#" className="text-primary">
-                                        Attached file Name 1
-                                      </a>
-                                      <a href="#" className="text-primary">
-                                        Attached file Name 2
-                                      </a>
-                                    </div>
-                                    <div className="w-25">
-                                      <i className="fa fa-paperclip me-3 text-secondary"></i>
-                                      <i className="fa fa-eye text-primary"></i>
-                                    </div>
-                                  </div>
                                 </td>
                               </tr>
                             );

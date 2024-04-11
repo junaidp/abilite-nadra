@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import Table from "./component/Table";
+import DeletePlanSummaryDialog from "./component/DeleteDialog";
 
 const AuditPlanSummary = () => {
   const {
@@ -22,6 +23,9 @@ const AuditPlanSummary = () => {
   const { user } = useSelector((state) => state?.auth);
   const [currentId, setCurrentId] = React.useState("");
   const { company, year } = useSelector((state) => state?.common);
+  const [deletePlanSummaryDialog, setDeletePlanSummaryDialog] =
+    React.useState(false);
+  const [currentPlanSummaryId, setCurrentPlanSummaryId] = React.useState("");
   const [page, setPage] = React.useState(1);
   const [data, setData] = React.useState([]);
   const [totals, setTotals] = React.useState({
@@ -177,7 +181,17 @@ const AuditPlanSummary = () => {
           <CircularProgress />
         </div>
       ) : (
-        <>
+        <div>
+          {deletePlanSummaryDialog && (
+            <div className="modal-objective">
+              <div className="model-wrap">
+                <DeletePlanSummaryDialog
+                  setDeletePlanSummaryDialog={setDeletePlanSummaryDialog}
+                  currentPlanSummaryId={currentPlanSummaryId}
+                />
+              </div>
+            </div>
+          )}
           <header className="section-header my-3  text-start d-flex align-items-center justify-content-between">
             <div className="mb-0 heading">Audit Plan Summary</div>
           </header>
@@ -204,7 +218,7 @@ const AuditPlanSummary = () => {
                           Proposed schedule current year
                         </th>
                         <th>Total Annual Effort</th>
-                        <th>Edit</th>
+                        <th>Actions</th>
                       </tr>
                     </thead>
 
@@ -245,6 +259,10 @@ const AuditPlanSummary = () => {
                             user={user}
                             currentId={currentId}
                             loading={loading}
+                            setDeletePlanSummaryDialog={
+                              setDeletePlanSummaryDialog
+                            }
+                            setCurrentPlanSummaryId={setCurrentPlanSummaryId}
                           />
                         );
                       })}
@@ -275,7 +293,7 @@ const AuditPlanSummary = () => {
               </div>
             </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

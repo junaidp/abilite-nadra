@@ -1,0 +1,8 @@
+.fileObservationCol {
+  width: 40vw !important;
+  overflow-x: scroll;
+}
+
+.fileSubObservationColItem {
+  width: 40vw !important;
+}

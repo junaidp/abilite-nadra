@@ -34,12 +34,16 @@ const InternalAuditReport = () => {
   };
   function handleSubmitReport(item) {
     if (!loading) {
-      dispatch(setupSaveInternalAuditReport({ ...item, submitted: true }));
+      let obj = { ...item };
+      delete obj.reportingAndFollowUp;
+      dispatch(setupSaveInternalAuditReport({ ...obj, submitted: true }));
     }
   }
   function handleApproveReport(item) {
     if (!loading) {
-      dispatch(setupSaveInternalAuditReport({ ...item, approved: true }));
+      let obj = { ...item };
+      delete obj.reportingAndFollowUp;
+      dispatch(setupSaveInternalAuditReport({ ...obj, approved: true }));
     }
   }
 

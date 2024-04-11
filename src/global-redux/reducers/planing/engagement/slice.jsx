@@ -13,6 +13,7 @@ import {
   updateSpecialProjectAudit,
   updateBusinessObjectiveAndMapProcessSpecialProjectOrAudit,
   getCheckListItems,
+  deleteEngagement,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
@@ -73,8 +74,6 @@ export const setupSaveMapProcessBusinessObjective = createAsyncThunk(
   }
 );
 
-
-
 export const setupGetInitialSingleCheckListObjective = createAsyncThunk(
   "engagement/getInitialSingleCheckListObjective",
   async (data, thunkAPI) => {
@@ -125,6 +124,12 @@ export const setupGetCheckListItems = createAsyncThunk(
   "engagement/getCheckListItems",
   async (data, thunkAPI) => {
     return getCheckListItems(data, thunkAPI);
+  }
+);
+export const setupDeleteEngagement = createAsyncThunk(
+  "engagement/deleteEngagement",
+  async (data, thunkAPI) => {
+    return deleteEngagement(data, thunkAPI);
   }
 );
 
@@ -299,7 +304,6 @@ export const slice = createSlice({
         }
       );
 
-  
     // Get Initial Single CheckList Objective
     builder
       .addCase(setupGetInitialSingleCheckListObjective.pending, (state) => {
@@ -474,6 +478,24 @@ export const slice = createSlice({
         state.selectedCheckListItems = payload?.data;
       })
       .addCase(setupGetCheckListItems.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Delete Engagement
+    builder
+      .addCase(setupDeleteEngagement.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupDeleteEngagement.fulfilled, (state) => {
+        state.loading = false;
+        toast.success("Enagement Deleted Successfully");
+        state.engagementAddSuccess = true;
+      })
+      .addCase(setupDeleteEngagement.rejected, (state, { payload }) => {
         state.loading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);

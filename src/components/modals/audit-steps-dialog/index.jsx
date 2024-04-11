@@ -4,6 +4,7 @@ import {
   setupUpdateAuditSteps,
   setupAddAuditStepObservation,
   setupUpdateAuditStepObservation,
+  setupAuditStepObservationDelete,
 } from "../../../global-redux/reducers/audit-engagement/slice";
 import { toast } from "react-toastify";
 import FirstLayout from "./components/FirstLayout";
@@ -76,13 +77,15 @@ const AuditStepsDialog = ({
   }
 
   function handleUpdateObservation(item) {
-    dispatch(
-      setupUpdateAuditStepObservation({
-        id: item?.id,
-        description: item?.description,
-        observationAttachmentsList: null,
-      })
-    );
+    if (!loading) {
+      dispatch(
+        setupUpdateAuditStepObservation({
+          id: item?.id,
+          description: item?.description,
+          observationAttachmentsList: null,
+        })
+      );
+    }
   }
 
   React.useEffect(() => {
@@ -150,7 +153,7 @@ const AuditStepsDialog = ({
             <div key={i}>
               {`${i + 1})`}
               <div className="row mb-3">
-                <div className="col-lg-11">
+                <div className="col-lg-10">
                   <textarea
                     className="form-control"
                     placeholder="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
@@ -173,6 +176,22 @@ const AuditStepsDialog = ({
                     onClick={() => handleUpdateObservation(item)}
                   >
                     {!loading ? "Save" : "Loading..."}
+                  </button>
+                </div>
+                <div className="col-lg-1">
+                  <button
+                    className={`btn btn-labeled float-end mt-4 btn-danger px-3 shadow ${
+                      loading && "disabled"
+                    }`}
+                    onClick={() => {
+                      if (!loading) {
+                        dispatch(
+                          setupAuditStepObservationDelete(Number(item?.id))
+                        );
+                      }
+                    }}
+                  >
+                    {!loading ? "Delete" : "Loading..."}
                   </button>
                 </div>
               </div>

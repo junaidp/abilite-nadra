@@ -13,6 +13,8 @@ const Table = ({
   user,
   currentId,
   loading,
+  setDeletePlanSummaryDialog,
+  setCurrentPlanSummaryId,
 }) => {
   return (
     <tbody>
@@ -132,6 +134,15 @@ const Table = ({
                     </div>
                   </div>
                 </div>
+              )}
+              {item?.approved === false && (
+                <i
+                  className="fa fa-trash text-danger f-18 cursor-pointer"
+                  onClick={() => {
+                    setDeletePlanSummaryDialog(true);
+                    setCurrentPlanSummaryId(item?.id);
+                  }}
+                ></i>
               )}
               {allAuditPlanSummary[index]?.submitted === false &&
                 allAuditPlanSummary[index]?.completed === false &&

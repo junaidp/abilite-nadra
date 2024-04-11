@@ -5,8 +5,6 @@ const TableRow = ({
   setComplianceCheckListMainId,
   setShowComplianceCheckListDialog,
   checkStaus,
-  downloadLoading,
-  downloadFileId,
   user,
   loading,
   currentButtonId,
@@ -19,20 +17,6 @@ const TableRow = ({
   return (
     <tr>
       <td>{mainItem?.id}</td>
-      {/* <td>
-        <a
-          className="fw-bold  text-primary  px-3 py-1 f-10"
-          onClick={() => {
-            if (mainItem?.submitted !== true) {
-              setComplianceCheckListMainId(mainItem?.id);
-              setShowComplianceCheckListDialog(true);
-            }
-          }}
-        >
-          {mainItem?.subLocation?.locationid?.description ||
-            "No Location Provided"}
-        </a>
-      </td> */}
       <td>
         <a
           className="fw-bold  text-primary  px-3 py-1 f-10"
@@ -59,20 +43,13 @@ const TableRow = ({
         {mainItem?.submitted === false && (
           <div className="mb-2">
             <div
-              className={`btn btn-labeled btn-secondary px-3  shadow ${
-                downloadLoading &&
-                Number(mainItem?.id) === Number(downloadFileId) &&
-                "disabled"
-              }`}
+              className={`btn btn-labeled btn-secondary px-3  shadow `}
               onClick={() => handleDownload(mainItem?.id)}
             >
               <span className="btn-label me-2">
                 <i className="bi bi-box-arrow-down  f-18"></i>
               </span>
-              {downloadLoading &&
-              Number(mainItem?.id) === Number(downloadFileId)
-                ? "Downloading..."
-                : "Download"}
+              Download
             </div>
           </div>
         )}
