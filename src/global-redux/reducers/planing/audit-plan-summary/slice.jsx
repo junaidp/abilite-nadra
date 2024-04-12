@@ -3,6 +3,7 @@ import {
   updateAuditPlanSummary,
   getInitialAllAuditPlanSummary,
   deletePlanSummary,
+  auditPlanSummaryFeedback,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
@@ -38,6 +39,12 @@ export const setupDeletePlanSummary = createAsyncThunk(
   "auditPlanSummary/deletePlanSummary",
   async (data, thunkAPI) => {
     return deletePlanSummary(data, thunkAPI);
+  }
+);
+export const setupAuditPlanSummaryFeedback = createAsyncThunk(
+  "auditPlanSummary/auditPlanSummaryFeedback",
+  async (data, thunkAPI) => {
+    return auditPlanSummaryFeedback(data, thunkAPI);
   }
 );
 export const slice = createSlice({
@@ -124,6 +131,24 @@ export const slice = createSlice({
         toast.success("Audit Plan Summary Deleted Successfully");
       })
       .addCase(setupDeletePlanSummary.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Feedback Audit Plan Summary
+    builder
+      .addCase(setupAuditPlanSummaryFeedback.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupAuditPlanSummaryFeedback.fulfilled, (state) => {
+        state.loading = false;
+        state.auditPlanSummaryAddSuccess = true;
+        toast.success("Audit Plan Summary FeedBack Provided Successfully");
+      })
+      .addCase(setupAuditPlanSummaryFeedback.rejected, (state, { payload }) => {
         state.loading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);

@@ -15,6 +15,8 @@ const Table = ({
   loading,
   setDeletePlanSummaryDialog,
   setCurrentPlanSummaryId,
+  setFeedBackDialog,
+  setViewFeedBackDialog,
 }) => {
   return (
     <tbody>
@@ -106,7 +108,7 @@ const Table = ({
               Number(user[0]?.userId?.employeeid?.id) ||
               user[0]?.userId?.employeeid?.userHierarchy === "IAH"))) && (
           <td className="normal-text ">
-            <div className="row">
+            <div className="d-flex justify-between">
               {item?.editable === false && (
                 <div className="mt-3">
                   <div className="justify-content-end text-end">
@@ -118,7 +120,7 @@ const Table = ({
                 </div>
               )}
               {item?.editable === true && (
-                <div className="mt-3">
+                <div className="mt-3 mx-3">
                   <div className="justify-content-end text-end">
                     <div
                       className={`btn btn-labeled btn-primary px-3 shadow ${
@@ -137,21 +139,21 @@ const Table = ({
               )}
               {item?.approved === false && (
                 <i
-                  className="fa fa-trash text-danger f-18 cursor-pointer"
+                  className="fa fa-trash mt-3  text-danger f-18 cursor-pointer"
                   onClick={() => {
                     setDeletePlanSummaryDialog(true);
                     setCurrentPlanSummaryId(item?.id);
                   }}
                 ></i>
               )}
-              {allAuditPlanSummary[index]?.submitted === false &&
-                allAuditPlanSummary[index]?.completed === false &&
+              {(allAuditPlanSummary[index]?.submitted === false ||
+                allAuditPlanSummary[index]?.completed === false) &&
                 allAuditPlanSummary[index]?.priority &&
                 allAuditPlanSummary[index]?.priority !== "" &&
                 allAuditPlanSummary[index]?.threeYearsAgo !== null &&
                 allAuditPlanSummary[index]?.twoYearsAgo !== null &&
                 allAuditPlanSummary[index]?.lastYear !== null && (
-                  <div className="mt-3">
+                  <div className="mt-3 mx-3">
                     <div className="justify-content-end text-end">
                       <div
                         className={`btn btn-labeled btn-primary px-3 shadow ${
@@ -180,7 +182,7 @@ const Table = ({
                 (Number(item?.initiatorTLEB) ===
                   Number(user[0]?.userId?.employeeid?.id) ||
                   user[0]?.userId?.employeeid?.userHierarchy === "IAH") && (
-                  <div className="mt-3">
+                  <div className="mt-3 mx-3">
                     <div className="justify-content-end text-end">
                       <div
                         className={`btn btn-labeled btn-primary px-3 shadow ${
@@ -198,6 +200,47 @@ const Table = ({
                   </div>
                 )}
             </div>
+            {allAuditPlanSummary[index]?.submitted === true &&
+              allAuditPlanSummary[index]?.completed === true &&
+              allAuditPlanSummary[index]?.approved === false &&
+              allAuditPlanSummary[index]?.locked === false &&
+              allAuditPlanSummary[index]?.priority &&
+              allAuditPlanSummary[index]?.priority !== "" &&
+              allAuditPlanSummary[index]?.threeYearsAgo !== null &&
+              allAuditPlanSummary[index]?.twoYearsAgo !== null &&
+              allAuditPlanSummary[index]?.lastYear !== null &&
+              (Number(item?.initiatorTLEB) ===
+                Number(user[0]?.userId?.employeeid?.id) ||
+                user[0]?.userId?.employeeid?.userHierarchy === "IAH") && (
+                <div className="mt-3 mx-3">
+                  <div className="justify-content-end text-end">
+                    <div
+                      className={`btn btn-labeled btn-primary px-3 shadow `}
+                      onClick={() => {
+                        setCurrentPlanSummaryId(item?.id);
+                        setFeedBackDialog(true);
+                      }}
+                    >
+                      FeedBack
+                    </div>
+                  </div>
+                </div>
+              )}
+            {item?.feedback && item?.feedback?.id && (
+              <div className="mt-3 mx-3">
+                <div className="justify-content-end text-end">
+                  <div
+                    className={`btn btn-labeled btn-primary px-3 shadow `}
+                    onClick={() => {
+                      setCurrentPlanSummaryId(item?.id);
+                      setViewFeedBackDialog(true);
+                    }}
+                  >
+                    View FeedBack
+                  </div>
+                </div>
+              </div>
+            )}
           </td>
         )}
       </tr>

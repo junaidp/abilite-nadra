@@ -5,7 +5,10 @@ import {
   setupGetSingleReport,
   setupUpdateReporting,
   setupGetInitialSingleReport,
+  setupUpdateReportingByManagementAuditee,
   resetReports,
+  resetManagementAuditeeReportingAddSuccess,
+  resetReportingFileUploadAddSuccess,
 } from "../../../../../global-redux/reducers/reporting/slice";
 import { useSearchParams } from "react-router-dom";
 import {
@@ -24,8 +27,14 @@ const ReportingParticulars = () => {
   const reportingId = searchParams.get("reportingId");
   const { user } = useSelector((state) => state?.auth);
   const { company, year } = useSelector((state) => state?.common);
-  const { singleReport, loading, reportingAddSuccess, initialLoading } =
-    useSelector((state) => state?.reporting);
+  const {
+    singleReport,
+    loading,
+    reportingAddSuccess,
+    initialLoading,
+    managementAuditeeReportingAddSuccess,
+    reportingFileUploadSuccess,
+  } = useSelector((state) => state?.reporting);
   const [report, setReport] = React.useState([]);
   const { allUsers } = useSelector((state) => state?.setttingsUserManagement);
 
@@ -99,7 +108,7 @@ const ReportingParticulars = () => {
   function handleSaveToStep3(item) {
     if (!loading) {
       dispatch(
-        setupUpdateReporting({
+        setupUpdateReportingByManagementAuditee({
           ...item,
           stepNo: 3,
         })
@@ -118,10 +127,7 @@ const ReportingParticulars = () => {
   }
 
   React.useEffect(() => {
-    if (
-      reportingAddSuccess &&
-      user[0]?.userId?.employeeid?.userHierarchy !== "Management_Auditee"
-    ) {
+    if (reportingAddSuccess) {
       const companyId = user[0]?.company?.find(
         (item) => item?.companyName === company
       )?.id;
@@ -132,14 +138,31 @@ const ReportingParticulars = () => {
       }
       dispatch(resetReportingAddSuccess());
     }
+  }, [reportingAddSuccess]);
+
+  React.useEffect(() => {
+    if (reportingFileUploadSuccess === true) {
+      const companyId = user[0]?.company?.find(
+        (item) => item?.companyName === company
+      )?.id;
+      if (companyId) {
+        dispatch(
+          setupGetSingleReport(`?reportingAndFollowUpId=${Number(reportingId)}`)
+        );
+      }
+      dispatch(resetReportingFileUploadAddSuccess());
+    }
+  }, [reportingFileUploadSuccess]);
+
+  React.useEffect(() => {
     if (
-      reportingAddSuccess &&
+      managementAuditeeReportingAddSuccess === true &&
       user[0]?.userId?.employeeid?.userHierarchy === "Management_Auditee"
     ) {
-      dispatch(resetReportingAddSuccess());
+      dispatch(resetManagementAuditeeReportingAddSuccess());
       navigate("/audit/dashboard");
     }
-  }, [reportingAddSuccess]);
+  }, [managementAuditeeReportingAddSuccess]);
 
   React.useEffect(() => {
     const isEmptyObject =

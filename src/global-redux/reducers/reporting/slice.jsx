@@ -6,6 +6,10 @@ import {
   updateReporting,
   getAllFollowUp,
   updateFollowUp,
+  updateReportingByManagementAuditee,
+  reportingFileUpload,
+  reportingFileDelete,
+  reportingFileUpdate,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -16,6 +20,8 @@ const initialState = {
   allReporting: [],
   allFollowUp: [],
   singleReport: {},
+  managementAuditeeReportingAddSuccess: false,
+  reportingFileUploadSuccess: false,
 };
 
 export const setupGetAllReporting = createAsyncThunk(
@@ -59,6 +65,30 @@ export const setupUpdateFollowUp = createAsyncThunk(
     return updateFollowUp(data, thunkAPI);
   }
 );
+export const setupUpdateReportingByManagementAuditee = createAsyncThunk(
+  "reporting/updateReportingByManagementAuditee",
+  async (data, thunkAPI) => {
+    return updateReportingByManagementAuditee(data, thunkAPI);
+  }
+);
+export const setupReportingFileUpload = createAsyncThunk(
+  "reporting/reportingFileUpload",
+  async (data, thunkAPI) => {
+    return reportingFileUpload(data, thunkAPI);
+  }
+);
+export const setupReportingFileDelete = createAsyncThunk(
+  "reporting/reportingFileDelete",
+  async (data, thunkAPI) => {
+    return reportingFileDelete(data, thunkAPI);
+  }
+);
+export const setupReportingFileUpdate = createAsyncThunk(
+  "reporting/reportingFileUpdate",
+  async (data, thunkAPI) => {
+    return reportingFileUpdate(data, thunkAPI);
+  }
+);
 
 export const slice = createSlice({
   name: "reporting",
@@ -66,6 +96,12 @@ export const slice = createSlice({
   reducers: {
     resetReportingAddSuccess: (state) => {
       state.reportingAddSuccess = false;
+    },
+    resetReportingFileUploadAddSuccess: (state) => {
+      state.reportingFileUploadSuccess = false;
+    },
+    resetManagementAuditeeReportingAddSuccess: (state) => {
+      state.managementAuditeeReportingAddSuccess = false;
     },
     resetReports: (state) => {
       (state.loading = false),
@@ -184,9 +220,89 @@ export const slice = createSlice({
           toast.error("An Error has occurred");
         }
       });
+    // Update Reporting By Management Auditee
+    builder
+      .addCase(setupUpdateReportingByManagementAuditee.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupUpdateReportingByManagementAuditee.fulfilled, (state) => {
+        state.loading = false;
+        state.managementAuditeeReportingAddSuccess = true;
+        toast.success("Reporting submitted successfully");
+      })
+      .addCase(
+        setupUpdateReportingByManagementAuditee.rejected,
+        (state, { payload }) => {
+          state.loading = false;
+          if (payload?.response?.data?.message) {
+            toast.error(payload?.response?.data?.message);
+          } else {
+            toast.error("An Error has occurred");
+          }
+        }
+      );
+    // Reporting File Upload
+    builder
+      .addCase(setupReportingFileUpload.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupReportingFileUpload.fulfilled, (state) => {
+        state.loading = false;
+        state.reportingFileUploadSuccess = true;
+        toast.success("Reporting file uploaded successfully");
+      })
+      .addCase(setupReportingFileUpload.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Reporting File Delete
+    builder
+      .addCase(setupReportingFileDelete.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupReportingFileDelete.fulfilled, (state) => {
+        state.loading = false;
+        state.reportingFileUploadSuccess = true;
+        toast.success("Reporting file deleted successfully");
+      })
+      .addCase(setupReportingFileDelete.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Reporting File Update
+    builder
+      .addCase(setupReportingFileUpdate.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupReportingFileUpdate.fulfilled, (state) => {
+        state.loading = false;
+        state.reportingFileUploadSuccess = true;
+        toast.success("Reporting file updated successfully");
+      })
+      .addCase(setupReportingFileUpdate.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
   },
 });
 
-export const { resetReportingAddSuccess, resetReports } = slice.actions;
+export const {
+  resetReportingAddSuccess,
+  resetReports,
+  resetManagementAuditeeReportingAddSuccess,
+  resetReportingFileUploadAddSuccess,
+} = slice.actions;
 
 export default slice.reducer;

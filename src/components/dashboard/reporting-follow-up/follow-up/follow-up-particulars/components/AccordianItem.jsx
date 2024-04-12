@@ -2,6 +2,7 @@ import React from "react";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import RichTextEditor from "../../../../../../components/common/rich-text";
+import FollowUpFileUpload from "./FileUpload";
 
 const AccordianItem = ({
   index,
@@ -141,6 +142,7 @@ const AccordianItem = ({
               disabled
             />
           </div>
+          <FollowUpFileUpload item={item} />
           <div className="mb-3 align-items-center">
             <label className="pe-4">Recommendations Implemented:</label>
             <select
@@ -156,6 +158,7 @@ const AccordianItem = ({
               <option value="false">No</option>
             </select>
           </div>
+
           {item?.followUp?.recommendationsImplemented.toString() === "true" && (
             <div className="mb-3">
               <label>Final Comments:</label>

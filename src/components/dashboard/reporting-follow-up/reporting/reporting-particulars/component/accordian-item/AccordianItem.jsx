@@ -3,6 +3,7 @@ import Select from "../select/Select";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import RichTextEditor from "../rich-text/RichText";
+import ReportingFileUpload from "../file-upload/FileUpload";
 
 const AccordianItem = ({
   item,
@@ -59,12 +60,8 @@ const AccordianItem = ({
         data-bs-parent="#accordionFlushExample"
       >
         <div className="accordion-body">
-          <div className="d-flex mb-3">
-            <label className="pe-4">Location:</label>
-            <label className="fw-normal">
-              {item?.subLocation?.locationid?.description}
-            </label>
-          </div>
+          {user[0]?.userId?.employeeid?.userHierarchy !==
+            "Management_Auditee" && <ReportingFileUpload item={item} />}
           <div className="row mb-3">
             <div className="col-lg-6">
               <label>Observation Title:</label>
@@ -211,43 +208,9 @@ const AccordianItem = ({
               />
             </div>
           )}
-          <label htmlFor="fileInput">Add Attachment:</label>
-          <input className="ms-3 f-10" type="file" id="fileInput" />
-          <div className="table-responsive mt-3">
-            <table className="table table-bordered  table-hover rounded">
-              <thead className="bg-secondary text-white">
-                <tr>
-                  <th>Files</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <a className=" text-primary  fw-bold f-12">
-                      File Attachment 1
-                    </a>
-                  </td>
-                  <td>
-                    <i className="fa fa-eye"></i>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <a className=" text-primary  fw-bold f-12">
-                      File Attachment 2
-                    </a>
-                  </td>
-                  <td>
-                    <i className="fa fa-eye"></i>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
 
-          <div className="row">
-            <div className="col-lg-12 text-end ">
+          <div>
+            <div className="d-flex flex-end w-100 gap-4">
               {item?.stepNo === 0 && (
                 <div className="d-flex align-items-center place-end">
                   <button

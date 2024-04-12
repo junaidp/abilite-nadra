@@ -128,9 +128,9 @@ export const createExtraFields = async (data, thunkAPI) => {
       `${baseUrl}/internalauditreport/report/createExtraField?internalAuditReportId=${Number(
         data?.reportId
       )}`,
-      
-        data?.extraFieldsArray,
-      
+
+      data?.extraFieldsArray,
+
       {
         headers: {
           Authorization: `Bearer ${user[0]?.token}`,
@@ -151,6 +151,62 @@ export const updateExtraField = async (data, thunkAPI) => {
       data,
       {
         headers: {
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
+//
+export const iahFileUpload = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.post(
+      `${baseUrl}/internalauditreport/IARAnnexureUploads/upload?internalauditreportId=${data?.id}`,
+      data?.formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+export const iahFileDelete = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.delete(
+      `${baseUrl}/internalauditreport/IARAnnexureUploads/delete?fileId=${data?.fileId}&internalauditreportId=${data?.internalauditreportId}`,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
+export const iahFileUpdate = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.post(
+      `${baseUrl}/internalauditreport/IARAnnexureUploads/update?fileId=${data?.id}`,
+      data?.formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${user[0]?.token}`,
         },
       }

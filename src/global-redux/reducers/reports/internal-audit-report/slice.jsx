@@ -9,6 +9,9 @@ import {
   createInternalAuditReportObject,
   createExtraFields,
   updateExtraField,
+  iahFileUpload,
+  iahFileDelete,
+  iahFileUpdate,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -22,6 +25,7 @@ const initialState = {
   internalAuditReportExtraFieldsAddSuccess: false,
   addReportLoading: false,
   createExtraFieldsLoading: false,
+  iahFileUploadSuccess: false,
   internalAuditReportExtraFieldsObject: {},
 };
 
@@ -86,12 +90,34 @@ export const setupUpdateExtraField = createAsyncThunk(
   }
 );
 
+export const setupIahFileUpload = createAsyncThunk(
+  "internalAuditReport/iahFileUpload",
+  async (data, thunkAPI) => {
+    return iahFileUpload(data, thunkAPI);
+  }
+);
+export const setupIahFileDelete = createAsyncThunk(
+  "internalAuditReport/iahFileDelete",
+  async (data, thunkAPI) => {
+    return iahFileDelete(data, thunkAPI);
+  }
+);
+export const setupIahFileUpdate = createAsyncThunk(
+  "internalAuditReport/iahFileUpdate",
+  async (data, thunkAPI) => {
+    return iahFileUpdate(data, thunkAPI);
+  }
+);
+
 export const slice = createSlice({
   name: "internalAuditReport",
   initialState,
   reducers: {
     resetInternalAuditReportAddSuccess: (state) => {
       state.internalAuditReportAddSuccess = false;
+    },
+    resetIahReportAddSuccess: (state) => {
+      state.iahFileUploadSuccess = false;
     },
     resetInternalAuditReportExtraFieldsAddSuccess: (state) => {
       state.internalAuditReportExtraFieldsAddSuccess = false;
@@ -266,8 +292,7 @@ export const slice = createSlice({
       .addCase(setupCreateExtraFields.fulfilled, (state, { payload }) => {
         state.createExtraFieldsLoading = false;
         state.internalAuditReportExtraFieldsAddSuccess = true;
-        state.internalAuditReportExtraFieldsObject =
-          payload?.data;
+        state.internalAuditReportExtraFieldsObject = payload?.data;
         toast.success("Extra Field Added Successfully");
       })
       .addCase(setupCreateExtraFields.rejected, (state, action) => {
@@ -295,12 +320,67 @@ export const slice = createSlice({
           toast.error("An Error has occurred");
         }
       });
+    // IAH File Upload
+    builder
+      .addCase(setupIahFileUpload.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupIahFileUpload.fulfilled, (state) => {
+        state.loading = false;
+        state.iahFileUploadSuccess = true;
+        toast.success("File Uploaded Successfully");
+      })
+      .addCase(setupIahFileUpload.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // IAH File Delete
+    builder
+      .addCase(setupIahFileDelete.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupIahFileDelete.fulfilled, (state) => {
+        state.loading = false;
+        state.iahFileUploadSuccess = true;
+        toast.success("File Deleted Successfully");
+      })
+      .addCase(setupIahFileDelete.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // IAH File Update
+    builder
+      .addCase(setupIahFileUpdate.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupIahFileUpdate.fulfilled, (state) => {
+        state.loading = false;
+        state.iahFileUploadSuccess = true;
+        toast.success("File Updated Successfully");
+      })
+      .addCase(setupIahFileUpdate.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
   },
 });
 
 export const {
   resetInternalAuditReportAddSuccess,
   handleResetData,
+  resetIahReportAddSuccess,
   resetInternalAuditReportExtraFieldsAddSuccess,
 } = slice.actions;
 

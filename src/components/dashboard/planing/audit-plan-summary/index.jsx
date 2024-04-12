@@ -11,6 +11,8 @@ import { CircularProgress } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import Table from "./component/Table";
 import DeletePlanSummaryDialog from "./component/DeleteDialog";
+import FeedBackDialog from "./component/FeedBackDialog";
+import ViewFeedBackDialog from "./component/ViewFeedBack"
 
 const AuditPlanSummary = () => {
   const {
@@ -19,6 +21,9 @@ const AuditPlanSummary = () => {
     auditPlanSummaryAddSuccess,
     initialLoading,
   } = useSelector((state) => state?.planingAuditPlanSummary);
+  const [feedBackDialog, setFeedBackDialog] = React.useState(false);
+  const [viewFeedBackDialog,setViewFeedBackDialog]=React.useState(false)
+
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state?.auth);
   const [currentId, setCurrentId] = React.useState("");
@@ -192,6 +197,26 @@ const AuditPlanSummary = () => {
               </div>
             </div>
           )}
+          {feedBackDialog && (
+            <div className="modal-objective">
+              <div className="model-wrap">
+                <FeedBackDialog
+                  setFeedBackDialog={setFeedBackDialog}
+                  currentPlanSummaryId={currentPlanSummaryId}
+                />
+              </div>
+            </div>
+          )}
+          {viewFeedBackDialog && (
+            <div className="modal-objective">
+              <div className="model-wrap">
+                <ViewFeedBackDialog
+                  setViewFeedBackDialog={setViewFeedBackDialog}
+                  currentPlanSummaryId={currentPlanSummaryId}
+                />
+              </div>
+            </div>
+          )}
           <header className="section-header my-3  text-start d-flex align-items-center justify-content-between">
             <div className="mb-0 heading">Audit Plan Summary</div>
           </header>
@@ -263,6 +288,8 @@ const AuditPlanSummary = () => {
                               setDeletePlanSummaryDialog
                             }
                             setCurrentPlanSummaryId={setCurrentPlanSummaryId}
+                            setFeedBackDialog={setFeedBackDialog}
+                            setViewFeedBackDialog={setViewFeedBackDialog}
                           />
                         );
                       })}
