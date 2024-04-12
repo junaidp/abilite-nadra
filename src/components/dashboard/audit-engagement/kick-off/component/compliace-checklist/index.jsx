@@ -8,6 +8,7 @@ import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { baseUrl } from "../../../../../../constants/index";
+import ApproveDialog from "./components/ApproveDialog";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -33,6 +34,8 @@ const ComplianceCheckList = ({
   const [currentButtonId, setCurrentButtonId] = React.useState("");
   const [selectedFile, setSelectedFile] = React.useState(null);
   const [showUpdateButton, setShowUpdateButton] = React.useState(true);
+  const [showApproveDialog, setShowApproveDialog] = React.useState(false);
+  const [currentApproveItem, setCurrentApproveItem] = React.useState({});
 
   const { user } = useSelector((state) => state?.auth);
   function checkStaus(item) {
@@ -58,10 +61,10 @@ const ComplianceCheckList = ({
     }
   }
   function handleApprove(item) {
-    if (!loading) {
-      dispatch(setupUpdateComplianceCheckList({ ...item, approved: true }));
-    }
+    setCurrentApproveItem(item);
+    setShowApproveDialog(true);
   }
+
   const handleDownload = async (checkListId) => {
     window.open(
       `${baseUrl}/auditEngagement/auditStepChecklist/downloadOfflineChecklist?auditStepChecklistId=${checkListId}`,
@@ -122,6 +125,16 @@ const ComplianceCheckList = ({
 
   return (
     <div className="accordion-item">
+      {showApproveDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <ApproveDialog
+              setShowApproveDialog={setShowApproveDialog}
+              currentApproveItem={currentApproveItem}
+            />
+          </div>
+        </div>
+      )}
       <h2 className="accordion-header" id="headingeight">
         <button
           className="accordion-button collapsed"

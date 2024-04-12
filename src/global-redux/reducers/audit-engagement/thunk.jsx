@@ -108,6 +108,24 @@ export const updateRiskControlMatrixObjective = async (data, thunkAPI) => {
     return thunkAPI.rejectWithValue(error);
   }
 };
+export const approveRiskControlMatrixObjective = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.post(
+      `${baseUrl}/auditEngagement/riskControlMatrix/update`,
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
 
 export const saveRiskControlMatrixRating = async (data, thunkAPI) => {
   try {
@@ -299,6 +317,25 @@ export const updateComplianceCheckList = async (data, thunkAPI) => {
   }
 };
 
+export const approveComplianceCheckList = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.post(
+      `${baseUrl}/auditEngagement/auditStepChecklist/update`,
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
 export const updateRiskControlMatrixApproval = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
@@ -336,8 +373,44 @@ export const updateAuditProgramApproval = async (data, thunkAPI) => {
     return thunkAPI.rejectWithValue(error);
   }
 };
+export const approveAuditProgramApproval = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.post(
+      `${baseUrl}/auditEngagement/auditProgram/updateAuditProgram`,
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
 
 export const updateAuditStepApproval = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.post(
+      `${baseUrl}/auditEngagement/auditStep/updateAuditStep`,
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+export const approveAuditStepApproval = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
@@ -584,6 +657,69 @@ export const auditStepSamplingFileUpdate = async (data, thunkAPI) => {
     let props = await axios.post(
       `${baseUrl}/auditEngagement/auditStep/samplingFileUploads/update?fileId=${data?.id}`,
       data?.formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
+// FeedBacks
+
+export const riskControlMatrixFeedBack = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.post(
+      `${baseUrl}/auditEngagement/riskControlMatrix/feedBack?riskControlMatrixId=${data?.id}`,
+      {
+        description: data?.description,
+      },
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+export const auditProgramFeedBack = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.post(
+      `${baseUrl}/auditEngagement/auditProgram/feedBack?auditProgramId=${data?.id}&auditEngagementId=${data?.auditEngagementId}`,
+      {
+        description: data?.description,
+      },
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+export const auditStepFeedBack = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.post(
+      `${baseUrl}/auditEngagement/auditStep/feedBack?auditStepId=${data?.id}`,
+      {
+        description: data?.description,
+      },
       {
         headers: {
           "Content-Type": "multipart/form-data",

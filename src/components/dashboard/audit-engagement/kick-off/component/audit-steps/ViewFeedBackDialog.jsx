@@ -1,16 +1,11 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import RickText from "../../../../common/feed-back-rich-text/index";
+import RichText from "../../../../../common/feed-back-rich-text";
 import moment from "moment";
 
 const ViewFeedBackDialog = ({
   setViewFeedBackDialog,
-  currentPlanSummaryId,
+  currentAuditEngagement,
 }) => {
-  const { allAuditPlanSummary } = useSelector(
-    (state) => state?.planingAuditPlanSummary
-  );
-
   function handleClose() {
     setViewFeedBackDialog(false);
   }
@@ -21,12 +16,10 @@ const ViewFeedBackDialog = ({
         <div className="col-lg-2 label-text">Description:</div>
         <div className="col-lg-8">
           <div className="form-group">
-            <RickText
+            <RichText
               editable="false"
               initialValue={
-                allAuditPlanSummary?.find(
-                  (all) => Number(all?.id) === Number(currentPlanSummaryId)
-                )?.feedback?.description || ""
+                currentAuditEngagement?.auditStep?.feedback?.description || ""
               }
             />
           </div>
@@ -37,9 +30,7 @@ const ViewFeedBackDialog = ({
         <div className="col-lg-8">
           <p>
             {moment(
-              allAuditPlanSummary?.find(
-                (all) => Number(all?.id) === Number(currentPlanSummaryId)
-              )?.feedback?.feedBackTime
+              currentAuditEngagement?.auditStep?.feedback?.feedBackTime
             ).format("DD-MM-YY HH:mm:ss")}
           </p>
         </div>

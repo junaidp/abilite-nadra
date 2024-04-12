@@ -4,6 +4,7 @@ import {
   getInitialSingleReport,
   getAllReporting,
   updateReporting,
+  approveReporting,
   getAllFollowUp,
   updateFollowUp,
   updateReportingByManagementAuditee,
@@ -49,6 +50,12 @@ export const setupUpdateReporting = createAsyncThunk(
   "reporting/updateReporting",
   async (data, thunkAPI) => {
     return updateReporting(data, thunkAPI);
+  }
+);
+export const setupApproveReporting = createAsyncThunk(
+  "reporting/approveReporting",
+  async (data, thunkAPI) => {
+    return approveReporting(data, thunkAPI);
   }
 );
 
@@ -176,6 +183,24 @@ export const slice = createSlice({
         toast.success("Reporting updated successfully");
       })
       .addCase(setupUpdateReporting.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Approve Reporting
+    builder
+      .addCase(setupApproveReporting.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupApproveReporting.fulfilled, (state) => {
+        state.loading = false;
+        state.reportingAddSuccess = true;
+        toast.success("Reporting Approved Successfully");
+      })
+      .addCase(setupApproveReporting.rejected, (state, { payload }) => {
         state.loading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);

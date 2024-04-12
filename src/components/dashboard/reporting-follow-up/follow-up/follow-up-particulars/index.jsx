@@ -17,6 +17,7 @@ import { useSearchParams } from "react-router-dom";
 import "./index.css";
 import { CircularProgress } from "@mui/material";
 import AccordianItem from "./components/AccordianItem";
+import ApproveDialog from "./components/ApproveDialog";
 
 const ReportingParticulars = () => {
   let navigate = useNavigate();
@@ -28,6 +29,8 @@ const ReportingParticulars = () => {
   const { singleReport, loading, reportingAddSuccess, initialLoading } =
     useSelector((state) => state?.reporting);
   const [report, setReport] = React.useState([]);
+  const [currentApproveItem, setCurrentApproveItem] = React.useState({});
+  const [approveDialog, setApproveDialog] = React.useState(false);
 
   function handleChange(event, id) {
     setReport((pre) => {
@@ -74,7 +77,8 @@ const ReportingParticulars = () => {
   }
 
   function handleSaveToStep7(item) {
-    dispatch(setupUpdateReporting({ ...item, stepNo: 7 }));
+    setCurrentApproveItem(item);
+    setApproveDialog(true);
   }
 
   React.useEffect(() => {
@@ -129,6 +133,16 @@ const ReportingParticulars = () => {
 
   return (
     <div>
+      {approveDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <ApproveDialog
+              setApproveDialog={setApproveDialog}
+              currentApproveItem={currentApproveItem}
+            />
+          </div>
+        </div>
+      )}
       {initialLoading ? (
         <div className="my-3">
           <CircularProgress />

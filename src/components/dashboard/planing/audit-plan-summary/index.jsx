@@ -12,7 +12,8 @@ import Pagination from "@mui/material/Pagination";
 import Table from "./component/Table";
 import DeletePlanSummaryDialog from "./component/DeleteDialog";
 import FeedBackDialog from "./component/FeedBackDialog";
-import ViewFeedBackDialog from "./component/ViewFeedBack"
+import ViewFeedBackDialog from "./component/ViewFeedBack";
+import ApproveAuditPlanSummaryDialog from "./component/ApproveDialog";
 
 const AuditPlanSummary = () => {
   const {
@@ -22,12 +23,14 @@ const AuditPlanSummary = () => {
     initialLoading,
   } = useSelector((state) => state?.planingAuditPlanSummary);
   const [feedBackDialog, setFeedBackDialog] = React.useState(false);
-  const [viewFeedBackDialog,setViewFeedBackDialog]=React.useState(false)
+  const [viewFeedBackDialog, setViewFeedBackDialog] = React.useState(false);
 
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state?.auth);
   const [currentId, setCurrentId] = React.useState("");
   const { company, year } = useSelector((state) => state?.common);
+  const [showApproveDialog, setShowApproveDialog] = React.useState(false);
+  const [currentApproveItem, setCurrentApproveItem] = React.useState({});
   const [deletePlanSummaryDialog, setDeletePlanSummaryDialog] =
     React.useState(false);
   const [currentPlanSummaryId, setCurrentPlanSummaryId] = React.useState("");
@@ -94,12 +97,8 @@ const AuditPlanSummary = () => {
   }
 
   function handleApprove(item) {
-    if (!loading) {
-      setCurrentId(item?.id);
-      dispatch(
-        setupUpdateAuditPlanSummary({ ...item, approved: true, locked: true })
-      );
-    }
+    setCurrentApproveItem(item);
+    setShowApproveDialog(true);
   }
 
   function handleEditEditable(item) {
@@ -213,6 +212,16 @@ const AuditPlanSummary = () => {
                 <ViewFeedBackDialog
                   setViewFeedBackDialog={setViewFeedBackDialog}
                   currentPlanSummaryId={currentPlanSummaryId}
+                />
+              </div>
+            </div>
+          )}
+          {showApproveDialog && (
+            <div className="modal-objective">
+              <div className="model-wrap">
+                <ApproveAuditPlanSummaryDialog
+                  setShowApproveDialog={setShowApproveDialog}
+                  currentApproveItem={currentApproveItem}
                 />
               </div>
             </div>

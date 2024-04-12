@@ -19,6 +19,8 @@ import { setupGetAllUsers } from "../../../../../global-redux/reducers/settings/
 import { useDispatch, useSelector } from "react-redux";
 import AccordianItem from "./component/accordian-item/AccordianItem";
 import { CircularProgress } from "@mui/material";
+import FirstApproveReportingDialog from "./component/approve-dialogs/FirstApprove";
+import SecondApproveReportingDialog from "./component/approve-dialogs/SecondApprove";
 
 const ReportingParticulars = () => {
   let navigate = useNavigate();
@@ -37,6 +39,9 @@ const ReportingParticulars = () => {
   } = useSelector((state) => state?.reporting);
   const [report, setReport] = React.useState([]);
   const { allUsers } = useSelector((state) => state?.setttingsUserManagement);
+  const [currentApproveItem, setCurrentApproveItem] = React.useState({});
+  const [firstApproveDialog, setFirstApproveDialog] = React.useState(false);
+  const [secondApproveDialog, setSecondApproveDialog] = React.useState(false);
 
   function handleChange(event, id) {
     setReport((pre) => {
@@ -91,20 +96,16 @@ const ReportingParticulars = () => {
   }
 
   function handleSaveToStep2(item) {
-    if (!loading) {
-      dispatch(
-        setupUpdateReporting({
-          ...item,
-          stepNo: 2,
-        })
-      );
-    }
+    setCurrentApproveItem(item);
+    setFirstApproveDialog(true);
   }
+
   function handleSaveStep2(item) {
     if (!loading) {
       dispatch(setupUpdateReporting(item));
     }
   }
+
   function handleSaveToStep3(item) {
     if (!loading) {
       dispatch(
@@ -116,14 +117,8 @@ const ReportingParticulars = () => {
     }
   }
   function handleSaveToStep4(item) {
-    if (!loading) {
-      dispatch(
-        setupUpdateReporting({
-          ...item,
-          stepNo: 4,
-        })
-      );
-    }
+    setCurrentApproveItem(item);
+    setSecondApproveDialog(true);
   }
 
   React.useEffect(() => {
@@ -213,6 +208,26 @@ const ReportingParticulars = () => {
 
   return (
     <div>
+      {firstApproveDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <FirstApproveReportingDialog
+              setFirstApproveDialog={setFirstApproveDialog}
+              currentApproveItem={currentApproveItem}
+            />
+          </div>
+        </div>
+      )}
+      {secondApproveDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <SecondApproveReportingDialog
+              setSecondApproveDialog={setSecondApproveDialog}
+              currentApproveItem={currentApproveItem}
+            />
+          </div>
+        </div>
+      )}
       {initialLoading ? (
         <div className="my-3">
           <CircularProgress />

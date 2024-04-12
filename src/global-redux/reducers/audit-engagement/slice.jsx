@@ -15,9 +15,13 @@ import {
   addAuditStepObservation,
   updateAuditStepObservation,
   updateComplianceCheckList,
+  approveComplianceCheckList,
   updateRiskControlMatrixApproval,
+  approveRiskControlMatrixObjective,
   updateAuditProgramApproval,
+  approveAuditProgramApproval,
   updateAuditStepApproval,
+  approveAuditStepApproval,
   uploadAuditStepFile,
   auditStepProcedureFileUpload,
   auditStepProcedureFileDelete,
@@ -31,6 +35,9 @@ import {
   uploadAuditStepCheckListFile,
   deleteAuditStepCheckListFile,
   updateAuditStepCheckListFile,
+  riskControlMatrixFeedBack,
+  auditProgramFeedBack,
+  auditStepFeedBack,
 } from "./thunk";
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
@@ -153,11 +160,23 @@ export const setupUpdateComplianceCheckList = createAsyncThunk(
     return updateComplianceCheckList(data, thunkAPI);
   }
 );
+export const setupApproveComplianceCheckList = createAsyncThunk(
+  "auditEngagement/approveComplianceCheckList",
+  async (data, thunkAPI) => {
+    return approveComplianceCheckList(data, thunkAPI);
+  }
+);
 
 export const setupUpdateRiskControlMatrixApproval = createAsyncThunk(
   "auditEngagement/updateRiskControlMatrixApproval",
   async (data, thunkAPI) => {
     return updateRiskControlMatrixApproval(data, thunkAPI);
+  }
+);
+export const setupApproveRiskControlMatrixObjective = createAsyncThunk(
+  "auditEngagement/approveRiskControlMatrixObjective",
+  async (data, thunkAPI) => {
+    return approveRiskControlMatrixObjective(data, thunkAPI);
   }
 );
 
@@ -167,11 +186,23 @@ export const setupUpdateAuditProgramApproval = createAsyncThunk(
     return updateAuditProgramApproval(data, thunkAPI);
   }
 );
+export const setupApproveAuditProgramApproval = createAsyncThunk(
+  "auditEngagement/approveAuditProgramApproval",
+  async (data, thunkAPI) => {
+    return approveAuditProgramApproval(data, thunkAPI);
+  }
+);
 
 export const setupUpdateAuditStepApproval = createAsyncThunk(
   "auditEngagement/updateAuditStepApproval",
   async (data, thunkAPI) => {
     return updateAuditStepApproval(data, thunkAPI);
+  }
+);
+export const setupApproveAuditStepApproval = createAsyncThunk(
+  "auditEngagement/approveAuditStepApproval",
+  async (data, thunkAPI) => {
+    return approveAuditStepApproval(data, thunkAPI);
   }
 );
 export const setupUploadAuditStepFile = createAsyncThunk(
@@ -253,6 +284,27 @@ export const setupUpdateAuditStepCheckListFile = createAsyncThunk(
   "auditEngagement/updateAuditStepCheckListFile",
   async (data, thunkAPI) => {
     return updateAuditStepCheckListFile(data, thunkAPI);
+  }
+);
+
+// FeedBacks
+
+export const setupRiskControlMatrixFeedBack = createAsyncThunk(
+  "auditEngagement/riskControlMatrixFeedBack",
+  async (data, thunkAPI) => {
+    return riskControlMatrixFeedBack(data, thunkAPI);
+  }
+);
+export const setupAuditProgramFeedBack = createAsyncThunk(
+  "auditEngagement/auditProgramFeedBack",
+  async (data, thunkAPI) => {
+    return auditProgramFeedBack(data, thunkAPI);
+  }
+);
+export const setupAuditStepFeedBack = createAsyncThunk(
+  "auditEngagement/auditStepFeedBack",
+  async (data, thunkAPI) => {
+    return auditStepFeedBack(data, thunkAPI);
   }
 );
 
@@ -586,6 +638,24 @@ export const slice = createSlice({
           toast.error("An Error has occurred");
         }
       });
+    // Approve Compliance CheckList
+    builder
+      .addCase(setupApproveComplianceCheckList.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupApproveComplianceCheckList.fulfilled, (state) => {
+        state.loading = false;
+        state.auditEngagementAddSuccess = true;
+        toast.success("Compliance Check List Approved Successfully");
+      })
+      .addCase(setupApproveComplianceCheckList.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
     // Update Risk Control Matrix Approval
     builder
       .addCase(setupUpdateRiskControlMatrixApproval.pending, (state) => {
@@ -598,6 +668,27 @@ export const slice = createSlice({
       })
       .addCase(
         setupUpdateRiskControlMatrixApproval.rejected,
+        (state, action) => {
+          state.loading = false;
+          if (action.payload?.response?.data?.message) {
+            toast.error(action.payload.response.data.message);
+          } else {
+            toast.error("An Error has occurred");
+          }
+        }
+      );
+    // Approve Risk Control Matrix Approval
+    builder
+      .addCase(setupApproveRiskControlMatrixObjective.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupApproveRiskControlMatrixObjective.fulfilled, (state) => {
+        state.loading = false;
+        state.auditEngagementAddSuccess = true;
+        toast.success("Risk Control Matrix Approved  Successfully");
+      })
+      .addCase(
+        setupApproveRiskControlMatrixObjective.rejected,
         (state, action) => {
           state.loading = false;
           if (action.payload?.response?.data?.message) {
@@ -625,6 +716,24 @@ export const slice = createSlice({
           toast.error("An Error has occurred");
         }
       });
+    // Approve Audit Program Approval
+    builder
+      .addCase(setupApproveAuditProgramApproval.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupApproveAuditProgramApproval.fulfilled, (state) => {
+        state.loading = false;
+        state.auditEngagementAddSuccess = true;
+        toast.success("Audit Program Approved Successfully");
+      })
+      .addCase(setupApproveAuditProgramApproval.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
     // Update Audit Step
     builder
       .addCase(setupUpdateAuditStepApproval.pending, (state) => {
@@ -636,6 +745,24 @@ export const slice = createSlice({
         toast.success("Audit Step Updated Successfully");
       })
       .addCase(setupUpdateAuditStepApproval.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Approve Audit Step
+    builder
+      .addCase(setupApproveAuditStepApproval.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupApproveAuditStepApproval.fulfilled, (state) => {
+        state.loading = false;
+        state.auditEngagementAddSuccess = true;
+        toast.success("Audit Step Approved Successfully");
+      })
+      .addCase(setupApproveAuditStepApproval.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);
@@ -870,6 +997,60 @@ export const slice = createSlice({
         toast.success("Audit Step CheckList File Updated Successfully");
       })
       .addCase(setupUpdateAuditStepCheckListFile.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // RCM Feedback
+    builder
+      .addCase(setupRiskControlMatrixFeedBack.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupRiskControlMatrixFeedBack.fulfilled, (state) => {
+        state.loading = false;
+        state.auditEngagementAddSuccess = true;
+        toast.success("Risk Control Matrix Feedback Added Successfully");
+      })
+      .addCase(setupRiskControlMatrixFeedBack.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Audit Program Feedback
+    builder
+      .addCase(setupAuditProgramFeedBack.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupAuditProgramFeedBack.fulfilled, (state) => {
+        state.loading = false;
+        state.auditEngagementAddSuccess = true;
+        toast.success("Audit Program Feedback Added Successfully");
+      })
+      .addCase(setupAuditProgramFeedBack.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Audit Step Feedback
+    builder
+      .addCase(setupAuditStepFeedBack.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupAuditStepFeedBack.fulfilled, (state) => {
+        state.loading = false;
+        state.auditEngagementAddSuccess = true;
+        toast.success("Audit Step Feedback Added Successfully");
+      })
+      .addCase(setupAuditStepFeedBack.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);

@@ -55,6 +55,24 @@ export const updateAuditPlanSummary = async (data, thunkAPI) => {
     return thunkAPI.rejectWithValue(error);
   }
 };
+export const approveAuditPlanSummary = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.post(
+      `${baseUrl}/auditPlanningAndScheduling/auditPlanSummary/update`,
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
 export const deletePlanSummary = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;

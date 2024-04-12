@@ -3,6 +3,9 @@ import { useSelector, useDispatch } from "react-redux";
 import Objective from "./component/objective";
 import Rating from "./component/rating";
 import Control from "./component/control";
+import FeedBackDialog from "./component/feedback/FeedBackDialog";
+import ViewFeedBackDialog from "./component/feedback/ViewFeedBackDialog";
+import ApproveDialog from "./component/approve/ApproveDialog";
 import { setupUpdateRiskControlMatrixApproval } from "../../../../../../global-redux/reducers/audit-engagement/slice";
 const RiskControlMatrix = ({
   setShowViewLibrary,
@@ -16,15 +19,12 @@ const RiskControlMatrix = ({
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state?.auditEngagement);
   const { user } = useSelector((state) => state?.auth);
+  const [feedBackDialog, setFeedBackDialog] = React.useState(false);
+  const [viewFeedBackDialog, setViewFeedBackDialog] = React.useState(false);
+  const [showApproveDialog, setShowApproveDialog] = React.useState(false);
+
   function handleApprove() {
-    if (!loading) {
-      dispatch(
-        setupUpdateRiskControlMatrixApproval({
-          ...currentAuditEngagement?.riskControlMatrix,
-          approved: true,
-        })
-      );
-    }
+    setShowApproveDialog(true);
   }
 
   function handleSubmit() {
@@ -39,6 +39,36 @@ const RiskControlMatrix = ({
   }
   return (
     <div className="accordion-item">
+      {feedBackDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <FeedBackDialog
+              setFeedBackDialog={setFeedBackDialog}
+              currentAuditEngagement={currentAuditEngagement}
+            />
+          </div>
+        </div>
+      )}
+      {viewFeedBackDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <ViewFeedBackDialog
+              setViewFeedBackDialog={setViewFeedBackDialog}
+              currentAuditEngagement={currentAuditEngagement}
+            />
+          </div>
+        </div>
+      )}
+      {showApproveDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <ApproveDialog
+              setShowApproveDialog={setShowApproveDialog}
+              currentAuditEngagement={currentAuditEngagement}
+            />
+          </div>
+        </div>
+      )}
       <h2 className="accordion-header">
         <button
           className="accordion-button collapsed"
@@ -50,7 +80,8 @@ const RiskControlMatrix = ({
         >
           {currentAuditEngagement?.riskControlMatrix !== null &&
             currentAuditEngagement?.riskControlMatrix?.objectives?.length !==
-              0 && (
+              0 &&
+            currentAuditEngagement?.riskControlMatrix?.approved == true && (
               <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
             )}
           Risk Control Matrix
@@ -281,13 +312,13 @@ const RiskControlMatrix = ({
                 );
               }
             )}
-            <div className="mt-3">
+            <div className="mt-3 d-flex gap-4 flex-end">
               {currentAuditEngagement?.riskControlMatrix?.submitted ===
                 false && (
-                <div onClick={handleSubmit}>
+                <div onClick={handleSubmit} className="mt-3">
                   <div className="justify-content-end text-end">
                     <div
-                      className={`btn btn-labeled btn-primary px-3 shadow ${
+                      className={`btn btn-labeled btn-primary  shadow ${
                         loading && "disabled"
                       }`}
                     >
@@ -309,7 +340,7 @@ const RiskControlMatrix = ({
                       currentAuditEngagement?.resourceAllocation
                         ?.proposedJobApprover?.id
                     )) && (
-                  <div onClick={handleApprove}>
+                  <div onClick={handleApprove} className="mt-3">
                     <div className="justify-content-end text-end">
                       <div
                         className={`btn btn-labeled btn-primary px-3 shadow ${
@@ -317,6 +348,42 @@ const RiskControlMatrix = ({
                         }`}
                       >
                         {loading ? "Loading" : "Approve"}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              {currentAuditEngagement?.riskControlMatrix?.submitted === true &&
+                currentAuditEngagement?.riskControlMatrix?.approved === false &&
+                (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
+                  Number(user[0]?.userId?.id) ===
+                    Number(
+                      currentAuditEngagement?.resourceAllocation
+                        ?.backupHeadOfInternalAudit?.id
+                    ) ||
+                  Number(user[0]?.userId?.id) ===
+                    Number(
+                      currentAuditEngagement?.resourceAllocation
+                        ?.proposedJobApprover?.id
+                    )) && (
+                  <div onClick={() => setFeedBackDialog(true)} className="mt-3">
+                    <div className="justify-content-end text-end">
+                      <div className={`btn btn-labeled btn-primary  shadow `}>
+                        FeedBack
+                      </div>
+                    </div>
+                  </div>
+                )}
+              {currentAuditEngagement?.riskControlMatrix?.feedback &&
+                currentAuditEngagement?.riskControlMatrix?.feedback?.id && (
+                  <div className="mt-3">
+                    <div className="justify-content-end text-end">
+                      <div
+                        className={`btn btn-labeled btn-primary  shadow `}
+                        onClick={() => {
+                          setViewFeedBackDialog(true);
+                        }}
+                      >
+                        View FeedBack
                       </div>
                     </div>
                   </div>

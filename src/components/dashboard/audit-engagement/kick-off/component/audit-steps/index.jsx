@@ -1,6 +1,9 @@
 import React from "react";
 import { setupUpdateAuditStepApproval } from "../../../../../../global-redux/reducers/audit-engagement/slice";
 import { useSelector, useDispatch } from "react-redux";
+import FeedBackDialog from "./FeedBackDialog";
+import ViewFeedBackDialog from "./ViewFeedBackDialog";
+import ApproveDialog from "./ApproveDialog";
 
 const AditSteps = ({
   setShowAuditStepsDialog,
@@ -12,6 +15,9 @@ const AditSteps = ({
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state?.auth);
   const [showSubmitButton, setShowSubmitButton] = React.useState(false);
+  const [feedBackDialog, setFeedBackDialog] = React.useState(false);
+  const [viewFeedBackDialog, setViewFeedBackDialog] = React.useState(false);
+  const [showApproveDialog, setShowApproveDialog] = React.useState(false);
 
   function handleSubmit() {
     if (!loading) {
@@ -25,14 +31,7 @@ const AditSteps = ({
   }
 
   function handleApprove() {
-    if (!loading) {
-      dispatch(
-        setupUpdateAuditStepApproval({
-          ...currentAuditEngagement?.auditStep,
-          approved: true,
-        })
-      );
-    }
+    setShowApproveDialog(true);
   }
 
   React.useEffect(() => {
@@ -54,6 +53,36 @@ const AditSteps = ({
 
   return (
     <div className="accordion-item">
+      {feedBackDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <FeedBackDialog
+              setFeedBackDialog={setFeedBackDialog}
+              currentAuditEngagement={currentAuditEngagement}
+            />
+          </div>
+        </div>
+      )}
+      {viewFeedBackDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <ViewFeedBackDialog
+              setViewFeedBackDialog={setViewFeedBackDialog}
+              currentAuditEngagement={currentAuditEngagement}
+            />
+          </div>
+        </div>
+      )}
+      {showApproveDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <ApproveDialog
+              setShowApproveDialog={setShowApproveDialog}
+              currentAuditEngagement={currentAuditEngagement}
+            />
+          </div>
+        </div>
+      )}
       <h2 className="accordion-header">
         <button
           className="accordion-button collapsed"
@@ -67,7 +96,8 @@ const AditSteps = ({
             <div className=" d-flex align-items-center">
               {currentAuditEngagement?.auditStep !== null &&
                 currentAuditEngagement?.auditStep?.stepList?.length !== 0 &&
-                showSubmitButton && (
+                showSubmitButton &&
+                currentAuditEngagement?.auditStep?.approved === true && (
                   <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
                 )}
               Audit Steps
@@ -137,45 +167,85 @@ const AditSteps = ({
                     </tbody>
                   </table>
                 </div>
-                {currentAuditEngagement?.auditStep?.submitted === false &&
-                  showSubmitButton && (
-                    <div onClick={handleSubmit}>
-                      <div className="justify-content-end text-end">
-                        <div
-                          className={`btn btn-labeled btn-primary px-3 shadow ${
-                            loading && "disabled"
-                          }`}
-                        >
-                          {loading ? "Loading..." : "Submit"}
+                <div className="d-flex gap-4 flex-end">
+                  {currentAuditEngagement?.auditStep?.submitted === false &&
+                    showSubmitButton && (
+                      <div onClick={handleSubmit}>
+                        <div className="justify-content-end text-end">
+                          <div
+                            className={`btn btn-labeled btn-primary  shadow ${
+                              loading && "disabled"
+                            }`}
+                          >
+                            {loading ? "Loading..." : "Submit"}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  )}
-                {currentAuditEngagement?.auditStep?.submitted === true &&
-                  currentAuditEngagement?.auditStep?.approved === false &&
-                  (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
-                    Number(user[0]?.userId?.id) ===
-                      Number(
-                        currentAuditEngagement?.resourceAllocation
-                          ?.backupHeadOfInternalAudit?.id
-                      ) ||
-                    Number(user[0]?.userId?.id) ===
-                      Number(
-                        currentAuditEngagement?.resourceAllocation
-                          ?.proposedJobApprover?.id
-                      )) && (
-                    <div onClick={handleApprove}>
-                      <div className="justify-content-end text-end">
-                        <div
-                          className={`btn btn-labeled btn-primary px-3 shadow ${
-                            loading && "disabled"
-                          }`}
-                        >
-                          {loading ? "Loading..." : "Approve"}
+                    )}
+                  {currentAuditEngagement?.auditStep?.submitted === true &&
+                    currentAuditEngagement?.auditStep?.approved === false &&
+                    (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
+                      Number(user[0]?.userId?.id) ===
+                        Number(
+                          currentAuditEngagement?.resourceAllocation
+                            ?.backupHeadOfInternalAudit?.id
+                        ) ||
+                      Number(user[0]?.userId?.id) ===
+                        Number(
+                          currentAuditEngagement?.resourceAllocation
+                            ?.proposedJobApprover?.id
+                        )) && (
+                      <div onClick={handleApprove}>
+                        <div className="justify-content-end text-end">
+                          <div
+                            className={`btn btn-labeled btn-primary  shadow ${
+                              loading && "disabled"
+                            }`}
+                          >
+                            {loading ? "Loading..." : "Approve"}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  )}
+                    )}
+                  {currentAuditEngagement?.auditStep?.submitted === true &&
+                    currentAuditEngagement?.auditStep?.approved === false &&
+                    (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
+                      Number(user[0]?.userId?.id) ===
+                        Number(
+                          currentAuditEngagement?.resourceAllocation
+                            ?.backupHeadOfInternalAudit?.id
+                        ) ||
+                      Number(user[0]?.userId?.id) ===
+                        Number(
+                          currentAuditEngagement?.resourceAllocation
+                            ?.proposedJobApprover?.id
+                        )) && (
+                      <div onClick={() => setFeedBackDialog(true)}>
+                        <div className="justify-content-end text-end">
+                          <div
+                            className={`btn btn-labeled btn-primary  shadow `}
+                          >
+                            FeedBack
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  {currentAuditEngagement?.auditStep?.feedback &&
+                    currentAuditEngagement?.auditStep?.feedback?.id && (
+                      <div>
+                        <div className="justify-content-end text-end">
+                          <div
+                            className={`btn btn-labeled btn-primary  shadow `}
+                            onClick={() => {
+                              setViewFeedBackDialog(true);
+                            }}
+                          >
+                            View FeedBack
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                </div>
               </div>
             </div>
           </div>
