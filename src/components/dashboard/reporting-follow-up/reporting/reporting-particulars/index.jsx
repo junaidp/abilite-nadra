@@ -21,6 +21,7 @@ import AccordianItem from "./component/accordian-item/AccordianItem";
 import { CircularProgress } from "@mui/material";
 import FirstApproveReportingDialog from "./component/approve-dialogs/FirstApprove";
 import SecondApproveReportingDialog from "./component/approve-dialogs/SecondApprove";
+import FeedBackDialog from "../../components/FeedBackDialog";
 
 const ReportingParticulars = () => {
   let navigate = useNavigate();
@@ -42,6 +43,9 @@ const ReportingParticulars = () => {
   const [currentApproveItem, setCurrentApproveItem] = React.useState({});
   const [firstApproveDialog, setFirstApproveDialog] = React.useState(false);
   const [secondApproveDialog, setSecondApproveDialog] = React.useState(false);
+  const [feedBackDialog, setFeedBackDialog] = React.useState(false);
+  const [currentReportingAndFollowUpId, setCurrentReportingAndFollowUpId] =
+    React.useState("");
 
   function handleChange(event, id) {
     setReport((pre) => {
@@ -107,15 +111,19 @@ const ReportingParticulars = () => {
   }
 
   function handleSaveToStep3(item) {
+    const currentItem = singleReport?.reportingList?.find(
+      (singleItem) => Number(singleItem?.id) === Number(item?.id)
+    );
     if (!loading) {
       dispatch(
         setupUpdateReportingByManagementAuditee({
-          ...item,
+          ...currentItem,
           stepNo: 3,
         })
       );
     }
   }
+
   function handleSaveToStep4(item) {
     setCurrentApproveItem(item);
     setSecondApproveDialog(true);
@@ -228,6 +236,16 @@ const ReportingParticulars = () => {
           </div>
         </div>
       )}
+      {feedBackDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <FeedBackDialog
+              setFeedBackDialog={setFeedBackDialog}
+              currentReportingAndFollowUpId={currentReportingAndFollowUpId}
+            />
+          </div>
+        </div>
+      )}
       {initialLoading ? (
         <div className="my-3">
           <CircularProgress />
@@ -281,6 +299,10 @@ const ReportingParticulars = () => {
                               handleSaveToStep3={handleSaveToStep3}
                               handleSaveToStep4={handleSaveToStep4}
                               handleObservationChange={handleObservationChange}
+                              setCurrentReportingAndFollowUpId={
+                                setCurrentReportingAndFollowUpId
+                              }
+                              setFeedBackDialog={setFeedBackDialog}
                             />
                           );
                         })}

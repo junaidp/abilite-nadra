@@ -19,6 +19,8 @@ const AccordianItem = ({
   singleReport,
   reportingId,
   handleObservationChange,
+  setCurrentReportingAndFollowUpId,
+  setFeedBackDialog,
 }) => {
   const { user } = useSelector((state) => state?.auth);
   const [currentItem, setCurrentItem] = React.useState({});
@@ -244,10 +246,32 @@ const AccordianItem = ({
                       }`}
                       onClick={() => handleSaveToStep2(item)}
                     >
-                      <span className="btn-label me-2">
-                        <i className="fa fa-check"></i>
-                      </span>
                       {loading ? "Loading..." : "Approve"}
+                    </button>
+                  </div>
+                )}
+              {item?.stepNo === 1 &&
+                (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
+                  Number(user[0]?.userId?.id) ===
+                    Number(
+                      singleReport?.resourceAllocation
+                        ?.backupHeadOfInternalAudit?.id
+                    ) ||
+                  Number(user[0]?.userId?.id) ===
+                    Number(
+                      singleReport?.resourceAllocation?.proposedJobApprover?.id
+                    )) && (
+                  <div className="d-flex align-items-center place-end">
+                    <button
+                      className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
+                        loading && "disabled"
+                      }`}
+                      onClick={() => {
+                        setCurrentReportingAndFollowUpId(item?.id);
+                        setFeedBackDialog(true);
+                      }}
+                    >
+                      First FeedBack
                     </button>
                   </div>
                 )}
@@ -261,9 +285,6 @@ const AccordianItem = ({
                       }`}
                       onClick={() => handleSaveStep2(item)}
                     >
-                      <span className="btn-label me-2">
-                        <i className="fa fa-check"></i>
-                      </span>
                       {loading ? "Loading..." : "Save"}
                     </button>
                   </div>
@@ -282,9 +303,6 @@ const AccordianItem = ({
                       }`}
                       onClick={() => handleSaveToStep3(item)}
                     >
-                      <span className="btn-label me-2">
-                        <i className="fa fa-check"></i>
-                      </span>
                       {loading ? "Loading..." : "Submit"}
                     </button>
                   </div>
@@ -308,10 +326,32 @@ const AccordianItem = ({
                       }`}
                       onClick={() => handleSaveToStep4(item)}
                     >
-                      <span className="btn-label me-2">
-                        <i className="fa fa-check"></i>
-                      </span>
                       {loading ? "Loading..." : "Approve"}
+                    </button>
+                  </div>
+                )}
+              {item?.stepNo === 3 &&
+                (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
+                  Number(user[0]?.userId?.id) ===
+                    Number(
+                      singleReport?.resourceAllocation
+                        ?.backupHeadOfInternalAudit?.id
+                    ) ||
+                  Number(user[0]?.userId?.id) ===
+                    Number(
+                      singleReport?.resourceAllocation?.proposedJobApprover?.id
+                    )) && (
+                  <div className="d-flex align-items-center place-end">
+                    <button
+                      className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
+                        loading && "disabled"
+                      }`}
+                      onClick={() => {
+                        setCurrentReportingAndFollowUpId(item?.id);
+                        setFeedBackDialog(true);
+                      }}
+                    >
+                      Second FeedBack
                     </button>
                   </div>
                 )}

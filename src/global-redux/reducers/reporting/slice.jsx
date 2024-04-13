@@ -11,6 +11,7 @@ import {
   reportingFileUpload,
   reportingFileDelete,
   reportingFileUpdate,
+  reportingFeedBack,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -94,6 +95,12 @@ export const setupReportingFileUpdate = createAsyncThunk(
   "reporting/reportingFileUpdate",
   async (data, thunkAPI) => {
     return reportingFileUpdate(data, thunkAPI);
+  }
+);
+export const setupReportingFeedBack = createAsyncThunk(
+  "reporting/reportingFeedBack",
+  async (data, thunkAPI) => {
+    return reportingFeedBack(data, thunkAPI);
   }
 );
 
@@ -313,6 +320,24 @@ export const slice = createSlice({
         toast.success("Reporting file updated successfully");
       })
       .addCase(setupReportingFileUpdate.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Reporting Feedback
+    builder
+      .addCase(setupReportingFeedBack.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupReportingFeedBack.fulfilled, (state) => {
+        state.loading = false;
+        state.reportingAddSuccess = true;
+        toast.success("Reporting FeedBack Provided Successfully");
+      })
+      .addCase(setupReportingFeedBack.rejected, (state, { payload }) => {
         state.loading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);

@@ -9,6 +9,9 @@ import {
   createInternalAuditReportObject,
   createExtraFields,
   updateExtraField,
+  submitInternalAuditReport,
+  approveInternalAuditReport,
+  reportFeedBack,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -36,6 +39,18 @@ export const setupSaveInternalAuditReport = createAsyncThunk(
   "internalAuditConsolidationReport/saveInternalAuditReport",
   async (data, thunkAPI) => {
     return saveInternalAuditReport(data, thunkAPI);
+  }
+);
+export const setupSubmitInternalAuditReport = createAsyncThunk(
+  "internalAuditConsolidationReport/submitInternalAuditReport",
+  async (data, thunkAPI) => {
+    return submitInternalAuditReport(data, thunkAPI);
+  }
+);
+export const setupApproveInternalAuditReport = createAsyncThunk(
+  "internalAuditConsolidationReport/approveInternalAuditReport",
+  async (data, thunkAPI) => {
+    return approveInternalAuditReport(data, thunkAPI);
   }
 );
 
@@ -83,6 +98,12 @@ export const setupUpdateExtraField = createAsyncThunk(
   "internalAuditConsolidationReport/updateExtraField",
   async (data, thunkAPI) => {
     return updateExtraField(data, thunkAPI);
+  }
+);
+export const setupReportFeedBack = createAsyncThunk(
+  "internalAuditConsolidationReport/reportFeedBack",
+  async (data, thunkAPI) => {
+    return reportFeedBack(data, thunkAPI);
   }
 );
 
@@ -143,6 +164,42 @@ export const slice = createSlice({
         toast.success("Internal Audit Report Added Successfully");
       })
       .addCase(setupSaveInternalAuditReport.rejected, (state, action) => {
+        state.addReportLoading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Submit Internal Audit Report
+    builder
+      .addCase(setupSubmitInternalAuditReport.pending, (state) => {
+        state.addReportLoading = true;
+      })
+      .addCase(setupSubmitInternalAuditReport.fulfilled, (state) => {
+        state.addReportLoading = false;
+        state.internalAuditReportAddSuccess = true;
+        toast.success("Consolidation Report Submitted Successfully");
+      })
+      .addCase(setupSubmitInternalAuditReport.rejected, (state, action) => {
+        state.addReportLoading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Approve Internal Audit Report
+    builder
+      .addCase(setupApproveInternalAuditReport.pending, (state) => {
+        state.addReportLoading = true;
+      })
+      .addCase(setupApproveInternalAuditReport.fulfilled, (state) => {
+        state.addReportLoading = false;
+        state.internalAuditReportAddSuccess = true;
+        toast.success("Consolidation Report Approved Successfully");
+      })
+      .addCase(setupApproveInternalAuditReport.rejected, (state, action) => {
         state.addReportLoading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);
@@ -290,6 +347,24 @@ export const slice = createSlice({
       })
       .addCase(setupUpdateExtraField.rejected, (state, action) => {
         state.createExtraFieldsLoading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // FeedBack
+    builder
+      .addCase(setupReportFeedBack.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupReportFeedBack.fulfilled, (state) => {
+        state.loading = false;
+        state.internalAuditReportAddSuccess = true;
+        toast.success("FeedBack Provided Succussfully");
+      })
+      .addCase(setupReportFeedBack.rejected, (state, action) => {
+        state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);
         } else {

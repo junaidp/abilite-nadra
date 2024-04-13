@@ -5,7 +5,6 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   setupGetAllInternalAuditReports,
   resetInternalAuditReportAddSuccess,
-  setupSaveInternalAuditReport,
 } from "../../../../global-redux/reducers/reports/consolidation-report/slice";
 import { CircularProgress } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
@@ -13,6 +12,10 @@ import moment from "moment";
 import DeleteInternalAuditConsolidationReportDialog from "../../../modals/delete-internal-audit-consolidation-report-dialog";
 import MyDocument from "./view-internal-audit-report/components/PDFGenerator";
 import { PDFDownloadLink } from "@react-pdf/renderer";
+import SubmitDialog from "./dialogs/SubmitDialog";
+import ApproveDialog from "./dialogs/ApproveDialog";
+import FeedBackDialog from "./dialogs/FeedBackDialog";
+import ViewFeedBackDialog from "./dialogs/ViewFeedBackDialog";
 
 const InternalAuditReport = () => {
   const navigate = useNavigate();
@@ -22,6 +25,12 @@ const InternalAuditReport = () => {
   const [page, setPage] = React.useState(1);
   const { allInternalAuditReports, loading, internalAuditReportAddSuccess } =
     useSelector((state) => state?.consolidationReports);
+  const [currentReportItem, setCurrentReportItem] = React.useState({});
+  const [showSubmitReportDialog, setShowSubmitReportDialog] =
+    React.useState(false);
+  const [showApproveDialog, setShowApproveDialog] = React.useState(false);
+  const [showFeedBackDialog, setFeedBackDialog] = React.useState(false);
+  const [viewFeedBackDialog, setViewFeedBackDialog] = React.useState(false);
   const [
     showDeleteInternalAuditReportDialog,
     setShowDeleteInternalAuditReportDialog,
@@ -33,14 +42,12 @@ const InternalAuditReport = () => {
     setPage(value);
   };
   function handleSubmitReport(item) {
-    if (!loading) {
-      dispatch(setupSaveInternalAuditReport({ ...item, submitted: true }));
-    }
+    setCurrentReportItem(item);
+    setShowSubmitReportDialog(true);
   }
   function handleApproveReport(item) {
-    if (!loading) {
-      dispatch(setupSaveInternalAuditReport({ ...item, approved: true }));
-    }
+    setCurrentReportItem(item);
+    setShowApproveDialog(true);
   }
 
   React.useEffect(() => {
@@ -86,6 +93,46 @@ const InternalAuditReport = () => {
           </div>
         </div>
       )}
+      {showSubmitReportDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <SubmitDialog
+              currentReportItem={currentReportItem}
+              setShowSubmitReportDialog={setShowSubmitReportDialog}
+            />
+          </div>
+        </div>
+      )}
+      {showApproveDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <ApproveDialog
+              currentReportItem={currentReportItem}
+              setShowApproveDialog={setShowApproveDialog}
+            />
+          </div>
+        </div>
+      )}
+      {showFeedBackDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <FeedBackDialog
+              Id={currentReportItem?.id}
+              setFeedBackDialog={setFeedBackDialog}
+            />
+          </div>
+        </div>
+      )}
+      {viewFeedBackDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <ViewFeedBackDialog
+              currentReportItem={currentReportItem}
+              setViewFeedBackDialog={setViewFeedBackDialog}
+            />
+          </div>
+        </div>
+      )}
       <header className="section-header my-3 text-start d-flex align-items-center justify-content-between">
         <div className="mb-0 heading">Internal Audit Consolidation Report</div>
         <div className="">
@@ -110,11 +157,10 @@ const InternalAuditReport = () => {
       <div className="row">
         <div className="col-lg-12">
           <div className="table-responsive">
-            <table className="table table-bordered  table-hover rounded">
+            <table className="table table-bordered  table-hover rounded w-100">
               <thead className="bg-secondary text-white">
                 <tr>
-                  <th className="w-80">Sr No.</th>
-                  <th className="w-80">Id</th>
+                  <th>Sr No.</th>
                   <th>Job Name</th>
                   <th>Report Name</th>
                   <th>Report Date</th>
@@ -145,7 +191,6 @@ const InternalAuditReport = () => {
                       return (
                         <tr key={index}>
                           <td>{index + 1}</td>
-                          <td>{item?.id}</td>
                           <td>{item?.jobName || ""}</td>
                           <td>{item?.reportName || ""}</td>
                           <td>
@@ -155,77 +200,96 @@ const InternalAuditReport = () => {
                           <td>null</td>
                           <td>{item?.status}</td>
                           <td>
-                            <i
-                              className="fa-eye fa f-18 cursor-pointer"
-                              onClick={() =>
-                                navigate(
-                                  `/audit/view-internal-audit-consolidation-report?reportId=${item?.id}`
-                                )
-                              }
-                            ></i>
-                            {item?.submitted === false && (
+                            <div className="d-flex gap-4">
                               <i
-                                className="fa fa-edit px-3 f-18 cursor-pointer "
+                                className="fa-eye fa f-18 cursor-pointer"
                                 onClick={() =>
                                   navigate(
-                                    `/audit/update-internal-audit-consolidation-report?reportId=${item?.id}`
+                                    `/audit/view-internal-audit-consolidation-report?reportId=${item?.id}`
                                   )
                                 }
                               ></i>
-                            )}
-                            <i
-                              className={`fa fa-trash text-danger cursor-pointer ${
-                                item?.submitted === true && "px-3"
-                              } f-18`}
-                              onClick={() => {
-                                setDeleteInternalAuditReportId(item?.id);
-                                setShowDeleteInternalAuditReportDialog(true);
-                              }}
-                            ></i>
-                            {item?.reportName &&
-                              item?.reportName !== "" &&
-                              item?.executiveSummary &&
-                              item?.executiveSummary !== "" &&
-                              item?.auditPurpose &&
-                              item?.auditPurpose !== "" &&
-                              item?.intAuditExtraFieldsList &&
-                              item?.intAuditExtraFieldsList?.length !== 0 &&
-                              item?.submitted === false &&
-                              Number(item?.createdBy) ===
-                                Number(user[0]?.userId?.id) && (
-                                <div
-                                  className={`btn btn-labeled btn-primary px-3 shadow mx-2 `}
-                                  onClick={() => handleSubmitReport(item)}
-                                >
-                                  <span className="btn-label me-2">
-                                    <i className="fa fa-check-circle f-18"></i>
-                                  </span>
-                                  Submit
-                                </div>
+                              {item?.submitted === false && (
+                                <i
+                                  className="fa fa-edit  f-18 cursor-pointer "
+                                  onClick={() =>
+                                    navigate(
+                                      `/audit/update-internal-audit-consolidation-report?reportId=${item?.id}`
+                                    )
+                                  }
+                                ></i>
                               )}
+                              <i
+                                className={`fa fa-trash text-danger cursor-pointer f-18`}
+                                onClick={() => {
+                                  setDeleteInternalAuditReportId(item?.id);
+                                  setShowDeleteInternalAuditReportDialog(true);
+                                }}
+                              ></i>
+                              {item?.reportName &&
+                                item?.reportName !== "" &&
+                                item?.executiveSummary &&
+                                item?.executiveSummary !== "" &&
+                                item?.auditPurpose &&
+                                item?.auditPurpose !== "" &&
+                                item?.intAuditExtraFieldsList &&
+                                item?.intAuditExtraFieldsList?.length !== 0 &&
+                                item?.submitted === false &&
+                                Number(item?.createdBy) ===
+                                  Number(user[0]?.userId?.id) && (
+                                  <div
+                                    className={`btn btn-labeled btn-primary  shadow mx-2 `}
+                                    onClick={() => handleSubmitReport(item)}
+                                  >
+                                    Submit
+                                  </div>
+                                )}
+                              {item?.submitted === true &&
+                                item?.approved === false &&
+                                user[0]?.userId?.employeeid?.userHierarchy ===
+                                  "IAH" && (
+                                  <div
+                                    className={`btn btn-labeled btn-primary  shadow mx-2 `}
+                                    onClick={() => handleApproveReport(item)}
+                                  >
+                                    Approve
+                                  </div>
+                                )}
+                              {item?.approved === true && (
+                                <PDFDownloadLink
+                                  document={<MyDocument reportObject={item} />}
+                                  fileName="consolidation.pdf"
+                                >
+                                  {({ blob, url, loading, error }) =>
+                                    "Download pdf!"
+                                  }
+                                </PDFDownloadLink>
+                              )}
+                            </div>
                             {item?.submitted === true &&
                               item?.approved === false &&
                               user[0]?.userId?.employeeid?.userHierarchy ===
                                 "IAH" && (
                                 <div
-                                  className={`btn btn-labeled btn-primary px-3 shadow mx-2 `}
-                                  onClick={() => handleApproveReport(item)}
+                                  className={`btn btn-labeled btn-primary  shadow mt-2 mx-2  `}
+                                  onClick={() => {
+                                    setCurrentReportItem(item);
+                                    setFeedBackDialog(true);
+                                  }}
                                 >
-                                  <span className="btn-label me-2">
-                                    <i className="fa fa-check-circle f-18"></i>
-                                  </span>
-                                  Approve
+                                  FeedBack
                                 </div>
                               )}
-                            {item?.approved === true && (
-                              <PDFDownloadLink
-                                document={<MyDocument reportObject={item} />}
-                                fileName="consolidation.pdf"
+                            {item?.feedback && item?.feedback?.id && (
+                              <div
+                                className={`btn btn-labeled btn-primary  shadow mt-2  `}
+                                onClick={() => {
+                                  setCurrentReportItem(item);
+                                  setViewFeedBackDialog(true);
+                                }}
                               >
-                                {({ blob, url, loading, error }) =>
-                                  "Download pdf!"
-                                }
-                              </PDFDownloadLink>
+                                View FeedBack
+                              </div>
                             )}
                           </td>
                         </tr>

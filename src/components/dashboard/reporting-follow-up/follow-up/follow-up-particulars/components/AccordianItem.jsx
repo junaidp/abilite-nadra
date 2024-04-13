@@ -14,6 +14,8 @@ const AccordianItem = ({
   loading,
   singleReport,
   followUpId,
+  setCurrentReportingAndFollowUpId,
+  setFeedBackDialog,
 }) => {
   const { user } = useSelector((state) => state?.auth);
   const [curretItem, setCurrentItem] = React.useState({});
@@ -245,10 +247,31 @@ const AccordianItem = ({
                       }`}
                       onClick={() => handleSaveToStep7(item)}
                     >
-                      <span className="btn-label me-2">
-                        <i className="fa fa-check"></i>
-                      </span>
                       {loading ? "Loading..." : "Approve"}
+                    </button>
+                  )}
+                {item?.stepNo === 6 &&
+                  (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
+                    Number(user[0]?.userId?.id) ===
+                      Number(
+                        singleReport?.resourceAllocation
+                          ?.backupHeadOfInternalAudit?.id
+                      ) ||
+                    Number(user[0]?.userId?.id) ===
+                      Number(
+                        singleReport?.resourceAllocation?.proposedJobApprover
+                          ?.id
+                      )) && (
+                    <button
+                      className={`btn btn-labeled btn-primary px-3 mx-2 mt-3 shadow ${
+                        loading && "disabled"
+                      }`}
+                      onClick={() => {
+                        setCurrentReportingAndFollowUpId(item?.id);
+                        setFeedBackDialog(true);
+                      }}
+                    >
+                      FeedBack
                     </button>
                   )}
               </div>

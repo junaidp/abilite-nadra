@@ -37,6 +37,41 @@ export const saveInternalAuditReport = async (data, thunkAPI) => {
   }
 };
 
+export const submitInternalAuditReport = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.post(
+      `${baseUrl}/consolidatedReports/update`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+export const approveInternalAuditReport = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.post(
+      `${baseUrl}/consolidatedReports/update`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
 export const updateInternalAuditReport = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
@@ -151,6 +186,24 @@ export const updateExtraField = async (data, thunkAPI) => {
     let props = await axios.post(
       `${baseUrl}/consolidatedReports/report/updateExtraField`,
       data,
+      {
+        headers: {
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
+export const reportFeedBack = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.post(
+      `${baseUrl}/consolidatedReports/report/feedBack?consolidatedReportsId=${data?.consolidatedReportsId}`,
+      { description: data?.description },
       {
         headers: {
           Authorization: `Bearer ${user[0]?.token}`,

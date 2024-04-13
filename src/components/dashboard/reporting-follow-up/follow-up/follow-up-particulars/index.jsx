@@ -18,6 +18,7 @@ import "./index.css";
 import { CircularProgress } from "@mui/material";
 import AccordianItem from "./components/AccordianItem";
 import ApproveDialog from "./components/ApproveDialog";
+import FeedBackDialog from "../../components/FeedBackDialog";
 
 const ReportingParticulars = () => {
   let navigate = useNavigate();
@@ -31,6 +32,9 @@ const ReportingParticulars = () => {
   const [report, setReport] = React.useState([]);
   const [currentApproveItem, setCurrentApproveItem] = React.useState({});
   const [approveDialog, setApproveDialog] = React.useState(false);
+  const [feedBackDialog, setFeedBackDialog] = React.useState(false);
+  const [currentReportingAndFollowUpId, setCurrentReportingAndFollowUpId] =
+    React.useState("");
 
   function handleChange(event, id) {
     setReport((pre) => {
@@ -52,9 +56,12 @@ const ReportingParticulars = () => {
   }
 
   function handleSaveToStep6(item) {
+    const currentItem = singleReport?.reportingList?.find(
+      (singleItem) => Number(singleItem?.id) === Number(item?.id)
+    );
     dispatch(
       setupUpdateReporting({
-        ...item,
+        ...currentItem,
         stepNo: 6,
       })
     );
@@ -65,6 +72,10 @@ const ReportingParticulars = () => {
       dispatch(
         setupUpdateFollowUp({
           ...item?.followUp,
+          finalComments:
+            item?.followUp?.recommendationsImplemented.toString() === "true"
+              ? item?.followUp?.finalComments
+              : "",
           recommendationsImplemented:
             item?.followUp?.recommendationsImplemented.toString() === "true"
               ? true
@@ -143,6 +154,16 @@ const ReportingParticulars = () => {
           </div>
         </div>
       )}
+      {feedBackDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <FeedBackDialog
+              setFeedBackDialog={setFeedBackDialog}
+              currentReportingAndFollowUpId={currentReportingAndFollowUpId}
+            />
+          </div>
+        </div>
+      )}
       {initialLoading ? (
         <div className="my-3">
           <CircularProgress />
@@ -195,6 +216,10 @@ const ReportingParticulars = () => {
                                 loading={loading}
                                 singleReport={singleReport}
                                 followUpId={followUpId}
+                                setCurrentReportingAndFollowUpId={
+                                  setCurrentReportingAndFollowUpId
+                                }
+                                setFeedBackDialog={setFeedBackDialog}
                               />
                             );
                           })}

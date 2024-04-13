@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import Chip from "@mui/material/Chip";
+import moment from "moment";
 const JobScheduleList = ({
   currentJobSchedulingObject,
   setCurrentJobScheduling,
@@ -87,9 +88,11 @@ const JobScheduleList = ({
                         className="form-control"
                         placeholder="Select Date"
                         value={
-                          new Date(list?.plannedJobStartDate)
-                            .toISOString()
-                            .split("T")[0]
+                          list?.plannedJobStartDate
+                            ? moment(list?.plannedJobStartDate).format(
+                                "YYYY-MM-DD"
+                              )
+                            : null
                         }
                         disabled={
                           singleJobSchedulingObject?.locked === true ||
@@ -112,9 +115,11 @@ const JobScheduleList = ({
                         className="form-control"
                         placeholder="Select Date"
                         value={
-                          new Date(list?.plannedJobEndDate)
-                            .toISOString()
-                            .split("T")[0]
+                          list?.plannedJobEndDate
+                            ? moment(list?.plannedJobEndDate).format(
+                                "YYYY-MM-DD"
+                              )
+                            : null
                         }
                         readOnly
                         disabled
