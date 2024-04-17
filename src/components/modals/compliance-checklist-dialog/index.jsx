@@ -81,9 +81,9 @@ const ComplianceCheckListDialog = ({
                       <th>Area</th>
                       <th>Subject</th>
                       <th>Particulars</th>
+                      <th>File attachment</th>
                       <th>Remarks</th>
                       <th>Observation</th>
-                      <th>File attachment</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -97,7 +97,10 @@ const ComplianceCheckListDialog = ({
                                 <td>{singleItem?.area}</td>
                                 <td>{singleItem?.subject || "null"}</td>
                                 <td>{singleItem?.particulars}</td>
-                                <ObservationFileUpload item={singleItem} />
+                                <ObservationFileUpload
+                                  item={singleItem}
+                                  complianceItem={complianceItem}
+                                />
                                 <td>
                                   <select
                                     className="form-select mb-2"
@@ -106,6 +109,11 @@ const ComplianceCheckListDialog = ({
                                     name="remarks"
                                     onChange={(event) =>
                                       handleChange(event, singleItem?.id)
+                                    }
+                                    disabled={
+                                      complianceItem?.submitted === true
+                                        ? true
+                                        : false
                                     }
                                   >
                                     <option value="">Select One</option>
@@ -122,6 +130,7 @@ const ComplianceCheckListDialog = ({
                                     initialValue={singleItem?.observation}
                                     onContentChange={onContentChange}
                                     singleItem={singleItem}
+                                    complianceItem={complianceItem}
                                   />
                                 </td>
                               </tr>
@@ -145,14 +154,16 @@ const ComplianceCheckListDialog = ({
             Close
           </button>
         </div>
-        <div className="col-lg-6 text-end">
-          <button
-            className={`btn btn-primary float-end ${loading && "disabled"}`}
-            onClick={handleUpdate}
-          >
-            {loading ? "Loading..." : "Save"}
-          </button>
-        </div>
+        {complianceItem?.submitted === false && (
+          <div className="col-lg-6 text-end">
+            <button
+              className={`btn btn-primary float-end ${loading && "disabled"}`}
+              onClick={handleUpdate}
+            >
+              {loading ? "Loading..." : "Save"}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

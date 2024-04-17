@@ -174,7 +174,7 @@ const PDFGenerator = ({ reportObject }) => {
           <Image src={logo} style={styles.logo} />
         </View>
         <View style={styles.pdfHeaderWrap}>
-          <Text style={styles.title}>Internal Audit Report</Text>
+          <Text style={styles.title}>Internal Audit Consolidation Report</Text>
         </View>
         <View style={styles.reportNameView}>
           <View style={styles.reportInfoViewItem}>

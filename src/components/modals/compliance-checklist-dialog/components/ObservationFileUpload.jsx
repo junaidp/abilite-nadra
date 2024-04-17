@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { baseUrl } from "../../../../constants/index";
 import "./index.css";
 
-const ObservationFileUpload = ({ item }) => {
+const ObservationFileUpload = ({ item, complianceItem }) => {
   const dispatch = useDispatch();
   const { loading, auditEngagementObservationAddSuccess } = useSelector(
     (state) => state?.auditEngagement
@@ -96,46 +96,47 @@ const ObservationFileUpload = ({ item }) => {
       <div className="row mb-3 fileSubObservationColItem">
         <div className="col-lg-12">
           <label className="form-label me-3 mb-3">Attach files</label>
-
-          <div className="row mb-3">
-            <div className="col-lg-4 row">
-              <div className="col-lg-12">
-                <input
-                  type="file"
-                  id="fileInpu"
-                  className="f-10"
-                  ref={fileInputRef}
-                  onChange={handleFileChange}
-                />
+          {complianceItem?.submitted === false && (
+            <div className="row mb-3">
+              <div className="col-lg-4 row">
+                <div className="col-lg-12">
+                  <input
+                    type="file"
+                    id="fileInpu"
+                    className="f-10"
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                  />
+                </div>
+                <div className="col-lg-12 mt-4">
+                  <button
+                    className={`btn btn-labeled btn-primary  shadow ${
+                      loading && "disabled"
+                    }`}
+                    onClick={handleFileUpload}
+                  >
+                    <span className="btn-label me-2">
+                      <i className="fa fa-save"></i>
+                    </span>
+                    {loading ? "Loading..." : "Upload"}
+                  </button>
+                </div>
               </div>
-              <div className="col-lg-12 mt-4">
-                <button
-                  className={`btn btn-labeled btn-primary  shadow ${
-                    loading && "disabled"
-                  }`}
-                  onClick={handleFileUpload}
-                >
-                  <span className="btn-label me-2">
-                    <i className="fa fa-save"></i>
-                  </span>
-                  {loading ? "Loading..." : "Upload"}
-                </button>
+
+              <div className="col-lg-8 row flex flex-end">
+                <div className="col-lg-8">
+                  <label>Updated File here:</label>
+                  <input
+                    type="file"
+                    id="fileInpu"
+                    className="f-10"
+                    ref={updatedFileInputRef}
+                    onChange={handleUpdateFileChange}
+                  />
+                </div>
               </div>
             </div>
-
-            <div className="col-lg-8 row flex flex-end">
-              <div className="col-lg-8">
-                <label>Updated File here:</label>
-                <input
-                  type="file"
-                  id="fileInpu"
-                  className="f-10"
-                  ref={updatedFileInputRef}
-                  onChange={handleUpdateFileChange}
-                />
-              </div>
-            </div>
-          </div>
+          )}
 
           <div className="table-responsive">
             <table className="table table-bordered  table-hover rounded">
@@ -164,23 +165,29 @@ const ObservationFileUpload = ({ item }) => {
                               class="fa fa-download f-18 mx-2 cursor-pointer"
                               onClick={() => handleDownload(fileItem?.id)}
                             ></i>
-                            <i
-                              className="fa fa-trash text-danger f-18 cursor-pointer px-2"
-                              onClick={() => {
-                                if (!loading) {
-                                  dispatch(
-                                    setupDeleteAuditStepCheckListFile({
-                                      fileId: Number(fileItem?.id),
-                                      ChecklistObservationsId: Number(item?.id),
-                                    })
-                                  );
-                                }
-                              }}
-                            ></i>
-                            <i
-                              className="fa fa-edit px-2 f-18 cursor-pointer"
-                              onClick={() => handleFileUpdate(fileItem?.id)}
-                            ></i>
+                            {complianceItem?.submitted === false && (
+                              <i
+                                className="fa fa-trash text-danger f-18 cursor-pointer px-2"
+                                onClick={() => {
+                                  if (!loading) {
+                                    dispatch(
+                                      setupDeleteAuditStepCheckListFile({
+                                        fileId: Number(fileItem?.id),
+                                        ChecklistObservationsId: Number(
+                                          item?.id
+                                        ),
+                                      })
+                                    );
+                                  }
+                                }}
+                              ></i>
+                            )}
+                            {complianceItem?.submitted === false && (
+                              <i
+                                className="fa fa-edit px-2 f-18 cursor-pointer"
+                                onClick={() => handleFileUpdate(fileItem?.id)}
+                              ></i>
+                            )}
                           </td>
                         </tr>
                       );

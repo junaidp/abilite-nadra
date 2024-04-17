@@ -21,10 +21,8 @@ const TableRow = ({
         <a
           className="fw-bold  text-primary  px-3 py-1 f-10"
           onClick={() => {
-            if (mainItem?.submitted !== true) {
-              setComplianceCheckListMainId(mainItem?.id);
-              setShowComplianceCheckListDialog(true);
-            }
+            setComplianceCheckListMainId(mainItem?.id);
+            setShowComplianceCheckListDialog(true);
           }}
         >
           {mainItem?.subLocationDescription || "No Sub Location Provided"}

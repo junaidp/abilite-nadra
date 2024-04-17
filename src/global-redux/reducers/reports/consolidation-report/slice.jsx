@@ -161,7 +161,7 @@ export const slice = createSlice({
       .addCase(setupSaveInternalAuditReport.fulfilled, (state) => {
         state.addReportLoading = false;
         state.internalAuditReportAddSuccess = true;
-        toast.success("Internal Audit Report Added Successfully");
+        toast.success("Internal Audit Consolidation Report Added Successfully");
       })
       .addCase(setupSaveInternalAuditReport.rejected, (state, action) => {
         state.addReportLoading = false;

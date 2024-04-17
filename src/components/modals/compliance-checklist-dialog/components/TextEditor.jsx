@@ -1,7 +1,12 @@
 import React, { useState, useRef, useMemo } from "react";
 import JoditEditor from "jodit-react";
 
-const RichTextEditor = ({ onContentChange, initialValue, singleItem }) => {
+const RichTextEditor = ({
+  onContentChange,
+  initialValue,
+  singleItem,
+  complianceItem,
+}) => {
   const editor = useRef(null);
   const [content, setContent] = React.useState(initialValue || "");
 
@@ -20,7 +25,9 @@ const RichTextEditor = ({ onContentChange, initialValue, singleItem }) => {
       },
       toolbarAdaptive: false,
       readonly:
-        singleItem?.remarks === "1" || singleItem?.remarks === "3"
+        singleItem?.remarks === "1" ||
+        singleItem?.remarks === "3" ||
+        complianceItem?.submitted === true
           ? true
           : false,
       spellcheck: true,
