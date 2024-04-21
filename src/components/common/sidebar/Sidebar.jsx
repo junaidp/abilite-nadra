@@ -15,7 +15,9 @@ const Sidebar = () => {
   );
 
   function handleMainItemClick(link, id) {
-    navigate(link);
+    if (link) {
+      navigate(link);
+    }
     dispatch(changeActiveLink(id));
     if (id === "li-audit") {
       dispatch(changeExpanded("li-audit"));

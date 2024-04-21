@@ -17,7 +17,9 @@ const RiskControlMatrix = ({
   auditEngagementId,
 }) => {
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state?.auditEngagement);
+  const { loading, singleAuditEngagementObject } = useSelector(
+    (state) => state?.auditEngagement
+  );
   const { user } = useSelector((state) => state?.auth);
   const [feedBackDialog, setFeedBackDialog] = React.useState(false);
   const [viewFeedBackDialog, setViewFeedBackDialog] = React.useState(false);
@@ -37,6 +39,34 @@ const RiskControlMatrix = ({
       );
     }
   }
+
+  function handleAllowEdit() {
+    let allowEdit = false;
+    if (singleAuditEngagementObject?.riskControlMatrix?.submitted === false) {
+      allowEdit = true;
+    }
+
+    if (
+      singleAuditEngagementObject?.riskControlMatrix?.submitted === true &&
+      singleAuditEngagementObject?.riskControlMatrix?.approved === false &&
+      (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
+        Number(user[0]?.userId?.id) ===
+          Number(
+            currentAuditEngagement?.resourceAllocation
+              ?.backupHeadOfInternalAudit?.id
+          ) ||
+        Number(user[0]?.userId?.id) ===
+          Number(
+            currentAuditEngagement?.resourceAllocation?.proposedJobApprover?.id
+          ))
+    ) {
+      allowEdit = true;
+    }
+
+    return allowEdit;
+  }
+
+  
   return (
     <div className="accordion-item">
       {feedBackDialog && (
@@ -180,6 +210,7 @@ const RiskControlMatrix = ({
                         singleAuditEngagement={singleAuditEngagement}
                         index={index}
                         currentAuditEngagement={currentAuditEngagement}
+                        handleAllowEdit={handleAllowEdit}
                       />
                     </div>
                     <div className="col-lg-8">

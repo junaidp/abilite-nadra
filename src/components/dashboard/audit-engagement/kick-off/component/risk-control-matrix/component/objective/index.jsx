@@ -9,6 +9,7 @@ const Objective = ({
   singleAuditEngagement,
   index,
   currentAuditEngagement,
+  handleAllowEdit,
 }) => {
   const dispatch = useDispatch();
   const [currentButtonDescription, setCurrentButtonDescription] =
@@ -116,13 +117,12 @@ const Objective = ({
           disabled={singleAuditEngagement?.editable ? false : true}
         ></textarea>
         <label className="word-limit-info label-text">Maximum 1500 words</label>
-        {!singleAuditEngagement?.editable &&
-          currentAuditEngagement?.riskControlMatrix?.approved !== true && (
-            <i
-              className="fa fa-edit   f-18 cursor-pointer  mt-3"
-              onClick={() => handleAddEditable(singleAuditEngagement?.id)}
-            ></i>
-          )}
+        {handleAllowEdit === true && (
+          <i
+            className="fa fa-edit   f-18 cursor-pointer  mt-3"
+            onClick={() => handleAddEditable(singleAuditEngagement?.id)}
+          ></i>
+        )}
         {singleAuditEngagement?.editable &&
           currentAuditEngagement?.riskControlMatrix?.approved !== true && (
             <button

@@ -314,34 +314,40 @@ const StartScheduling = () => {
                 singleJobSchedulingObject={singleJobSchedulingObject}
               />
             </div>
-            <div className="col-lg-2">
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="flexCheckDefault"
-                  name="separateJob"
-                  checked={currentJobSchedulingObject?.separateJob}
-                  onChange={(event) =>
-                    handleChangeJobSchedulingCheckFields(event, "seprateJob")
-                  }
-                  disabled={
-                    singleJobSchedulingObject?.locked === true ||
-                    singleJobSchedulingObject?.natureThrough ===
-                      "Compliance Checklist" ||
-                    (singleJobSchedulingObject?.complete === true &&
-                      singleJobSchedulingObject?.locked === false &&
-                      user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
-                      ? true
-                      : false
-                  }
-                />
-                <label className="form-check-label" htmlFor="flexCheckDefault">
-                  Seprate job
-                </label>
+            {singleJobSchedulingObject?.natureThrough !==
+              "Compliance Checklist" && (
+              <div className="col-lg-2">
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    value=""
+                    id="flexCheckDefault"
+                    name="separateJob"
+                    checked={currentJobSchedulingObject?.separateJob}
+                    onChange={(event) =>
+                      handleChangeJobSchedulingCheckFields(event, "seprateJob")
+                    }
+                    disabled={
+                      singleJobSchedulingObject?.locked === true ||
+                      singleJobSchedulingObject?.natureThrough ===
+                        "Compliance Checklist" ||
+                      (singleJobSchedulingObject?.complete === true &&
+                        singleJobSchedulingObject?.locked === false &&
+                        user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                        ? true
+                        : false
+                    }
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexCheckDefault"
+                  >
+                    Seprate job
+                  </label>
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           <div className="row">

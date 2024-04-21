@@ -100,8 +100,6 @@ const TimeAndDateAllocation = ({
               0 &&
             singleJobSchedulingObject?.timeAndDateAllocation
               ?.totalWorkingManHours !== 0 &&
-            singleJobSchedulingObject?.timeAndDateAllocation?.travellingDays !==
-              0 &&
             singleJobSchedulingObject?.timeAndDateAllocation?.placeOfWork && (
               <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
             )}
@@ -223,31 +221,34 @@ const TimeAndDateAllocation = ({
                   </option>
                 </select>
               </div>
-              <div className="col-lg-6">
-                <label>Travelling days</label>
-                <input
-                  type="number"
-                  className="form-control"
-                  id="sa"
-                  placeholder=""
-                  value={
-                    currentJobSchedulingObject?.timeAndDateAllocation
-                      ?.travellingDays
-                  }
-                  name="travellingDays"
-                  disabled={
-                    singleJobSchedulingObject?.locked === true ||
-                    (singleJobSchedulingObject?.complete === true &&
-                      singleJobSchedulingObject?.locked === false &&
-                      user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
-                      ? true
-                      : false
-                  }
-                  onChange={(event) =>
-                    handleChangeNumberTextField(event, "timeAllocation")
-                  }
-                />
-              </div>
+              {currentJobSchedulingObject?.timeAndDateAllocation
+                ?.placeOfWork !== "In-house" && (
+                <div className="col-lg-6">
+                  <label>Travelling days</label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="sa"
+                    placeholder=""
+                    value={
+                      currentJobSchedulingObject?.timeAndDateAllocation
+                        ?.travellingDays
+                    }
+                    name="travellingDays"
+                    disabled={
+                      singleJobSchedulingObject?.locked === true ||
+                      (singleJobSchedulingObject?.complete === true &&
+                        singleJobSchedulingObject?.locked === false &&
+                        user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                        ? true
+                        : false
+                    }
+                    onChange={(event) =>
+                      handleChangeNumberTextField(event, "timeAllocation")
+                    }
+                  />
+                </div>
+              )}
             </div>
 
             <div className="row mb-3">
@@ -260,70 +261,72 @@ const TimeAndDateAllocation = ({
                 </p>
               </div>
             </div>
-
-            <div className="row mb-3">
-              <div className="col-lg-6">
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="flexCheckDefault"
-                    name="repeatJob"
-                    checked={
-                      currentJobSchedulingObject?.timeAndDateAllocation
-                        ?.repeatJob
-                    }
-                    disabled={
-                      singleJobSchedulingObject?.locked === true ||
-                      (singleJobSchedulingObject?.complete === true &&
-                        singleJobSchedulingObject?.locked === false &&
-                        user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
-                        ? true
-                        : false
-                    }
-                    onChange={(event) =>
-                      handleChangeJobSchedulingCheckFields(event, "repeatJob")
-                    }
-                  />
-                  <label
-                    className="form-check-label"
-                    htmlFor="flexCheckDefault"
-                  >
-                    Repeat job
-                  </label>
-                </div>
-              </div>
-              {currentJobSchedulingObject?.timeAndDateAllocation?.repeatJob ===
-                true && (
+            {singleJobSchedulingObject?.natureThrough !==
+              "Compliance Checklist" && (
+              <div className="row mb-3">
                 <div className="col-lg-6">
-                  <label className="me-3">Frequency</label>
-                  <select
-                    className="form-select"
-                    aria-label="Default select example"
-                    value={
-                      currentJobSchedulingObject?.timeAndDateAllocation
-                        ?.frequency || ""
-                    }
-                    name="frequency"
-                    disabled={
-                      singleJobSchedulingObject?.locked === true ||
-                      (singleJobSchedulingObject?.complete === true &&
-                        singleJobSchedulingObject?.locked === false &&
-                        user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
-                        ? true
-                        : false
-                    }
-                    onChange={handleChangeJobSchedulingStringTextFields}
-                  >
-                    <option value="">Select</option>
-                    <option value="Semi Annually">Semi Annually</option>
-                    <option value="Quarterly">Quarterly</option>
-                    <option value="Monthly">Monthly</option>
-                  </select>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value=""
+                      id="flexCheckDefault"
+                      name="repeatJob"
+                      checked={
+                        currentJobSchedulingObject?.timeAndDateAllocation
+                          ?.repeatJob
+                      }
+                      disabled={
+                        singleJobSchedulingObject?.locked === true ||
+                        (singleJobSchedulingObject?.complete === true &&
+                          singleJobSchedulingObject?.locked === false &&
+                          user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                          ? true
+                          : false
+                      }
+                      onChange={(event) =>
+                        handleChangeJobSchedulingCheckFields(event, "repeatJob")
+                      }
+                    />
+                    <label
+                      className="form-check-label"
+                      htmlFor="flexCheckDefault"
+                    >
+                      Repeat job
+                    </label>
+                  </div>
                 </div>
-              )}
-            </div>
+                {currentJobSchedulingObject?.timeAndDateAllocation
+                  ?.repeatJob === true && (
+                  <div className="col-lg-6">
+                    <label className="me-3">Frequency</label>
+                    <select
+                      className="form-select"
+                      aria-label="Default select example"
+                      value={
+                        currentJobSchedulingObject?.timeAndDateAllocation
+                          ?.frequency || ""
+                      }
+                      name="frequency"
+                      disabled={
+                        singleJobSchedulingObject?.locked === true ||
+                        (singleJobSchedulingObject?.complete === true &&
+                          singleJobSchedulingObject?.locked === false &&
+                          user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                          ? true
+                          : false
+                      }
+                      onChange={handleChangeJobSchedulingStringTextFields}
+                    >
+                      <option value="">Select</option>
+                      <option value="Semi Annually">Semi Annually</option>
+                      <option value="Quarterly">Quarterly</option>
+                      <option value="Monthly">Monthly</option>
+                    </select>
+                  </div>
+                )}
+              </div>
+            )}
             {(singleJobSchedulingObject?.complete === false ||
               (singleJobSchedulingObject?.complete === true &&
                 singleJobSchedulingObject?.locked === false &&
