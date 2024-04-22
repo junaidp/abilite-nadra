@@ -1,5 +1,4 @@
 import React from "react";
-import RickText from "../../../../../../../common/feed-back-rich-text/index";
 import moment from "moment";
 
 const ViewFeedBackDialog = ({
@@ -16,13 +15,19 @@ const ViewFeedBackDialog = ({
         <div className="col-lg-2 label-text">Description:</div>
         <div className="col-lg-8">
           <div className="form-group">
-            <RickText
-              editable="false"
-              initialValue={
+            <textarea
+              type="text"
+              id="fname"
+              className="form-control h-400"
+              name="fname"
+              placeholder="Add feed-back here"
+              required="required"
+              value={
                 currentAuditEngagement?.riskControlMatrix?.feedback
                   ?.description || ""
               }
-            />
+              disabled={true}
+            ></textarea>
           </div>
         </div>
       </div>

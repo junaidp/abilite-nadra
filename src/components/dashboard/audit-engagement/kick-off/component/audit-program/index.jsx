@@ -138,6 +138,33 @@ const AuditProgram = ({
     }
   }, [singleAuditEngagementObject]);
 
+  function handleAllowEdit() {
+    let allowEdit = false;
+    if (singleAuditEngagementObject?.auditProgram?.submitted === false) {
+      allowEdit = true;
+    }
+
+    if (
+      singleAuditEngagementObject?.auditProgram?.submitted === true &&
+      singleAuditEngagementObject?.auditProgram?.approved === false &&
+      (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
+        Number(user[0]?.userId?.id) ===
+          Number(
+            singleAuditEngagementObject?.resourceAllocation
+              ?.backupHeadOfInternalAudit?.id
+          ) ||
+        Number(user[0]?.userId?.id) ===
+          Number(
+            singleAuditEngagementObject?.resourceAllocation?.proposedJobApprover
+              ?.id
+          ))
+    ) {
+      allowEdit = true;
+    }
+
+    return allowEdit;
+  }
+
   return (
     <div className="accordion-item">
       {feedBackDialog && (
@@ -202,7 +229,7 @@ const AuditProgram = ({
         <div className="accordion-body">
           <div className="container">
             <div className="row mb-2">
-              {currentAuditEngagement?.auditProgram?.approved !== true && (
+              {handleAllowEdit() === true && (
                 <div className="col-lg-12">
                   <button
                     className="btn btn-labeled float-end btn-primary px-3 mt-3 shadow"
@@ -221,6 +248,7 @@ const AuditProgram = ({
               <div className="col-lg-12">
                 <div className="table-responsive">
                   <Table
+                    handleAllowEdit={handleAllowEdit}
                     currentAuditEngagement={currentAuditEngagement}
                     getDescription={getDescription}
                     handleChange={handleChange}

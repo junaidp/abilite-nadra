@@ -11,12 +11,11 @@ const Control = ({
   risk,
   riskIndex,
   index,
-  currentAuditEngagement,
+  handleAllowEdit,
 }) => {
   const dispatch = useDispatch();
-  const { auditEngagementAddSuccess } = useSelector(
-    (state) => state?.auditEngagement
-  );
+  const { auditEngagementAddSuccess, singleAuditEngagementObject } =
+    useSelector((state) => state?.auditEngagement);
   const [currentButtonDescription, setCurrentButtonDescription] =
     React.useState("");
   function handleAddEditable(objectiveId, riskId, controlId) {
@@ -172,21 +171,21 @@ const Control = ({
             <label className="word-limit-info label-text">
               Maximum 1500 words
             </label>
-            {!control?.editable &&
-              currentAuditEngagement?.riskControlMatrix?.approved !== true && (
-                <i
-                  className="fa fa-edit   f-18 cursor-pointer  mt-3"
-                  onClick={() =>
-                    handleAddEditable(
-                      singleAuditEngagement?.id,
-                      risk?.id,
-                      control?.id
-                    )
-                  }
-                ></i>
-              )}
+            {handleAllowEdit() === true && (
+              <i
+                className="fa fa-edit   f-18 cursor-pointer  mt-3"
+                onClick={() =>
+                  handleAddEditable(
+                    singleAuditEngagement?.id,
+                    risk?.id,
+                    control?.id
+                  )
+                }
+              ></i>
+            )}
             {control?.editable &&
-              currentAuditEngagement?.riskControlMatrix?.approved !== true && (
+              singleAuditEngagementObject?.riskControlMatrix?.approved !==
+                true && (
                 <button
                   className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
                     loading &&

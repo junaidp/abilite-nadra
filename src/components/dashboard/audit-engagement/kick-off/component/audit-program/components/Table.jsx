@@ -8,6 +8,7 @@ const Table = ({
   handleEditable,
   loading,
   currentButtonId,
+  handleAllowEdit,
 }) => {
   return (
     <table className="table table-bordered  table-hover rounded">
@@ -17,9 +18,7 @@ const Table = ({
           <th>Control</th>
           <th>Rating</th>
           <th>Audit Program</th>
-          {currentAuditEngagement?.auditProgram?.approved !== true && (
-            <th>Actions</th>
-          )}
+          {handleAllowEdit() === true && <th>Actions</th>}
         </tr>
       </thead>
       <tbody>
@@ -52,13 +51,7 @@ const Table = ({
                         value={item?.rating}
                         name="rating"
                         onChange={(event) => handleChange(event, item?.id)}
-                        disabled={
-                          item?.editable === true &&
-                          currentAuditEngagement?.auditProgram?.approved !==
-                            true
-                            ? false
-                            : true
-                        }
+                        disabled={item?.editable === true ? false : true}
                       >
                         <option value="">Select One</option>
                         <option value={1}>High</option>
@@ -75,15 +68,10 @@ const Table = ({
                       value={item?.description || ""}
                       name="description"
                       onChange={(event) => handleChange(event, item?.id)}
-                      disabled={
-                        item?.editable === true &&
-                        currentAuditEngagement?.auditProgram?.approved !== true
-                          ? false
-                          : true
-                      }
+                      disabled={item?.editable === true ? false : true}
                     ></textarea>
                   </td>
-                  {currentAuditEngagement?.auditProgram?.approved !== true && (
+                  {handleAllowEdit() === true && (
                     <td>
                       {item?.editable === false && (
                         <i

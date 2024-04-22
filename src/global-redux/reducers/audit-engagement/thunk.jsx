@@ -676,13 +676,10 @@ export const riskControlMatrixFeedBack = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
-      `${baseUrl}/auditEngagement/riskControlMatrix/feedBack?riskControlMatrixId=${data?.id}`,
-      {
-        description: data?.description,
-      },
+      `${baseUrl}/auditEngagement/riskControlMatrix/feedBack?riskControlMatrixId=${data?.id}&feedBackDescription=${data?.description}`,
       {
         headers: {
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json",
           Authorization: `Bearer ${user[0]?.token}`,
         },
       }
@@ -696,13 +693,10 @@ export const auditProgramFeedBack = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
-      `${baseUrl}/auditEngagement/auditProgram/feedBack?auditProgramId=${data?.id}&auditEngagementId=${data?.auditEngagementId}`,
-      {
-        description: data?.description,
-      },
+      `${baseUrl}/auditEngagement/auditProgram/feedBack?auditProgramId=${data?.id}&auditEngagementId=${data?.auditEngagementId}&description=${data?.description}`,
       {
         headers: {
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json",
           Authorization: `Bearer ${user[0]?.token}`,
         },
       }

@@ -52,12 +52,13 @@ const RiskControlMatrix = ({
       (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
         Number(user[0]?.userId?.id) ===
           Number(
-            currentAuditEngagement?.resourceAllocation
+            singleAuditEngagementObject?.resourceAllocation
               ?.backupHeadOfInternalAudit?.id
           ) ||
         Number(user[0]?.userId?.id) ===
           Number(
-            currentAuditEngagement?.resourceAllocation?.proposedJobApprover?.id
+            singleAuditEngagementObject?.resourceAllocation?.proposedJobApprover
+              ?.id
           ))
     ) {
       allowEdit = true;
@@ -66,7 +67,6 @@ const RiskControlMatrix = ({
     return allowEdit;
   }
 
-  
   return (
     <div className="accordion-item">
       {feedBackDialog && (
@@ -124,7 +124,7 @@ const RiskControlMatrix = ({
       >
         <div className="accordion-body">
           <div className="container">
-            <div className="row mb-2">
+            {/* <div className="row mb-2">
               <div className="col-lg-12">
                 <button
                   className="btn btn-labeled float-end btn-primary px-3 mt-3 shadow"
@@ -136,7 +136,7 @@ const RiskControlMatrix = ({
                   View Library
                 </button>
               </div>
-            </div>
+            </div> */}
 
             {currentAuditEngagement?.riskControlMatrix === null && (
               <div className="row">
@@ -193,8 +193,7 @@ const RiskControlMatrix = ({
                           <a
                             className="text-white add-btn"
                             onClick={() =>
-                              currentAuditEngagement?.riskControlMatrix
-                                ?.approved !== true &&
+                              handleAllowEdit() === true &&
                               setShowKickOffObjectiveDialog(true)
                             }
                           >
@@ -222,8 +221,7 @@ const RiskControlMatrix = ({
                                 <span>Risk</span>
                                 <a
                                   onClick={() =>
-                                    currentAuditEngagement?.riskControlMatrix
-                                      ?.approved !== true &&
+                                    handleAllowEdit() === true &&
                                     setShowKickOffRatingDialog(true)
                                   }
                                   className="text-white add-btn"
@@ -239,8 +237,7 @@ const RiskControlMatrix = ({
                                 <span>Controls</span>
                                 <a
                                   onClick={() =>
-                                    currentAuditEngagement?.riskControlMatrix
-                                      ?.approved !== true &&
+                                    handleAllowEdit() === true &&
                                     setShowKickOffControlDialog(true)
                                   }
                                   className="text-white add-btn"
@@ -264,9 +261,7 @@ const RiskControlMatrix = ({
                                     <span>Risk</span>
                                     <a
                                       onClick={() =>
-                                        currentAuditEngagement
-                                          ?.riskControlMatrix?.approved !==
-                                          true &&
+                                        handleAllowEdit() === true &&
                                         setShowKickOffRatingDialog(true)
                                       }
                                       className="text-white add-btn"
@@ -290,6 +285,7 @@ const RiskControlMatrix = ({
                                   currentAuditEngagement={
                                     currentAuditEngagement
                                   }
+                                  handleAllowEdit={handleAllowEdit}
                                 />
                               </div>
 
@@ -299,9 +295,7 @@ const RiskControlMatrix = ({
                                     <span>Controls</span>
                                     <a
                                       onClick={() =>
-                                        currentAuditEngagement
-                                          ?.riskControlMatrix?.approved !==
-                                          true &&
+                                        handleAllowEdit() === true &&
                                         setShowKickOffControlDialog(true)
                                       }
                                       className="text-white add-btn"
@@ -327,6 +321,7 @@ const RiskControlMatrix = ({
                                   currentAuditEngagement={
                                     currentAuditEngagement
                                   }
+                                  handleAllowEdit={handleAllowEdit}
                                 />
                               </div>
                             </div>

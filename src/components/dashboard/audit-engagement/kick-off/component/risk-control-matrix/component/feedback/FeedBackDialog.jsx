@@ -2,7 +2,6 @@ import React from "react";
 import { toast } from "react-toastify";
 import { setupRiskControlMatrixFeedBack } from "../../../../../../../../global-redux/reducers/audit-engagement/slice";
 import { useDispatch, useSelector } from "react-redux";
-import RickText from "../../../../../../../common/feed-back-rich-text/index";
 
 const FeedBackDialog = ({ setFeedBackDialog, currentAuditEngagement }) => {
   const dispatch = useDispatch();
@@ -14,10 +13,6 @@ const FeedBackDialog = ({ setFeedBackDialog, currentAuditEngagement }) => {
   function handleClose() {
     setFeedBackDialog(false);
     setDescription("");
-  }
-
-  function onContentChange(value) {
-    setDescription(value);
   }
 
   function handleAdd() {
@@ -47,7 +42,16 @@ const FeedBackDialog = ({ setFeedBackDialog, currentAuditEngagement }) => {
         <div className="col-lg-2 label-text">Description:</div>
         <div className="col-lg-8">
           <div className="form-group">
-            <RickText onContentChange={onContentChange} />
+            <textarea
+              type="text"
+              id="fname"
+              className="form-control h-400"
+              name="fname"
+              placeholder="Add feed-back here"
+              required="required"
+              value={description}
+              onChange={(event) => setDescription(event?.target?.value)}
+            ></textarea>
           </div>
         </div>
       </div>
