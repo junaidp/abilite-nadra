@@ -8,7 +8,11 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { baseUrl } from "../../../../constants/index";
 
-const ProcedureFileUpload = ({ handleChange, currentAuditStep }) => {
+const ProcedureFileUpload = ({
+  handleChange,
+  currentAuditStep,
+  handleAllowEdit,
+}) => {
   const dispatch = useDispatch();
   const fileInputRef = React.useRef(null);
   const updatedFileInputRef = React.useRef(null);
@@ -104,6 +108,7 @@ const ProcedureFileUpload = ({ handleChange, currentAuditStep }) => {
                 ? currentAuditStep?.procedurePerformed
                 : ""
             }
+            disabled={handleAllowEdit() === true ? false : true}
             onChange={(event) => handleChange(event)}
           ></textarea>
           <p className="word-limit-info mb-0">Maximum 1500 words</p>
@@ -114,33 +119,34 @@ const ProcedureFileUpload = ({ handleChange, currentAuditStep }) => {
       <div className="row mb-3">
         <div className="col-lg-12">
           <label className="form-label me-3 mb-3">Attach files</label>
-
-          <div className="row mb-3">
-            <div className="col-lg-12 row">
-              <div className="col-lg-2">
-                <input
-                  type="file"
-                  id="fileInpu"
-                  className="f-10"
-                  ref={fileInputRef}
-                  onChange={handleFileChange}
-                />
-              </div>
-              <div className="col-lg-2">
-                <button
-                  className={`btn btn-labeled btn-primary  shadow ${
-                    loading && "disabled"
-                  }`}
-                  onClick={handleFileUpload}
-                >
-                  <span className="btn-label me-2">
-                    <i className="fa fa-save"></i>
-                  </span>
-                  {loading ? "Loading..." : "Upload"}
-                </button>
+          {handleAllowEdit() === true && (
+            <div className="row mb-3">
+              <div className="col-lg-12 row">
+                <div className="col-lg-2">
+                  <input
+                    type="file"
+                    id="fileInpu"
+                    className="f-10"
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                  />
+                </div>
+                <div className="col-lg-2">
+                  <button
+                    className={`btn btn-labeled btn-primary  shadow ${
+                      loading && "disabled"
+                    }`}
+                    onClick={handleFileUpload}
+                  >
+                    <span className="btn-label me-2">
+                      <i className="fa fa-save"></i>
+                    </span>
+                    {loading ? "Loading..." : "Upload"}
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
+          )}
           <div className="table-responsive">
             <table className="table table-bordered  table-hover rounded">
               <thead className="bg-secondary text-white">
@@ -148,7 +154,7 @@ const ProcedureFileUpload = ({ handleChange, currentAuditStep }) => {
                   <th className="sr-col">Sr No.</th>
                   <th>Attach Files </th>
                   <th>Action</th>
-                  <th>Update</th>
+                  {handleAllowEdit() === true && <th>Update</th>}
                 </tr>
               </thead>
               <tbody>
@@ -174,47 +180,51 @@ const ProcedureFileUpload = ({ handleChange, currentAuditStep }) => {
                           )
                         }
                       ></i>
-                      <i
-                        className="fa fa-trash text-danger f-18 mx-2 cursor-pointer"
-                        onClick={() => {
-                          dispatch(
-                            setupAuditStepProcedureFileDelete({
-                              fileId:
-                                currentAuditStep?.procedureFileAuditStep?.id,
-                              stepId: currentAuditStep?.id,
-                            })
-                          );
-                        }}
-                      ></i>
+                      {handleAllowEdit() === true && (
+                        <i
+                          className="fa fa-trash text-danger f-18 mx-2 cursor-pointer"
+                          onClick={() => {
+                            dispatch(
+                              setupAuditStepProcedureFileDelete({
+                                fileId:
+                                  currentAuditStep?.procedureFileAuditStep?.id,
+                                stepId: currentAuditStep?.id,
+                              })
+                            );
+                          }}
+                        ></i>
+                      )}
                     </td>
-                    <td className="w-200">
-                      <div>
-                        <input
-                          type="file"
-                          id="fileInpu"
-                          className="f-10"
-                          ref={updatedFileInputRef}
-                          onChange={handleUpdateFileChange}
-                        />
-                      </div>
-                      <div>
-                        <button
-                          className={`btn btn-labeled btn-primary mt-2  shadow ${
-                            loading && "disabled"
-                          }`}
-                          onClick={() =>
-                            handleFileUpdate(
-                              currentAuditStep?.procedureFileAuditStep?.id
-                            )
-                          }
-                        >
-                          <span className="btn-label me-2">
-                            <i className="fa fa-save"></i>
-                          </span>
-                          {loading ? "Loading..." : "Update"}
-                        </button>
-                      </div>
-                    </td>
+                    {handleAllowEdit() === true && (
+                      <td className="w-200">
+                        <div>
+                          <input
+                            type="file"
+                            id="fileInpu"
+                            className="f-10"
+                            ref={updatedFileInputRef}
+                            onChange={handleUpdateFileChange}
+                          />
+                        </div>
+                        <div>
+                          <button
+                            className={`btn btn-labeled btn-primary mt-2  shadow ${
+                              loading && "disabled"
+                            }`}
+                            onClick={() =>
+                              handleFileUpdate(
+                                currentAuditStep?.procedureFileAuditStep?.id
+                              )
+                            }
+                          >
+                            <span className="btn-label me-2">
+                              <i className="fa fa-save"></i>
+                            </span>
+                            {loading ? "Loading..." : "Update"}
+                          </button>
+                        </div>
+                      </td>
+                    )}
                   </tr>
                 )}
               </tbody>

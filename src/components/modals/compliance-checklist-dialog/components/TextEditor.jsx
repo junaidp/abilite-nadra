@@ -5,7 +5,7 @@ const RichTextEditor = ({
   onContentChange,
   initialValue,
   singleItem,
-  complianceItem,
+  handleAllowEdit,
 }) => {
   const editor = useRef(null);
   const [content, setContent] = React.useState(initialValue || "");
@@ -27,7 +27,7 @@ const RichTextEditor = ({
       readonly:
         singleItem?.remarks === "1" ||
         singleItem?.remarks === "3" ||
-        complianceItem?.submitted === true
+        handleAllowEdit() === false
           ? true
           : false,
       spellcheck: true,

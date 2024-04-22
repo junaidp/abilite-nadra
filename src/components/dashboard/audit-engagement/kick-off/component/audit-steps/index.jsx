@@ -138,13 +138,8 @@ const AditSteps = ({
                                 <td>
                                   <a
                                     onClick={() => {
-                                      if (
-                                        currentAuditEngagement?.auditStep
-                                          ?.approved !== true
-                                      ) {
-                                        setAuditStepId(item?.id);
-                                        setShowAuditStepsDialog(true);
-                                      }
+                                      setAuditStepId(item?.id);
+                                      setShowAuditStepsDialog(true);
                                     }}
                                     className="fw-bold  text-primary  px-3 py-1 f-10"
                                   >

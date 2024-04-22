@@ -2,7 +2,7 @@ import React from "react";
 import ProcedureFileUpload from "./ProcedureFileUpload";
 import SamplingFileUpload from "./SamplingFileUpload";
 
-const FirstLayout = ({ currentAuditStep, handleChange }) => {
+const FirstLayout = ({ currentAuditStep, handleChange, handleAllowEdit }) => {
   return (
     <div>
       <div className="row mb-3">
@@ -22,6 +22,7 @@ const FirstLayout = ({ currentAuditStep, handleChange }) => {
               value={currentAuditStep?.sampling}
               onChange={(event) => handleChange(event)}
               name="sampling"
+              disabled={handleAllowEdit() === true ? false : true}
             >
               <option value="">Select One</option>
               <option value={1}>Yes</option>
@@ -38,6 +39,7 @@ const FirstLayout = ({ currentAuditStep, handleChange }) => {
               aria-label="Default select example"
               value={currentAuditStep?.samplingMethod}
               name="samplingMethod"
+              disabled={handleAllowEdit() === true ? false : true}
             >
               <option value="">Select One</option>
               <option value={1}>Simple Random Sampling</option>
@@ -58,6 +60,7 @@ const FirstLayout = ({ currentAuditStep, handleChange }) => {
               value={currentAuditStep?.controlRisk}
               onChange={(event) => handleChange(event)}
               name="controlRisk"
+              disabled={handleAllowEdit() === true ? false : true}
             >
               <option value="">Select One</option>
               <option value={1}>High</option>
@@ -75,6 +78,7 @@ const FirstLayout = ({ currentAuditStep, handleChange }) => {
               value={currentAuditStep?.frequency}
               onChange={(event) => handleChange(event)}
               name="frequency"
+              disabled={handleAllowEdit() === true ? false : true}
             >
               <option value="">Select One</option>
               <option value={1}>Annually</option>
@@ -104,11 +108,15 @@ const FirstLayout = ({ currentAuditStep, handleChange }) => {
         </div>
       </div>
 
-      <SamplingFileUpload currentAuditStep={currentAuditStep} />
+      <SamplingFileUpload
+        currentAuditStep={currentAuditStep}
+        handleAllowEdit={handleAllowEdit}
+      />
 
       <ProcedureFileUpload
         handleChange={handleChange}
         currentAuditStep={currentAuditStep}
+        handleAllowEdit={handleAllowEdit}
       />
     </div>
   );

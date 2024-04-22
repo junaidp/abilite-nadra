@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { baseUrl } from "../../../../constants/index";
 import "./index.css";
 
-const ObservationFileUpload = ({ item, complianceItem }) => {
+const ObservationFileUpload = ({ item, handleAllowEdit }) => {
   const dispatch = useDispatch();
   const { loading, auditEngagementObservationAddSuccess } = useSelector(
     (state) => state?.auditEngagement
@@ -96,7 +96,7 @@ const ObservationFileUpload = ({ item, complianceItem }) => {
       <div className="row mb-3 fileSubObservationColItem">
         <div className="col-lg-12">
           <label className="form-label me-3 mb-3">Attach files</label>
-          {complianceItem?.submitted === false && (
+          {handleAllowEdit() === true && (
             <div className="row mb-3">
               <div className="col-lg-4 row">
                 <div className="col-lg-12">
@@ -165,7 +165,7 @@ const ObservationFileUpload = ({ item, complianceItem }) => {
                               class="fa fa-download f-18 mx-2 cursor-pointer"
                               onClick={() => handleDownload(fileItem?.id)}
                             ></i>
-                            {complianceItem?.submitted === false && (
+                            {handleAllowEdit() === true && (
                               <i
                                 className="fa fa-trash text-danger f-18 cursor-pointer px-2"
                                 onClick={() => {
@@ -182,7 +182,7 @@ const ObservationFileUpload = ({ item, complianceItem }) => {
                                 }}
                               ></i>
                             )}
-                            {complianceItem?.submitted === false && (
+                            {handleAllowEdit() === true && (
                               <i
                                 className="fa fa-edit px-2 f-18 cursor-pointer"
                                 onClick={() => handleFileUpdate(fileItem?.id)}

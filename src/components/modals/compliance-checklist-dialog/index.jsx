@@ -10,9 +10,12 @@ const ComplianceCheckListDialog = ({
   complianceCheckListMainId,
 }) => {
   const dispatch = useDispatch();
-  const { loading, auditEngagementAddSuccess } = useSelector(
-    (state) => state?.auditEngagement
-  );
+  const {
+    loading,
+    auditEngagementObservationAddSuccess,
+    singleAuditEngagementObject,
+  } = useSelector((state) => state?.auditEngagement);
+  const { user } = useSelector((state) => state?.auth);
   const [complianceItem, setComplianceItem] = React.useState({});
 
   function handleUpdate() {
@@ -48,10 +51,10 @@ const ComplianceCheckListDialog = ({
   }
 
   React.useEffect(() => {
-    if (auditEngagementAddSuccess) {
-      setShowComplianceCheckListDialog(false);
+    if (auditEngagementObservationAddSuccess) {
+      handleUpdate();
     }
-  }, [auditEngagementAddSuccess]);
+  }, [auditEngagementObservationAddSuccess]);
 
   React.useEffect(() => {
     const singleComplianceMainItem =
@@ -60,6 +63,33 @@ const ComplianceCheckListDialog = ({
       );
     setComplianceItem(singleComplianceMainItem);
   }, [currentAuditEngagement]);
+
+  function handleAllowEdit() {
+    let allowEdit = false;
+    if (complianceItem?.submitted === false) {
+      allowEdit = true;
+    }
+
+    if (
+      complianceItem?.submitted === true &&
+      complianceItem?.approved === false &&
+      (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
+        Number(user[0]?.userId?.id) ===
+          Number(
+            singleAuditEngagementObject?.resourceAllocation
+              ?.backupHeadOfInternalAudit?.id
+          ) ||
+        Number(user[0]?.userId?.id) ===
+          Number(
+            singleAuditEngagementObject?.resourceAllocation?.proposedJobApprover
+              ?.id
+          ))
+    ) {
+      allowEdit = true;
+    }
+
+    return allowEdit;
+  }
 
   return (
     <div className="p-3">
@@ -78,12 +108,12 @@ const ComplianceCheckListDialog = ({
                   <thead>
                     <tr>
                       <th className="sr-col">Sr. #</th>
-                      <th>Area</th>
-                      <th>Subject</th>
-                      <th>Particulars</th>
-                      <th>File attachment</th>
-                      <th>Remarks</th>
+                      <th className="w-80">Area</th>
+                      <th className="w-80">Subject</th>
+                      <th className="w-150">Particulars</th>
+                      <th className="w-150">Remarks</th>
                       <th>Observation</th>
+                      <th>File attachment</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -97,10 +127,7 @@ const ComplianceCheckListDialog = ({
                                 <td>{singleItem?.area}</td>
                                 <td>{singleItem?.subject || "null"}</td>
                                 <td>{singleItem?.particulars}</td>
-                                <ObservationFileUpload
-                                  item={singleItem}
-                                  complianceItem={complianceItem}
-                                />
+
                                 <td>
                                   <select
                                     className="form-select mb-2"
@@ -111,9 +138,7 @@ const ComplianceCheckListDialog = ({
                                       handleChange(event, singleItem?.id)
                                     }
                                     disabled={
-                                      complianceItem?.submitted === true
-                                        ? true
-                                        : false
+                                      handleAllowEdit() === true ? false : true
                                     }
                                   >
                                     <option value="">Select One</option>
@@ -131,8 +156,13 @@ const ComplianceCheckListDialog = ({
                                     onContentChange={onContentChange}
                                     singleItem={singleItem}
                                     complianceItem={complianceItem}
+                                    handleAllowEdit={handleAllowEdit}
                                   />
                                 </td>
+                                <ObservationFileUpload
+                                  item={singleItem}
+                                  handleAllowEdit={handleAllowEdit}
+                                />
                               </tr>
                             );
                           }
@@ -154,7 +184,7 @@ const ComplianceCheckListDialog = ({
             Close
           </button>
         </div>
-        {complianceItem?.submitted === false && (
+        {handleAllowEdit() === true && (
           <div className="col-lg-6 text-end">
             <button
               className={`btn btn-primary float-end ${loading && "disabled"}`}
