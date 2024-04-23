@@ -12,7 +12,6 @@ const Reporting = () => {
   const { user } = useSelector((state) => state?.auth);
   const { company, year } = useSelector((state) => state?.common);
   const { allFollowUp, loading } = useSelector((state) => state?.reporting);
-  const [total, setTotal] = React.useState(0);
   const [page, setPage] = React.useState(1);
   const handleChange = (event, value) => {
     setPage(value);
@@ -30,21 +29,6 @@ const Reporting = () => {
       );
     }
   }, [user, year, company]);
-
-  React.useEffect(() => {
-    if (allFollowUp?.length !== 0) {
-      let num = 0;
-      allFollowUp?.forEach((item) => {
-        num =
-          Number(num) +
-          Number(
-            item?.reportingList?.filter((singleItem) => singleItem?.stepNo >= 5)
-              ?.length
-          );
-      });
-      setTotal(num);
-    }
-  }, [allFollowUp]);
 
   return (
     <div>

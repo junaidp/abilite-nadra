@@ -108,9 +108,6 @@ const ReportingFileUpload = ({ item }) => {
                   }`}
                   onClick={handleFileUpload}
                 >
-                  <span className="btn-label me-2">
-                    <i className="fa fa-save"></i>
-                  </span>
                   {loading ? "Loading..." : "Upload"}
                 </button>
               </div>

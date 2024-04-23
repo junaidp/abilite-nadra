@@ -46,6 +46,7 @@ const ReportingParticulars = () => {
   const [feedBackDialog, setFeedBackDialog] = React.useState(false);
   const [currentReportingAndFollowUpId, setCurrentReportingAndFollowUpId] =
     React.useState("");
+  const [currentOpenItem, setCurrentOpenItem] = React.useState({});
 
   function handleChange(event, id) {
     setReport((pre) => {
@@ -129,6 +130,50 @@ const ReportingParticulars = () => {
     setSecondApproveDialog(true);
   }
 
+  // Editibility 1 Starts
+  function handleAllowEditSection1(item) {
+    let allowEdit = false;
+    if (Number(item?.stepNo) === 0) {
+      allowEdit = true;
+    }
+    if (
+      Number(item?.stepNo) === 1 &&
+      (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
+        Number(user[0]?.userId?.id) ===
+          Number(
+            singleReport?.resourceAllocation?.backupHeadOfInternalAudit?.id
+          ) ||
+        Number(user[0]?.userId?.id) ===
+          Number(singleReport?.resourceAllocation?.proposedJobApprover?.id))
+    ) {
+      allowEdit = true;
+    }
+
+    return allowEdit;
+  }
+
+  // Editibility 1 Ends
+  // Editibility 2 Starts
+  function handleAllowEditSection2(item) {
+    let allowEdit = false;
+    if (
+      Number(item?.stepNo) === 3 &&
+      (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
+        Number(user[0]?.userId?.id) ===
+          Number(
+            singleReport?.resourceAllocation?.backupHeadOfInternalAudit?.id
+          ) ||
+        Number(user[0]?.userId?.id) ===
+          Number(singleReport?.resourceAllocation?.proposedJobApprover?.id))
+    ) {
+      allowEdit = true;
+    }
+
+    return allowEdit;
+  }
+
+  // Editibility 2 Ends
+
   React.useEffect(() => {
     if (reportingAddSuccess) {
       const companyId = user[0]?.company?.find(
@@ -145,13 +190,16 @@ const ReportingParticulars = () => {
 
   React.useEffect(() => {
     if (reportingFileUploadSuccess === true) {
-      const companyId = user[0]?.company?.find(
-        (item) => item?.companyName === company
-      )?.id;
-      if (companyId) {
-        dispatch(
-          setupGetSingleReport(`?reportingAndFollowUpId=${Number(reportingId)}`)
-        );
+      if (currentOpenItem && Object?.keys(currentOpenItem)?.length !== 0) {
+        setTimeout(() => {
+          dispatch(
+            setupUpdateReporting(
+              report?.reportingList?.find(
+                (item) => Number(item?.id) === Number(currentOpenItem?.id)
+              )
+            )
+          );
+        }, 1500);
       }
       dispatch(resetReportingFileUploadAddSuccess());
     }
@@ -162,8 +210,17 @@ const ReportingParticulars = () => {
       managementAuditeeReportingAddSuccess === true &&
       user[0]?.userId?.employeeid?.userHierarchy === "Management_Auditee"
     ) {
+      const companyId = user[0]?.company?.find(
+        (item) => item?.companyName === company
+      )?.id;
+      if (companyId) {
+        dispatch(
+          setupGetInitialSingleReport(
+            `?reportingAndFollowUpId=${Number(reportingId)}`
+          )
+        );
+      }
       dispatch(resetManagementAuditeeReportingAddSuccess());
-      navigate("/audit/dashboard");
     }
   }, [managementAuditeeReportingAddSuccess]);
 
@@ -179,7 +236,7 @@ const ReportingParticulars = () => {
         setReport({
           ...singleReport,
           reportingList: singleReport?.reportingList?.filter(
-            (all) => Number(all?.stepNo) === 2
+            (all) => Number(all?.stepNo) >= 2
           ),
         });
       }
@@ -303,6 +360,9 @@ const ReportingParticulars = () => {
                                 setCurrentReportingAndFollowUpId
                               }
                               setFeedBackDialog={setFeedBackDialog}
+                              setCurrentOpenItem={setCurrentOpenItem}
+                              handleAllowEditSection1={handleAllowEditSection1}
+                              handleAllowEditSection2={handleAllowEditSection2}
                             />
                           );
                         })}

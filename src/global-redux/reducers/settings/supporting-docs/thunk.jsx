@@ -56,9 +56,8 @@ export const getAllFiles = async (data, thunkAPI) => {
 export const deleteFile = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
-    let props = await axios.post(
-      `${baseUrl}/supportingDocument/delete/document/${data}`,
-      null,
+    let props = await axios.delete(
+      `${baseUrl}/abiliteconfig/supporting/doc/delete/${data}`,
       {
         headers: {
           Authorization: `Bearer ${user[0]?.token}`,

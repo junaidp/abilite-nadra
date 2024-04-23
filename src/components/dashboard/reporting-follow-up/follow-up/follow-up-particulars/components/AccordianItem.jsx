@@ -16,6 +16,10 @@ const AccordianItem = ({
   followUpId,
   setCurrentReportingAndFollowUpId,
   setFeedBackDialog,
+  handleAllowEditImplemetationDate,
+  handleAllowEditLastSection,
+  handleChangeDate,
+  handleSaveReporting,
 }) => {
   const { user } = useSelector((state) => state?.auth);
   const [curretItem, setCurrentItem] = React.useState({});
@@ -133,6 +137,7 @@ const AccordianItem = ({
               Maximum 1500 words
             </label>
           </div>
+          <FollowUpFileUpload item={item} />
           <div className="mb-3">
             <label className="py-1">Implementation Date:</label>
             <input
@@ -141,10 +146,12 @@ const AccordianItem = ({
               id="exampleFormControlInput1"
               value={moment(item?.implementationDate).format("YYYY-MM-DD")}
               name="implementationDate"
-              disabled
+              onChange={(event) => handleChangeDate(event, item?.id)}
+              disabled={
+                handleAllowEditImplemetationDate(item) === true ? false : true
+              }
             />
           </div>
-          <FollowUpFileUpload item={item} />
           <div className="mb-3 align-items-center">
             <label className="pe-4">Recommendations Implemented:</label>
             <select
@@ -153,7 +160,9 @@ const AccordianItem = ({
               value={item?.followUp?.recommendationsImplemented.toString()}
               name="recommendationsImplemented"
               onChange={(event) => handleChange(event, item?.id)}
-              disabled={item?.stepNo === 6 || item?.stepNo === 7 ? true : false}
+              disabled={
+                handleAllowEditLastSection(item) === true ? false : true
+              }
             >
               <option value="">Select One</option>
               <option value="true">Yes</option>
@@ -173,7 +182,7 @@ const AccordianItem = ({
                 name="finalComments"
                 onChange={(event) => handleChange(event, item?.id)}
                 disabled={
-                  item?.stepNo === 6 || item?.stepNo === 7 ? true : false
+                  handleAllowEditLastSection(item) === true ? false : true
                 }
               ></textarea>
               <label className="word-limit-info label-text">
@@ -181,22 +190,35 @@ const AccordianItem = ({
               </label>
             </div>
           )}
-
-          <div className="mb-3 align-items-center">
-            <label className="pe-4">Test In Next Year:</label>
-            <select
-              className="form-select"
-              aria-label="Default select example"
-              value={item?.followUp?.testInNextYear.toString()}
-              name="testInNextYear"
-              onChange={(event) => handleChange(event, item?.id)}
-              disabled={item?.stepNo === 6 || item?.stepNo === 7 ? true : false}
-            >
-              <option value="">Select One</option>
-              <option value="true">Yes</option>
-              <option value="false">No</option>
-            </select>
-          </div>
+          {item?.stepNo >= 6 &&
+            (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
+              Number(user[0]?.userId?.id) ===
+                Number(
+                  singleReport?.resourceAllocation?.backupHeadOfInternalAudit
+                    ?.id
+                ) ||
+              Number(user[0]?.userId?.id) ===
+                Number(
+                  singleReport?.resourceAllocation?.proposedJobApprover?.id
+                )) && (
+              <div className="mb-3 align-items-center">
+                <label className="pe-4">Test In Next Year:</label>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  value={item?.followUp?.testInNextYear.toString()}
+                  name="testInNextYear"
+                  onChange={(event) => handleChange(event, item?.id)}
+                  disabled={
+                    handleAllowEditLastSection(item) === true ? false : true
+                  }
+                >
+                  <option value="">Select One</option>
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
+              </div>
+            )}
 
           <div className="row">
             <div className="col-lg-12 text-end ">
@@ -215,8 +237,7 @@ const AccordianItem = ({
                   </button>
                 )}
                 {item?.stepNo === 5 &&
-                  curretItem?.followUp?.recommendationsImplemented !== null &&
-                  curretItem?.followUp?.testInNextYear !== null && (
+                  curretItem?.followUp?.recommendationsImplemented !== null && (
                     <button
                       className={`btn btn-labeled btn-primary px-3 mx-2 mt-3 shadow ${
                         loading && "disabled"
@@ -227,6 +248,27 @@ const AccordianItem = ({
                         <i className="fa fa-check"></i>
                       </span>
                       {loading ? "Loading..." : "Submit"}
+                    </button>
+                  )}
+                {item?.stepNo === 6 &&
+                  (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
+                    Number(user[0]?.userId?.id) ===
+                      Number(
+                        singleReport?.resourceAllocation
+                          ?.backupHeadOfInternalAudit?.id
+                      ) ||
+                    Number(user[0]?.userId?.id) ===
+                      Number(
+                        singleReport?.resourceAllocation?.proposedJobApprover
+                          ?.id
+                      )) && (
+                    <button
+                      className={`btn btn-labeled btn-primary px-3 mx-2 mt-3 shadow ${
+                        loading && "disabled"
+                      }`}
+                      onClick={() => handleSaveReporting(item)}
+                    >
+                      {loading ? "Loading..." : "Save"}
                     </button>
                   )}
                 {item?.stepNo === 6 &&

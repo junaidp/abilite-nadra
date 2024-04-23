@@ -202,10 +202,7 @@ export const reportingFeedBack = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
-      `${baseUrl}/reportingAndFollowUp/feedBack?reportingId=${data?.reportingId}`,
-      {
-        description: data?.description,
-      },
+      `${baseUrl}/reportingAndFollowUp/feedBack?reportingId=${data?.reportingId}&feedBackDescription=${data?.description}`,
       {
         headers: {
           "Content-Type": "application/json",

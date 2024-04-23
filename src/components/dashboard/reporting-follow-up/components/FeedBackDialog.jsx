@@ -2,7 +2,6 @@ import React from "react";
 import { toast } from "react-toastify";
 import { setupReportingFeedBack } from "../../../../global-redux/reducers/reporting/slice";
 import { useDispatch, useSelector } from "react-redux";
-import RichText from "../../../common/feed-back-rich-text/index";
 
 const FeedBackDialog = ({
   setFeedBackDialog,
@@ -17,10 +16,6 @@ const FeedBackDialog = ({
   function handleClose() {
     setFeedBackDialog(false);
     setDescription("");
-  }
-
-  function onContentChange(value) {
-    setDescription(value);
   }
 
   function handleAdd() {
@@ -50,7 +45,16 @@ const FeedBackDialog = ({
         <div className="col-lg-2 label-text">Description:</div>
         <div className="col-lg-8">
           <div className="form-group">
-            <RichText onContentChange={onContentChange} />
+            <textarea
+              type="text"
+              id="fname"
+              className="form-control h-400"
+              name="fname"
+              placeholder="Add feed-back here"
+              required="required"
+              value={description}
+              onChange={(event) => setDescription(event?.target?.value)}
+            ></textarea>
           </div>
         </div>
       </div>

@@ -21,6 +21,9 @@ const AccordianItem = ({
   handleObservationChange,
   setCurrentReportingAndFollowUpId,
   setFeedBackDialog,
+  setCurrentOpenItem,
+  handleAllowEditSection1,
+  handleAllowEditSection2,
 }) => {
   const { user } = useSelector((state) => state?.auth);
   const [currentItem, setCurrentItem] = React.useState({});
@@ -45,6 +48,7 @@ const AccordianItem = ({
           data-bs-target={`#flush-collapse${item?.id}`}
           aria-expanded="false"
           aria-controls={`flush-collapse${item?.id}`}
+          onClick={() => setCurrentOpenItem(item)}
         >
           <div className="d-flex w-100 me-3 align-items-center justify-content-between">
             <div className=" d-flex align-items-center">
@@ -74,7 +78,7 @@ const AccordianItem = ({
                 value={item?.observationTitle}
                 name="observationTitle"
                 onChange={(event) => handleChange(event, item?.id)}
-                disabled={item?.stepNo !== 0 ? true : false}
+                disabled={handleAllowEditSection1(item) === true ? false : true}
               />
             </div>
           </div>
@@ -84,7 +88,9 @@ const AccordianItem = ({
               onContentChange={handleObservationChange}
               initialValue={item?.observationName}
               id={item?.id}
-              editable={item?.stepNo !== 0 ? "false" : "true"}
+              editable={
+                handleAllowEditSection1(item) === false ? "false" : "true"
+              }
               singleReport={singleReport}
               item={item}
             />
@@ -98,7 +104,7 @@ const AccordianItem = ({
               value={item?.implicationRating}
               name="implicationRating"
               onChange={(event) => handleChange(event, item?.id)}
-              disabled={item?.stepNo !== 0 ? true : false}
+              disabled={handleAllowEditSection1(item) === true ? false : true}
             >
               <option value="">Select One</option>
               <option value={1}>High</option>
@@ -118,7 +124,7 @@ const AccordianItem = ({
             value={item?.implication || ""}
             name="implication"
             onChange={(event) => handleChange(event, item?.id)}
-            disabled={item?.stepNo !== 0 ? true : false}
+            disabled={handleAllowEditSection1(item) === true ? false : true}
           ></textarea>
           <label className="word-limit-info label-text mb-3">
             Maximum 1500 words
@@ -134,7 +140,7 @@ const AccordianItem = ({
             value={item?.recommendedActionStep || ""}
             name="recommendedActionStep"
             onChange={(event) => handleChange(event, item?.id)}
-            disabled={item?.stepNo !== 0 ? true : false}
+            disabled={handleAllowEditSection1(item) === true ? false : true}
           ></textarea>
           <label className="word-limit-info label-text mb-3">
             Maximum 1500 words
@@ -149,7 +155,7 @@ const AccordianItem = ({
               list={allUsers?.map((all) => all?.name)}
               id={item?.id}
               allUsers={allUsers}
-              disabled={item?.stepNo !== 0 ? true : false}
+              disabled={handleAllowEditSection1(item) === true ? false : true}
             />
           </div>
           {item?.stepNo === 2 &&
@@ -191,8 +197,8 @@ const AccordianItem = ({
                 rows="3"
                 value={item?.managementComments || ""}
                 name="managementComments"
-                disabled
-                readOnly
+                onChange={(event) => handleChange(event, item?.id)}
+                disabled={handleAllowEditSection2(item) === true ? false : true}
               ></textarea>
               <label className="word-limit-info label-text mb-3">
                 Maximum 1500 words
@@ -205,8 +211,8 @@ const AccordianItem = ({
                 id="exampleFormControlInput1"
                 value={moment(item?.implementationDate).format("YYYY-MM-DD")}
                 name="implementationDate"
-                disabled
-                readOnly
+                onChange={(event) => handleChange(event, item?.id)}
+                disabled={handleAllowEditSection2(item) === true ? false : true}
               />
             </div>
           )}
@@ -220,6 +226,21 @@ const AccordianItem = ({
                       loading && "disabled"
                     }`}
                     onClick={() => handleSaveToStep1(item)}
+                  >
+                    <span className="btn-label me-2">
+                      <i className="fa fa-check"></i>
+                    </span>
+                    {loading ? "Loading..." : "Submit"}
+                  </button>
+                </div>
+              )}
+              {handleAllowEditSection1(item) === true && item?.stepNo === 1 && (
+                <div className="d-flex align-items-center place-end">
+                  <button
+                    className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
+                      loading && "disabled"
+                    }`}
+                    onClick={() => handleSaveStep2(item)}
                   >
                     <span className="btn-label me-2">
                       <i className="fa fa-check"></i>
@@ -307,6 +328,22 @@ const AccordianItem = ({
                     </button>
                   </div>
                 )}
+
+              {handleAllowEditSection2(item) === true && item?.stepNo === 3 && (
+                <div className="d-flex align-items-center place-end">
+                  <button
+                    className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
+                      loading && "disabled"
+                    }`}
+                    onClick={() => handleSaveStep2(item)}
+                  >
+                    <span className="btn-label me-2">
+                      <i className="fa fa-check"></i>
+                    </span>
+                    {loading ? "Loading..." : "Submit"}
+                  </button>
+                </div>
+              )}
 
               {item?.stepNo === 3 &&
                 (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||

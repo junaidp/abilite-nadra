@@ -55,6 +55,19 @@ const ReportingParticulars = () => {
     });
   }
 
+  function handleChangeDate(event, id) {
+    setReport((pre) => {
+      return {
+        ...pre,
+        reportingList: pre?.reportingList?.map((report) =>
+          Number(report?.id) === Number(id)
+            ? { ...report, [event?.target?.name]: event?.target?.value }
+            : report
+        ),
+      };
+    });
+  }
+
   function handleSaveToStep6(item) {
     const currentItem = singleReport?.reportingList?.find(
       (singleItem) => Number(singleItem?.id) === Number(item?.id)
@@ -87,10 +100,73 @@ const ReportingParticulars = () => {
     }
   }
 
+  function handleSaveReporting(item) {
+    if (!loading) {
+      dispatch(setupUpdateReporting(item));
+      dispatch(
+        setupUpdateFollowUp({
+          ...item?.followUp,
+          finalComments:
+            item?.followUp?.recommendationsImplemented.toString() === "true"
+              ? item?.followUp?.finalComments
+              : "",
+          recommendationsImplemented:
+            item?.followUp?.recommendationsImplemented.toString() === "true"
+              ? true
+              : false,
+          testInNextYear:
+            item?.followUp?.testInNextYear.toString() === "true" ? true : false,
+        })
+      );
+    }
+  }
+
   function handleSaveToStep7(item) {
     setCurrentApproveItem(item);
     setApproveDialog(true);
   }
+
+  // Editibility OF Implementation Date Starts
+  function handleAllowEditImplemetationDate(item) {
+    let allowEdit = false;
+    if (
+      Number(item?.stepNo) === 6 &&
+      (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
+        Number(user[0]?.userId?.id) ===
+          Number(
+            singleReport?.resourceAllocation?.backupHeadOfInternalAudit?.id
+          ) ||
+        Number(user[0]?.userId?.id) ===
+          Number(singleReport?.resourceAllocation?.proposedJobApprover?.id))
+    ) {
+      allowEdit = true;
+    }
+
+    return allowEdit;
+  }
+  // Editibility OF Implementation Date Ends
+  // Editibility OF Last Section Starts
+  function handleAllowEditLastSection(item) {
+    let allowEdit = false;
+    if (Number(item?.stepNo) === 5) {
+      allowEdit = true;
+    }
+    if (
+      Number(item?.stepNo) === 6 &&
+      (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
+        Number(user[0]?.userId?.id) ===
+          Number(
+            singleReport?.resourceAllocation?.backupHeadOfInternalAudit?.id
+          ) ||
+        Number(user[0]?.userId?.id) ===
+          Number(singleReport?.resourceAllocation?.proposedJobApprover?.id))
+    ) {
+      allowEdit = true;
+    }
+
+    return allowEdit;
+  }
+  // Editibility OF Last Section Ends
 
   React.useEffect(() => {
     if (reportingAddSuccess) {
@@ -220,6 +296,14 @@ const ReportingParticulars = () => {
                                   setCurrentReportingAndFollowUpId
                                 }
                                 setFeedBackDialog={setFeedBackDialog}
+                                handleAllowEditImplemetationDate={
+                                  handleAllowEditImplemetationDate
+                                }
+                                handleAllowEditLastSection={
+                                  handleAllowEditLastSection
+                                }
+                                handleChangeDate={handleChangeDate}
+                                handleSaveReporting={handleSaveReporting}
                               />
                             );
                           })}
