@@ -7,6 +7,8 @@ import {
   handleResetData,
   setupSaveInternalAuditReport,
   resetInternalAuditReportAddSuccess,
+  resetFileUploadAddSuccess,
+  setupGetSingleInternalAuditReportAfterSave,
 } from "../../../../../global-redux/reducers/reports/consolidation-report/slice";
 import { useSearchParams } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
@@ -15,7 +17,6 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import InternalAuditReportBody from "./components/InternalAuditReportBody";
 import Header from "./components/Header";
-import { toast } from "react-toastify";
 
 const UpdateInternalAuditReport = () => {
   const dispatch = useDispatch();
@@ -29,6 +30,7 @@ const UpdateInternalAuditReport = () => {
     addReportLoading,
     internalAuditReportExtraFieldsObject,
     singleInternalAuditReport,
+    consolidationFileUploadAddSuccess,
   } = useSelector((state) => state?.consolidationReports);
   const [reportObject, setReportObject] = React.useState({});
 
@@ -94,45 +96,28 @@ const UpdateInternalAuditReport = () => {
   }
 
   function handleSaveInternalAuditReport() {
-    if (!loading) {
-      if (reportObject?.reportName === "" || !reportObject?.reportName) {
-        toast.error("Provide Report Name");
-      }
-      if (
-        reportObject?.executiveSummary === "" ||
-        !reportObject?.executiveSummary
-      ) {
-        toast.error("Provide Executive Summary");
-      }
-      if (reportObject?.auditPurpose === "" || !reportObject?.auditPurpose) {
-        toast.error("Provide Audit Purpose");
-      }
-      if (
-        reportObject?.intAuditExtraFieldsList?.length === 0 ||
-        !reportObject?.intAuditExtraFieldsList
-      ) {
-        toast.error("Provide Audit Extra Fields List");
-      }
-      if (
-        reportObject?.reportName &&
-        reportObject?.reportName !== "" &&
-        reportObject?.executiveSummary !== "" &&
-        reportObject?.executiveSummary &&
-        reportObject?.auditPurpose !== "" &&
-        reportObject?.auditPurpose &&
-        reportObject?.intAuditExtraFieldsList?.length !== 0 &&
-        reportObject?.intAuditExtraFieldsList
-      )
-        dispatch(setupSaveInternalAuditReport(reportObject));
+    if (!addReportLoading) {
+      dispatch(setupSaveInternalAuditReport(reportObject));
     }
   }
 
   React.useEffect(() => {
     if (internalAuditReportAddSuccess) {
       dispatch(resetInternalAuditReportAddSuccess());
-      navigate("/audit/internal-audit-consolidation-report");
+      dispatch(
+        setupGetSingleInternalAuditReportAfterSave(
+          `?reportId=${Number(reportId)}`
+        )
+      );
     }
   }, [internalAuditReportAddSuccess]);
+
+  React.useEffect(() => {
+    if (consolidationFileUploadAddSuccess) {
+      dispatch(resetFileUploadAddSuccess());
+      dispatch(setupSaveInternalAuditReport(reportObject));
+    }
+  }, [consolidationFileUploadAddSuccess]);
 
   React.useEffect(() => {
     let isNotNull =
@@ -157,6 +142,7 @@ const UpdateInternalAuditReport = () => {
           auditPurpose: pre?.auditPurpose,
           annexure: pre?.annexure,
           consolidatedIARKeyFindingsList: pre?.consolidatedIARKeyFindingsList,
+          annexureUploads: pre?.annexureUploads,
         };
       });
     }

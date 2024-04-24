@@ -1,5 +1,4 @@
 import React from "react";
-import FollowUpItem from "./FollowUpItem";
 import ReportFirstLayout from "./ReportFirstLayout";
 import RichTextEditor from "./RichText";
 import { useSelector, useDispatch } from "react-redux";
@@ -12,6 +11,7 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import KeyFindings from "./KeyFindings";
 import ExtraFields from "./ExtraFields";
+import FileUpload from "../components/FileUpload";
 
 const InternalAuditReportBody = ({
   reportObject,
@@ -89,6 +89,9 @@ const InternalAuditReportBody = ({
         reportObject={reportObject}
         handleChangeReportObject={handleChangeReportObject}
       />
+      <div className="mt-4">
+        <FileUpload item={reportObject} />
+      </div>
       {/* Editors Start */}
       <div className="border px-3 py-2  mt-3 rounded">
         <div className="row mb-3">

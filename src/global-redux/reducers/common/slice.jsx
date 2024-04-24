@@ -97,10 +97,10 @@ let menuItems = [
     open: false,
     subMenu: [
       {
-        id: "li-internal-audit-planing-report",
-        label: "Planing Report",
+        id: "li-consolidation-report",
+        label: "Consolidation Report",
         icon: "fa fa-file-code pe-2",
-        route: "/audit/planning-report",
+        route: "/audit/internal-audit-consolidation-report",
         active: false,
       },
       {
@@ -111,10 +111,10 @@ let menuItems = [
         active: false,
       },
       {
-        id: "li-consolidation-report",
-        label: "Consolidation Report",
+        id: "li-internal-audit-planing-report",
+        label: "Planing Report",
         icon: "fa fa-file-code pe-2",
-        route: "/audit/internal-audit-consolidation-report",
+        route: "/audit/planning-report",
         active: false,
       },
       // {

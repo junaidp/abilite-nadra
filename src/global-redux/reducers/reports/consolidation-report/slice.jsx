@@ -5,6 +5,7 @@ import {
   updateInternalAuditReport,
   deleteInternalAuditReport,
   getSingleInternalAuditReport,
+  getSingleInternalAuditReportAfterSave,
   getAllJobsForInternalAuditReport,
   createInternalAuditReportObject,
   createExtraFields,
@@ -12,16 +13,21 @@ import {
   submitInternalAuditReport,
   approveInternalAuditReport,
   reportFeedBack,
+  consolidationFileUpload,
+  consolidationFileDelete,
+  consolidationFileUpdate,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
   loading: false,
+  subLoading: false,
   allInternalAuditReports: [],
   jobsForInternalAuditReports: [],
   internalAuditReportObject: {},
   singleInternalAuditReport: {},
   internalAuditReportAddSuccess: false,
+  consolidationFileUploadAddSuccess: false,
   internalAuditReportExtraFieldsAddSuccess: false,
   addReportLoading: false,
   createExtraFieldsLoading: false,
@@ -74,6 +80,13 @@ export const setupGetSingleInternalAuditReport = createAsyncThunk(
   }
 );
 
+export const setupGetSingleInternalAuditReportAfterSave = createAsyncThunk(
+  "internalAuditConsolidationReport/getSingleInternalAuditReportAfterSave",
+  async (data, thunkAPI) => {
+    return getSingleInternalAuditReportAfterSave(data, thunkAPI);
+  }
+);
+
 export const setupGetAllJobsForInternalAuditReport = createAsyncThunk(
   "internalAuditConsolidationReport/getAllJobsForInternalAuditReport",
   async (data, thunkAPI) => {
@@ -107,6 +120,25 @@ export const setupReportFeedBack = createAsyncThunk(
   }
 );
 
+export const setupConsolidationFileUpload = createAsyncThunk(
+  "internalAuditConsolidationReport/consolidationFileUpload",
+  async (data, thunkAPI) => {
+    return consolidationFileUpload(data, thunkAPI);
+  }
+);
+export const setupConsolidationFileDelete = createAsyncThunk(
+  "internalAuditConsolidationReport/consolidationFileDelete",
+  async (data, thunkAPI) => {
+    return consolidationFileDelete(data, thunkAPI);
+  }
+);
+export const setupConsolidationFileUpdate = createAsyncThunk(
+  "internalAuditConsolidationReport/consolidationFileUpdate",
+  async (data, thunkAPI) => {
+    return consolidationFileUpdate(data, thunkAPI);
+  }
+);
+
 export const slice = createSlice({
   name: "internalAuditConsolidationReport",
   initialState,
@@ -116,6 +148,9 @@ export const slice = createSlice({
     },
     resetInternalAuditReportExtraFieldsAddSuccess: (state) => {
       state.internalAuditReportExtraFieldsAddSuccess = false;
+    },
+    resetFileUploadAddSuccess: (state) => {
+      state.consolidationFileUploadAddSuccess = false;
     },
     handleResetData: (state) => {
       (state.loading = false),
@@ -161,7 +196,7 @@ export const slice = createSlice({
       .addCase(setupSaveInternalAuditReport.fulfilled, (state) => {
         state.addReportLoading = false;
         state.internalAuditReportAddSuccess = true;
-        toast.success("Internal Audit Consolidation Report Added Successfully");
+        toast.success("Internal Audit Consolidation Report Saved Successfully");
       })
       .addCase(setupSaveInternalAuditReport.rejected, (state, action) => {
         state.addReportLoading = false;
@@ -267,6 +302,31 @@ export const slice = createSlice({
           toast.error("An Error has occurred");
         }
       });
+    // Get Single Internal  Audit Report After
+    builder
+      .addCase(setupGetSingleInternalAuditReportAfterSave.pending, (state) => {
+        state.subLoading = true;
+      })
+      .addCase(
+        setupGetSingleInternalAuditReportAfterSave.fulfilled,
+        (state, { payload }) => {
+          state.subLoading = false;
+          state.singleInternalAuditReport = payload?.data || [
+            { error: "Not Found" },
+          ];
+        }
+      )
+      .addCase(
+        setupGetSingleInternalAuditReportAfterSave.rejected,
+        (state, action) => {
+          state.subLoading = false;
+          if (action.payload?.response?.data?.message) {
+            toast.error(action.payload.response.data.message);
+          } else {
+            toast.error("An Error has occurred");
+          }
+        }
+      );
     // Get Jobs  Audit Report
     builder
       .addCase(setupGetAllJobsForInternalAuditReport.pending, (state) => {
@@ -371,6 +431,60 @@ export const slice = createSlice({
           toast.error("An Error has occurred");
         }
       });
+    // File Upload
+    builder
+      .addCase(setupConsolidationFileUpload.pending, (state) => {
+        state.subLoading = true;
+      })
+      .addCase(setupConsolidationFileUpload.fulfilled, (state) => {
+        state.subLoading = false;
+        state.consolidationFileUploadAddSuccess = true;
+        toast.success("File Uploaded Succussfully");
+      })
+      .addCase(setupConsolidationFileUpload.rejected, (state, action) => {
+        state.subLoading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // File Update
+    builder
+      .addCase(setupConsolidationFileUpdate.pending, (state) => {
+        state.subLoading = true;
+      })
+      .addCase(setupConsolidationFileUpdate.fulfilled, (state) => {
+        state.subLoading = false;
+        state.consolidationFileUploadAddSuccess = true;
+        toast.success("File Updated Succussfully");
+      })
+      .addCase(setupConsolidationFileUpdate.rejected, (state, action) => {
+        state.subLoading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // File Delete
+    builder
+      .addCase(setupConsolidationFileDelete.pending, (state) => {
+        state.subLoading = true;
+      })
+      .addCase(setupConsolidationFileDelete.fulfilled, (state) => {
+        state.subLoading = false;
+        state.consolidationFileUploadAddSuccess = true;
+        toast.success("File Deleted Succussfully");
+      })
+      .addCase(setupConsolidationFileDelete.rejected, (state, action) => {
+        state.subLoading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
   },
 });
 
@@ -378,6 +492,7 @@ export const {
   resetInternalAuditReportAddSuccess,
   handleResetData,
   resetInternalAuditReportExtraFieldsAddSuccess,
+  resetFileUploadAddSuccess,
 } = slice.actions;
 
 export default slice.reducer;
