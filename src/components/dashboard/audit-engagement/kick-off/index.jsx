@@ -131,7 +131,7 @@ const KickOff = () => {
 
   React.useEffect(() => {
     if (auditEngagementObservationAddSuccess) {
-      dispatch(setupGetSingleAuditEngagement(auditEngagementId));
+      // dispatch(setupGetSingleAuditEngagement(auditEngagementId));
       dispatch(resetAuditEngagementObservationAddSuccess());
     }
   }, [auditEngagementObservationAddSuccess]);

@@ -96,6 +96,7 @@ export const auditPlanSummaryFeedback = async (data, thunkAPI) => {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
       `${baseUrl}/auditPlanningAndScheduling/auditPlanSummary/feedBack?auditPlanSummaryId=${data?.id}&feedBackDescription=${data?.description}`,
+      null,
       {
         headers: {
           "Content-Type": "application/json",

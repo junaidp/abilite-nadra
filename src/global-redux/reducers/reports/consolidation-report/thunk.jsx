@@ -221,6 +221,7 @@ export const reportFeedBack = async (data, thunkAPI) => {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
       `${baseUrl}/consolidatedReports/report/feedBack?consolidatedReportsId=${data?.consolidatedReportsId}&feedBackDescription=${data?.description}`,
+      null,
       {
         headers: {
           Authorization: `Bearer ${user[0]?.token}`,
