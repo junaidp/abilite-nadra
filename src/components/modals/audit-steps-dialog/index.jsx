@@ -97,7 +97,6 @@ const AuditStepsDialog = ({
   React.useEffect(() => {
     if (auditEngagementObservationAddSuccess) {
       setDescription("");
-      handleSave();
     }
   }, [auditEngagementObservationAddSuccess]);
 
