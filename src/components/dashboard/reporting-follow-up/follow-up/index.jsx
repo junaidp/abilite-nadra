@@ -35,10 +35,10 @@ const Reporting = () => {
       <div className="mx-3">
         <div className="row pt-4">
           <div className="col-lg-7">
-            <h2 className="mx-2 m-2 heading">Follow Up</h2>
+            <h2 className="heading">Follow Up</h2>
           </div>
 
-          <div className="col-lg-5 text-end">
+          {/* <div className="col-lg-5 text-end">
             <div className="d-flex align-items-center">
               <label className="me-3 w-25">Status:</label>
               <select
@@ -54,7 +54,7 @@ const Reporting = () => {
                 <option>Exceptions Implemented</option>
               </select>
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div className="row py-4">
@@ -71,7 +71,7 @@ const Reporting = () => {
                     <tr>
                       <th className="sr-col">Sr. #</th>
                       <th>Particulars</th>
-                      <th>Status</th>
+                      {/* <th>Status</th> */}
                       <th>No. of Observations</th>
                       <th>Action</th>
                     </tr>
@@ -97,9 +97,18 @@ const Reporting = () => {
                                 {item?.title}
                               </a>
                             </td>
-                            <td>null</td>
+                            {/* <td>null</td> */}
                             <td>{item?.reportingList?.length}</td>
-                            <td>null</td>
+                            <td>
+                              <i
+                                onClick={() =>
+                                  navigate(
+                                    `/audit/follow-up-particulars?followUpId=${item?.id}`
+                                  )
+                                }
+                                className="fa fa-edit  px-3 f-18 cursor-pointer"
+                              ></i>
+                            </td>
                           </tr>
                         );
                       })}

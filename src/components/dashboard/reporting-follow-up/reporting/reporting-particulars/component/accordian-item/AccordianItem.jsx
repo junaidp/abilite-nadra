@@ -55,7 +55,18 @@ const AccordianItem = ({
               {Number(item?.stepNo) >= 4 && (
                 <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
               )}
-              {item?.observationTitle}
+              {item?.observationTitle} -----
+              {Number(item?.stepNo) === 0
+                ? "Implementation In Progress"
+                : Number(item?.stepNo) === 1
+                ? "Exceptions To Be Sent To Management For Comments"
+                : Number(item?.stepNo) === 2
+                ? "Awaiting Management Comments"
+                : Number(item?.stepNo) === 3
+                ? "Management Comments Received"
+                : Number(item?.stepNo) >= 4
+                ? "Exceptions Implemented"
+                : ""}
             </div>
           </div>
         </button>
