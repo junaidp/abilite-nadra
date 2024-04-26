@@ -20,6 +20,8 @@ const AccordianItem = ({
   handleAllowEditLastSection,
   handleChangeDate,
   handleSaveReporting,
+  setViewThirdFeedBackDialog,
+  setViewFeedBackItem,
 }) => {
   const { user } = useSelector((state) => state?.auth);
   const [curretItem, setCurrentItem] = React.useState({});
@@ -316,6 +318,19 @@ const AccordianItem = ({
                       FeedBack
                     </button>
                   )}
+                {item?.thirdFeedback?.description && (
+                  <button
+                    className={`btn btn-labeled btn-primary px-3 mx-2 mt-3 shadow ${
+                      loading && "disabled"
+                    }`}
+                    onClick={() => {
+                      setViewFeedBackItem(item);
+                      setViewThirdFeedBackDialog(true);
+                    }}
+                  >
+                    View FeedBack
+                  </button>
+                )}
               </div>
             </div>
           </div>

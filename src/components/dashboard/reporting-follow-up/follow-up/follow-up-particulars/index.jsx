@@ -19,6 +19,7 @@ import { CircularProgress } from "@mui/material";
 import AccordianItem from "./components/AccordianItem";
 import ApproveDialog from "./components/ApproveDialog";
 import FeedBackDialog from "../../components/FeedBackDialog";
+import ViewThirdFeedBackDialog from "../../components/ThirdFeedBack";
 
 const ReportingParticulars = () => {
   let navigate = useNavigate();
@@ -35,6 +36,9 @@ const ReportingParticulars = () => {
   const [feedBackDialog, setFeedBackDialog] = React.useState(false);
   const [currentReportingAndFollowUpId, setCurrentReportingAndFollowUpId] =
     React.useState("");
+  const [viewFeedBackItem, setViewFeedBackItem] = React.useState({});
+  const [viewThirdFeedBackDialog, setViewThirdFeedBackDialog] =
+    React.useState(false);
 
   function handleChange(event, id) {
     setReport((pre) => {
@@ -240,6 +244,16 @@ const ReportingParticulars = () => {
           </div>
         </div>
       )}
+      {viewThirdFeedBackDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <ViewThirdFeedBackDialog
+              setViewThirdFeedBackDialog={setViewThirdFeedBackDialog}
+              viewFeedBackItem={viewFeedBackItem}
+            />
+          </div>
+        </div>
+      )}
       {initialLoading ? (
         <div className="my-3">
           <CircularProgress />
@@ -304,6 +318,10 @@ const ReportingParticulars = () => {
                                 }
                                 handleChangeDate={handleChangeDate}
                                 handleSaveReporting={handleSaveReporting}
+                                setViewThirdFeedBackDialog={
+                                  setViewThirdFeedBackDialog
+                                }
+                                setViewFeedBackItem={setViewFeedBackItem}
                               />
                             );
                           })}

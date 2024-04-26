@@ -24,6 +24,9 @@ const AccordianItem = ({
   setCurrentOpenItem,
   handleAllowEditSection1,
   handleAllowEditSection2,
+  setViewFirstFeedBackDialog,
+  setViewSecondFeedBackDialog,
+  setViewFeedBackItem,
 }) => {
   const { user } = useSelector((state) => state?.auth);
   const [currentItem, setCurrentItem] = React.useState({});
@@ -403,6 +406,32 @@ const AccordianItem = ({
                     </button>
                   </div>
                 )}
+              {item?.firstFeedback?.description && (
+                <button
+                  className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
+                    loading && "disabled"
+                  }`}
+                  onClick={() => {
+                    setViewFeedBackItem(item);
+                    setViewFirstFeedBackDialog(true);
+                  }}
+                >
+                  View First FeedBack
+                </button>
+              )}
+              {item?.secondFeedback?.description && (
+                <button
+                  className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
+                    loading && "disabled"
+                  }`}
+                  onClick={() => {
+                    setViewFeedBackItem(item);
+                    setViewSecondFeedBackDialog(true);
+                  }}
+                >
+                  View Second FeedBack
+                </button>
+              )}
             </div>
           </div>
         </div>

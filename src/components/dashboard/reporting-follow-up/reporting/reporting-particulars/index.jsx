@@ -22,6 +22,8 @@ import { CircularProgress } from "@mui/material";
 import FirstApproveReportingDialog from "./component/approve-dialogs/FirstApprove";
 import SecondApproveReportingDialog from "./component/approve-dialogs/SecondApprove";
 import FeedBackDialog from "../../components/FeedBackDialog";
+import ViewFirstFeedBackDialog from "../../components/FirstFeedBack";
+import ViewSecondFeedBackDialog from "../../components/SecondFeedBack";
 
 const ReportingParticulars = () => {
   let navigate = useNavigate();
@@ -30,6 +32,11 @@ const ReportingParticulars = () => {
   const reportingId = searchParams.get("reportingId");
   const { user } = useSelector((state) => state?.auth);
   const { company, year } = useSelector((state) => state?.common);
+  const [viewFeedBackItem, setViewFeedBackItem] = React.useState({});
+  const [viewFirstFeedBackDialog, setViewFirstFeedBackDialog] =
+    React.useState(false);
+  const [viewSecondFeedBackDialog, setViewSecondFeedBackDialog] =
+    React.useState(false);
   const {
     singleReport,
     loading,
@@ -303,6 +310,26 @@ const ReportingParticulars = () => {
           </div>
         </div>
       )}
+      {viewFirstFeedBackDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <ViewFirstFeedBackDialog
+              setViewFirstFeedBackDialog={setViewFirstFeedBackDialog}
+              viewFeedBackItem={viewFeedBackItem}
+            />
+          </div>
+        </div>
+      )}
+      {viewSecondFeedBackDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <ViewSecondFeedBackDialog
+              setViewSecondFeedBackDialog={setViewSecondFeedBackDialog}
+              viewFeedBackItem={viewFeedBackItem}
+            />
+          </div>
+        </div>
+      )}
       {initialLoading ? (
         <div className="my-3">
           <CircularProgress />
@@ -363,6 +390,13 @@ const ReportingParticulars = () => {
                               setCurrentOpenItem={setCurrentOpenItem}
                               handleAllowEditSection1={handleAllowEditSection1}
                               handleAllowEditSection2={handleAllowEditSection2}
+                              setViewFirstFeedBackDialog={
+                                setViewFirstFeedBackDialog
+                              }
+                              setViewSecondFeedBackDialog={
+                                setViewSecondFeedBackDialog
+                              }
+                              setViewFeedBackItem={setViewFeedBackItem}
                             />
                           );
                         })}
