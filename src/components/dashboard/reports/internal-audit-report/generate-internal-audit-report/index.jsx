@@ -7,6 +7,8 @@ import {
   handleResetData,
   setupSaveInternalAuditReport,
   resetInternalAuditReportAddSuccess,
+  resetFileUploadAddSuccess,
+  setupGetSingleInternalAuditReportAfterReportSave,
 } from "../../../../../global-redux/reducers/reports/internal-audit-report/slice";
 import {
   changeActiveLink,
@@ -20,11 +22,9 @@ import InternalAuditReportBody from "./components/InternalAuditReportBody";
 import Header from "./components/Header";
 import { toast } from "react-toastify";
 import { CircularProgress } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 
 const GenerateInternalAuditReport = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { user } = useSelector((state) => state?.auth);
   const { company, year } = useSelector((state) => state?.common);
   const {
@@ -34,6 +34,7 @@ const GenerateInternalAuditReport = () => {
     internalAuditReportAddSuccess,
     addReportLoading,
     internalAuditReportExtraFieldsObject,
+    iahFileUploadSuccess,
   } = useSelector((state) => state?.internalAuditReports);
   const [reportObject, setReportObject] = React.useState({});
   const [jobForInternalAuditReportId, setJobForInternalAuditReportId] =
@@ -119,43 +120,21 @@ const GenerateInternalAuditReport = () => {
   }
 
   function handleSaveInternalAuditReport() {
-    if (!loading) {
-      if (reportObject?.reportName === "" || !reportObject?.reportName) {
-        toast.error("Provide Report Name");
-      }
-      if (
-        reportObject?.executiveSummary === "" ||
-        !reportObject?.executiveSummary
-      ) {
-        toast.error("Provide Executive Summary");
-      }
-      if (reportObject?.auditPurpose === "" || !reportObject?.auditPurpose) {
-        toast.error("Provide Audit Purpose");
-      }
-      if (
-        reportObject?.intAuditExtraFieldsList?.length === 0 ||
-        !reportObject?.intAuditExtraFieldsList
-      ) {
-        toast.error("Provide Audit Extra Fields List");
-      }
-      if (
-        reportObject?.reportName &&
-        reportObject?.reportName !== "" &&
-        reportObject?.executiveSummary !== "" &&
-        reportObject?.executiveSummary &&
-        reportObject?.auditPurpose !== "" &&
-        reportObject?.auditPurpose &&
-        reportObject?.intAuditExtraFieldsList?.length !== 0 &&
-        reportObject?.intAuditExtraFieldsList
-      )
-        dispatch(setupSaveInternalAuditReport(reportObject));
+    if (!addReportLoading) {
+      dispatch(setupSaveInternalAuditReport(reportObject));
     }
   }
 
   React.useEffect(() => {
     if (internalAuditReportAddSuccess) {
       dispatch(resetInternalAuditReportAddSuccess());
-      navigate("/audit/internal-audit-report");
+      if (internalAuditReportObject?.id) {
+        dispatch(
+          setupGetSingleInternalAuditReportAfterReportSave(
+            `?reportId=${Number(internalAuditReportObject?.id)}`
+          )
+        );
+      }
     }
   }, [internalAuditReportAddSuccess]);
 
@@ -183,6 +162,13 @@ const GenerateInternalAuditReport = () => {
       setReportObject(internalAuditReportObject);
     }
   }, [internalAuditReportObject]);
+
+  React.useEffect(() => {
+    if (iahFileUploadSuccess) {
+      dispatch(resetFileUploadAddSuccess());
+      dispatch(setupSaveInternalAuditReport(reportObject));
+    }
+  }, [iahFileUploadSuccess]);
 
   React.useEffect(() => {
     let isNotNull =

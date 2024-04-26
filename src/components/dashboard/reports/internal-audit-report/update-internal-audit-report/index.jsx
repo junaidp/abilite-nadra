@@ -1,23 +1,22 @@
+import React from "react";
 import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
 } from "../../../../../global-redux/reducers/common/slice";
-import { useSearchParams } from "react-router-dom";
 import {
   setupGetSingleInternalAuditReport,
   handleResetData,
-} from "../../../../../global-redux/reducers/reports/internal-audit-report/slice";
-import { CircularProgress } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import {
+  setupGetSingleInternalAuditReportAfterReportSave,
   setupSaveInternalAuditReport,
   resetInternalAuditReportAddSuccess,
+  resetFileUploadAddSuccess,
 } from "../../../../../global-redux/reducers/reports/internal-audit-report/slice";
+import { useSearchParams } from "react-router-dom";
+import { CircularProgress } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import InternalAuditReportBody from "./components/InternalAuditReportBody";
 import Header from "./components/Header";
-import { toast } from "react-toastify";
 
 const UpdateInternalAuditReport = () => {
   const dispatch = useDispatch();
@@ -31,6 +30,7 @@ const UpdateInternalAuditReport = () => {
     addReportLoading,
     internalAuditReportExtraFieldsObject,
     singleInternalAuditReport,
+    iahFileUploadSuccess,
   } = useSelector((state) => state?.internalAuditReports);
   const [reportObject, setReportObject] = React.useState({});
 
@@ -95,43 +95,21 @@ const UpdateInternalAuditReport = () => {
   }
 
   function handleSaveInternalAuditReport() {
-    if (!loading) {
-      if (reportObject?.reportName === "" || !reportObject?.reportName) {
-        toast.error("Provide Report Name");
-      }
-      if (
-        reportObject?.executiveSummary === "" ||
-        !reportObject?.executiveSummary
-      ) {
-        toast.error("Provide Executive Summary");
-      }
-      if (reportObject?.auditPurpose === "" || !reportObject?.auditPurpose) {
-        toast.error("Provide Audit Purpose");
-      }
-      if (
-        reportObject?.intAuditExtraFieldsList?.length === 0 ||
-        !reportObject?.intAuditExtraFieldsList
-      ) {
-        toast.error("Provide Audit Extra Fields List");
-      }
-      if (
-        reportObject?.reportName &&
-        reportObject?.reportName !== "" &&
-        reportObject?.executiveSummary !== "" &&
-        reportObject?.executiveSummary &&
-        reportObject?.auditPurpose !== "" &&
-        reportObject?.auditPurpose &&
-        reportObject?.intAuditExtraFieldsList?.length !== 0 &&
-        reportObject?.intAuditExtraFieldsList
-      )
-        dispatch(setupSaveInternalAuditReport(reportObject));
+    if (!addReportLoading) {
+      dispatch(setupSaveInternalAuditReport(reportObject));
     }
   }
 
   React.useEffect(() => {
     if (internalAuditReportAddSuccess) {
       dispatch(resetInternalAuditReportAddSuccess());
-      navigate("/audit/internal-audit-report");
+      if (reportId) {
+        dispatch(
+          setupGetSingleInternalAuditReportAfterReportSave(
+            `?reportId=${Number(reportId)}`
+          )
+        );
+      }
     }
   }, [internalAuditReportAddSuccess]);
 
@@ -143,6 +121,13 @@ const UpdateInternalAuditReport = () => {
       setReportObject(singleInternalAuditReport);
     }
   }, [singleInternalAuditReport]);
+
+  React.useEffect(() => {
+    if (iahFileUploadSuccess) {
+      dispatch(resetFileUploadAddSuccess());
+      dispatch(setupSaveInternalAuditReport(reportObject));
+    }
+  }, [iahFileUploadSuccess]);
 
   React.useEffect(() => {
     let isNotNull =
@@ -171,20 +156,20 @@ const UpdateInternalAuditReport = () => {
   }, [reportId]);
 
   React.useEffect(() => {
-    dispatch(changeActiveLink("li-internal-audit-report"));
-    dispatch(InitialLoadSidebarActiveLink("li-reports"));
-    return () => {
-      dispatch(handleResetData());
-    };
-  }, []);
-
-  React.useEffect(() => {
     if (user[0]?.token && reportId) {
       dispatch(
         setupGetSingleInternalAuditReport(`?reportId=${Number(reportId)}`)
       );
     }
   }, [reportId, user]);
+
+  React.useEffect(() => {
+    dispatch(changeActiveLink("li-internal-audit-report"));
+    dispatch(InitialLoadSidebarActiveLink("li-reports"));
+    return () => {
+      dispatch(handleResetData());
+    };
+  }, []);
 
   return (
     <div>

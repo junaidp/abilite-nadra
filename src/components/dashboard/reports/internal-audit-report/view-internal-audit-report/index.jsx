@@ -19,6 +19,7 @@ import Header from "./components/Header";
 import FollowUpItem from "./components/FollowUpItem";
 import PDFGenerator from "./components/PDFGenerator";
 import { PDFViewer } from "@react-pdf/renderer";
+import FileUpload from "./components/FileUpload";
 
 const ViewInternalAuditReport = () => {
   const dispatch = useDispatch();
@@ -68,6 +69,9 @@ const ViewInternalAuditReport = () => {
           <ReportFirstLayout
             singleInternalAuditReport={singleInternalAuditReport}
           />
+          <div className="mt-4">
+            <FileUpload item={singleInternalAuditReport} />
+          </div>
           <RichTextFields
             singleInternalAuditReport={singleInternalAuditReport}
           />
