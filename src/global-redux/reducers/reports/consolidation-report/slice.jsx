@@ -314,6 +314,9 @@ export const slice = createSlice({
           state.singleInternalAuditReport = payload?.data || [
             { error: "Not Found" },
           ];
+          state.internalAuditReportObject = payload?.data || [
+            { error: "Not Found" },
+          ];
         }
       )
       .addCase(

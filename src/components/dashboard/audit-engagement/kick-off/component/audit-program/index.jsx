@@ -164,6 +164,35 @@ const AuditProgram = ({
 
     return allowEdit;
   }
+  function handleAllowEditForAddProgram() {
+    let allowEdit = false;
+    if (
+      singleAuditEngagementObject?.auditProgram?.submitted === false ||
+      !singleAuditEngagementObject?.auditProgram
+    ) {
+      allowEdit = true;
+    }
+
+    if (
+      singleAuditEngagementObject?.auditProgram?.submitted === true &&
+      singleAuditEngagementObject?.auditProgram?.approved === false &&
+      (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
+        Number(user[0]?.userId?.id) ===
+          Number(
+            singleAuditEngagementObject?.resourceAllocation
+              ?.backupHeadOfInternalAudit?.id
+          ) ||
+        Number(user[0]?.userId?.id) ===
+          Number(
+            singleAuditEngagementObject?.resourceAllocation?.proposedJobApprover
+              ?.id
+          ))
+    ) {
+      allowEdit = true;
+    }
+
+    return allowEdit;
+  }
 
   return (
     <div className="accordion-item">
@@ -229,7 +258,7 @@ const AuditProgram = ({
         <div className="accordion-body">
           <div className="container">
             <div className="row mb-2">
-              {handleAllowEdit() === true && (
+              {handleAllowEditForAddProgram() === true && (
                 <div className="col-lg-12">
                   <button
                     className="btn btn-labeled float-end btn-primary px-3 mt-3 shadow"
