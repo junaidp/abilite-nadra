@@ -185,6 +185,7 @@ const GenerateInternalAuditReport = () => {
           annexure: pre?.annexure,
           keyFindingsList: pre?.keyFindingsList,
           reportingAndFollowUp: pre?.reportingAndFollowUp,
+          annexureUploads: pre?.annexureUploads,
         };
       });
     }
