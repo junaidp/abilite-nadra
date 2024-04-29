@@ -13,27 +13,14 @@ const AccordianItem = ({
   handleSaveToStep6,
   loading,
   singleReport,
-  followUpId,
   setCurrentReportingAndFollowUpId,
   setFeedBackDialog,
-  handleAllowEditImplemetationDate,
   handleAllowEditLastSection,
-  handleChangeDate,
-  handleSaveReporting,
   setViewThirdFeedBackDialog,
   setViewFeedBackItem,
+  handleShowTestInNextYear,
 }) => {
   const { user } = useSelector((state) => state?.auth);
-  const [curretItem, setCurrentItem] = React.useState({});
-  React.useEffect(() => {
-    if (singleReport && followUpId) {
-      setCurrentItem(
-        singleReport?.reportingList?.find(
-          (all) => Number(all?.id) === Number(item?.id)
-        )
-      );
-    }
-  }, [singleReport, followUpId]);
 
   return (
     <div className="accordion-item">
@@ -48,10 +35,17 @@ const AccordianItem = ({
         >
           <div className="d-flex w-100 me-3 align-items-center justify-content-between">
             <div className=" d-flex align-items-center">
-              {Number(item?.stepNo) === 7 && (
+              {Number(item?.stepNo) >= 7 && (
                 <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
               )}
-              {item?.observationTitle}
+              {item?.observationTitle} -----
+              {Number(item?.stepNo) === 5
+                ? "Exception To Be  Implemented"
+                : Number(item?.stepNo) === 6
+                ? "Exceptions Implemented"
+                : Number(item?.stepNo) >= 7
+                ? "Observation Completed"
+                : ""}
             </div>
           </div>
         </button>
@@ -147,11 +141,7 @@ const AccordianItem = ({
               className="form-control"
               id="exampleFormControlInput1"
               value={moment(item?.implementationDate).format("YYYY-MM-DD")}
-              name="implementationDate"
-              onChange={(event) => handleChangeDate(event, item?.id)}
-              disabled={
-                handleAllowEditImplemetationDate(item) === true ? false : true
-              }
+              disabled
             />
           </div>
           <div className="mb-3 align-items-center">
@@ -192,66 +182,52 @@ const AccordianItem = ({
               </label>
             </div>
           )}
-          {item?.stepNo >= 6 &&
-            (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
-              Number(user[0]?.userId?.id) ===
-                Number(
-                  singleReport?.resourceAllocation?.backupHeadOfInternalAudit
-                    ?.id
-                ) ||
-              Number(user[0]?.userId?.id) ===
-                Number(
-                  singleReport?.resourceAllocation?.proposedJobApprover?.id
-                )) && (
-              <div className="mb-3 align-items-center">
-                <label className="pe-4">Test In Next Year:</label>
-                <select
-                  className="form-select"
-                  aria-label="Default select example"
-                  value={item?.followUp?.testInNextYear.toString()}
-                  name="testInNextYear"
-                  onChange={(event) => handleChange(event, item?.id)}
-                  disabled={
-                    handleAllowEditLastSection(item) === true ? false : true
-                  }
-                >
-                  <option value="">Select One</option>
-                  <option value="true">Yes</option>
-                  <option value="false">No</option>
-                </select>
-              </div>
-            )}
+          {item?.stepNo >= 6 && (
+            <div className="mb-3 align-items-center">
+              <label className="pe-4">Test In Next Year:</label>
+              <select
+                className="form-select"
+                aria-label="Default select example"
+                value={item?.followUp?.testInNextYear.toString()}
+                name="testInNextYear"
+                onChange={(event) => handleChange(event, item?.id)}
+                disabled={
+                  handleShowTestInNextYear(item) === true ? false : true
+                }
+              >
+                <option value="">Select One</option>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+              </select>
+            </div>
+          )}
 
           <div className="row">
             <div className="col-lg-12 text-end ">
               <div className="d-flex align-items-center place-end">
-                {item?.stepNo === 5 && (
-                  <button
-                    className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
-                      loading && "disabled"
-                    }`}
-                    onClick={() => handleSave(item)}
-                  >
-                    <span className="btn-label me-2">
-                      <i className="fa fa-check"></i>
-                    </span>
-                    {loading ? "Loading..." : "Save"}
-                  </button>
-                )}
                 {item?.stepNo === 5 &&
-                  curretItem?.followUp?.recommendationsImplemented !== null && (
+                  Number(user[0]?.userId?.id) === Number(item?.auditee?.id) && (
+                    <button
+                      className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
+                        loading && "disabled"
+                      }`}
+                      onClick={() => handleSave(item)}
+                    >
+                      {loading ? "Loading..." : "Save"}
+                    </button>
+                  )}
+                {item?.stepNo === 5 &&
+                  Number(user[0]?.userId?.id) === Number(item?.auditee?.id) && (
                     <button
                       className={`btn btn-labeled btn-primary px-3 mx-2 mt-3 shadow ${
                         loading && "disabled"
                       }`}
                       onClick={() => handleSaveToStep6(item)}
                     >
-                      <span className="btn-label me-2">
-                        <i className="fa fa-check"></i>
-                      </span>
                       {loading ? "Loading..." : "Submit"}
                     </button>
                   )}
+
                 {item?.stepNo === 6 &&
                   (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
                     Number(user[0]?.userId?.id) ===
@@ -263,28 +239,12 @@ const AccordianItem = ({
                       Number(
                         singleReport?.resourceAllocation?.proposedJobApprover
                           ?.id
-                      )) && (
-                    <button
-                      className={`btn btn-labeled btn-primary px-3 mx-2 mt-3 shadow ${
-                        loading && "disabled"
-                      }`}
-                      onClick={() => handleSaveReporting(item)}
-                    >
-                      {loading ? "Loading..." : "Save"}
-                    </button>
-                  )}
-                {item?.stepNo === 6 &&
-                  (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
-                    Number(user[0]?.userId?.id) ===
-                      Number(
-                        singleReport?.resourceAllocation
-                          ?.backupHeadOfInternalAudit?.id
                       ) ||
-                    Number(user[0]?.userId?.id) ===
-                      Number(
-                        singleReport?.resourceAllocation?.proposedJobApprover
-                          ?.id
-                      )) && (
+                    singleReport?.resourceAllocation?.resourcesList?.find(
+                      (singleResource) =>
+                        Number(singleResource?.id) ===
+                        Number(user[0]?.userId?.id)
+                    )) && (
                     <button
                       className={`btn btn-labeled btn-primary px-3 mx-2 mt-3 shadow ${
                         loading && "disabled"
@@ -305,7 +265,12 @@ const AccordianItem = ({
                       Number(
                         singleReport?.resourceAllocation?.proposedJobApprover
                           ?.id
-                      )) && (
+                      ) ||
+                    singleReport?.resourceAllocation?.resourcesList?.find(
+                      (singleResource) =>
+                        Number(singleResource?.id) ===
+                        Number(user[0]?.userId?.id)
+                    )) && (
                     <button
                       className={`btn btn-labeled btn-primary px-3 mx-2 mt-3 shadow ${
                         loading && "disabled"

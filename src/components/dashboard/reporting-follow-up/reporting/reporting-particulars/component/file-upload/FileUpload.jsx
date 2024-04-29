@@ -89,7 +89,7 @@ const ReportingFileUpload = ({ item }) => {
     <div className="row mb-3">
       <div className="col-lg-12">
         <label className="form-label me-3 mb-3">Attach files</label>
-        {Number(item?.stepNo) < 4 && (
+        {Number(item?.stepNo) <= 1 && (
           <div className="row mb-3">
             <div className="col-lg-4 row">
               <div className="col-lg-7">
@@ -154,7 +154,7 @@ const ReportingFileUpload = ({ item }) => {
                           class="fa fa-download f-18 mx-2 cursor-pointer"
                           onClick={() => handleDownload(fileItem?.id)}
                         ></i>
-                        {Number(item?.stepNo) < 4 && (
+                        {Number(item?.stepNo) <= 1 && (
                           <i
                             className="fa fa-trash text-danger f-18 cursor-pointer px-2"
                             onClick={() => {
@@ -169,7 +169,7 @@ const ReportingFileUpload = ({ item }) => {
                             }}
                           ></i>
                         )}
-                        {Number(item?.stepNo) < 4 && (
+                        {Number(item?.stepNo) <= 1 && (
                           <i
                             className="fa fa-edit px-2 f-18 cursor-pointer"
                             onClick={() => handleFileUpdate(fileItem?.id)}

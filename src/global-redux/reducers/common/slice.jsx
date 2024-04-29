@@ -112,7 +112,7 @@ let menuItems = [
       },
       {
         id: "li-internal-audit-planing-report",
-        label: "Planing Report",
+        label: "Planning Report",
         icon: "fa fa-file-code pe-2",
         route: "/audit/planning-report",
         active: false,

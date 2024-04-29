@@ -17,6 +17,24 @@ const Reporting = () => {
     setPage(value);
   };
 
+  function handleCalculateStatus(item) {
+    if (
+      item?.reportingList?.find(
+        (singleReportingItem) => Number(singleReportingItem?.stepNo) === 5
+      )
+    ) {
+      return "Exception To Be  Implemented";
+    }
+    if (
+      item?.reportingList?.find(
+        (singleReportingItem) => Number(singleReportingItem?.stepNo) === 6
+      )
+    ) {
+      return "Exceptions  Implemented";
+    }
+    return "Observation Completed";
+  }
+
   React.useEffect(() => {
     const companyId = user[0]?.company?.find(
       (item) => item?.companyName === company
@@ -71,7 +89,7 @@ const Reporting = () => {
                     <tr>
                       <th className="sr-col">Sr. #</th>
                       <th>Particulars</th>
-                      {/* <th>Status</th> */}
+                      <th>Status</th>
                       <th>No. of Observations</th>
                       <th>Action</th>
                     </tr>
@@ -97,7 +115,7 @@ const Reporting = () => {
                                 {item?.title}
                               </a>
                             </td>
-                            {/* <td>null</td> */}
+                            <td>{handleCalculateStatus(item)}</td>
                             <td>{item?.reportingList?.length}</td>
                             <td>
                               <i

@@ -23,7 +23,6 @@ const AccordianItem = ({
   setFeedBackDialog,
   setCurrentOpenItem,
   handleAllowEditSection1,
-  handleAllowEditSection2,
   setViewFirstFeedBackDialog,
   setViewSecondFeedBackDialog,
   setViewFeedBackItem,
@@ -60,15 +59,18 @@ const AccordianItem = ({
               )}
               {item?.observationTitle} -----
               {Number(item?.stepNo) === 0
-                ? "Implementation In Progress"
+                ? "Exceptions To Be Sent To Management For Comments"
                 : Number(item?.stepNo) === 1
                 ? "Exceptions To Be Sent To Management For Comments"
                 : Number(item?.stepNo) === 2
                 ? "Awaiting Management Comments"
                 : Number(item?.stepNo) === 3
-                ? "Management Comments Received"
+                ? user[0]?.userId?.employeeid?.userHierarchy ===
+                  "Management_Auditee"
+                  ? "Management Comments Sent"
+                  : "Management Comments Received"
                 : Number(item?.stepNo) >= 4
-                ? "Exceptions Implemented"
+                ? "Exception To Be Implemented"
                 : ""}
             </div>
           </div>
@@ -80,8 +82,6 @@ const AccordianItem = ({
         data-bs-parent="#accordionFlushExample"
       >
         <div className="accordion-body">
-          {user[0]?.userId?.employeeid?.userHierarchy !==
-            "Management_Auditee" && <ReportingFileUpload item={item} />}
           <div className="row mb-3">
             <div className="col-lg-6">
               <label>Observation Title:</label>
@@ -201,6 +201,7 @@ const AccordianItem = ({
                 />
               </div>
             )}
+
           {item?.stepNo !== 0 && item?.stepNo !== 1 && item?.stepNo !== 2 && (
             <div className="mb-4">
               <label>Management Comments:</label>
@@ -211,8 +212,7 @@ const AccordianItem = ({
                 rows="3"
                 value={item?.managementComments || ""}
                 name="managementComments"
-                onChange={(event) => handleChange(event, item?.id)}
-                disabled={handleAllowEditSection2(item) === true ? false : true}
+                disabled
               ></textarea>
               <label className="word-limit-info label-text mb-3">
                 Maximum 1500 words
@@ -225,11 +225,12 @@ const AccordianItem = ({
                 id="exampleFormControlInput1"
                 value={moment(item?.implementationDate).format("YYYY-MM-DD")}
                 name="implementationDate"
-                onChange={(event) => handleChange(event, item?.id)}
-                disabled={handleAllowEditSection2(item) === true ? false : true}
+                disabled
               />
             </div>
           )}
+
+          <ReportingFileUpload item={item} />
 
           <div>
             <div className="d-flex flex-end w-100 gap-4">
@@ -241,9 +242,6 @@ const AccordianItem = ({
                     }`}
                     onClick={() => handleSaveToStep1(item)}
                   >
-                    <span className="btn-label me-2">
-                      <i className="fa fa-check"></i>
-                    </span>
                     {loading ? "Loading..." : "Submit"}
                   </button>
                 </div>
@@ -256,10 +254,7 @@ const AccordianItem = ({
                     }`}
                     onClick={() => handleSaveStep2(item)}
                   >
-                    <span className="btn-label me-2">
-                      <i className="fa fa-check"></i>
-                    </span>
-                    {loading ? "Loading..." : "Submit"}
+                    {loading ? "Loading..." : "Save"}
                   </button>
                 </div>
               )}
@@ -306,7 +301,7 @@ const AccordianItem = ({
                         setFeedBackDialog(true);
                       }}
                     >
-                      First FeedBack
+                      FeedBack
                     </button>
                   </div>
                 )}
@@ -343,22 +338,6 @@ const AccordianItem = ({
                   </div>
                 )}
 
-              {handleAllowEditSection2(item) === true && item?.stepNo === 3 && (
-                <div className="d-flex align-items-center place-end">
-                  <button
-                    className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
-                      loading && "disabled"
-                    }`}
-                    onClick={() => handleSaveStep2(item)}
-                  >
-                    <span className="btn-label me-2">
-                      <i className="fa fa-check"></i>
-                    </span>
-                    {loading ? "Loading..." : "Submit"}
-                  </button>
-                </div>
-              )}
-
               {item?.stepNo === 3 &&
                 (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
                   Number(user[0]?.userId?.id) ===
@@ -369,7 +348,11 @@ const AccordianItem = ({
                   Number(user[0]?.userId?.id) ===
                     Number(
                       singleReport?.resourceAllocation?.proposedJobApprover?.id
-                    )) && (
+                    ) ||
+                  singleReport?.resourceAllocation?.resourcesList?.find(
+                    (singleResource) =>
+                      Number(singleResource?.id) === Number(user[0]?.userId?.id)
+                  )) && (
                   <div className="d-flex align-items-center place-end">
                     <button
                       className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
@@ -391,7 +374,11 @@ const AccordianItem = ({
                   Number(user[0]?.userId?.id) ===
                     Number(
                       singleReport?.resourceAllocation?.proposedJobApprover?.id
-                    )) && (
+                    ) ||
+                  singleReport?.resourceAllocation?.resourcesList?.find(
+                    (singleResource) =>
+                      Number(singleResource?.id) === Number(user[0]?.userId?.id)
+                  )) && (
                   <div className="d-flex align-items-center place-end">
                     <button
                       className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
@@ -402,7 +389,7 @@ const AccordianItem = ({
                         setFeedBackDialog(true);
                       }}
                     >
-                      Second FeedBack
+                      FeedBack
                     </button>
                   </div>
                 )}

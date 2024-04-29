@@ -17,6 +17,35 @@ const Reporting = () => {
     setPage(value);
   };
 
+  function handleCalculateStatus(item) {
+    if (
+      item?.reportingList?.find(
+        (singleReportingItem) =>
+          Number(singleReportingItem?.stepNo) === 0 ||
+          Number(singleReportingItem?.stepNo) === 1
+      )
+    ) {
+      return "Exceptions To Be Sent To Management For Comments";
+    }
+    if (
+      item?.reportingList?.find(
+        (singleReportingItem) => Number(singleReportingItem?.stepNo) === 2
+      )
+    ) {
+      return "Awaiting Management Comments";
+    }
+    if (
+      item?.reportingList?.find(
+        (singleReportingItem) => Number(singleReportingItem?.stepNo) === 3
+      )
+    ) {
+      return user[0]?.userId?.employeeid?.userHierarchy === "Management_Auditee"
+        ? "Management Comments Sent"
+        : "Management Comments Received";
+    }
+    return "Exception To Be Implemented";
+  }
+
   React.useEffect(() => {
     const companyId = user[0]?.company?.find(
       (item) => item?.companyName === company
@@ -71,7 +100,7 @@ const Reporting = () => {
                     <tr>
                       <th className="sr-col">Sr. #</th>
                       <th>Particulars</th>
-                      {/* <th>Status</th> */}
+                      <th>Status</th>
                       <th>No. of Observations</th>
                       <th>Action</th>
                     </tr>
@@ -97,19 +126,7 @@ const Reporting = () => {
                                 {item?.title}
                               </a>
                             </td>
-                            {/* <td>
-                              {Number(item?.stepNo) === 0
-                                ? "Implementation In Progress"
-                                : Number(item?.stepNo) === 1
-                                ? "Exceptions To Be Sent To Management For Comments"
-                                : Number(item?.stepNo) === 2
-                                ? "Awaiting Management Comments"
-                                : Number(item?.stepNo) === 3
-                                ? "Management Comments Received"
-                                : Number(item?.stepNo) === 4
-                                ? "Exceptions Implemented"
-                                : ""}
-                            </td> */}
+                            <td>{handleCalculateStatus(item)}</td>
                             <td>{item?.reportingList?.length}</td>
                             <td>
                               <i

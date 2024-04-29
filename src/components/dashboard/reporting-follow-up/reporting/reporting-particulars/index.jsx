@@ -24,6 +24,7 @@ import SecondApproveReportingDialog from "./component/approve-dialogs/SecondAppr
 import FeedBackDialog from "../../components/FeedBackDialog";
 import ViewFirstFeedBackDialog from "../../components/FirstFeedBack";
 import ViewSecondFeedBackDialog from "../../components/SecondFeedBack";
+import { toast } from "react-toastify";
 
 const ReportingParticulars = () => {
   let navigate = useNavigate();
@@ -108,6 +109,26 @@ const ReportingParticulars = () => {
   }
 
   function handleSaveToStep2(item) {
+    if (
+      item?.observationTitle === "" ||
+      !item?.observationTitle ||
+      item?.observationName === "" ||
+      !item?.observationName ||
+      item?.implicationRating === "" ||
+      !item?.implicationRating ||
+      Number(item?.implicationRating) === 0 ||
+      !item?.implication ||
+      item?.implication === "" ||
+      item?.recommendedActionStep === "" ||
+      !item?.recommendedActionStep ||
+      !item?.auditee ||
+      !item?.auditee?.name
+    ) {
+      toast.error(
+        "Fields missing. Please fill them  first and then approve the observation"
+      );
+      return;
+    }
     setCurrentApproveItem(item);
     setFirstApproveDialog(true);
   }
@@ -119,13 +140,21 @@ const ReportingParticulars = () => {
   }
 
   function handleSaveToStep3(item) {
-    const currentItem = singleReport?.reportingList?.find(
-      (singleItem) => Number(singleItem?.id) === Number(item?.id)
-    );
     if (!loading) {
+      if (
+        item?.managementComments === "" ||
+        !item?.managementComments ||
+        item?.implementationDate === "" ||
+        !item?.implementationDate
+      ) {
+        toast.error(
+          "Fields missing. Please fill them  first and then submit the observation"
+        );
+        return;
+      }
       dispatch(
         setupUpdateReportingByManagementAuditee({
-          ...currentItem,
+          ...item,
           stepNo: 3,
         })
       );
@@ -160,26 +189,6 @@ const ReportingParticulars = () => {
   }
 
   // Editibility 1 Ends
-  // Editibility 2 Starts
-  function handleAllowEditSection2(item) {
-    let allowEdit = false;
-    if (
-      Number(item?.stepNo) === 3 &&
-      (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
-        Number(user[0]?.userId?.id) ===
-          Number(
-            singleReport?.resourceAllocation?.backupHeadOfInternalAudit?.id
-          ) ||
-        Number(user[0]?.userId?.id) ===
-          Number(singleReport?.resourceAllocation?.proposedJobApprover?.id))
-    ) {
-      allowEdit = true;
-    }
-
-    return allowEdit;
-  }
-
-  // Editibility 2 Ends
 
   React.useEffect(() => {
     if (reportingAddSuccess) {
@@ -389,7 +398,6 @@ const ReportingParticulars = () => {
                               setFeedBackDialog={setFeedBackDialog}
                               setCurrentOpenItem={setCurrentOpenItem}
                               handleAllowEditSection1={handleAllowEditSection1}
-                              handleAllowEditSection2={handleAllowEditSection2}
                               setViewFirstFeedBackDialog={
                                 setViewFirstFeedBackDialog
                               }

@@ -20,6 +20,7 @@ import AccordianItem from "./components/AccordianItem";
 import ApproveDialog from "./components/ApproveDialog";
 import FeedBackDialog from "../../components/FeedBackDialog";
 import ViewThirdFeedBackDialog from "../../components/ThirdFeedBack";
+import { toast } from "react-toastify";
 
 const ReportingParticulars = () => {
   let navigate = useNavigate();
@@ -59,29 +60,39 @@ const ReportingParticulars = () => {
     });
   }
 
-  function handleChangeDate(event, id) {
-    setReport((pre) => {
-      return {
-        ...pre,
-        reportingList: pre?.reportingList?.map((report) =>
-          Number(report?.id) === Number(id)
-            ? { ...report, [event?.target?.name]: event?.target?.value }
-            : report
-        ),
-      };
-    });
-  }
-
   function handleSaveToStep6(item) {
-    const currentItem = singleReport?.reportingList?.find(
-      (singleItem) => Number(singleItem?.id) === Number(item?.id)
-    );
+    if (
+      item?.followUp?.recommendationsImplemented.toString() === "true" &&
+      (item?.followUp?.finalComments === null ||
+        item?.followUp?.finalComments === "")
+    ) {
+      toast.error(
+        "Final Comments missing. Please provide them first and then submit the observation"
+      );
+      return;
+    }
     dispatch(
-      setupUpdateReporting({
-        ...currentItem,
-        stepNo: 6,
+      setupUpdateFollowUp({
+        ...item?.followUp,
+        recommendationsImplemented:
+          item?.followUp?.recommendationsImplemented.toString() === "true"
+            ? true
+            : false,
+        finalComments:
+          item?.followUp?.recommendationsImplemented.toString() === "true"
+            ? item?.followUp?.finalComments
+            : "",
       })
     );
+
+    setTimeout(() => {
+      dispatch(
+        setupUpdateReporting({
+          ...item,
+          stepNo: 6,
+        })
+      );
+    }, 900);
   }
 
   function handleSave(item) {
@@ -89,81 +100,42 @@ const ReportingParticulars = () => {
       dispatch(
         setupUpdateFollowUp({
           ...item?.followUp,
-          finalComments:
-            item?.followUp?.recommendationsImplemented.toString() === "true"
-              ? item?.followUp?.finalComments
-              : "",
           recommendationsImplemented:
             item?.followUp?.recommendationsImplemented.toString() === "true"
               ? true
               : false,
-          testInNextYear:
-            item?.followUp?.testInNextYear.toString() === "true" ? true : false,
-        })
-      );
-    }
-  }
-
-  function handleSaveReporting(item) {
-    if (!loading) {
-      dispatch(setupUpdateReporting(item));
-      dispatch(
-        setupUpdateFollowUp({
-          ...item?.followUp,
           finalComments:
             item?.followUp?.recommendationsImplemented.toString() === "true"
               ? item?.followUp?.finalComments
               : "",
-          recommendationsImplemented:
-            item?.followUp?.recommendationsImplemented.toString() === "true"
-              ? true
-              : false,
-          testInNextYear:
-            item?.followUp?.testInNextYear.toString() === "true" ? true : false,
         })
       );
     }
   }
 
   function handleSaveToStep7(item) {
-    setCurrentApproveItem(item);
-    setApproveDialog(true);
-  }
-
-  // Editibility OF Implementation Date Starts
-  function handleAllowEditImplemetationDate(item) {
-    let allowEdit = false;
-    if (
-      Number(item?.stepNo) === 6 &&
-      (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
-        Number(user[0]?.userId?.id) ===
-          Number(
-            singleReport?.resourceAllocation?.backupHeadOfInternalAudit?.id
-          ) ||
-        Number(user[0]?.userId?.id) ===
-          Number(singleReport?.resourceAllocation?.proposedJobApprover?.id))
-    ) {
-      allowEdit = true;
+    if (!loading) {
+      dispatch(
+        setupUpdateFollowUp({
+          ...item?.followUp,
+          testInNextYear:
+            item?.followUp?.testInNextYear.toString() === "true" ? true : false,
+        })
+      );
     }
 
-    return allowEdit;
+    setTimeout(() => {
+      setCurrentApproveItem(item);
+      setApproveDialog(true);
+    }, 1200);
   }
-  // Editibility OF Implementation Date Ends
+
   // Editibility OF Last Section Starts
   function handleAllowEditLastSection(item) {
     let allowEdit = false;
-    if (Number(item?.stepNo) === 5) {
-      allowEdit = true;
-    }
     if (
-      Number(item?.stepNo) === 6 &&
-      (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
-        Number(user[0]?.userId?.id) ===
-          Number(
-            singleReport?.resourceAllocation?.backupHeadOfInternalAudit?.id
-          ) ||
-        Number(user[0]?.userId?.id) ===
-          Number(singleReport?.resourceAllocation?.proposedJobApprover?.id))
+      Number(item?.stepNo) === 5 &&
+      Number(user[0]?.userId?.id) === Number(item?.auditee?.id)
     ) {
       allowEdit = true;
     }
@@ -171,6 +143,29 @@ const ReportingParticulars = () => {
     return allowEdit;
   }
   // Editibility OF Last Section Ends
+
+  // Test In Next Year
+  function handleShowTestInNextYear(item) {
+    let allowEdit = false;
+    if (
+      item?.stepNo === 6 &&
+      (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
+        Number(user[0]?.userId?.id) ===
+          Number(
+            singleReport?.resourceAllocation?.backupHeadOfInternalAudit?.id
+          ) ||
+        Number(user[0]?.userId?.id) ===
+          Number(singleReport?.resourceAllocation?.proposedJobApprover?.id) ||
+        singleReport?.resourceAllocation?.resourcesList?.find(
+          (singleResource) =>
+            Number(singleResource?.id) === Number(user[0]?.userId?.id)
+        ))
+    ) {
+      allowEdit = true;
+    }
+    return allowEdit;
+  }
+  // Test In Next Year
 
   React.useEffect(() => {
     if (reportingAddSuccess) {
@@ -310,18 +305,16 @@ const ReportingParticulars = () => {
                                   setCurrentReportingAndFollowUpId
                                 }
                                 setFeedBackDialog={setFeedBackDialog}
-                                handleAllowEditImplemetationDate={
-                                  handleAllowEditImplemetationDate
-                                }
                                 handleAllowEditLastSection={
                                   handleAllowEditLastSection
                                 }
-                                handleChangeDate={handleChangeDate}
-                                handleSaveReporting={handleSaveReporting}
                                 setViewThirdFeedBackDialog={
                                   setViewThirdFeedBackDialog
                                 }
                                 setViewFeedBackItem={setViewFeedBackItem}
+                                handleShowTestInNextYear={
+                                  handleShowTestInNextYear
+                                }
                               />
                             );
                           })}

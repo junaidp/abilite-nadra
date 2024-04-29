@@ -208,7 +208,7 @@ const GenerateInternalAuditReport = () => {
             <div className="col-lg-10">
               <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">
-                  Reporting And Follow Up
+                  Internal Audit Report
                 </InputLabel>
                 <Select
                   labelId="demo-simple-select-label"

@@ -104,11 +104,11 @@ const AuditEngagement = () => {
                     <thead className="bg-secondary text-white">
                       <tr>
                         <th className="w-80">Sr No.</th>
-                        <th>job Name</th>
-                        <th>planned Start Date </th>
-                        <th>planned End Date </th>
-                        <th>job Type </th>
-                        <th>status </th>
+                        <th>Job Name</th>
+                        <th>Planned Start Date </th>
+                        <th>Planned End Date </th>
+                        <th>Job Type </th>
+                        <th>Status </th>
 
                         {/* <th>Change Request </th> */}
                       </tr>
