@@ -107,6 +107,11 @@ const ReportingParticulars = () => {
       );
     }
   }
+  function handleSaveStep1(item) {
+    if (!loading) {
+      dispatch(setupUpdateReporting(item));
+    }
+  }
 
   function handleSaveToStep2(item) {
     if (
@@ -405,6 +410,7 @@ const ReportingParticulars = () => {
                                 setViewSecondFeedBackDialog
                               }
                               setViewFeedBackItem={setViewFeedBackItem}
+                              handleSaveStep1={handleSaveStep1}
                             />
                           );
                         })}

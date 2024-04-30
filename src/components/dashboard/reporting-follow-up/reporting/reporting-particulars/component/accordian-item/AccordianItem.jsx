@@ -26,6 +26,7 @@ const AccordianItem = ({
   setViewFirstFeedBackDialog,
   setViewSecondFeedBackDialog,
   setViewFeedBackItem,
+  handleSaveStep1,
 }) => {
   const { user } = useSelector((state) => state?.auth);
   const [currentItem, setCurrentItem] = React.useState({});
@@ -234,6 +235,18 @@ const AccordianItem = ({
 
           <div>
             <div className="d-flex flex-end w-100 gap-4">
+              {item?.stepNo === 0 && (
+                <div className="d-flex align-items-center place-end">
+                  <button
+                    className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
+                      loading && "disabled"
+                    }`}
+                    onClick={() => handleSaveStep1(item)}
+                  >
+                    {loading ? "Loading..." : "Save"}
+                  </button>
+                </div>
+              )}
               {item?.stepNo === 0 && (
                 <div className="d-flex align-items-center place-end">
                   <button
