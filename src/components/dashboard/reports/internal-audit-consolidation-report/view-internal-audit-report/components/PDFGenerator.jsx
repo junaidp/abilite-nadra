@@ -57,9 +57,7 @@ const styles = StyleSheet.create({
   reportName: {
     textAlign: "center",
   },
-  pdfHeaderWrap: {
-    top: 100,
-  },
+
   h4: {
     fontSize: 12,
   },
@@ -258,6 +256,24 @@ const PDFGenerator = ({ reportObject }) => {
             </Text>
           </View>
           <View style={styles.reportInfoViewItem}>
+            <Text style={styles.reportInfoTitle}>Planned Hours:</Text>
+            <Text style={styles.reportInfoSubTitle}>
+              {reportObject?.plannedHours}
+            </Text>
+          </View>
+          <View style={styles.reportInfoViewItem}>
+            <Text style={styles.reportInfoTitle}>Risk Approach:</Text>
+            <Text style={styles.reportInfoSubTitle}>
+              {reportObject?.riskApproach}
+            </Text>
+          </View>
+          <View style={styles.reportInfoViewItem}>
+            <Text style={styles.reportInfoTitle}>Risk Rating:</Text>
+            <Text style={styles.reportInfoSubTitle}>
+              {reportObject?.riskRating}
+            </Text>
+          </View>
+          <View style={styles.reportInfoViewItem}>
             <Text style={styles.reportInfoTitle}>Location:</Text>
             <View style={styles.locationWrap}>
               {[
@@ -287,7 +303,7 @@ const PDFGenerator = ({ reportObject }) => {
           </View>
         </View>
       </Page>
-      <Page style={styles.page2} size="A4" wrap>
+      <Page style={styles.page} size="A4" wrap>
         <Text style={styles.contents}>EXECUTIVE SUMMARY </Text>
         <View>
           <Text style={styles.h4}>
@@ -295,7 +311,7 @@ const PDFGenerator = ({ reportObject }) => {
           </Text>
         </View>
       </Page>
-      <Page style={styles.page2} size="A4" wrap>
+      <Page style={styles.page} size="A4" wrap>
         <Text style={styles.contents}>AUDIT PURPOSE </Text>
         <View>
           <Text style={styles.h4}>
@@ -303,7 +319,7 @@ const PDFGenerator = ({ reportObject }) => {
           </Text>
         </View>
       </Page>
-      <Page style={styles.page2} size="A4" wrap>
+      <Page style={styles.page} size="A4" wrap>
         <Text style={styles.contents}>ANNEXURE </Text>
         <View>
           <Text style={styles.h4}>
@@ -311,7 +327,7 @@ const PDFGenerator = ({ reportObject }) => {
           </Text>
         </View>
       </Page>
-      <Page style={styles.page2} size="A4" wrap>
+      <Page style={styles.page} size="A4" wrap>
         <Text style={styles.contents}>SUMMARY OF KEY FINDINGS </Text>
         {reportObject?.consolidatedIARKeyFindingsList?.map((item, index) => {
           return (
@@ -328,7 +344,7 @@ const PDFGenerator = ({ reportObject }) => {
                 <Text style={styles.summaryHeader}>Reporting & Follow Up</Text>
                 {!item?.reportingList || item?.reportingList?.length === 0 ? (
                   <Text style={styles.reportingNotFoundText}>
-                    Reporting Not Available
+                    Reporting List Not Available
                   </Text>
                 ) : (
                   item?.reportingList?.map((followUpItem, index) => {
@@ -337,6 +353,16 @@ const PDFGenerator = ({ reportObject }) => {
                         <Text style={styles.indexNumber}>
                           Reporting {index + 1}
                         </Text>
+                        <View style={styles.singleFindSummaryWrap}>
+                          <Text style={styles.singleFindSummaryHeader}>
+                            Observation
+                          </Text>
+                          <Text style={styles.singleFindSummaryPara}>
+                            {convert(followUpItem?.observationName, {
+                              tables: true,
+                            })}
+                          </Text>
+                        </View>
                         <View style={styles.summaryInfoWrap}>
                           <View style={styles.singleFindingsHeaderInfo}>
                             <Text style={styles.singleFindingsHeaderInfoHeader}>
@@ -350,16 +376,6 @@ const PDFGenerator = ({ reportObject }) => {
                           </View>
                           <View style={styles.singleFindSummaryWrap}>
                             <Text style={styles.singleFindSummaryHeader}>
-                              Observation
-                            </Text>
-                            <Text style={styles.singleFindSummaryPara}>
-                              {convert(followUpItem?.observationName, {
-                                tables: true,
-                              })}
-                            </Text>
-                          </View>
-                          <View style={styles.singleFindSummaryWrap}>
-                            <Text style={styles.singleFindSummaryHeader}>
                               Implication
                             </Text>
                             <Text style={styles.singleFindSummaryPara}>
@@ -368,12 +384,43 @@ const PDFGenerator = ({ reportObject }) => {
                           </View>
                           <View style={styles.singleFindSummaryWrap}>
                             <Text style={styles.singleFindSummaryHeader}>
+                              Auditee
+                            </Text>
+                            <Text style={styles.singleFindSummaryPara}>
+                              {followUpItem?.auditee?.name}
+                            </Text>
+                          </View>
+                          <View style={styles.singleFindSummaryWrap}>
+                            <Text style={styles.singleFindSummaryHeader}>
+                              Test In Next Year
+                            </Text>
+                            <Text style={styles.singleFindSummaryPara}>
+                              {followUpItem?.followUp?.recommendationsImplemented.toString() ===
+                              "true"
+                                ? "Yes"
+                                : "No"}
+                            </Text>
+                          </View>
+                          <View style={styles.singleFindSummaryWrap}>
+                            <Text style={styles.singleFindSummaryHeader}>
+                              Implication Rating
+                            </Text>
+                            <Text style={styles.singleFindSummaryPara}>
+                              {followUpItem?.implicationRating === 1
+                                ? "High"
+                                : followUpItem?.implicationRating === 2
+                                ? "Medium"
+                                : followUpItem?.implicationRating === 3
+                                ? "Low"
+                                : ""}
+                            </Text>
+                          </View>
+                          <View style={styles.singleFindSummaryWrap}>
+                            <Text style={styles.singleFindSummaryHeader}>
                               Management Comments
                             </Text>
                             <Text style={styles.singleFindSummaryPara}>
-                              {followUpItem?.managementComments
-                                ? followUpItem?.managementComments
-                                : "No Management Comments Provided"}
+                              {followUpItem?.managementComments}
                             </Text>
                           </View>
                         </View>
@@ -386,7 +433,7 @@ const PDFGenerator = ({ reportObject }) => {
           );
         })}
       </Page>
-      <Page style={styles.page2} size="A4" wrap>
+      <Page style={styles.page} size="A4" wrap>
         <Text style={styles.contents}>Init Audit Extra Fields List</Text>
         {reportObject?.intAuditExtraFieldsList?.map((item, index) => {
           return (

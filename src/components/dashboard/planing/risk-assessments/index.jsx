@@ -79,7 +79,6 @@ const RiskAssessments = () => {
                   <th>Risk Approach</th>
                   <th>Risk Rating</th>
                   <th>Perform Risk Assessment</th>
-                  <th>Delete</th>
                 </tr>
               </thead>
               <tbody>
@@ -124,9 +123,6 @@ const RiskAssessments = () => {
                                 ? "View Risk"
                                 : "Perform Risk"}
                             </div>
-                          </td>
-                          <td className="text-center pt-3">
-                            <i className="fa fa-trash text-danger f-18"></i>
                           </td>
                         </tr>
                       );
