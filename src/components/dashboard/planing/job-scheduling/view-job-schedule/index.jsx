@@ -1,162 +1,189 @@
 import React from "react";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
+import Pagination from "@mui/material/Pagination";
+import { setupGetAllJobScheduling } from "../../../../../global-redux/reducers/planing/job-scheduling/slice";
+import {
+  changeActiveLink,
+  InitialLoadSidebarActiveLink,
+} from "../../../../../global-redux/reducers/common/slice";
+import { useSelector, useDispatch } from "react-redux";
+import { CircularProgress } from "@mui/material";
+import moment from "moment/moment";
 
 const ViewJobSchedule = () => {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { allJobScheduling, loading } = useSelector(
+    (state) => state?.planingJobScheduling
+  );
+  const { company, year } = useSelector((state) => state?.common);
+  const { user } = useSelector((state) => state?.auth);
+  const [page, setPage] = React.useState(1);
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
+
+  function calculateHours(item) {
+    let totalResources =
+      Number(item?.numberOfResourcesRequired?.finance) +
+      Number(item?.numberOfResourcesRequired?.business) +
+      Number(item?.numberOfResourcesRequired?.fraud) +
+      Number(item?.numberOfResourcesRequired?.operations) +
+      Number(item?.numberOfResourcesRequired?.other) +
+      Number(item?.numberOfResourcesRequired?.it);
+    let totalWeeksHours =
+      Number(item?.timeAndDateAllocation?.estimatedWeeks) * 40;
+    return (
+      Number(item?.timeAndDateAllocation?.travellingDays) * 8 +
+      totalResources * totalWeeksHours +
+      Number(item?.timeAndDateAllocation?.internalAuditManagementHours)
+    );
+  }
+  React.useEffect(() => {
+    const companyId = user[0]?.company?.find(
+      (item) => item?.companyName === company
+    )?.id;
+    if (companyId) {
+      dispatch(
+        setupGetAllJobScheduling(
+          `?companyId=${companyId}&currentYear=${Number(year)}`
+        )
+      );
+    }
+  }, [user, year, company]);
+
+  React.useEffect(() => {
+    dispatch(changeActiveLink("li-job-scheduling"));
+    dispatch(InitialLoadSidebarActiveLink("li-audit"));
+  }, []);
+
   return (
     <div>
-      <header className="section-header my-3  text-start d-flex align-items-center justify-content-between">
-        <div className="mb-0 heading">
-          <button
-            className="btn btn-indigo me-2"
-            onClick={() => navigate("/audit/job-scheduling")}
-          >
-            Back
-          </button>
-          Job Scheduling
-        </div>
-
-        <div className="d-flex align-items-center">
-          <label className="me-3">Year:</label>
-          <select className="form-select" aria-label="Default select example">
-            <option>2023</option>
-            <option value="2">2022</option>
-            <option value="3">2021</option>
-          </select>
-        </div>
-      </header>
-
-      <div className="row">
-        <div className="col-lg-12">
-          <div className="table-responsive">
-            <table className="table table-bordered table-hover rounded equal-columns">
-              <thead>
-                <tr>
-                  <th className="sr-col">Sr. #</th>
-                  <th>Auditable Unit</th>
-                  <th>Year</th>
-                  <th>Planned Start Date</th>
-                  <th>Planned End Date</th>
-                  <th>Resources Allocated</th>
-                  <th>Total Estimated Hours</th>
-                  <th>Risk Rating</th>
-                  <th>Created by</th>
-                  <th>Status</th>
-                  <th>Approved by</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="h-50">
-                  <td>1</td>
-                  <td>
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry.
-                  </td>
-                  <td>2023</td>
-                  <td>
-                    <input
-                      type="date"
-                      className="form-control"
-                      id="exampleFormControlInput1"
-                      placeholder="DD/MM/YYYY"
-                    />
-                  </td>
-                  <td>DD/MM/YYYY</td>
-                  <td>2</td>
-                  <td>80</td>
-                  <td className="bg-warning text-white">Moderate</td>
-                  <td>AR</td>
-                  <td>Draft</td>
-                  <td>AR</td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry.
-                  </td>
-                  <td>2023</td>
-                  <td>
-                    <input
-                      type="date"
-                      className="form-control"
-                      id="exampleFormCon"
-                      placeholder="DD/MM/YYYY"
-                    />
-                  </td>
-                  <td>DD/MM/YYYY</td>
-                  <td>2</td>
-                  <td>160</td>
-                  <td className="bg-danger text-white">Extreme</td>
-                  <td>AR</td>
-                  <td>Draft</td>
-                  <td>AR</td>
-                </tr>
-              </tbody>
-            </table>
+      <div>
+        <header className="section-header my-3  text-start d-flex align-items-center justify-content-between">
+          <div className="mb-0 heading">
+            <button
+              className="btn btn-indigo me-2"
+              onClick={() => navigate("/audit/job-scheduling")}
+            >
+              Back
+            </button>
+            Job Scheduling
+          </div>
+        </header>
+        <div className="row">
+          <div className="col-lg-12">
+            <div className="table-responsive">
+              <table className="table table-bordered table-hover rounded equal-columns">
+                <thead>
+                  <tr>
+                    <th className="sr-col">Sr. #</th>
+                    <th>Auditable Unit</th>
+                    <th>Year</th>
+                    <th>Planned Start Date</th>
+                    <th>Planned End Date</th>
+                    <th>Resources Allocated</th>
+                    <th>Total Estimated Hours</th>
+                    <th>Risk Rating</th>
+                    <th>Created by</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {loading ? (
+                    <tr>
+                      <td className="w-300">
+                        <CircularProgress />
+                      </td>
+                    </tr>
+                  ) : allJobScheduling?.length === 0 ? (
+                    <tr>
+                      <td className="w-300">No data to show</td>
+                    </tr>
+                  ) : (
+                    allJobScheduling
+                      ?.slice((page - 1) * 10, page * 10)
+                      ?.map((item, index) => {
+                        return (
+                          <tr className="h-50" key={index}>
+                            <td>{index + 1}</td>
+                            <td>{item?.auditableUnitTitle}</td>
+                            <td>{item?.year}</td>
+                            <td>
+                              <input
+                                type="date"
+                                className="form-control"
+                                disabled
+                                value={moment(
+                                  item?.jobScheduleList[0]?.plannedStartDate
+                                ).format("YYYY-MM-DD")}
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="date"
+                                className="form-control"
+                                disabled
+                                value={moment(
+                                  item?.jobScheduleList[0]?.plannedJobEndDate
+                                ).format("YYYY-MM-DD")}
+                              />
+                            </td>
+                            <td>
+                              {item?.resourceAllocation?.resourcesList?.length}
+                            </td>
+                            <td>{calculateHours(item)}</td>
+                            <td
+                              className={` text-white ${
+                                item?.riskRating?.toUpperCase() ===
+                                "Low"?.toUpperCase()
+                                  ? "bg-success"
+                                  : item?.riskRating?.toUpperCase() ===
+                                    "Medium"?.toUpperCase()
+                                  ? "bg-yellow"
+                                  : item?.riskRating?.toUpperCase() ===
+                                    "High"?.toUpperCase()
+                                  ? "bg-danger"
+                                  : ""
+                              }`}
+                            >
+                              {item?.riskRating}
+                            </td>
+                            <td>{item?.resourceAllocation?.createdBy?.name}</td>
+                            <td>
+                              {item?.locked === true
+                                ? "Completed"
+                                : "In-Progress"}
+                            </td>
+                            <td>
+                              <span className="btn-label me-2">
+                                <i
+                                  className="fa fa-edit  px-3 f-18 cursor-pointer"
+                                  onClick={() =>
+                                    navigate(
+                                      `/audit/start-scheduling?jobScheduling=${item?.id}`
+                                    )
+                                  }
+                                ></i>
+                              </span>
+                            </td>
+                          </tr>
+                        );
+                      })
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="row">
-        <div className="col-2 d-flex align-items-center">
-          <label className="me-2 label-text fw-bold">View Entries</label>
-          <select
-            className="form-select w-70"
-            aria-label="Default select example"
-          >
-            <option>10</option>
-            <option value="1">20</option>
-            <option value="2">30</option>
-            <option value="3">40</option>
-          </select>
-        </div>
-
-        <div className="col-10 d-flex align-items-center justify-content-end">
-          <a href="#" className="text-secondary">
-            <i className="fa fa-print me-3 f-18"></i>
-          </a>
-
-          <nav aria-label="Page navigation example">
-            <ul className="pagination mb-0 justify-content-center">
-              <li className="page-item disabled">
-                <a className="page-link">Previous</a>
-              </li>
-              <li className="page-item">
-                <a className="page-link" href="#">
-                  1
-                </a>
-              </li>
-              <li className="page-item">
-                <a className="page-link" href="#">
-                  2
-                </a>
-              </li>
-              <li className="page-item">
-                <a className="page-link" href="#">
-                  3
-                </a>
-              </li>
-              <li className="page-item">
-                <a className="page-link" href="#">
-                  Next
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </div>
-
-      <div className="row mt-3">
-        <div className="col-lg-12 justify-content-end text-end">
-          <div className="btn btn-labeled btn-primary px-3 shadow">
-            <span className="btn-label me-2">
-              <i className="fa fa-check-circle"></i>
-            </span>
-            Save
-          </div>
-        </div>
+        <Pagination
+          count={Math.ceil(allJobScheduling?.length / 10)}
+          page={page}
+          onChange={handleChange}
+        />
       </div>
     </div>
   );

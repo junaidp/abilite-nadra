@@ -1,9 +1,37 @@
 import React from "react";
-import "./index.css";
+import { setupGetAllUsers } from "../../../../../global-redux/reducers/settings/user-management/slice";
+import { useSelector, useDispatch } from "react-redux";
+import { CircularProgress } from "@mui/material";
+import Pagination from "@mui/material/Pagination";
 import { useNavigate } from "react-router-dom";
+import {
+  changeActiveLink,
+  InitialLoadSidebarActiveLink,
+} from "../../../../../global-redux/reducers/common/slice";
 
 const ViewResource = () => {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { loading, allUsers } = useSelector(
+    (state) => state?.setttingsUserManagement
+  );
+  const { user } = useSelector((state) => state?.auth);
+  const [page, setPage] = React.useState(1);
+  const handleChange = (_, value) => {
+    setPage(value);
+  };
+
+  React.useEffect(() => {
+    if (user[0]?.token) {
+      dispatch(setupGetAllUsers({ shareWith: true }));
+    }
+  }, [user]);
+
+  React.useEffect(() => {
+    dispatch(changeActiveLink("li-job-scheduling"));
+    dispatch(InitialLoadSidebarActiveLink("li-audit"));
+  }, []);
+
   return (
     <div>
       <header className="section-header my-3 text-start d-flex align-items-center">
@@ -39,54 +67,52 @@ const ViewResource = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Shahrukh Ali - 28715</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td>SM Raza ul Islam - 8502</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td>Shahzad Ahmed - 36531</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
+                {loading ? (
+                  <tr>
+                    <td className="w-300">
+                      <CircularProgress />
+                    </td>
+                  </tr>
+                ) : allUsers?.length === 0 ||
+                  allUsers[0]?.error === "Not Found" ? (
+                  <tr>
+                    <td className="w-300">No user to show!</td>
+                  </tr>
+                ) : (
+                  allUsers
+                    ?.filter(
+                      (all) =>
+                        all?.employeeid?.userHierarchy !== "Management_Auditee"
+                    )
+                    ?.slice((page - 1) * 10, page * 10)
+                    ?.map((userItem, index) => {
+                      return (
+                        <tr key={index}>
+                          <td>{userItem?.name}</td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                        </tr>
+                      );
+                    })
+                )}
               </tbody>
             </table>
           </div>
+          <Pagination
+            count={Math.ceil(allUsers?.length / 10)}
+            page={page}
+            onChange={handleChange}
+          />
         </div>
       </div>
     </div>
