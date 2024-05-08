@@ -2,7 +2,6 @@ import logo from "../../../../../../assets/logo.png";
 import moment from "moment";
 import React from "react";
 import font from "../../../../../../font/Poppins-Medium.ttf";
-
 import {
   Document,
   Page,
@@ -27,14 +26,16 @@ const styles = StyleSheet.create({
     paddingLeft: 35,
     paddingRight: 35,
   },
+  globalFont: {
+    fontFamily: "Poppins",
+  },
   page2: {
     flexDirection: "column",
     backgroundColor: "#FFFFFF",
     fontFamily: "Poppins",
-    paddingTop: 120,
-    paddingBottom: 20,
-    paddingLeft: 35,
-    paddingRight: 35,
+    paddingTop: 25,
+    paddingBottom: 120,
+    paddingHorizontal: 35,
   },
   header: {
     flexDirection: "column",
@@ -45,6 +46,7 @@ const styles = StyleSheet.create({
   logo: {
     width: 100,
     marginBottom: 10,
+    alignItems: "center",
   },
   title: {
     fontSize: 24,
@@ -138,8 +140,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
   },
-  summaryInfoWrap: {
-    marginTop: 8,
+  summaryInfoWrapSummary: {
+    marginTop: 0,
     display: "flex",
     flexDirection: "column",
     gap: 20,
@@ -183,17 +185,80 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   findings: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 20,
+    marginTop: 20,
+  },
+  findingsSummary: {
     marginTop: 15,
     display: "flex",
     flexDirection: "column",
     gap: 20,
+    marginBottom: 20,
+  },
+  firstPage: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    fontFamily: "Poppins",
+    justifyContent: "center",
+  },
+  overviewFields: {
+    display: "flex",
+    flexDirection: "column",
+    marginLeft: "50px",
+  },
+  pageStarter: {
+    display: "flex",
+    justifyContent: "space-between",
+    flexDirection: "row",
+    alignItems: "center",
+    paddingTop: 50,
+    paddingBottom: 20,
+    paddingLeft: 35,
+    paddingRight: 35,
+  },
+  h7: {
+    fontSize: 8,
+    fontFamily: "Poppins",
+  },
+  pageStarterLogo: {
+    width: 40,
+  },
+  pageNumber: {
+    position: "absolute",
+    bottom: 30,
+    left: 0,
+    right: 0,
+    textAlign: "center",
+    fontSize: 10,
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 30,
+  },
+  allFindingMianHeadingWrap: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "80%",
   },
 });
 
 const PDFGenerator = ({ reportObject }) => {
+  // const [pages, setPages] = React.useState({
+  //   overView: "",
+  //   executiveSummary: "",
+  //   auditPurpose: "",
+  //   summaryOfKeyFindings: "",
+  //   allFindings: "",
+  //   extraFields: "",
+  //   annexure: "",
+  // });
   return (
     <Document>
-      <Page style={styles.page2} size="A4">
+      <Page style={styles.firstPage} size="A4">
         <View style={styles.header}>
           <Image src={logo} style={styles.logo} />
         </View>
@@ -203,257 +268,314 @@ const PDFGenerator = ({ reportObject }) => {
         <View>
           <Text style={styles.reportName}>{reportObject?.reportName}</Text>
         </View>
+        <Text
+          style={styles.pageNumber}
+          render={({ pageNumber, totalPages }) =>
+            `${pageNumber} / ${totalPages}`
+          }
+          fixed
+        />
       </Page>
-      <Page style={styles.page2} size="A4">
-        <Text style={styles.contents}>Contents </Text>
-        <View style={styles.overviewWrap}>
-          <Text style={styles.h4}>
-            OVERVIEW -------------------------------------------------------
-          </Text>
-          <Text style={styles.h4}>
-            EXECUTIVE SUMMARY ----------------------------------------------
-          </Text>
-          <Text style={styles.h4}>
-            AUDIT PURPOSE ---------------------------------------------------
-          </Text>
-          <Text style={styles.h4}>
-            ANNEXURE -------------------------------------------------------
-          </Text>
-          <Text style={styles.h4}>
-            ALL FINDINGS -----------------------------------------------------
-          </Text>
-          <Text style={styles.h4}>
-            Init Audit Extra Fields
-            ----------------------------------------------
-          </Text>
+      <Page size="A4" wrap style={{ paddingBottom: "10%" }}>
+        <View style={styles.pageStarter} fixed wrap>
+          <Text style={styles.h7}>{reportObject?.reportName}</Text>
+          <Image src={logo} style={styles.pageStarterLogo} />
         </View>
-      </Page>
-      <Page style={styles.page2} size="A4">
-        <Text style={styles.contents}>Contents </Text>
-        <View style={styles.reportNameView}>
-          <View style={styles.reportInfoViewItem}>
-            <Text style={styles.reportInfoTitle}>Report Name:</Text>
-            <Text style={styles.reportInfoSubTitle}>
-              {reportObject?.reportName}
+
+        {/* Page 1 */}
+        <View style={styles.page2}>
+          <Text style={styles.contents}>Contents </Text>
+          <View style={styles.overviewWrap}>
+            <Text style={styles.h4}>
+              OVERVIEW -------------------------------------------------------
             </Text>
-          </View>
-          <View style={styles.reportInfoViewItem}>
-            <Text style={styles.reportInfoTitle}>Report Date:</Text>
-            <Text style={styles.reportInfoSubTitle}>
-              {moment(reportObject?.reportDate).format("DD-MM-YYYY")}
+            <Text style={styles.h4}>
+              EXECUTIVE SUMMARY ----------------------------------------------
             </Text>
-          </View>
-          <View style={styles.reportInfoViewItem}>
-            <Text style={styles.reportInfoTitle}>Planned Start Date:</Text>
-            <Text style={styles.reportInfoSubTitle}>
-              {moment(reportObject?.plannedStartDate).format("DD-MM-YYYY")}
+            <Text style={styles.h4}>
+              AUDIT PURPOSE ---------------------------------------------------
             </Text>
-          </View>
-          <View style={styles.reportInfoViewItem}>
-            <Text style={styles.reportInfoTitle}>Planned End Date:</Text>
-            <Text style={styles.reportInfoSubTitle}>
-              {moment(reportObject?.plannedEndDate).format("DD-MM-YYYY")}
+            <Text style={styles.h4}>
+              SUMMARY OF KEY FINDINGS -----------------------------------------
             </Text>
-          </View>
-          <View style={styles.reportInfoViewItem}>
-            <Text style={styles.reportInfoTitle}>Planned Hours:</Text>
-            <Text style={styles.reportInfoSubTitle}>
-              {reportObject?.plannedHours}
-            </Text>
-          </View>
-          <View style={styles.reportInfoViewItem}>
-            <Text style={styles.reportInfoTitle}>Risk Approach:</Text>
-            <Text style={styles.reportInfoSubTitle}>
-              {reportObject?.riskApproach}
-            </Text>
-          </View>
-          <View style={styles.reportInfoViewItem}>
-            <Text style={styles.reportInfoTitle}>Risk Rating:</Text>
-            <Text style={styles.reportInfoSubTitle}>
-              {reportObject?.riskRating}
-            </Text>
-          </View>
-          <View style={styles.reportInfoViewItem}>
-            <Text style={styles.reportInfoTitle}>Location:</Text>
-            <View style={styles.locationWrap}>
-              {[
-                ...new Set(
-                  reportObject?.subLocationList?.map(
-                    (item) => item?.locationid?.description
-                  )
-                ),
-              ]?.map((locationItem) => {
-                return (
-                  <Text style={styles.reportInfoSubTitle}>{locationItem}</Text>
-                );
-              })}
+            <View style={styles.overviewFields}>
+              {reportObject?.consolidatedIARKeyFindingsList[0]?.reportingList
+                ?.filter((singleItem) => singleItem?.implicationRating === 1)
+                ?.map((singleItem) => {
+                  return (
+                    <Text style={styles.h4}>
+                      {singleItem?.observationTitle}
+                    </Text>
+                  );
+                })}
             </View>
-          </View>
-          <View style={styles.reportInfoViewItem}>
-            <Text style={styles.reportInfoTitle}>Sub Location:</Text>
-            <View style={styles.locationWrap}>
-              {reportObject?.subLocationList?.map((item) => {
+            <Text style={styles.h4}>
+              ALL FINDINGS -----------------------------------------------------
+            </Text>
+            <View style={styles.overviewFields}>
+              {reportObject?.consolidatedIARKeyFindingsList[0]?.reportingList?.map(
+                (singleItem) => {
+                  return (
+                    <Text style={styles.h4}>
+                      {singleItem?.observationTitle}
+                    </Text>
+                  );
+                }
+              )}
+            </View>
+            <Text style={styles.h4}>
+              Audit Extra Fields
+              -------------------------------------------------
+            </Text>
+            <View style={styles.overviewFields}>
+              {reportObject?.intAuditExtraFieldsList?.map((singleItem) => {
                 return (
-                  <Text style={styles.reportInfoSubTitle}>
-                    {item?.description}
+                  <Text style={styles.h4}>
+                    {singleItem?.heading.slice(0, 20)}
                   </Text>
                 );
               })}
             </View>
+            <Text style={styles.h4}>
+              ANNEXURE -------------------------------------------------------
+            </Text>
           </View>
         </View>
-      </Page>
-      <Page style={styles.page} size="A4" wrap>
-        <Text style={styles.contents}>EXECUTIVE SUMMARY </Text>
-        <View>
-          <Text style={styles.h4}>
-            {convert(reportObject?.executiveSummary, { tables: true })}
-          </Text>
-        </View>
-      </Page>
-      <Page style={styles.page} size="A4" wrap>
-        <Text style={styles.contents}>AUDIT PURPOSE </Text>
-        <View>
-          <Text style={styles.h4}>
-            {convert(reportObject?.auditPurpose, { tables: true })}
-          </Text>
-        </View>
-      </Page>
-      <Page style={styles.page} size="A4" wrap>
-        <Text style={styles.contents}>ANNEXURE </Text>
-        <View>
-          <Text style={styles.h4}>
-            {convert(reportObject?.annexure, { tables: true })}
-          </Text>
-        </View>
-      </Page>
-      <Page style={styles.page} size="A4" wrap>
-        <Text style={styles.contents}>SUMMARY OF KEY FINDINGS </Text>
-        {reportObject?.consolidatedIARKeyFindingsList?.map((item, index) => {
-          return (
-            <View style={styles.findings} key={index}>
-              <Text style={styles.indexNumber}>Key Finding {index + 1}</Text>
-              <View style={styles.summaryInfoWrap}>
-                <View style={styles.singleFindSummaryWrap}>
-                  <Text style={styles.singleFindSummaryPara}>
-                    {convert(item?.summaryOfKeyFinding, { tables: true })}
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.reportingView}>
-                <Text style={styles.summaryHeader}>Reporting & Follow Up</Text>
-                {!item?.reportingList || item?.reportingList?.length === 0 ? (
-                  <Text style={styles.reportingNotFoundText}>
-                    Reporting List Not Available
-                  </Text>
-                ) : (
-                  item?.reportingList?.map((followUpItem, index) => {
-                    return (
-                      <View style={styles.findings}>
-                        <Text style={styles.indexNumber}>
-                          Reporting {index + 1}
-                        </Text>
-                        <View style={styles.singleFindSummaryWrap}>
-                          <Text style={styles.singleFindSummaryHeader}>
-                            Observation
-                          </Text>
-                          <Text style={styles.singleFindSummaryPara}>
-                            {convert(followUpItem?.observationName, {
-                              tables: true,
-                            })}
-                          </Text>
-                        </View>
-                        <View style={styles.summaryInfoWrap}>
-                          <View style={styles.singleFindingsHeaderInfo}>
-                            <Text style={styles.singleFindingsHeaderInfoHeader}>
-                              Implementation Date:
-                            </Text>
-                            <Text style={styles.singleFindingsHeaderInfoPara}>
-                              {moment(followUpItem?.implementationDate).format(
-                                "YYYY-MM-DD"
-                              )}
-                            </Text>
-                          </View>
-                          <View style={styles.singleFindSummaryWrap}>
-                            <Text style={styles.singleFindSummaryHeader}>
-                              Implication
-                            </Text>
-                            <Text style={styles.singleFindSummaryPara}>
-                              {followUpItem?.implication}
-                            </Text>
-                          </View>
-                          <View style={styles.singleFindSummaryWrap}>
-                            <Text style={styles.singleFindSummaryHeader}>
-                              Auditee
-                            </Text>
-                            <Text style={styles.singleFindSummaryPara}>
-                              {followUpItem?.auditee?.name}
-                            </Text>
-                          </View>
-                          <View style={styles.singleFindSummaryWrap}>
-                            <Text style={styles.singleFindSummaryHeader}>
-                              Test In Next Year
-                            </Text>
-                            <Text style={styles.singleFindSummaryPara}>
-                              {followUpItem?.followUp?.recommendationsImplemented.toString() ===
-                              "true"
-                                ? "Yes"
-                                : "No"}
-                            </Text>
-                          </View>
-                          <View style={styles.singleFindSummaryWrap}>
-                            <Text style={styles.singleFindSummaryHeader}>
-                              Implication Rating
-                            </Text>
-                            <Text style={styles.singleFindSummaryPara}>
-                              {followUpItem?.implicationRating === 1
-                                ? "High"
-                                : followUpItem?.implicationRating === 2
-                                ? "Medium"
-                                : followUpItem?.implicationRating === 3
-                                ? "Low"
-                                : ""}
-                            </Text>
-                          </View>
-                          <View style={styles.singleFindSummaryWrap}>
-                            <Text style={styles.singleFindSummaryHeader}>
-                              Management Comments
-                            </Text>
-                            <Text style={styles.singleFindSummaryPara}>
-                              {followUpItem?.managementComments}
-                            </Text>
-                          </View>
-                        </View>
-                      </View>
-                    );
-                  })
-                )}
+        {/* Page 2 */}
+        <View style={styles.page2} break>
+          <Text style={styles.contents}>OVERVIEW </Text>
+          <View style={styles.reportNameView}>
+            <View style={styles.reportInfoViewItem}>
+              <Text style={styles.reportInfoTitle}>Report Name:</Text>
+              <Text style={styles.reportInfoSubTitle}>
+                {reportObject?.reportName}
+              </Text>
+            </View>
+            <View style={styles.reportInfoViewItem}>
+              <Text style={styles.reportInfoTitle}>Report Date:</Text>
+              <Text style={styles.reportInfoSubTitle}>
+                {moment(reportObject?.reportDate).format("DD-MM-YYYY")}
+              </Text>
+            </View>
+            <View style={styles.reportInfoViewItem}>
+              <Text style={styles.reportInfoTitle}>Planned Start Date:</Text>
+              <Text style={styles.reportInfoSubTitle}>
+                {moment(reportObject?.plannedStartDate).format("DD-MM-YYYY")}
+              </Text>
+            </View>
+            <View style={styles.reportInfoViewItem}>
+              <Text style={styles.reportInfoTitle}>Planned End Date:</Text>
+              <Text style={styles.reportInfoSubTitle}>
+                {moment(reportObject?.plannedEndDate).format("DD-MM-YYYY")}
+              </Text>
+            </View>
+            <View style={styles.reportInfoViewItem}>
+              <Text style={styles.reportInfoTitle}>Planned Hours:</Text>
+              <Text style={styles.reportInfoSubTitle}>
+                {reportObject?.plannedHours}
+              </Text>
+            </View>
+            <View style={styles.reportInfoViewItem}>
+              <Text style={styles.reportInfoTitle}>Job Through:</Text>
+              <Text style={styles.reportInfoSubTitle}>
+                {reportObject?.riskApproach}
+              </Text>
+            </View>
+            <View style={styles.reportInfoViewItem}>
+              <Text style={styles.reportInfoTitle}>Location:</Text>
+              <View style={styles.locationWrap}>
+                {[
+                  ...new Set(
+                    reportObject?.subLocationList?.map(
+                      (item) => item?.locationid?.description
+                    )
+                  ),
+                ]?.map((locationItem) => {
+                  return (
+                    <Text style={styles.reportInfoSubTitle}>
+                      {locationItem}
+                    </Text>
+                  );
+                })}
               </View>
             </View>
-          );
-        })}
-      </Page>
-      <Page style={styles.page} size="A4" wrap>
-        <Text style={styles.contents}>Init Audit Extra Fields List</Text>
-        {reportObject?.intAuditExtraFieldsList?.map((item, index) => {
-          return (
-            <View style={styles.findings}>
-              <Text style={styles.indexNumber}>Field {index + 1}</Text>
-              <View style={styles.summaryInfoWrap}>
-                <View style={styles.singleFindSummaryWrap}>
-                  <Text style={styles.singleFindSummaryHeader}>Heading</Text>
-                  <Text style={styles.singleFindSummaryPara}>
-                    {item?.heading}
-                  </Text>
-                </View>
-                <View style={styles.singleFindSummaryWrap}>
-                  <Text style={styles.singleFindSummaryHeader}>Data</Text>
-                  <Text style={styles.singleFindSummaryPara}>{item?.data}</Text>
-                </View>
+            <View style={styles.reportInfoViewItem}>
+              <Text style={styles.reportInfoTitle}>Sub Location:</Text>
+              <View style={styles.locationWrap}>
+                {reportObject?.subLocationList?.map((item) => {
+                  return (
+                    <Text style={styles.reportInfoSubTitle}>
+                      {item?.description}
+                    </Text>
+                  );
+                })}
               </View>
             </View>
-          );
-        })}
+          </View>
+        </View>
+        {/* Page 3 */}
+        <View style={styles.page2} break>
+          <Text style={styles.contents}>EXECUTIVE SUMMARY </Text>
+          <View>
+            <Text style={styles.h4}>
+              {convert(reportObject?.executiveSummary, { tables: true })}
+            </Text>
+          </View>
+        </View>
+        {/* Page 4 */}
+        <View style={styles.page2} break>
+          <Text style={styles.contents}>AUDIT PURPOSE </Text>
+          <View>
+            <Text style={styles.h4}>
+              {convert(reportObject?.auditPurpose, { tables: true })}
+            </Text>
+          </View>
+        </View>
+        {/* Page 5 */}
+        <View style={styles.page2} break>
+          <Text style={styles.contents}>SUMMARY OF KEY FINDINGS </Text>
+          {reportObject?.consolidatedIARKeyFindingsList?.map((item, index) => {
+            return (
+              <View style={styles.findingsSummary} key={index}>
+                <Text style={styles.indexNumber}>Key Finding {index + 1}</Text>
+                <View style={styles.summaryInfoWrap}>
+                  <View style={styles.singleFindSummaryWrap}>
+                    <Text style={styles.singleFindSummaryPara}>
+                      {convert(item?.summaryOfKeyFinding, { tables: true })}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            );
+          })}
+        </View>
+        {/* Page 6 */}
+        <View style={styles.allFindingMianHeadingWrap} break>
+          <Text style={styles.globalFont}>ALL FINDINGS</Text>
+        </View>
+        {/* Page 7 */}
+        <View style={styles.page2} break>
+          {reportObject?.consolidatedIARKeyFindingsList[0]?.reportingList?.map(
+            (followUpItem, index) => {
+              return (
+                <View style={styles.findings}>
+                  <Text
+                    style={styles.indexNumber}
+                    break={
+                      index !== 0 &&
+                      index !==
+                        reportObject?.consolidatedIARKeyFindingsList[0]
+                          ?.reportingList?.length -
+                          1
+                        ? true
+                        : false
+                    }
+                  >
+                    Finding {index + 1}
+                  </Text>
+                  <View style={styles.singleFindSummaryWrap}>
+                    <Text style={styles.singleFindSummaryHeader}>
+                      Observation
+                    </Text>
+                    <Text style={styles.singleFindSummaryPara}>
+                      {convert(followUpItem?.observationName, {
+                        tables: true,
+                      })}
+                    </Text>
+                  </View>
+                  <View style={styles.singleFindSummaryWrap}>
+                    <Text style={styles.singleFindSummaryHeader}>
+                      Implication
+                    </Text>
+                    <Text style={styles.singleFindSummaryPara}>
+                      {followUpItem?.implication}
+                    </Text>
+                  </View>
+                  <View style={styles.singleFindSummaryWrap}>
+                    <Text style={styles.singleFindSummaryHeader}>
+                      Management Comments
+                    </Text>
+                    <Text style={styles.singleFindSummaryPara}>
+                      {followUpItem?.managementComments}
+                    </Text>
+                  </View>
+                  <View style={styles.singleFindSummaryWrap}>
+                    <Text style={styles.singleFindSummaryHeader}>
+                      Implication Rating
+                    </Text>
+                    <Text style={styles.singleFindSummaryPara}>
+                      {followUpItem?.implicationRating === 1
+                        ? "High"
+                        : followUpItem?.implicationRating === 2
+                        ? "Medium"
+                        : followUpItem?.implicationRating === 3
+                        ? "Low"
+                        : ""}
+                    </Text>
+                  </View>
+                  <View style={styles.singleFindSummaryWrap}>
+                    <Text style={styles.singleFindSummaryHeader}>Auditee</Text>
+                    <Text style={styles.singleFindSummaryPara}>
+                      {followUpItem?.auditee?.name}
+                    </Text>
+                  </View>
+                  <View style={styles.singleFindSummaryWrap}>
+                    <Text style={styles.singleFindingsHeaderInfoHeader}>
+                      Implementation Date
+                    </Text>
+                    <Text style={styles.singleFindSummaryPara}>
+                      {moment(followUpItem?.implementationDate).format(
+                        "YYYY-MM-DD"
+                      )}
+                    </Text>
+                  </View>
+                </View>
+              );
+            }
+          )}
+        </View>
+
+        {/* Page 8 */}
+        <View style={styles.page2} break>
+          <Text style={styles.contents}>Audit Extra Fields List</Text>
+          {reportObject?.intAuditExtraFieldsList?.map((item, index) => {
+            return (
+              <View style={styles.findings}>
+                <Text style={styles.indexNumber}>Field {index + 1}</Text>
+                <View style={styles.summaryInfoWrap}>
+                  <View style={styles.singleFindSummaryWrap}>
+                    <Text style={styles.singleFindSummaryHeader}>Heading</Text>
+                    <Text style={styles.singleFindSummaryPara}>
+                      {item?.heading}
+                    </Text>
+                  </View>
+                  <View style={styles.singleFindSummaryWrap}>
+                    <Text style={styles.singleFindSummaryHeader}>Data</Text>
+                    <Text style={styles.singleFindSummaryPara}>
+                      {item?.data}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            );
+          })}
+        </View>
+        {/* Page 9 */}
+        <View style={styles.page2} break>
+          <Text style={styles.contents}>ANNEXURE </Text>
+          <View>
+            <Text style={styles.h4}>
+              {convert(reportObject?.annexure, { tables: true })}
+            </Text>
+          </View>
+        </View>
+        <Text
+          style={styles.pageNumber}
+          render={({ pageNumber, totalPages }) =>
+            `${pageNumber} / ${totalPages}`
+          }
+          fixed
+        />
       </Page>
     </Document>
   );
