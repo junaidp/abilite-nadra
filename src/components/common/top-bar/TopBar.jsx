@@ -320,7 +320,7 @@ const TopBar = () => {
                   ref={userRef}
                 >
                   <div className="d-flex align-items-center">
-                    <div className="user-profile-img">
+                    <div className="user-profile-img w-32">
                       <img
                         src={user1}
                         className="rounded-circle"
@@ -348,8 +348,8 @@ const TopBar = () => {
                           height="80"
                           alt=""
                         />
-                        <div className="ms-3">
-                          <h5 className="mb-1 fs-3">
+                        <div className="ms-3 w-200">
+                          <h5 className="mb-1 fs-3 break-word">
                             {user[0]?.name ? user[0]?.name : "Name Not Found"}
                           </h5>
                           <span className="mb-1 d-block text-dark">

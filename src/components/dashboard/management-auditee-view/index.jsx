@@ -3,6 +3,7 @@ import FollowUp from "./components/FollowUp";
 import Reporting from "./components/Reporting";
 import InformationRequest from "./components/InformationRequest";
 import TaskManagement from "./components/TaskManagement";
+import UserInfo from "./components/UserInfo";
 import SupportingDocs from "./components/SupportingDocs";
 import { useDispatch } from "react-redux";
 import { resetAuthValues } from "../../../global-redux/reducers/auth/slice";
@@ -14,7 +15,7 @@ const ManagementAuditeeView = () => {
   }, []);
   return (
     <div>
-      <div className="card p-3 shadow-sm setting-tab">
+      <div className="card p-3 shadow-sm setting-tab min-h-80">
         <h2 className="text-center heading p-3">
           Management Auditee Dashboard
         </h2>
@@ -82,6 +83,17 @@ const ManagementAuditeeView = () => {
                 >
                   Task Management
                 </button>
+                <button
+                  className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
+                  id="nav-task-management-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#nav-user"
+                  type="button"
+                  role="tab"
+                  aria-controls="nav-user"
+                >
+                  User Details
+                </button>
               </div>
             </nav>
           </div>
@@ -96,6 +108,7 @@ const ManagementAuditeeView = () => {
               <Reporting />
               <InformationRequest />
               <TaskManagement />
+              <UserInfo />
             </div>
           </div>
         </div>

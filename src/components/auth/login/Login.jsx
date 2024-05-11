@@ -11,7 +11,7 @@ import {
 
 const Login = () => {
   const [showpassword, setShowPassword] = React.useState(false);
-  const { user, loginEmail, loginPassword, loading, authSuccess } = useSelector(
+  const { loginEmail, loginPassword, loading, authSuccess } = useSelector(
     (state) => state.auth
   );
   const dispatch = useDispatch();
@@ -43,12 +43,6 @@ const Login = () => {
   }
 
   React.useEffect(() => {
-    if (user) {
-      localStorage.setItem("user", JSON.stringify(user));
-    }
-  }, [user]);
-
-  React.useEffect(() => {
     if (authSuccess) {
       navigate("/audit/dashboard");
     }
@@ -66,36 +60,13 @@ const Login = () => {
               </a>
             </div>
             <div className="fxt-transformY-50 fxt-transition-delay-4"></div>
-            <div className="fxt-login-option">
-              {/* <ul>
-                <li className="fxt-transformY-50 fxt-transition-delay-6">
-                  <a href="#">Sing in with Google</a>
-                </li>
-                <li className="fxt-transformY-50 fxt-transition-delay-7">
-                  <a href="#">Sing in with Facebook</a>
-                </li>
-              </ul> */}
-            </div>
+            <div className="fxt-login-option"></div>
           </div>
         </div>
         <div className="fxt-form-content">
           <div className="fxt-page-switcher">
             <h2 className="fxt-page-title mr-3">Login</h2>
-            <ul className="fxt-switcher-wrap">
-              {/* <li>
-                <a className="fxt-switcher-btn active border-0 rounded shadow">
-                  Login
-                </a>
-              </li> */}
-              {/* <li>
-                <a
-                  className="fxt-switcher-btn border-0 rounded shadow"
-                  onClick={() => navigate("/register")}
-                >
-                  Register
-                </a>
-              </li> */}
-            </ul>
+            <ul className="fxt-switcher-wrap"></ul>
           </div>
           <div className="fxt-main-form">
             <div className="fxt-inner-wrap">
@@ -151,10 +122,6 @@ const Login = () => {
                   <div className="col-12">
                     <div className="form-group">
                       <div className="fxt-checkbox-wrap">
-                        {/* <div className="fxt-checkbox-box mr-3">
-                          <input id="checkbox1" type="checkbox" />
-                          <label className="ps-4">Keep me logged in</label>
-                        </div> */}
                         <a
                           className="fxt-switcher-text"
                           onClick={() => navigate("/forgot-password")}
@@ -177,15 +144,6 @@ const Login = () => {
                   </div>
                 </div>
               </form>
-              {/* <div className="fxt-switcher-description">
-                Don't have an account?
-                <a
-                  className="fxt-switcher-text ms-1"
-                  onClick={() => navigate("/register")}
-                >
-                  Register
-                </a>
-              </div> */}
             </div>
           </div>
         </div>

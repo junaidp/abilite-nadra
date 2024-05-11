@@ -189,7 +189,7 @@ const JobPrioritization = () => {
                             {item?.businessObjectiveTitle}
                           </td>
                           <td className="moderate">{item?.riskRating}</td>
-                          <td className="w-120">
+                          <td>
                             <div className="form-check">
                               <input
                                 className="form-check-input"

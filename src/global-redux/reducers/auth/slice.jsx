@@ -30,7 +30,7 @@ const initialState = {
   resetPasswordSuccess: "",
   // Common States
   loading: false,
-  user: [],
+  user: JSON.parse(localStorage.getItem("user")) || [],
   authSuccess: false,
   // Internal Reset Password
   internalResetPasswordSuccess: false,
@@ -156,6 +156,19 @@ export const slice = createSlice({
             userId: action.payload?.data?.userId,
           },
         ];
+        localStorage.setItem(
+          "user",
+          JSON.stringify([
+            {
+              name: action.payload?.data?.userId?.name,
+              token: action.payload?.data?.jwt,
+              email: action.payload?.data?.email,
+              company: action.payload?.data?.userId?.company,
+              id: action.payload?.data?.userId?.id,
+              userId: action.payload?.data?.userId,
+            },
+          ])
+        );
         state.authSuccess = true;
         toast.success("Login Success Redirecting!");
       })

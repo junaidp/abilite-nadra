@@ -156,8 +156,8 @@ const InternalAuditReport = () => {
 
       <div className="row">
         <div className="col-lg-12">
-          <div className="table-responsive">
-            <table className="table table-bordered  table-hover rounded w-100">
+          <div>
+            <table className="table table-bordered  table-hover rounded table-responsive">
               <thead className="bg-secondary text-white">
                 <tr>
                   <th>Sr No.</th>
@@ -199,7 +199,7 @@ const InternalAuditReport = () => {
                           <td>{item?.preparedBy || ""}</td>
                           <td>null</td>
                           <td>{item?.status}</td>
-                          <td>
+                          <td className="reportsLastColumn">
                             <div className="d-flex gap-4">
                               <i
                                 className="fa-eye fa f-18 cursor-pointer"
@@ -242,7 +242,7 @@ const InternalAuditReport = () => {
                                 Number(item?.createdBy) ===
                                   Number(user[0]?.userId?.id) && (
                                   <div
-                                    className={`btn btn-labeled btn-primary  shadow mx-2 `}
+                                    className={`btn btn-labeled btn-primary  shadow mx-2  h-40 `}
                                     onClick={() => handleSubmitReport(item)}
                                   >
                                     Submit
@@ -253,48 +253,48 @@ const InternalAuditReport = () => {
                                 user[0]?.userId?.employeeid?.userHierarchy ===
                                   "IAH" && (
                                   <div
-                                    className={`btn btn-labeled btn-primary  shadow mx-2 `}
+                                    className={`btn btn-labeled btn-primary  shadow mx-2  h-40 `}
                                     onClick={() => handleApproveReport(item)}
                                   >
                                     Approve
                                   </div>
                                 )}
-                            </div>
-                            {item?.submitted === true && (
-                              <PDFDownloadLink
-                                document={<MyDocument reportObject={item} />}
-                                fileName="consolidation.pdf"
-                              >
-                                {({ blob, url, loading, error }) =>
-                                  "Download pdf!"
-                                }
-                              </PDFDownloadLink>
-                            )}
-                            {item?.submitted === true &&
-                              item?.approved === false &&
-                              user[0]?.userId?.employeeid?.userHierarchy ===
-                                "IAH" && (
+                              {item?.submitted === true && (
+                                <PDFDownloadLink
+                                  document={<MyDocument reportObject={item} />}
+                                  fileName="consolidation.pdf"
+                                >
+                                  {({ blob, url, loading, error }) =>
+                                    "Download pdf!"
+                                  }
+                                </PDFDownloadLink>
+                              )}
+                              {item?.submitted === true &&
+                                item?.approved === false &&
+                                user[0]?.userId?.employeeid?.userHierarchy ===
+                                  "IAH" && (
+                                  <div
+                                    className={`btn btn-labeled btn-primary  shadow mt-2 mx-2  h-40  `}
+                                    onClick={() => {
+                                      setCurrentReportItem(item);
+                                      setFeedBackDialog(true);
+                                    }}
+                                  >
+                                    FeedBack
+                                  </div>
+                                )}
+                              {item?.feedback && item?.feedback?.id && (
                                 <div
-                                  className={`btn btn-labeled btn-primary  shadow mt-2 mx-2  `}
+                                  className={`btn btn-labeled btn-primary  shadow mt-2 mx-2  h-40 `}
                                   onClick={() => {
                                     setCurrentReportItem(item);
-                                    setFeedBackDialog(true);
+                                    setViewFeedBackDialog(true);
                                   }}
                                 >
-                                  FeedBack
+                                  View FeedBack
                                 </div>
                               )}
-                            {item?.feedback && item?.feedback?.id && (
-                              <div
-                                className={`btn btn-labeled btn-primary  shadow mt-2 mx-2 `}
-                                onClick={() => {
-                                  setCurrentReportItem(item);
-                                  setViewFeedBackDialog(true);
-                                }}
-                              >
-                                View FeedBack
-                              </div>
-                            )}
+                            </div>
                           </td>
                         </tr>
                       );

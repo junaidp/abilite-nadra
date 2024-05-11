@@ -1,12 +1,19 @@
 import React from "react";
+import logo from "./assets/favicon.ico";
+import "./App.css";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { ToastContainer } from "react-toastify";
 import { changeCompany } from "./global-redux/reducers/common/slice";
-import "./App.css";
-import logo from "./assets/favicon.ico";
+import { changeAuthUser } from "./global-redux/reducers/auth/slice";
+import { useDispatch, useSelector } from "react-redux";
+import { changeYear } from "./global-redux/reducers/common/slice";
+import "react-toastify/dist/ReactToastify.css";
+import {
+  InitialLoadSidebarActiveLink,
+  changeActiveLink,
+} from "./global-redux/reducers/common/slice";
 import Login from "./pages/auth/login/Login";
-import Register from "./pages/auth/register/Register";
 import ForgetPassword from "./pages/auth/forget-password/ForgetPassword";
 import DashboardHomePage from "./pages/dashboard/home/DashboardHome";
 import BusinessObjectivePage from "./pages/dashboard/planing/business-objective/BusinessObjective";
@@ -32,7 +39,6 @@ import UserProfile from "./components/user/user-profile/UserProfile";
 import KickOffPage from "./pages/dashboard/audit-engagement/kick-off/KickOff";
 import SpecificRiskApproachPage from "./pages/dashboard/planing/risk-assessments/specific-risk-approach/SpecificRiskApproach";
 import RiskFactorApproachPage from "./pages/dashboard/planing/risk-assessments/risk-factor-approach/RiskFactorApproach";
-import RegisterPage from "./pages/auth/register/Register";
 import ReportingPage from "./pages/dashboard/reporting-follow-up/reporting/Reporting";
 import FollowUpPage from "./pages/dashboard/reporting-follow-up/follow-up/FollowUp";
 import ResetPassword from "./components/auth/reset-password/ResetPassword";
@@ -44,14 +50,6 @@ import ViewInternalAuditReportPage from "./components/dashboard/reports/internal
 import UpdateInternalAuditReportPage from "./components/dashboard/reports/internal-audit-report/update-internal-audit-report/index";
 import Layout from "./components/common/layout/Layout";
 import GenerateInternalAuditReportPage from "./pages/dashboard/report/internal-audit-report/generate-internal-audit-report/GenerateInternalAuditReport";
-import { changeAuthUser } from "./global-redux/reducers/auth/slice";
-import { useDispatch, useSelector } from "react-redux";
-import { changeYear } from "./global-redux/reducers/common/slice";
-import "react-toastify/dist/ReactToastify.css";
-import {
-  InitialLoadSidebarActiveLink,
-  changeActiveLink,
-} from "./global-redux/reducers/common/slice";
 import JobTimeAllocationPage from "./pages/dashboard/report/job-time-allocation/JobTimeAllocation";
 import AuditPlaningSummaryPage from "./pages/dashboard/report/audit-planing-summary/AuditPlaningSummary";
 import AuditExceptionPage from "./pages/dashboard/report/audit-exception/AuditException";
@@ -59,10 +57,13 @@ import InternalAuditConsolidationReport from "./components/dashboard/reports/int
 import GenerateInternalAuditConsolidationReport from "./components/dashboard/reports/internal-audit-consolidation-report/generate-internal-audit-report";
 import ViewInternalAuditConsolidationReport from "./components/dashboard/reports/internal-audit-consolidation-report/view-internal-audit-report";
 import UpdateInternalAuditConsolidationReport from "./components/dashboard/reports/internal-audit-consolidation-report/update-internal-audit-report";
+import ProtectedRoute from "./components/common/layout/ProtectedRoute";
+import AuthProtectedRoutes from "./components/common/layout/AuthProtectedRoutes";
+import NotFound from "./components/common/not-found/index";
 
 const App = () => {
   let dispatch = useDispatch();
-  let { menuItems, year, company } = useSelector((state) => state.common);
+  let { menuItems } = useSelector((state) => state.common);
   let { user } = useSelector((state) => state.auth);
   React.useEffect(() => {
     let authUser = JSON.parse(localStorage.getItem("user"));
@@ -120,11 +121,39 @@ const App = () => {
               </div>
             }
           />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/forgot-password" element={<ForgetPassword />} />
-          <Route path="/audit" element={<Layout />}>
+          <Route
+            path="/reset-password"
+            element={
+              <AuthProtectedRoutes>
+                <ResetPassword />
+              </AuthProtectedRoutes>
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <AuthProtectedRoutes>
+                <Login />
+              </AuthProtectedRoutes>
+            }
+          />
+
+          <Route
+            path="/forgot-password"
+            element={
+              <AuthProtectedRoutes>
+                <ForgetPassword />
+              </AuthProtectedRoutes>
+            }
+          />
+          <Route
+            path="/audit"
+            element={
+              <ProtectedRoute>
+                <Layout />
+              </ProtectedRoute>
+            }
+          >
             <Route path="dashboard" element={<DashboardHomePage />} />
             <Route
               path="business-objective"
@@ -243,6 +272,7 @@ const App = () => {
               element={<AuditExceptionPage />}
             />
           </Route>
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </HelmetProvider>

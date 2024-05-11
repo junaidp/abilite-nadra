@@ -21,6 +21,7 @@ import CPList from "./components/cp-list/index";
 import SupportingDocs from "./components/supporting-docs/index";
 import InformationRequest from "./components/information-request";
 import TaskManagement from "./components/task-management";
+import UserInfo from "./components/user-info/UserInfo.jsx";
 // import ApprovalManagement from "./components/approval-management/index";
 import Location from "./components/location";
 import Company from "./components/company";
@@ -159,7 +160,7 @@ const AuditSettings = () => {
         </div>
       )}
       <div className="card p-3 shadow-sm setting-tab">
-        <h2 className="text-center heading p-3">Settings</h2>
+        <h2 className="text-center heading p-3 h-100">Settings</h2>
 
         <div className="row">
           <div className="col-lg-2">
@@ -364,11 +365,24 @@ const AuditSettings = () => {
                     Task Management
                   </button>
                 )}
+                {userRole === "ADMIN" && (
+                  <button
+                    className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
+                    id="nav-user-info-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#nav-user-info"
+                    type="button"
+                    role="tab"
+                    aria-controls="nav-user-info"
+                  >
+                    User Details
+                  </button>
+                )}
               </div>
             </nav>
           </div>
 
-          <div className="col-lg-10">
+          <div className="col-lg-10 min-h-120">
             <div
               className="tab-content p-3 mt-4 border bg-light"
               id="nav-tabContent"
@@ -418,6 +432,7 @@ const AuditSettings = () => {
               <Process userHierarchy={userHierarchy} userRole={userRole} />
               {userRole === "ADMIN" && <InformationRequest />}
               {userRole === "ADMIN" && <TaskManagement />}
+              {userRole === "ADMIN" && <UserInfo />}
             </div>
           </div>
         </div>

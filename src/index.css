@@ -139,6 +139,9 @@ body {
 .w-18 {
   width: 18px !important;
 }
+.w-32 {
+  width: 32px;
+}
 
 .w-45 {
   width: 45px !important;
@@ -161,6 +164,16 @@ body {
 }
 .w-100 {
   width: 100px !important;
+}
+.min-h-80 {
+  min-height: 80vh;
+}
+.min-h-120 {
+  min-height: 120vh !important;
+}
+
+.w-120 {
+  width: 120px;
 }
 .w-130 {
   width: 130px !important;
@@ -714,6 +727,11 @@ span[aria-label="Insert Ordered List"] .jodit-toolbar-button__trigger {
   display: flex !important;
 }
 
+.reportsLastColumn {
+  min-width: 100px;
+  overflow-x: auto;
+}
+
 .css-18lrjg1-MuiCircularProgress-root {
   color: #0a7386 !important;
 }
@@ -748,6 +766,10 @@ span[aria-label="Insert Ordered List"] .jodit-toolbar-button__trigger {
 }
 .css-1x5jdmq {
   height: 2px !important;
+}
+
+.break-word {
+  word-wrap: break-word;
 }
 
 .dashboard-modal {
