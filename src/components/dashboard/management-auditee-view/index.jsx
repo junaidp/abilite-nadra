@@ -20,8 +20,8 @@ const ManagementAuditeeView = () => {
           Management Auditee Dashboard
         </h2>
 
-        <div className="row">
-          <div className="col-lg-2">
+        <div className="d-flex overflow-x-auto">
+          <div className="col-lg-2 min-h-60">
             <nav className="mt-4 pb-10">
               <div
                 className="nav d-grid nav-tabs glass-effect border-0"
@@ -98,7 +98,7 @@ const ManagementAuditeeView = () => {
             </nav>
           </div>
 
-          <div className="col-lg-10">
+          <div className="col-lg-10 min-w-500">
             <div
               className="tab-content p-3 mt-4 border bg-light"
               id="nav-tabContent"

@@ -191,7 +191,24 @@
 .cheveron-icon {
   margin-left: 5px;
 }
+#smallScreenSidebar {
+  display: none;
+}
 
-.grey-horizontal-line{
-  
+@media screen and (max-width: 990px) {
+  #bigScreenSideBar {
+    display: none;
+  }
+
+  #SideComponentsFullWidth {
+    margin-left: 0px !important;
+    width: 100%;
+  }
+  #SideComponents {
+    width: 100% !important;
+    margin-left: 0px !important;
+  }
+  #smallScreenSidebar {
+    display: block;
+  }
 }

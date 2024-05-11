@@ -7,9 +7,13 @@ import {
   changeActiveLink,
   changeExpanded,
 } from "../../../global-redux/reducers/common/slice";
+import SmallScreenSidebar from "./SmallScreenSidebar";
 const Sidebar = () => {
   let navigate = useNavigate();
   let dispatch = useDispatch();
+  const [isWidthLessThan990, setIsWidthLessThan990] = React.useState(
+    window.innerWidth < 990
+  );
   let { showSidebar, activeLink, menuItems } = useSelector(
     (state) => state.common
   );
@@ -36,187 +40,215 @@ const Sidebar = () => {
     dispatch(changeActiveLink(id));
   }
 
+  React.useEffect(() => {
+    function handleResize() {
+      setIsWidthLessThan990(window.innerWidth < 990);
+    }
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
-    <div
-      className={`${!showSidebar ? "page-wrapper-closed" : "page-wrapper"}`}
-      data-theme="blue_theme"
-      data-layout="vertical"
-      data-sidebartype="full"
-      data-sidebar-position="fixed"
-      data-header-position="fixed"
-    >
-      <div className="left-sidebar">
-        <div className="min-h-100">
-          <nav
-            className="sidebar-nav scroll-sidebar mt-4 pt-4"
-            data-simplebar=""
-          >
-            <ul id="sidebarnav" className="mt-5">
-              {menuItems?.slice(0, -2)?.map((item, index) => {
-                return (
-                  <div key={index}>
-                    <div
-                      className={
-                        activeLink !== item?.id
-                          ? "link-wrap"
-                          : "link-wrap-active"
-                      }
-                      onClick={() => handleMainItemClick(item?.route, item?.id)}
-                    >
-                      <span>
-                        <i className={item?.icon} id={item?.id} />
-                      </span>
-                      <ul>
-                        <li>
-                          <a>
-                            <span>{item?.label}</span>
-                          </a>
-                        </li>
-                      </ul>
-                      {item?.id === "li-reports" && (
-                        <i
-                          className="fa fa-angle-down cheveron-icon"
-                          id={item?.open ? "animate" : "non-animate"}
-                          aria-hidden="true"
-                        ></i>
-                      )}
-                      {item?.id === "li-audit" && (
-                        <i
-                          className="fa fa-angle-down cheveron-icon"
-                          aria-hidden="true"
-                          id={item?.open ? "animate" : "non-animate"}
-                        ></i>
-                      )}
-                      {item?.id === "li-reporting-and-followup" && (
-                        <i
-                          className="fa fa-angle-down cheveron-icon"
-                          aria-hidden="true"
-                          id={item?.open ? "animate" : "non-animate"}
-                        ></i>
-                      )}
-                    </div>
-                    {item?.subMenu &&
-                      item?.subMenu?.map((subItem) => {
-                        return (
-                          <div
-                            key={subItem?.id}
-                            className={`sub-link-wrap ${
-                              item?.open === false && "sub-link-wrap-close"
-                            }`}
-                            onClick={() =>
-                              handleSubItemClick(subItem?.route, subItem?.id)
-                            }
-                          >
+    <div>
+      <div
+        className={`${!showSidebar ? "page-wrapper-closed" : "page-wrapper"} `}
+        id="bigScreenSideBar"
+        data-theme="blue_theme"
+        data-layout="vertical"
+        data-sidebartype="full"
+        data-sidebar-position="fixed"
+        data-header-position="fixed"
+      >
+        <div className="left-sidebar">
+          <div className="min-h-100">
+            <nav
+              className="sidebar-nav scroll-sidebar mt-4 pt-4"
+              data-simplebar=""
+            >
+              <ul id="sidebarnav" className="mt-5">
+                {menuItems?.slice(0, -2)?.map((item, index) => {
+                  return (
+                    <div key={index}>
+                      <div
+                        className={
+                          activeLink !== item?.id
+                            ? "link-wrap"
+                            : "link-wrap-active"
+                        }
+                        onClick={() =>
+                          handleMainItemClick(item?.route, item?.id)
+                        }
+                      >
+                        <span>
+                          <i className={item?.icon} id={item?.id} />
+                        </span>
+                        <ul>
+                          <li>
+                            <a>
+                              <span>{item?.label}</span>
+                            </a>
+                          </li>
+                        </ul>
+                        {item?.id === "li-reports" && (
+                          <i
+                            className="fa fa-angle-down cheveron-icon"
+                            id={item?.open ? "animate" : "non-animate"}
+                            aria-hidden="true"
+                          ></i>
+                        )}
+                        {item?.id === "li-audit" && (
+                          <i
+                            className="fa fa-angle-down cheveron-icon"
+                            aria-hidden="true"
+                            id={item?.open ? "animate" : "non-animate"}
+                          ></i>
+                        )}
+                        {item?.id === "li-reporting-and-followup" && (
+                          <i
+                            className="fa fa-angle-down cheveron-icon"
+                            aria-hidden="true"
+                            id={item?.open ? "animate" : "non-animate"}
+                          ></i>
+                        )}
+                      </div>
+                      {item?.subMenu &&
+                        item?.subMenu?.map((subItem) => {
+                          return (
                             <div
-                              className={
-                                activeLink !== subItem?.id
-                                  ? "link-wrap"
-                                  : "link-wrap-active"
+                              key={subItem?.id}
+                              className={`sub-link-wrap ${
+                                item?.open === false && "sub-link-wrap-close"
+                              }`}
+                              onClick={() =>
+                                handleSubItemClick(subItem?.route, subItem?.id)
                               }
                             >
-                              <span>
-                                <i className={subItem?.icon} id={subItem?.id} />
-                              </span>
-                              <ul>
-                                <li>
-                                  <a>
-                                    <span>{subItem?.label}</span>
-                                  </a>
-                                </li>
-                              </ul>
+                              <div
+                                className={
+                                  activeLink !== subItem?.id
+                                    ? "link-wrap"
+                                    : "link-wrap-active"
+                                }
+                              >
+                                <span>
+                                  <i
+                                    className={subItem?.icon}
+                                    id={subItem?.id}
+                                  />
+                                </span>
+                                <ul>
+                                  <li>
+                                    <a>
+                                      <span>{subItem?.label}</span>
+                                    </a>
+                                  </li>
+                                </ul>
+                              </div>
                             </div>
-                          </div>
-                        );
-                      })}
-                  </div>
-                );
-              })}
-            </ul>
-            <hr className="mt-5 ng-star-inserted" />
-            <ul id="sidebarnav" className="mt-5">
-              {menuItems?.slice(-2)?.map((item, index) => {
-                return (
-                  <div key={index}>
-                    <div
-                      className={
-                        activeLink !== item?.id
-                          ? "link-wrap"
-                          : "link-wrap-active"
-                      }
-                      onClick={() => handleMainItemClick(item?.route, item?.id)}
-                    >
-                      <span>
-                        <i className={item?.icon} id={item?.id} />
-                      </span>
-                      <ul>
-                        <li>
-                          <a>
-                            <span>{item?.label}</span>
-                          </a>
-                        </li>
-                      </ul>
-                      {item?.id === "li-reports" && (
-                        <i
-                          className="fa fa-angle-down cheveron-icon"
-                          id={item?.open ? "animate" : "non-animate"}
-                          aria-hidden="true"
-                        ></i>
-                      )}
-                      {item?.id === "li-audit" && (
-                        <i
-                          className="fa fa-angle-down cheveron-icon"
-                          aria-hidden="true"
-                          id={item?.open ? "animate" : "non-animate"}
-                        ></i>
-                      )}
-                      {item?.id === "li-reporting-and-followup" && (
-                        <i
-                          className="fa fa-angle-down cheveron-icon"
-                          aria-hidden="true"
-                          id={item?.open ? "animate" : "non-animate"}
-                        ></i>
-                      )}
+                          );
+                        })}
                     </div>
-                    {item?.subMenu &&
-                      item?.subMenu?.map((subItem) => {
-                        return (
-                          <div
-                            key={subItem?.id}
-                            className={`sub-link-wrap ${
-                              item?.open === false && "sub-link-wrap-close"
-                            }`}
-                            onClick={() =>
-                              handleSubItemClick(subItem?.route, subItem?.id)
-                            }
-                          >
+                  );
+                })}
+              </ul>
+              <hr className="mt-5 ng-star-inserted" />
+              <ul id="sidebarnav" className="mt-5">
+                {menuItems?.slice(-2)?.map((item, index) => {
+                  return (
+                    <div key={index}>
+                      <div
+                        className={
+                          activeLink !== item?.id
+                            ? "link-wrap"
+                            : "link-wrap-active"
+                        }
+                        onClick={() =>
+                          handleMainItemClick(item?.route, item?.id)
+                        }
+                      >
+                        <span>
+                          <i className={item?.icon} id={item?.id} />
+                        </span>
+                        <ul>
+                          <li>
+                            <a>
+                              <span>{item?.label}</span>
+                            </a>
+                          </li>
+                        </ul>
+                        {item?.id === "li-reports" && (
+                          <i
+                            className="fa fa-angle-down cheveron-icon"
+                            id={item?.open ? "animate" : "non-animate"}
+                            aria-hidden="true"
+                          ></i>
+                        )}
+                        {item?.id === "li-audit" && (
+                          <i
+                            className="fa fa-angle-down cheveron-icon"
+                            aria-hidden="true"
+                            id={item?.open ? "animate" : "non-animate"}
+                          ></i>
+                        )}
+                        {item?.id === "li-reporting-and-followup" && (
+                          <i
+                            className="fa fa-angle-down cheveron-icon"
+                            aria-hidden="true"
+                            id={item?.open ? "animate" : "non-animate"}
+                          ></i>
+                        )}
+                      </div>
+                      {item?.subMenu &&
+                        item?.subMenu?.map((subItem) => {
+                          return (
                             <div
-                              className={
-                                activeLink !== subItem?.id
-                                  ? "link-wrap"
-                                  : "link-wrap-active"
+                              key={subItem?.id}
+                              className={`sub-link-wrap ${
+                                item?.open === false && "sub-link-wrap-close"
+                              }`}
+                              onClick={() =>
+                                handleSubItemClick(subItem?.route, subItem?.id)
                               }
                             >
-                              <span>
-                                <i className={subItem?.icon} id={subItem?.id} />
-                              </span>
-                              <ul>
-                                <li>
-                                  <a>
-                                    <span>{subItem?.label}</span>
-                                  </a>
-                                </li>
-                              </ul>
+                              <div
+                                className={
+                                  activeLink !== subItem?.id
+                                    ? "link-wrap"
+                                    : "link-wrap-active"
+                                }
+                              >
+                                <span>
+                                  <i
+                                    className={subItem?.icon}
+                                    id={subItem?.id}
+                                  />
+                                </span>
+                                <ul>
+                                  <li>
+                                    <a>
+                                      <span>{subItem?.label}</span>
+                                    </a>
+                                  </li>
+                                </ul>
+                              </div>
                             </div>
-                          </div>
-                        );
-                      })}
-                  </div>
-                );
-              })}
-            </ul>
-          </nav>
+                          );
+                        })}
+                    </div>
+                  );
+                })}
+              </ul>
+            </nav>
+          </div>
         </div>
       </div>
+      {isWidthLessThan990 && (
+        <div className="smallScreenSidebar">
+          <SmallScreenSidebar />
+        </div>
+      )}
     </div>
   );
 };

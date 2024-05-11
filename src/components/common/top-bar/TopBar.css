@@ -1,7 +1,7 @@
 .navbar-toggler {
   cursor: pointer !important;
 }
-.left-300{
+.left-300 {
   left: -300px !important;
 }
 
@@ -28,7 +28,21 @@
   box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
 }
 
-.logoutOut-btn{
+.logoutOut-btn {
   justify-self: center !important;
   margin: auto !important;
+}
+
+.smallScreenToolBar {
+  display: none !important;
+}
+
+@media screen and (max-width: 990px) {
+  .bigScreenToolBar {
+    display: none !important;
+  }
+
+  .smallScreenToolBar {
+    display: block !important;
+  }
 }

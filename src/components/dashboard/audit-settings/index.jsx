@@ -162,7 +162,7 @@ const AuditSettings = () => {
       <div className="card p-3 shadow-sm setting-tab">
         <h2 className="text-center heading p-3 h-100">Settings</h2>
 
-        <div className="row">
+        <div className="d-flex overflow-x-auto">
           <div className="col-lg-2">
             <nav className="mt-4 pb-10">
               <div
@@ -382,7 +382,7 @@ const AuditSettings = () => {
             </nav>
           </div>
 
-          <div className="col-lg-10 min-h-120">
+          <div className="col-lg-10 min-h-120 min-w-500">
             <div
               className="tab-content p-3 mt-4 border bg-light"
               id="nav-tabContent"

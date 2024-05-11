@@ -1,10 +1,10 @@
 import React from "react";
 import "./TopBar.css";
 import user1 from "../../../assets/user-1.jpg";
-import user2 from "../../../assets/user-2.jpg";
-import user3 from "../../../assets/user-3.jpg";
-import user4 from "../../../assets/user-4.jpg";
-import user5 from "../../../assets/user-5.jpg";
+// import user2 from "../../../assets/user-2.jpg";
+// import user3 from "../../../assets/user-3.jpg";
+// import user4 from "../../../assets/user-4.jpg";
+// import user5 from "../../../assets/user-5.jpg";
 import accountIcon from "../../../assets/icon-account.svg";
 import logo from "../../../assets/light-logo-.png";
 import { Link } from "react-router-dom";
@@ -61,16 +61,14 @@ const TopBar = () => {
   return (
     <header className="app-header shadow-sm mb-3 px-0 ">
       <nav className="navbar navbar-expand-lg navbar-light px-5">
-        <a className="text-nowrap mx-auto logo-img"></a>
-
         <div>
-          <img src={logo} className="light-logo" width="154" alt="" />
+          <img src={logo} className="light-logo" width="110" alt="" />
         </div>
         {user[0]?.userId?.role[0]?.name === "USER" &&
           user[0]?.userId?.employeeid?.userHierarchy !==
             "Management_Auditee" && (
             <button
-              className="btn btn-light ml-100"
+              className="btn  ml-100"
               onClick={() => dispatch(changeShowSidebar(!showSidebar))}
             >
               <svg
@@ -165,7 +163,7 @@ const TopBar = () => {
                 }}
                 ref={notificationRef}
               >
-                <a
+                {/* <a
                   className="nav-link nav-icon-hover"
                   id="drop2"
                   data-bs-toggle="dropdown"
@@ -182,8 +180,8 @@ const TopBar = () => {
                     <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z" />
                   </svg>
                   <div className="notification bg-primary rounded-circle"></div>
-                </a>
-                {shownotification && (
+                </a> */}
+                {/* {shownotification && (
                   <div className="notification-wrap" aria-labelledby="drop2">
                     <div className="d-flex align-items-center justify-content-between py-3 px-7">
                       <h5 className="mb-0 fs-5 fw-semibold">Notifications</h5>
@@ -304,7 +302,7 @@ const TopBar = () => {
                       </button>
                     </div>
                   </div>
-                )}
+                )} */}
               </li>
 
               <li className="nav-item dropdown">
