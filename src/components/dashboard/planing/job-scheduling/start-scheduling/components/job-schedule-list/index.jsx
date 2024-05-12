@@ -89,9 +89,9 @@ const JobScheduleList = ({
                         placeholder="Select Date"
                         value={
                           list?.plannedJobStartDate
-                            ? moment(list?.plannedJobStartDate).format(
-                                "YYYY-MM-DD"
-                              )
+                            ? moment
+                                .utc(list?.plannedJobStartDate)
+                                .format("YYYY-MM-DD")
                             : null
                         }
                         disabled={
@@ -116,9 +116,9 @@ const JobScheduleList = ({
                         placeholder="Select Date"
                         value={
                           list?.plannedJobEndDate
-                            ? moment(list?.plannedJobEndDate).format(
-                                "YYYY-MM-DD"
-                              )
+                            ? moment
+                                .utc(list?.plannedJobEndDate)
+                                .format("YYYY-MM-DD")
                             : null
                         }
                         readOnly

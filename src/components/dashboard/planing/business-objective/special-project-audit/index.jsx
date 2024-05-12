@@ -177,17 +177,21 @@ const SpecialProjectAudit = () => {
             ?.location_Id || "",
         meetingDateTimeFrom: planingEngagementSingleObject
           ?.meetingScheduleAndMinutes?.meetingDateTimeFrom
-          ? moment(
-              planingEngagementSingleObject?.meetingScheduleAndMinutes
-                ?.meetingDateTimeFrom
-            ).format("YYYY-MM-DD")
+          ? moment
+              .utc(
+                planingEngagementSingleObject?.meetingScheduleAndMinutes
+                  ?.meetingDateTimeFrom
+              )
+              .format("YYYY-MM-DD")
           : "",
         meetingDateTimeTo: planingEngagementSingleObject
           ?.meetingScheduleAndMinutes?.meetingDateTimeTo
-          ? moment(
-              planingEngagementSingleObject?.meetingScheduleAndMinutes
-                ?.meetingDateTimeTo
-            ).format("YYYY-MM-DD")
+          ? moment
+              .utc(
+                planingEngagementSingleObject?.meetingScheduleAndMinutes
+                  ?.meetingDateTimeTo
+              )
+              .format("YYYY-MM-DD")
           : "",
         subLocation_Id:
           planingEngagementSingleObject?.meetingScheduleAndMinutes

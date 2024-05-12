@@ -34,7 +34,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     fontFamily: "Poppins",
     paddingTop: 25,
-    paddingBottom: 120,
     paddingHorizontal: 35,
   },
   header: {
@@ -176,6 +175,7 @@ const styles = StyleSheet.create({
   singleFindSummaryWrap: {
     flexDirection: "column",
     gap: 5,
+    marginTop: 10,
   },
   singleFindSummaryHeader: {
     fontSize: 12,
@@ -354,19 +354,21 @@ const PDFGenerator = ({ reportObject }) => {
             <View style={styles.reportInfoViewItem}>
               <Text style={styles.reportInfoTitle}>Report Date:</Text>
               <Text style={styles.reportInfoSubTitle}>
-                {moment(reportObject?.reportDate).format("DD-MM-YYYY")}
+                {moment.utc(reportObject?.reportDate).format("DD-MM-YYYY")}
               </Text>
             </View>
             <View style={styles.reportInfoViewItem}>
               <Text style={styles.reportInfoTitle}>Planned Start Date:</Text>
               <Text style={styles.reportInfoSubTitle}>
-                {moment(reportObject?.plannedStartDate).format("DD-MM-YYYY")}
+                {moment
+                  .utc(reportObject?.plannedStartDate)
+                  .format("DD-MM-YYYY")}
               </Text>
             </View>
             <View style={styles.reportInfoViewItem}>
               <Text style={styles.reportInfoTitle}>Planned End Date:</Text>
               <Text style={styles.reportInfoSubTitle}>
-                {moment(reportObject?.plannedEndDate).format("DD-MM-YYYY")}
+                {moment.utc(reportObject?.plannedEndDate).format("DD-MM-YYYY")}
               </Text>
             </View>
             <View style={styles.reportInfoViewItem}>
@@ -465,15 +467,7 @@ const PDFGenerator = ({ reportObject }) => {
                 <View style={styles.findings}>
                   <Text
                     style={styles.indexNumber}
-                    break={
-                      index !== 0 &&
-                      index !==
-                        reportObject?.consolidatedIARKeyFindingsList[0]
-                          ?.reportingList?.length -
-                          1
-                        ? true
-                        : false
-                    }
+                    break={index === 0 ? false : true}
                   >
                     Finding {index + 1}
                   </Text>
@@ -541,22 +535,20 @@ const PDFGenerator = ({ reportObject }) => {
 
         {/* Page 8 */}
         <View style={styles.page2} break>
-          <Text style={styles.contents}>Audit Extra Fields List</Text>
           {reportObject?.intAuditExtraFieldsList?.map((item, index) => {
             return (
-              <View style={styles.findings}>
-                <Text style={styles.indexNumber}>Field {index + 1}</Text>
+              <View style={styles.findings} key={index}>
                 <View style={styles.summaryInfoWrap}>
                   <View style={styles.singleFindSummaryWrap}>
                     <Text style={styles.singleFindSummaryHeader}>Heading</Text>
                     <Text style={styles.singleFindSummaryPara}>
-                      {item?.heading}
+                      {item?.heading.trim()}
                     </Text>
                   </View>
                   <View style={styles.singleFindSummaryWrap}>
                     <Text style={styles.singleFindSummaryHeader}>Data</Text>
                     <Text style={styles.singleFindSummaryPara}>
-                      {item?.data}
+                      {item?.data.trim()}
                     </Text>
                   </View>
                 </View>
@@ -569,7 +561,9 @@ const PDFGenerator = ({ reportObject }) => {
           <Text style={styles.contents}>ANNEXURE </Text>
           <View>
             <Text style={styles.h4}>
-              {convert(reportObject?.annexure, { tables: true })}
+              {convert(reportObject?.annexure) === ""
+                ? "Annexure Not Provided"
+                : convert(reportObject?.annexure, { tables: true })}
             </Text>
           </View>
         </View>

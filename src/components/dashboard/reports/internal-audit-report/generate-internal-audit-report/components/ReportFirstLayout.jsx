@@ -35,7 +35,9 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
                 placeholder="Select Date"
                 type="date"
                 name="reportDate"
-                value={moment(reportObject?.reportDate).format("YYYY-MM-DD")}
+                value={moment
+                  .utc(reportObject?.reportDate)
+                  .format("YYYY-MM-DD")}
                 onChange={(event) => handleChangeReportObject(event)}
               />
             </div>
@@ -51,9 +53,9 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
                 placeholder="Select Date"
                 type="date"
                 disabled
-                value={moment(reportObject?.plannedStartDate).format(
-                  "YYYY-MM-DD"
-                )}
+                value={moment
+                  .utc(reportObject?.plannedStartDate)
+                  .format("YYYY-MM-DD")}
               />
             </div>
           </div>
@@ -65,9 +67,9 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
                 placeholder="Select Date"
                 type="date"
                 disabled
-                value={moment(reportObject?.plannedEndDate).format(
-                  "YYYY-MM-DD"
-                )}
+                value={moment
+                  .utc(reportObject?.plannedEndDate)
+                  .format("YYYY-MM-DD")}
               />
             </div>
           </div>

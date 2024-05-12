@@ -820,8 +820,27 @@ span[aria-label="Insert Ordered List"] .jodit-toolbar-button__trigger {
 .smallScreenSidebar {
   display: none !important;
 }
-.min-h-60{
+.min-h-60 {
   min-height: 60vh;
+}
+
+.navbarWrapMain {
+  padding-right: 3rem !important;
+  padding-left: 3rem !important;
+}
+.h-35 {
+  height: 35px;
+}
+
+@media screen and (max-width: 1000px) {
+  .fxt-shape {
+    display: none;
+  }
+}
+@media screen and (max-width: 820px) {
+  .model-wrap {
+    width: 95%;
+  }
 }
 
 @media screen and (max-width: 990px) {
@@ -839,5 +858,8 @@ span[aria-label="Insert Ordered List"] .jodit-toolbar-button__trigger {
     padding: 0px !important;
     margin: 0px !important;
     width: 100% !important;
+  }
+  .navbarWrapMain {
+    padding: 12px !important;
   }
 }

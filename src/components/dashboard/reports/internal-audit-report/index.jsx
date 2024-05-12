@@ -163,7 +163,6 @@ const InternalAuditReport = () => {
                   <th>Report Name</th>
                   <th>Report Date</th>
                   <th>Prepared By</th>
-                  <th>Approved By</th>
                   <th>Status</th>
                   <th>Actions</th>
                 </tr>
@@ -193,12 +192,11 @@ const InternalAuditReport = () => {
                             {moment(item?.reportDate).format("DD-MM-YYYY")}
                           </td>
                           <td>{item?.preparedBy || ""}</td>
-                          <td>null</td>
                           <td>{item?.status}</td>
-                          <td className="reportsLastColumn">
-                            <div className="d-flex gap-4">
+                          <td>
+                            <div className="row">
                               <i
-                                className="fa-eye fa f-18 cursor-pointer"
+                                className="fa-eye fa f-18 cursor-pointer col-lg-3"
                                 onClick={() =>
                                   navigate(
                                     `/audit/view-internal-audit-report?reportId=${item?.id}`
@@ -207,7 +205,7 @@ const InternalAuditReport = () => {
                               ></i>
                               {item?.approved === false && (
                                 <i
-                                  className="fa fa-edit  f-18 cursor-pointer "
+                                  className="fa fa-edit  f-18 cursor-pointer col-lg-3"
                                   onClick={() =>
                                     navigate(
                                       `/audit/update-internal-audit-report?reportId=${item?.id}`
@@ -217,7 +215,7 @@ const InternalAuditReport = () => {
                               )}
                               {item?.approved === false && (
                                 <i
-                                  className={`fa fa-trash text-danger cursor-pointer f-18`}
+                                  className={`fa fa-trash text-danger cursor-pointer f-18 col-lg-3`}
                                   onClick={() => {
                                     setDeleteInternalAuditReportId(item?.id);
                                     setShowDeleteInternalAuditReportDialog(
@@ -238,7 +236,7 @@ const InternalAuditReport = () => {
                                 Number(item?.createdBy) ===
                                   Number(user[0]?.userId?.id) && (
                                   <div
-                                    className={`btn btn-labeled btn-primary  shadow mx-2 h-40 `}
+                                    className={`btn btn-labeled btn-primary  shadow mx-2 h-35 col-lg-4 mt-2 `}
                                     onClick={() => handleSubmitReport(item)}
                                   >
                                     Submit
@@ -249,28 +247,32 @@ const InternalAuditReport = () => {
                                 user[0]?.userId?.employeeid?.userHierarchy ===
                                   "IAH" && (
                                   <div
-                                    className={`btn btn-labeled btn-primary  shadow mx-2 h-40 `}
+                                    className={`btn btn-labeled btn-primary  shadow mx-2 h-35 col-lg-4 mt-2 `}
                                     onClick={() => handleApproveReport(item)}
                                   >
                                     Approve
                                   </div>
                                 )}
                               {item?.submitted === true && (
-                                <PDFDownloadLink
-                                  document={<MyDocument reportObject={item} />}
-                                  fileName="consolidation.pdf"
-                                >
-                                  {({ blob, url, loading, error }) =>
-                                    "Download pdf!"
-                                  }
-                                </PDFDownloadLink>
+                                <div className="col-lg-3">
+                                  <PDFDownloadLink
+                                    document={
+                                      <MyDocument reportObject={item} />
+                                    }
+                                    fileName="consolidation.pdf"
+                                  >
+                                    {({ blob, url, loading, error }) =>
+                                      "Download pdf!"
+                                    }
+                                  </PDFDownloadLink>
+                                </div>
                               )}
                               {item?.submitted === true &&
                                 item?.approved === false &&
                                 user[0]?.userId?.employeeid?.userHierarchy ===
                                   "IAH" && (
                                   <div
-                                    className={`btn btn-labeled btn-primary  shadow mt-2 mx-2 h-40  `}
+                                    className={`btn btn-labeled btn-primary  shadow -2 mx-2 h-35 col-lg-4 mt-2 `}
                                     onClick={() => {
                                       setCurrentReportItem(item);
                                       setFeedBackDialog(true);
@@ -281,7 +283,7 @@ const InternalAuditReport = () => {
                                 )}
                               {item?.feedback && item?.feedback?.id && (
                                 <div
-                                  className={`btn btn-labeled btn-primary  shadow mt-2 mx-2 h-40`}
+                                  className={`btn btn-labeled btn-primary mt-2  shadow  mx-2 h-35 col-lg-8`}
                                   onClick={() => {
                                     setCurrentReportItem(item);
                                     setViewFeedBackDialog(true);

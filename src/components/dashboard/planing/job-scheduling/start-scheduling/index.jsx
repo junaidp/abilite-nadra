@@ -293,8 +293,8 @@ const StartScheduling = () => {
             </div>
           </header>
 
-          <div className="row mb-3">
-            <div className="col-lg-5">
+          <div className="row ">
+            <div className="col-lg-5 mb-3">
               <MultiSelect
                 names={allLocations?.map((all) => all?.description)}
                 title="Location"
@@ -304,7 +304,7 @@ const StartScheduling = () => {
                 singleJobSchedulingObject={singleJobSchedulingObject}
               />
             </div>
-            <div className="col-lg-5">
+            <div className="col-lg-5 mb-3">
               <MultiSelect
                 title="SubLocation"
                 names={allSubLocations?.map((all) => all?.description)}
@@ -316,7 +316,7 @@ const StartScheduling = () => {
             </div>
             {singleJobSchedulingObject?.natureThrough !==
               "Compliance Checklist" && (
-              <div className="col-lg-2">
+              <div className="col-lg-2 mb-3">
                 <div className="form-check">
                   <input
                     className="form-check-input"

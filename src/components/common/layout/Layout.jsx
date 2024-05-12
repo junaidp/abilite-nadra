@@ -48,10 +48,7 @@ const Layout = () => {
 
   React.useEffect(() => {
     if (user[0]?.token) {
-      if (
-        user[0]?.userId?.role[0]?.name === "ADMIN" ||
-        user[0]?.userId?.employeeid?.userHierarchy === "Management_Auditee"
-      ) {
+      if (user[0]?.userId?.role[0]?.name === "ADMIN") {
         navigate("/audit/dashboard");
       }
     }

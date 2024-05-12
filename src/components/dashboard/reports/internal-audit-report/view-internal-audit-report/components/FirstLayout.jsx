@@ -36,9 +36,9 @@ const ReportFirstLayout = ({ singleInternalAuditReport }) => {
                 placeholder="Select Date"
                 type="date"
                 name="reportDate"
-                value={moment(singleInternalAuditReport?.reportDate).format(
-                  "YYYY-MM-DD"
-                )}
+                value={moment
+                  .utc(singleInternalAuditReport?.reportDate)
+                  .format("YYYY-MM-DD")}
                 disabled
                 readOnly
               />
@@ -55,9 +55,9 @@ const ReportFirstLayout = ({ singleInternalAuditReport }) => {
                 placeholder="Select Date"
                 type="date"
                 disabled
-                value={moment(
-                  singleInternalAuditReport?.plannedStartDate
-                ).format("YYYY-MM-DD")}
+                value={moment
+                  .utc(singleInternalAuditReport?.plannedStartDate)
+                  .format("YYYY-MM-DD")}
               />
             </div>
           </div>
@@ -69,9 +69,9 @@ const ReportFirstLayout = ({ singleInternalAuditReport }) => {
                 placeholder="Select Date"
                 type="date"
                 disabled
-                value={moment(singleInternalAuditReport?.plannedEndDate).format(
-                  "YYYY-MM-DD"
-                )}
+                value={moment
+                  .utc(singleInternalAuditReport?.plannedEndDate)
+                  .format("YYYY-MM-DD")}
               />
             </div>
           </div>

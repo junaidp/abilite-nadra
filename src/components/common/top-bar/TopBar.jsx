@@ -60,7 +60,7 @@ const TopBar = () => {
 
   return (
     <header className="app-header shadow-sm mb-3 px-0 ">
-      <nav className="navbar navbar-expand-lg navbar-light px-5">
+      <nav className="navbar navbar-expand-lg navbar-light  navbarWrapMain">
         <div>
           <img src={logo} className="light-logo" width="110" alt="" />
         </div>

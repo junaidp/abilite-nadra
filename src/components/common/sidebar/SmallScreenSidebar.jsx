@@ -9,14 +9,17 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   changeActiveLink,
   changeExpanded,
+  changeYear,
 } from "../../../global-redux/reducers/common/slice";
+import { changeAuthUser } from "../../../global-redux/reducers/auth/slice";
 
 export default function TemporaryDrawer() {
   let navigate = useNavigate();
   let dispatch = useDispatch();
-  let { showSidebar, activeLink, menuItems } = useSelector(
+  let { showSidebar, activeLink, menuItems, year } = useSelector(
     (state) => state.common
   );
+  const { user } = useSelector((state) => state?.auth);
   const [open, setOpen] = React.useState(false);
   const toggleDrawer = () => {
     setOpen(false);
@@ -42,6 +45,14 @@ export default function TemporaryDrawer() {
     }
   }
 
+  function handleLogout() {
+    localStorage.removeItem("user");
+    localStorage.removeItem("company");
+    localStorage.removeItem("year");
+    dispatch(changeAuthUser([]));
+    navigate("/login");
+  }
+
   function handleSubItemClick(link, id) {
     navigate(link);
     dispatch(changeActiveLink(id));
@@ -50,6 +61,12 @@ export default function TemporaryDrawer() {
   React.useEffect(() => {
     setOpen(true);
   }, [showSidebar]);
+
+  React.useEffect(() => {
+    if (year) {
+      localStorage.setItem("year", year);
+    }
+  }, [year]);
 
   const DrawerList = (
     <Box sx={{ width: 285 }} role="presentation" ref={userRef}>
@@ -223,6 +240,38 @@ export default function TemporaryDrawer() {
               })}
             </ul>
           </nav>
+          <div className="smallSidebarYearDropDown mb-2">
+            {user[0]?.userId?.role[0]?.name === "USER" && (
+              <select
+                className="form-select h-40 "
+                aria-label="Default select example"
+                value={year}
+                onChange={(e) => {
+                  if (e?.target?.value !== "") {
+                    dispatch(changeYear(e?.target?.value));
+                  }
+                }}
+              >
+                <option value="">Select Year</option>
+                <option value="2028">2028</option>
+                <option value="2027">2027</option>
+                <option value="2026">2026</option>
+                <option value="2025">2025</option>
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+                <option value="2021">2021</option>
+              </select>
+            )}
+          </div>
+          <div className="smallSidebarYearDropDown d-flex">
+            <button
+              className="btn btn-outline-primary  w-75 my-3 margin-auto logoutOut-btn"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
+          </div>
         </div>
       </div>
     </Box>

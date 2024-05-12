@@ -34,7 +34,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     fontFamily: "Poppins",
     paddingTop: 25,
-    paddingBottom: 120,
     paddingHorizontal: 35,
   },
   header: {
@@ -176,6 +175,7 @@ const styles = StyleSheet.create({
   singleFindSummaryWrap: {
     flexDirection: "column",
     gap: 5,
+    marginTop: 10,
   },
   singleFindSummaryHeader: {
     fontSize: 12,
@@ -183,6 +183,10 @@ const styles = StyleSheet.create({
   },
   singleFindSummaryPara: {
     fontSize: 10,
+  },
+  singleFindSummaryParaConsolidate: {
+    fontSize: 10,
+    marginTop: 10,
   },
   findings: {
     display: "flex",
@@ -299,28 +303,30 @@ const PDFGenerator = ({ reportObject }) => {
               SUMMARY OF KEY FINDINGS -----------------------------------------
             </Text>
             <View style={styles.overviewFields}>
-              {reportObject?.consolidatedIARKeyFindingsList[0]?.reportingList
-                ?.filter((singleItem) => singleItem?.implicationRating === 1)
-                ?.map((singleItem) => {
-                  return (
-                    <Text style={styles.h4}>
-                      {singleItem?.observationTitle}
-                    </Text>
-                  );
-                })}
+              {reportObject?.consolidatedIARKeyFindingsList?.map((list) =>
+                list?.reportingList
+                  ?.filter((singleItem) => singleItem?.implicationRating === 1)
+                  ?.map((singleItem) => {
+                    return (
+                      <Text style={styles.h4}>
+                        {singleItem?.observationTitle}
+                      </Text>
+                    );
+                  })
+              )}
             </View>
             <Text style={styles.h4}>
               ALL FINDINGS -----------------------------------------------------
             </Text>
             <View style={styles.overviewFields}>
-              {reportObject?.consolidatedIARKeyFindingsList[0]?.reportingList?.map(
-                (singleItem) => {
+              {reportObject?.consolidatedIARKeyFindingsList?.map((list) =>
+                list?.reportingList?.map((singleItem) => {
                   return (
                     <Text style={styles.h4}>
                       {singleItem?.observationTitle}
                     </Text>
                   );
-                }
+                })
               )}
             </View>
             <Text style={styles.h4}>
@@ -354,19 +360,21 @@ const PDFGenerator = ({ reportObject }) => {
             <View style={styles.reportInfoViewItem}>
               <Text style={styles.reportInfoTitle}>Report Date:</Text>
               <Text style={styles.reportInfoSubTitle}>
-                {moment(reportObject?.reportDate).format("DD-MM-YYYY")}
+                {moment.utc(reportObject?.reportDate).format("DD-MM-YYYY")}
               </Text>
             </View>
             <View style={styles.reportInfoViewItem}>
               <Text style={styles.reportInfoTitle}>Planned Start Date:</Text>
               <Text style={styles.reportInfoSubTitle}>
-                {moment(reportObject?.plannedStartDate).format("DD-MM-YYYY")}
+                {moment
+                  .utc(reportObject?.plannedStartDate)
+                  .format("DD-MM-YYYY")}
               </Text>
             </View>
             <View style={styles.reportInfoViewItem}>
               <Text style={styles.reportInfoTitle}>Planned End Date:</Text>
               <Text style={styles.reportInfoSubTitle}>
-                {moment(reportObject?.plannedEndDate).format("DD-MM-YYYY")}
+                {moment.utc(reportObject?.plannedEndDate).format("DD-MM-YYYY")}
               </Text>
             </View>
             <View style={styles.reportInfoViewItem}>
@@ -434,20 +442,25 @@ const PDFGenerator = ({ reportObject }) => {
         {/* Page 5 */}
         <View style={styles.page2} break>
           <Text style={styles.contents}>SUMMARY OF KEY FINDINGS </Text>
-          {reportObject?.consolidatedIARKeyFindingsList?.map((item, index) => {
-            return (
-              <View style={styles.findingsSummary} key={index}>
-                <Text style={styles.indexNumber}>Key Finding {index + 1}</Text>
-                <View style={styles.summaryInfoWrap}>
-                  <View style={styles.singleFindSummaryWrap}>
-                    <Text style={styles.singleFindSummaryPara}>
-                      {convert(item?.summaryOfKeyFinding, { tables: true })}
+          {reportObject?.consolidatedIARKeyFindingsList?.map((list) =>
+            list?.reportingList
+              ?.filter((singleItem) => singleItem?.implicationRating === 1)
+              ?.map((singleItem, index) => {
+                return (
+                  <View>
+                    <Text style={styles.indexNumber}> Finding {index + 1}</Text>
+                    <Text
+                      style={styles.singleFindSummaryParaConsolidate}
+                      key={index}
+                    >
+                      {convert(singleItem?.observationName, {
+                        tables: true,
+                      })}
                     </Text>
                   </View>
-                </View>
-              </View>
-            );
-          })}
+                );
+              })
+          )}
         </View>
         {/* Page 6 */}
         <View style={styles.allFindingMianHeadingWrap} break>
@@ -455,104 +468,96 @@ const PDFGenerator = ({ reportObject }) => {
         </View>
         {/* Page 7 */}
         <View style={styles.page2} break>
-          {reportObject?.consolidatedIARKeyFindingsList[0]?.reportingList?.map(
-            (followUpItem, index) => {
-              return (
-                <View style={styles.findings}>
-                  <Text
-                    style={styles.indexNumber}
-                    break={
-                      index !== 0 &&
-                      index !==
-                        reportObject?.consolidatedIARKeyFindingsList[0]
-                          ?.reportingList?.length -
-                          1
-                        ? true
-                        : false
-                    }
+          {reportObject?.consolidatedIARKeyFindingsList?.map(
+            (list, mainIndex) =>
+              list?.reportingList?.map((followUpItem, index) => {
+                return (
+                  <View
+                    style={styles.findings}
+                    key={index}
+                    break={mainIndex === 0 && index === 0 ? false : true}
                   >
-                    Finding {index + 1}
-                  </Text>
-                  <View style={styles.singleFindSummaryWrap}>
-                    <Text style={styles.singleFindSummaryHeader}>
-                      Observation
-                    </Text>
-                    <Text style={styles.singleFindSummaryPara}>
-                      {convert(followUpItem?.observationName, {
-                        tables: true,
-                      })}
-                    </Text>
+                    <Text style={styles.indexNumber}>Finding {index + 1}</Text>
+                    <View style={styles.singleFindSummaryWrap}>
+                      <Text style={styles.singleFindSummaryHeader}>
+                        Observation
+                      </Text>
+                      <Text style={styles.singleFindSummaryPara}>
+                        {convert(followUpItem?.observationName, {
+                          tables: true,
+                        })}
+                      </Text>
+                    </View>
+                    <View style={styles.singleFindSummaryWrap}>
+                      <Text style={styles.singleFindSummaryHeader}>
+                        Implication
+                      </Text>
+                      <Text style={styles.singleFindSummaryPara}>
+                        {followUpItem?.implication}
+                      </Text>
+                    </View>
+                    <View style={styles.singleFindSummaryWrap}>
+                      <Text style={styles.singleFindSummaryHeader}>
+                        Management Comments
+                      </Text>
+                      <Text style={styles.singleFindSummaryPara}>
+                        {followUpItem?.managementComments}
+                      </Text>
+                    </View>
+                    <View style={styles.singleFindSummaryWrap}>
+                      <Text style={styles.singleFindSummaryHeader}>
+                        Implication Rating
+                      </Text>
+                      <Text style={styles.singleFindSummaryPara}>
+                        {followUpItem?.implicationRating === 1
+                          ? "High"
+                          : followUpItem?.implicationRating === 2
+                          ? "Medium"
+                          : followUpItem?.implicationRating === 3
+                          ? "Low"
+                          : ""}
+                      </Text>
+                    </View>
+                    <View style={styles.singleFindSummaryWrap}>
+                      <Text style={styles.singleFindSummaryHeader}>
+                        Auditee
+                      </Text>
+                      <Text style={styles.singleFindSummaryPara}>
+                        {followUpItem?.auditee?.name}
+                      </Text>
+                    </View>
+                    <View style={styles.singleFindSummaryWrap}>
+                      <Text style={styles.singleFindingsHeaderInfoHeader}>
+                        Implementation Date
+                      </Text>
+                      <Text style={styles.singleFindSummaryPara}>
+                        {moment(followUpItem?.implementationDate).format(
+                          "YYYY-MM-DD"
+                        )}
+                      </Text>
+                    </View>
                   </View>
-                  <View style={styles.singleFindSummaryWrap}>
-                    <Text style={styles.singleFindSummaryHeader}>
-                      Implication
-                    </Text>
-                    <Text style={styles.singleFindSummaryPara}>
-                      {followUpItem?.implication}
-                    </Text>
-                  </View>
-                  <View style={styles.singleFindSummaryWrap}>
-                    <Text style={styles.singleFindSummaryHeader}>
-                      Management Comments
-                    </Text>
-                    <Text style={styles.singleFindSummaryPara}>
-                      {followUpItem?.managementComments}
-                    </Text>
-                  </View>
-                  <View style={styles.singleFindSummaryWrap}>
-                    <Text style={styles.singleFindSummaryHeader}>
-                      Implication Rating
-                    </Text>
-                    <Text style={styles.singleFindSummaryPara}>
-                      {followUpItem?.implicationRating === 1
-                        ? "High"
-                        : followUpItem?.implicationRating === 2
-                        ? "Medium"
-                        : followUpItem?.implicationRating === 3
-                        ? "Low"
-                        : ""}
-                    </Text>
-                  </View>
-                  <View style={styles.singleFindSummaryWrap}>
-                    <Text style={styles.singleFindSummaryHeader}>Auditee</Text>
-                    <Text style={styles.singleFindSummaryPara}>
-                      {followUpItem?.auditee?.name}
-                    </Text>
-                  </View>
-                  <View style={styles.singleFindSummaryWrap}>
-                    <Text style={styles.singleFindingsHeaderInfoHeader}>
-                      Implementation Date
-                    </Text>
-                    <Text style={styles.singleFindSummaryPara}>
-                      {moment(followUpItem?.implementationDate).format(
-                        "YYYY-MM-DD"
-                      )}
-                    </Text>
-                  </View>
-                </View>
-              );
-            }
+                );
+              })
           )}
         </View>
 
         {/* Page 8 */}
         <View style={styles.page2} break>
-          <Text style={styles.contents}>Audit Extra Fields List</Text>
           {reportObject?.intAuditExtraFieldsList?.map((item, index) => {
             return (
-              <View style={styles.findings}>
-                <Text style={styles.indexNumber}>Field {index + 1}</Text>
+              <View style={styles.findings} key={index}>
                 <View style={styles.summaryInfoWrap}>
                   <View style={styles.singleFindSummaryWrap}>
                     <Text style={styles.singleFindSummaryHeader}>Heading</Text>
                     <Text style={styles.singleFindSummaryPara}>
-                      {item?.heading}
+                      {item?.heading.trim()}
                     </Text>
                   </View>
                   <View style={styles.singleFindSummaryWrap}>
                     <Text style={styles.singleFindSummaryHeader}>Data</Text>
                     <Text style={styles.singleFindSummaryPara}>
-                      {item?.data}
+                      {item?.data.trim()}
                     </Text>
                   </View>
                 </View>
@@ -565,7 +570,9 @@ const PDFGenerator = ({ reportObject }) => {
           <Text style={styles.contents}>ANNEXURE </Text>
           <View>
             <Text style={styles.h4}>
-              {convert(reportObject?.annexure, { tables: true })}
+              {convert(reportObject?.annexure) === ""
+                ? "Annexure Not Provided"
+                : convert(reportObject?.annexure, { tables: true })}
             </Text>
           </View>
         </View>

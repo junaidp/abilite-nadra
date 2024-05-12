@@ -196,7 +196,7 @@ const AccordianItem = ({
                   type="date"
                   className="form-control"
                   id="exampleFormControlInput1"
-                  value={moment(item?.implementationDate).format("YYYY-MM-DD")}
+                  value={moment.utc(item?.implementationDate).format("YYYY-MM-DD")}
                   name="implementationDate"
                   onChange={(event) => handleChange(event, item?.id)}
                 />
@@ -224,7 +224,9 @@ const AccordianItem = ({
                 type="date"
                 className="form-control"
                 id="exampleFormControlInput1"
-                value={moment(item?.implementationDate).format("YYYY-MM-DD")}
+                value={moment
+                  .utc(item?.implementationDate)
+                  .format("YYYY-MM-DD")}
                 name="implementationDate"
                 disabled
               />

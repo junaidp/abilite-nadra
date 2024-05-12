@@ -186,14 +186,14 @@ const BusinessObjectiveRedirect = () => {
             ?.location_Id || "",
         meetingDateTimeFrom: planingEngagementSingleObject
           ?.meetingScheduleAndMinutes?.meetingDateTimeFrom
-          ? moment(
+          ? moment.utc(
               planingEngagementSingleObject?.meetingScheduleAndMinutes
                 ?.meetingDateTimeFrom
             ).format("YYYY-MM-DD")
           : "",
         meetingDateTimeTo: planingEngagementSingleObject
           ?.meetingScheduleAndMinutes?.meetingDateTimeTo
-          ? moment(
+          ? moment.utc(
               planingEngagementSingleObject?.meetingScheduleAndMinutes
                 ?.meetingDateTimeTo
             ).format("YYYY-MM-DD")
