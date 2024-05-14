@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
 import { setupGenerateQRCode } from "../../../../global-redux/reducers/auth/slice";
 
-const AddCheckListManagementDialog = () => {
+const AddCheckListManagementDialog = ({ tab }) => {
   const dispatch = useDispatch();
   const { qrCode, loading, user } = useSelector((state) => state?.auth);
   let arrayBufferToBase64 = (buffer) => {
@@ -17,8 +17,10 @@ const AddCheckListManagementDialog = () => {
   };
 
   React.useEffect(() => {
-    dispatch(setupGenerateQRCode());
-  }, [user]);
+    if (tab === "tfa") {
+      dispatch(setupGenerateQRCode());
+    }
+  }, [user, tab]);
 
   return (
     <div

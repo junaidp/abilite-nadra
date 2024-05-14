@@ -1,7 +1,7 @@
 import React from "react";
 import TaskManagementPage from "../../task-management/index";
 
-const TaskManagement = () => {
+const TaskManagement = ({ tab }) => {
   return (
     <div
       className="tab-pane fade"
@@ -9,7 +9,7 @@ const TaskManagement = () => {
       role="tabpanel"
       aria-labelledby="nav-task-management-tab"
     >
-      <TaskManagementPage />
+      {tab === "taskManagement" && <TaskManagementPage />}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React from "react";
 import ReportingPage from "../../reporting-follow-up/reporting/index";
 
-const Reporting = () => {
+const Reporting = ({ tab }) => {
   return (
     <div
       className="tab-pane fade"
@@ -9,7 +9,7 @@ const Reporting = () => {
       role="tabpanel"
       aria-labelledby="nav-reporting-tab"
     >
-      <ReportingPage />
+      {tab === "reporting" && <ReportingPage />}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React from "react";
 import InformationRequestPage from "../../information-request/index";
 
-const InformationRequest = () => {
+const InformationRequest = ({ tab }) => {
   return (
     <div
       className="tab-pane fade"
@@ -9,7 +9,7 @@ const InformationRequest = () => {
       role="tabpanel"
       aria-labelledby="nav-information-request-tab"
     >
-      <InformationRequestPage />
+      {tab === "informationRequest" && <InformationRequestPage />}
     </div>
   );
 };

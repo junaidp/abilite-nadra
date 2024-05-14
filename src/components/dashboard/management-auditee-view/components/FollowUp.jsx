@@ -1,7 +1,7 @@
 import React from "react";
 import FollowUpPage from "../../reporting-follow-up/follow-up/index";
 
-const FollowUp = () => {
+const FollowUp = ({ tab }) => {
   return (
     <div
       className="tab-pane fade"
@@ -9,7 +9,7 @@ const FollowUp = () => {
       role="tabpanel"
       aria-labelledby="nav-follow-up-tab"
     >
-      <FollowUpPage />
+      {tab === "followUp" && <FollowUpPage />}
     </div>
   );
 };

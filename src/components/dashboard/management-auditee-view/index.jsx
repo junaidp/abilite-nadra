@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { resetAuthValues } from "../../../global-redux/reducers/auth/slice";
 
 const ManagementAuditeeView = () => {
+  const [tab, setTab] = React.useState("doc");
   const dispatch = useDispatch();
   React.useEffect(() => {
     dispatch(resetAuthValues());
@@ -37,6 +38,7 @@ const ManagementAuditeeView = () => {
                   type="button"
                   role="tab"
                   aria-controls="nav-home"
+                  onClick={() => setTab("doc")}
                 >
                   Supporting Docs
                 </button>
@@ -48,6 +50,7 @@ const ManagementAuditeeView = () => {
                   type="button"
                   role="tab"
                   aria-controls="nav-reporting"
+                  onClick={() => setTab("reporting")}
                 >
                   Reporting
                 </button>
@@ -59,6 +62,7 @@ const ManagementAuditeeView = () => {
                   type="button"
                   role="tab"
                   aria-controls="nav-follow-up"
+                  onClick={() => setTab("followUp")}
                 >
                   Follow Up
                 </button>
@@ -70,6 +74,7 @@ const ManagementAuditeeView = () => {
                   type="button"
                   role="tab"
                   aria-controls="nav-information-request"
+                  onClick={() => setTab("informationRequest")}
                 >
                   Information Request
                 </button>
@@ -81,6 +86,7 @@ const ManagementAuditeeView = () => {
                   type="button"
                   role="tab"
                   aria-controls="nav-task-management"
+                  onClick={() => setTab("taskManagement")}
                 >
                   Task Management
                 </button>
@@ -92,6 +98,7 @@ const ManagementAuditeeView = () => {
                   type="button"
                   role="tab"
                   aria-controls="nav-user"
+                  onClick={() => setTab("user")}
                 >
                   User Details
                 </button>
@@ -103,6 +110,7 @@ const ManagementAuditeeView = () => {
                   type="button"
                   role="tab"
                   aria-controls="nav-tfa"
+                  onClick={() => setTab("tfa")}
                 >
                   Two Factor Authentication
                 </button>
@@ -115,13 +123,13 @@ const ManagementAuditeeView = () => {
               className="tab-content p-3 mt-4 border bg-light"
               id="nav-tabContent"
             >
-              <SupportingDocs />
-              <FollowUp />
-              <Reporting />
-              <InformationRequest />
-              <TaskManagement />
-              <UserInfo />
-              <TFA />
+              <SupportingDocs tab={tab} />
+              <Reporting tab={tab} />
+              <FollowUp tab={tab} />
+              <InformationRequest tab={tab} />
+              <TaskManagement tab={tab} />
+              <UserInfo tab={tab} />
+              <TFA tab={tab} />
             </div>
           </div>
         </div>

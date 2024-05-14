@@ -1,7 +1,7 @@
 import React from "react";
 import UserDetails from "../../../user/user-profile/UserProfile";
 
-const TaskManagement = () => {
+const TaskManagement = ({ tab }) => {
   return (
     <div
       className="tab-pane fade"
@@ -9,7 +9,7 @@ const TaskManagement = () => {
       role="tabpanel"
       aria-labelledby="nav-user-tab"
     >
-      <UserDetails />
+      {tab === "user" && <UserDetails />}
     </div>
   );
 };

@@ -4,7 +4,7 @@ import { setupGetAllFiles } from "../../../../global-redux/reducers/settings/sup
 import { Pagination } from "@mui/material";
 import { CircularProgress } from "@mui/material";
 
-const SupportingDocs = () => {
+const SupportingDocs = ({ tab }) => {
   const dispatch = useDispatch();
   const { allFiles, loading } = useSelector((state) => state?.settingsDocs);
   const { user } = useSelector((state) => state.auth);
@@ -23,13 +23,13 @@ const SupportingDocs = () => {
   };
 
   React.useEffect(() => {
-    if (user[0]?.token) {
+    if (user[0]?.token && tab === "doc") {
       const companyId = user[0]?.company?.find(
         (item) => item?.companyName === company
       )?.id;
       dispatch(setupGetAllFiles(`?companyId=${companyId}`));
     }
-  }, [user]);
+  }, [user, tab]);
 
   return (
     <div
