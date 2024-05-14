@@ -1,19 +1,9 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { CircularProgress } from "@mui/material";
+import Button from "@mui/material/Button";
+import TFADialog from "./TFADialog";
 
-const AddCheckListManagementDialog = () => {
-  const { qrCode, loading } = useSelector((state) => state?.auth);
-  let arrayBufferToBase64 = (buffer) => {
-    var binary = "";
-    var bytes = new Uint8Array(buffer);
-    var len = bytes.byteLength;
-    for (var i = 0; i < len; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-    return window.btoa(binary);
-  };
-
+const TwoFactorAuthentication = () => {
+  const [showDialog, setShowDialog] = React.useState(false);
   return (
     <div
       className="tab-pane fade"
@@ -21,19 +11,20 @@ const AddCheckListManagementDialog = () => {
       role="tabpanel"
       aria-labelledby="nav-tfa-tab"
     >
-      <div>
-        {loading ? (
-          <CircularProgress />
-        ) : (
-          <div class="qr-code py-4">
-            <img
-              src={`data:image/JPEG;base64,${arrayBufferToBase64(qrCode)}`}
-            />
+      {showDialog && (
+        <div className="audit-settings-modal">
+          <div className="model-wrap">
+            <TFADialog setShowDialog={setShowDialog} />
           </div>
-        )}
+        </div>
+      )}
+      <div className="d-flex justify-center">
+        <Button variant="outlined" onClick={() => setShowDialog(true)}>
+          Generate New QR Code
+        </Button>
       </div>
     </div>
   );
 };
 
-export default AddCheckListManagementDialog;
+export default TwoFactorAuthentication;

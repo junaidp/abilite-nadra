@@ -831,6 +831,9 @@ span[aria-label="Insert Ordered List"] .jodit-toolbar-button__trigger {
 .h-35 {
   height: 35px;
 }
+.justify-center{
+  justify-content: center;
+}
 
 @media screen and (max-width: 1000px) {
   .fxt-shape {

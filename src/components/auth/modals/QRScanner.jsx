@@ -43,7 +43,9 @@ const AddCheckListManagementDialog = ({ setShowQRCodeScanner }) => {
     }
   }, [verifyCodeSuccess]);
   React.useEffect(() => {
-    dispatch(setupGenerateQRCode());
+    if (user[0]?.userId?.tfa === false) {
+      dispatch(setupGenerateQRCode());
+    }
   }, [user]);
 
   return (
@@ -57,11 +59,13 @@ const AddCheckListManagementDialog = ({ setShowQRCodeScanner }) => {
         {loading ? (
           <CircularProgress />
         ) : (
-          <div class="qr-code">
-            <img
-              src={`data:image/JPEG;base64,${arrayBufferToBase64(qrCode)}`}
-            />
-          </div>
+          user[0]?.userId?.tfa === false && (
+            <div class="qr-code">
+              <img
+                src={`data:image/JPEG;base64,${arrayBufferToBase64(qrCode)}`}
+              />
+            </div>
+          )
         )}
         <div class="formQrCode margin-auto">
           <input

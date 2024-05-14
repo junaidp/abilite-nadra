@@ -13,10 +13,7 @@ import UserManagementDialog from "../../modals/add-user-dialog/index";
 import UpdateCompanyDialog from "../../modals/update-company-dialog";
 import UpdateUserDialog from "../.././modals/update-user-dialog";
 import TFA from "./components/tfa/index.jsx";
-import {
-  resetAuthValues,
-  setupGenerateQRCode,
-} from "../../../global-redux/reducers/auth/slice";
+import { resetAuthValues } from "../../../global-redux/reducers/auth/slice";
 import { useSelector, useDispatch } from "react-redux";
 import "./index.css";
 import AddCompanyDialog from "../../modals/add-company-dialog/index";
@@ -95,9 +92,6 @@ const AuditSettings = () => {
       }
       if (currentSettingOption === "users") {
         dispatch(setupGetAllUsers({ shareWith: true }));
-      }
-      if (currentSettingOption === "tfa") {
-        dispatch(setupGenerateQRCode());
       }
     }
   }, [currentSettingOption, user, company]);
@@ -331,20 +325,18 @@ const AuditSettings = () => {
                     User Details
                   </button>
                 )}
-                {userRole !== "ADMIN" && (
-                  <button
-                    className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
-                    id="nav-tfa-tab"
-                    data-bs-toggle="tab"
-                    data-bs-target="#nav-tfa"
-                    type="button"
-                    role="tab"
-                    aria-controls="nav-tfa"
-                    onClick={() => setCurrentSettingOption("tfa")}
-                  >
-                    Two Factor Authentication
-                  </button>
-                )}
+                <button
+                  className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
+                  id="nav-tfa-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#nav-tfa"
+                  type="button"
+                  role="tab"
+                  aria-controls="nav-tfa"
+                  onClick={() => setCurrentSettingOption("tfa")}
+                >
+                  Two Factor Authentication
+                </button>
               </div>
             </nav>
           </div>
@@ -400,7 +392,7 @@ const AuditSettings = () => {
               {userRole === "ADMIN" && <InformationRequest />}
               {userRole === "ADMIN" && <TaskManagement />}
               {userRole === "ADMIN" && <UserInfo />}
-              {userRole !== "ADMIN" && <TFA />}
+              <TFA />
             </div>
           </div>
         </div>
