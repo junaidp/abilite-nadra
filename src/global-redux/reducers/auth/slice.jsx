@@ -5,6 +5,8 @@ import {
   resetPassword,
   internalResetPassword,
   updateUserName,
+  generateQRCode,
+  verifyQRCode,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
@@ -36,6 +38,10 @@ const initialState = {
   internalResetPasswordSuccess: false,
   // Internal Reset Password
   userNameUpdateSuccess: false,
+  // Code Scanner
+  qrCode: "",
+  codeLoading: false,
+  verifyCodeSuccess: false,
 };
 
 export const setupRegisterUser = createAsyncThunk(
@@ -79,6 +85,18 @@ export const setupUpdateUserName = createAsyncThunk(
     return updateUserName(data, thunkAPI);
   }
 );
+export const setupGenerateQRCode = createAsyncThunk(
+  "auth/generateQRCode",
+  async (data, thunkAPI) => {
+    return generateQRCode(data, thunkAPI);
+  }
+);
+export const setupVerifyQRCode = createAsyncThunk(
+  "auth/verifyQRCode",
+  async (data, thunkAPI) => {
+    return verifyQRCode(data, thunkAPI);
+  }
+);
 
 export const slice = createSlice({
   name: "auth",
@@ -107,6 +125,9 @@ export const slice = createSlice({
     },
     updateUserState: (state, action) => {
       state.user = [{ ...state?.user[0], name: action.payload }];
+    },
+    resetVerifyCode: (state) => {
+      state.verifyCodeSuccess = false;
     },
   },
   extraReducers: (builder) => {
@@ -252,6 +273,44 @@ export const slice = createSlice({
           toast.error("An Error has occurred");
         }
       });
+    // QR Code Generator
+    builder
+      .addCase(setupGenerateQRCode.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGenerateQRCode.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.qrCode = payload;
+      })
+      .addCase(setupGenerateQRCode.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Verify Code
+    builder
+      .addCase(setupVerifyQRCode.pending, (state) => {
+        state.codeLoading = true;
+      })
+      .addCase(setupVerifyQRCode.fulfilled, (state, { payload }) => {
+        state.codeLoading = false;
+        if (payload?.valid === true) {
+          state.verifyCodeSuccess = true;
+        } else {
+          toast.error("Code Not Valid");
+        }
+      })
+      .addCase(setupVerifyQRCode.rejected, (state, action) => {
+        state.codeLoading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
   },
 });
 
@@ -264,6 +323,7 @@ export const {
   resetInternalResetPasswordSuccess,
   updateUserState,
   resetUpdateUserNameSuccess,
+  resetVerifyCode,
 } = slice.actions;
 
 export default slice.reducer;

@@ -124,26 +124,26 @@ const App = () => {
           <Route
             path="/reset-password"
             element={
-              <AuthProtectedRoutes>
+              // <AuthProtectedRoutes>
                 <ResetPassword />
-              </AuthProtectedRoutes>
+              // </AuthProtectedRoutes>
             }
           />
           <Route
             path="/login"
             element={
-              <AuthProtectedRoutes>
+              // <AuthProtectedRoutes>
                 <Login />
-              </AuthProtectedRoutes>
+              // </AuthProtectedRoutes>
             }
           />
 
           <Route
             path="/forgot-password"
             element={
-              <AuthProtectedRoutes>
+              // <AuthProtectedRoutes>
                 <ForgetPassword />
-              </AuthProtectedRoutes>
+              // </AuthProtectedRoutes>
             }
           />
           <Route

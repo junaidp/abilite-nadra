@@ -39,20 +39,30 @@ const Layout = () => {
     dispatch(changeAuthUser([]));
     navigate("/login");
   };
+  const tokenExpiration = () => {
+    toast.error("The token has expired, so you were logged out.", {
+      position: "top-right",
+      autoClose: false,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      toastId: "success1",
+    });
+    localStorage.removeItem("user");
+    localStorage.removeItem("company");
+    localStorage.removeItem("year");
+    dispatch(changeAuthUser([]));
+    navigate("/login");
+  };
 
   useIdleTimer({
     onIdle,
-    timeout: 600000, // 10 minutes in milliseconds
+    timeout: 3600000, // 60 minutes in milliseconds
     throttle: 500,
   });
-
-  React.useEffect(() => {
-    if (user[0]?.token) {
-      if (user[0]?.userId?.role[0]?.name === "ADMIN") {
-        navigate("/audit/dashboard");
-      }
-    }
-  }, [user]);
 
   React.useEffect(() => {
     const checkTokenExpiration = () => {
@@ -61,12 +71,20 @@ const Layout = () => {
         const decodedToken = jwtDecode(token);
         const currentTime = Date.now() / 1000;
         if (decodedToken.exp < currentTime) {
-          onIdle();
+          tokenExpiration();
         }
       }
     };
     checkTokenExpiration();
   }, [location]);
+
+  React.useEffect(() => {
+    if (user[0]?.token) {
+      if (user[0]?.userId?.role[0]?.name === "ADMIN") {
+        navigate("/audit/dashboard");
+      }
+    }
+  }, [user]);
 
   return (
     <React.Fragment>

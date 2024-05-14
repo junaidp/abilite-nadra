@@ -4,6 +4,7 @@ import Reporting from "./components/Reporting";
 import InformationRequest from "./components/InformationRequest";
 import TaskManagement from "./components/TaskManagement";
 import UserInfo from "./components/UserInfo";
+import TFA from "./components/TFA";
 import SupportingDocs from "./components/SupportingDocs";
 import { useDispatch } from "react-redux";
 import { resetAuthValues } from "../../../global-redux/reducers/auth/slice";
@@ -94,6 +95,17 @@ const ManagementAuditeeView = () => {
                 >
                   User Details
                 </button>
+                <button
+                  className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
+                  id="nav-tfa-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#nav-tfa"
+                  type="button"
+                  role="tab"
+                  aria-controls="nav-tfa"
+                >
+                  Two Factor Authentication
+                </button>
               </div>
             </nav>
           </div>
@@ -109,6 +121,7 @@ const ManagementAuditeeView = () => {
               <InformationRequest />
               <TaskManagement />
               <UserInfo />
+              <TFA />
             </div>
           </div>
         </div>

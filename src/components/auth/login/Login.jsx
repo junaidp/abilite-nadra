@@ -7,11 +7,15 @@ import { toast } from "react-toastify";
 import {
   setupLoginUser,
   changeAuthState,
+  changeAuthUser,
 } from "../../../global-redux/reducers/auth/slice";
+import QRCodeScannerDialog from "../modals/QRScanner";
+import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
   const [showpassword, setShowPassword] = React.useState(false);
-  const { loginEmail, loginPassword, loading, authSuccess } = useSelector(
+  const [showQRCodeScanner, setShowQRCodeScanner] = React.useState(false);
+  const { loginEmail, loginPassword, loading, authSuccess, user } = useSelector(
     (state) => state.auth
   );
   const dispatch = useDispatch();
@@ -43,13 +47,29 @@ const Login = () => {
   }
 
   React.useEffect(() => {
-    if (authSuccess) {
-      navigate("/audit/dashboard");
+    if (user[0]?.token && user[0]?.email) {
+      const decodedToken = jwtDecode(user[0]?.token);
+      const currentTime = Date.now() / 1000;
+      if (decodedToken.exp < currentTime) {
+        localStorage.removeItem("user");
+        localStorage.removeItem("company");
+        localStorage.removeItem("year");
+        dispatch(changeAuthUser([]));
+      } else {
+        setShowQRCodeScanner(true);
+      }
     }
-  }, [authSuccess]);
+  }, [user]);
 
   return (
     <section className="fxt-template-animation fxt-template-layout31">
+      {showQRCodeScanner && (
+        <div className="modal-compliance-check-list">
+          <div className="model-wrap-compliance-check-list">
+            <QRCodeScannerDialog setShowQRCodeScanner={setShowQRCodeScanner} />
+          </div>
+        </div>
+      )}
       <span className="fxt-shape fxt-animation-active"></span>
       <div className="fxt-content-wrap">
         <div className="fxt-heading-content">
