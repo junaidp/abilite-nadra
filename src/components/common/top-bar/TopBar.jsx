@@ -83,6 +83,16 @@ const TopBar = () => {
               </svg>
             </button>
           )}
+        {(user[0]?.userId?.role[0]?.name === "ADMIN" ||
+          user[0]?.userId?.employeeid?.userHierarchy ===
+            "Management_Auditee") && (
+          <button
+            className="btn btn-outline-primary   my-3 logoutOut-btn-dashboard"
+            onClick={handleLogout}
+          >
+            Logout
+          </button>
+        )}
 
         <div
           className="collapse navbar-collapse justify-content-end"
@@ -353,7 +363,7 @@ const TopBar = () => {
                           <span className="mb-1 d-block text-dark">
                             {user[0]?.userId?.role[0]?.name}
                           </span>
-                          <p className="mb-0 d-flex text-dark align-items-center gap-2">
+                          <p className="mb-0 d-flex text-dark align-items-center gap-2 word-break ">
                             <i className="fa fa-envelope fs-4"></i>{" "}
                             {user[0]?.email
                               ? user[0]?.email

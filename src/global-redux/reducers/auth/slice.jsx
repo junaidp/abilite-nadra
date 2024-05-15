@@ -191,7 +191,7 @@ export const slice = createSlice({
           ])
         );
         state.authSuccess = true;
-        toast.success("Login Success Redirecting!");
+        toast.success("Login Success!");
       })
       .addCase(setupLoginUser.rejected, (state, action) => {
         state.loading = false;
