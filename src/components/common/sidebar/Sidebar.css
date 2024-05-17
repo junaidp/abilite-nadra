@@ -16,6 +16,13 @@
   position: relative;
 }
 
+.link-wrap svg {
+  font-size: 20px !important;
+}
+.link-wrap-active svg {
+  font-size: 20px !important;
+}
+
 .page-wrapper {
   top: -66px;
   transition: all 0.5s linear;
@@ -194,7 +201,7 @@
 #smallScreenSidebar {
   display: none;
 }
-.smallSidebarYearDropDown{
+.smallSidebarYearDropDown {
   padding: 0px 13px;
 }
 

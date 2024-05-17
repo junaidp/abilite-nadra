@@ -14,7 +14,7 @@
   border: 1px solid lightgray;
   border-radius: 9px;
   box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
-  height: 340px;
+  /* height: 340px; */
 }
 
 .notification-wrap {

@@ -60,7 +60,7 @@ const Layout = () => {
 
   useIdleTimer({
     onIdle,
-    timeout: 3600000, // 60 minutes in milliseconds
+    timeout: 600000, // 10 minutes in milliseconds
     throttle: 500,
   });
 

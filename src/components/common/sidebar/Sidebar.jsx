@@ -3,6 +3,7 @@ import "./Sidebar.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   changeActiveLink,
   changeExpanded,
@@ -81,9 +82,7 @@ const Sidebar = () => {
                           handleMainItemClick(item?.route, item?.id)
                         }
                       >
-                        <span>
-                          <i className={item?.icon} id={item?.id} />
-                        </span>
+                        <FontAwesomeIcon icon={item?.icon} />
                         <ul>
                           <li>
                             <a>
@@ -132,12 +131,7 @@ const Sidebar = () => {
                                     : "link-wrap-active"
                                 }
                               >
-                                <span>
-                                  <i
-                                    className={subItem?.icon}
-                                    id={subItem?.id}
-                                  />
-                                </span>
+                                <FontAwesomeIcon icon={subItem?.icon} />
                                 <ul>
                                   <li>
                                     <a>
@@ -168,9 +162,8 @@ const Sidebar = () => {
                           handleMainItemClick(item?.route, item?.id)
                         }
                       >
-                        <span>
-                          <i className={item?.icon} id={item?.id} />
-                        </span>
+                        <FontAwesomeIcon icon={item?.icon} />
+
                         <ul>
                           <li>
                             <a>
@@ -219,12 +212,8 @@ const Sidebar = () => {
                                     : "link-wrap-active"
                                 }
                               >
-                                <span>
-                                  <i
-                                    className={subItem?.icon}
-                                    id={subItem?.id}
-                                  />
-                                </span>
+                                <FontAwesomeIcon icon={subItem?.icon} />
+
                                 <ul>
                                   <li>
                                     <a>

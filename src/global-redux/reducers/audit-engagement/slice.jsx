@@ -15,6 +15,7 @@ import {
   addAuditStepObservation,
   updateAuditStepObservation,
   updateComplianceCheckList,
+  submitComplianceCheckList,
   approveComplianceCheckList,
   updateRiskControlMatrixApproval,
   approveRiskControlMatrixObjective,
@@ -158,6 +159,12 @@ export const setupUpdateComplianceCheckList = createAsyncThunk(
   "auditEngagement/updateComplianceCheckList",
   async (data, thunkAPI) => {
     return updateComplianceCheckList(data, thunkAPI);
+  }
+);
+export const setupSubmitComplianceCheckList = createAsyncThunk(
+  "auditEngagement/submitComplianceCheckList",
+  async (data, thunkAPI) => {
+    return submitComplianceCheckList(data, thunkAPI);
   }
 );
 export const setupApproveComplianceCheckList = createAsyncThunk(
@@ -628,9 +635,27 @@ export const slice = createSlice({
       .addCase(setupUpdateComplianceCheckList.fulfilled, (state) => {
         state.loading = false;
         state.auditEngagementAddSuccess = true;
-        toast.success("Compliance Check List Updated Successfully");
+        toast.success("Compliance checklist saved successfully");
       })
       .addCase(setupUpdateComplianceCheckList.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Submit Compliance CheckList
+    builder
+      .addCase(setupSubmitComplianceCheckList.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupSubmitComplianceCheckList.fulfilled, (state) => {
+        state.loading = false;
+        state.auditEngagementAddSuccess = true;
+        toast.success("Compliance checklist submitted successfully");
+      })
+      .addCase(setupSubmitComplianceCheckList.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);
@@ -646,7 +671,7 @@ export const slice = createSlice({
       .addCase(setupApproveComplianceCheckList.fulfilled, (state) => {
         state.loading = false;
         state.auditEngagementAddSuccess = true;
-        toast.success("Compliance Check List Approved Successfully");
+        toast.success("Compliance checklist approved successfully");
       })
       .addCase(setupApproveComplianceCheckList.rejected, (state, action) => {
         state.loading = false;
@@ -958,7 +983,7 @@ export const slice = createSlice({
       .addCase(setupUploadAuditStepCheckListFile.fulfilled, (state) => {
         state.loading = false;
         state.auditEngagementObservationAddSuccess = true;
-        toast.success("Audit Step CheckList File Uploaded Successfully");
+        toast.success("File Uploaded Successfully");
       })
       .addCase(setupUploadAuditStepCheckListFile.rejected, (state, action) => {
         state.loading = false;
@@ -976,7 +1001,7 @@ export const slice = createSlice({
       .addCase(setupDeleteAuditStepCheckListFile.fulfilled, (state) => {
         state.loading = false;
         state.auditEngagementObservationAddSuccess = true;
-        toast.success("Audit Step CheckList File Deleted Successfully");
+        toast.success("File Deleted Successfully");
       })
       .addCase(setupDeleteAuditStepCheckListFile.rejected, (state, action) => {
         state.loading = false;
@@ -994,7 +1019,7 @@ export const slice = createSlice({
       .addCase(setupUpdateAuditStepCheckListFile.fulfilled, (state) => {
         state.loading = false;
         state.auditEngagementObservationAddSuccess = true;
-        toast.success("Audit Step CheckList File Updated Successfully");
+        toast.success("File Uploaded Successfully");
       })
       .addCase(setupUpdateAuditStepCheckListFile.rejected, (state, action) => {
         state.loading = false;

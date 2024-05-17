@@ -45894,10 +45894,10 @@ html[dir=rtl] .welcome-bg-img {
   color: #fff
 }
 
-.message-body {
+/* .message-body {
   max-height: 360px;
   overflow-y: scroll;
-}
+} */
 
 .arrow-none.dropdown-toggle::after {
   display: none

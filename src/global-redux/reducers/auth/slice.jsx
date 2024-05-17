@@ -191,7 +191,7 @@ export const slice = createSlice({
           ])
         );
         state.authSuccess = true;
-        toast.success("Login Success!");
+        toast.success("Please enter 6 digit code from google authenticator!");
       })
       .addCase(setupLoginUser.rejected, (state, action) => {
         state.loading = false;
@@ -299,6 +299,7 @@ export const slice = createSlice({
         state.codeLoading = false;
         if (payload?.valid === true) {
           state.verifyCodeSuccess = true;
+          toast.success("Login Success, Redirecting!");
         } else {
           toast.error("Code Not Valid");
         }

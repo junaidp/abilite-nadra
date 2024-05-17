@@ -70,7 +70,7 @@ export const slice = createSlice({
       .addCase(setupAddAuditableUnit.fulfilled, (state, { payload }) => {
         state.loading = false;
         state.auditableUnitAddSuccess = true;
-        toast.success("Unit Added Successfully");
+        toast.success("Auditable Unit Added Successfully");
       })
       .addCase(setupAddAuditableUnit.rejected, (state, { payload }) => {
         state.loading = false;
@@ -90,7 +90,7 @@ export const slice = createSlice({
       .addCase(setupEditAuditableUnit.fulfilled, (state, { payload }) => {
         state.loading = false;
         state.auditableUnitAddSuccess = true;
-        toast.success("Unit Edited Successfully");
+        toast.success("Auditable Unit Updated Successfully");
       })
       .addCase(setupEditAuditableUnit.rejected, (state, { payload }) => {
         state.loading = false;

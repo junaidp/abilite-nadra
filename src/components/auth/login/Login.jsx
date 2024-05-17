@@ -110,7 +110,8 @@ const Login = () => {
                     <div className="form-group relative">
                       <input
                         id="password"
-                        type={showpassword ? "password" : "string"}
+                        // type={showpassword ? "password" : "string"}
+                        type="password"
                         className="form-control"
                         placeholder="********"
                         required="required"
@@ -119,8 +120,8 @@ const Login = () => {
                         value={loginPassword}
                         onChange={handleChange}
                       />
-                      <div className="t-12 r-12 absolute">
-                        {!showpassword && (
+                      {/* <div className="t-12 r-12 absolute"> */}
+                      {/* {!showpassword && (
                           <div
                             onClick={() => setShowPassword(true)}
                             className="cursor-pointer"
@@ -136,7 +137,7 @@ const Login = () => {
                             <i className="bi bi-eye-slash-fill"></i>
                           </div>
                         )}
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                   <div className="col-12">

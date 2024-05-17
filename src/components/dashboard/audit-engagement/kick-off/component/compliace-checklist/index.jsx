@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setupUpdateComplianceCheckList } from "../../../../../../global-redux/reducers/audit-engagement/slice";
+import { setupSubmitComplianceCheckList } from "../../../../../../global-redux/reducers/audit-engagement/slice";
 import axios from "axios";
 import { toast } from "react-toastify";
 import TableRow from "./components/TableRow";
@@ -57,7 +57,7 @@ const ComplianceCheckList = ({
 
   function handleSubmit(item) {
     if (!loading) {
-      dispatch(setupUpdateComplianceCheckList({ ...item, submitted: true }));
+      dispatch(setupSubmitComplianceCheckList({ ...item, submitted: true }));
     }
   }
   function handleApprove(item) {
@@ -205,7 +205,7 @@ const ComplianceCheckList = ({
                         <th className="f-80">Sr No.</th>
                         <th>Sub Location Name</th>
                         <th>Status</th>
-                        <th>Change Request</th>
+                        {/* <th>Change Request</th> */}
                         <th>Status</th>
                         <th>Actions</th>
                       </tr>
