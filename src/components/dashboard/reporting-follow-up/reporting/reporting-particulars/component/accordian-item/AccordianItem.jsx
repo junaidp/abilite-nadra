@@ -140,10 +140,11 @@ const AccordianItem = ({
             name="implication"
             onChange={(event) => handleChange(event, item?.id)}
             disabled={handleAllowEditSection1(item) === true ? false : true}
+            maxlength="500"
           ></textarea>
-          <label className="word-limit-info label-text mb-3">
-            Maximum 1500 words
-          </label>
+          <p className="word-limit-info label-text mb-2">
+            Maximum 500 characters
+          </p>
           <br />
 
           <label>Recommended Action Step:</label>
@@ -156,10 +157,11 @@ const AccordianItem = ({
             name="recommendedActionStep"
             onChange={(event) => handleChange(event, item?.id)}
             disabled={handleAllowEditSection1(item) === true ? false : true}
+            maxlength="500"
           ></textarea>
-          <label className="word-limit-info label-text mb-3">
-            Maximum 1500 words
-          </label>
+          <p className="word-limit-info label-text mb-2">
+            Maximum 500 characters
+          </p>
           <br />
 
           <div className="col-lg-12 mb-4">
@@ -186,17 +188,20 @@ const AccordianItem = ({
                   value={item?.managementComments || ""}
                   name="managementComments"
                   onChange={(event) => handleChange(event, item?.id)}
+                  maxlength="500"
                 ></textarea>
-                <label className="word-limit-info label-text mb-3">
-                  Maximum 1500 words
-                </label>
+                <p className="word-limit-info label-text mb-2">
+                  Maximum 500 characters
+                </p>
                 <br />
                 <label className="py-1">Implementation Date:</label>
                 <input
                   type="date"
                   className="form-control"
                   id="exampleFormControlInput1"
-                  value={moment.utc(item?.implementationDate).format("YYYY-MM-DD")}
+                  value={moment
+                    .utc(item?.implementationDate)
+                    .format("YYYY-MM-DD")}
                   name="implementationDate"
                   onChange={(event) => handleChange(event, item?.id)}
                 />

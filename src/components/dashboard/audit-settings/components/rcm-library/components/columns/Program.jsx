@@ -48,7 +48,11 @@ const Program = ({
                     readOnly
                     id="exampleFormCon"
                     rows="3"
+                    maxlength="500"
                   ></textarea>
+                  <label className="word-limit-info label-text">
+                    Maximum 500 characters
+                  </label>{" "}
                   {(userRole === "ADMIN" || userHierarchy === "IAH") && (
                     <div className="btn btn-labeled btn-primary  shadow mt-2 float-end mb-2">
                       Get RCM
@@ -94,7 +98,11 @@ const Program = ({
                           readOnly
                           id="exampleFormCon"
                           rows="3"
+                          maxlength="500"
                         ></textarea>
+                        <label className="word-limit-info label-text">
+                          Maximum 500 characters
+                        </label>{" "}
                         {(userRole === "ADMIN" || userHierarchy === "IAH") && (
                           <div className="btn btn-labeled btn-primary  shadow mt-2 float-end mb-2">
                             Get RCM
@@ -158,7 +166,11 @@ const Program = ({
                             }
                             name="description"
                             rows="3"
+                            maxlength="500"
                           ></textarea>
+                          <label className="word-limit-info label-text">
+                            Maximum 500 characters
+                          </label>{" "}
                           {program?.editable === true ? (
                             <div className="col-lg-12">
                               <div

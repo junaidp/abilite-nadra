@@ -106,8 +106,11 @@ const BusinessObjectiveMapProcess = ({
                           ? true
                           : false
                       }
+                      maxlength="500"
                     ></textarea>
-                    <p className="word-limit-info mb-0">Maximum 1500 words</p>
+                    <label className="word-limit-info label-text mb-2">
+                      Maximum 500 characters
+                    </label>
                   </div>
 
                   <div className="col-lg-12">
@@ -141,7 +144,9 @@ const BusinessObjectiveMapProcess = ({
                       className={`btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow ${
                         loading && "disabled"
                       }`}
-                      onClick={()=>handleSaveBusinessObjectiveMapProcess(item)}
+                      onClick={() =>
+                        handleSaveBusinessObjectiveMapProcess(item)
+                      }
                     >
                       <span className="btn-label me-2">
                         <i className="fa fa-check-circle"></i>

@@ -48,7 +48,11 @@ const Control = ({
                     readOnly
                     id="exampleFormCon"
                     rows="3"
+                    maxlength="500"
                   ></textarea>
+                  <label className="word-limit-info label-text">
+                    Maximum 500 characters
+                  </label>{" "}
                   {(userRole === "ADMIN" || userHierarchy === "IAH") && (
                     <div>
                       <div className="btn btn-labeled btn-primary  shadow mt-2 float-end mb-2">
@@ -108,7 +112,11 @@ const Control = ({
                       }
                       name="description"
                       disabled={control?.editable === false ? true : false}
+                      maxlength="500"
                     ></textarea>
+                    <label className="word-limit-info label-text">
+                      Maximum 500 characters
+                    </label>{" "}
                     {control?.editable === true ? (
                       <div className="col-lg-12  ">
                         <div
@@ -184,7 +192,11 @@ const Control = ({
                                 id="exampleFormCon"
                                 rows="3"
                                 readOnly
+                                maxlength="500"
                               ></textarea>
+                              <label className="word-limit-info label-text">
+                                Maximum 500 characters
+                              </label>{" "}
                               {(userRole === "ADMIN" ||
                                 userHierarchy === "IAH") && (
                                 <div className="btn btn-labeled btn-primary  shadow mt-2 float-end mb-2 mt-2">

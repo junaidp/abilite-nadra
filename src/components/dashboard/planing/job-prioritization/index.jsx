@@ -222,10 +222,11 @@ const JobPrioritization = () => {
                               }
                               disabled={item?.editable === true ? false : true}
                               name="comments"
+                              maxlength="500"
                             ></textarea>
-                            <label className="word-limit-info label-text">
-                              Maximum 1500 words
-                            </label>
+                            <p className="word-limit-info label-text mb-2">
+                              Maximum 500 characters
+                            </p>
                           </td>
                           <td className="width-100">
                             <select

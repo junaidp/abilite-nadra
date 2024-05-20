@@ -40,7 +40,11 @@ const ExtraFields = ({
                     onChange={(event) =>
                       handleChangeExtraFields(event, item?.id)
                     }
+                    maxlength="500"
                   ></textarea>
+                  <p className="word-limit-info label-text mb-2">
+                    Maximum 500 characters
+                  </p>{" "}
                 </div>
               </div>
               <div className="row mb-3">
@@ -56,7 +60,11 @@ const ExtraFields = ({
                     onChange={(event) =>
                       handleChangeExtraFields(event, item?.id)
                     }
+                    maxlength="500"
                   ></textarea>
+                  <p className="word-limit-info label-text mb-2">
+                    Maximum 500 characters
+                  </p>{" "}
                 </div>
               </div>
               <div className="col-lg-4">
@@ -116,10 +124,11 @@ const ExtraFields = ({
                       onChange={(event) =>
                         handleChangeExtraField(event, singleItem?.id)
                       }
+                      maxlength="500"
                     ></textarea>
-                    <label className="word-limit-info label-text">
-                      Maximum 5000 words
-                    </label>
+                    <p className="word-limit-info label-text mb-2">
+                      Maximum 500 characters
+                    </p>
                   </div>
                 </div>
                 <div className="row mb-3">
@@ -135,10 +144,11 @@ const ExtraFields = ({
                       onChange={(event) =>
                         handleChangeExtraField(event, singleItem?.id)
                       }
+                      maxlength="500"
                     ></textarea>
-                    <label className="word-limit-info label-text">
-                      Maximum 5000 words
-                    </label>
+                    <p className="word-limit-info label-text mb-2">
+                      Maximum 500 characters
+                    </p>
                   </div>
                 </div>
                 <hr />

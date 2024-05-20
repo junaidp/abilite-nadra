@@ -138,6 +138,13 @@ body {
 .min-h-100 {
   min-height: 100vh !important;
 }
+.min-height-100 {
+  min-height: 100px !important;
+}
+
+.pb-70{
+  padding-bottom: 70px !important; 
+}
 
 .w-10 {
   width: 10px !important;

@@ -112,7 +112,7 @@ const AddCheckListManagementDialog = ({ setCheckListManagementDialog }) => {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.subject}
-              />
+              ></input>
               {formik.touched.subject && formik.errors.subject && (
                 <div className="error">{formik.errors.subject}</div>
               )}
@@ -132,8 +132,11 @@ const AddCheckListManagementDialog = ({ setCheckListManagementDialog }) => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.particulars}
+              maxlength="500"
             ></textarea>
-
+            <label className="word-limit-info label-text">
+              Maximum 500 characters
+            </label>
             {formik.touched.particulars && formik.errors.particulars && (
               <div className="error">{formik.errors.particulars}</div>
             )}

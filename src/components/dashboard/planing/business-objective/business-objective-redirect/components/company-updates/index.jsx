@@ -31,15 +31,12 @@ const CompanyUpdates = ({
         className="accordion-collapse collapse"
         data-bs-parent="#accordionFlushExample"
       >
-        <div className="accordion-body">
+        <div className="accordion-body pb-70">
           <div className="d-flex justify-content-between">
-            <label>Company Update</label>
-            <a href="#" className="link-underline-muted decoration-none">
-              AI Generate
-            </a>
+            <label className="mb-2">Company Update</label>
           </div>
           <textarea
-            className="form-control w-100"
+            className="form-control w-100 min-height-100"
             placeholder="Enter update"
             type="textarea"
             name="companyUpdate"
@@ -53,14 +50,17 @@ const CompanyUpdates = ({
                 ? true
                 : false
             }
+            maxlength="500"
           ></textarea>
-          <p className="word-limit-info mb-0">Maximum 1500 words</p>
+          <p className="word-limit-info label-text mb-2">
+            Maximum 500 characters
+          </p>
           {(planingEngagementSingleObject?.complete === false ||
             (planingEngagementSingleObject?.complete === true &&
               planingEngagementSingleObject?.locked === false &&
               user[0]?.userId?.employeeid?.userHierarchy === "IAH")) && (
             <button
-              className={`btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow ${
+              className={`btn btn-labeled btn-primary px-3 mb-2  shadow float-end ${
                 loading && "disabled"
               }`}
               onClick={handleUpdateBusinessObjective}

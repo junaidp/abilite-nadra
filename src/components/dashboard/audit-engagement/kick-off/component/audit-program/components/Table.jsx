@@ -69,7 +69,11 @@ const Table = ({
                       name="description"
                       onChange={(event) => handleChange(event, item?.id)}
                       disabled={item?.editable === true ? false : true}
+                      maxlength="500"
                     ></textarea>
+                    <p className="word-limit-info label-text mb-2">
+                      Maximum 500 characters
+                    </p>
                   </td>
                   {handleAllowEdit() === true && (
                     <td>

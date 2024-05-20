@@ -133,8 +133,11 @@ const Rating = ({
         }
         name="description"
         disabled={risk?.editable ? false : true}
-      ></textarea>
-      <label className="word-limit-info label-text">Maximum 1500 words</label>
+        maxlength="500"
+        ></textarea>
+        <p className="word-limit-info label-text mb-2">
+          Maximum 500 characters
+        </p>
       {handleAllowEdit() === true && (
         <i
           className="fa fa-edit   f-18 cursor-pointer  mt-3"

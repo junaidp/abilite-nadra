@@ -108,8 +108,11 @@ const BusinessObjectiveMapProcess = ({
                           ? true
                           : false
                       }
+                      maxlength="500"
                     ></textarea>
-                    <p className="word-limit-info mb-0">Maximum 1500 words</p>
+                    <p className="word-limit-info label-text mb-2">
+                      Maximum 500 characters
+                    </p>
                   </div>
 
                   <div className="col-lg-12">
