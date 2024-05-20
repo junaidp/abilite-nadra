@@ -52,7 +52,9 @@ const AddCheckListManagementDialog = ({ setShowQRCodeScanner }) => {
     <div className="px-4 py-4 min-h-70">
       <header className="section-header my-3    text-start d-flex align-items-center justify-content-between">
         <div className="mb-0 heading d-flex align-items-center">
-          <h2 className=" heading">Two Factor Authentication</h2>
+          <h2 className=" heading">
+            Two Factor Authentication({user[0]?.email})
+          </h2>
         </div>
       </header>
       <div class="wrapper ">

@@ -309,7 +309,7 @@ const PDFGenerator = ({ reportObject }) => {
                   ?.map((singleItem) => {
                     return (
                       <Text style={styles.h4}>
-                        {singleItem?.observationTitle}
+                        {singleItem?.observationTitle.slice(0, 40)}...
                       </Text>
                     );
                   })
@@ -323,7 +323,7 @@ const PDFGenerator = ({ reportObject }) => {
                 list?.reportingList?.map((singleItem) => {
                   return (
                     <Text style={styles.h4}>
-                      {singleItem?.observationTitle}
+                      {singleItem?.observationTitle.slice(0, 40)}...
                     </Text>
                   );
                 })
@@ -337,7 +337,7 @@ const PDFGenerator = ({ reportObject }) => {
               {reportObject?.intAuditExtraFieldsList?.map((singleItem) => {
                 return (
                   <Text style={styles.h4}>
-                    {singleItem?.heading.slice(0, 20)}
+                    {singleItem?.heading.slice(0, 40)}...
                   </Text>
                 );
               })}

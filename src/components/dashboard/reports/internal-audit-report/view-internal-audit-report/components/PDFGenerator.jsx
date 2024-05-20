@@ -304,7 +304,7 @@ const PDFGenerator = ({ reportObject }) => {
                 ?.map((singleItem) => {
                   return (
                     <Text style={styles.h4}>
-                      {singleItem?.observationTitle}
+                      {singleItem?.observationTitle.slice(0, 40)}...
                     </Text>
                   );
                 })}
@@ -317,7 +317,7 @@ const PDFGenerator = ({ reportObject }) => {
                 (singleItem) => {
                   return (
                     <Text style={styles.h4}>
-                      {singleItem?.observationTitle}
+                      {singleItem?.observationTitle.slice(0, 40)}...
                     </Text>
                   );
                 }
@@ -331,7 +331,7 @@ const PDFGenerator = ({ reportObject }) => {
               {reportObject?.intAuditExtraFieldsList?.map((singleItem) => {
                 return (
                   <Text style={styles.h4}>
-                    {singleItem?.heading.slice(0, 20)}
+                    {singleItem?.heading.slice(0, 40)}...
                   </Text>
                 );
               })}
@@ -467,7 +467,6 @@ const PDFGenerator = ({ reportObject }) => {
                 <View style={styles.findings}>
                   <Text
                     style={styles.indexNumber}
-                    break={index === 0 ? false : true}
                   >
                     Finding {index + 1}
                   </Text>

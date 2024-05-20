@@ -18,6 +18,8 @@ import {
   changeCompany,
   changeYear,
 } from "../../../global-redux/reducers/common/slice";
+import { faIdBadge } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const TopBar = () => {
   const [showUserProfile, setShowUserProfile] = React.useState(false);
@@ -380,16 +382,13 @@ const TopBar = () => {
                               className="py-8 px-7 mt-8 d-flex align-items-center"
                             >
                               <span className="d-flex align-items-center justify-content-center bg-light rounded-1 p-6">
-                                <img
-                                  src={accountIcon}
-                                  alt=""
-                                  width="24"
-                                  height="24"
+                                <FontAwesomeIcon
+                                  icon={faIdBadge}
+                                  style={{ fontSize: "30px" }}
                                 />
                               </span>
                               <div className="w-75 d-inline-block v-middle ps-3">
                                 <h6 className="mb-1 bg-hover-primary fw-semibold">
-                                  {" "}
                                   My Profile{" "}
                                 </h6>
                                 <span className="d-block text-dark">
@@ -402,8 +401,7 @@ const TopBar = () => {
                           className="btn btn-outline-primary w-75 my-3 logoutOut-btn"
                           onClick={handleLogout}
                         >
-                          {" "}
-                          Logout{" "}
+                          Logout
                         </button>
                       </div>
                     </div>
