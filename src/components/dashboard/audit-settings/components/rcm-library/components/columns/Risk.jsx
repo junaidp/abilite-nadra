@@ -54,7 +54,7 @@ const Risk = ({
               ></textarea>
               <label className="word-limit-info label-text">
                 Maximum 500 characters
-              </label>{" "}
+              </label>
               {risk?.editable === true ? (
                 <div className="col-lg-12">
                   <div
@@ -88,7 +88,7 @@ const Risk = ({
               {(userRole === "ADMIN" || userHierarchy === "IAH") && (
                 <div className="float-end w-100 mb-2">
                   <i
-                    className="fa fa-trash text-danger f-18  cursor-pointer"
+                    className="fa fa-trash text-danger f-18 mb-2 cursor-pointer"
                     onClick={() => deleteRCMRisk(risk?.id)}
                   ></i>
                   <hr />
@@ -98,15 +98,15 @@ const Risk = ({
               <div className="visibility-0">
                 {risk?.rcmLibraryControlRisk
                   ?.slice(1)
-                  ?.map((_, controlIndex) => {
+                  ?.map((control, controlIndex) => {
                     return (
                       <div key={controlIndex}>
                         <div className="col-lg-12 mb-2">
                           <select
-                            className="form-select"
+                            className="form-select "
                             aria-label="Default select example"
-                            value={1}
-                            readOnly
+                            value={control?.rating}
+                            name="rating"
                           >
                             <option value="">Select One</option>
                             <option value={1}>High</option>
@@ -115,28 +115,37 @@ const Risk = ({
                           </select>
                         </div>
                         <textarea
-                          className={`form-control ${
-                            userRole !== "ADMIN" &&
-                            userHierarchy !== "IAH" &&
-                            "mb-4"
-                          }`}
-                          value="Some"
+                          className="form-control "
+                          value={control?.description}
                           id="exampleFormCon"
                           rows="3"
-                          readOnly
+                          name="description"
                           maxlength="500"
                         ></textarea>
                         <label className="word-limit-info label-text">
                           Maximum 500 characters
-                        </label>{" "}
-                        {(userRole === "ADMIN" || userHierarchy === "IAH") && (
-                          <div className="btn btn-labeled btn-primary  shadow mt-2 float-end  mt-2 mb-2">
-                            Save
+                        </label>
+                        {control?.editable === true ? (
+                          <div className="col-lg-12  ">
+                            <div
+                              className={`btn btn-labeled btn-primary  shadow mt-2 float-end mb-4`}
+                            >
+                              Save
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="mt-2 mb-4">
+                            {(userRole === "ADMIN" ||
+                              userHierarchy === "IAH") && (
+                              <div className="float-end">
+                                <i className="fa fa-edit mb-4 f-18"></i>
+                              </div>
+                            )}
                           </div>
                         )}
                         {(userRole === "ADMIN" || userHierarchy === "IAH") && (
-                          <div className="float-end w-100 mb-2">
-                            <i className="fa fa-trash text-danger f-18  cursor-pointer"></i>
+                          <div className="float-end w-100">
+                            <i className="fa fa-trash text-danger f-18 mb-2 cursor-pointer"></i>
                             <hr />
                           </div>
                         )}

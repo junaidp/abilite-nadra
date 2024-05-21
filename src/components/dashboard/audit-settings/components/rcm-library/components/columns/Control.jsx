@@ -25,14 +25,14 @@ const Control = ({
           <div key={riskIndex}>
             {/* Hidden Only */}
             {risk?.rcmLibraryControlRisk?.length === 0 && (
-              <div className="visibility-0 mb-2">
+              <div className="visibility-0">
                 <div>
                   <div className="col-lg-12 mb-2">
                     <select
                       className="form-select "
                       aria-label="Default select example"
-                      value={1}
-                      readOnly
+                      value={risk?.rating}
+                      name="rating"
                     >
                       <option value="">Select One</option>
                       <option value={1}>High</option>
@@ -41,23 +41,31 @@ const Control = ({
                     </select>
                   </div>
                   <textarea
-                    className={`form-control ${
-                      userRole !== "ADMIN" && userHierarchy !== "IAH" && "mb-4"
-                    }`}
-                    value="some"
-                    readOnly
+                    className="form-control"
+                    value={risk?.description}
                     id="exampleFormCon"
                     rows="3"
+                    name="description"
                     maxlength="500"
                   ></textarea>
                   <label className="word-limit-info label-text">
                     Maximum 500 characters
-                  </label>{" "}
-                  {(userRole === "ADMIN" || userHierarchy === "IAH") && (
-                    <div>
-                      <div className="btn btn-labeled btn-primary  shadow mt-2 float-end mb-2">
-                        Get RCM
+                  </label>
+                  {risk?.editable === true ? (
+                    <div className="col-lg-12">
+                      <div
+                        className={`btn btn-labeled btn-primary  shadow mt-2 float-end mb-4`}
+                      >
+                        Save
                       </div>
+                    </div>
+                  ) : (
+                    <div className="mt-2 mb-4">
+                      {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+                        <div className="float-end">
+                          <i className="fa fa-edit mb-4 f-18"></i>
+                        </div>
+                      )}
                     </div>
                   )}
                   {(userRole === "ADMIN" || userHierarchy === "IAH") && (
@@ -116,7 +124,7 @@ const Control = ({
                     ></textarea>
                     <label className="word-limit-info label-text">
                       Maximum 500 characters
-                    </label>{" "}
+                    </label>
                     {control?.editable === true ? (
                       <div className="col-lg-12  ">
                         <div
@@ -166,15 +174,15 @@ const Control = ({
                     <div className="visibility-0">
                       {control?.rcmLibraryAuditProgramsList
                         ?.slice(1)
-                        ?.map((_, programIndex) => {
+                        ?.map((program, programIndex) => {
                           return (
                             <div key={programIndex}>
                               <div className="col-lg-12 mb-2">
                                 <select
-                                  className="form-select"
+                                  className="form-select "
                                   aria-label="Default select example"
-                                  value={1}
-                                  readOnly
+                                  value={program?.rating}
+                                  name="rating"
                                 >
                                   <option value="">Select One</option>
                                   <option value={1}>High</option>
@@ -183,30 +191,38 @@ const Control = ({
                                 </select>
                               </div>
                               <textarea
-                                className={`form-control ${
-                                  userRole !== "ADMIN" &&
-                                  userHierarchy !== "IAH" &&
-                                  "mb-4"
-                                }`}
-                                value="Some"
+                                className="form-control"
+                                value={program?.description}
                                 id="exampleFormCon"
+                                name="description"
                                 rows="3"
-                                readOnly
                                 maxlength="500"
                               ></textarea>
                               <label className="word-limit-info label-text">
                                 Maximum 500 characters
-                              </label>{" "}
-                              {(userRole === "ADMIN" ||
-                                userHierarchy === "IAH") && (
-                                <div className="btn btn-labeled btn-primary  shadow mt-2 float-end mb-2 mt-2">
-                                  Save
+                              </label>
+                              {program?.editable === true ? (
+                                <div className="col-lg-12">
+                                  <div
+                                    className={`btn btn-labeled btn-primary  shadow mt-2 float-end  mb-4`}
+                                  >
+                                    Save
+                                  </div>
+                                </div>
+                              ) : (
+                                <div className="mt-2 mb-4">
+                                  {(userRole === "ADMIN" ||
+                                    userHierarchy === "IAH") && (
+                                    <div className="float-end">
+                                      <i className="fa fa-edit mb-4  f-18"></i>
+                                    </div>
+                                  )}
                                 </div>
                               )}
                               {(userRole === "ADMIN" ||
                                 userHierarchy === "IAH") && (
-                                <div className="float-end w-100 mb-2">
-                                  <i className="fa fa-trash text-danger f-18  cursor-pointer"></i>
+                                <div className="float-end w-100">
+                                  <i className="fa fa-trash text-danger f-18 mb-2 cursor-pointer"></i>
                                   <hr />
                                 </div>
                               )}

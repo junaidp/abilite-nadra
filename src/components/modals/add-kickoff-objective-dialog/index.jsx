@@ -77,7 +77,11 @@ const AddKickOffObjectiveDialog = ({
               required="required"
               value={description}
               onChange={(event) => setDescription(event?.target?.value)}
+              maxlength="2000"
             ></textarea>
+            <label className="word-limit-info label-text">
+              Maximum 2000 characters
+            </label>
           </div>
         </div>
       </div>

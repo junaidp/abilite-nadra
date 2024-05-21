@@ -51,11 +51,14 @@ const FeedBackDialog = ({ setFeedBackDialog, currentPlanSummaryId }) => {
               required="required"
               value={description}
               onChange={(event) => setDescription(event?.target?.value)}
+              maxlength="2000"
             ></textarea>
+            <label className="word-limit-info label-text">
+              Maximum 2000 characters
+            </label>
           </div>
         </div>
       </div>
-
       <div className="row py-3">
         <div className="col-lg-6 text-end">
           <button

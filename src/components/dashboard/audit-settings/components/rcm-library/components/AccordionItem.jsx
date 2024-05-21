@@ -389,7 +389,7 @@ const AccordionItem = ({
                       <tr>
                         <th>Objective</th>
                         <th>Risk</th>
-                        <th>Controls</th>
+                        <th>Control</th>
                         <th>Program</th>
                       </tr>
                     </thead>
