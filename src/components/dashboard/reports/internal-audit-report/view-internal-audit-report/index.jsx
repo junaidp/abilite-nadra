@@ -65,7 +65,7 @@ const ViewInternalAuditReport = () => {
         "Interal Audit Report Not Found"
       ) : (
         <div className="mb-4">
-          <Header />
+          <Header singleInternalAuditReport={singleInternalAuditReport} />
           <ReportFirstLayout
             singleInternalAuditReport={singleInternalAuditReport}
           />

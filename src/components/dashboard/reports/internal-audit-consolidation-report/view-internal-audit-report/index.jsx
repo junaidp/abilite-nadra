@@ -16,9 +16,9 @@ import RichTextFields from "./components/RichTextElements";
 import KeyFindings from "./components/KeyFindings";
 import AuditExtraFields from "./components/AuditExtraFields";
 import Header from "./components/Header";
-import PDFGenerator from "./components/PDFGenerator";
 import { PDFViewer } from "@react-pdf/renderer";
 import FileUpload from "./components/FileUpload";
+import PDFGenerator from "./components/PDFGenerator";
 
 const ViewInternalAuditReport = () => {
   const dispatch = useDispatch();
@@ -63,7 +63,7 @@ const ViewInternalAuditReport = () => {
         "Internal Audit Consolidation  Report Not Found"
       ) : (
         <div className="mb-4">
-          <Header />
+          <Header singleInternalAuditReport={singleInternalAuditReport} />
           <ReportFirstLayout
             singleInternalAuditReport={singleInternalAuditReport}
           />

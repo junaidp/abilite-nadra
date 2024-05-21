@@ -10,12 +10,11 @@ import { CircularProgress } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import moment from "moment";
 import DeleteDialog from "./dialogs/DeleteDialog";
-import MyDocument from "./view-internal-audit-report/components/PDFGenerator";
-import { PDFDownloadLink } from "@react-pdf/renderer";
 import SubmitDialog from "./dialogs/SubmitDialog";
 import ApproveDialog from "./dialogs/ApproveDialog";
 import FeedBackDialog from "./dialogs/FeedBackDialog";
 import ViewFeedBackDialog from "./dialogs/ViewFeedBackDialog";
+import Tooltip from "@mui/material/Tooltip";
 
 const InternalAuditReport = () => {
   const navigate = useNavigate();
@@ -253,20 +252,7 @@ const InternalAuditReport = () => {
                                     Approve
                                   </div>
                                 )}
-                              {item?.submitted === true && (
-                                <div className="col-lg-3">
-                                  <PDFDownloadLink
-                                    document={
-                                      <MyDocument reportObject={item} />
-                                    }
-                                    fileName="consolidation.pdf"
-                                  >
-                                    {({ blob, url, loading, error }) =>
-                                      "Download pdf!"
-                                    }
-                                  </PDFDownloadLink>
-                                </div>
-                              )}
+
                               {item?.submitted === true &&
                                 item?.approved === false &&
                                 user[0]?.userId?.employeeid?.userHierarchy ===
@@ -291,6 +277,21 @@ const InternalAuditReport = () => {
                                 >
                                   View FeedBack
                                 </div>
+                              )}
+                              {item?.submitted === true && (
+                                <Tooltip
+                                  title="Link to download pdf"
+                                  placement="top"
+                                >
+                                  <i
+                                    className="fa fa-download mt-2 f-18  cursor-pointer"
+                                    onClick={() =>
+                                      navigate(
+                                        `/audit/view-internal-audit-report?reportId=${item?.id}`
+                                      )
+                                    }
+                                  ></i>
+                                </Tooltip>
                               )}
                             </div>
                           </td>
