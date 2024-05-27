@@ -56,7 +56,7 @@ const ViewInternalAuditReport = () => {
   }, [reportId, user]);
 
   return (
-    <div>
+    <div className="overflow-y-hidden">
       {loading ? (
         <CircularProgress />
       ) : singleInternalAuditReport[0]?.error === "Not Found" ||
@@ -69,9 +69,7 @@ const ViewInternalAuditReport = () => {
           <ReportFirstLayout
             singleInternalAuditReport={singleInternalAuditReport}
           />
-          <div className="mt-4">
-            <FileUpload item={singleInternalAuditReport} />
-          </div>
+
           <RichTextFields
             singleInternalAuditReport={singleInternalAuditReport}
           />
@@ -88,6 +86,9 @@ const ViewInternalAuditReport = () => {
                 return <FollowUpItem key={index} item={item} />;
               }
             )}
+          </div>
+          <div className="mt-4">
+            <FileUpload item={singleInternalAuditReport} />
           </div>
         </div>
       )}

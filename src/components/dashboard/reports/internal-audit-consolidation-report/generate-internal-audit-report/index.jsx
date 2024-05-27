@@ -202,7 +202,7 @@ const GenerateInternalAuditReport = () => {
   }, []);
 
   return (
-    <div>
+    <div className="overflow-y-hidden">
       <Header />
       {Object.keys(internalAuditReportObject).length === 0 &&
         internalAuditReportObject.constructor === Object && (

@@ -171,7 +171,7 @@ const UpdateInternalAuditReport = () => {
   }, [reportId, user]);
 
   return (
-    <div>
+    <div className="overflow-y-hidden">
       {loading ? (
         <CircularProgress />
       ) : singleInternalAuditReport[0]?.error === "Not Found" ||

@@ -15,7 +15,7 @@ const ExtraFields = ({
     <div>
       <div className="row my-3">
         <div className="col-lg-12">
-          <div className="sub-heading  fw-bold">Audit Extra Fields List</div>
+          <div className="sub-heading  fw-bold">Add Additional Fields</div>
         </div>
       </div>
       {reportObject?.intAuditExtraFieldsList?.length === 0 ? (

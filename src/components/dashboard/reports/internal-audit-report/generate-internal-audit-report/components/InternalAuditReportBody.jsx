@@ -89,9 +89,7 @@ const InternalAuditReportBody = ({
         reportObject={reportObject}
         handleChangeReportObject={handleChangeReportObject}
       />
-      <div className="mt-4">
-        <FileUpload item={reportObject} />
-      </div>
+
       {/* Editors Start */}
       <div className="border px-3 py-2  mt-3 rounded">
         <div className="row mb-3">
@@ -166,6 +164,9 @@ const InternalAuditReportBody = ({
             Maximum 5000 words
           </label>
         </div>
+      </div>
+      <div className="mt-4">
+        <FileUpload item={reportObject} />
       </div>
 
       <div className="row my-3">

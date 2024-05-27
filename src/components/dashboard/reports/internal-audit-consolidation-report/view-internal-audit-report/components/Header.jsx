@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import PDFGenerator from "./PDFGenerator";
+import moment from "moment";
 
 const Header = ({ singleInternalAuditReport }) => {
   let navigate = useNavigate();
@@ -23,7 +24,9 @@ const Header = ({ singleInternalAuditReport }) => {
               document={
                 <PDFGenerator reportObject={singleInternalAuditReport} />
               }
-              fileName="consolidation.pdf"
+              fileName={`${singleInternalAuditReport?.reportName}_${moment
+                .utc(singleInternalAuditReport?.reportDate)
+                .format("YYYY-MM-DD")}.pdf`}
             >
               {() => "Download pdf!"}
             </PDFDownloadLink>

@@ -5,7 +5,7 @@ const AuditExtraFields = ({ singleInternalAuditReport }) => {
     <div>
       <div className="row my-3">
         <div className="col-lg-12">
-          <div className="sub-heading  fw-bold">Audit Extra Fields List</div>
+          <div className="sub-heading  fw-bold">Additional Fields</div>
         </div>
       </div>
       {singleInternalAuditReport?.intAuditExtraFieldsList?.map(
