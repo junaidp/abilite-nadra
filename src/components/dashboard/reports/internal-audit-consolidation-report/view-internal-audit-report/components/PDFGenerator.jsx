@@ -2,6 +2,7 @@ import logo from "../../../../../../assets/logo.png";
 import moment from "moment";
 import React from "react";
 import font from "../../../../../../font/Poppins-Medium.ttf";
+import Html from "react-pdf-html";
 import {
   Document,
   Page,
@@ -11,7 +12,6 @@ import {
   Image,
   Font,
 } from "@react-pdf/renderer";
-import { convert } from "html-to-text";
 Font.register({
   family: "Poppins",
   src: font,
@@ -251,15 +251,6 @@ const styles = StyleSheet.create({
 });
 
 const PDFGenerator = ({ reportObject }) => {
-  // const [pages, setPages] = React.useState({
-  //   overView: "",
-  //   executiveSummary: "",
-  //   auditPurpose: "",
-  //   summaryOfKeyFindings: "",
-  //   allFindings: "",
-  //   extraFields: "",
-  //   annexure: "",
-  // });
   return (
     <Document>
       <Page style={styles.firstPage} size="A4">
@@ -425,18 +416,14 @@ const PDFGenerator = ({ reportObject }) => {
         <View style={styles.page2} break>
           <Text style={styles.contents}>EXECUTIVE SUMMARY </Text>
           <View>
-            <Text style={styles.h4}>
-              {convert(reportObject?.executiveSummary, { tables: true })}
-            </Text>
+            <Html>{reportObject?.executiveSummary}</Html>
           </View>
         </View>
         {/* Page 4 */}
         <View style={styles.page2} break>
           <Text style={styles.contents}>AUDIT PURPOSE </Text>
           <View>
-            <Text style={styles.h4}>
-              {convert(reportObject?.auditPurpose, { tables: true })}
-            </Text>
+            <Html>{reportObject?.auditPurpose}</Html>
           </View>
         </View>
         {/* Page 5 */}
@@ -449,14 +436,7 @@ const PDFGenerator = ({ reportObject }) => {
                 return (
                   <View>
                     <Text style={styles.indexNumber}> Finding {index + 1}</Text>
-                    <Text
-                      style={styles.singleFindSummaryParaConsolidate}
-                      key={index}
-                    >
-                      {convert(singleItem?.observationName, {
-                        tables: true,
-                      })}
-                    </Text>
+                    <Html>{singleItem?.observationName}</Html>
                   </View>
                 );
               })
@@ -483,9 +463,7 @@ const PDFGenerator = ({ reportObject }) => {
                         Observation
                       </Text>
                       <Text style={styles.singleFindSummaryPara}>
-                        {convert(followUpItem?.observationName, {
-                          tables: true,
-                        })}
+                        <Html>{followUpItem?.observationName}</Html>
                       </Text>
                     </View>
                     <View style={styles.singleFindSummaryWrap}>
@@ -570,9 +548,7 @@ const PDFGenerator = ({ reportObject }) => {
           <Text style={styles.contents}>ANNEXURE </Text>
           <View>
             <Text style={styles.h4}>
-              {convert(reportObject?.annexure) === ""
-                ? "Annexure Not Provided"
-                : convert(reportObject?.annexure, { tables: true })}
+              <Html>{reportObject?.annexure}</Html>
             </Text>
           </View>
         </View>
