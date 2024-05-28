@@ -2,8 +2,6 @@ import React from "react";
 import "./index.css";
 import { useSelector, useDispatch } from "react-redux";
 import Pagination from "@mui/material/Pagination";
-import LinearProgress from "@mui/material/LinearProgress";
-// import MultipleSelect from "../../common/select/Select";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +10,7 @@ import PostponedDialog from "../../../components/modals/postponed-dialog/index";
 import Modal from "@mui/material/Modal";
 import { setupGetAllAuditEngagement } from "../../../global-redux/reducers/audit-engagement/slice";
 import { CircularProgress } from "@mui/material";
+
 const AuditEngagement = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -26,7 +25,7 @@ const AuditEngagement = () => {
   const [page, setPage] = React.useState(1);
   const [showCancelModal, setShowCancelModal] = React.useState(false);
 
-  const handleChange = (event, value) => {
+  const handleChange = (_, value) => {
     setPage(value);
   };
 
@@ -109,8 +108,6 @@ const AuditEngagement = () => {
                         <th>Planned End Date </th>
                         <th>Job Type </th>
                         <th>Status </th>
-
-                        {/* <th>Change Request </th> */}
                       </tr>
                     </thead>
                     <tbody>
@@ -154,13 +151,9 @@ const AuditEngagement = () => {
                                     to={`/audit/kick-off?auditEngagementId=${item?.id}`}
                                     className="kink-off"
                                   >
-                                    kick off
+                                    {item?.status}
                                   </Link>
                                 </td>
-
-                                {/* <td>
-                                  <MultipleSelect />
-                                </td> */}
                               </tr>
                             );
                           })

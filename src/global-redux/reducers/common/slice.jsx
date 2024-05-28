@@ -1,4 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { getNavigation, getData } from "./thunk";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 import {
   faGauge,
   faFile,
@@ -16,7 +18,7 @@ import {
   faFileSignature,
   faGear,
   faCheck,
-  faChartBar
+  faChartBar,
 } from "@fortawesome/free-solid-svg-icons";
 let menuItems = [
   {
@@ -175,7 +177,24 @@ const initialState = {
   allCompanies: [],
   allUsers: [],
   resetRichTextFieldState: false,
+  // API STATES
+  loading: false,
+  navigationInfo: {},
+  dataInfo: {},
 };
+
+export const setupGetNavigation = createAsyncThunk(
+  "common/getNavigation",
+  async (data, thunkAPI) => {
+    return getNavigation(data, thunkAPI);
+  }
+);
+export const setupGetData = createAsyncThunk(
+  "common/getData",
+  async (data, thunkAPI) => {
+    return getData(data, thunkAPI);
+  }
+);
 
 export const slice = createSlice({
   name: "common",
@@ -227,6 +246,42 @@ export const slice = createSlice({
         });
       }
     },
+  },
+  extraReducers: (builder) => {
+    // Get the navigation Info
+    builder
+      .addCase(setupGetNavigation.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetNavigation.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.navigationInfo = payload?.data || [];
+      })
+      .addCase(setupGetNavigation.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Get the data Info
+    builder
+      .addCase(setupGetData.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetData.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.dataInfo = payload?.data || [];
+      })
+      .addCase(setupGetData.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
   },
 });
 
