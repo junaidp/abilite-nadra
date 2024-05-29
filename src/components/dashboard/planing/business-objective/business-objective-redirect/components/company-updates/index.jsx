@@ -31,7 +31,7 @@ const CompanyUpdates = ({
         className="accordion-collapse collapse"
         data-bs-parent="#accordionFlushExample"
       >
-        <div className="accordion-body pb-70">
+        <div className="accordion-body pb-55">
           <div className="d-flex justify-content-between">
             <label className="mb-2">Company Update</label>
           </div>

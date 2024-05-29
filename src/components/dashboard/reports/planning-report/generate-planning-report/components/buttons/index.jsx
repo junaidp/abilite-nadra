@@ -1,7 +1,6 @@
 import React from "react";
 
 const Buttons = ({
-  handleDownload,
   pdfLoading,
   editable,
   loading,
@@ -15,7 +14,6 @@ const Buttons = ({
           className={`btn btn-labeled btn-primary px-3 shadow fitContent ${
             pdfLoading && "disabled"
           }`}
-          onClick={handleDownload}
         >
           <span className="btn-label me-2">
             <i className="fa fa-file-pdf f-18"></i>

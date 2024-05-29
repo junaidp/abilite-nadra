@@ -1,14 +1,13 @@
-import React, { PureComponent } from "react";
-import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from "recharts";
+import React from "react";
+import { PieChart, Pie, Cell } from "recharts";
 
 const data = [
-  { name: "Group A", value: 400 },
-  { name: "Group B", value: 300 },
-  { name: "Group C", value: 300 },
-  { name: "Group D", value: 200 },
+  { name: "High", value: 400 },
+  { name: "Medium", value: 350 },
+  { name: "Low", value: 300 },
 ];
 
-const COLORS = ["#0088FE", "#0a7386", "#FFBB28", "#FF8042"];
+const COLORS = ["#0088FE", "#ED7D31", "#A5A5A5"];
 
 const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({
@@ -50,7 +49,7 @@ const PieChartComponent = () => {
         fill="#8884d8"
         dataKey="value"
       >
-        {data.map((entry, index) => (
+        {data.map((_, index) => (
           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
         ))}
       </Pie>

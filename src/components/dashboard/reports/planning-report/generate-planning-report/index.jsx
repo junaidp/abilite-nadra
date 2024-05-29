@@ -4,8 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
 import {
   resetReportAddSuccess,
   setupSaveReports,
@@ -72,32 +70,6 @@ const GeneratePlanningReport = () => {
       };
     });
   }
-
-  const handleDownload = () => {
-    if (!pdfLoading) {
-      const element = document.getElementById("reportsPage");
-      setPdfLoading(true);
-      html2canvas(element)
-        .then((canvas) => {
-          const imgData = canvas.toDataURL("image/png");
-          const imgWidth = 210;
-          const imgHeight = (canvas.height * imgWidth) / canvas.width;
-          const pdf = new jsPDF({
-            orientation: "p",
-            unit: "mm",
-            format: [imgWidth, imgHeight],
-          });
-          pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
-          pdf.save("document.pdf");
-          setPdfLoading(false);
-          toast.success("Pdf Dowloaded!");
-        })
-        .catch((error) => {
-          toast.error("Error generating PDF:", error);
-          setPdfLoading(false);
-        });
-    }
-  };
 
   function handleSaveReport() {
     if (!loading) {
@@ -294,7 +266,6 @@ const GeneratePlanningReport = () => {
           <RiskFactorApproach />
           <AttachFiles />
           <Buttons
-            handleDownload={handleDownload}
             pdfLoading={pdfLoading}
             editable={editable}
             loading={loading}

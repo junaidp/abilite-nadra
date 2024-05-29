@@ -13,6 +13,7 @@ import {
   resetAuditEngagementObservationAddSuccess,
   handleCleanUp,
   setupGetInitialSingleAuditEngagement,
+  setupUpdateSingleAuditEngagement,
 } from "../../../../global-redux/reducers/audit-engagement/slice";
 import AddKickOffObjectiveDialog from "../../../modals/add-kickoff-objective-dialog";
 import AddKickOffRatingDialog from "../../../modals/add-kickoff-rating-dialog";
@@ -23,7 +24,6 @@ import ComplianceCheckListDialog from "../../../modals/compliance-checklist-dial
 import AddAuditProgramDialog from "../../../modals/add-audit-program-dialog";
 import JobName from "./component/job-name";
 import AuditNotifications from "./component/audit-notifications";
-import RaiseInformationRequest from "./component/raise-information-request";
 import RiskControlMatrix from "./component/risk-control-matrix";
 import AuditProgram from "./component/audit-program";
 import AuditSteps from "./component/audit-steps";
@@ -131,7 +131,6 @@ const KickOff = () => {
 
   React.useEffect(() => {
     if (auditEngagementObservationAddSuccess) {
-      // dispatch(setupGetSingleAuditEngagement(auditEngagementId));
       dispatch(resetAuditEngagementObservationAddSuccess());
     }
   }, [auditEngagementObservationAddSuccess]);
@@ -141,6 +140,17 @@ const KickOff = () => {
       dispatch(setupGetInitialSingleAuditEngagement(auditEngagementId));
     }
   }, [user, auditEngagementId]);
+
+  React.useEffect(() => {
+    if (singleAuditEngagementObject?.status === "Kick Off") {
+      dispatch(
+        setupUpdateSingleAuditEngagement({
+          ...singleAuditEngagementObject,
+          status: "In Progress",
+        })
+      );
+    }
+  }, [singleAuditEngagementObject]);
 
   React.useEffect(() => {
     dispatch(changeKickOffRequest(""));
@@ -269,7 +279,6 @@ const KickOff = () => {
                   currentAuditEngagement={currentAuditEngagement}
                   auditEngagementId={auditEngagementId}
                 />
-                {/* <RaiseInformationRequest /> */}
                 {currentAuditEngagement?.jobType !== "Compliance Checklist" && (
                   <RiskControlMatrix
                     setShowViewLibrary={setShowViewLibrary}

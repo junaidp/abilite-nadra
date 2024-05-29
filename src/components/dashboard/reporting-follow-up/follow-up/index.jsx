@@ -55,26 +55,7 @@ const Reporting = () => {
           <div className="col-lg-7">
             <h2 className="heading">Follow Up</h2>
           </div>
-
-          {/* <div className="col-lg-5 text-end">
-            <div className="d-flex align-items-center">
-              <label className="me-3 w-25">Status:</label>
-              <select
-                className="form-select"
-                aria-label="Default select example"
-              >
-                <option>
-                  Exceptions To Be Sent To Management For Comments
-                </option>
-                <option value="2">Awaiting Management Comments</option>
-                <option>Management Comments Received</option>
-                <option>Implementation In Progress</option>
-                <option>Exceptions Implemented</option>
-              </select>
-            </div>
-          </div> */}
         </div>
-
         <div className="row py-4">
           <div className="col-lg-12">
             <div className="table-responsive">

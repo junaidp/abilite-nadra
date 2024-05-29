@@ -142,8 +142,8 @@ body {
   min-height: 100px !important;
 }
 
-.pb-70{
-  padding-bottom: 70px !important; 
+.pb-70 {
+  padding-bottom: 70px !important;
 }
 
 .w-10 {
@@ -183,6 +183,10 @@ body {
 }
 .min-h-120 {
   min-height: 120vh !important;
+}
+
+.pb-55 {
+  padding-bottom: 55px !important;
 }
 
 .w-120 {
@@ -395,11 +399,11 @@ body {
 }
 
 input::placeholder {
-  font-size: 11px; /* Standard */
+  font-size: 11px;
 }
 
 textarea::placeholder {
-  font-size: 11px; /* Standard */
+  font-size: 11px;
 }
 
 .form-select {
@@ -492,14 +496,13 @@ a {
   border-radius: 8px;
   margin-bottom: 15px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  overflow: hidden; /* For rounded corners */
+  overflow: hidden;
 }
 
 .accordion-header {
-  margin: 0; /* Reset default margin */
+  margin: 0;
 }
 
-/* Accordion button styles */
 .accordion-button {
   background-color: #f7f7f7;
   color: #333;
@@ -521,12 +524,10 @@ a {
   background-color: #e7f1ff;
 }
 
-/* Hover effect */
 .accordion-button:hover {
   background-color: #e2e6ea;
 }
 
-/* Accordion body styles */
 .accordion-body {
   padding: 20px;
   line-height: 1.5;
@@ -538,11 +539,11 @@ a {
 }
 
 table th {
-  font-size: 12px !important; /* Adjust based on your specific design */
+  font-size: 12px !important;
   font-weight: bold;
   text-align: start;
-  background-color: #f4f4f4; /* Optional: for better header distinction */
-  padding: 8px; /* Adjust padding as needed */
+  background-color: #f4f4f4;
+  padding: 8px;
 }
 
 table td {
@@ -671,7 +672,6 @@ element {
 
 .link-wrap span i {
   font-size: 20px !important;
-  /* color: #0a7386 !important; */
 }
 .link-wrap-active span i {
   font-size: 20px !important;
@@ -766,8 +766,17 @@ span[aria-label="Insert Ordered List"] .jodit-toolbar-button__trigger {
   border: none !important;
 }
 
+.recharts-wrapper {
+  position: relative !important;
+  left: -170px !important;
+}
+
 .w-full {
   width: 100% !important;
+}
+
+.cursor-auto {
+  cursor: auto !important;
 }
 
 .jodit-container:not(.jodit_inline) .jodit-wysiwyg img {

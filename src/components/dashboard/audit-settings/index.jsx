@@ -1,4 +1,6 @@
 import React from "react";
+import "./index.css";
+import { useSelector, useDispatch } from "react-redux";
 import { setupGetAllCheckLists } from "../../../global-redux/reducers/settings/check-list/slice";
 import { setupGetAllCompanies } from "../../../global-redux/reducers/settings/company-management/slice";
 import { setupGetAllLocations } from "../../../global-redux/reducers/settings/location/slice";
@@ -9,35 +11,26 @@ import { setupGetAllRiskFactors } from "../../../global-redux/reducers/settings/
 import AddCheckListManagementDialog from "../../modals/add-checklist-management-dialog/index";
 import { setupGetAllFiles } from "../../../global-redux/reducers/settings/supporting-docs/slice";
 import { handleReset } from "../../../global-redux/reducers/settings/risk-control-matrix/slice";
+import { resetAuthValues } from "../../../global-redux/reducers/auth/slice";
 import UserManagementDialog from "../../modals/add-user-dialog/index";
 import UpdateCompanyDialog from "../../modals/update-company-dialog";
+import AddCompanyDialog from "../../modals/add-company-dialog/index";
 import UpdateUserDialog from "../.././modals/update-user-dialog";
 import TFA from "./components/tfa/index.jsx";
-import { resetAuthValues } from "../../../global-redux/reducers/auth/slice";
-import { useSelector, useDispatch } from "react-redux";
-import "./index.css";
-import AddCompanyDialog from "../../modals/add-company-dialog/index";
 import CheckList from "./components/checklist";
 import CPList from "./components/cp-list/index";
 import SupportingDocs from "./components/supporting-docs/index";
 import InformationRequest from "./components/information-request";
 import TaskManagement from "./components/task-management";
 import UserInfo from "./components/user-info/UserInfo.jsx";
-// import ApprovalManagement from "./components/approval-management/index";
 import Location from "./components/location";
 import Company from "./components/company";
-// import { toast } from "react-toastify";
 import RiskFactor from "./components/risk-factor";
-// import EmailManagement from "./components/email";
-// import ResidualRisk from "./components/residual-risk";
-// import Notifications from "./components/notification";
 import UserManagement from "./components/user";
-// import Modules from "./components/modules";
 import RCMLibrary from "./components/rcm-library";
 import Process from "./components/process";
 const AuditSettings = () => {
   const dispatch = useDispatch();
-  // const [activeEmailTab, setActiveEmailTab] = React.useState("systemEmail");
   const [checkListManagementDialog, setCheckListManagementDialog] =
     React.useState(false);
   const [currentSettingOption, setCurrentSettingOption] =
@@ -350,27 +343,15 @@ const AuditSettings = () => {
                 userHierarchy={userHierarchy}
                 userRole={userRole}
               />
-              {/* <ApprovalManagement /> */}
               <Location userHierarchy={userHierarchy} userRole={userRole} />
-
               <CPList userHierarchy={userHierarchy} userRole={userRole} />
-
-              {/* <ResidualRisk /> */}
               <RCMLibrary userHierarchy={userHierarchy} userRole={userRole} />
-
               <RiskFactor userHierarchy={userHierarchy} userRole={userRole} />
-              {/* <EmailManagement
-                activeEmailTab={activeEmailTab}
-                setActiveEmailTab={setActiveEmailTab}
-              /> */}
-
               <CheckList
                 setCheckListManagementDialog={setCheckListManagementDialog}
                 userHierarchy={userHierarchy}
                 userRole={userRole}
               />
-
-              {/* <Notifications />  */}
               {userRole === "ADMIN" && (
                 <UserManagement
                   setUserManagementDialog={setUserManagementDialog}
@@ -378,8 +359,6 @@ const AuditSettings = () => {
                   setUpdateUserObject={setUpdateUserObject}
                 />
               )}
-
-              {/* <Modules /> */}
               {userRole !== "ADMIN" && userRole !== "USER" && (
                 <Company
                   setAddCompantDialog={setAddCompantDialog}
@@ -387,7 +366,6 @@ const AuditSettings = () => {
                   setShowUpdateCompanyDialog={setShowUpdateCompanyDialog}
                 />
               )}
-
               <Process userHierarchy={userHierarchy} userRole={userRole} />
               {userRole === "ADMIN" && <InformationRequest />}
               {userRole === "ADMIN" && <TaskManagement />}

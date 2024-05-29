@@ -1,7 +1,6 @@
 import React from "react";
 import "./index.css";
 import { useDispatch, useSelector } from "react-redux";
-import chart11 from "../../../assets/chart11.png";
 import chart1 from "../../../assets/chart1.png";
 import { resetAuthValues } from "../../../global-redux/reducers/auth/slice";
 import {
@@ -9,8 +8,13 @@ import {
   setupGetData,
 } from "../../../global-redux/reducers/common/slice";
 import { CircularProgress } from "@mui/material";
+import InfoCard from "./components/cards/InfoCard";
+import { useNavigate } from "react-router-dom";
+import PieChartComponent from "./components/pie-chart/PieChart";
+import AreaChartComponent from "./components/area-chart/AreaChart";
 
 const DashboardHome = () => {
+  const navigate = useNavigate();
   let dispatch = useDispatch();
   const { year, company, loading, navigationInfo, dataInfo } = useSelector(
     (state) => state?.common
@@ -45,117 +49,64 @@ const DashboardHome = () => {
                 <section id="minimal-statistics">
                   <div className="row">
                     <div className="col-xl-4 col-sm-6 col-12">
-                      <div className="card glassmorphism-card">
-                        <div className="card-content">
-                          <div className="card-body">
-                            <div className="media d-flex  justify-content-between">
-                              <div className="align-self-center">
-                                <i className="fa fa-tasks primary fa-2xl f-40"></i>
-                              </div>
-                              <div className="media-body">
-                                <span>Jobs in Progress</span>
-                                <h3>
-                                  {dataInfo?.totalJobs} /{" "}
-                                  {dataInfo?.jobsCompleted}
-                                </h3>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      <InfoCard
+                        name="Jobs In Progress"
+                        icon={
+                          <i className="fa fa-tasks primary fa-2xl f-40"></i>
+                        }
+                        value={
+                          dataInfo?.totalJobs + "/" + dataInfo?.jobsCompleted
+                        }
+                      />
                     </div>
                     <div className="col-xl-4 col-sm-6 col-12">
-                      <div className="card glassmorphism-card">
-                        <div className="card-content">
-                          <div className="card-body">
-                            <div className="media d-flex justify-content-between">
-                              <div className="align-self-center">
-                                <i className="fa fa-calculator primary fa-2xl f-40"></i>
-                              </div>
-                              <div className="media-body">
-                                <span>Avg obs. per job</span>
-                                <h3>{dataInfo?.averageObservationPerJob}</h3>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      <InfoCard
+                        name="Avg obs. per job"
+                        icon={
+                          <i className="fa fa-calculator primary fa-2xl f-40"></i>
+                        }
+                        value={dataInfo?.averageObservationPerJob}
+                      />
                     </div>
                     <div className="col-xl-4 col-sm-6 col-12">
-                      <div className="card glassmorphism-card">
-                        <div className="card-content">
-                          <div className="card-body">
-                            <div className="media d-flex justify-content-between">
-                              <div className="align-self-center">
-                                <i className="fa fa-check-circle primary fa-2xl f-40"></i>
-                              </div>
-                              <div className="media-body">
-                                <span>Jobs Completed</span>
-                                <h3>{dataInfo?.jobsCompleted}</h3>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      <InfoCard
+                        name="Jobs Completed"
+                        icon={
+                          <i className="fa fa-check-circle primary fa-2xl f-40"></i>
+                        }
+                        value={dataInfo?.jobsCompleted}
+                      />
                     </div>
                     <div className="col-xl-4 col-sm-6 col-12">
-                      <div className="card glassmorphism-card">
-                        <div className="card-content">
-                          <div className="card-body">
-                            <div className="media d-flex justify-content-between">
-                              <div className="align-self-center">
-                                <i class="bi bi-share primary f-40"></i>{" "}
-                              </div>
-                              <div className="media-body">
-                                <span>Jobs by Business Objective</span>
-                                <h3>{dataInfo?.jobsByBusinessObjective}</h3>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      <InfoCard
+                        name="Jobs By Business Objective"
+                        icon={<i class="bi bi-share primary f-40"></i>}
+                        value={dataInfo?.jobsByBusinessObjective}
+                      />
                     </div>
 
                     <div className="col-xl-4 col-sm-6 col-12">
-                      <div className="card glassmorphism-card">
-                        <div className="card-content">
-                          <div className="card-body">
-                            <div className="media d-flex justify-content-between">
-                              <div className="align-self-center">
-                                <i class="bi bi-shield-shaded primary f-40"></i>{" "}
-                              </div>
-                              <div className="media-body">
-                                <span>Jobs by Compliance</span>
-                                <h3>{dataInfo?.jobsByCompliance}</h3>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      <InfoCard
+                        name="Jobs By Compliance"
+                        icon={<i class="bi bi-shield-shaded primary f-40"></i>}
+                        value={dataInfo?.jobsByCompliance}
+                      />
                     </div>
 
                     <div className="col-xl-4 col-sm-6 col-12">
-                      <div className="card glassmorphism-card">
-                        <div className="card-content">
-                          <div className="card-body">
-                            <div className="media d-flex justify-content-between">
-                              <div className="align-self-center">
-                                <i className="fa fa-exclamation-triangle primary fa-2xl f-40"></i>
-                              </div>
-                              <div className="media-body">
-                                <span>Exceptions Implemented</span>
-                                <h3>{dataInfo?.exceptionsImplemented}</h3>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      <InfoCard
+                        name="Exceptions Implemented"
+                        icon={
+                          <i className="fa fa-exclamation-triangle primary fa-2xl f-40"></i>
+                        }
+                        value={dataInfo?.exceptionsImplemented}
+                      />
                     </div>
                   </div>
 
                   <div className="row">
                     <div className="col-lg-6">
-                      <div className="card job-card p-0">
+                      <div className="card job-card p-0 cursor-auto">
                         <div className="card-header application-main-color color-white">
                           Jobs in Execution
                         </div>
@@ -166,7 +117,15 @@ const DashboardHome = () => {
                             navigationInfo?.jobsInExecution?.map(
                               (job, index) => {
                                 return (
-                                  <h5 className="card-title" key={index}>
+                                  <h5
+                                    className="card-title cursor-pointer"
+                                    key={index}
+                                    onClick={() =>
+                                      navigate(
+                                        `/audit/kick-off?auditEngagementId=${job?.id}`
+                                      )
+                                    }
+                                  >
                                     {job?.name}
                                   </h5>
                                 );
@@ -177,19 +136,27 @@ const DashboardHome = () => {
                       </div>
                     </div>
                     <div className="col-lg-6 ">
-                      <div className="card job-card p-0">
+                      <div className="card job-card p-0 cursor-auto">
                         <div className="card-header application-main-color color-white">
                           Jobs Due for Kick Off within a week
                         </div>
                         <div className="card-body d-flex flex-column">
                           {navigationInfo?.jobsDueForKickOffWithinAWeek
                             ?.length === 0 ? (
-                            <p> No jobs due for kick Off within a week</p>
+                            <p>No jobs due for kick Off within a week yet</p>
                           ) : (
                             navigationInfo?.jobsDueForKickOffWithinAWeek?.map(
                               (job, index) => {
                                 return (
-                                  <h5 className="card-title" key={index}>
+                                  <h5
+                                    className="card-title cursor-pointer"
+                                    key={index}
+                                    onClick={() =>
+                                      navigate(
+                                        `/audit/kick-off?auditEngagementId=${job?.id}`
+                                      )
+                                    }
+                                  >
                                     {job?.name}
                                   </h5>
                                 );
@@ -203,7 +170,7 @@ const DashboardHome = () => {
 
                   <div className="row">
                     <div className="col-lg-6">
-                      <div className="card job-card p-0">
+                      <div className="card cursor-auto job-card p-0">
                         <div className="card-header application-main-color color-white">
                           Management comments overdue
                         </div>
@@ -215,7 +182,15 @@ const DashboardHome = () => {
                             navigationInfo?.managementCommentsOverdue?.map(
                               (job, index) => {
                                 return (
-                                  <h5 className="card-title" key={index}>
+                                  <h5
+                                    className="card-title cursor-pointer"
+                                    key={index}
+                                    onClick={() =>
+                                      navigate(
+                                        `/audit/reporting-particulars?reportingId=${job?.id}`
+                                      )
+                                    }
+                                  >
                                     {job?.name}
                                   </h5>
                                 );
@@ -226,7 +201,7 @@ const DashboardHome = () => {
                       </div>
                     </div>
                     <div className="col-lg-6">
-                      <div className="card job-card p-0">
+                      <div className="card job-card p-0 cursor-auto">
                         <div className="card-header application-main-color color-white">
                           Jobs Due for completion within a week
                         </div>
@@ -234,18 +209,47 @@ const DashboardHome = () => {
                         <div className="card-body d-flex flex-column">
                           {navigationInfo?.jobsDueForCompletionWithinAWeek
                             ?.length === 0 ? (
-                            <p> No jobs due for completion within a week</p>
+                            <p> No jobs due for completion within a week yet</p>
                           ) : (
                             navigationInfo?.jobsDueForCompletionWithinAWeek?.map(
                               (job, index) => {
                                 return (
-                                  <h5 className="card-title" key={index}>
+                                  <h5
+                                    className="card-title cursor-pointer"
+                                    key={index}
+                                    onClick={() =>
+                                      navigate(
+                                        `/audit/follow-up-particulars?followUpId=${job?.id}`
+                                      )
+                                    }
+                                  >
                                     {job?.name}
                                   </h5>
                                 );
                               }
                             )
                           )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card  glassmorphism-card text-center">
+                    <div className="card-content">
+                      <div className="card-body ">
+                        <p className="text-start">
+                          Observation by Due Implementation Date
+                        </p>
+
+                        <div>
+                          <AreaChartComponent />
+                        </div>
+                        <div className="row">
+                          <div className="label mb-2 highh">
+                            Not Yet due for implementation
+                          </div>
+                          <div className="label mediumm">
+                            Due for implementation
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -280,38 +284,12 @@ const DashboardHome = () => {
                           <p className="text-center">
                             Observation by Risk Rating
                           </p>
-                          <img
-                            src={chart11}
-                            className="w-100"
-                            rel="copyright"
-                          />
-                          <div className="text-end">
+                          <PieChartComponent />
+
+                          <div className="flex">
                             <div className="label high">High</div>
                             <div className="label medium">Medium</div>
                             <div className="label low">Low</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="card  glassmorphism-card text-center">
-                      <div className="card-content">
-                        <div className="card-body ">
-                          <p className="text-center">
-                            Observation by Due Implementation Date
-                          </p>
-                          <img
-                            src={chart1}
-                            className="mx-auto my-3 w-150 h-150"
-                            rel="copyright"
-                          />
-                          <div className="text-end">
-                            <div className="label highh">
-                              Not Yet due for implementation
-                            </div>
-                            <div className="label mediumm">
-                              Due for implementation
-                            </div>
                           </div>
                         </div>
                       </div>

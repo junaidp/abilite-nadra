@@ -27,7 +27,7 @@
   top: -66px;
   transition: all 0.5s linear;
   transform: translateX(-0px);
-  /* height: 100% !important; */
+  height: 100% !important;
 }
 
 .submenu.collapsed {

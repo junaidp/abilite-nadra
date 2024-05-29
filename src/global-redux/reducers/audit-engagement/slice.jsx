@@ -1,6 +1,7 @@
 import {
   getAllAuditEngagement,
   getSingleAuditEngagement,
+  updateSingleAuditEngagement,
   getInitialSingleAuditEngagement,
   saveAuditNotification,
   saveRiskControlMatrixObjective,
@@ -63,6 +64,13 @@ export const setupGetSingleAuditEngagement = createAsyncThunk(
   "auditEngagement/getSingleAuditEngagement",
   async (data, thunkAPI) => {
     return getSingleAuditEngagement(data, thunkAPI);
+  }
+);
+
+export const setupUpdateSingleAuditEngagement = createAsyncThunk(
+  "auditEngagement/updateSingleAuditEngagement",
+  async (data, thunkAPI) => {
+    return updateSingleAuditEngagement(data, thunkAPI);
   }
 );
 
@@ -375,6 +383,17 @@ export const slice = createSlice({
         } else {
           toast.error("An Error has occurred");
         }
+      });
+    // Update Single Audit Engagements
+    builder
+      .addCase(setupUpdateSingleAuditEngagement.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupUpdateSingleAuditEngagement.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(setupUpdateSingleAuditEngagement.rejected, (state) => {
+        state.loading = false;
       });
     // Get Initial Single Audit Engagements
     builder
