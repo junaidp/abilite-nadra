@@ -1,5 +1,4 @@
 import React from "react";
-import "./ResetPassword.css";
 import { useNavigate } from "react-router-dom";
 import logo from "../../../assets/light-logo-.png";
 import { toast } from "react-toastify";

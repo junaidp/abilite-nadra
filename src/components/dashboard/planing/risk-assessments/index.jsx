@@ -6,6 +6,14 @@ import { useSelector, useDispatch } from "react-redux";
 import Pagination from "@mui/material/Pagination";
 import { setupGetAllRiskAssessments } from "../../../../global-redux/reducers/planing/risk-assessment/slice";
 import { CircularProgress } from "@mui/material";
+
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+
+const poppinsStyle = {
+  fontFamily: '"Poppins", sans-serif',
+  fontWeight: "normal",
+};
 const RiskAssessments = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -60,10 +68,23 @@ const RiskAssessments = () => {
             </span>
             View Risk Assessment
           </div>
-          <i
-            className="fa fa-info-circle ps-3 text-secondary cursor-pointer"
-            title="Info"
-          ></i>
+          <Tooltip
+            title={
+              <React.Fragment>
+                <Typography
+                  color="inherit"
+                  className="mb-2"
+                  style={poppinsStyle}
+                >
+                  Perform risk assessment based on likelihood and impact, then
+                  evaluate residual risk post-mitigation.
+                </Typography>
+              </React.Fragment>
+            }
+            arrow
+          >
+            <i className="fa fa-info-circle ps-3 text-secondary cursor-pointer"></i>
+          </Tooltip>
         </div>
       </header>
 

@@ -1,6 +1,5 @@
 import React from "react";
 import "./index.css";
-// import Pagination from "../../../common/pagination/Pagination";
 import EditAuditableUnit from "../../../modals/edit-auditable-unit";
 import AuditableUnitRatingDialog from "../../../modals/auditable-unit-rating-dialog/index";
 import {
@@ -81,12 +80,6 @@ const AuditableUnits = () => {
         <section className="faq-section">
           <div className="container" data-aos="fade-up">
             <header className="section-header my-3 align-items-center  text-start d-flex ">
-              <a
-                className="text-primary"
-                onClick={() => navigate("/audit/business-objective")}
-              >
-                <i className="fa fa-arrow-left text-primary fs-5 pe-3"></i>
-              </a>
               <div className="mb-0 heading">Auditable Units</div>
             </header>
 

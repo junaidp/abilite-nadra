@@ -1,5 +1,4 @@
 import React from "react";
-import "./ForgetPassword";
 import { useNavigate } from "react-router-dom";
 import logo from "../../../assets/light-logo-.png";
 import { toast } from "react-toastify";
@@ -65,14 +64,6 @@ const ForgetPassword = () => {
                   Login
                 </a>
               </li>
-              {/* <li>
-                <a
-                  type="submit"
-                  className="fxt-switcher-btn active shadow border-start-0 border-0 rounded shadow"
-                >
-                  Register
-                </a>
-              </li> */}
             </ul>
           </div>
           <div className="fxt-main-form">

@@ -11,7 +11,13 @@ import {
 import { CircularProgress } from "@mui/material";
 import TableRow from "./components/table-row";
 import DeleteEngagementDialog from "./components/DeleteDialog";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 
+const poppinsStyle = {
+  fontFamily: '"Poppins", sans-serif',
+  fontWeight: "normal",
+};
 const BusinessObjective = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -102,10 +108,34 @@ const BusinessObjective = () => {
                   </span>
                   {loading ? "Loading.." : "Add Engagement"}
                 </div>
-                <i
-                  className="fa fa-info-circle ps-3 text-secondary cursor-pointer"
-                  title="Info"
-                ></i>
+                <Tooltip
+                  title={
+                    <React.Fragment>
+                      <Typography
+                        color="inherit"
+                        className="mb-2"
+                        style={poppinsStyle}
+                      >
+                        Click to add a new engagement by selecting an option
+                        through
+                      </Typography>
+                      <ul
+                        style={{
+                          ...poppinsStyle,
+                          paddingLeft: "20px",
+                          margin: "0",
+                        }}
+                      >
+                        <li>Business Objective</li>
+                        <li>Special project/Audit</li>
+                        <li>Compliance Checklist</li>
+                      </ul>
+                    </React.Fragment>
+                  }
+                  arrow
+                >
+                  <i className="fa fa-info-circle ps-3 text-secondary cursor-pointer"></i>
+                </Tooltip>
               </div>
             </header>
 

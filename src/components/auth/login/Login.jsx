@@ -13,7 +13,6 @@ import QRCodeScannerDialog from "../modals/QRScanner";
 import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
-  const [showpassword, setShowPassword] = React.useState(false);
   const [showQRCodeScanner, setShowQRCodeScanner] = React.useState(false);
   const { loginEmail, loginPassword, loading, authSuccess, user } = useSelector(
     (state) => state.auth
@@ -110,7 +109,6 @@ const Login = () => {
                     <div className="form-group relative">
                       <input
                         id="password"
-                        // type={showpassword ? "password" : "string"}
                         type="password"
                         className="form-control"
                         placeholder="********"
@@ -120,24 +118,6 @@ const Login = () => {
                         value={loginPassword}
                         onChange={handleChange}
                       />
-                      {/* <div className="t-12 r-12 absolute"> */}
-                      {/* {!showpassword && (
-                          <div
-                            onClick={() => setShowPassword(true)}
-                            className="cursor-pointer"
-                          >
-                            <i className="bi bi-eye-fill"></i>
-                          </div>
-                        )}
-                        {showpassword && (
-                          <div
-                            onClick={() => setShowPassword(false)}
-                            className="cursor-pointer"
-                          >
-                            <i className="bi bi-eye-slash-fill"></i>
-                          </div>
-                        )}
-                      </div> */}
                     </div>
                   </div>
                   <div className="col-12">

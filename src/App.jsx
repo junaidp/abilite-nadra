@@ -1,8 +1,6 @@
 import React from "react";
-import logo from "./assets/favicon.ico";
 import "./App.css";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { Helmet, HelmetProvider } from "react-helmet-async";
 import { ToastContainer } from "react-toastify";
 import { changeCompany } from "./global-redux/reducers/common/slice";
 import { changeAuthUser } from "./global-redux/reducers/auth/slice";
@@ -104,11 +102,7 @@ const App = () => {
   }, []);
 
   return (
-    <HelmetProvider>
-      <Helmet>
-        <title>Abilite</title>
-        <link rel="icon" href={logo} />
-      </Helmet>
+    <div>
       <ToastContainer />
       <BrowserRouter>
         <Routes>
@@ -121,31 +115,10 @@ const App = () => {
               </div>
             }
           />
-          <Route
-            path="/reset-password"
-            element={
-              // <AuthProtectedRoutes>
-                <ResetPassword />
-              // </AuthProtectedRoutes>
-            }
-          />
-          <Route
-            path="/login"
-            element={
-              // <AuthProtectedRoutes>
-                <Login />
-              // </AuthProtectedRoutes>
-            }
-          />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/login" element={<Login />} />
 
-          <Route
-            path="/forgot-password"
-            element={
-              // <AuthProtectedRoutes>
-                <ForgetPassword />
-              // </AuthProtectedRoutes>
-            }
-          />
+          <Route path="/forgot-password" element={<ForgetPassword />} />
           <Route
             path="/audit"
             element={
@@ -275,7 +248,7 @@ const App = () => {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
-    </HelmetProvider>
+    </div>
   );
 };
 

@@ -5,6 +5,13 @@ import Pagination from "@mui/material/Pagination";
 import { setupGetAllJobScheduling } from "../../../../global-redux/reducers/planing/job-scheduling/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+
+const poppinsStyle = {
+  fontFamily: '"Poppins", sans-serif',
+  fontWeight: "normal",
+};
 
 const JobScheduling = () => {
   const navigate = useNavigate();
@@ -57,10 +64,23 @@ const JobScheduling = () => {
             </span>
             View Job schedule
           </div>
-          <i
-            className="fa fa-info-circle ps-3 text-secondary cursor-pointer"
-            title="Info"
-          ></i>
+          <Tooltip
+            title={
+              <React.Fragment>
+                <Typography
+                  color="inherit"
+                  className="mb-2"
+                  style={poppinsStyle}
+                >
+                  Users can schedule jobs by allocating available resources,
+                  specifying the location, and setting the time for each task.
+                </Typography>
+              </React.Fragment>
+            }
+            arrow
+          >
+            <i className="fa fa-info-circle ps-3 text-secondary cursor-pointer"></i>
+          </Tooltip>
         </div>
       </header>
 

@@ -130,7 +130,7 @@ const PlanningReport = () => {
         </div>
       )}
       <header className="section-header my-3 text-start d-flex align-items-center justify-content-between">
-        <div className="mb-0 heading">Report</div>
+        <div className="mb-0 heading">Planning Report</div>
         <button
           className="btn btn-outline-light text-black"
           onClick={() =>

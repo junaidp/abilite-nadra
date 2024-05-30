@@ -42,10 +42,6 @@ const BusinessObjectiveMapProcess = ({
             </span>
             Objective List
           </div>
-          <i
-            title="Info"
-            className="fa fa-info-circle ps-3 text-secondary cursor-pointer"
-          ></i>
         </header>
       )}
 

@@ -6,7 +6,8 @@ import { toast } from "react-toastify";
 import TableRow from "./components/TableRow";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { baseUrl } from "../../../../../../constants/index";
 import ApproveDialog from "./components/ApproveDialog";
 
@@ -173,7 +174,7 @@ const ComplianceCheckList = ({
                       role={undefined}
                       variant="contained"
                       tabIndex={-1}
-                      startIcon={<CloudUploadIcon />}
+                      startIcon={<FontAwesomeIcon icon={faUpload} />}
                       ref={fileInputRef}
                       onChange={handleFileChange}
                     >

@@ -95,47 +95,13 @@ const AddEngagementAuditDialog = ({ setBusinessObjectiveDialog }) => {
                   </div>
                 </div>
               </div>
-              <div className="card-hover-text">New Text on Hover</div>
+              <div className="card-hover-text text-center">
+                Define and assess the goals, risks, and controls to ensure
+                alignment with organizational objectives.
+              </div>
             </div>
           </a>
         </div>
-        {/* <div className="col-lg-4">
-          <a
-            className="w-100 "
-            type="button"
-            onClick={() => navigate("/audit/business-process")}
-          >
-            <div className="card card p-0 border-0">
-              <div className="card-content">
-                <div className="card border main-card shadow rounded">
-                  <div className="card-header  bg-secondary  text-center py-3">
-                    <svg
-                      width="52"
-                      height="53"
-                      viewBox="0 0 22 23"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M16.25 22.25C16.096 22.25 15.9458 22.2027 15.8197 22.1144C15.6936 22.0261 15.5977 21.9012 15.545 21.7565L13.193 15.2877L11.6893 18.7955C11.6314 18.9304 11.5353 19.0453 11.4128 19.1261C11.2903 19.2069 11.1468 19.25 11 19.25H8V17.75H10.505L12.56 12.9545C12.6822 12.6717 12.9717 12.4925 13.271 12.5C13.4214 12.5042 13.567 12.5535 13.6889 12.6415C13.8109 12.7295 13.9036 12.8521 13.955 12.9935L16.307 19.463L17.8107 15.9545C17.8686 15.8196 17.9647 15.7046 18.0872 15.6239C18.2097 15.5431 18.3532 15.5 18.5 15.5H21.5V17H18.995L16.94 21.7955C16.8821 21.9305 16.7859 22.0455 16.6632 22.1263C16.5406 22.2071 16.3969 22.2501 16.25 22.25Z"
-                        fill="white"
-                      />
-                      <path
-                        d="M5.75 17.75H2V6.5H20V13.25H21.5V6.5C21.5 5.67275 20.8273 5 20 5H15.5V2C15.5 1.17275 14.8273 0.5 14 0.5H8C7.17275 0.5 6.5 1.17275 6.5 2V5H2C1.17275 5 0.5 5.67275 0.5 6.5V17.75C0.5 18.5773 1.17275 19.25 2 19.25H5.75V17.75ZM8 2H14V5H8V2Z"
-                        fill="white"
-                      />
-                    </svg>
-                  </div>
-
-                  <div className="card-body">
-                    <h6 className=" fw-bold text-center">Business Process</h6>
-                  </div>
-                </div>
-              </div>
-              <div className="card-hover-text">New Text on Hover</div>
-            </div>
-          </a>
-        </div> */}
         <div className="col-lg-4">
           <a
             className="w-100 "
@@ -172,7 +138,10 @@ const AddEngagementAuditDialog = ({ setBusinessObjectiveDialog }) => {
                   </div>
                 </div>
               </div>
-              <div className="card-hover-text">New Text on Hover</div>
+              <div className="card-hover-text text-center">
+                Initiate a focused audit or special project to address specific
+                issues or areas of concern.
+              </div>
             </div>
           </a>
         </div>
@@ -212,7 +181,10 @@ const AddEngagementAuditDialog = ({ setBusinessObjectiveDialog }) => {
                   </div>
                 </div>
               </div>
-              <div className="card-hover-text">New Text on Hover</div>
+              <div className="card-hover-text text-center">
+                Start an engagement to verify adherence to laws, regulations,
+                and internal policies.
+              </div>
             </div>
           </a>
         </div>

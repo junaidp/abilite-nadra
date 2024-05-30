@@ -2,7 +2,8 @@ import React from "react";
 import { CircularProgress } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import Button from "@mui/material/Button";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { styled } from "@mui/material/styles";
 import DeleteFileDialog from "./DeleteDailog";
 const VisuallyHiddenInput = styled("input")({
@@ -122,7 +123,9 @@ const Table = ({
                                   role={undefined}
                                   variant="contained"
                                   tabIndex={-1}
-                                  startIcon={<CloudUploadIcon />}
+                                  startIcon={
+                                    <FontAwesomeIcon icon={faUpload} />
+                                  }
                                   onChange={handleUpdateFileChange}
                                 >
                                   Upload
