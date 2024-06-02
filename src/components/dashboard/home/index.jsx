@@ -1,7 +1,6 @@
 import React from "react";
 import "./index.css";
 import { useDispatch, useSelector } from "react-redux";
-import chart1 from "../../../assets/chart1.png";
 import { resetAuthValues } from "../../../global-redux/reducers/auth/slice";
 import {
   setupGetNavigation,
@@ -12,10 +11,13 @@ import InfoCard from "./components/cards/InfoCard";
 import { useNavigate } from "react-router-dom";
 import PieChartComponent from "./components/pie-chart/PieChart";
 import AreaChartComponent from "./components/area-chart/AreaChart";
+import KickOffModal from "./components/modals/kickOffModal";
 
 const DashboardHome = () => {
   const navigate = useNavigate();
   let dispatch = useDispatch();
+  const [showKickOffDialog, setShowKickOffDialog] = React.useState(false);
+  const [kickOffId, setKickOffId] = React.useState("");
   const { year, company, loading, navigationInfo, dataInfo } = useSelector(
     (state) => state?.common
   );
@@ -34,7 +36,17 @@ const DashboardHome = () => {
     }
   }, [user]);
   return (
-    <div>
+    <div className="overflow-y-hidden">
+      {showKickOffDialog && (
+        <div className="dashboard-modal">
+          <div className="model-wrap">
+            <KickOffModal
+              setShowKickOffDialog={setShowKickOffDialog}
+              kickOffId={kickOffId}
+            />
+          </div>
+        </div>
+      )}
       {loading ? (
         <CircularProgress />
       ) : (
@@ -114,23 +126,25 @@ const DashboardHome = () => {
                           {navigationInfo?.jobsInExecution?.length === 0 ? (
                             <p>No jobs In execution yet</p>
                           ) : (
-                            navigationInfo?.jobsInExecution?.map(
-                              (job, index) => {
-                                return (
-                                  <h5
-                                    className="card-title cursor-pointer"
-                                    key={index}
-                                    onClick={() =>
-                                      navigate(
-                                        `/audit/kick-off?auditEngagementId=${job?.id}`
-                                      )
-                                    }
-                                  >
-                                    {job?.name}
-                                  </h5>
-                                );
-                              }
-                            )
+                            <div className="limited-text">
+                              {navigationInfo?.jobsInExecution?.map(
+                                (job, index) => {
+                                  return (
+                                    <h5
+                                      className="card-title cursor-pointer"
+                                      key={index}
+                                      onClick={() =>
+                                        navigate(
+                                          `/audit/kick-off?auditEngagementId=${job?.id}`
+                                        )
+                                      }
+                                    >
+                                      {job?.name}
+                                    </h5>
+                                  );
+                                }
+                              )}
+                            </div>
                           )}
                         </div>
                       </div>
@@ -145,23 +159,24 @@ const DashboardHome = () => {
                             ?.length === 0 ? (
                             <p>No jobs due for kick Off within a week yet</p>
                           ) : (
-                            navigationInfo?.jobsDueForKickOffWithinAWeek?.map(
-                              (job, index) => {
-                                return (
-                                  <h5
-                                    className="card-title cursor-pointer"
-                                    key={index}
-                                    onClick={() =>
-                                      navigate(
-                                        `/audit/kick-off?auditEngagementId=${job?.id}`
-                                      )
-                                    }
-                                  >
-                                    {job?.name}
-                                  </h5>
-                                );
-                              }
-                            )
+                            <div className="limited-text">
+                              {navigationInfo?.jobsDueForKickOffWithinAWeek?.map(
+                                (job, index) => {
+                                  return (
+                                    <h5
+                                      className="card-title cursor-pointer"
+                                      key={index}
+                                      onClick={() => {
+                                        setKickOffId(job?.id);
+                                        setShowKickOffDialog(true);
+                                      }}
+                                    >
+                                      {job?.name}
+                                    </h5>
+                                  );
+                                }
+                              )}
+                            </div>
                           )}
                         </div>
                       </div>
@@ -179,23 +194,25 @@ const DashboardHome = () => {
                           0 ? (
                             <p> No jobs overdue yet</p>
                           ) : (
-                            navigationInfo?.managementCommentsOverdue?.map(
-                              (job, index) => {
-                                return (
-                                  <h5
-                                    className="card-title cursor-pointer"
-                                    key={index}
-                                    onClick={() =>
-                                      navigate(
-                                        `/audit/reporting-particulars?reportingId=${job?.id}`
-                                      )
-                                    }
-                                  >
-                                    {job?.name}
-                                  </h5>
-                                );
-                              }
-                            )
+                            <div className="limited-text">
+                              {navigationInfo?.managementCommentsOverdue?.map(
+                                (job, index) => {
+                                  return (
+                                    <h5
+                                      className="card-title cursor-pointer"
+                                      key={index}
+                                      onClick={() =>
+                                        navigate(
+                                          `/audit/reporting-particulars?reportingId=${job?.id}`
+                                        )
+                                      }
+                                    >
+                                      {job?.name}
+                                    </h5>
+                                  );
+                                }
+                              )}
+                            </div>
                           )}
                         </div>
                       </div>
@@ -211,23 +228,25 @@ const DashboardHome = () => {
                             ?.length === 0 ? (
                             <p> No jobs due for completion within a week yet</p>
                           ) : (
-                            navigationInfo?.jobsDueForCompletionWithinAWeek?.map(
-                              (job, index) => {
-                                return (
-                                  <h5
-                                    className="card-title cursor-pointer"
-                                    key={index}
-                                    onClick={() =>
-                                      navigate(
-                                        `/audit/follow-up-particulars?followUpId=${job?.id}`
-                                      )
-                                    }
-                                  >
-                                    {job?.name}
-                                  </h5>
-                                );
-                              }
-                            )
+                            <div className="limited-text">
+                              {navigationInfo?.jobsDueForCompletionWithinAWeek?.map(
+                                (job, index) => {
+                                  return (
+                                    <h5
+                                      className="card-title cursor-pointer"
+                                      key={index}
+                                      onClick={() =>
+                                        navigate(
+                                          `/audit/follow-up-particulars?followUpId=${job?.id}`
+                                        )
+                                      }
+                                    >
+                                      {job?.name}
+                                    </h5>
+                                  );
+                                }
+                              )}
+                            </div>
                           )}
                         </div>
                       </div>
@@ -241,7 +260,7 @@ const DashboardHome = () => {
                         </p>
 
                         <div>
-                          <AreaChartComponent />
+                          <AreaChartComponent dataInfo={dataInfo} />
                         </div>
                         <div className="row">
                           <div className="label mb-2 highh">
@@ -284,7 +303,7 @@ const DashboardHome = () => {
                           <p className="text-center">
                             Observation by Risk Rating
                           </p>
-                          <PieChartComponent />
+                          <PieChartComponent dataInfo={dataInfo} />
 
                           <div className="flex">
                             <div className="label high">High</div>

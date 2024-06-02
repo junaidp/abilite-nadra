@@ -1,12 +1,6 @@
 import React from "react";
 import { PieChart, Pie, Cell } from "recharts";
 
-const data = [
-  { name: "High", value: 400 },
-  { name: "Medium", value: 350 },
-];
-
-const COLORS = ["#0088FE", "#70AD47"];
 const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({
   cx,
@@ -34,7 +28,13 @@ const renderCustomizedLabel = ({
   );
 };
 
-const PieChartComponent = () => {
+const PieChartComponent = ({ dataInfo }) => {
+  const data = [
+    { name: "High", value: dataInfo?.odidnotDue },
+    { name: "Medium", value: dataInfo?.odiddue },
+  ];
+
+  const COLORS = ["#0088FE", "#70AD47"];
   return (
     <PieChart width={500} height={300}>
       <Pie

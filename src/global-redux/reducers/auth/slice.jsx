@@ -7,6 +7,7 @@ import {
   updateUserName,
   generateQRCode,
   verifyQRCode,
+  updateUser,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
@@ -42,6 +43,7 @@ const initialState = {
   qrCode: "",
   codeLoading: false,
   verifyCodeSuccess: false,
+  disableTfaSuccess: false,
 };
 
 export const setupRegisterUser = createAsyncThunk(
@@ -97,6 +99,12 @@ export const setupVerifyQRCode = createAsyncThunk(
     return verifyQRCode(data, thunkAPI);
   }
 );
+export const setupUpdateUser = createAsyncThunk(
+  "auth/updateUser",
+  async (data, thunkAPI) => {
+    return updateUser(data, thunkAPI);
+  }
+);
 
 export const slice = createSlice({
   name: "auth",
@@ -128,6 +136,9 @@ export const slice = createSlice({
     },
     resetVerifyCode: (state) => {
       state.verifyCodeSuccess = false;
+    },
+    resetTfaDisableAddSucess: (state) => {
+      state.disableTfaSuccess = false;
     },
   },
   extraReducers: (builder) => {
@@ -191,7 +202,6 @@ export const slice = createSlice({
           ])
         );
         state.authSuccess = true;
-        toast.success("Please enter 6 digit code from google authenticator!");
       })
       .addCase(setupLoginUser.rejected, (state, action) => {
         state.loading = false;
@@ -299,13 +309,31 @@ export const slice = createSlice({
         state.codeLoading = false;
         if (payload?.valid === true) {
           state.verifyCodeSuccess = true;
-          toast.success("Login Success, Redirecting!");
+          toast.success("Two Factor Authentication Passed Successfully!");
         } else {
           toast.error("Code Not Valid");
         }
       })
       .addCase(setupVerifyQRCode.rejected, (state, action) => {
         state.codeLoading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Update User
+    builder
+      .addCase(setupUpdateUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupUpdateUser.fulfilled, (state) => {
+        state.loading = false;
+        state.disableTfaSuccess = true;
+        toast.success("Two Factor Authentication Disabled Successfully");
+      })
+      .addCase(setupUpdateUser.rejected, (state, action) => {
+        state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);
         } else {
@@ -325,6 +353,7 @@ export const {
   updateUserState,
   resetUpdateUserNameSuccess,
   resetVerifyCode,
+  resetTfaDisableAddSucess,
 } = slice.actions;
 
 export default slice.reducer;

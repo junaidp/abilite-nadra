@@ -273,6 +273,7 @@ const JobPrioritization = () => {
                                     : "Save"}
                                 </div>
                               )}
+
                               <div>
                                 {allJobPrioritization[index]?.completed ===
                                   false &&
@@ -296,6 +297,15 @@ const JobPrioritization = () => {
                                     </div>
                                   )}
                               </div>
+                            </td>
+                          )}
+                          {allJobPrioritization[index]?.locked === true && (
+                            <td>
+                              <button
+                                className={`btn btn-labeled btn-primary px-3  shadow disabled`}
+                              >
+                                Approved
+                              </button>
                             </td>
                           )}
                         </tr>

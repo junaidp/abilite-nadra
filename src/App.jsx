@@ -103,7 +103,7 @@ const App = () => {
 
   return (
     <div>
-      <ToastContainer />
+      <ToastContainer position="bottom-right" />
       <BrowserRouter>
         <Routes>
           <Route

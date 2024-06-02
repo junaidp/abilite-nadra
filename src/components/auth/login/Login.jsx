@@ -14,7 +14,7 @@ import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
   const [showQRCodeScanner, setShowQRCodeScanner] = React.useState(false);
-  const { loginEmail, loginPassword, loading, authSuccess, user } = useSelector(
+  const { loginEmail, loginPassword, loading, user } = useSelector(
     (state) => state.auth
   );
   const dispatch = useDispatch();
@@ -55,7 +55,14 @@ const Login = () => {
         localStorage.removeItem("year");
         dispatch(changeAuthUser([]));
       } else {
-        setShowQRCodeScanner(true);
+        if (user[0]?.userId?.tfa === true) {
+          toast.success("Please enter 6 digit code from google authenticator!");
+          setShowQRCodeScanner(true);
+        }
+        if (user[0]?.userId?.tfa === false) {
+          toast.success("Login Success Redirecting!");
+          navigate("/audit/dashboard");
+        }
       }
     }
   }, [user]);

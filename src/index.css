@@ -854,6 +854,12 @@ span[aria-label="Insert Ordered List"] .jodit-toolbar-button__trigger {
   word-break: break-all;
 }
 
+.limited-text h5 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 @media screen and (max-width: 1000px) {
   .fxt-shape {
     display: none;

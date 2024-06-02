@@ -455,7 +455,6 @@ const PDFGenerator = ({ reportObject }) => {
                   <View
                     style={styles.findings}
                     key={index}
-                    break={mainIndex === 0 && index === 0 ? false : true}
                   >
                     <Text style={styles.indexNumber}>Finding {index + 1}</Text>
                     <View style={styles.singleFindSummaryWrap}>

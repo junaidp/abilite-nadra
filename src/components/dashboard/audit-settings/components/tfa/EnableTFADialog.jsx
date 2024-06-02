@@ -1,18 +1,17 @@
 import React from "react";
-import "./index.css";
 import {
+  setupGenerateQRCode,
   setupVerifyQRCode,
   resetVerifyCode,
-} from "../../../global-redux/reducers/auth/slice";
+} from "../../../../../global-redux/reducers/auth/slice";
 import { useSelector, useDispatch } from "react-redux";
+import { CircularProgress } from "@mui/material";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 
-const AddCheckListManagementDialog = ({ setShowQRCodeScanner }) => {
+const EnableTFADialog = ({ setShowEnableTfaDialog, setCheck }) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [code, setCode] = React.useState("");
-  const { user, codeLoading, verifyCodeSuccess } = useSelector(
+  const { qrCode, user, loading, codeLoading, verifyCodeSuccess } = useSelector(
     (state) => state?.auth
   );
   function handleVerifyCode() {
@@ -24,13 +23,26 @@ const AddCheckListManagementDialog = ({ setShowQRCodeScanner }) => {
       }
     }
   }
+  let arrayBufferToBase64 = (buffer) => {
+    var binary = "";
+    var bytes = new Uint8Array(buffer);
+    var len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return window.btoa(binary);
+  };
 
   React.useEffect(() => {
     if (verifyCodeSuccess) {
       dispatch(resetVerifyCode());
-      navigate("/audit/dashboard");
+      setCheck(true);
+      setShowEnableTfaDialog(false);
     }
   }, [verifyCodeSuccess]);
+  React.useEffect(() => {
+    dispatch(setupGenerateQRCode());
+  }, [user]);
 
   return (
     <div className="px-4 py-4 min-h-70">
@@ -42,6 +54,15 @@ const AddCheckListManagementDialog = ({ setShowQRCodeScanner }) => {
         </div>
       </header>
       <div class="wrapper ">
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          <div class="qr-code">
+            <img
+              src={`data:image/JPEG;base64,${arrayBufferToBase64(qrCode)}`}
+            />
+          </div>
+        )}
         <div class="formQrCode margin-auto">
           <input
             type="text"
@@ -60,7 +81,7 @@ const AddCheckListManagementDialog = ({ setShowQRCodeScanner }) => {
         <div className="col-lg-12 text-end">
           <button
             className="btn btn-danger float-end"
-            onClick={() => setShowQRCodeScanner(false)}
+            onClick={() => setShowEnableTfaDialog(false)}
           >
             Close
           </button>
@@ -70,4 +91,4 @@ const AddCheckListManagementDialog = ({ setShowQRCodeScanner }) => {
   );
 };
 
-export default AddCheckListManagementDialog;
+export default EnableTFADialog;
