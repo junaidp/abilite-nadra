@@ -17,6 +17,8 @@ import {
   deleteRCMRisk,
   deleteRCMControl,
   deleteRCMProgram,
+  getAllProcess,
+  getAllSubProcess,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -25,6 +27,8 @@ const initialState = {
   initialLoading: false,
   allRCM: [],
   rcmAddSuccess: false,
+  allProcess: [],
+  allSubProcess: [],
 };
 
 export const setupCreateRiskControlMatrix = createAsyncThunk(
@@ -134,6 +138,20 @@ export const setupDeleteRCMProgram = createAsyncThunk(
   }
 );
 
+export const setupGetAllProcess = createAsyncThunk(
+  "rcm/getAllProcess",
+  async (data, thunkAPI) => {
+    return getAllProcess(data, thunkAPI);
+  }
+);
+
+export const setupGetAllSubProcess = createAsyncThunk(
+  "rcm/getAllSubProcess",
+  async (data, thunkAPI) => {
+    return getAllSubProcess(data, thunkAPI);
+  }
+);
+
 export const slice = createSlice({
   name: "rcm",
   initialState,
@@ -143,6 +161,10 @@ export const slice = createSlice({
     },
     handleReset: (state) => {
       state.allRCM = [];
+    },
+    handleResetProcessData: (state) => {
+      state.allProcess = [];
+      state.allSubProcess = [];
     },
   },
   extraReducers: (builder) => {
@@ -457,9 +479,56 @@ export const slice = createSlice({
           toast.error("An Error has occurred");
         }
       });
+
+    // Get All Process
+    builder
+      .addCase(setupGetAllProcess.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetAllProcess.fulfilled, (state, action) => {
+        state.loading = false;
+        state.allProcess = action.payload?.data || [{ error: "Not Found" }];
+      })
+      .addCase(setupGetAllProcess.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    builder
+      .addCase(setupGetAllSubProcess.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetAllSubProcess.fulfilled, (state, action) => {
+        state.loading = false;
+        if (Array.isArray(action.payload?.data)) {
+          state.allSubProcess = action.payload?.data || [
+            { error: "Not Found" },
+          ];
+        }
+        if (!Array.isArray(action.payload?.data) && action.payload?.data) {
+          state.allSubProcess = [{ ...action.payload?.data }] || [
+            { error: "Not Found" },
+          ];
+        }
+        if (!Array.isArray(action.payload?.data) && !action.payload?.data) {
+          state.allSubProcess = [{ error: "Not Found" }];
+        }
+      })
+      .addCase(setupGetAllSubProcess.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
   },
 });
 
-export const { resetRCMAddSuccess, handleReset } = slice.actions;
+export const { resetRCMAddSuccess, handleReset, handleResetProcessData } =
+  slice.actions;
 
 export default slice.reducer;

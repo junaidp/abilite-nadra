@@ -3,7 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   setupGetAllProcess,
   setupGetAllSubProcess,
-} from "../../../global-redux/reducers/settings/process/slice";
+  handleResetProcessData,
+} from "../../../global-redux/reducers/settings/risk-control-matrix/slice";
 import { toast } from "react-toastify";
 import { setupCreateRiskControlMatrix } from "../../../global-redux/reducers/settings/risk-control-matrix/slice";
 
@@ -13,7 +14,7 @@ const AddSettingsRCMDialog = ({ setShowCreateRCMDialog }) => {
     (state) => state?.setttingsRiskControlMatrix
   );
   let { allProcess, allSubProcess } = useSelector(
-    (state) => state?.setttingsProcess
+    (state) => state?.setttingsRiskControlMatrix
   );
   const { company } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
@@ -26,6 +27,7 @@ const AddSettingsRCMDialog = ({ setShowCreateRCMDialog }) => {
     setDescription("");
     setSubProcessId("");
     setProcessId("");
+    dispatch(handleResetProcessData());
   }
 
   React.useEffect(() => {
@@ -34,6 +36,7 @@ const AddSettingsRCMDialog = ({ setShowCreateRCMDialog }) => {
       setDescription("");
       setSubProcessId("");
       setProcessId("");
+      dispatch(handleResetProcessData());
     }
   }, [rcmAddSuccess]);
 
