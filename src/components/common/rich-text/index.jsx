@@ -1,3 +1,4 @@
+import { Jodit } from "jodit";
 import React, { useState, useRef, useMemo } from "react";
 import JoditEditor from "jodit-react";
 import { useSelector } from "react-redux";
@@ -22,11 +23,16 @@ const RichTextEditor = ({ onContentChange, initialValue, name, editable }) => {
         },
       },
       toolbarAdaptive: false,
-      // processPasteHTML: false,
-      // scrollToPastedContent: false,
-      // nl2brInPlainText: true,
       readonly: editable === "false" ? true : false,
       spellcheck: true,
+
+      pasteHTMLActionList: Jodit.atom([
+        {
+          value: Jodit.constants.INSERT_ONLY_TEXT,
+          text: "Insert this content as text",
+        },
+      ]),
+      askBeforePasteHTML: true,
       buttons: [
         "bold",
         "|",

@@ -1,4 +1,4 @@
-import logo from "../../../../../../assets/logo.png";
+import logo from "../../../../../../assets/hyphen.jpeg";
 import moment from "moment";
 import React from "react";
 import font from "../../../../../../font/Poppins-Medium.ttf";
@@ -452,10 +452,7 @@ const PDFGenerator = ({ reportObject }) => {
             (list, mainIndex) =>
               list?.reportingList?.map((followUpItem, index) => {
                 return (
-                  <View
-                    style={styles.findings}
-                    key={index}
-                  >
+                  <View style={styles.findings} key={index}>
                     <Text style={styles.indexNumber}>Finding {index + 1}</Text>
                     <View style={styles.singleFindSummaryWrap}>
                       <Text style={styles.singleFindSummaryHeader}>

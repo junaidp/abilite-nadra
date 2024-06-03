@@ -1,5 +1,6 @@
 import React, { useRef, useMemo } from "react";
 import JoditEditor from "jodit-react";
+import { Jodit } from "jodit";
 
 const RichTextEditor = ({
   handleChangeExcutiveSummary,
@@ -27,7 +28,14 @@ const RichTextEditor = ({
       },
       toolbarAdaptive: false,
       spellcheck: true,
-
+      
+      pasteHTMLActionList: Jodit.atom([
+        {
+          value: Jodit.constants.INSERT_ONLY_TEXT,
+          text: "Insert this content as text",
+        },
+      ]),
+      askBeforePasteHTML: true,
       buttons: [
         "bold",
         "|",

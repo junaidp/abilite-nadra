@@ -1,4 +1,4 @@
-import logo from "../../../../../../assets/logo.png";
+import logo from "../../../../../../assets/hyphen.jpeg";
 import moment from "moment";
 import React from "react";
 import font from "../../../../../../font/Poppins-Medium.ttf";
