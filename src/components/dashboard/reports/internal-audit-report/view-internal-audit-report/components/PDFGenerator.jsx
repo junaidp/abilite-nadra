@@ -409,20 +409,12 @@ const PDFGenerator = ({ reportObject }) => {
         {/* Page 3 */}
         <View style={styles.page2} break>
           <Text style={styles.contents}>EXECUTIVE SUMMARY </Text>
-          <View>
-            <Text style={styles.h4}>
-              <Html>{reportObject?.executiveSummary}</Html>
-            </Text>
-          </View>
+          <Html>{reportObject?.executiveSummary}</Html>
         </View>
         {/* Page 4 */}
         <View style={styles.page2} break>
           <Text style={styles.contents}>AUDIT PURPOSE </Text>
-          <View>
-            <Text style={styles.h4}>
-              <Html>{reportObject?.auditPurpose}</Html>
-            </Text>
-          </View>
+          <Html>{reportObject?.auditPurpose}</Html>
         </View>
         {/* Page 5 */}
         <View style={styles.page2} break>
@@ -435,13 +427,7 @@ const PDFGenerator = ({ reportObject }) => {
                   <Text style={styles.indexNumber}>
                     Key Finding {index + 1}
                   </Text>
-                  <View style={styles.summaryInfoWrap}>
-                    <View style={styles.singleFindSummaryWrap}>
-                      <Text style={styles.singleFindSummaryPara}>
-                        <Html>{item?.observationName}</Html>
-                      </Text>
-                    </View>
-                  </View>
+                  <Html>{item?.observationName}</Html>
                 </View>
               );
             })}
@@ -461,9 +447,7 @@ const PDFGenerator = ({ reportObject }) => {
                     <Text style={styles.singleFindSummaryHeader}>
                       Observation
                     </Text>
-                    <Text style={styles.singleFindSummaryPara}>
-                      <Html>{followUpItem?.observationName}</Html>
-                    </Text>
+                    <Html>{followUpItem?.observationName}</Html>
                   </View>
                   <View style={styles.singleFindSummaryWrap}>
                     <Text style={styles.singleFindSummaryHeader}>
@@ -543,11 +527,7 @@ const PDFGenerator = ({ reportObject }) => {
         {/* Page 9 */}
         <View style={styles.page2} break>
           <Text style={styles.contents}>ANNEXURE </Text>
-          <View>
-            <Text style={styles.h4}>
-              <Html>{reportObject?.annexure}</Html>
-            </Text>
-          </View>
+          <Html>{reportObject?.annexure}</Html>
         </View>
         <Text
           style={styles.pageNumber}

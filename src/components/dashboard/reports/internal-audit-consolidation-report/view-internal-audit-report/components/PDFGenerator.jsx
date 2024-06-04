@@ -415,16 +415,12 @@ const PDFGenerator = ({ reportObject }) => {
         {/* Page 3 */}
         <View style={styles.page2} break>
           <Text style={styles.contents}>EXECUTIVE SUMMARY </Text>
-          <View>
-            <Html>{reportObject?.executiveSummary}</Html>
-          </View>
+          <Html>{reportObject?.executiveSummary}</Html>
         </View>
         {/* Page 4 */}
         <View style={styles.page2} break>
           <Text style={styles.contents}>AUDIT PURPOSE </Text>
-          <View>
-            <Html>{reportObject?.auditPurpose}</Html>
-          </View>
+          <Html>{reportObject?.auditPurpose}</Html>
         </View>
         {/* Page 5 */}
         <View style={styles.page2} break>
@@ -448,71 +444,66 @@ const PDFGenerator = ({ reportObject }) => {
         </View>
         {/* Page 7 */}
         <View style={styles.page2} break>
-          {reportObject?.consolidatedIARKeyFindingsList?.map(
-            (list, mainIndex) =>
-              list?.reportingList?.map((followUpItem, index) => {
-                return (
-                  <View style={styles.findings} key={index}>
-                    <Text style={styles.indexNumber}>Finding {index + 1}</Text>
-                    <View style={styles.singleFindSummaryWrap}>
-                      <Text style={styles.singleFindSummaryHeader}>
-                        Observation
-                      </Text>
-                      <Text style={styles.singleFindSummaryPara}>
-                        <Html>{followUpItem?.observationName}</Html>
-                      </Text>
-                    </View>
-                    <View style={styles.singleFindSummaryWrap}>
-                      <Text style={styles.singleFindSummaryHeader}>
-                        Implication
-                      </Text>
-                      <Text style={styles.singleFindSummaryPara}>
-                        {followUpItem?.implication}
-                      </Text>
-                    </View>
-                    <View style={styles.singleFindSummaryWrap}>
-                      <Text style={styles.singleFindSummaryHeader}>
-                        Management Comments
-                      </Text>
-                      <Text style={styles.singleFindSummaryPara}>
-                        {followUpItem?.managementComments}
-                      </Text>
-                    </View>
-                    <View style={styles.singleFindSummaryWrap}>
-                      <Text style={styles.singleFindSummaryHeader}>
-                        Implication Rating
-                      </Text>
-                      <Text style={styles.singleFindSummaryPara}>
-                        {followUpItem?.implicationRating === 1
-                          ? "High"
-                          : followUpItem?.implicationRating === 2
-                          ? "Medium"
-                          : followUpItem?.implicationRating === 3
-                          ? "Low"
-                          : ""}
-                      </Text>
-                    </View>
-                    <View style={styles.singleFindSummaryWrap}>
-                      <Text style={styles.singleFindSummaryHeader}>
-                        Auditee
-                      </Text>
-                      <Text style={styles.singleFindSummaryPara}>
-                        {followUpItem?.auditee?.name}
-                      </Text>
-                    </View>
-                    <View style={styles.singleFindSummaryWrap}>
-                      <Text style={styles.singleFindingsHeaderInfoHeader}>
-                        Implementation Date
-                      </Text>
-                      <Text style={styles.singleFindSummaryPara}>
-                        {moment(followUpItem?.implementationDate).format(
-                          "YYYY-MM-DD"
-                        )}
-                      </Text>
-                    </View>
+          {reportObject?.consolidatedIARKeyFindingsList?.map((list) =>
+            list?.reportingList?.map((followUpItem, index) => {
+              return (
+                <View style={styles.findings} key={index}>
+                  <Text style={styles.indexNumber}>Finding {index + 1}</Text>
+                  <View style={styles.singleFindSummaryWrap}>
+                    <Text style={styles.singleFindSummaryHeader}>
+                      Observation
+                    </Text>
+                    <Html>{followUpItem?.observationName}</Html>
                   </View>
-                );
-              })
+                  <View style={styles.singleFindSummaryWrap}>
+                    <Text style={styles.singleFindSummaryHeader}>
+                      Implication
+                    </Text>
+                    <Text style={styles.singleFindSummaryPara}>
+                      {followUpItem?.implication}
+                    </Text>
+                  </View>
+                  <View style={styles.singleFindSummaryWrap}>
+                    <Text style={styles.singleFindSummaryHeader}>
+                      Management Comments
+                    </Text>
+                    <Text style={styles.singleFindSummaryPara}>
+                      {followUpItem?.managementComments}
+                    </Text>
+                  </View>
+                  <View style={styles.singleFindSummaryWrap}>
+                    <Text style={styles.singleFindSummaryHeader}>
+                      Implication Rating
+                    </Text>
+                    <Text style={styles.singleFindSummaryPara}>
+                      {followUpItem?.implicationRating === 1
+                        ? "High"
+                        : followUpItem?.implicationRating === 2
+                        ? "Medium"
+                        : followUpItem?.implicationRating === 3
+                        ? "Low"
+                        : ""}
+                    </Text>
+                  </View>
+                  <View style={styles.singleFindSummaryWrap}>
+                    <Text style={styles.singleFindSummaryHeader}>Auditee</Text>
+                    <Text style={styles.singleFindSummaryPara}>
+                      {followUpItem?.auditee?.name}
+                    </Text>
+                  </View>
+                  <View style={styles.singleFindSummaryWrap}>
+                    <Text style={styles.singleFindingsHeaderInfoHeader}>
+                      Implementation Date
+                    </Text>
+                    <Text style={styles.singleFindSummaryPara}>
+                      {moment(followUpItem?.implementationDate).format(
+                        "YYYY-MM-DD"
+                      )}
+                    </Text>
+                  </View>
+                </View>
+              );
+            })
           )}
         </View>
 
@@ -542,11 +533,7 @@ const PDFGenerator = ({ reportObject }) => {
         {/* Page 9 */}
         <View style={styles.page2} break>
           <Text style={styles.contents}>ANNEXURE </Text>
-          <View>
-            <Text style={styles.h4}>
-              <Html>{reportObject?.annexure}</Html>
-            </Text>
-          </View>
+          <Html>{reportObject?.annexure}</Html>
         </View>
         <Text
           style={styles.pageNumber}
