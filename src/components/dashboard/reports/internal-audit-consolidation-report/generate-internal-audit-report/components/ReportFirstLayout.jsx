@@ -20,7 +20,6 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
               <label className="me-3">Report Name:</label>
               <input
                 className="form-control w-100"
-                placeholder="Report Name"
                 name="reportName"
                 value={reportObject?.reportName || ""}
                 onChange={(event) => handleChangeReportObject(event)}
@@ -35,7 +34,9 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
                 placeholder="Select Date"
                 type="date"
                 name="reportDate"
-                value={moment.utc(reportObject?.reportDate).format("YYYY-MM-DD")}
+                value={moment
+                  .utc(reportObject?.reportDate)
+                  .format("YYYY-MM-DD")}
                 onChange={(event) => handleChangeReportObject(event)}
               />
             </div>
@@ -51,9 +52,9 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
                 placeholder="Select Date"
                 type="date"
                 disabled
-                value={moment.utc(reportObject?.plannedStartDate).format(
-                  "YYYY-MM-DD"
-                )}
+                value={moment
+                  .utc(reportObject?.plannedStartDate)
+                  .format("YYYY-MM-DD")}
               />
             </div>
           </div>
@@ -65,9 +66,9 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
                 placeholder="Select Date"
                 type="date"
                 disabled
-                value={moment.utc(reportObject?.plannedEndDate).format(
-                  "YYYY-MM-DD"
-                )}
+                value={moment
+                  .utc(reportObject?.plannedEndDate)
+                  .format("YYYY-MM-DD")}
               />
             </div>
           </div>

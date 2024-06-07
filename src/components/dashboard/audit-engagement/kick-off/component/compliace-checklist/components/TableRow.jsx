@@ -28,8 +28,6 @@ const TableRow = ({
           {mainItem?.subLocationDescription || "No Sub Location Provided"}
         </a>
       </td>
-      <td>null</td>
-      {/* <td>null</td> */}
       <td>
         {checkStaus(mainItem) ? (
           <i className="fa fa-check-circle text-success f-18"></i>

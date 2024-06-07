@@ -18,7 +18,6 @@ const InternalAuditReportBody = ({
   handleChangeReportObject,
   handleChangeExcutiveSummary,
   handleChangeAuditPurpose,
-  handleChangeSummaryOfKeyFinding,
   handleSaveInternalAuditReport,
   addReportLoading,
   handleChangeExtraFields,
@@ -123,7 +122,6 @@ const InternalAuditReportBody = ({
       {/* Findings Start */}
       <KeyKindings
         reportObject={reportObject}
-        handleChangeSummaryOfKeyFinding={handleChangeSummaryOfKeyFinding}
       />
 
       {/* Extra Fields Starts */}

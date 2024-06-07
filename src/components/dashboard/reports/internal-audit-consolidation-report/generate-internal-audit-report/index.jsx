@@ -22,11 +22,9 @@ import InternalAuditReportBody from "./components/InternalAuditReportBody";
 import Header from "./components/Header";
 import { toast } from "react-toastify";
 import { CircularProgress } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 
 const GenerateInternalAuditReport = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { user } = useSelector((state) => state?.auth);
   const { company, year } = useSelector((state) => state?.common);
   const {
@@ -69,19 +67,7 @@ const GenerateInternalAuditReport = () => {
       };
     });
   }
-  function handleChangeSummaryOfKeyFinding(value, id) {
-    setReportObject((pre) => {
-      return {
-        ...pre,
-        consolidatedIARKeyFindingsList:
-          pre?.consolidatedIARKeyFindingsList?.map((keyObject) =>
-            Number(keyObject?.id) === Number(id)
-              ? { ...keyObject, summaryOfKeyFinding: value }
-              : keyObject
-          ),
-      };
-    });
-  }
+
   function handleChangeExtraFields(event, id) {
     setReportObject((pre) => {
       return {
@@ -188,6 +174,7 @@ const GenerateInternalAuditReport = () => {
           annexure: pre?.annexure,
           consolidatedIARKeyFindingsList: pre?.consolidatedIARKeyFindingsList,
           annexureUploads: pre?.annexureUploads,
+          summaryOfKeyFindingsList: pre?.summaryOfKeyFindingsList,
         };
       });
     }
@@ -255,7 +242,6 @@ const GenerateInternalAuditReport = () => {
             handleChangeReportObject={handleChangeReportObject}
             handleChangeExcutiveSummary={handleChangeExcutiveSummary}
             handleChangeAuditPurpose={handleChangeAuditPurpose}
-            handleChangeSummaryOfKeyFinding={handleChangeSummaryOfKeyFinding}
             handleSaveInternalAuditReport={handleSaveInternalAuditReport}
             addReportLoading={addReportLoading}
             handleChangeExtraFields={handleChangeExtraFields}

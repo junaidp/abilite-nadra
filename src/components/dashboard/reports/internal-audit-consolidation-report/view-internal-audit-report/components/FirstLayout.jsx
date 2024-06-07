@@ -20,7 +20,6 @@ const ReportFirstLayout = ({ singleInternalAuditReport }) => {
               <label className="me-3">Report Name:</label>
               <input
                 className="form-control w-100"
-                placeholder="Job Name"
                 name="reportName"
                 value={singleInternalAuditReport?.reportName || ""}
                 disabled

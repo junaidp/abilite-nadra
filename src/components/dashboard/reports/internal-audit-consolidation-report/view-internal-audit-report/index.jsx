@@ -67,15 +67,15 @@ const ViewInternalAuditReport = () => {
           <ReportFirstLayout
             singleInternalAuditReport={singleInternalAuditReport}
           />
-        
+
           <RichTextFields
             singleInternalAuditReport={singleInternalAuditReport}
           />
-          <KeyFindings singleInternalAuditReport={singleInternalAuditReport} />
+          <KeyFindings reportObject={singleInternalAuditReport} />
           <AuditExtraFields
             singleInternalAuditReport={singleInternalAuditReport}
           />
-            <div className="mt-4">
+          <div className="mt-4">
             <FileUpload item={singleInternalAuditReport} />
           </div>
           {singleInternalAuditReport?.approved === true && (

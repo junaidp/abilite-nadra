@@ -1,43 +1,69 @@
 import React from "react";
-import RichTextEditor from "./RichText";
+import RichTextEditor from "../../view-internal-audit-report/components/RichText";
 import Chip from "@mui/material/Chip";
 import FollowUpItem from "./FollowUpItem";
 
-const KeyFindings = ({ reportObject, handleChangeSummaryOfKeyFinding }) => {
+const KeyFindings = ({ reportObject }) => {
   return (
     <div>
       <div className="col-lg-12 mt-4">
-        <div className="sub-heading  fw-bold">All Findings</div>
+        <div className="heading  fw-bold">Summary Of Key Findings</div>
+      </div>
+      <div className="border px-3 py-2  mt-3 rounded">
+        {reportObject?.summaryOfKeyFindingsList?.length === 0 ? (
+          <p>No summary of key findings in this job!</p>
+        ) : (
+          reportObject?.summaryOfKeyFindingsList?.map((singleItem, index) => {
+            return (
+              <div key={index} className="mb-4">
+                <div className="sub-heading  fw-bold mb-2">
+                  Finding {index + 1}
+                </div>
+                <div className="mb-4">
+                  <RichTextEditor
+                    initialValue={singleItem?.summaryOfKeyFinding}
+                  />
+                </div>
+              </div>
+            );
+          })
+        )}
+      </div>
+      {/*  */}
+      <div className="col-lg-12 mt-4">
+        <div className="heading  fw-bold">All Findings</div>
       </div>
       <div className="border px-3 py-2  mt-3 rounded">
         {reportObject?.consolidatedIARKeyFindingsList?.map(
-          (singleItem, index) => {
+          (singleMainItem, index) => {
             return (
               <div key={index}>
-                <div className="mb-4">
-                  <label className="mb-2">Summary of key finding:</label>
-                  <RichTextEditor
-                    initialValue={singleItem?.summaryOfKeyFinding}
-                    handleChangeSummaryOfKeyFinding={
-                      handleChangeSummaryOfKeyFinding
-                    }
-                    keyFindingId={singleItem?.id}
-                  />
-                </div>
-                <div className="row mb-3">
+                <h3 className="heading  fw-bold my-4">Finding {index + 1}</h3>
+                {singleMainItem?.summaryOfKeyFinding &&
+                  singleMainItem?.summaryOfKeyFinding.trim() !== "" && (
+                    <>
+                      <div className="sub-heading  fw-bold my-2">
+                        Consolidated Observation
+                      </div>
+                      <RichTextEditor
+                        initialValue={singleMainItem?.summaryOfKeyFinding}
+                      />
+                    </>
+                  )}
+                <div className="row my-4">
                   <div className="col-lg-6">
                     <div>
                       <div className="row mb-3 f-13">
                         <div className="col-lg-6 px-3 d-flex justify-content-between">
                           <label className="mt-2">Location:</label>
                           <div>
-                            {!singleItem?.subLocationList ||
-                            singleItem?.subLocationList?.length === 0 ? (
+                            {!singleMainItem?.subLocationList ||
+                            singleMainItem?.subLocationList?.length === 0 ? (
                               <p className="mt-2">No Location To Show</p>
                             ) : (
                               [
                                 ...new Set(
-                                  singleItem?.subLocationList?.map(
+                                  singleMainItem?.subLocationList?.map(
                                     (item) => item?.locationid?.description
                                   )
                                 ),
@@ -58,11 +84,11 @@ const KeyFindings = ({ reportObject, handleChangeSummaryOfKeyFinding }) => {
                   <div className="col-lg-6 px-3 d-flex justify-content-between">
                     <label className="mt-2">Sub-Location:</label>
                     <div className="">
-                      {!singleItem?.subLocationList ||
-                      singleItem?.subLocationList?.length === 0 ? (
+                      {!singleMainItem?.subLocationList ||
+                      singleMainItem?.subLocationList?.length === 0 ? (
                         <p className="mt-2">No Sub Location To Show</p>
                       ) : (
-                        singleItem?.subLocationList?.map((item) => {
+                        singleMainItem?.subLocationList?.map((item) => {
                           return (
                             <Chip
                               label={item?.description}
@@ -74,13 +100,12 @@ const KeyFindings = ({ reportObject, handleChangeSummaryOfKeyFinding }) => {
                     </div>
                   </div>
                 </div>
-                {singleItem?.reportingList?.map((item, index) => {
-                  return <FollowUpItem key={index} item={item} />;
+                <div className="sub-heading  fw-bold mb-4">
+                  Key Findings List
+                </div>
+                {singleMainItem?.reportingList?.map((item, keyFindingIndex) => {
+                  return <FollowUpItem key={keyFindingIndex} item={item} />;
                 })}
-                {index + 1 !==
-                  reportObject?.consolidatedIARKeyFindingsList?.length && (
-                  <hr />
-                )}
               </div>
             );
           }

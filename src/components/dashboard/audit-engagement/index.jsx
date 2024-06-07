@@ -131,16 +131,16 @@ const AuditEngagement = () => {
                                 <td>{item?.title}</td>
                                 <td>
                                   {item?.plannedStartDate
-                                    ? moment(item?.plannedStartDate).format(
-                                        "DD-MM-YYYY"
-                                      )
+                                    ? moment
+                                        .utc(item?.plannedStartDate)
+                                        .format("DD-MM-YYYY")
                                     : "null"}
                                 </td>
                                 <td>
                                   {item?.plannedEndDate
-                                    ? moment(item?.item?.plannedEndDate).format(
-                                        "DD-MM-YYYY"
-                                      )
+                                    ? moment
+                                        .utc(item?.item?.plannedEndDate)
+                                        .format("DD-MM-YYYY")
                                     : "null"}
                                 </td>
                                 <td>

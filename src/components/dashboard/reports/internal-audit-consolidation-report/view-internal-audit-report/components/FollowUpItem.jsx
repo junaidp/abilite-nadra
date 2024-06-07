@@ -1,10 +1,11 @@
 import React from "react";
 import moment from "moment";
-import RichTextEditor from "./RichText";
+import RichTextEditor from "../../view-internal-audit-report/components/RichText";
+import FileAttachement from "./Attachments";
 
 const FollowUpItem = ({ item }) => {
   return (
-    <div className=" py-2  mt-3">
+    <div>
       <div className="mb-3">
         <label>Observation:</label>
         <RichTextEditor initialValue={item?.observationName} />
@@ -120,6 +121,8 @@ const FollowUpItem = ({ item }) => {
           <option value="false">No</option>
         </select>
       </div>
+      <FileAttachement item={item} />
+      <hr />
     </div>
   );
 };

@@ -206,8 +206,6 @@ const ComplianceCheckList = ({
                         <th className="f-80">Sr No.</th>
                         <th>Sub Location Name</th>
                         <th>Status</th>
-                        {/* <th>Change Request</th> */}
-                        <th>Status</th>
                         <th>Actions</th>
                       </tr>
                     </thead>
