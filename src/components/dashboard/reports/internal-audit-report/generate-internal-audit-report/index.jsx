@@ -67,18 +67,7 @@ const GenerateInternalAuditReport = () => {
       };
     });
   }
-  function handleChangeSummaryOfKeyFinding(value, id) {
-    setReportObject((pre) => {
-      return {
-        ...pre,
-        keyFindingsList: pre?.keyFindingsList?.map((keyObject) =>
-          Number(keyObject?.id) === Number(id)
-            ? { ...keyObject, summaryOfKeyFinding: value }
-            : keyObject
-        ),
-      };
-    });
-  }
+
   function handleChangeExtraFields(event, id) {
     setReportObject((pre) => {
       return {
@@ -253,7 +242,6 @@ const GenerateInternalAuditReport = () => {
             handleChangeReportObject={handleChangeReportObject}
             handleChangeExcutiveSummary={handleChangeExcutiveSummary}
             handleChangeAuditPurpose={handleChangeAuditPurpose}
-            handleChangeSummaryOfKeyFinding={handleChangeSummaryOfKeyFinding}
             handleSaveInternalAuditReport={handleSaveInternalAuditReport}
             addReportLoading={addReportLoading}
             handleChangeExtraFields={handleChangeExtraFields}

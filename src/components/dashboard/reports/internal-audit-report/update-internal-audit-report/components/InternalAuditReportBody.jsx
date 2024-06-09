@@ -19,7 +19,6 @@ const InternalAuditReportBody = ({
   handleChangeReportObject,
   handleChangeExcutiveSummary,
   handleChangeAuditPurpose,
-  handleChangeSummaryOfKeyFinding,
   handleSaveInternalAuditReport,
   addReportLoading,
   handleChangeExtraFields,
@@ -120,6 +119,9 @@ const InternalAuditReportBody = ({
         </div>
       </div>
       {/* Editors Ends */}
+      {/* Findings Start */}
+      <KeyFindings reportObject={reportObject} />
+      {/* Findings Ends */}
 
       {/* Reporting And Follow Up Starts */}
       <div className="row my-3">
@@ -132,12 +134,6 @@ const InternalAuditReportBody = ({
       })}
       {/* Reporting And Follow Up Ends */}
 
-      {/* Findings Start */}
-      <KeyFindings
-        reportObject={reportObject}
-        handleChangeSummaryOfKeyFinding={handleChangeSummaryOfKeyFinding}
-      />
-      {/* Findings Ends */}
       {/* Extra Field Starts */}
       <ExtraFields
         reportObject={reportObject}

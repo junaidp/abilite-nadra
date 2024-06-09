@@ -16,9 +16,7 @@ import FileUpload from "./FileUpload";
 const InternalAuditReportBody = ({
   reportObject,
   handleChangeReportObject,
-  handleChangeExcutiveSummary,
   handleChangeAuditPurpose,
-  handleChangeSummaryOfKeyFinding,
   handleSaveInternalAuditReport,
   addReportLoading,
   handleChangeExtraFields,
@@ -95,10 +93,7 @@ const InternalAuditReportBody = ({
         <div className="row mb-3">
           <div className="col-lg-12">
             <label>Executive summary</label>
-            <RichTextEditor
-              initialValue={reportObject?.executiveSummary}
-              handleChangeExcutiveSummary={handleChangeExcutiveSummary}
-            />
+            <RichTextEditor initialValue={reportObject?.executiveSummary} />
             <label className="word-limit-info label-text">
               Maximum 5000 words
             </label>
@@ -121,10 +116,7 @@ const InternalAuditReportBody = ({
       {/* Editors Ends */}
 
       {/* Findings Start */}
-      <KeyKindings
-        reportObject={reportObject}
-        handleChangeSummaryOfKeyFinding={handleChangeSummaryOfKeyFinding}
-      />
+      <KeyKindings reportObject={reportObject} />
 
       {/* Findings Ends */}
       {/* Reporting And Follow Up Starts */}

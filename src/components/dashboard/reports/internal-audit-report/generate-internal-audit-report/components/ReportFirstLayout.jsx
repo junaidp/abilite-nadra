@@ -20,7 +20,6 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
               <label className="me-3">Report Name:</label>
               <input
                 className="form-control w-100"
-                placeholder="Report Name"
                 name="reportName"
                 value={reportObject?.reportName || ""}
                 onChange={(event) => handleChangeReportObject(event)}

@@ -74,9 +74,6 @@ const ViewInternalAuditReport = () => {
             singleInternalAuditReport={singleInternalAuditReport}
           />
           <KeyFindings singleInternalAuditReport={singleInternalAuditReport} />
-          <AuditExtraFields
-            singleInternalAuditReport={singleInternalAuditReport}
-          />
           <div>
             <div className="col-lg-12 mt-4">
               <div className="sub-heading  fw-bold">Reporting & Follow Up</div>
@@ -87,6 +84,9 @@ const ViewInternalAuditReport = () => {
               }
             )}
           </div>
+          <AuditExtraFields
+            singleInternalAuditReport={singleInternalAuditReport}
+          />
           <div className="mt-4">
             <FileUpload item={singleInternalAuditReport} />
           </div>

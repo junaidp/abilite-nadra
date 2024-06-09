@@ -290,15 +290,23 @@ const PDFGenerator = ({ reportObject }) => {
               SUMMARY OF KEY FINDINGS -----------------------------------------
             </Text>
             <View style={styles.overviewFields}>
-              {reportObject?.reportingAndFollowUp?.reportingList
-                ?.filter((singleItem) => singleItem?.implicationRating === 1)
-                ?.map((singleItem) => {
-                  return (
-                    <Text style={styles.h4}>
-                      {singleItem?.observationTitle.slice(0, 40)}...
-                    </Text>
-                  );
-                })}
+              {reportObject?.reportingAndFollowUp?.reportingList?.filter(
+                (singleItem) => singleItem?.implicationRating === 1
+              )?.length === 0 ? (
+                <Text style={styles.h4}>
+                  No summary of key findings in this job!
+                </Text>
+              ) : (
+                reportObject?.reportingAndFollowUp?.reportingList
+                  ?.filter((singleItem) => singleItem?.implicationRating === 1)
+                  ?.map((singleItem) => {
+                    return (
+                      <Text style={styles.h4}>
+                        {singleItem?.observationTitle.slice(0, 40)}...
+                      </Text>
+                    );
+                  })
+              )}
             </View>
             <Text style={styles.h4}>
               ALL FINDINGS -----------------------------------------------------
@@ -419,18 +427,24 @@ const PDFGenerator = ({ reportObject }) => {
         {/* Page 5 */}
         <View style={styles.page2} break>
           <Text style={styles.contents}>SUMMARY OF KEY FINDINGS </Text>
-          {reportObject?.reportingAndFollowUp?.reportingList
-            ?.filter((singleItem) => singleItem?.implicationRating === 1)
-            ?.map((item, index) => {
-              return (
-                <View style={styles.findingsSummary} key={index}>
-                  <Text style={styles.indexNumber}>
-                    Key Finding {index + 1}
-                  </Text>
-                  <Html>{item?.observationName}</Html>
-                </View>
-              );
-            })}
+          {reportObject?.reportingAndFollowUp?.reportingList?.filter(
+            (singleItem) => singleItem?.implicationRating === 1
+          )?.length == 0 ? (
+            <Text style={styles.h4}>
+              No summary of key findings in this job!
+            </Text>
+          ) : (
+            reportObject?.reportingAndFollowUp?.reportingList
+              ?.filter((singleItem) => singleItem?.implicationRating === 1)
+              ?.map((item, index) => {
+                return (
+                  <View style={styles.findingsSummary} key={index}>
+                    <Text style={styles.indexNumber}>Finding {index + 1}</Text>
+                    <Html>{item?.observationName}</Html>
+                  </View>
+                );
+              })
+          )}
         </View>
         {/* Page 6 */}
         <View style={styles.allFindingMianHeadingWrap} break>
@@ -443,6 +457,14 @@ const PDFGenerator = ({ reportObject }) => {
               return (
                 <View style={styles.findings}>
                   <Text style={styles.indexNumber}>Finding {index + 1}</Text>
+                  <View style={styles.singleFindSummaryWrap}>
+                    <Text style={styles.singleFindSummaryHeader}>
+                      Observation Title
+                    </Text>
+                    <Text style={styles.singleFindSummaryPara}>
+                      {followUpItem?.observationTitle}
+                    </Text>
+                  </View>
                   <View style={styles.singleFindSummaryWrap}>
                     <Text style={styles.singleFindSummaryHeader}>
                       Observation
