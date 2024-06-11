@@ -11,18 +11,24 @@ const KeyFindings = ({ singleInternalAuditReport }) => {
       </div>
 
       <div className="border px-3 py-2  mt-3 rounded">
-        {singleInternalAuditReport?.reportingAndFollowUp?.reportingList
-          ?.filter((reportItem) => reportItem?.implicationRating === 1)
-          ?.map((item, index) => {
-            return (
-              <div className="row mb-3" key={index}>
-                <div className="col-lg-12">
-                  <label>Finding {index + 1}</label>
-                  <RichTextEditor initialValue={item?.observationName} />
+        {singleInternalAuditReport?.reportingAndFollowUp?.reportingList?.filter(
+          (singleItem) => singleItem?.implicationRating === 1
+        )?.length == 0 ? (
+          <p> No summary of key findings in this job!</p>
+        ) : (
+          singleInternalAuditReport?.reportingAndFollowUp?.reportingList
+            ?.filter((reportItem) => reportItem?.implicationRating === 1)
+            ?.map((item, index) => {
+              return (
+                <div className="row mb-3" key={index}>
+                  <div className="col-lg-12">
+                    <label>Finding {index + 1}</label>
+                    <RichTextEditor initialValue={item?.observationName} />
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+        )}
       </div>
     </div>
   );
