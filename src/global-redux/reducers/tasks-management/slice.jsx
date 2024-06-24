@@ -11,6 +11,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
   loading: false,
+  initialLoading: false,
   users: [],
   auditEngagements: [],
   allTasks: [],
@@ -120,14 +121,14 @@ export const slice = createSlice({
     // Get All Tasks
     builder
       .addCase(setupGetAllTasks.pending, (state) => {
-        state.loading = true;
+        state.initialLoading = true;
       })
       .addCase(setupGetAllTasks.fulfilled, (state, { payload }) => {
-        state.loading = false;
+        state.initialLoading = false;
         state.allTasks = payload?.data || [];
       })
       .addCase(setupGetAllTasks.rejected, (state, { payload }) => {
-        state.loading = false;
+        state.initialLoading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
         } else {

@@ -26,7 +26,7 @@ const InformationRequest = () => {
     setShowViewInformationRequestDialog,
   ] = React.useState(false);
 
-  const { taskAddSuccess, allTasks, loading } = useSelector(
+  const { taskAddSuccess, allTasks, initialLoading } = useSelector(
     (state) => state?.tasksManagement
   );
   const { company } = useSelector((state) => state?.common);
@@ -126,7 +126,7 @@ const InformationRequest = () => {
                 </tr>
               </thead>
               <tbody>
-                {loading ? (
+                {initialLoading ? (
                   <tr>
                     <td>
                       <CircularProgress />
@@ -144,7 +144,9 @@ const InformationRequest = () => {
                         <tr key={index}>
                           <td>{index + 1}</td>
                           <td>{task?.detailedRequirement}</td>
-                          <td>{moment(task?.dueDate).format("DD-MM-YY")}</td>
+                          <td>
+                            {moment.utc(task?.dueDate).format("DD-MM-YY")}
+                          </td>
                           <td>{task?.auditEngagement?.title}</td>
                           <td>{task?.assignee?.name}</td>
                           <td>{task?.assignedBy?.name}</td>

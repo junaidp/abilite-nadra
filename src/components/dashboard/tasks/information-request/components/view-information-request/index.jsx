@@ -24,7 +24,7 @@ const ViewInformationRequest = ({
   React.useEffect(() => {
     let task = allTasks.find((singleTask) => singleTask?.id === updateTaskId);
     setInitialValues({
-      dueDate: task ? moment(task?.dueDate).format("YYYY-MM-DD") : "",
+      dueDate: task ? moment.utc(task?.dueDate).format("YYYY-MM-DD") : "",
       auditEngagementId: task?.auditEngagement?.id,
       userAssigned: task?.assignee?.id,
       detailedRequirement: task?.detailedRequirement,
@@ -93,7 +93,7 @@ const ViewInformationRequest = ({
 
       <div className="row mb-3">
         <div className="col-lg-12">
-          <label>Detailed Requirement:</label>
+          <label>Detailed Requirement</label>
           <textarea
             className="form-control"
             placeholder="Enter Detailed Requirement"
@@ -106,7 +106,7 @@ const ViewInformationRequest = ({
       </div>
       <div className="row mb-3">
         <div className="col-lg-12">
-          <label>Assignee Response:</label>
+          <label>Assignee Response</label>
           <textarea
             className="form-control min-h-150"
             placeholder="Enter Detailed Requirement"

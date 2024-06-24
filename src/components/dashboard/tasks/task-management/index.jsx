@@ -4,8 +4,6 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   resetTaskAddSuccess,
   setupGetAllTasks,
-  setupGetAllAuditEngagement,
-  setupGetAllUsers,
 } from "../../../../global-redux/reducers/tasks-management/slice";
 import { CircularProgress } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
@@ -16,7 +14,6 @@ const TaskManagement = () => {
   const dispatch = useDispatch();
   const [showUpdateTaskDialog, setShowUpdateTaskDailog] = React.useState(false);
   const [showViewTaskDialog, setShowViewTasktDialog] = React.useState(false);
-
   const { taskAddSuccess, allTasks, loading } = useSelector(
     (state) => state?.tasksManagement
   );
@@ -35,8 +32,6 @@ const TaskManagement = () => {
     )?.id;
     if (companyId) {
       dispatch(setupGetAllTasks({ companyId: companyId, isTask: true }));
-      dispatch(setupGetAllAuditEngagement(`?companyId=${companyId}`));
-      dispatch(setupGetAllUsers());
     }
   }, [user, company]);
 
@@ -109,7 +104,9 @@ const TaskManagement = () => {
                         <tr key={index}>
                           <td>{index + 1}</td>
                           <td>{task?.detailedRequirement}</td>
-                          <td>{moment(task?.dueDate).format("DD-MM-YY")}</td>
+                          <td>
+                            {moment.utc(task?.dueDate).format("DD-MM-YY")}
+                          </td>
                           <td>{task?.auditEngagement?.title}</td>
                           <td>{task?.assignee?.name}</td>
                           <td>{task?.assignedBy?.name}</td>

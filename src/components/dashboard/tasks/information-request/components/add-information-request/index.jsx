@@ -71,7 +71,7 @@ const AddInformationRequest = ({ setShowAddInformationRequestDialog }) => {
           <Form>
             <div className="row">
               <div className="mb-3 col-lg-12">
-                <label>Due Date:</label>
+                <label>Due Date</label>
                 <Field
                   type="date"
                   name="dueDate"
@@ -88,7 +88,7 @@ const AddInformationRequest = ({ setShowAddInformationRequestDialog }) => {
 
             <div className="row mb-3">
               <div className="col-lg-6">
-                <label className="me-3">Selected Job:</label>
+                <label className="me-3">Selected Job</label>
                 <Field
                   as="select"
                   name="auditEngagementId"
@@ -109,7 +109,7 @@ const AddInformationRequest = ({ setShowAddInformationRequestDialog }) => {
                 />
               </div>
               <div className="col-lg-6">
-                <label className="me-3">Selected Assignee:</label>
+                <label className="me-3">Selected Assignee</label>
                 <Field
                   as="select"
                   name="userAssigned"
@@ -133,7 +133,7 @@ const AddInformationRequest = ({ setShowAddInformationRequestDialog }) => {
 
             <div className="row mb-3">
               <div className="col-lg-12">
-                <label>Detailed Requirement:</label>
+                <label>Detailed Requirement</label>
                 <Field
                   as="textarea"
                   name="detailedRequirement"

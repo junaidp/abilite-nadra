@@ -64,7 +64,7 @@ const UpdateInformationRequest = ({
   React.useEffect(() => {
     let task = allTasks.find((singleTask) => singleTask?.id === updateTaskId);
     setInitialValues({
-      dueDate: task ? moment(task?.dueDate).format("YYYY-MM-DD") : "",
+      dueDate: task ? moment.utc(task?.dueDate).format("YYYY-MM-DD") : "",
       auditEngagementId: task?.auditEngagement?.id,
       userAssigned: task?.assignee?.id,
       detailedRequirement: task?.detailedRequirement,
@@ -88,7 +88,7 @@ const UpdateInformationRequest = ({
           <Form>
             <div className="row">
               <div className="mb-3 col-lg-12">
-                <label>Due Date:</label>
+                <label>Due Date</label>
                 <Field
                   type="date"
                   name="dueDate"
@@ -105,7 +105,7 @@ const UpdateInformationRequest = ({
 
             <div className="row mb-3">
               <div className="col-lg-6">
-                <label className="me-3">Selected Job:</label>
+                <label className="me-3">Selected Job</label>
                 <Field
                   as="select"
                   name="auditEngagementId"
@@ -126,7 +126,7 @@ const UpdateInformationRequest = ({
                 />
               </div>
               <div className="col-lg-6">
-                <label className="me-3">Selected Assignee:</label>
+                <label className="me-3">Selected Assignee</label>
                 <Field
                   as="select"
                   name="userAssigned"
@@ -150,7 +150,7 @@ const UpdateInformationRequest = ({
 
             <div className="row mb-3">
               <div className="col-lg-12">
-                <label>Detailed Requirement:</label>
+                <label>Detailed Requirement</label>
                 <Field
                   as="textarea"
                   name="detailedRequirement"

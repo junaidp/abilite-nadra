@@ -7,15 +7,16 @@ import { toast } from "react-toastify";
 
 const UpdateTaskManagement = ({ setShowUpdateTaskDailog, updateTaskId }) => {
   const dispatch = useDispatch();
-  const { users, auditEngagements, loading, taskAddSuccess, allTasks } =
-    useSelector((state) => state?.tasksManagement);
+  const { loading, taskAddSuccess, allTasks } = useSelector(
+    (state) => state?.tasksManagement
+  );
   const [fileAttachments, setFileAttachments] = React.useState([]);
   const [response, setResponse] = React.useState("");
 
   // Initial form initialValues
   const defaultinitialValues = {
     dueDate: "",
-    auditEngagementId: "",
+    auditEngagement: "",
     userAssigned: "",
     detailedRequirement: "",
   };
@@ -33,15 +34,15 @@ const UpdateTaskManagement = ({ setShowUpdateTaskDailog, updateTaskId }) => {
         dispatch(
           setupUpdateTask({
             id: updateTaskId,
-            dueDate: initialValues?.dueDate,
+            dueDate: task?.dueDate,
             status: "string",
-            auditEngagementId: Number(initialValues?.auditEngagementId),
-            createdBy: task?.assignedBy?.id,
-            companyId: task?.companyId,
-            userAssigned: Number(initialValues?.userAssigned),
+            auditEngagementId: Number(task?.auditEngagement?.id),
+            createdBy: Number(task?.assignedBy?.id),
+            companyId: Number(task?.companyId),
+            userAssigned: Number(task?.assignee?.id),
             yourResponse: response,
             fileAttachments: [],
-            detailedRequirement: initialValues?.detailedRequirement,
+            detailedRequirement: task?.detailedRequirement,
           })
         );
       }
@@ -57,9 +58,9 @@ const UpdateTaskManagement = ({ setShowUpdateTaskDailog, updateTaskId }) => {
   React.useEffect(() => {
     let task = allTasks.find((singleTask) => singleTask?.id === updateTaskId);
     setInitialValues({
-      dueDate: task ? moment(task?.dueDate).format("YYYY-MM-DD") : "",
-      auditEngagementId: task?.auditEngagement?.id,
-      userAssigned: task?.assignee?.id,
+      dueDate: task ? moment.utc(task?.dueDate).format("YYYY-MM-DD") : "",
+      auditEngagement: task?.auditEngagement?.title,
+      userAssigned: task?.assignee?.name,
       detailedRequirement: task?.detailedRequirement,
     });
     setResponse(task?.yourResponse);
@@ -87,46 +88,26 @@ const UpdateTaskManagement = ({ setShowUpdateTaskDailog, updateTaskId }) => {
 
       <div className="row mb-3">
         <div className="col-lg-6">
-          <label className="me-3">Selected Job:</label>
-          <select
-            className="form-select"
-            aria-label="Default select example"
+          <label className="me-3">Selected Job</label>
+          <input
+            className="form-control w-100"
             disabled
-            value={initialValues?.auditEngagementId}
-          >
-            <option value="">Select Job</option>
-            {auditEngagements?.map((job, index) => {
-              return (
-                <option key={index} value={job?.id}>
-                  {job?.engagementName}
-                </option>
-              );
-            })}
-          </select>
+            value={initialValues?.auditEngagement}
+          />
         </div>
         <div className="col-lg-6">
-          <label className="me-3">Selected Assignee:</label>
-          <select
-            className="form-select"
-            aria-label="Default select example"
+          <label className="me-3">Selected Assignee</label>
+          <input
+            className="form-control w-100"
             disabled
             value={initialValues?.userAssigned}
-          >
-            <option value="">Select User</option>
-            {users?.map((user, index) => {
-              return (
-                <option value={user?.id} key={index}>
-                  {user?.name}
-                </option>
-              );
-            })}
-          </select>
+          />
         </div>
       </div>
 
       <div className="row mb-3">
         <div className="col-lg-12">
-          <label>Detailed Requirement:</label>
+          <label>Detailed Requirement</label>
           <textarea
             className="form-control"
             placeholder="Enter Detailed Requirement"
@@ -135,14 +116,11 @@ const UpdateTaskManagement = ({ setShowUpdateTaskDailog, updateTaskId }) => {
             rows="3"
             value={initialValues?.detailedRequirement}
           ></textarea>
-          <label className="word-limit-info label-text">
-            Maximum 400 words
-          </label>
         </div>
       </div>
       <div className="row mb-3">
         <div className="col-lg-12">
-          <label>Your Response:</label>
+          <label>Your Response</label>
           <textarea
             className="form-control"
             placeholder="Enter Detailed Requirement"
