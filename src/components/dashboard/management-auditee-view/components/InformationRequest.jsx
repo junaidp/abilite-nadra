@@ -1,5 +1,5 @@
 import React from "react";
-import InformationRequestPage from "../../information-request/index";
+import InformationRequestPage from "../../tasks/information-request/index";
 
 const InformationRequest = ({ tab }) => {
   return (

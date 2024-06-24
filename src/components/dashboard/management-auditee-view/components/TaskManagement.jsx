@@ -1,5 +1,5 @@
 import React from "react";
-import TaskManagementPage from "../../task-management/index";
+import TaskManagementPage from "../../tasks/task-management/index";
 
 const TaskManagement = ({ tab }) => {
   return (

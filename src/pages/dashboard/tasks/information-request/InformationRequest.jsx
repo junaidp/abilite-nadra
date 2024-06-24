@@ -1,5 +1,5 @@
 import React from "react";
-import InformationRequest from "../../../components/dashboard/information-request/index";
+import InformationRequest from "../../../../components/dashboard/tasks/information-request/index";
 
 const InformationRequestPage = () => {
   return <InformationRequest />;

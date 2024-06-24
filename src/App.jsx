@@ -28,9 +28,9 @@ import ViewResourcePage from "./pages/dashboard/planing/job-scheduling/view-reso
 import GeneratePlanningReportPage from "./pages/dashboard/report/planing-report/generate-planing-report/GeneratePlanningReport";
 import StartSchedulingPage from "./pages/dashboard/planing/job-scheduling/start-scheduling/StartScheduling";
 import BusinessObjectiveRedirectPage from "./pages/dashboard/planing/business-objective/business-objectives-redirect/BusinessObjectiveRedirect";
-import InformationRequestPage from "./pages/dashboard/information-request/InformationRequest";
+import InformationRequestPage from "./pages/dashboard/tasks/information-request/InformationRequest";
 import BusinessProcessPage from "./pages/dashboard/planing/business-objective/business-process/Business-Process";
-import TaskManagementPage from "./pages/dashboard/task-management/TaskManagement";
+import TaskManagementPage from "./pages/dashboard/tasks/task-management/TaskManagement";
 import SpecialProjectAuditPage from "./pages/dashboard/planing/business-objective/special-project-audit/SpecialProjectAudit";
 import ComplianceCheckListCardPage from "./pages/dashboard/planing/business-objective/compliance-checklist-card/ComplianceCheckListCard";
 import UserProfile from "./components/user/user-profile/UserProfile";
@@ -56,7 +56,6 @@ import GenerateInternalAuditConsolidationReport from "./components/dashboard/rep
 import ViewInternalAuditConsolidationReport from "./components/dashboard/reports/internal-audit-consolidation-report/view-internal-audit-report";
 import UpdateInternalAuditConsolidationReport from "./components/dashboard/reports/internal-audit-consolidation-report/update-internal-audit-report";
 import ProtectedRoute from "./components/common/layout/ProtectedRoute";
-import AuthProtectedRoutes from "./components/common/layout/AuthProtectedRoutes";
 import NotFound from "./components/common/not-found/index";
 
 const App = () => {

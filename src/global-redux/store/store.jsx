@@ -21,6 +21,7 @@ import settingCPListReducer from "../reducers/settings/cp-list/slice";
 import settingRiskFactorReducer from "../reducers/settings/risk-factor/slice";
 import settingsSupportingDocumentReducer from "../reducers/settings/supporting-docs/slice";
 import consolidationReportReducer from "../reducers/reports/consolidation-report/slice";
+import tasksManagementReducer from "../reducers/tasks-management/slice";
 export const store = configureStore({
   reducer: {
     common: commonReducer,
@@ -49,5 +50,7 @@ export const store = configureStore({
     reporting: reportingReducer,
     // Audit Enagagement
     auditEngagement: auditEngagementReducer,
+    // Task Management & Information Request
+    tasksManagement: tasksManagementReducer,
   },
 });

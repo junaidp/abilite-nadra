@@ -1,6 +1,6 @@
 import React from "react";
 
-import TaskManagement from "../../../components/dashboard/task-management";
+import TaskManagement from "../../../../components/dashboard/tasks/task-management/index";
 
 const TaskManagementPage = () => {
   return <TaskManagement />;

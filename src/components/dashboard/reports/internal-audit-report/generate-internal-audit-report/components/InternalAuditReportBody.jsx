@@ -21,6 +21,7 @@ const InternalAuditReportBody = ({
   addReportLoading,
   handleChangeExtraFields,
   handleChangeAnnexure,
+  handleChangeExcutiveSummary,
 }) => {
   const dispatch = useDispatch();
   const [extraFieldsArray, setExtraFieldsArray] = React.useState([]);
@@ -93,7 +94,10 @@ const InternalAuditReportBody = ({
         <div className="row mb-3">
           <div className="col-lg-12">
             <label>Executive summary</label>
-            <RichTextEditor initialValue={reportObject?.executiveSummary} />
+            <RichTextEditor
+              initialValue={reportObject?.executiveSummary}
+              handleChangeExcutiveSummary={handleChangeExcutiveSummary}
+            />
             <label className="word-limit-info label-text">
               Maximum 5000 words
             </label>

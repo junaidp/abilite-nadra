@@ -372,6 +372,10 @@ body {
   font-family: "Poppins", sans-serif !important;
 }
 
+.min-h-150{
+  min-height: 150px !important;
+}
+
 .disabled {
   cursor: not-allowed !important;
 }

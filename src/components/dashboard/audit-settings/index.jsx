@@ -21,7 +21,6 @@ import CheckList from "./components/checklist";
 import CPList from "./components/cp-list/index";
 import SupportingDocs from "./components/supporting-docs/index";
 import InformationRequest from "./components/information-request";
-import TaskManagement from "./components/task-management";
 import UserInfo from "./components/user-info/UserInfo.jsx";
 import Location from "./components/location";
 import Company from "./components/company";
@@ -288,23 +287,14 @@ const AuditSettings = () => {
                     type="button"
                     role="tab"
                     aria-controls="nav-information-request"
+                    onClick={() =>
+                      setCurrentSettingOption("information-request")
+                    }
                   >
                     Information Request
                   </button>
                 )}
-                {userRole === "ADMIN" && (
-                  <button
-                    className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
-                    id="nav-task-management-tab"
-                    data-bs-toggle="tab"
-                    data-bs-target="#nav-task-management"
-                    type="button"
-                    role="tab"
-                    aria-controls="nav-task-management"
-                  >
-                    Task Management
-                  </button>
-                )}
+
                 {userRole === "ADMIN" && (
                   <button
                     className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
@@ -367,8 +357,12 @@ const AuditSettings = () => {
                 />
               )}
               <Process userHierarchy={userHierarchy} userRole={userRole} />
-              {userRole === "ADMIN" && <InformationRequest />}
-              {userRole === "ADMIN" && <TaskManagement />}
+              {userRole === "ADMIN" && (
+                <InformationRequest
+                  currentSettingOption={currentSettingOption}
+                />
+              )}
+
               {userRole === "ADMIN" && <UserInfo />}
               <TFA />
             </div>
