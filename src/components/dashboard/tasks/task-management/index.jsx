@@ -4,13 +4,15 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   resetTaskAddSuccess,
   setupGetAllTasks,
+  setupGetAllAuditEngagement,
+  setupGetAllUsers,
 } from "../../../../global-redux/reducers/tasks-management/slice";
 import { CircularProgress } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import ViewTaskManagement from "./view-task-dialog";
 import moment from "moment";
 
-const InformationRequest = () => {
+const TaskManagement = () => {
   const dispatch = useDispatch();
   const [showUpdateTaskDialog, setShowUpdateTaskDailog] = React.useState(false);
   const [showViewTaskDialog, setShowViewTasktDialog] = React.useState(false);
@@ -33,6 +35,8 @@ const InformationRequest = () => {
     )?.id;
     if (companyId) {
       dispatch(setupGetAllTasks({ companyId: companyId, isTask: true }));
+      dispatch(setupGetAllAuditEngagement(`?companyId=${companyId}`));
+      dispatch(setupGetAllUsers());
     }
   }, [user, company]);
 
@@ -143,4 +147,4 @@ const InformationRequest = () => {
   );
 };
 
-export default InformationRequest;
+export default TaskManagement;

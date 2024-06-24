@@ -13,7 +13,7 @@ const validationSchema = Yup.object({
   userAssigned: Yup.string().required("Assignee is required"),
   detailedRequirement: Yup.string()
     .required("Detailed Requirement is required")
-    .max(400, "Detailed Requirement must be 400 words or less"),
+    .max(400, "Detailed Requirement must be 400 characters or less"),
 });
 
 const UpdateInformationRequest = ({
@@ -23,7 +23,6 @@ const UpdateInformationRequest = ({
   const dispatch = useDispatch();
   const { users, auditEngagements, loading, taskAddSuccess, allTasks } =
     useSelector((state) => state?.tasksManagement);
-  const { user } = useSelector((state) => state?.auth);
   const [fileAttachments, setFileAttachments] = React.useState([]);
 
   // Initial form values
