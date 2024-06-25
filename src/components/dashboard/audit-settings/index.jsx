@@ -20,10 +20,8 @@ import TFA from "./components/tfa/index.jsx";
 import CheckList from "./components/checklist";
 import CPList from "./components/cp-list/index";
 import SupportingDocs from "./components/supporting-docs/index";
-import InformationRequest from "./components/information-request";
 import UserInfo from "./components/user-info/UserInfo.jsx";
 import Location from "./components/location";
-import Company from "./components/company";
 import RiskFactor from "./components/risk-factor";
 import UserManagement from "./components/user";
 import RCMLibrary from "./components/rcm-library";
@@ -250,20 +248,7 @@ const AuditSettings = () => {
                   </button>
                 )}
 
-                {userRole !== "ADMIN" && userRole !== "USER" && (
-                  <button
-                    className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
-                    id="nav-com-tab"
-                    data-bs-toggle="tab"
-                    data-bs-target="#nav-com"
-                    type="button"
-                    role="tab"
-                    aria-controls="nav-com"
-                    onClick={() => setCurrentSettingOption("company")}
-                  >
-                    Company Management
-                  </button>
-                )}
+              
                 <button
                   className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
                   id="nav-com-tab"
@@ -278,22 +263,7 @@ const AuditSettings = () => {
                 </button>
 
                 {/* For Admins Only */}
-                {userRole === "ADMIN" && (
-                  <button
-                    className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
-                    id="nav-information-request-tab"
-                    data-bs-toggle="tab"
-                    data-bs-target="#nav-information-request"
-                    type="button"
-                    role="tab"
-                    aria-controls="nav-information-request"
-                    onClick={() =>
-                      setCurrentSettingOption("information-request")
-                    }
-                  >
-                    Information Request
-                  </button>
-                )}
+                
 
                 {userRole === "ADMIN" && (
                   <button
@@ -349,19 +319,9 @@ const AuditSettings = () => {
                   setUpdateUserObject={setUpdateUserObject}
                 />
               )}
-              {userRole !== "ADMIN" && userRole !== "USER" && (
-                <Company
-                  setAddCompantDialog={setAddCompantDialog}
-                  setCurrentCompanyId={setCurrentCompanyId}
-                  setShowUpdateCompanyDialog={setShowUpdateCompanyDialog}
-                />
-              )}
+             
               <Process userHierarchy={userHierarchy} userRole={userRole} />
-              {userRole === "ADMIN" && (
-                <InformationRequest
-                  currentSettingOption={currentSettingOption}
-                />
-              )}
+             
 
               {userRole === "ADMIN" && <UserInfo />}
               <TFA />

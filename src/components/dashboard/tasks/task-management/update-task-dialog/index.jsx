@@ -147,7 +147,7 @@ const UpdateTaskManagement = ({ setShowUpdateTaskDailog, updateTaskId }) => {
             className={`btn btn-primary ${loading && "disabled"}`}
             onClick={handleSubmit}
           >
-            {loading ? "Loading.." : "Send"}
+            {loading ? "Loading..." : "Update"}
           </button>
         </div>
       </div>

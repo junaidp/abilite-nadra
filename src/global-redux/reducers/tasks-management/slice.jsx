@@ -142,7 +142,12 @@ export const slice = createSlice({
       })
       .addCase(setupGetAllUsers.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.users = payload?.data;
+        const currentUser = JSON.parse(localStorage.getItem("user"));
+        state.users = payload?.data?.filter(
+          (singleUser) =>
+            singleUser?.employeeid?.userHierarchy !== "Management_Auditee" &&
+            singleUser?.id !== currentUser[0]?.id
+        );
       })
       .addCase(setupGetAllUsers.rejected, (state, { payload }) => {
         state.loading = false;

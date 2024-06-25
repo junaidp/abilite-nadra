@@ -1,8 +1,6 @@
 import React from "react";
 import FollowUp from "./components/FollowUp";
 import Reporting from "./components/Reporting";
-import InformationRequest from "./components/InformationRequest";
-import TaskManagement from "./components/TaskManagement";
 import UserInfo from "./components/UserInfo";
 import TFA from "./components/TFA";
 import SupportingDocs from "./components/SupportingDocs";
@@ -68,30 +66,6 @@ const ManagementAuditeeView = () => {
                 </button>
                 <button
                   className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
-                  id="nav-information-request-tab"
-                  data-bs-toggle="tab"
-                  data-bs-target="#nav-information-request"
-                  type="button"
-                  role="tab"
-                  aria-controls="nav-information-request"
-                  onClick={() => setTab("informationRequest")}
-                >
-                  Information Request
-                </button>
-                <button
-                  className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
-                  id="nav-task-management-tab"
-                  data-bs-toggle="tab"
-                  data-bs-target="#nav-task-management"
-                  type="button"
-                  role="tab"
-                  aria-controls="nav-task-management"
-                  onClick={() => setTab("taskManagement")}
-                >
-                  Task Management
-                </button>
-                <button
-                  className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
                   id="nav-task-management-tab"
                   data-bs-toggle="tab"
                   data-bs-target="#nav-user"
@@ -126,8 +100,6 @@ const ManagementAuditeeView = () => {
               <SupportingDocs tab={tab} />
               <Reporting tab={tab} />
               <FollowUp tab={tab} />
-              <InformationRequest tab={tab} />
-              <TaskManagement tab={tab} />
               <UserInfo tab={tab} />
               <TFA tab={tab} />
             </div>
