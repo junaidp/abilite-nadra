@@ -92,7 +92,7 @@ const DashboardHome = () => {
                     <div className="col-xl-4 col-sm-6 col-12">
                       <InfoCard
                         name="Jobs By Business Objective"
-                        icon={<i class="bi bi-share primary f-40"></i>}
+                        icon={<i className="bi bi-share primary f-40"></i>}
                         value={dataInfo?.jobsByBusinessObjective}
                       />
                     </div>
@@ -100,7 +100,7 @@ const DashboardHome = () => {
                     <div className="col-xl-4 col-sm-6 col-12">
                       <InfoCard
                         name="Jobs By Compliance"
-                        icon={<i class="bi bi-shield-shaded primary f-40"></i>}
+                        icon={<i className="bi bi-shield-shaded primary f-40"></i>}
                         value={dataInfo?.jobsByCompliance}
                       />
                     </div>

@@ -71,8 +71,8 @@ const JobName = ({ currentAuditEngagement }) => {
                       (item) => item?.locationid?.description
                     )
                   ),
-                ]?.map((locationItem) => {
-                  return <Chip label={locationItem} className="mx-2 mb-2" />;
+                ]?.map((locationItem,index) => {
+                  return <Chip label={locationItem} className="mx-2 mb-2" key={index} />;
                 })}
                 {currentAuditEngagement?.subLocation?.locationid?.description}
               </div>
@@ -83,9 +83,9 @@ const JobName = ({ currentAuditEngagement }) => {
             <div className="col-lg-12 px-3 d-flex justify-content-between">
               <div className="fw-bold mt-2">Sub-Location:</div>
               <div className="">
-                {currentAuditEngagement?.subLocationList?.map((item) => {
+                {currentAuditEngagement?.subLocationList?.map((item,index) => {
                   return (
-                    <Chip label={item?.description} className="mx-2 mb-2" />
+                    <Chip label={item?.description} className="mx-2 mb-2" key={index} />
                   );
                 })}
               </div>

@@ -8,7 +8,6 @@ import ViewFeedBackDialog from "./component/feedback/ViewFeedBackDialog";
 import ApproveDialog from "./component/approve/ApproveDialog";
 import { setupUpdateRiskControlMatrixApproval } from "../../../../../../global-redux/reducers/audit-engagement/slice";
 const RiskControlMatrix = ({
-  setShowViewLibrary,
   currentAuditEngagement,
   setCurrentAuditEngagement,
   setShowKickOffObjectiveDialog,

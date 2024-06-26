@@ -46,7 +46,7 @@ const Program = ({
                     id="exampleFormCon"
                     rows="3"
                     name="description"
-                    maxlength="500"
+                    maxLength="500"
                   ></textarea>
                   <label className="word-limit-info label-text">
                     Maximum 500 characters
@@ -105,7 +105,7 @@ const Program = ({
                           id="exampleFormCon"
                           rows="3"
                           name="description"
-                          maxlength="500"
+                          maxLength="500"
                         ></textarea>
                         <label className="word-limit-info label-text">
                           Maximum 500 characters
@@ -186,7 +186,7 @@ const Program = ({
                             }
                             name="description"
                             rows="3"
-                            maxlength="500"
+                            maxLength="500"
                           ></textarea>
                           <label className="word-limit-info label-text">
                             Maximum 500 characters

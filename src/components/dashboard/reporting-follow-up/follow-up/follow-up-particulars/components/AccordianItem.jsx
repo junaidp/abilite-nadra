@@ -176,7 +176,7 @@ const AccordianItem = ({
                 disabled={
                   handleAllowEditLastSection(item) === true ? false : true
                 }
-                maxlength="500"
+                maxLength="500"
               ></textarea>
               <p className="word-limit-info label-text mb-2">
                 Maximum 500 characters

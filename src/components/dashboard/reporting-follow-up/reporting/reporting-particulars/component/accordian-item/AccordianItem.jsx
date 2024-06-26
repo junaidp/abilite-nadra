@@ -140,7 +140,7 @@ const AccordianItem = ({
             name="implication"
             onChange={(event) => handleChange(event, item?.id)}
             disabled={handleAllowEditSection1(item) === true ? false : true}
-            maxlength="500"
+            maxLength="500"
           ></textarea>
           <p className="word-limit-info label-text mb-2">
             Maximum 500 characters
@@ -157,7 +157,7 @@ const AccordianItem = ({
             name="recommendedActionStep"
             onChange={(event) => handleChange(event, item?.id)}
             disabled={handleAllowEditSection1(item) === true ? false : true}
-            maxlength="500"
+            maxLength="500"
           ></textarea>
           <p className="word-limit-info label-text mb-2">
             Maximum 500 characters
@@ -188,7 +188,7 @@ const AccordianItem = ({
                   value={item?.managementComments || ""}
                   name="managementComments"
                   onChange={(event) => handleChange(event, item?.id)}
-                  maxlength="500"
+                  maxLength="500"
                 ></textarea>
                 <p className="word-limit-info label-text mb-2">
                   Maximum 500 characters

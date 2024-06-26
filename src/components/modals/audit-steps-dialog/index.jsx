@@ -161,7 +161,7 @@ const AuditStepsDialog = ({
               rows="3"
               value={description}
               onChange={(event) => setDescription(event?.target?.value)}
-              maxlength="500"
+              maxLength="500"
             ></textarea>
             <p className="word-limit-info label-text mb-2">
               Maximum 500 characters
@@ -190,7 +190,7 @@ const AuditStepsDialog = ({
                     }
                     disabled={handleAllowEdit() === true ? false : true}
                     value={item?.description}
-                    maxlength="500"
+                    maxLength="500"
                   ></textarea>
                   <p className="word-limit-info label-text mb-2">
                     Maximum 500 characters

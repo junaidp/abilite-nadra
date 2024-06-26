@@ -110,7 +110,7 @@ const ProcedureFileUpload = ({
             }
             disabled={handleAllowEdit() === true ? false : true}
             onChange={(event) => handleChange(event)}
-            maxlength="500"
+            maxLength="500"
           ></textarea>
           <p className="word-limit-info label-text mb-2">
             Maximum 500 characters

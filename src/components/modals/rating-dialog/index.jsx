@@ -31,7 +31,7 @@ const RatingDialog = () => {
                 placeholder="Enter Reason"
                 id="exampleFormControlTextarea1"
                 rows="3"
-                maxlength="500"
+                maxLength="500"
               ></textarea>
               <p className="word-limit-info label-text mb-2">
                 Maximum 500 characters

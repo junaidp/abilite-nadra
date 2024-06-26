@@ -50,7 +50,7 @@ const Risk = ({
                 }
                 name="description"
                 disabled={risk?.editable === false ? true : false}
-                maxlength="500"
+                maxLength="500"
               ></textarea>
               <label className="word-limit-info label-text">
                 Maximum 500 characters
@@ -120,7 +120,7 @@ const Risk = ({
                           id="exampleFormCon"
                           rows="3"
                           name="description"
-                          maxlength="500"
+                          maxLength="500"
                         ></textarea>
                         <label className="word-limit-info label-text">
                           Maximum 500 characters

@@ -107,7 +107,7 @@ const CPListRows = ({
               ? true
               : false
           }
-          maxlength="500"
+          maxLength="500"
         ></textarea>
         <p className="word-limit-info label-text mb-2">
           Maximum 500 characters

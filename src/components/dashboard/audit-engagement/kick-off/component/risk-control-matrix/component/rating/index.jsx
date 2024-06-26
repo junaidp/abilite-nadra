@@ -133,7 +133,7 @@ const Rating = ({
         }
         name="description"
         disabled={risk?.editable ? false : true}
-        maxlength="500"
+        maxLength="500"
         ></textarea>
         <p className="word-limit-info label-text mb-2">
           Maximum 500 characters
