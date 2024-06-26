@@ -14,7 +14,7 @@ const TaskManagement = () => {
   const dispatch = useDispatch();
   const [showUpdateTaskDialog, setShowUpdateTaskDailog] = React.useState(false);
   const [showViewTaskDialog, setShowViewTasktDialog] = React.useState(false);
-  const { taskAddSuccess, allTasks, loading } = useSelector(
+  const { taskAddSuccess, allTasks, initialLoading } = useSelector(
     (state) => state?.tasksManagement
   );
   const { company } = useSelector((state) => state?.common);
@@ -86,7 +86,7 @@ const TaskManagement = () => {
                 </tr>
               </thead>
               <tbody>
-                {loading ? (
+                {initialLoading ? (
                   <tr>
                     <td>
                       <CircularProgress />
