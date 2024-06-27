@@ -36,7 +36,7 @@ const FollowUpFileUpload = ({ item }) => {
                       </td>
                       <td className="w-130">
                         <i
-                          class="fa fa-download f-18 mx-2 cursor-pointer"
+                          className="fa fa-download f-18 mx-2 cursor-pointer"
                           onClick={() => handleDownload(fileItem?.id)}
                         ></i>
                       </td>

@@ -110,11 +110,10 @@ const UpdateTaskManagement = ({ setShowUpdateTaskDailog, updateTaskId }) => {
           <label>Detailed Requirement</label>
           <textarea
             className="form-control"
-            placeholder="Enter Detailed Requirement"
             id="exampleFormControlTextarea1"
             disabled
             rows="3"
-            value={initialValues?.detailedRequirement}
+            value={initialValues?.detailedRequirement || ""}
           ></textarea>
         </div>
       </div>
@@ -123,7 +122,6 @@ const UpdateTaskManagement = ({ setShowUpdateTaskDailog, updateTaskId }) => {
           <label>Your Response</label>
           <textarea
             className="form-control"
-            placeholder="Enter Detailed Requirement"
             id="exampleFormControlTextarea1"
             rows="3"
             value={response}

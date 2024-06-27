@@ -173,6 +173,7 @@ const Location = ({ userHierarchy, userRole }) => {
                 ?.map((item, index) => {
                   return (
                     <AccordionItem
+                      key={index}
                       index={index}
                       setLocationId={setLocationId}
                       setSubLocationText={setSubLocationText}

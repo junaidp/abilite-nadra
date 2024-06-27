@@ -45,7 +45,7 @@ const AddCheckListManagementDialog = ({ setShowQRCodeScanner }) => {
         <div class="formQrCode margin-auto">
           <input
             type="text"
-            spellcheck="false"
+            spellCheck="false"
             placeholder="Enter code"
             value={code}
             onChange={(event) => setCode(event?.target?.value)}

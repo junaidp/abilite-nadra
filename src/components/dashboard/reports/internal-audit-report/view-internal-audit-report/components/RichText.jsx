@@ -20,7 +20,7 @@ const RichTextEditor = ({ initialValue }) => {
         },
       },
       toolbarAdaptive: false,
-      spellcheck: true,
+      spellCheck: true,
       readonly: true,
 
       pasteHTMLActionList: Jodit.atom([
@@ -42,8 +42,6 @@ const RichTextEditor = ({ initialValue }) => {
         "ul",
         "|",
         "ol",
-        "|",
-        "image",
         "|",
         "table",
         "|",
@@ -67,8 +65,6 @@ const RichTextEditor = ({ initialValue }) => {
         "ul",
         "|",
         "ol",
-        "|",
-        "image",
         "|",
         "table",
         "|",

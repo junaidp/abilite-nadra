@@ -53,20 +53,20 @@ const EnableTFADialog = ({ setShowEnableTfaDialog, setCheck }) => {
           </h2>
         </div>
       </header>
-      <div class="wrapper ">
+      <div className="wrapper ">
         {loading ? (
           <CircularProgress />
         ) : (
-          <div class="qr-code">
+          <div className="qr-code">
             <img
               src={`data:image/JPEG;base64,${arrayBufferToBase64(qrCode)}`}
             />
           </div>
         )}
-        <div class="formQrCode margin-auto">
+        <div className="formQrCode margin-auto">
           <input
             type="text"
-            spellcheck="false"
+            spellCheck="false"
             placeholder="Enter code"
             value={code}
             onChange={(event) => setCode(event?.target?.value)}

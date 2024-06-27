@@ -141,9 +141,9 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
                             (item) => item?.locationid?.description
                           )
                         ),
-                      ]?.map((locationItem) => {
+                      ]?.map((locationItem,index) => {
                         return (
-                          <Chip label={locationItem} className="mx-2 mb-2" />
+                          <Chip label={locationItem} className="mx-2 mb-2" key={index} />
                         );
                       })
                     )}
@@ -159,9 +159,9 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
               reportObject?.subLocationList?.length == 0 ? (
                 <p className="mt-2">No Sub Location To Show</p>
               ) : (
-                reportObject?.subLocationList?.map((item) => {
+                reportObject?.subLocationList?.map((item,index) => {
                   return (
-                    <Chip label={item?.description} className="mx-2 mb-2" />
+                    <Chip label={item?.description} className="mx-2 mb-2" key={index} />
                   );
                 })
               )}

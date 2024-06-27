@@ -24,7 +24,7 @@ const RichTextEditor = ({ onContentChange, initialValue, name, editable }) => {
       },
       toolbarAdaptive: false,
       readonly: editable === "false" ? true : false,
-      spellcheck: true,
+      spellCheck: true,
 
       pasteHTMLActionList: Jodit.atom([
         {
@@ -45,8 +45,6 @@ const RichTextEditor = ({ onContentChange, initialValue, name, editable }) => {
         "ul",
         "|",
         "ol",
-        "|",
-        "image",
         "|",
         "table",
         "|",
@@ -71,8 +69,6 @@ const RichTextEditor = ({ onContentChange, initialValue, name, editable }) => {
         "ul",
         "|",
         "ol",
-        "|",
-        "image",
         "|",
         "table",
         "|",

@@ -67,10 +67,11 @@ const KeyFindings = ({ reportObject }) => {
                                     (item) => item?.locationid?.description
                                   )
                                 ),
-                              ]?.map((locationItem) => {
+                              ]?.map((locationItem, index) => {
                                 return (
                                   <Chip
                                     label={locationItem}
+                                    key={index}
                                     className="mx-2 mb-2"
                                   />
                                 );
@@ -88,9 +89,10 @@ const KeyFindings = ({ reportObject }) => {
                       singleMainItem?.subLocationList?.length === 0 ? (
                         <p className="mt-2">No Sub Location To Show</p>
                       ) : (
-                        singleMainItem?.subLocationList?.map((item) => {
+                        singleMainItem?.subLocationList?.map((item, index) => {
                           return (
                             <Chip
+                              key={index}
                               label={item?.description}
                               className="mx-2 mb-2"
                             />

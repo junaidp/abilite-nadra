@@ -96,11 +96,10 @@ const ViewInformationRequest = ({
           <label>Detailed Requirement</label>
           <textarea
             className="form-control"
-            placeholder="Enter Detailed Requirement"
             id="exampleFormControlTextarea1"
             disabled
             rows="3"
-            value={initialValues?.detailedRequirement}
+            value={initialValues?.detailedRequirement || ""}
           ></textarea>
         </div>
       </div>
@@ -109,10 +108,9 @@ const ViewInformationRequest = ({
           <label>Assignee Response</label>
           <textarea
             className="form-control min-h-150"
-            placeholder="Enter Detailed Requirement"
             id="exampleFormControlTextarea1"
             rows="3"
-            value={initialValues?.response}
+            value={initialValues?.response || ""}
             disabled
           ></textarea>
         </div>

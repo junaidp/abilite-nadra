@@ -31,7 +31,7 @@ const RichTextEditor = ({
         handleAllowEdit() === false
           ? true
           : false,
-      spellcheck: true,
+      spellCheck: true,
 
       pasteHTMLActionList: Jodit.atom([
         {
@@ -52,8 +52,6 @@ const RichTextEditor = ({
         "ul",
         "|",
         "ol",
-        "|",
-        "image",
         "|",
         "table",
         "|",
@@ -77,8 +75,6 @@ const RichTextEditor = ({
         "ul",
         "|",
         "ol",
-        "|",
-        "image",
         "|",
         "table",
         "|",

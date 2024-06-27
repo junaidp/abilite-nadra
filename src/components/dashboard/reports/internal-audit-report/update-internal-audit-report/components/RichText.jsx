@@ -2,7 +2,6 @@ import React, { useRef, useMemo } from "react";
 import JoditEditor from "jodit-react";
 import { Jodit } from "jodit";
 
-
 const RichTextEditor = ({
   handleChangeExcutiveSummary,
   initialValue,
@@ -28,7 +27,7 @@ const RichTextEditor = ({
         },
       },
       toolbarAdaptive: false,
-      spellcheck: true,
+      spellCheck: true,
       pasteHTMLActionList: Jodit.atom([
         {
           value: Jodit.constants.INSERT_ONLY_TEXT,
@@ -48,8 +47,6 @@ const RichTextEditor = ({
         "ul",
         "|",
         "ol",
-        "|",
-        "image",
         "|",
         "table",
         "|",
@@ -73,8 +70,6 @@ const RichTextEditor = ({
         "ul",
         "|",
         "ol",
-        "|",
-        "image",
         "|",
         "table",
         "|",

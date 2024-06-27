@@ -28,11 +28,11 @@ const TFADialog = ({ setShowDialog }) => {
           <h2 className=" heading">Two Factor Authentication</h2>
         </div>
       </header>
-      <div class="wrapper pb-4 ">
+      <div className="wrapper pb-4 ">
         {loading ? (
           <CircularProgress />
         ) : (
-          <div class="qr-code mb-4">
+          <div className="qr-code mb-4">
             <img
               src={`data:image/JPEG;base64,${arrayBufferToBase64(qrCode)}`}
             />

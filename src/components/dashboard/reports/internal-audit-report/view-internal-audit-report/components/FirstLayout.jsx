@@ -139,9 +139,13 @@ const ReportFirstLayout = ({ singleInternalAuditReport }) => {
                             (item) => item?.locationid?.description
                           )
                         ),
-                      ]?.map((locationItem) => {
+                      ]?.map((locationItem, index) => {
                         return (
-                          <Chip label={locationItem} className="mx-2 mb-2" />
+                          <Chip
+                            label={locationItem}
+                            key={index}
+                            className="mx-2 mb-2"
+                          />
                         );
                       })
                     )}
@@ -157,11 +161,17 @@ const ReportFirstLayout = ({ singleInternalAuditReport }) => {
               singleInternalAuditReport?.subLocationList?.length === 0 ? (
                 <p className="mt-2">No Sub Location To Show</p>
               ) : (
-                singleInternalAuditReport?.subLocationList?.map((item) => {
-                  return (
-                    <Chip label={item?.description} className="mx-2 mb-2" />
-                  );
-                })
+                singleInternalAuditReport?.subLocationList?.map(
+                  (item, index) => {
+                    return (
+                      <Chip
+                        label={item?.description}
+                        className="mx-2 mb-2"
+                        key={index}
+                      />
+                    );
+                  }
+                )
               )}
             </div>
           </div>

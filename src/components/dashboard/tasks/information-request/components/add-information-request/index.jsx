@@ -138,7 +138,6 @@ const AddInformationRequest = ({ setShowAddInformationRequestDialog }) => {
                   as="textarea"
                   name="detailedRequirement"
                   className="form-control"
-                  placeholder="Enter Detailed Requirement"
                   id="exampleFormControlTextarea1"
                   rows="3"
                 />

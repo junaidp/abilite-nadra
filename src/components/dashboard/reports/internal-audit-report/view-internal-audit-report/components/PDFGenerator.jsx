@@ -299,9 +299,9 @@ const PDFGenerator = ({ reportObject }) => {
               ) : (
                 reportObject?.reportingAndFollowUp?.reportingList
                   ?.filter((singleItem) => singleItem?.implicationRating === 1)
-                  ?.map((singleItem) => {
+                  ?.map((singleItem, index) => {
                     return (
-                      <Text style={styles.h4}>
+                      <Text style={styles.h4} key={index}>
                         {singleItem?.observationTitle.slice(0, 40)}...
                       </Text>
                     );
@@ -313,9 +313,9 @@ const PDFGenerator = ({ reportObject }) => {
             </Text>
             <View style={styles.overviewFields}>
               {reportObject?.reportingAndFollowUp?.reportingList?.map(
-                (singleItem) => {
+                (singleItem, index) => {
                   return (
-                    <Text style={styles.h4}>
+                    <Text style={styles.h4} key={index}>
                       {singleItem?.observationTitle.slice(0, 40)}...
                     </Text>
                   );
@@ -327,13 +327,15 @@ const PDFGenerator = ({ reportObject }) => {
               -------------------------------------------------
             </Text>
             <View style={styles.overviewFields}>
-              {reportObject?.intAuditExtraFieldsList?.map((singleItem) => {
-                return (
-                  <Text style={styles.h4}>
-                    {singleItem?.heading.slice(0, 40)}...
-                  </Text>
-                );
-              })}
+              {reportObject?.intAuditExtraFieldsList?.map(
+                (singleItem, index) => {
+                  return (
+                    <Text style={styles.h4} key={index}>
+                      {singleItem?.heading.slice(0, 40)}...
+                    </Text>
+                  );
+                }
+              )}
             </View>
             <Text style={styles.h4}>
               ANNEXURE -------------------------------------------------------
@@ -391,9 +393,9 @@ const PDFGenerator = ({ reportObject }) => {
                       (item) => item?.locationid?.description
                     )
                   ),
-                ]?.map((locationItem) => {
+                ]?.map((locationItem, index) => {
                   return (
-                    <Text style={styles.reportInfoSubTitle}>
+                    <Text style={styles.reportInfoSubTitle} key={index}>
                       {locationItem}
                     </Text>
                   );
@@ -403,9 +405,9 @@ const PDFGenerator = ({ reportObject }) => {
             <View style={styles.reportInfoViewItem}>
               <Text style={styles.reportInfoTitle}>Sub Location:</Text>
               <View style={styles.locationWrap}>
-                {reportObject?.subLocationList?.map((item) => {
+                {reportObject?.subLocationList?.map((item, index) => {
                   return (
-                    <Text style={styles.reportInfoSubTitle}>
+                    <Text style={styles.reportInfoSubTitle} key={index}>
                       {item?.description}
                     </Text>
                   );
@@ -455,7 +457,7 @@ const PDFGenerator = ({ reportObject }) => {
           {reportObject?.reportingAndFollowUp?.reportingList?.map(
             (followUpItem, index) => {
               return (
-                <View style={styles.findings}>
+                <View style={styles.findings} key={index}>
                   <Text style={styles.indexNumber}>Finding {index + 1}</Text>
                   <View style={styles.singleFindSummaryWrap}>
                     <Text style={styles.singleFindSummaryHeader}>
