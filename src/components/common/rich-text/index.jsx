@@ -53,8 +53,6 @@ const RichTextEditor = ({ onContentChange, initialValue, name, editable }) => {
         "fontsize",
         "|",
         "paragraph",
-        "|",
-        "fullsize",
       ],
 
       buttonsXS: [
@@ -77,8 +75,6 @@ const RichTextEditor = ({ onContentChange, initialValue, name, editable }) => {
         "fontsize",
         "|",
         "paragraph",
-        "|",
-        "fullsize",
       ],
 
       events: {},

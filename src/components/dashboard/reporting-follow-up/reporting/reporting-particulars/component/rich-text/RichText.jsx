@@ -57,8 +57,6 @@ const RichTextEditor = ({
         "fontsize",
         "|",
         "paragraph",
-        "|",
-        "fullsize",
       ],
 
       buttonsXS: [
@@ -81,8 +79,6 @@ const RichTextEditor = ({
         "fontsize",
         "|",
         "paragraph",
-        "|",
-        "fullsize",
       ],
 
       events: {},
