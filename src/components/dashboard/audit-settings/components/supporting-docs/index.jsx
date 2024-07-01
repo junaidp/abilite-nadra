@@ -28,14 +28,38 @@ const SupportingDocs = ({ userHierarchy, userRole }) => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setSelectedFile(file);
+      const fileType = file.type;
+      const validTypes = [
+        "application/pdf",
+        "application/vnd.ms-excel",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      ];
+      if (validTypes.includes(fileType)) {
+        setSelectedFile(file);
+      } else {
+        toast.error(
+          "Invalid file type. Only Pdf and Excel files are acceptable"
+        );
+      }
     }
   };
 
   const handleUpdateFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setSelectedUpdateFile(file);
+      const fileType = file.type;
+      const validTypes = [
+        "application/pdf",
+        "application/vnd.ms-excel",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      ];
+      if (validTypes.includes(fileType)) {
+        setSelectedUpdateFile(file);
+      } else {
+        toast.error(
+          "Invalid file type. Only Pdf and Excel files are acceptable"
+        );
+      }
     }
   };
 

@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { toast } from "react-toastify";
 
 const InformationRequestFileUpload = ({
   fileAttachments,
@@ -9,17 +10,29 @@ const InformationRequestFileUpload = ({
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const fileData = reader.result.split(",")[1]; // Remove base64 prefix
-        const newFile = {
-          fileName: file.name,
-          fileData: [fileData],
+      const fileType = file.type;
+      const validTypes = [
+        "application/pdf",
+        "application/vnd.ms-excel",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      ];
+      if (validTypes.includes(fileType)) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const fileData = reader.result.split(",")[1];
+          const newFile = {
+            fileName: file.name,
+            fileData: [fileData],
+          };
+          setFileAttachments((prevFiles) => [...prevFiles, newFile]);
         };
-        setFileAttachments((prevFiles) => [...prevFiles, newFile]);
-      };
-      reader.readAsDataURL(file);
-      fileInputRef.current.value = null;
+        reader.readAsDataURL(file);
+        fileInputRef.current.value = null;
+      } else {
+        toast.error(
+          "Invalid file type. Only Pdf and Excel files are acceptable"
+        );
+      }
     }
   };
 
