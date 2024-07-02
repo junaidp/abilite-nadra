@@ -10,9 +10,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   changeActiveLink,
   changeExpanded,
-  changeYear,
+  changeYear
 } from "../../../global-redux/reducers/common/slice";
-import { changeAuthUser } from "../../../global-redux/reducers/auth/slice";
+import { changeAuthUser,setupLogoutUser } from "../../../global-redux/reducers/auth/slice";
 
 export default function TemporaryDrawer() {
   let navigate = useNavigate();
@@ -47,6 +47,7 @@ export default function TemporaryDrawer() {
   }
 
   function handleLogout() {
+    dispatch(setupLogoutUser());
     localStorage.removeItem("user");
     localStorage.removeItem("company");
     localStorage.removeItem("year");

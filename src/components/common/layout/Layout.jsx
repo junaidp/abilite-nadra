@@ -8,7 +8,7 @@ import { Routes, Route } from "react-router-dom";
 import { useIdleTimer } from "react-idle-timer";
 import TopBar from "../top-bar/TopBar";
 import Sidebar from "../sidebar/Sidebar";
-import { changeAuthUser } from "../../../global-redux/reducers/auth/slice";
+import { changeAuthUser,setupLogoutUser } from "../../../global-redux/reducers/auth/slice";
 import Settings from "../../dashboard/audit-settings/index";
 import ManagementAuditeeView from "../../dashboard/management-auditee-view/index";
 import FollowUpRoute from "../../dashboard/reporting-follow-up/follow-up/follow-up-particulars/index";
@@ -33,6 +33,7 @@ const Layout = () => {
       theme: "light",
       toastId: "success1",
     });
+    dispatch(setupLogoutUser());
     localStorage.removeItem("user");
     localStorage.removeItem("company");
     localStorage.removeItem("year");
@@ -51,6 +52,7 @@ const Layout = () => {
       theme: "light",
       toastId: "success1",
     });
+    dispatch(setupLogoutUser());
     localStorage.removeItem("user");
     localStorage.removeItem("company");
     localStorage.removeItem("year");

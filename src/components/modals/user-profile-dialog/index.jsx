@@ -3,14 +3,15 @@ import { useSelector } from "react-redux";
 import {
   resetInternalResetPasswordSuccess,
   setupInternalResetPassword,
-  changeAuthUser
+  changeAuthUser,
+  setupLogoutUser,
 } from "../../../global-redux/reducers/auth/slice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const UserProfileDialog = ({ setUpdateUserDialog }) => {
   const dispatch = useDispatch();
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   let { user, internalResetPasswordSuccess, loading } = useSelector(
     (state) => state.auth
   );
@@ -86,6 +87,7 @@ const UserProfileDialog = ({ setUpdateUserDialog }) => {
           newPassword: "",
           confirmNewPassword: "",
         });
+        dispatch(setupLogoutUser());
         localStorage.removeItem("user");
         localStorage.removeItem("company");
         localStorage.removeItem("year");

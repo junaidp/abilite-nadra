@@ -1,18 +1,13 @@
 import React from "react";
 import "./TopBar.css";
 import user1 from "../../../assets/user-1.jpg";
-// import user2 from "../../../assets/user-2.jpg";
-// import user3 from "../../../assets/user-3.jpg";
-// import user4 from "../../../assets/user-4.jpg";
-// import user5 from "../../../assets/user-5.jpg";
-import accountIcon from "../../../assets/icon-account.svg";
 import logo from "../../../assets/light-logo-.png";
 import { Link } from "react-router-dom";
 import { changeShowSidebar } from "../../../global-redux/reducers/common/slice";
 import { useDispatch, useSelector } from "react-redux";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import { useNavigate } from "react-router-dom";
-import { changeAuthUser } from "../../../global-redux/reducers/auth/slice";
+import { changeAuthUser,setupLogoutUser } from "../../../global-redux/reducers/auth/slice";
 import nadraLogo from "../../../assets/logo.png";
 import {
   changeCompany,
@@ -43,6 +38,7 @@ const TopBar = () => {
   }
 
   function handleLogout() {
+    dispatch(setupLogoutUser());
     localStorage.removeItem("user");
     localStorage.removeItem("company");
     localStorage.removeItem("year");

@@ -8,6 +8,7 @@ import {
   setupLoginUser,
   changeAuthState,
   changeAuthUser,
+  setupLogoutUser
 } from "../../../global-redux/reducers/auth/slice";
 import QRCodeScannerDialog from "../modals/QRScanner";
 import { jwtDecode } from "jwt-decode";
@@ -50,6 +51,7 @@ const Login = () => {
       const decodedToken = jwtDecode(user[0]?.token);
       const currentTime = Date.now() / 1000;
       if (decodedToken.exp < currentTime) {
+        dispatch(setupLogoutUser());
         localStorage.removeItem("user");
         localStorage.removeItem("company");
         localStorage.removeItem("year");

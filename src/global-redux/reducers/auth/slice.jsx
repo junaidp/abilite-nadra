@@ -8,6 +8,7 @@ import {
   generateQRCode,
   verifyQRCode,
   updateUser,
+  logoutUser,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
@@ -103,6 +104,12 @@ export const setupUpdateUser = createAsyncThunk(
   "auth/updateUser",
   async (data, thunkAPI) => {
     return updateUser(data, thunkAPI);
+  }
+);
+export const setupLogoutUser = createAsyncThunk(
+  "auth/logoutUser",
+  async (data, thunkAPI) => {
+    return logoutUser(data, thunkAPI);
   }
 );
 
@@ -333,6 +340,19 @@ export const slice = createSlice({
         toast.success("Two Factor Authentication Disabled Successfully");
       })
       .addCase(setupUpdateUser.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Logout User
+    builder
+      .addCase(setupLogoutUser.fulfilled, (state) => {
+        toast.success("User Logged Out Successfully");
+      })
+      .addCase(setupLogoutUser.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);
