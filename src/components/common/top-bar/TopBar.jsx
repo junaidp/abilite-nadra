@@ -343,10 +343,10 @@ const TopBar = () => {
                     aria-labelledby="drop1"
                   >
                     <div data-simplebar="">
-                      <div className="py-3 px-7 pb-0">
+                      <div className="py-3  pb-0">
                         <h5 className="mb-0 fs-5 fw-semibold">User Profile</h5>
                       </div>
-                      <div className="d-flex align-items-center py-9 mx-7 border-bottom">
+                      <div className="d-flex align-items-center py-9 border-bottom">
                         <img
                           src={user1}
                           className="rounded-circle"
@@ -375,7 +375,7 @@ const TopBar = () => {
                             "Management_Auditee" && (
                             <Link
                               to="/audit/user/profile"
-                              className="py-8 px-7 mt-8 d-flex align-items-center"
+                              className="py-8  mt-8 d-flex align-items-center"
                             >
                               <span className="d-flex align-items-center justify-content-center bg-light rounded-1 p-6">
                                 <FontAwesomeIcon

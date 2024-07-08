@@ -85,7 +85,7 @@ const JobScheduling = () => {
       </header>
 
       <div className="example-header">
-        <div className="mb-2 w-100">
+        <div className="mb-2">
           <input
             placeholder="Filter"
             id="inputField"

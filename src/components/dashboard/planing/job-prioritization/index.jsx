@@ -158,7 +158,7 @@ const JobPrioritization = () => {
           </header>
 
           <div className="table-responsive overflow-x-hidden">
-            <table className="table w-100 table-bordered table-hover rounded equal-columns">
+            <table className="table table-bordered table-hover rounded equal-columns">
               <thead>
                 <tr>
                   <th className="sr-col">Sr. #</th>

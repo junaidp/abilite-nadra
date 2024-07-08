@@ -31,6 +31,7 @@
 .logoutOut-btn {
   justify-self: center !important;
   margin: auto !important;
+  margin-bottom: 10px !important;
 }
 
 .smallScreenToolBar {

@@ -7,7 +7,7 @@ import { changeAuthUser } from "./global-redux/reducers/auth/slice";
 import { useDispatch, useSelector } from "react-redux";
 import { changeYear } from "./global-redux/reducers/common/slice";
 import "react-toastify/dist/ReactToastify.css";
-import { changeActiveLink } from "./global-redux/reducers/common/slice";
+import { changeActiveLink ,InitialLoadSidebarActiveLink } from "./global-redux/reducers/common/slice";
 import { CircularProgress } from "@mui/material";
 
 const Login = React.lazy(() => import("./pages/auth/login/Login"));

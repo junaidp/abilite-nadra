@@ -76,55 +76,48 @@ const AuditableUnits = () => {
           </div>
         </div>
       )}
-      <div>
-        <section className="faq-section">
-          <div className="container" data-aos="fade-up">
-            <header className="section-header my-3 align-items-center  text-start d-flex ">
-              <div className="mb-0 heading">Auditable Units</div>
-            </header>
-
-            <div className="row">
-              <div className="col-md-12">
-                <div className="accordion" id="accordionFlushExample">
-                  {loading ? (
-                    <CircularProgress />
-                  ) : allAuditableUnits?.length === 0 ? (
-                    <p>No data to show!</p>
-                  ) : (
-                    allAuditableUnits
-                      ?.slice((page - 1) * 10, page * 10)
-                      ?.map((item, index) => {
-                        return (
-                          <AuditableUnitRow
-                            setSelectedAuditableUnitId={
-                              setSelectedAuditableUnitId
-                            }
-                            key={index}
-                            item={item}
-                            setAuditableUnitRatingDialog={
-                              setAuditableUnitRatingDialog
-                            }
-                            setSelectedAuditableSubUnitId={
-                              setSelectedAuditableSubUnitId
-                            }
-                            setShowEditAuditableUnit={setShowEditAuditableUnit}
-                            index={index}
-                            loading={loading}
-                          />
-                        );
-                      })
-                  )}
-                </div>
-              </div>
-              <Pagination
-                count={Math.ceil(allAuditableUnits?.length / 10)}
-                page={page}
-                onChange={handleChange}
-              />
+      <>
+        <header className="section-header my-3 align-items-center  text-start d-flex ">
+          <div className="mb-0 heading">Auditable Units</div>
+        </header>
+        <div className="row">
+          <div className="col-md-12">
+            <div className="accordion" id="accordionFlushExample">
+              {loading ? (
+                <CircularProgress />
+              ) : allAuditableUnits?.length === 0 ? (
+                <p>No data to show!</p>
+              ) : (
+                allAuditableUnits
+                  ?.slice((page - 1) * 10, page * 10)
+                  ?.map((item, index) => {
+                    return (
+                      <AuditableUnitRow
+                        setSelectedAuditableUnitId={setSelectedAuditableUnitId}
+                        key={index}
+                        item={item}
+                        setAuditableUnitRatingDialog={
+                          setAuditableUnitRatingDialog
+                        }
+                        setSelectedAuditableSubUnitId={
+                          setSelectedAuditableSubUnitId
+                        }
+                        setShowEditAuditableUnit={setShowEditAuditableUnit}
+                        index={index}
+                        loading={loading}
+                      />
+                    );
+                  })
+              )}
             </div>
           </div>
-        </section>
-      </div>
+          <Pagination
+            count={Math.ceil(allAuditableUnits?.length / 10)}
+            page={page}
+            onChange={handleChange}
+          />
+        </div>
+      </>
     </div>
   );
 };

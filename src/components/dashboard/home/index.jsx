@@ -56,7 +56,7 @@ const DashboardHome = () => {
               <div className="mb-0 heading">Dashboard</div>
             </div>
 
-            <div className="row mb-3">
+            <div className="row mb-3 dashboard-content-wrap">
               <div className="col-lg-9">
                 <section id="minimal-statistics">
                   <div className="row">
@@ -100,7 +100,9 @@ const DashboardHome = () => {
                     <div className="col-xl-4 col-sm-6 col-12">
                       <InfoCard
                         name="Jobs By Compliance"
-                        icon={<i className="bi bi-shield-shaded primary f-40"></i>}
+                        icon={
+                          <i className="bi bi-shield-shaded primary f-40"></i>
+                        }
                         value={dataInfo?.jobsByCompliance}
                       />
                     </div>
