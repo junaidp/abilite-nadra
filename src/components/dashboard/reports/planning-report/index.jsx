@@ -19,7 +19,7 @@ const PlanningReport = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, allReports, reportAddSuccess } = useSelector(
-    (state) => state?.reports
+    (state) => state?.planningReport
   );
   const { allUsers } = useSelector((state) => state?.setttingsUserManagement);
   const { user } = useSelector((state) => state?.auth);

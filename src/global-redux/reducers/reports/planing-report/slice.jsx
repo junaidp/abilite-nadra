@@ -1,12 +1,13 @@
 import { toast } from "react-toastify";
 import {
-  saveReports,
+  saveReport,
   getAllReports,
-  getInitialSingleReport,
-  getIAHReports,
-  editSingleReport,
-  deleteSingleReport,
+  getSingleReport,
+  updateReport,
+  deleteReport,
   publishReport,
+  addHeading,
+  updateHeading,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -18,54 +19,67 @@ const initialState = {
   allReports: [],
 };
 
-export const setupSaveReports = createAsyncThunk(
-  "reports/saveReports",
+export const setupSaveReport = createAsyncThunk(
+  "planningReport/saveReport",
   async (data, thunkAPI) => {
-    return saveReports(data, thunkAPI);
+    return saveReport(data, thunkAPI);
   }
 );
 export const setupGetAllReports = createAsyncThunk(
-  "reports/getAllReports",
+  "planningReport/getAllReports",
   async (data, thunkAPI) => {
     return getAllReports(data, thunkAPI);
   }
 );
 
-export const setupGetInitialSingleReport = createAsyncThunk(
-  "reports/getInitialSingleReport",
+export const setupGetSingleReport = createAsyncThunk(
+  "planningReport/getSingleReport",
   async (data, thunkAPI) => {
-    return getInitialSingleReport(data, thunkAPI);
+    return getSingleReport(data, thunkAPI);
   }
 );
 export const setupGetIAHReports = createAsyncThunk(
-  "reports/getIAHReports",
+  "planningReport/getIAHReports",
   async (data, thunkAPI) => {
     return getIAHReports(data, thunkAPI);
   }
 );
 
 export const setupUpdateSingleReport = createAsyncThunk(
-  "reports/editSingleReport",
+  "planningReport/updateReport",
   async (data, thunkAPI) => {
-    return editSingleReport(data, thunkAPI);
+    return updateReport(data, thunkAPI);
   }
 );
 
-export const setupDeleteSingleReport = createAsyncThunk(
-  "reports/deleteSingleReport",
+export const setupDeleteReport = createAsyncThunk(
+  "planningReport/deleteReport",
   async (data, thunkAPI) => {
-    return deleteSingleReport(data, thunkAPI);
+    return deleteReport(data, thunkAPI);
   }
 );
 export const setupPublishReport = createAsyncThunk(
-  "reports/publishReport",
+  "planningReport/publishReport",
   async (data, thunkAPI) => {
     return publishReport(data, thunkAPI);
   }
 );
 
+export const setupAddHeading = createAsyncThunk(
+  "planningReport/addHeading",
+  async (data, thunkAPI) => {
+    return addHeading(data, thunkAPI);
+  }
+);
+export const setupUpdateHeading = createAsyncThunk(
+  "planningReport/updateHeading",
+  async (data, thunkAPI) => {
+    return updateHeading(data, thunkAPI);
+  }
+);
+
 export const slice = createSlice({
-  name: "reports",
+  name: "planningReport",
   initialState,
   reducers: {
     resetReportAddSuccess: (state, action) => {
@@ -81,15 +95,15 @@ export const slice = createSlice({
   extraReducers: (builder) => {
     // Save Reports
     builder
-      .addCase(setupSaveReports.pending, (state) => {
+      .addCase(setupSaveReport.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupSaveReports.fulfilled, (state) => {
+      .addCase(setupSaveReport.fulfilled, (state) => {
         state.loading = false;
         toast.success("Report Added Successfully");
         state.reportAddSuccess = true;
       })
-      .addCase(setupSaveReports.rejected, (state, { payload }) => {
+      .addCase(setupSaveReport.rejected, (state, { payload }) => {
         state.loading = false;
         state.companyAddSuccess = false;
         if (payload?.response?.data?.message) {
@@ -121,14 +135,14 @@ export const slice = createSlice({
       });
     // Get Initial Single Report
     builder
-      .addCase(setupGetInitialSingleReport.pending, (state) => {
+      .addCase(setupGetSingleReport.pending, (state) => {
         state.initialLoading = true;
       })
-      .addCase(setupGetInitialSingleReport.fulfilled, (state, { payload }) => {
+      .addCase(setupGetSingleReport.fulfilled, (state, { payload }) => {
         state.initialLoading = false;
         state.singleReportObject = payload?.data || [{ error: "Not Found" }];
       })
-      .addCase(setupGetInitialSingleReport.rejected, (state, { payload }) => {
+      .addCase(setupGetSingleReport.rejected, (state, { payload }) => {
         state.initialLoading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
@@ -178,15 +192,15 @@ export const slice = createSlice({
 
     // Delete Report
     builder
-      .addCase(setupDeleteSingleReport.pending, (state) => {
+      .addCase(setupDeleteReport.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupDeleteSingleReport.fulfilled, (state, { payload }) => {
+      .addCase(setupDeleteReport.fulfilled, (state, { payload }) => {
         state.loading = false;
         state.reportAddSuccess = true;
         toast.success("Report Deleted Successfully");
       })
-      .addCase(setupDeleteSingleReport.rejected, (state, { payload }) => {
+      .addCase(setupDeleteReport.rejected, (state, { payload }) => {
         state.loading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
@@ -206,6 +220,42 @@ export const slice = createSlice({
         toast.success("Report Published Successfully");
       })
       .addCase(setupPublishReport.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Add Heading
+    builder
+      .addCase(setupAddHeading.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupAddHeading.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.reportAddSuccess = true;
+        toast.success("Report Published Successfully");
+      })
+      .addCase(setupAddHeading.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Update Heading
+    builder
+      .addCase(setupUpdateHeading.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupUpdateHeading.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.reportAddSuccess = true;
+        toast.success("Report Published Successfully");
+      })
+      .addCase(setupUpdateHeading.rejected, (state, { payload }) => {
         state.loading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);

@@ -34,7 +34,7 @@ const GeneratePlanningReport = () => {
   const editable = searchParams.get("editable");
   const reportId = searchParams.get("reportId");
   const { loading, reportAddSuccess, singleReportObject, initialLoading } =
-    useSelector((state) => state?.reports);
+    useSelector((state) => state?.planningReport);
   const { user } = useSelector((state) => state?.auth);
   const { company } = useSelector((state) => state?.common);
   const [pdfLoading, setPdfLoading] = React.useState(false);
