@@ -1,8 +1,24 @@
-import React from "react";
-import RiskFactorApproach from "../../../../../components/dashboard/planing/risk-assessments/risk-factor-approach/index";
+import React, { Suspense, lazy } from "react";
+import { CircularProgress } from "@mui/material";
 
-const RiskFactorApproachPage = () => {
-  return <RiskFactorApproach />;
+const SpecificRiskApproach = lazy(() =>
+  import(
+    "../../../../../components/dashboard/planing/risk-assessments/specific-risk-approach/index"
+  )
+);
+
+const SpecificRiskApproachPage = () => {
+  return (
+    <Suspense
+      fallback={
+        <div className="py-2 px-2">
+          <CircularProgress />
+        </div>
+      }
+    >
+      <SpecificRiskApproach />
+    </Suspense>
+  );
 };
 
-export default RiskFactorApproachPage;
+export default SpecificRiskApproachPage;

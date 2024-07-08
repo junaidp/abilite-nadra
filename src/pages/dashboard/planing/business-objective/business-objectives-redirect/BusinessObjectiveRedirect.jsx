@@ -1,8 +1,24 @@
-import React from "react";
-import BusinessObjectiveRedirect from "../../../../../components/dashboard/planing/business-objective/business-objective-redirect/index";
+import React, { Suspense, lazy } from "react";
+import { CircularProgress } from "@mui/material";
+
+const BusinessObjectiveRedirect = lazy(() =>
+  import(
+    "../../../../../components/dashboard/planing/business-objective/business-objective-redirect/index"
+  )
+);
 
 const BusinessObjectiveRedirectPage = () => {
-  return <BusinessObjectiveRedirect />;
+  return (
+    <Suspense
+      fallback={
+        <div className="py-2 px-2">
+          <CircularProgress />
+        </div>
+      }
+    >
+      <BusinessObjectiveRedirect />
+    </Suspense>
+  );
 };
 
 export default BusinessObjectiveRedirectPage;

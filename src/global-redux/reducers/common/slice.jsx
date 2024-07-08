@@ -291,10 +291,10 @@ export const {
   showBusinessObjectiveDialog,
   changeExpanded,
   changeKickOffRequest,
-  InitialLoadSidebarActiveLink,
   changeCompany,
   changeYear,
   changeCommonRichTextFieldState,
+  InitialLoadSidebarActiveLink,
 } = slice.actions;
 
 export default slice.reducer;

@@ -1,7 +1,22 @@
-import React from "react";
-import KinkOff from "../../../../components/dashboard/audit-engagement/kick-off/index";
+import React, { Suspense, lazy } from "react";
+import { CircularProgress } from "@mui/material";
+
+const KickOff = lazy(() =>
+  import("../../../../components/dashboard/audit-engagement/kick-off/index")
+);
+
 const KickOffPage = () => {
-  return <KinkOff />;
+  return (
+    <Suspense
+      fallback={
+        <div className="py-2 px-2">
+          <CircularProgress />
+        </div>
+      }
+    >
+      <KickOff />
+    </Suspense>
+  );
 };
 
 export default KickOffPage;

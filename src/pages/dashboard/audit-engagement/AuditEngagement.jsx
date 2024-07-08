@@ -1,8 +1,22 @@
-import React from "react";
-import AuditEngagement from "../../../components/dashboard/audit-engagement";
+import React, { Suspense, lazy } from "react";
+import { CircularProgress } from "@mui/material";
+
+const AuditEngagement = lazy(() =>
+  import("../../../components/dashboard/audit-engagement")
+);
 
 const AuditEngagementPage = () => {
-  return <AuditEngagement />;
+  return (
+    <Suspense
+      fallback={
+        <div className="py-2 px-2">
+          <CircularProgress />
+        </div>
+      }
+    >
+      <AuditEngagement />
+    </Suspense>
+  );
 };
 
 export default AuditEngagementPage;
