@@ -1,21 +1,11 @@
-import React, { Suspense, lazy } from "react";
-import { CircularProgress } from "@mui/material";
-
-const DashboardHome = lazy(() =>
-  import("../../../components/dashboard/home/index")
-);
+import React from "react";
+import DashboardHome from "../../../components/dashboard/home/index";
 
 const DashboardHomePage = () => {
   return (
-    <Suspense
-      fallback={
-        <div className="py-2 px-2">
-          <CircularProgress />
-        </div>
-      }
-    >
+    <div className="py-2 px-2">
       <DashboardHome />
-    </Suspense>
+    </div>
   );
 };
 

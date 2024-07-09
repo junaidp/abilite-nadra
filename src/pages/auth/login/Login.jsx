@@ -1,19 +1,11 @@
-import React, { Suspense, lazy } from "react";
-import { CircularProgress } from "@mui/material";
-
-const Login = lazy(() => import("../../../components/auth/login/Login"));
+import React from "react";
+import Login from "../../../components/auth/login/Login";
 
 const LoginPage = () => {
   return (
-    <Suspense
-      fallback={
-        <div className="py-2 px-2">
-          <CircularProgress />
-        </div>
-      }
-    >
+    <div className="py-2 px-2">
       <Login />
-    </Suspense>
+    </div>
   );
 };
 

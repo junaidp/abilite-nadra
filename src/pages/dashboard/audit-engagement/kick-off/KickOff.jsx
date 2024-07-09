@@ -1,21 +1,11 @@
-import React, { Suspense, lazy } from "react";
-import { CircularProgress } from "@mui/material";
-
-const KickOff = lazy(() =>
-  import("../../../../components/dashboard/audit-engagement/kick-off/index")
-);
+import React from "react";
+import KickOff from "../../../../components/dashboard/audit-engagement/kick-off/index";
 
 const KickOffPage = () => {
   return (
-    <Suspense
-      fallback={
-        <div className="py-2 px-2">
-          <CircularProgress />
-        </div>
-      }
-    >
+    <div className="py-2 px-2">
       <KickOff />
-    </Suspense>
+    </div>
   );
 };
 

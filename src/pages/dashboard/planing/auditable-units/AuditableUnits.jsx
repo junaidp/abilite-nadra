@@ -1,22 +1,8 @@
-import React, { Suspense, lazy } from "react";
-import { CircularProgress } from "@mui/material";
-
-const AuditableUnits = lazy(() =>
-  import("../../../../components/dashboard/planing/auditable-units/index")
-);
+import React from "react";
+import AuditableUnits from "../../../../components/dashboard/planing/auditable-units/index";
 
 const AuditableUnitsPage = () => {
-  return (
-    <Suspense
-      fallback={
-        <div className="py-2 px-2">
-          <CircularProgress />
-        </div>
-      }
-    >
-      <AuditableUnits />
-    </Suspense>
-  );
+  return <AuditableUnits />;
 };
 
 export default AuditableUnitsPage;
