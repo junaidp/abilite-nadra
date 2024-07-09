@@ -10,11 +10,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   changeActiveLink,
   changeExpanded,
-  changeYear
+  changeYear,
 } from "../../../global-redux/reducers/common/slice";
-import { changeAuthUser,setupLogoutUser } from "../../../global-redux/reducers/auth/slice";
+import {
+  changeAuthUser,
+  setupLogoutUser,
+} from "../../../global-redux/reducers/auth/slice";
 
-export default function TemporaryDrawer() {
+export default function SmallScreenSidebar() {
   let navigate = useNavigate();
   let dispatch = useDispatch();
   let { showSidebar, activeLink, menuItems, year } = useSelector(

@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-const AddCheckListManagementDialog = ({ setShowQRCodeScanner }) => {
+const QRCodeScanner = ({ setShowQRCodeScanner }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [code, setCode] = React.useState("");
@@ -70,4 +70,4 @@ const AddCheckListManagementDialog = ({ setShowQRCodeScanner }) => {
   );
 };
 
-export default AddCheckListManagementDialog;
+export default QRCodeScanner;

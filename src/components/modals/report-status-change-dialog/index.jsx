@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setupPublishReport } from "../../../global-redux/reducers/reports/slice";
+import { setupPublishReport } from "../../../global-redux/reducers/reports/planing-report/slice";
 
 const ReportStatusChangeDialog = ({
   setShowReportStatusChangeDialog,

@@ -28,7 +28,7 @@ const renderCustomizedLabel = ({
   );
 };
 
-const PieChartComponent = ({ dataInfo }) => {
+const AreaChart = ({ dataInfo }) => {
   const data = [
     { name: "High", value: dataInfo?.odidnotDue },
     { name: "Medium", value: dataInfo?.odiddue },
@@ -55,4 +55,4 @@ const PieChartComponent = ({ dataInfo }) => {
   );
 };
 
-export default PieChartComponent;
+export default AreaChart;

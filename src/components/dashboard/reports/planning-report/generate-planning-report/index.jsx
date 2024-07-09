@@ -6,11 +6,11 @@ import { useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   resetReportAddSuccess,
-  setupSaveReports,
+  setupSaveReport,
   setupUpdateSingleReport,
   handleCleanUp,
-  setupGetInitialSingleReport,
-} from "../../../../../global-redux/reducers/reports/slice";
+  setupGetSingleReport,
+} from "../../../../../global-redux/reducers/reports/planing-report/slice";
 import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
@@ -87,7 +87,7 @@ const GeneratePlanningReport = () => {
         toast.error("Please Provide all the fields");
       } else {
         dispatch(
-          setupSaveReports({
+          setupSaveReport({
             ...data,
             newHeading: data?.newHeading?.map((item) => {
               return {
@@ -188,7 +188,7 @@ const GeneratePlanningReport = () => {
 
   React.useEffect(() => {
     if (user[0]?.token && editable !== "notApplicable") {
-      dispatch(setupGetInitialSingleReport(reportId));
+      dispatch(setupGetSingleReport(reportId));
     }
   }, [user, editable]);
 

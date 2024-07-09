@@ -8,7 +8,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import RichTextEditor from "../../../components/common/rich-text/index";
 
-const EditCheckListItemDialog = ({ setShowEditCheckListItemDialog }) => {
+const EditSubCheckListDialog = ({ setShowEditCheckListItemDialog }) => {
   const dispatch = useDispatch();
   const { checkListAddSuccess, editLoading, currentSubCheckListItem } =
     useSelector((state) => state.setttingsCheckList);
@@ -167,4 +167,4 @@ const EditCheckListItemDialog = ({ setShowEditCheckListItemDialog }) => {
   );
 };
 
-export default EditCheckListItemDialog;
+export default EditSubCheckListDialog;

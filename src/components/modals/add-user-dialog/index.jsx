@@ -8,7 +8,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import Form from "./component/Form";
 
-const UserManagementDialog = ({ setUserManagementDialog }) => {
+const AddUserDialog = ({ setUserManagementDialog }) => {
   const dispatch = useDispatch();
   const { addUserSuccess, loading, allUsers } = useSelector(
     (state) => state.setttingsUserManagement
@@ -184,4 +184,4 @@ const UserManagementDialog = ({ setUserManagementDialog }) => {
   );
 };
 
-export default UserManagementDialog;
+export default AddUserDialog;

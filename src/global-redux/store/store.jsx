@@ -2,7 +2,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import commonReducer from "../reducers/common/slice";
 import authReducer from "../reducers/auth/slice";
 import settingsCheckListReducer from "../reducers/settings/check-list/slice";
-import settingsCompanyReducer from "../reducers/settings/company-management/slice";
 import settingsRiskControlMatrixReducer from "../reducers/settings/risk-control-matrix/slice";
 import settingsLocationReducer from "../reducers/settings/location/slice";
 import settingsAddUserReducer from "../reducers/settings/user-management/slice";
@@ -32,7 +31,6 @@ export const store = configureStore({
     setttingsRiskControlMatrix: settingsRiskControlMatrixReducer,
     setttingsProcess: settingsProcessReducer,
     setttingsUserManagement: settingsAddUserReducer,
-    settingsCompanyManagement: settingsCompanyReducer,
     settingsCPList: settingCPListReducer,
     settingsRiskFactor: settingRiskFactorReducer,
     settingsDocs: settingsSupportingDocumentReducer,

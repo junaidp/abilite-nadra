@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setupApproveRiskControlMatrixObjective } from "../../../../../../../../global-redux/reducers/audit-engagement/slice";
 
-const ApproveAuditPlanSummaryDialog = ({
+const ApproveRiskControlMatrixDialog = ({
   setShowApproveDialog,
   currentAuditEngagement,
 }) => {
@@ -58,4 +58,4 @@ const ApproveAuditPlanSummaryDialog = ({
   );
 };
 
-export default ApproveAuditPlanSummaryDialog;
+export default ApproveRiskControlMatrixDialog;

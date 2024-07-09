@@ -1,13 +1,13 @@
 import React, { Suspense, lazy } from "react";
 import { CircularProgress } from "@mui/material";
 
-const SpecificRiskApproach = lazy(() =>
+const RiskFactorApproach = lazy(() =>
   import(
-    "../../../../../components/dashboard/planing/risk-assessments/specific-risk-approach/index"
+    "../../../../../components/dashboard/planing/risk-assessments/risk-factor-approach/index"
   )
 );
 
-const SpecificRiskApproachPage = () => {
+const RiskFactorApproachPage = () => {
   return (
     <Suspense
       fallback={
@@ -16,9 +16,9 @@ const SpecificRiskApproachPage = () => {
         </div>
       }
     >
-      <SpecificRiskApproach />
+      <RiskFactorApproach />
     </Suspense>
   );
 };
 
-export default SpecificRiskApproachPage;
+export default RiskFactorApproachPage;

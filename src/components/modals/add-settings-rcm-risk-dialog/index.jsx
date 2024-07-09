@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { setupCreateRisk } from "../../../global-redux/reducers/settings/risk-control-matrix/slice";
-const AddSettingsRiskRCMDialog = ({ setShowRCMRiskDialog }) => {
+const AddSettingsRCMRiskDialog = ({ setShowRCMRiskDialog }) => {
   const dispatch = useDispatch();
   const { rcmAddSuccess, loading, allRCM } = useSelector(
     (state) => state?.setttingsRiskControlMatrix
@@ -125,4 +125,4 @@ const AddSettingsRiskRCMDialog = ({ setShowRCMRiskDialog }) => {
   );
 };
 
-export default AddSettingsRiskRCMDialog;
+export default AddSettingsRCMRiskDialog;

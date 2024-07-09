@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setupApproveComplianceCheckList } from "../../../../../../../global-redux/reducers/audit-engagement/slice";
 
-const ApproveAuditCheckListDialog = ({
+const ApproveComplianceCheckListDialog = ({
   setShowApproveDialog,
   currentApproveItem,
 }) => {
@@ -58,4 +58,4 @@ const ApproveAuditCheckListDialog = ({
   );
 };
 
-export default ApproveAuditCheckListDialog;
+export default ApproveComplianceCheckListDialog;

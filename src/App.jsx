@@ -7,7 +7,10 @@ import { changeAuthUser } from "./global-redux/reducers/auth/slice";
 import { useDispatch, useSelector } from "react-redux";
 import { changeYear } from "./global-redux/reducers/common/slice";
 import "react-toastify/dist/ReactToastify.css";
-import { changeActiveLink ,InitialLoadSidebarActiveLink } from "./global-redux/reducers/common/slice";
+import {
+  changeActiveLink,
+  InitialLoadSidebarActiveLink,
+} from "./global-redux/reducers/common/slice";
 import { CircularProgress } from "@mui/material";
 
 const Login = React.lazy(() => import("./pages/auth/login/Login"));
@@ -30,7 +33,7 @@ const JobPrioritizationPage = React.lazy(() =>
   import("./pages/dashboard/planing/job-prioritization/JobPrioritization")
 );
 const JobSechedulingPage = React.lazy(() =>
-  import("./pages/dashboard/planing/job-scheduling/JobSecheduling")
+  import("./pages/dashboard/planing/job-scheduling/JobSeheduling")
 );
 const AuditPlanSummaryPage = React.lazy(() =>
   import("./pages/dashboard/planing/audit-plan-summary/AuditPlanSummary")
@@ -96,11 +99,7 @@ const UserProfile = React.lazy(() =>
 const KickOffPage = React.lazy(() =>
   import("./pages/dashboard/audit-engagement/kick-off/KickOff")
 );
-const SpecificRiskApproachPage = React.lazy(() =>
-  import(
-    "./pages/dashboard/planing/risk-assessments/specific-risk-approach/SpecificRiskApproach"
-  )
-);
+
 const RiskFactorApproachPage = React.lazy(() =>
   import(
     "./pages/dashboard/planing/risk-assessments/risk-factor-approach/RiskFactorApproach"
@@ -113,11 +112,11 @@ const FollowUpPage = React.lazy(() =>
   import("./pages/dashboard/reporting-follow-up/follow-up/FollowUp")
 );
 const ResetPassword = React.lazy(() =>
-  import("./components/auth/reset-password/ResetPassword")
+  import("./pages/auth/reset-password/index")
 );
 const AuditParticularsPage = React.lazy(() =>
   import(
-    "./pages/dashboard/reporting-follow-up/reporting/audit-particulars/AuditParticulars"
+    "./pages/dashboard/reporting-follow-up/reporting/reporting-particulars/ReportingParticulars"
   )
 );
 const FollowUpParticularsPage = React.lazy(() =>
@@ -133,12 +132,12 @@ const InternalAuditReportPage = React.lazy(() =>
 );
 const ViewInternalAuditReportPage = React.lazy(() =>
   import(
-    "./components/dashboard/reports/internal-audit-report/view-internal-audit-report/index"
+    "./pages/dashboard/report/internal-audit-report/view-internal-audit-report/ViewInternalAuditReport"
   )
 );
 const UpdateInternalAuditReportPage = React.lazy(() =>
   import(
-    "./components/dashboard/reports/internal-audit-report/update-internal-audit-report/index"
+    "./pages/dashboard/report/internal-audit-report/update-internal-audit-report/UpdateInternalAuditReport"
   )
 );
 const Layout = React.lazy(() => import("./components/common/layout/Layout"));
@@ -158,22 +157,22 @@ const AuditExceptionPage = React.lazy(() =>
 );
 const InternalAuditConsolidationReport = React.lazy(() =>
   import(
-    "./components/dashboard/reports/internal-audit-consolidation-report/index"
+    "./pages/dashboard/report/internal-audit-consolidation-report/InternalAuditConsolidationReport"
   )
 );
 const GenerateInternalAuditConsolidationReport = React.lazy(() =>
   import(
-    "./components/dashboard/reports/internal-audit-consolidation-report/generate-internal-audit-report"
+    "./pages/dashboard/report/internal-audit-consolidation-report/generate-internal-audit-consolidation-report/GenerateInternalAuditConsolidationReport"
   )
 );
 const ViewInternalAuditConsolidationReport = React.lazy(() =>
   import(
-    "./components/dashboard/reports/internal-audit-consolidation-report/view-internal-audit-report"
+    "./pages/dashboard/report/internal-audit-consolidation-report/view-internal-audit-consolidation-report/ViewInternalAuditConsolidationReport"
   )
 );
 const UpdateInternalAuditConsolidationReport = React.lazy(() =>
   import(
-    "./components/dashboard/reports/internal-audit-consolidation-report/update-internal-audit-report"
+    "./pages/dashboard/report/internal-audit-consolidation-report/update-internal-audit-consolidation-report/UpdateInternalAuditConsolidationReport"
   )
 );
 const ProtectedRoute = React.lazy(() =>
@@ -318,10 +317,7 @@ const App = () => {
                 element={<ComplianceCheckListCardPage />}
               />
               <Route path="kick-off" element={<KickOffPage />} />
-              <Route
-                path="specific-risk-approach"
-                element={<SpecificRiskApproachPage />}
-              />
+
               <Route
                 path="risk-factor-approach"
                 element={<RiskFactorApproachPage />}

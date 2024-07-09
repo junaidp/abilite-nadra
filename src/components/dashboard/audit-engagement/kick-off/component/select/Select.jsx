@@ -28,7 +28,7 @@ function getStyles(name, personName, theme) {
   };
 }
 
-export default function MultipleSelect() {
+export default function Select() {
   const [personName, setPersonName] = React.useState([]);
   const theme = useTheme();
 

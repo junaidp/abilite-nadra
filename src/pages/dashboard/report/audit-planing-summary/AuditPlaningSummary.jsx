@@ -1,7 +1,7 @@
 import React, { Suspense, lazy } from "react";
 import { CircularProgress } from "@mui/material";
 
-const AuditPlaningSummaryComponent = lazy(() =>
+const AuditPlaningSummary = lazy(() =>
   import("../../../../components/dashboard/reports/audit-planing-summary")
 );
 
@@ -14,7 +14,7 @@ const AuditPlaningSummaryPage = () => {
         </div>
       }
     >
-      <AuditPlaningSummaryComponent />
+      <AuditPlaningSummary />
     </Suspense>
   );
 };

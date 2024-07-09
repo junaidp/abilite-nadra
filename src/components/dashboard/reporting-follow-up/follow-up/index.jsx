@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { CircularProgress } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 
-const Reporting = () => {
+const FollowUp = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state?.auth);
@@ -127,4 +127,4 @@ const Reporting = () => {
   );
 };
 
-export default Reporting;
+export default FollowUp;

@@ -5,9 +5,6 @@ import Pagination from "@mui/material/Pagination";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import CancelledDialog from "../../../components/modals/cancelled-dialog/index";
-import PostponedDialog from "../../../components/modals/postponed-dialog/index";
-import Modal from "@mui/material/Modal";
 import { setupGetAllAuditEngagement } from "../../../global-redux/reducers/audit-engagement/slice";
 import { CircularProgress } from "@mui/material";
 
@@ -21,9 +18,7 @@ const AuditEngagement = () => {
     (state) => state?.auditEngagement
   );
   const { user } = useSelector((state) => state.auth);
-  const [showPostPonedModal, setShowPostPonedModal] = React.useState(false);
   const [page, setPage] = React.useState(1);
-  const [showCancelModal, setShowCancelModal] = React.useState(false);
 
   const handleChange = (_, value) => {
     setPage(value);
@@ -32,18 +27,6 @@ const AuditEngagement = () => {
   React.useEffect(() => {
     if (kickOffRequest === "Kick-Off") {
       navigate("/audit/kick-off");
-    }
-    if (kickOffRequest === "Postponed") {
-      setShowPostPonedModal(true);
-      setShowCancelModal(false);
-    }
-    if (kickOffRequest === "Cancelled") {
-      setShowCancelModal(true);
-      setShowPostPonedModal(false);
-    }
-    if (kickOffRequest === "None") {
-      setShowCancelModal(true);
-      setShowPostPonedModal(false);
     }
   }, [kickOffRequest]);
 
@@ -66,29 +49,6 @@ const AuditEngagement = () => {
 
   return (
     <div>
-      {showCancelModal && (
-        <Modal
-          open={showCancelModal}
-          onClose={() => setShowCancelModal(false)}
-          closeAfterTransition
-        >
-          <div className="audit-engagement-dialog">
-            <CancelledDialog setShowCancelModal={setShowCancelModal} />
-          </div>
-        </Modal>
-      )}
-      {showPostPonedModal && (
-        <Modal
-          open={showPostPonedModal}
-          onClose={() => setShowPostPonedModal(false)}
-          closeAfterTransition
-        >
-          <div className="audit-engagement-dialog">
-            <PostponedDialog setShowPostPonedModal={setShowPostPonedModal} />
-          </div>
-        </Modal>
-      )}
-
       <div>
         <section className="faq-section ">
           <div data-aos="fade-up">

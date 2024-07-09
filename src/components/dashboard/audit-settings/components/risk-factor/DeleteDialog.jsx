@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setupDeleteRiskFactor } from "../../../../../global-redux/reducers/settings/risk-factor/slice";
 
-const DeleteCPListDialog = ({
+const DeleteRiskFactorDialog = ({
   setShowDeleteRiskFactorDialog,
   currentRiskFactorId,
 }) => {
@@ -51,4 +51,4 @@ const DeleteCPListDialog = ({
   );
 };
 
-export default DeleteCPListDialog;
+export default DeleteRiskFactorDialog;

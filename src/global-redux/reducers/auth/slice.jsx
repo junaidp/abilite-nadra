@@ -182,6 +182,11 @@ export const slice = createSlice({
         state.loading = true;
       })
       .addCase(setupLoginUser.fulfilled, (state, action) => {
+        if (action.payload.message === "User is already logged in") {
+          toast.error(
+            "User is already logged in. Please remove the previous session and then try login in here"
+          );
+        }
         state.loading = false;
         state.loginEmail = "";
         state.loginPassword = "";

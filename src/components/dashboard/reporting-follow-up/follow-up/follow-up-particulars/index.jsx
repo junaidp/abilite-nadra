@@ -22,7 +22,7 @@ import FeedBackDialog from "../../components/FeedBackDialog";
 import ViewThirdFeedBackDialog from "../../components/ThirdFeedBack";
 import { toast } from "react-toastify";
 
-const ReportingParticulars = () => {
+const FollowUpParticulars = () => {
   let navigate = useNavigate();
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -329,4 +329,4 @@ const ReportingParticulars = () => {
   );
 };
 
-export default ReportingParticulars;
+export default FollowUpParticulars;

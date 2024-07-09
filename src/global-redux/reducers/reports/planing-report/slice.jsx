@@ -38,12 +38,6 @@ export const setupGetSingleReport = createAsyncThunk(
     return getSingleReport(data, thunkAPI);
   }
 );
-export const setupGetIAHReports = createAsyncThunk(
-  "planningReport/getIAHReports",
-  async (data, thunkAPI) => {
-    return getIAHReports(data, thunkAPI);
-  }
-);
 
 export const setupUpdateSingleReport = createAsyncThunk(
   "planningReport/updateReport",
@@ -144,26 +138,6 @@ export const slice = createSlice({
       })
       .addCase(setupGetSingleReport.rejected, (state, { payload }) => {
         state.initialLoading = false;
-        if (payload?.response?.data?.message) {
-          toast.error(payload?.response?.data?.message);
-        } else {
-          toast.error("An Error has occurred");
-        }
-      });
-    // Get All IAH Reports
-    builder
-      .addCase(setupGetIAHReports.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(setupGetIAHReports.fulfilled, (state, { payload }) => {
-        const sortedArray = payload?.data?.sort(
-          (a, b) => new Date(b.createdTime) - new Date(a.createdTime)
-        );
-        state.allReports = sortedArray || [];
-        state.loading = false;
-      })
-      .addCase(setupGetIAHReports.rejected, (state, { payload }) => {
-        state.loading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
         } else {

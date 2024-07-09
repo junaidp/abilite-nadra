@@ -1,7 +1,7 @@
 import React, { Suspense, lazy } from "react";
 import { CircularProgress } from "@mui/material";
 
-const JobTimeAllocationComponent = lazy(() =>
+const JobTimeAllocation = lazy(() =>
   import("../../../../components/dashboard/reports/job-time-allocation")
 );
 
@@ -14,7 +14,7 @@ const JobTimeAllocationPage = () => {
         </div>
       }
     >
-      <JobTimeAllocationComponent />
+      <JobTimeAllocation />
     </Suspense>
   );
 };

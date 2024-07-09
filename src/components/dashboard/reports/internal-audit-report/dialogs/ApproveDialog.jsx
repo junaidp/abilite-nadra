@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setupApproveInternalAuditReport } from "../../../../../global-redux/reducers/reports/internal-audit-report/slice";
 
-const ApproveInternalAuditConsolidationReportDialog = ({
+const ApproveInternalAuditReportDialog = ({
   currentReportItem,
   setShowApproveDialog,
 }) => {
@@ -54,4 +54,4 @@ const ApproveInternalAuditConsolidationReportDialog = ({
   );
 };
 
-export default ApproveInternalAuditConsolidationReportDialog;
+export default ApproveInternalAuditReportDialog;

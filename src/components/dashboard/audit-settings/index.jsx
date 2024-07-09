@@ -2,7 +2,6 @@ import React from "react";
 import "./index.css";
 import { useSelector, useDispatch } from "react-redux";
 import { setupGetAllCheckLists } from "../../../global-redux/reducers/settings/check-list/slice";
-import { setupGetAllCompanies } from "../../../global-redux/reducers/settings/company-management/slice";
 import { setupGetAllLocations } from "../../../global-redux/reducers/settings/location/slice";
 import { setupGetAllProcess } from "../../../global-redux/reducers/settings/process/slice";
 import { setupGetAllUsers } from "../../../global-redux/reducers/settings/user-management/slice";
@@ -13,8 +12,6 @@ import { setupGetAllFiles } from "../../../global-redux/reducers/settings/suppor
 import { handleReset } from "../../../global-redux/reducers/settings/risk-control-matrix/slice";
 import { resetAuthValues } from "../../../global-redux/reducers/auth/slice";
 import UserManagementDialog from "../../modals/add-user-dialog/index";
-import UpdateCompanyDialog from "../../modals/update-company-dialog";
-import AddCompanyDialog from "../../modals/add-company-dialog/index";
 import UpdateUserDialog from "../.././modals/update-user-dialog";
 import TFA from "./components/tfa/index.jsx";
 import CheckList from "./components/checklist";
@@ -36,12 +33,8 @@ const AuditSettings = () => {
   const { company } = useSelector((state) => state.common);
   const [userManagementDialog, setUserManagementDialog] = React.useState(false);
   const [updateUserDialog, setUpdateUserDialog] = React.useState(false);
-  const [addCompanyDialog, setAddCompantDialog] = React.useState(false);
-  const [currentCompanyId, setCurrentCompanyId] = React.useState("");
   const [userRole, setUserRole] = React.useState("");
   const [userHierarchy, setUserHierarchy] = React.useState("");
-  const [showUpdateCompanyDialog, setShowUpdateCompanyDialog] =
-    React.useState("");
   const [updateUserObject, setUpdateUserObject] = React.useState({});
 
   // Calls
@@ -55,12 +48,6 @@ const AuditSettings = () => {
         dispatch(
           setupGetAllCheckLists(`?userEmailId=${email}&companyId=${companyId}`)
         );
-      }
-      if (
-        currentSettingOption === "company" ||
-        currentSettingOption === "approval-management"
-      ) {
-        dispatch(setupGetAllCompanies());
       }
       if (currentSettingOption === "location") {
         dispatch(setupGetAllLocations(`?companyId=${companyId}`));
@@ -123,23 +110,7 @@ const AuditSettings = () => {
           </div>
         </div>
       )}
-      {addCompanyDialog && (
-        <div className="audit-settings-modal">
-          <div className="model-wrap">
-            <AddCompanyDialog setAddCompantDialog={setAddCompantDialog} />
-          </div>
-        </div>
-      )}
-      {showUpdateCompanyDialog && (
-        <div className="audit-settings-modal">
-          <div className="model-wrap">
-            <UpdateCompanyDialog
-              setShowUpdateCompanyDialog={setShowUpdateCompanyDialog}
-              currentCompanyId={currentCompanyId}
-            />
-          </div>
-        </div>
-      )}
+
       {updateUserDialog && (
         <div className="audit-settings-modal">
           <div className="model-wrap">
@@ -248,7 +219,6 @@ const AuditSettings = () => {
                   </button>
                 )}
 
-              
                 <button
                   className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
                   id="nav-com-tab"
@@ -263,7 +233,6 @@ const AuditSettings = () => {
                 </button>
 
                 {/* For Admins Only */}
-                
 
                 {userRole === "ADMIN" && (
                   <button
@@ -319,9 +288,8 @@ const AuditSettings = () => {
                   setUpdateUserObject={setUpdateUserObject}
                 />
               )}
-             
+
               <Process userHierarchy={userHierarchy} userRole={userRole} />
-             
 
               {userRole === "ADMIN" && <UserInfo />}
               <TFA />

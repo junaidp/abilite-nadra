@@ -89,7 +89,7 @@ const JobScheduling = () => {
           <input
             placeholder="Filter"
             id="inputField"
-            className="input-border-bottom"
+            className="input-border-bottom form-control"
             value={searchValue}
             onChange={(e) => setSearchValue(e?.target?.value)}
           />

@@ -7,7 +7,10 @@ import { changeShowSidebar } from "../../../global-redux/reducers/common/slice";
 import { useDispatch, useSelector } from "react-redux";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import { useNavigate } from "react-router-dom";
-import { changeAuthUser,setupLogoutUser } from "../../../global-redux/reducers/auth/slice";
+import {
+  changeAuthUser,
+  setupLogoutUser,
+} from "../../../global-redux/reducers/auth/slice";
 import nadraLogo from "../../../assets/logo.png";
 import {
   changeCompany,
@@ -18,21 +21,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const TopBar = () => {
   const [showUserProfile, setShowUserProfile] = React.useState(false);
-  const [shownotification, setShowNotification] = React.useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   let { user } = useSelector((state) => state.auth);
   const { showSidebar, company, year } = useSelector((state) => state.common);
-  const notificationRef = useDetectClickOutside({
-    onTriggered: closeNotficationDropDown,
-  });
   const userRef = useDetectClickOutside({
     onTriggered: closeUserProfileDropDown,
   });
 
-  function closeNotficationDropDown() {
-    setShowNotification(false);
-  }
   function closeUserProfileDropDown() {
     setShowUserProfile(false);
   }
@@ -163,156 +159,6 @@ const TopBar = () => {
                   </a>
                 )}
 
-              <li
-                className="nav-item dropdown"
-                onClick={() => {
-                  setShowNotification((pre) => !pre);
-                  setShowUserProfile(false);
-                }}
-                ref={notificationRef}
-              >
-                {/* <a
-                  className="nav-link nav-icon-hover"
-                  id="drop2"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    className="bi bi-bell-fill"
-                    viewBox="0 0 16 16"
-                  >
-                    <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z" />
-                  </svg>
-                  <div className="notification bg-primary rounded-circle"></div>
-                </a> */}
-                {/* {shownotification && (
-                  <div className="notification-wrap" aria-labelledby="drop2">
-                    <div className="d-flex align-items-center justify-content-between py-3 px-7">
-                      <h5 className="mb-0 fs-5 fw-semibold">Notifications</h5>
-                      <span className="badge bg-primary rounded-4 px-3 py-1 lh-sm">
-                        5 new
-                      </span>
-                    </div>
-                    <div className="message-body" data-simplebar="">
-                      <a className="py-6 px-7 d-flex align-items-center dropdown-item">
-                        <span className="me-3">
-                          <img
-                            src={user1}
-                            alt="user"
-                            className="rounded-circle"
-                            width="48"
-                            height="48"
-                          />
-                        </span>
-                        <div className="w-75 d-inline-block v-middle">
-                          <h6 className="mb-1 fw-semibold">
-                            Roman Joined the Team!
-                          </h6>
-                          <span className="d-block">Congratulate him</span>
-                        </div>
-                      </a>
-                      <a className="py-6 px-7 d-flex align-items-center dropdown-item">
-                        <span className="me-3">
-                          <img
-                            src={user2}
-                            alt="user"
-                            className="rounded-circle"
-                            width="48"
-                            height="48"
-                          />
-                        </span>
-                        <div className="w-75 d-inline-block v-middle">
-                          <h6 className="mb-1 fw-semibold">New message</h6>
-                          <span className="d-block">
-                            Salma sent you new message
-                          </span>
-                        </div>
-                      </a>
-                      <a className="py-6 px-7 d-flex align-items-center dropdown-item">
-                        <span className="me-3">
-                          <img
-                            src={user3}
-                            alt="user"
-                            className="rounded-circle"
-                            width="48"
-                            height="48"
-                          />
-                        </span>
-                        <div className="w-75 d-inline-block v-middle">
-                          <h6 className="mb-1 fw-semibold">
-                            Bianca sent payment
-                          </h6>
-                          <span className="d-block">Check your earnings</span>
-                        </div>
-                      </a>
-                      <a className="py-6 px-7 d-flex align-items-center dropdown-item">
-                        <span className="me-3">
-                          <img
-                            src={user4}
-                            alt="user"
-                            className="rounded-circle"
-                            width="48"
-                            height="48"
-                          />
-                        </span>
-                        <div className="w-75 d-inline-block v-middle">
-                          <h6 className="mb-1 fw-semibold">
-                            Jolly completed tasks
-                          </h6>
-                          <span className="d-block">Assign her new tasks</span>
-                        </div>
-                      </a>
-                      <a className="py-6 px-7 d-flex align-items-center dropdown-item">
-                        <span className="me-3">
-                          <img
-                            src={user5}
-                            alt="user"
-                            className="rounded-circle"
-                            width="48"
-                            height="48"
-                          />
-                        </span>
-                        <div className="w-75 d-inline-block v-middle">
-                          <h6 className="mb-1 fw-semibold">
-                            John received payment
-                          </h6>
-                          <span className="d-block">
-                            $230 deducted from account
-                          </span>
-                        </div>
-                      </a>
-                      <a className="py-6 px-7 d-flex align-items-center dropdown-item">
-                        <span className="me-3">
-                          <img
-                            src={user1}
-                            alt="user"
-                            className="rounded-circle"
-                            width="48"
-                            height="48"
-                          />
-                        </span>
-                        <div className="w-75 d-inline-block v-middle">
-                          <h6 className="mb-1 fw-semibold">
-                            Roman Joined the Team!
-                          </h6>
-                          <span className="d-block">Congratulate him</span>
-                        </div>
-                      </a>
-                    </div>
-                    <div className="py-6 px-7 mb-1">
-                      <button className="btn btn-outline-primary w-100">
-                        {" "}
-                        See All Notifications{" "}
-                      </button>
-                    </div>
-                  </div>
-                )} */}
-              </li>
-
               <li className="nav-item dropdown">
                 <a
                   className="nav-link pe-0"
@@ -321,7 +167,6 @@ const TopBar = () => {
                   aria-expanded="false"
                   onClick={() => {
                     setShowUserProfile((pre) => !pre);
-                    setShowNotification(false);
                   }}
                   ref={userRef}
                 >

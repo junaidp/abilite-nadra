@@ -4,9 +4,8 @@ import { useNavigate } from "react-router-dom";
 import {
   setupGetAllReports,
   resetReportAddSuccess,
-  setupGetIAHReports,
   setupUpdateSingleReport,
-} from "../../../../global-redux/reducers/reports/slice";
+} from "../../../../global-redux/reducers/reports/planing-report/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
 import moment from "moment";
@@ -79,7 +78,6 @@ const PlanningReport = () => {
           (item) => item?.companyName === company
         )?.id;
         if (companyId) {
-          dispatch(setupGetIAHReports(companyId));
         }
       }
       if (user[0]?.userId?.employeeid?.userHierarchy !== "IAH") {
@@ -96,7 +94,6 @@ const PlanningReport = () => {
           (item) => item?.companyName === company
         )?.id;
         if (companyId) {
-          dispatch(setupGetIAHReports(companyId));
           dispatch(setupGetAllUsers({ shareWith: true }));
         }
       }

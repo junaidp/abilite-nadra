@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setupDeleteSingleReport } from "../../../global-redux/reducers/reports/slice";
+import { setupDeleteReport } from "../../../global-redux/reducers/reports/planing-report/slice";
 import "./index.css";
 
 const ReportDeleteDialog = ({
@@ -12,7 +12,7 @@ const ReportDeleteDialog = ({
 
   function handleReportDelete() {
     if (!loading) {
-      dispatch(setupDeleteSingleReport(Number(selectedReportId)));
+      dispatch(setupDeleteReport(Number(selectedReportId)));
     }
   }
 

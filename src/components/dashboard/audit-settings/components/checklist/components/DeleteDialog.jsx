@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setupDeleteCheckList } from "../../../../../../global-redux/reducers/settings/check-list/slice";
 
-const DeleteCPListDialog = ({ setShowDeleteCheckListDialog }) => {
+const DeleteCheckListDialog = ({ setShowDeleteCheckListDialog }) => {
   const dispatch = useDispatch();
   const { checkListAddSuccess, editLoading, checkListId } = useSelector(
     (state) => state.setttingsCheckList
@@ -50,4 +50,4 @@ const DeleteCPListDialog = ({ setShowDeleteCheckListDialog }) => {
   );
 };
 
-export default DeleteCPListDialog;
+export default DeleteCheckListDialog;

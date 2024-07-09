@@ -1,7 +1,7 @@
 import React from "react";
 import UserDetails from "../../../../user/user-profile/UserProfile";
 
-const TaskManagement = () => {
+const UserInfo = () => {
   return (
     <div
       className="tab-pane fade"
@@ -14,4 +14,4 @@ const TaskManagement = () => {
   );
 };
 
-export default TaskManagement;
+export default UserInfo;

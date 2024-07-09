@@ -1,11 +1,11 @@
 import React, { Suspense, lazy } from "react";
 import { CircularProgress } from "@mui/material";
 
-const AuditException = lazy(() =>
-  import("../../../../components/dashboard/reports/audit-exception")
+const JobScheduling = lazy(() =>
+  import("../../../../components/dashboard/planing/job-scheduling/index")
 );
 
-const AuditExceptionPage = () => {
+const JobSehedulingPage = () => {
   return (
     <Suspense
       fallback={
@@ -14,9 +14,9 @@ const AuditExceptionPage = () => {
         </div>
       }
     >
-      <AuditException />
+      <JobScheduling />
     </Suspense>
   );
 };
 
-export default AuditExceptionPage;
+export default JobSehedulingPage;

@@ -2,7 +2,7 @@ import React from "react";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
 
-const PerformanceRiskAssessment = ({ setPerformRiskAssessmentModal }) => {
+const PerformanceRiskAssessmentDialog = ({ setPerformRiskAssessmentModal }) => {
   let navigate = useNavigate();
   return (
     <div className="container  p-3">
@@ -111,4 +111,4 @@ const PerformanceRiskAssessment = ({ setPerformRiskAssessmentModal }) => {
   );
 };
 
-export default PerformanceRiskAssessment;
+export default PerformanceRiskAssessmentDialog;
