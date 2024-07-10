@@ -31,27 +31,25 @@ const Header = () => {
   }
 
   function handleAdd() {
-    if (!loading) {
-      const companyId = user[0]?.company?.find(
-        (item) => item?.companyName === company
-      )?.id;
-      if (companyId) {
-        if (
-          data?.startDate === "" ||
-          data?.endDate === "" ||
-          data?.reportTitle === ""
-        ) {
-          toast.error("Provide all values");
-        } else {
-          dispatch(
-            setupSaveReport({
-              companyId: companyId,
-              startDate: data?.startDate,
-              endDate: data?.endDate,
-              reportTitle: data?.reportTitle,
-            })
-          );
-        }
+    const companyId = user[0]?.company?.find(
+      (item) => item?.companyName === company
+    )?.id;
+    if (companyId) {
+      if (
+        data?.startDate === "" ||
+        data?.endDate === "" ||
+        data?.reportTitle === ""
+      ) {
+        toast.error("Provide all values");
+      } else {
+        dispatch(
+          setupSaveReport({
+            companyId: companyId,
+            startDate: data?.startDate,
+            endDate: data?.endDate,
+            reportTitle: data?.reportTitle,
+          })
+        );
       }
     }
   }

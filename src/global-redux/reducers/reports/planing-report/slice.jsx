@@ -9,6 +9,7 @@ import {
   addHeading,
   updateHeading,
   deleteHeading,
+  getAllUsers,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -17,6 +18,8 @@ const initialState = {
   reportAddSuccess: false,
   singleReportObject: {},
   allReports: [],
+  users: [],
+  updateLoading: false,
 };
 
 export const setupSaveReport = createAsyncThunk(
@@ -78,6 +81,13 @@ export const setupDeleteHeading = createAsyncThunk(
   }
 );
 
+export const setupGetAllUsers = createAsyncThunk(
+  "planningReport/getAllUsers",
+  async (data, thunkAPI) => {
+    return getAllUsers(data, thunkAPI);
+  }
+);
+
 export const slice = createSlice({
   name: "planningReport",
   initialState,
@@ -87,6 +97,7 @@ export const slice = createSlice({
     },
     handleCleanUp: (state) => {
       state.loading = false;
+      state.updateLoading = false;
       state.reportAddSuccess = false;
       state.singleReportObject = {};
     },
@@ -135,14 +146,14 @@ export const slice = createSlice({
     // Get Initial Single Report
     builder
       .addCase(setupGetSingleReport.pending, (state) => {
-        state.initialLoading = true;
+        state.loading = true;
       })
       .addCase(setupGetSingleReport.fulfilled, (state, { payload }) => {
-        state.initialLoading = false;
-        state.singleReportObject = payload?.data || [{ error: "Not Found" }];
+        state.loading = false;
+        state.singleReportObject = payload?.data;
       })
       .addCase(setupGetSingleReport.rejected, (state, { payload }) => {
-        state.initialLoading = false;
+        state.loading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
         } else {
@@ -153,15 +164,15 @@ export const slice = createSlice({
     // Update Single Report
     builder
       .addCase(setupUpdateSingleReport.pending, (state) => {
-        state.loading = true;
+        state.updateLoading = true;
       })
       .addCase(setupUpdateSingleReport.fulfilled, (state) => {
-        state.loading = false;
+        state.updateLoading = false;
         state.reportAddSuccess = true;
-        toast.success("Report Updated Successfully");
+        toast.success("Planning Report Updated Successfully");
       })
       .addCase(setupUpdateSingleReport.rejected, (state, { payload }) => {
-        state.loading = false;
+        state.updateLoading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
         } else {
@@ -256,6 +267,24 @@ export const slice = createSlice({
         state.loading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+
+    builder
+      .addCase(setupGetAllUsers.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetAllUsers.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        const sortedArray = payload?.data;
+        state.users = sortedArray;
+      })
+      .addCase(setupGetAllUsers.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
         } else {
           toast.error("An Error has occurred");
         }

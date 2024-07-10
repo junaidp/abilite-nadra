@@ -2,6 +2,7 @@ import React from "react";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
+import { useSelector } from "react-redux";
 
 const Form = ({
   formik,
@@ -12,6 +13,9 @@ const Form = ({
   nullSkillSet,
   email,
 }) => {
+  const { allUsers: users } = useSelector(
+    (state) => state.setttingsUserManagement
+  );
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="row">
@@ -86,7 +90,7 @@ const Form = ({
             onBlur={formik.handleBlur}
             value={formik.values.userHierarchy}
           >
-            {!allUsers[0]?.error && allUsers.length === 1
+            {!users[0]?.error && users.length === 1
               ? [
                   <MenuItem key="" value="">
                     Select Role
@@ -95,8 +99,8 @@ const Form = ({
                     IAH
                   </MenuItem>,
                 ]
-              : allUsers?.length > 1 &&
-                !allUsers[0]?.error && [
+              : users?.length > 1 &&
+                !users[0]?.error && [
                   <MenuItem key="" value="">
                     Select Role
                   </MenuItem>,

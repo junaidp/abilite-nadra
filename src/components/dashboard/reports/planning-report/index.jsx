@@ -1,9 +1,9 @@
 import React from "react";
-import "./index.css";
 import { useNavigate } from "react-router-dom";
 import {
   setupGetAllReports,
   resetReportAddSuccess,
+  setupGetAllUsers,
 } from "../../../../global-redux/reducers/reports/planing-report/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
@@ -15,7 +15,7 @@ import ReportPublishDialog from "./components/report-publish-dialog";
 const PlanningReport = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, allReports, reportAddSuccess } = useSelector(
+  const { loading, allReports, reportAddSuccess, users } = useSelector(
     (state) => state?.planningReport
   );
   const { user } = useSelector((state) => state?.auth);
@@ -60,6 +60,9 @@ const PlanningReport = () => {
     )?.id;
     if (companyId) {
       dispatch(setupGetAllReports(companyId));
+      setTimeout(() => {
+        dispatch(setupGetAllUsers());
+      }, 500);
     }
   }, [dispatch]);
 
@@ -89,9 +92,7 @@ const PlanningReport = () => {
         <div className="mb-0 heading">Planning Report</div>
         <button
           className="btn btn-outline-light text-black"
-          onClick={() =>
-            navigate(`/audit/generate-planning-report?&editable=notApplicable`)
-          }
+          onClick={() => navigate(`/audit/generate-planning-report`)}
         >
           Generate Report
         </button>
@@ -119,11 +120,7 @@ const PlanningReport = () => {
                   <th>Report Name</th>
                   <th>Report Date</th>
                   <th>Created By</th>
-                  <th>Shared With</th>
                   <th>Status</th>
-                  {user[0]?.userId?.employeeid?.userHierarchy === "IAH" && (
-                    <th>Report Share With</th>
-                  )}
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -141,7 +138,7 @@ const PlanningReport = () => {
                 ) : (
                   allReports
                     ?.filter((all) =>
-                      all?.reportName
+                      all?.reportTitle
                         ?.toLowerCase()
                         .includes(reportNameValue?.toLowerCase())
                     )
@@ -151,42 +148,43 @@ const PlanningReport = () => {
                         <tr className="h-40" key={index}>
                           <td>{index + 1}</td>
                           <td>{item?.id}</td>
-                          <td>{item?.reportName}</td>
+                          <td>{item?.reportTitle}</td>
                           <td>
-                            {moment(item?.createdTime).format("DD-MM-YY")}
+                            {moment.utc(item?.createdTime).format("DD-MM-YY")}
                           </td>
-                          <td>{item?.createdBy?.name}</td>
-                          <td>{item?.reportShareWith?.name || "null"}</td>
+                          <td>
+                            {
+                              users?.find(
+                                (user) => user?.id === item?.createdBy
+                              )?.name
+                            }
+                          </td>
                           <td>{item?.reportStatus}</td>
                           <td>
                             <i
                               className="fa fa-eye text-primary f-18 cursor-pointer"
                               onClick={() =>
-                                navigate(
-                                  `/audit/generate-planning-report?reportId=${item?.id}&editable=false`
-                                )
+                                navigate(`/audit/view-planning-report`)
                               }
                             ></i>
-                            {(item?.reportStatus === "draft" ||
-                              user[0]?.userId?.employeeid?.userHierarchy ===
-                                "IAH") && (
+                            {item?.reportStatus === "Draft" && (
                               <i
                                 className="fa fa-edit mx-3 text-secondary f-18 cursor-pointer mx-2"
                                 onClick={() =>
                                   navigate(
-                                    `/audit/generate-planning-report?reportId=${item?.id}&editable=true`
+                                    `/audit/update-planning-report?reportId=${item?.id}`
                                   )
                                 }
                               ></i>
                             )}
-                            {item?.reportStatus === "draft" &&
-                              item?.createdBy?.id === user[0]?.userId?.id && (
+                            {item?.reportStatus === "Draft" &&
+                              item?.createdBy === user[0]?.userId?.id && (
                                 <i
                                   className="fa fa-trash text-danger f-18 cursor-pointer mx-2"
                                   onClick={() => handleDelete(item?.id)}
                                 ></i>
                               )}
-                            {item?.reportStatus === "draft" &&
+                            {item?.reportStatus !== "Draft" &&
                               user[0]?.userId?.employeeid?.userHierarchy ===
                                 "IAH" && (
                                 <div
