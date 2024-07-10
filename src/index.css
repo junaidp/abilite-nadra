@@ -639,8 +639,15 @@ mat-form-field.mat-focused .mat-form-field-ripple {
   width: 1100px !important;
 }
 
-element {
+.report-delete-close-btn {
+  position: absolute;
+  bottom: 0px !important;
+  right: 30px;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 30px;
 }
+
 .css-1t1j96h-MuiPaper-root-MuiDialog-paper {
   background-color: #fff;
 

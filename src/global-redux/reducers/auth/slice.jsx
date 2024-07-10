@@ -355,7 +355,7 @@ export const slice = createSlice({
     // Logout User
     builder
       .addCase(setupLogoutUser.fulfilled, (state) => {
-        toast.success("User Logged Out Successfully");
+        // toast.success("User Logged Out Successfully");
       })
       .addCase(setupLogoutUser.rejected, (state, action) => {
         state.loading = false;

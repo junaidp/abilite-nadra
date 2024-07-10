@@ -14,27 +14,29 @@ import {
 import Login from "./pages/auth/login/Login";
 import ForgetPassword from "./pages/auth/forget-password/ForgetPassword";
 import DashboardHomePage from "./pages/dashboard/home/DashboardHome";
-import BusinessObjectivePage from "./pages/dashboard/planing/business-objective/BusinessObjective";
-import RiskAssessmentsPage from "./pages/dashboard/planing/risk-assessments/RiskAssessments";
-import AuditableUnitsPage from "./pages/dashboard/planing/auditable-units/AuditableUnits";
-import JobPrioritizationPage from "./pages/dashboard/planing/job-prioritization/JobPrioritization";
-import JobSechedulingPage from "./pages/dashboard/planing/job-scheduling/JobSeheduling";
-import AuditPlanSummaryPage from "./pages/dashboard/planing/audit-plan-summary/AuditPlanSummary";
+import BusinessObjectivePage from "./pages/dashboard/planning/business-objective/BusinessObjective";
+import RiskAssessmentsPage from "./pages/dashboard/planning/risk-assessments/RiskAssessments";
+import AuditableUnitsPage from "./pages/dashboard/planning/auditable-units/AuditableUnits";
+import JobPrioritizationPage from "./pages/dashboard/planning/job-prioritization/JobPrioritization";
+import JobSechedulingPage from "./pages/dashboard/planning/job-scheduling/JobSeheduling";
+import AuditPlanSummaryPage from "./pages/dashboard/planning/audit-plan-summary/AuditPlanSummary";
 import AuditEngagementPage from "./pages/dashboard/audit-engagement/AuditEngagement";
-import ViewRiskAssessmentPage from "./pages/dashboard/planing/risk-assessments/view-risk-assessment/ViewRiskAssessment";
-import PlaningReportPage from "./pages/dashboard/report/planing-report/PlaningReport";
-import ViewJobschedulePage from "./pages/dashboard/planing/job-scheduling/view-job-schedule/ViewJobschedule";
-import ViewResourcePage from "./pages/dashboard/planing/job-scheduling/view-resource/ViewResource";
-import GeneratePlanningReportPage from "./pages/dashboard/report/planing-report/generate-planing-report/GeneratePlanningReport";
-import StartSchedulingPage from "./pages/dashboard/planing/job-scheduling/start-scheduling/StartScheduling";
-import BusinessObjectiveRedirectPage from "./pages/dashboard/planing/business-objective/business-objectives-redirect/BusinessObjectiveRedirect";
+import ViewRiskAssessmentPage from "./pages/dashboard/planning/risk-assessments/view-risk-assessment/ViewRiskAssessment";
+import PlanningReportPage from "./pages/dashboard/report/planning-report/PlanningReport";
+import ViewJobschedulePage from "./pages/dashboard/planning/job-scheduling/view-job-schedule/ViewJobschedule";
+import ViewResourcePage from "./pages/dashboard/planning/job-scheduling/view-resource/ViewResource";
+import GeneratePlanningReportPage from "./pages/dashboard/report/planning-report/generate-planning-report/GeneratePlanningReport";
+import UpdatePlanningReportPage from "./pages/dashboard/report/planning-report/update-planning-report/UpdatePlanningReport";
+import ViewPlanningReportPage from "./pages/dashboard/report/planning-report/view-planning-report/ViewPlanningReport";
+import StartSchedulingPage from "./pages/dashboard/planning/job-scheduling/start-scheduling/StartScheduling";
+import BusinessObjectiveRedirectPage from "./pages/dashboard/planning/business-objective/business-objectives-redirect/BusinessObjectiveRedirect";
 import InformationRequestPage from "./pages/dashboard/tasks/information-request/InformationRequest";
 import TaskManagementPage from "./pages/dashboard/tasks/task-management/TaskManagement";
-import SpecialProjectAuditPage from "./pages/dashboard/planing/business-objective/special-project-audit/SpecialProjectAudit";
-import ComplianceCheckListCardPage from "./pages/dashboard/planing/business-objective/compliance-checklist-card/ComplianceCheckListCard";
+import SpecialProjectAuditPage from "./pages/dashboard/planning/business-objective/special-project-audit/SpecialProjectAudit";
+import ComplianceCheckListCardPage from "./pages/dashboard/planning/business-objective/compliance-checklist-card/ComplianceCheckListCard";
 import UserProfile from "./components/user/user-profile/UserProfile";
 import KickOffPage from "./pages/dashboard/audit-engagement/kick-off/KickOff";
-import RiskFactorApproachPage from "./pages/dashboard/planing/risk-assessments/risk-factor-approach/RiskFactorApproach";
+import RiskFactorApproachPage from "./pages/dashboard/planning/risk-assessments/risk-factor-approach/RiskFactorApproach";
 import ReportingPage from "./pages/dashboard/reporting-follow-up/reporting/Reporting";
 import FollowUpPage from "./pages/dashboard/reporting-follow-up/follow-up/FollowUp";
 import ResetPassword from "./pages/auth/reset-password/index";
@@ -141,7 +143,7 @@ const App = () => {
               element={<AuditPlanSummaryPage />}
             />
             <Route path="audit-engagement" element={<AuditEngagementPage />} />
-            <Route path="planning-report" element={<PlaningReportPage />} />
+            <Route path="planning-report" element={<PlanningReportPage />} />
             <Route
               path="view-risk-assesment"
               element={<ViewRiskAssessmentPage />}
@@ -155,6 +157,14 @@ const App = () => {
             <Route
               path="generate-planning-report"
               element={<GeneratePlanningReportPage />}
+            />
+            <Route
+              path="update-planning-report"
+              element={<UpdatePlanningReportPage />}
+            />
+            <Route
+              path="view-planning-report"
+              element={<ViewPlanningReportPage />}
             />
             <Route
               path="information-request"

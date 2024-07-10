@@ -146,12 +146,38 @@ const Form = ({
             onBlur={formik.handleBlur}
             value={formik.values.userHierarchy}
           >
-            <MenuItem value="">Select Role</MenuItem>
-            <MenuItem value="IAH">IAH</MenuItem>
-            <MenuItem value="Management_Auditee">Management_Auditee</MenuItem>
-            <MenuItem value="Team_Lead">Team_Lead</MenuItem>
-            <MenuItem value="Audit_Executive_2">Audit_Executive_2</MenuItem>
-            <MenuItem value="Audit_Executive_1">Audit_Executive_1</MenuItem>
+            {!allUsers ||
+            allUsers.length === 0 ||
+            allUsers[0]?.error === "Not Found"
+              ? [
+                  <MenuItem key="" value="">
+                    Select Role
+                  </MenuItem>,
+                  <MenuItem key="IAH" value="IAH">
+                    IAH
+                  </MenuItem>,
+                ]
+              : allUsers?.length >= 1 &&
+                !allUsers[0]?.error && [
+                  <MenuItem key="" value="">
+                    Select Role
+                  </MenuItem>,
+                  <MenuItem key="IAH" value="IAH">
+                    IAH
+                  </MenuItem>,
+                  <MenuItem key="Management_Auditee" value="Management_Auditee">
+                    Management_Auditee
+                  </MenuItem>,
+                  <MenuItem key="Team_Lead" value="Team_Lead">
+                    Team_Lead
+                  </MenuItem>,
+                  <MenuItem key="Audit_Executive_2" value="Audit_Executive_2">
+                    Audit_Executive_2
+                  </MenuItem>,
+                  <MenuItem key="Audit_Executive_1" value="Audit_Executive_1">
+                    Audit_Executive_1
+                  </MenuItem>,
+                ]}
           </Select>
           {formik.touched.userHierarchy && formik.errors.userHierarchy && (
             <div className="error">{formik.errors.userHierarchy}</div>

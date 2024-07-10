@@ -8,12 +8,12 @@ import {
   publishReport,
   addHeading,
   updateHeading,
+  deleteHeading,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
   loading: false,
-  initialLoading: false,
   reportAddSuccess: false,
   singleReportObject: {},
   allReports: [],
@@ -71,19 +71,24 @@ export const setupUpdateHeading = createAsyncThunk(
     return updateHeading(data, thunkAPI);
   }
 );
+export const setupDeleteHeading = createAsyncThunk(
+  "planningReport/deleteHeading",
+  async (data, thunkAPI) => {
+    return deleteHeading(data, thunkAPI);
+  }
+);
 
 export const slice = createSlice({
   name: "planningReport",
   initialState,
   reducers: {
-    resetReportAddSuccess: (state, action) => {
+    resetReportAddSuccess: (state) => {
       state.reportAddSuccess = false;
     },
     handleCleanUp: (state) => {
-      (state.loading = false),
-        (state.reportAddSuccess = false),
-        (state.singleReportObject = {}),
-        (state.allReports = []);
+      state.loading = false;
+      state.reportAddSuccess = false;
+      state.singleReportObject = {};
     },
   },
   extraReducers: (builder) => {
@@ -150,7 +155,7 @@ export const slice = createSlice({
       .addCase(setupUpdateSingleReport.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupUpdateSingleReport.fulfilled, (state, { payload }) => {
+      .addCase(setupUpdateSingleReport.fulfilled, (state) => {
         state.loading = false;
         state.reportAddSuccess = true;
         toast.success("Report Updated Successfully");
@@ -169,7 +174,7 @@ export const slice = createSlice({
       .addCase(setupDeleteReport.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupDeleteReport.fulfilled, (state, { payload }) => {
+      .addCase(setupDeleteReport.fulfilled, (state) => {
         state.loading = false;
         state.reportAddSuccess = true;
         toast.success("Report Deleted Successfully");
@@ -188,7 +193,7 @@ export const slice = createSlice({
       .addCase(setupPublishReport.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupPublishReport.fulfilled, (state, { payload }) => {
+      .addCase(setupPublishReport.fulfilled, (state) => {
         state.loading = false;
         state.reportAddSuccess = true;
         toast.success("Report Published Successfully");
@@ -206,7 +211,7 @@ export const slice = createSlice({
       .addCase(setupAddHeading.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupAddHeading.fulfilled, (state, { payload }) => {
+      .addCase(setupAddHeading.fulfilled, (state) => {
         state.loading = false;
         state.reportAddSuccess = true;
         toast.success("Report Published Successfully");
@@ -224,12 +229,30 @@ export const slice = createSlice({
       .addCase(setupUpdateHeading.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupUpdateHeading.fulfilled, (state, { payload }) => {
+      .addCase(setupUpdateHeading.fulfilled, (state) => {
         state.loading = false;
         state.reportAddSuccess = true;
         toast.success("Report Published Successfully");
       })
       .addCase(setupUpdateHeading.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Delete Heading
+    builder
+      .addCase(setupDeleteHeading.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupDeleteHeading.fulfilled, (state) => {
+        state.loading = false;
+        state.reportAddSuccess = true;
+        toast.success("Report Deleted Successfully");
+      })
+      .addCase(setupDeleteHeading.rejected, (state, { payload }) => {
         state.loading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);

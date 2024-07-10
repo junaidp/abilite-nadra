@@ -47,7 +47,6 @@ export const getSingleReport = async (data, thunkAPI) => {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${user[0]?.token}`,
-          reportId: data,
         },
       }
     );
@@ -79,7 +78,6 @@ export const deleteReport = async (data, thunkAPI) => {
       `${baseUrl}/planningreport/delete?deleteReport=${data}`,
       {
         headers: {
-          deleteReport: data,
           "Content-Type": "application/json",
           Authorization: `Bearer ${user[0]?.token}`,
         },
@@ -99,7 +97,6 @@ export const publishReport = async (data, thunkAPI) => {
       null,
       {
         headers: {
-          publishReport: data,
           "Content-Type": "application/json",
           Authorization: `Bearer ${user[0]?.token}`,
         },
@@ -115,11 +112,10 @@ export const addHeading = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
-      `${baseUrl}/planningreport/update/addNewHeading${data}`,
-      null,
+      `${baseUrl}/planningreport/report/addNewHeading`,
+      data,
       {
         headers: {
-          publishReport: data,
           "Content-Type": "application/json",
           Authorization: `Bearer ${user[0]?.token}`,
         },
@@ -134,11 +130,28 @@ export const updateHeading = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
-      `${baseUrl}/planningreport/update/updateNewHeading`,
+      `${baseUrl}/planningreport/report/updateNewHeading`,
       data,
       {
         headers: {
-          publishReport: data,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
+export const deleteHeading = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.delete(
+      `${baseUrl}/planningreport/report/heading/delete${data}`,
+      {
+        headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${user[0]?.token}`,
         },

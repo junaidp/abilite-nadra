@@ -4,15 +4,13 @@ import { useNavigate } from "react-router-dom";
 import {
   setupGetAllReports,
   resetReportAddSuccess,
-  setupUpdateSingleReport,
 } from "../../../../global-redux/reducers/reports/planing-report/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
 import moment from "moment";
 import Pagination from "@mui/material/Pagination";
-import ReportDeleteDailog from "../../../modals/report-delete-dialog/index";
-import ReportStatusChangeDialog from "../../../modals/report-status-change-dialog/index";
-import { setupGetAllUsers } from "../../../../global-redux/reducers/settings/user-management/slice";
+import ReportDeleteDailog from "./components/report-delete-dialog";
+import ReportPublishDialog from "./components/report-publish-dialog";
 
 const PlanningReport = () => {
   const dispatch = useDispatch();
@@ -20,97 +18,58 @@ const PlanningReport = () => {
   const { loading, allReports, reportAddSuccess } = useSelector(
     (state) => state?.planningReport
   );
-  const { allUsers } = useSelector((state) => state?.setttingsUserManagement);
   const { user } = useSelector((state) => state?.auth);
   const { company } = useSelector((state) => state?.common);
   const [page, setPage] = React.useState(1);
   const [selectedReportId, setSelectedReportId] = React.useState("");
   const [showReportDeleteDialog, setShowReportDeleteDialog] =
     React.useState(false);
-  const [showReportStatusChangeDialog, setShowReportStatusChangeDialog] =
+  const [showReportPublishDialog, setShowReportPublishDialog] =
     React.useState(false);
   const [reportNameValue, setReportNameValue] = React.useState("");
 
-  const handleChange = (event, value) => {
+  const handleChange = (_, value) => {
     setPage(value);
   };
 
   function handlePublish(id) {
-    setShowReportStatusChangeDialog(true);
     setSelectedReportId(id);
+    setShowReportPublishDialog(true);
   }
 
   function handleDelete(id) {
-    setShowReportDeleteDialog(true);
     setSelectedReportId(id);
-  }
-
-  function handleReportShare(event, reportId) {
-    if (event?.target?.value !== "") {
-      const singleReport = allReports?.find(
-        (all) => Number(all?.id) === Number(reportId)
-      );
-      dispatch(
-        setupUpdateSingleReport({
-          ...singleReport,
-          newHeading: singleReport?.newHeading?.map((item) => {
-            return {
-              heading: item?.heading,
-              description: item?.description,
-            };
-          }),
-          storedHtml: "<p>Dummy String By Now</p>",
-          reportStatus: singleReport?.reportStatus,
-          reportShareWith: Number(event?.target?.value),
-          reportingTo: singleReport?.reportingTo?.id || null,
-          createdBy: singleReport?.createdBy?.id,
-          updatedBy: user[0]?.userId?.id,
-          id: Number(reportId),
-        })
-      );
-    }
+    setShowReportDeleteDialog(true);
   }
 
   React.useEffect(() => {
     if (reportAddSuccess) {
-      if (user[0]?.userId?.employeeid?.userHierarchy === "IAH") {
-        const companyId = user[0]?.company?.find(
-          (item) => item?.companyName === company
-        )?.id;
-        if (companyId) {
-        }
-      }
-      if (user[0]?.userId?.employeeid?.userHierarchy !== "IAH") {
-        dispatch(setupGetAllReports());
+      const companyId = user[0]?.company?.find(
+        (item) => item?.companyName === company
+      )?.id;
+      if (companyId) {
+        dispatch(setupGetAllReports(companyId));
       }
       dispatch(resetReportAddSuccess());
     }
   }, [reportAddSuccess]);
 
   React.useEffect(() => {
-    if (user[0]?.token) {
-      if (user[0]?.userId?.employeeid?.userHierarchy === "IAH") {
-        const companyId = user[0]?.company?.find(
-          (item) => item?.companyName === company
-        )?.id;
-        if (companyId) {
-          dispatch(setupGetAllUsers({ shareWith: true }));
-        }
-      }
-      if (user[0]?.userId?.employeeid?.userHierarchy !== "IAH") {
-        dispatch(setupGetAllReports());
-        dispatch(setupGetAllUsers({ shareWith: true }));
-      }
+    const companyId = user[0]?.company?.find(
+      (item) => item?.companyName === company
+    )?.id;
+    if (companyId) {
+      dispatch(setupGetAllReports(companyId));
     }
-  }, [user, company]);
+  }, [dispatch]);
 
   return (
     <div>
-      {showReportStatusChangeDialog && (
+      {showReportPublishDialog && (
         <div className="modal-objective">
           <div className="model-wrap">
-            <ReportStatusChangeDialog
-              setShowReportStatusChangeDialog={setShowReportStatusChangeDialog}
+            <ReportPublishDialog
+              setShowReportPublishDialog={setShowReportPublishDialog}
               selectedReportId={selectedReportId}
             />
           </div>
@@ -171,7 +130,7 @@ const PlanningReport = () => {
               <tbody>
                 {loading ? (
                   <tr>
-                    <td>
+                    <td className="w-300">
                       <CircularProgress />
                     </td>
                   </tr>
@@ -199,33 +158,6 @@ const PlanningReport = () => {
                           <td>{item?.createdBy?.name}</td>
                           <td>{item?.reportShareWith?.name || "null"}</td>
                           <td>{item?.reportStatus}</td>
-                          {user[0]?.userId?.employeeid?.userHierarchy ===
-                            "IAH" && (
-                            <td>
-                              <select
-                                className="form-select  px-1"
-                                aria-label="Default select example"
-                                name="priority"
-                                value={item?.reportShareWith?.id || ""}
-                                onChange={(event) =>
-                                  handleReportShare(event, item?.id)
-                                }
-                              >
-                                <option value="">Select One</option>
-                                {allUsers
-                                  ?.filter(
-                                    (all) => all?.id !== user[0]?.userId?.id
-                                  )
-                                  ?.map((user, i) => {
-                                    return (
-                                      <option key={i} value={user?.id}>
-                                        {user?.name}
-                                      </option>
-                                    );
-                                  })}
-                              </select>
-                            </td>
-                          )}
                           <td>
                             <i
                               className="fa fa-eye text-primary f-18 cursor-pointer"
