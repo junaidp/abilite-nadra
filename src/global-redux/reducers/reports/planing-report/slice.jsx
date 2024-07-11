@@ -129,10 +129,7 @@ export const slice = createSlice({
         state.loading = true;
       })
       .addCase(setupGetAllReports.fulfilled, (state, { payload }) => {
-        const sortedArray = payload?.data?.sort(
-          (a, b) => new Date(b.createdTime) - new Date(a.createdTime)
-        );
-        state.allReports = sortedArray || [];
+        state.allReports = payload?.data;
         state.loading = false;
       })
       .addCase(setupGetAllReports.rejected, (state, { payload }) => {
@@ -220,15 +217,15 @@ export const slice = createSlice({
     // Add Heading
     builder
       .addCase(setupAddHeading.pending, (state) => {
-        state.loading = true;
+        state.updateLoading = true;
       })
       .addCase(setupAddHeading.fulfilled, (state) => {
-        state.loading = false;
+        state.updateLoading = false;
         state.reportAddSuccess = true;
-        toast.success("Report Published Successfully");
+        toast.success("Heading Added Successfully");
       })
       .addCase(setupAddHeading.rejected, (state, { payload }) => {
-        state.loading = false;
+        state.updateLoading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
         } else {

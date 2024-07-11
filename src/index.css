@@ -18,6 +18,10 @@ body {
   font-family: "Poppins", sans-serif !important;
 }
 
+.justify-end{
+  justify-content: end;
+}
+
 .mright-4 {
   margin-right: -45px !important;
 }

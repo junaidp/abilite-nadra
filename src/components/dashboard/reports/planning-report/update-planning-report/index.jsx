@@ -14,6 +14,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
 import Editors from "./components/editors/index";
+import HeadingTable from "./components/heading-table";
 
 const UpdatePlanningReport = () => {
   const dispatch = useDispatch();
@@ -30,6 +31,8 @@ const UpdatePlanningReport = () => {
     orgnizationStrategy: "",
     summaryRisk: "",
   });
+
+  function handleDeleteHeading() {}
 
   function handleEditorContentChange(name, value) {
     setValues((pre) => {
@@ -52,8 +55,21 @@ const UpdatePlanningReport = () => {
   }
 
   React.useEffect(() => {
+    if (singleReportObject) {
+      setValues({
+        summary: singleReportObject?.summary,
+        methodology: singleReportObject?.methodology,
+        riskAssesmentSummary: singleReportObject?.riskAssesmentSummary,
+        orgnizationStrategy: singleReportObject?.orgnizationStrategy,
+        summaryRisk: singleReportObject?.summaryRisk,
+      });
+    }
+  }, [singleReportObject]);
+
+  React.useEffect(() => {
     if (reportAddSuccess) {
       dispatch(resetReportAddSuccess());
+      dispatch(setupGetSingleReport(Number(reportId)));
     }
   }, [reportAddSuccess]);
 
@@ -88,9 +104,15 @@ const UpdatePlanningReport = () => {
             handleEditorContentChange={handleEditorContentChange}
             data={singleReportObject}
           />
+          <HeadingTable
+            data={singleReportObject}
+            handleDeleteHeading={handleDeleteHeading}
+            reportId={reportId}
+          />
           <button
-            type="submit"
-            className={`btn btn-outline-primary  my-4 ${loading && "disabled"}`}
+            className={`btn btn-outline-primary  my-4 ${
+              updateLoading && "disabled"
+            }`}
             onClick={handleUpdate}
           >
             {updateLoading ? "Loading..." : "Update Report"}

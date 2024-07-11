@@ -60,11 +60,10 @@ const PlanningReport = () => {
     )?.id;
     if (companyId) {
       dispatch(setupGetAllReports(companyId));
-      setTimeout(() => {
-        dispatch(setupGetAllUsers());
-      }, 500);
+      dispatch(setupGetAllUsers());
     }
   }, [dispatch]);
+
 
   return (
     <div>

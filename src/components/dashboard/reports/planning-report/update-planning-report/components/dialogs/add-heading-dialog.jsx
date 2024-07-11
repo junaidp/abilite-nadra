@@ -1,53 +1,48 @@
 import React from "react";
 import { toast } from "react-toastify";
+import { useSelector, useDispatch } from "react-redux";
+import { setupAddHeading } from "../.././../../../../../global-redux/reducers/reports/planing-report/slice";
 
-const EditGeneratePlaningReportDialog = ({
-  setEditGeneratePlaningReportDialog,
-  setData,
-  data,
-  editGeneratePlaningId,
-  setEditGeneratePlaningId,
-}) => {
+const AddHeadingDialog = ({ setShowAddHeadingDialog, reportId }) => {
+  const dispatch = useDispatch();
+  const { updateLoading, reportAddSuccess } = useSelector(
+    (state) => state?.planningReport
+  );
   const [heading, setHeading] = React.useState("");
   const [description, setDescription] = React.useState("");
 
   function handleClose() {
-    setEditGeneratePlaningReportDialog(false);
+    setShowAddHeadingDialog(false);
     setHeading("");
     setDescription("");
-    setEditGeneratePlaningId("");
   }
 
-  function handleEdit() {
-    if (heading === "" || description === "") {
-      toast.error("Please Provide both values");
-    } else {
-      setData((pre) => {
-        return {
-          ...pre,
-          newHeading: pre?.newHeading?.map((item) =>
-            item?.id === editGeneratePlaningId
-              ? { id: item?.id, heading, description }
-              : item
-          ),
-        };
-      });
-      setHeading("");
-      setDescription("");
-      setEditGeneratePlaningId("");
-      setEditGeneratePlaningReportDialog(false);
+  function handleAdd() {
+    if (!updateLoading) {
+      if (heading === "" || description === "") {
+        toast.error("Please Provide both values");
+      } else {
+        dispatch(
+          dispatch(
+            setupAddHeading({
+              heading: heading,
+              description: description,
+              planningReportId: reportId,
+            })
+          )
+        );
+      }
     }
   }
 
   React.useEffect(() => {
-    if (editGeneratePlaningId) {
-      const currentHeading = data?.newHeading?.find(
-        (item) => item?.id === editGeneratePlaningId
-      );
-      setDescription(currentHeading?.description);
-      setHeading(currentHeading?.heading);
+    if (reportAddSuccess) {
+      setHeading("");
+      setDescription("");
+      setShowAddHeadingDialog(false);
     }
-  }, [editGeneratePlaningId]);
+  }, [reportAddSuccess]);
+
   return (
     <div className="px-4 py-4">
       <div className="row mb-2">
@@ -87,8 +82,13 @@ const EditGeneratePlaningReportDialog = ({
 
       <div className="row py-3">
         <div className="col-lg-6 text-end">
-          <button className="btn btn-primary float-start" onClick={handleEdit}>
-            Edit
+          <button
+            className={`btn btn-primary float-start ${
+              updateLoading && "disabled"
+            }`}
+            onClick={handleAdd}
+          >
+            {updateLoading ? "Loading..." : "Add Heading"}
           </button>
         </div>
         <div className="col-lg-6 text-end">
@@ -101,4 +101,4 @@ const EditGeneratePlaningReportDialog = ({
   );
 };
 
-export default EditGeneratePlaningReportDialog;
+export default AddHeadingDialog;

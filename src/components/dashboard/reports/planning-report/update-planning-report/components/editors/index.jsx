@@ -37,8 +37,8 @@ const Editors = ({ handleEditorContentChange, data }) => {
           </label>
           <Editor
             onContentChange={handleEditorContentChange}
-            initialValue={data?.riskAssesmentSummary}
-            name="riskAssesmentSummary"
+            initialValue={data?.riskAssessmentSummary}
+            name="riskAssessmentSummary"
           />
           <p className="word-limit-info mb-0">Maximum 1500 words</p>
         </div>
@@ -51,8 +51,8 @@ const Editors = ({ handleEditorContentChange, data }) => {
           </label>
           <Editor
             onContentChange={handleEditorContentChange}
-            initialValue={data?.orgnizationStrategy}
-            name="orgnizationStrategy"
+            initialValue={data?.organizationStrategy}
+            name="organizationStrategy"
           />
           <p className="word-limit-info mb-0">Maximum 1500 words</p>
         </div>
