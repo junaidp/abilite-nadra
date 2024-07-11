@@ -3,6 +3,7 @@ import {
   saveReport,
   getAllReports,
   getSingleReport,
+  getSingleUpdatedReport,
   updateReport,
   deleteReport,
   publishReport,
@@ -39,6 +40,12 @@ export const setupGetSingleReport = createAsyncThunk(
   "planningReport/getSingleReport",
   async (data, thunkAPI) => {
     return getSingleReport(data, thunkAPI);
+  }
+);
+export const setupGetSingleUpdatedReport = createAsyncThunk(
+  "planningReport/getSingleUpdatedReport",
+  async (data, thunkAPI) => {
+    return getSingleUpdatedReport(data, thunkAPI);
   }
 );
 
@@ -157,6 +164,23 @@ export const slice = createSlice({
           toast.error("An Error has occurred");
         }
       });
+    // Get Single Updated Report
+    builder
+      .addCase(setupGetSingleUpdatedReport.pending, (state) => {
+        state.updateLoading = true;
+      })
+      .addCase(setupGetSingleUpdatedReport.fulfilled, (state, { payload }) => {
+        state.updateLoading = false;
+        state.singleReportObject = payload?.data;
+      })
+      .addCase(setupGetSingleUpdatedReport.rejected, (state, { payload }) => {
+        state.updateLoading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
 
     // Update Single Report
     builder
@@ -235,15 +259,15 @@ export const slice = createSlice({
     // Update Heading
     builder
       .addCase(setupUpdateHeading.pending, (state) => {
-        state.loading = true;
+        state.updateLoading = true;
       })
       .addCase(setupUpdateHeading.fulfilled, (state) => {
-        state.loading = false;
+        state.updateLoading = false;
         state.reportAddSuccess = true;
         toast.success("Report Published Successfully");
       })
       .addCase(setupUpdateHeading.rejected, (state, { payload }) => {
-        state.loading = false;
+        state.updateLoading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
         } else {
@@ -253,15 +277,15 @@ export const slice = createSlice({
     // Delete Heading
     builder
       .addCase(setupDeleteHeading.pending, (state) => {
-        state.loading = true;
+        state.updateLoading = true;
       })
       .addCase(setupDeleteHeading.fulfilled, (state) => {
-        state.loading = false;
+        state.updateLoading = false;
         state.reportAddSuccess = true;
         toast.success("Report Deleted Successfully");
       })
       .addCase(setupDeleteHeading.rejected, (state, { payload }) => {
-        state.loading = false;
+        state.updateLoading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
         } else {

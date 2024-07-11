@@ -1,7 +1,7 @@
 import React from "react";
-import Editor from "../../../../../../common/rich-text/index"
+import Editor from "../../../../../../common/rich-text/index";
 
-const Editors = ({handleEditorContentChange,data,editable}) => {
+const Editors = ({ data }) => {
   return (
     <div>
       <div className="row mb-3">
@@ -9,12 +9,7 @@ const Editors = ({handleEditorContentChange,data,editable}) => {
           <label htmlFor="exampleFormControlTextarea1" className="form-label">
             Executive Summary
           </label>
-          <Editor
-            onContentChange={handleEditorContentChange}
-            initialValue={data?.summary}
-            name="summary"
-            editable={editable}
-          />
+          <Editor initialValue={data?.summary} editable="false" />
           <p className="word-limit-info mb-0">Maximum 1500 words</p>
         </div>
       </div>
@@ -23,12 +18,7 @@ const Editors = ({handleEditorContentChange,data,editable}) => {
           <label htmlFor="exampleFormControlTextarea1" className="form-label">
             Audit Planning Methodology
           </label>
-          <Editor
-            onContentChange={handleEditorContentChange}
-            initialValue={data?.methodology}
-            name="methodology"
-            editable={editable}
-          />
+          <Editor initialValue={data?.methodology} editable="false" />
           <p className="word-limit-info mb-0">Maximum 1500 words</p>
         </div>
       </div>
@@ -37,12 +27,7 @@ const Editors = ({handleEditorContentChange,data,editable}) => {
           <label htmlFor="exampleFormControlTextarea1" className="form-label">
             Risk assessment summary
           </label>
-          <Editor
-            onContentChange={handleEditorContentChange}
-            initialValue={data?.riskAssesmentSummary}
-            name="riskAssesmentSummary"
-            editable={editable}
-          />
+          <Editor initialValue={data?.riskAssessmentSummary} editable="false" />
           <p className="word-limit-info mb-0">Maximum 1500 words</p>
         </div>
       </div>
@@ -52,12 +37,7 @@ const Editors = ({handleEditorContentChange,data,editable}) => {
             Organizational strategy, key areas of focus, key risks, and
             associated assurance strategies in the audit plan.
           </label>
-          <Editor
-            onContentChange={handleEditorContentChange}
-            initialValue={data?.orgnizationStrategy}
-            name="orgnizationStrategy"
-            editable={editable}
-          />
+          <Editor initialValue={data?.organizationStrategy} editable="false" />
           <p className="word-limit-info mb-0">Maximum 1500 words</p>
         </div>
       </div>
@@ -67,12 +47,7 @@ const Editors = ({handleEditorContentChange,data,editable}) => {
           <label htmlFor="exampleFormControlTextarea1" className="form-label">
             Summary of risks.
           </label>
-          <Editor
-            onContentChange={handleEditorContentChange}
-            initialValue={data?.summaryRisk}
-            name="summaryRisk"
-            editable={editable}
-          />
+          <Editor initialValue={data?.summaryRisk} editable="editable" />
           <p className="word-limit-info mb-0">Maximum 1500 words</p>
         </div>
       </div>

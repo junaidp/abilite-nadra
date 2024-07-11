@@ -6,6 +6,7 @@ import {
   setupGetSingleReport,
   resetReportAddSuccess,
   setupUpdateSingleReport,
+  setupGetSingleUpdatedReport,
 } from "../../../../../global-redux/reducers/reports/planing-report/slice";
 import {
   changeActiveLink,
@@ -31,8 +32,6 @@ const UpdatePlanningReport = () => {
     orgnizationStrategy: "",
     summaryRisk: "",
   });
-
-  function handleDeleteHeading() {}
 
   function handleEditorContentChange(name, value) {
     setValues((pre) => {
@@ -69,7 +68,7 @@ const UpdatePlanningReport = () => {
   React.useEffect(() => {
     if (reportAddSuccess) {
       dispatch(resetReportAddSuccess());
-      dispatch(setupGetSingleReport(Number(reportId)));
+      dispatch(setupGetSingleUpdatedReport(Number(reportId)));
     }
   }, [reportAddSuccess]);
 
@@ -104,11 +103,7 @@ const UpdatePlanningReport = () => {
             handleEditorContentChange={handleEditorContentChange}
             data={singleReportObject}
           />
-          <HeadingTable
-            data={singleReportObject}
-            handleDeleteHeading={handleDeleteHeading}
-            reportId={reportId}
-          />
+          <HeadingTable data={singleReportObject} reportId={reportId} />
           <button
             className={`btn btn-outline-primary  my-4 ${
               updateLoading && "disabled"

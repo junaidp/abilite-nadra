@@ -1,14 +1,22 @@
 import React from "react";
 import AddHeadingDialog from "../dialogs/add-heading-dialog";
 import UpdateHeadingDialog from "../dialogs/update-heading-dialog";
+import { useSelector, useDispatch } from "react-redux";
+import { setupDeleteHeading } from "../../../../../../../global-redux/reducers/reports/planing-report/slice";
 
-const HeadingTable = ({ data, handleDeleteHeading, reportId }) => {
+const HeadingTable = ({ data, reportId }) => {
+  const dispatch = useDispatch();
+  const { updateLoading } = useSelector((state) => state?.planningReport);
   const [showAddHeadingDialog, setShowAddHeadingDialog] = React.useState(false);
   const [showUpdateHeadingDialog, setShowUpdateHeadingDialog] =
     React.useState(false);
   const [updateHeadingId, setUpdateHeadingId] = React.useState("");
 
-  function handleDeleteHeading() {}
+  function handleDeleteHeading(headingId) {
+    if (!updateLoading) {
+      dispatch(setupDeleteHeading(headingId));
+    }
+  }
 
   function handleUpdateHeading(id) {
     setUpdateHeadingId(id);

@@ -1,66 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  setupSaveReport,
-  resetReportAddSuccess,
-} from "../../../../../../../global-redux/reducers/reports/planing-report/slice";
-import { toast } from "react-toastify";
+import moment from "moment";
 
-const Header = () => {
+const Header = ({ data }) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { company } = useSelector((state) => state?.common);
-  const { user } = useSelector((state) => state?.auth);
-  const { loading, reportAddSuccess } = useSelector(
-    (state) => state?.planningReport
-  );
-  const [data, setData] = React.useState({
-    startDate: "",
-    endDate: "",
-    reportTitle: "",
-  });
-
-  function handleChange(event) {
-    setData((pre) => {
-      return {
-        ...pre,
-        [event.target.name]: event.target.value,
-      };
-    });
-  }
-
-  function handleAdd() {
-    const companyId = user[0]?.company?.find(
-      (item) => item?.companyName === company
-    )?.id;
-    if (companyId) {
-      if (
-        data?.startDate === "" ||
-        data?.endDate === "" ||
-        data?.reportTitle === ""
-      ) {
-        toast.error("Provide all values");
-      } else {
-        dispatch(
-          setupSaveReport({
-            companyId: companyId,
-            startDate: data?.startDate,
-            endDate: data?.endDate,
-            reportTitle: data?.reportTitle,
-          })
-        );
-      }
-    }
-  }
-
-  React.useEffect(() => {
-    if (reportAddSuccess) {
-      dispatch(resetReportAddSuccess());
-      navigate("/audit/planning-report");
-    }
-  }, [reportAddSuccess]);
-
   return (
     <div>
       <header className="section-header my-3">
@@ -72,7 +15,7 @@ const Header = () => {
             ></i>
 
             <div className="mb-0 heading">
-              Generate Internal Audit Planning Report
+              View Internal Audit Planning Report
             </div>
           </div>
         </div>
@@ -83,27 +26,13 @@ const Header = () => {
             <div className="col-lg-6">
               <label className="form-label">From</label>
               <div className="mb-3 d-flex align-items-end">
-                <input
-                  type="date"
-                  className="form-control"
-                  placeholder="Select Date"
-                  value={data?.startDate}
-                  name="startDate"
-                  onChange={(e) => handleChange(e)}
-                />
+                {moment.utc(data?.startDate).format("DD-MM-YY")}
               </div>
             </div>
             <div className="col-lg-6">
               <label className="form-label">To</label>
               <div className="mb-3 d-flex align-items-end">
-                <input
-                  type="date"
-                  className="form-control"
-                  placeholder="Select Date"
-                  value={data?.endDate}
-                  name="endDate"
-                  onChange={(e) => handleChange(e)}
-                />
+                {moment.utc(data?.endDate).format("DD-MM-YY")}
               </div>
             </div>
           </div>
@@ -120,21 +49,12 @@ const Header = () => {
                 id="description"
                 className="form-control h-40"
                 value={data?.reportTitle}
-                name="reportTitle"
-                onChange={(e) => handleChange(e)}
+                disabled
               />
             </div>
           </div>
         </div>
       </div>
-
-      <button
-        type="submit"
-        className={`btn btn-outline-primary    ${loading && "disabled"}`}
-        onClick={handleAdd}
-      >
-        {loading ? "Loading..." : "Add Report"}
-      </button>
     </div>
   );
 };
