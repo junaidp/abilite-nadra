@@ -49,8 +49,8 @@ const PlanningReport = () => {
       )?.id;
       if (companyId) {
         dispatch(setupGetAllReports(companyId));
+        dispatch(resetReportAddSuccess());
       }
-      dispatch(resetReportAddSuccess());
     }
   }, [reportAddSuccess]);
 
@@ -159,46 +159,53 @@ const PlanningReport = () => {
                           </td>
                           <td>{item?.reportStatus}</td>
                           <td>
-                            <i
-                              className="fa fa-eye text-primary f-18 cursor-pointer"
-                              onClick={() =>
-                                navigate(
-                                  `/audit/view-planning-report?reportId=${item?.id}`
-                                )
-                              }
-                            ></i>
-                            {item?.reportStatus === "Draft" && (
+                            <div className="d-flex flex-wrap gap-4">
                               <i
-                                className="fa fa-edit mx-3 text-secondary f-18 cursor-pointer mx-2"
+                                className="fa fa-eye text-primary f-18 cursor-pointer"
                                 onClick={() =>
                                   navigate(
-                                    `/audit/update-planning-report?reportId=${item?.id}`
+                                    `/audit/view-planning-report?reportId=${item?.id}`
                                   )
                                 }
                               ></i>
-                            )}
-                            {item?.reportStatus === "Draft" &&
-                              item?.createdBy === user[0]?.userId?.id && (
+                              {item?.reportStatus === "Draft" && (
                                 <i
-                                  className="fa fa-trash text-danger f-18 cursor-pointer mx-2"
-                                  onClick={() => handleDelete(item?.id)}
+                                  className="fa fa-edit text-secondary f-18 cursor-pointer"
+                                  onClick={() =>
+                                    navigate(
+                                      `/audit/update-planning-report?reportId=${item?.id}`
+                                    )
+                                  }
                                 ></i>
                               )}
-                            {item?.reportStatus !== "Draft" &&
-                              user[0]?.userId?.employeeid?.userHierarchy ===
-                                "IAH" && (
-                                <div
-                                  className={`btn btn-labeled btn-primary px-3 shadow me-3 mx-4 fitContent ${
-                                    loading && "disabled"
-                                  }`}
-                                  onClick={() => handlePublish(item?.id)}
-                                >
-                                  <span className="btn-label me-2">
-                                    <i className="fa fa-check-circle f-18"></i>
-                                  </span>
-                                  {loading ? "Loading..." : "Publish"}
-                                </div>
-                              )}
+                              {item?.reportStatus === "Draft" &&
+                                item?.createdBy === user[0]?.userId?.id && (
+                                  <i
+                                    className="fa fa-trash text-danger f-18 cursor-pointer"
+                                    onClick={() => handleDelete(item?.id)}
+                                  ></i>
+                                )}
+                              {item?.reportStatus === "Draft" &&
+                                user[0]?.userId?.employeeid?.userHierarchy ===
+                                  "IAH" &&
+                                item?.summary &&
+                                item?.summary !== "" &&
+                                item?.methodology &&
+                                item?.methodology !== "" &&
+                                item?.riskAssessmentSummary &&
+                                item?.riskAssessmentSummary !== "" &&
+                                item?.organizationStrategy &&
+                                item?.organizationStrategy !== "" &&
+                                item?.summaryRisk &&
+                                item?.summaryRisk !== "" && (
+                                  <div
+                                    className={`btn btn-labeled btn-primary shadow fitContent`}
+                                    onClick={() => handlePublish(item?.id)}
+                                  >
+                                    Publish
+                                  </div>
+                                )}
+                            </div>
                           </td>
                         </tr>
                       );

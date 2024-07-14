@@ -265,11 +265,11 @@ const DashboardHome = () => {
                           <AreaChartComponent dataInfo={dataInfo} />
                         </div>
                         <div className="row">
-                          <div className="label mb-2 highh">
-                            Not Yet due for implementation
-                          </div>
-                          <div className="label mediumm">
+                          <div className="label mb-2 mediumm">
                             Due for implementation
+                          </div>
+                          <div className="label highh">
+                            Not Yet due for implementation
                           </div>
                         </div>
                       </div>

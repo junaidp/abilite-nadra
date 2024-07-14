@@ -43,7 +43,7 @@ const UpdatePlanningReport = () => {
   }
 
   function handleUpdate() {
-    if (!loading) {
+    if (!updateLoading) {
       dispatch(
         setupUpdateSingleReport({
           ...singleReportObject,

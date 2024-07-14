@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, lazy } from "react";
 import "./App.css";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { changeCompany } from "./global-redux/reducers/common/slice";
 import { changeAuthUser } from "./global-redux/reducers/auth/slice";
@@ -11,7 +11,9 @@ import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
 } from "./global-redux/reducers/common/slice";
-import Login from "./pages/auth/login/Login";
+// Lazy Loading the Home and the Login Page
+const Home = lazy(() => import("./pages/Home"));
+const Login = lazy(() => import("./pages/auth/login/Login"));
 import ForgetPassword from "./pages/auth/forget-password/ForgetPassword";
 import DashboardHome from "./pages/dashboard/home/DashboardHome";
 import BusinessObjective from "./pages/dashboard/planning/business-objective/BusinessObjective";
@@ -57,6 +59,7 @@ import ViewInternalAuditConsolidationReport from "./pages/dashboard/reports/inte
 import UpdateInternalAuditConsolidationReport from "./pages/dashboard/reports/internal-audit-consolidation-report/update-internal-audit-consolidation-report/UpdateInternalAuditConsolidationReport";
 import ProtectedRoute from "./components/common/layout/ProtectedRoute";
 import NotFound from "./components/common/not-found/index";
+import { CircularProgress } from "@mui/material";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -105,17 +108,9 @@ const App = () => {
       <ToastContainer position="bottom-right" />
       <BrowserRouter>
         <Routes>
-          <Route
-            path="/"
-            element={
-              <div className="p-2">
-                <h2>Redirecting...</h2>
-                <Navigate to="/login" />
-              </div>
-            }
-          />
-          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/forgot-password" element={<ForgetPassword />} />
           <Route
             path="/audit"

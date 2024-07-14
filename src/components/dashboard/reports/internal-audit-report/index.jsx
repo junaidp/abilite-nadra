@@ -193,9 +193,9 @@ const InternalAuditReport = () => {
                           <td>{item?.preparedBy || ""}</td>
                           <td>{item?.status}</td>
                           <td>
-                            <div className="row">
+                            <div className="d-flex flex-wrap gap-4">
                               <i
-                                className="fa-eye fa f-18 cursor-pointer col-lg-3"
+                                className="fa-eye fa f-18 cursor-pointer"
                                 onClick={() =>
                                   navigate(
                                     `/audit/view-internal-audit-report?reportId=${item?.id}`
@@ -204,7 +204,7 @@ const InternalAuditReport = () => {
                               ></i>
                               {item?.approved === false && (
                                 <i
-                                  className="fa fa-edit  f-18 cursor-pointer col-lg-3"
+                                  className="fa fa-edit f-18 cursor-pointer"
                                   onClick={() =>
                                     navigate(
                                       `/audit/update-internal-audit-report?reportId=${item?.id}`
@@ -214,7 +214,7 @@ const InternalAuditReport = () => {
                               )}
                               {item?.approved === false && (
                                 <i
-                                  className={`fa fa-trash text-danger cursor-pointer f-18 col-lg-3`}
+                                  className={`fa fa-trash text-danger cursor-pointer f-18`}
                                   onClick={() => {
                                     setDeleteInternalAuditReportId(item?.id);
                                     setShowDeleteInternalAuditReportDialog(
@@ -235,7 +235,7 @@ const InternalAuditReport = () => {
                                 Number(item?.createdBy) ===
                                   Number(user[0]?.userId?.id) && (
                                   <div
-                                    className={`btn btn-labeled btn-primary  shadow mx-2 h-35 col-lg-4 mt-2 `}
+                                    className={`btn btn-labeled btn-primary shadow h-35`}
                                     onClick={() => handleSubmitReport(item)}
                                   >
                                     Submit
@@ -246,7 +246,7 @@ const InternalAuditReport = () => {
                                 user[0]?.userId?.employeeid?.userHierarchy ===
                                   "IAH" && (
                                   <div
-                                    className={`btn btn-labeled btn-primary  shadow mx-2 h-35 col-lg-4 mt-2 `}
+                                    className={`btn btn-labeled btn-primary shadow h-35`}
                                     onClick={() => handleApproveReport(item)}
                                   >
                                     Approve
@@ -258,7 +258,7 @@ const InternalAuditReport = () => {
                                 user[0]?.userId?.employeeid?.userHierarchy ===
                                   "IAH" && (
                                   <div
-                                    className={`btn btn-labeled btn-primary  shadow -2 mx-2 h-35 col-lg-4 mt-2 `}
+                                    className={`btn btn-labeled btn-primary shadow h-35`}
                                     onClick={() => {
                                       setCurrentReportItem(item);
                                       setFeedBackDialog(true);
@@ -269,7 +269,7 @@ const InternalAuditReport = () => {
                                 )}
                               {item?.feedback && item?.feedback?.id && (
                                 <div
-                                  className={`btn btn-labeled btn-primary mt-2  shadow  mx-2 h-35 col-lg-8`}
+                                  className={`btn btn-labeled btn-primary shadow  h-35`}
                                   onClick={() => {
                                     setCurrentReportItem(item);
                                     setViewFeedBackDialog(true);
@@ -284,7 +284,7 @@ const InternalAuditReport = () => {
                                   placement="top"
                                 >
                                   <i
-                                    className="fa fa-download mt-2 f-18  cursor-pointer"
+                                    className="fa fa-download f-18 cursor-pointer"
                                     onClick={() =>
                                       navigate(
                                         `/audit/view-internal-audit-report?reportId=${item?.id}`

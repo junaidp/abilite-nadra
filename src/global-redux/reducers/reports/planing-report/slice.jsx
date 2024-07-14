@@ -135,8 +135,8 @@ export const slice = createSlice({
         state.loading = true;
       })
       .addCase(setupGetAllReports.fulfilled, (state, { payload }) => {
-        state.allReports = payload?.data;
         state.loading = false;
+        state.allReports = payload?.data || [];
       })
       .addCase(setupGetAllReports.rejected, (state, { payload }) => {
         state.loading = false;

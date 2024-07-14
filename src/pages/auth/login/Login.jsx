@@ -1,8 +1,20 @@
-import React from "react";
-import Login from "../../../components/auth/login";
+import React, { Suspense, lazy } from "react";
+import { CircularProgress } from "@mui/material";
+
+const Login = lazy(() => import("../../../components/auth/login"));
 
 const LoginPage = () => {
-  return <Login />;
+  return (
+    <Suspense
+      fallback={
+        <div className="py-2 px-2">
+          <CircularProgress />
+        </div>
+      }
+    >
+      <Login />
+    </Suspense>
+  );
 };
 
 export default LoginPage;
