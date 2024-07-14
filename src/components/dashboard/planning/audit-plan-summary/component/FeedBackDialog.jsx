@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 const FeedBackDialog = ({ setFeedBackDialog, currentPlanSummaryId }) => {
   const dispatch = useDispatch();
   const { loading, auditPlanSummaryAddSuccess } = useSelector(
-    (state) => state?.planingAuditPlanSummary
+    (state) => state?.planningAuditPlanSummary
   );
   const [description, setDescription] = React.useState("");
 

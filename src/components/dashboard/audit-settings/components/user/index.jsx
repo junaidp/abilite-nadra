@@ -15,7 +15,7 @@ const UserManagement = ({
 }) => {
   const dispatch = useDispatch();
   const { loading, addUserSuccess, allUsers } = useSelector(
-    (state) => state?.setttingsUserManagement
+    (state) => state?.settingsUserManagement
   );
   const [nameVal, setNameVal] = React.useState("");
   const [page, setPage] = React.useState(1);

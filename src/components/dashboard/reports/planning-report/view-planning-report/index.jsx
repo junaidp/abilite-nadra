@@ -1,7 +1,10 @@
 import React from "react";
 import Headers from "./components/header/index";
 import { useSearchParams } from "react-router-dom";
-import { setupGetSingleReport } from "../../../../../global-redux/reducers/reports/planing-report/slice";
+import {
+  setupGetSingleReport,
+  handleCleanUp,
+} from "../../../../../global-redux/reducers/reports/planing-report/slice";
 import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
@@ -10,8 +13,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
 import Editors from "./components/editors/index";
 import HeadingTable from "./components/heading-table";
+import { useNavigate } from "react-router-dom";
 
 const UpdatePlanningReport = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
   const reportId = searchParams.get("reportId");
@@ -35,6 +40,9 @@ const UpdatePlanningReport = () => {
   React.useEffect(() => {
     dispatch(changeActiveLink("li-internal-audit-planing-report"));
     dispatch(InitialLoadSidebarActiveLink("li-reports"));
+    return () => {
+      dispatch(handleCleanUp());
+    };
   }, []);
 
   return (

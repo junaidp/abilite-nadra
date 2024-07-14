@@ -4,21 +4,21 @@ import authReducer from "../reducers/auth/slice";
 import settingsCheckListReducer from "../reducers/settings/check-list/slice";
 import settingsRiskControlMatrixReducer from "../reducers/settings/risk-control-matrix/slice";
 import settingsLocationReducer from "../reducers/settings/location/slice";
-import settingsAddUserReducer from "../reducers/settings/user-management/slice";
+import settingsUserManagementReducer from "../reducers/settings/user-management/slice";
 import settingsProcessReducer from "../reducers/settings/process/slice";
-import planingEngagementsReducers from "../reducers/planing/engagement/slice";
-import planingAuditPlanSummaryReducers from "../reducers/planing/audit-plan-summary/slice";
-import planingRiskAssessmentReducer from "../reducers/planing/risk-assessment/slice";
-import planingAuditableUnitReducer from "../reducers/planing/auditable-units/slice";
-import planingJobPrioritizationReducer from "../reducers/planing/job-prioritization/slice";
-import planingJobSchedulingReducer from "../reducers/planing/job-scheduling/slice";
+import planningEngagementReducer from "../reducers/planing/engagement/slice";
+import planningAuditPlanSummaryReducer from "../reducers/planing/audit-plan-summary/slice";
+import planningRiskAssessmentReducer from "../reducers/planing/risk-assessment/slice";
+import planningAuditableUnitReducer from "../reducers/planing/auditable-units/slice";
+import planningJobPrioritizationReducer from "../reducers/planing/job-prioritization/slice";
+import planningJobSchedulingReducer from "../reducers/planing/job-scheduling/slice";
 import planningReportReducer from "../reducers/reports/planing-report/slice";
-import InternalAuditReportReducer from "../reducers/reports/internal-audit-report/slice";
+import internalAuditReportReducer from "../reducers/reports/internal-audit-report/slice";
 import reportingReducer from "../reducers/reporting/slice";
 import auditEngagementReducer from "../reducers/audit-engagement/slice";
-import settingCPListReducer from "../reducers/settings/cp-list/slice";
-import settingRiskFactorReducer from "../reducers/settings/risk-factor/slice";
-import settingsSupportingDocumentReducer from "../reducers/settings/supporting-docs/slice";
+import settingsCPListReducer from "../reducers/settings/cp-list/slice";
+import settingsRiskFactorReducer from "../reducers/settings/risk-factor/slice";
+import settingsDocsReducer from "../reducers/settings/supporting-docs/slice";
 import consolidationReportReducer from "../reducers/reports/consolidation-report/slice";
 import tasksManagementReducer from "../reducers/tasks-management/slice";
 export const store = configureStore({
@@ -26,25 +26,25 @@ export const store = configureStore({
     common: commonReducer,
     auth: authReducer,
     // settings
-    setttingsCheckList: settingsCheckListReducer,
-    setttingsLocation: settingsLocationReducer,
-    setttingsRiskControlMatrix: settingsRiskControlMatrixReducer,
-    setttingsProcess: settingsProcessReducer,
-    setttingsUserManagement: settingsAddUserReducer,
-    settingsCPList: settingCPListReducer,
-    settingsRiskFactor: settingRiskFactorReducer,
-    settingsDocs: settingsSupportingDocumentReducer,
+    settingsCheckList: settingsCheckListReducer,
+    settingsLocation: settingsLocationReducer,
+    settingsRiskControlMatrix: settingsRiskControlMatrixReducer,
+    settingsProcess: settingsProcessReducer,
+    settingsUserManagement: settingsUserManagementReducer,
+    settingsCPList: settingsCPListReducer,
+    settingsRiskFactor: settingsRiskFactorReducer,
+    settingsDocs: settingsDocsReducer,
     // planing
-    planingEngagements: planingEngagementsReducers,
-    planingRiskAssessments: planingRiskAssessmentReducer,
-    planingAuditableUnit: planingAuditableUnitReducer,
-    planingJobPrioritization: planingJobPrioritizationReducer,
-    planingJobScheduling: planingJobSchedulingReducer,
-    planingAuditPlanSummary: planingAuditPlanSummaryReducers,
+    planningEngagement: planningEngagementReducer,
+    planningRiskAssessment: planningRiskAssessmentReducer,
+    planningAuditableUnit: planningAuditableUnitReducer,
+    planningJobPrioritization: planningJobPrioritizationReducer,
+    planningJobScheduling: planningJobSchedulingReducer,
+    planningAuditPlanSummary: planningAuditPlanSummaryReducer,
     // Report
     planningReport: planningReportReducer,
-    internalAuditReports: InternalAuditReportReducer,
-    consolidationReports: consolidationReportReducer,
+    internalAuditReport: internalAuditReportReducer,
+    consolidationReport: consolidationReportReducer,
     reporting: reportingReducer,
     // Audit Enagagement
     auditEngagement: auditEngagementReducer,

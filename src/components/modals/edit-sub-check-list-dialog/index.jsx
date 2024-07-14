@@ -11,7 +11,7 @@ import RichTextEditor from "../../../components/common/rich-text/index";
 const EditSubCheckListDialog = ({ setShowEditCheckListItemDialog }) => {
   const dispatch = useDispatch();
   const { checkListAddSuccess, editLoading, currentSubCheckListItem } =
-    useSelector((state) => state.setttingsCheckList);
+    useSelector((state) => state.settingsCheckList);
   const initialState = {
     area: currentSubCheckListItem?.area,
     subject: currentSubCheckListItem?.subject,

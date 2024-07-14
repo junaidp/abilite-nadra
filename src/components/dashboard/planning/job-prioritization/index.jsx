@@ -17,7 +17,7 @@ const JobPrioritization = () => {
     allJobPrioritization,
     jobPrioritizationAddSuccess,
     initialLoading,
-  } = useSelector((state) => state?.planingJobPrioritization);
+  } = useSelector((state) => state?.planningJobPrioritization);
   const { user } = useSelector((state) => state?.auth);
   const { company } = useSelector((state) => state?.common);
   const [currentId, setCurrentId] = React.useState("");

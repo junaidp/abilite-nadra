@@ -35,7 +35,7 @@ const GenerateInternalAuditConsolidationReport = () => {
     addReportLoading,
     internalAuditReportExtraFieldsObject,
     consolidationFileUploadAddSuccess,
-  } = useSelector((state) => state?.consolidationReports);
+  } = useSelector((state) => state?.consolidationReport);
   const [reportObject, setReportObject] = React.useState({});
   const [jobForInternalAuditReportId, setJobForInternalAuditReportId] =
     React.useState("");

@@ -16,7 +16,7 @@ const ViewRiskControlMatrixLibraryDialog = ({
   const { user } = useSelector((state) => state?.auth);
   const { company } = useSelector((state) => state?.common);
   const { allRCM, loading } = useSelector(
-    (state) => state?.setttingsRiskControlMatrix
+    (state) => state?.settingsRiskControlMatrix
   );
   React.useEffect(() => {
     const companyId = user[0]?.company?.find(

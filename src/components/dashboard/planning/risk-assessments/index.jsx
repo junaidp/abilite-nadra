@@ -21,7 +21,7 @@ const RiskAssessments = () => {
     React.useState(false);
   const [page, setPage] = React.useState(1);
   const { allRiskAssessments, loading } = useSelector(
-    (state) => state?.planingRiskAssessments
+    (state) => state?.planningRiskAssessment
   );
   const { company } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);

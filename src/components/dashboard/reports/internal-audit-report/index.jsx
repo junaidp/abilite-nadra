@@ -23,7 +23,7 @@ const InternalAuditReport = () => {
   const { user } = useSelector((state) => state?.auth);
   const [page, setPage] = React.useState(1);
   const { allInternalAuditReports, loading, internalAuditReportAddSuccess } =
-    useSelector((state) => state?.internalAuditReports);
+    useSelector((state) => state?.internalAuditReport);
   const [currentReportItem, setCurrentReportItem] = React.useState({});
   const [showSubmitReportDialog, setShowSubmitReportDialog] =
     React.useState(false);

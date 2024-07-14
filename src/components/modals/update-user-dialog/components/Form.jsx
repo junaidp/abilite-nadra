@@ -14,7 +14,7 @@ const Form = ({
   email,
 }) => {
   const { allUsers: users } = useSelector(
-    (state) => state.setttingsUserManagement
+    (state) => state.settingsUserManagement
   );
   return (
     <form onSubmit={formik.handleSubmit}>

@@ -5,7 +5,7 @@ import { setupDeleteCheckList } from "../../../../../../global-redux/reducers/se
 const DeleteCheckListDialog = ({ setShowDeleteCheckListDialog }) => {
   const dispatch = useDispatch();
   const { checkListAddSuccess, editLoading, checkListId } = useSelector(
-    (state) => state.setttingsCheckList
+    (state) => state.settingsCheckList
   );
 
   function handleDeleteCheckList() {

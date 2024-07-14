@@ -31,7 +31,7 @@ const CheckList = ({
     checkList,
     checkListId,
     checkListItems,
-  } = useSelector((state) => state.setttingsCheckList);
+  } = useSelector((state) => state.settingsCheckList);
   const { user } = useSelector((state) => state.auth);
   const { company } = useSelector((state) => state.common);
   const [description, setDescription] = React.useState("");

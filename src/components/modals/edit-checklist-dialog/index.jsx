@@ -7,7 +7,7 @@ const EditCheckListDialog = ({ setShowEditCheckListDialog }) => {
   const { user } = useSelector((state) => state.auth);
   const [checkListName, setCheckListName] = React.useState("");
   const { checkListAddSuccess, editLoading, checkList, checkListId } =
-    useSelector((state) => state.setttingsCheckList);
+    useSelector((state) => state.settingsCheckList);
   const dispatch = useDispatch();
   function handleSubmit() {
     if (checkListName === "") {

@@ -64,7 +64,6 @@ const PlanningReport = () => {
     }
   }, [dispatch]);
 
-
   return (
     <div>
       {showReportPublishDialog && (
@@ -163,7 +162,9 @@ const PlanningReport = () => {
                             <i
                               className="fa fa-eye text-primary f-18 cursor-pointer"
                               onClick={() =>
-                                navigate(`/audit/view-planning-report`)
+                                navigate(
+                                  `/audit/view-planning-report?reportId=${item?.id}`
+                                )
                               }
                             ></i>
                             {item?.reportStatus === "Draft" && (

@@ -23,13 +23,11 @@ const AddHeadingDialog = ({ setShowAddHeadingDialog, reportId }) => {
         toast.error("Please Provide both values");
       } else {
         dispatch(
-          dispatch(
-            setupAddHeading({
-              heading: heading,
-              description: description,
-              planningReportId: reportId,
-            })
-          )
+          setupAddHeading({
+            heading: heading,
+            description: description,
+            planningReportId: Number(reportId),
+          })
         );
       }
     }

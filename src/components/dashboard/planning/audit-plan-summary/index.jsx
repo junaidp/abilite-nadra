@@ -21,7 +21,7 @@ const AuditPlanSummary = () => {
     allAuditPlanSummary,
     auditPlanSummaryAddSuccess,
     initialLoading,
-  } = useSelector((state) => state?.planingAuditPlanSummary);
+  } = useSelector((state) => state?.planningAuditPlanSummary);
   const [feedBackDialog, setFeedBackDialog] = React.useState(false);
   const [viewFeedBackDialog, setViewFeedBackDialog] = React.useState(false);
 

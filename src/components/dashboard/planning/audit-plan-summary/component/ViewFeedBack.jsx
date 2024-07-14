@@ -7,7 +7,7 @@ const ViewFeedBackDialog = ({
   currentPlanSummaryId,
 }) => {
   const { allAuditPlanSummary } = useSelector(
-    (state) => state?.planingAuditPlanSummary
+    (state) => state?.planningAuditPlanSummary
   );
 
   function handleClose() {

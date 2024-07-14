@@ -28,7 +28,7 @@ const ComplianceCheckListCard = () => {
     loading,
     selectedCheckListItems,
     initialLoading,
-  } = useSelector((state) => state.planingEngagements);
+  } = useSelector((state) => state.planningEngagement);
   const { user } = useSelector((state) => state?.auth);
   const [page, setPage] = React.useState(1);
   const [checkListId, setCheckListId] = React.useState("");

@@ -5,7 +5,7 @@ import { setupDeleteRCM } from "../../../../../../global-redux/reducers/settings
 const DeleteRCMDialog = ({ setShowDeleteRCMDialog, updatedRCMId }) => {
   const dispatch = useDispatch();
   const { rcmAddSuccess, loading } = useSelector(
-    (state) => state?.setttingsRiskControlMatrix
+    (state) => state?.settingsRiskControlMatrix
   );
 
   function handleDeleteRCM() {

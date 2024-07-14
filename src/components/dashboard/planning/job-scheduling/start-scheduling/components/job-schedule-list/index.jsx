@@ -10,7 +10,7 @@ const JobScheduleList = ({
   handleSaveMainJobScheduling,
 }) => {
   const { loading, singleJobSchedulingObject } = useSelector(
-    (state) => state?.planingJobScheduling
+    (state) => state?.planningJobScheduling
   );
   const { user } = useSelector((state) => state?.auth);
 

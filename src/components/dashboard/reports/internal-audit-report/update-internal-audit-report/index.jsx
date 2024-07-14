@@ -31,7 +31,7 @@ const UpdateInternalAuditReport = () => {
     internalAuditReportExtraFieldsObject,
     singleInternalAuditReport,
     iahFileUploadSuccess,
-  } = useSelector((state) => state?.internalAuditReports);
+  } = useSelector((state) => state?.internalAuditReport);
   const [reportObject, setReportObject] = React.useState({});
 
   function handleChangeReportObject(event) {

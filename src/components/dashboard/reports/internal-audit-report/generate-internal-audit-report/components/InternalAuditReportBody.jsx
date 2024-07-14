@@ -28,7 +28,7 @@ const InternalAuditReportBody = ({
   const dispatch = useDispatch();
   const [extraFieldsArray, setExtraFieldsArray] = React.useState([]);
   const { createExtraFieldsLoading, internalAuditReportExtraFieldsAddSuccess } =
-    useSelector((state) => state?.internalAuditReports);
+    useSelector((state) => state?.internalAuditReport);
 
   function handleUpdateExtraField(item) {
     if (!createExtraFieldsLoading) {

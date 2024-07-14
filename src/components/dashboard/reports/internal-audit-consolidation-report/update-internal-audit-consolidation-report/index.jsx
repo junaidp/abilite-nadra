@@ -31,7 +31,7 @@ const UpdateInternalAuditConsolidationReport = () => {
     internalAuditReportExtraFieldsObject,
     singleInternalAuditReport,
     consolidationFileUploadAddSuccess,
-  } = useSelector((state) => state?.consolidationReports);
+  } = useSelector((state) => state?.consolidationReport);
   const [reportObject, setReportObject] = React.useState({});
 
   function handleChangeReportObject(event) {

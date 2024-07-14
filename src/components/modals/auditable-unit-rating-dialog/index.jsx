@@ -15,13 +15,13 @@ const AuditableUnitRatingDialog = ({
 }) => {
   const dispatch = useDispatch();
   const { loading, auditableUnitAddSuccess, allAuditableUnits } = useSelector(
-    (state) => state?.planingAuditableUnit
+    (state) => state?.planningAuditableUnit
   );
   const {
     allProcess,
     allSubProcess,
     loading: processLoading,
-  } = useSelector((state) => state?.setttingsProcess);
+  } = useSelector((state) => state?.settingsProcess);
   const { company } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
   const [processId, setProcessId] = React.useState("");

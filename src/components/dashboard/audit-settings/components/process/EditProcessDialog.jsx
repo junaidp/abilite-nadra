@@ -6,7 +6,7 @@ import { setupEditProcess } from "../../../../../global-redux/reducers/settings/
 const EditProcessDialog = ({ setEditProcessDialog, processId }) => {
   const [processName, setProcessName] = React.useState("");
   const { loading, processAddSuccess, allProcess } = useSelector(
-    (state) => state?.setttingsProcess
+    (state) => state?.settingsProcess
   );
   const dispatch = useDispatch();
 

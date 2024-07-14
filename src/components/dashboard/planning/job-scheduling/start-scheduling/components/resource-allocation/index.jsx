@@ -15,7 +15,7 @@ const ResourceAllocation = ({
 }) => {
   const dispatch = useDispatch();
   const { loading, singleJobSchedulingObject } = useSelector(
-    (state) => state?.planingJobScheduling
+    (state) => state?.planningJobScheduling
   );
   const [selectedUsers, setSelectedUsers] = React.useState([]);
   const { user } = useSelector((state) => state?.auth);

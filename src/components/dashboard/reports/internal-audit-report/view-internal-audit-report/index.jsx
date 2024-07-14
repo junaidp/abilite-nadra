@@ -28,7 +28,7 @@ const ViewInternalAuditReport = () => {
   const reportId = searchParams.get("reportId");
   const { user } = useSelector((state) => state?.auth);
   const { loading, singleInternalAuditReport } = useSelector(
-    (state) => state?.internalAuditReports
+    (state) => state?.internalAuditReport
   );
 
   const [viewPdf, setViewPdf] = React.useState(false);

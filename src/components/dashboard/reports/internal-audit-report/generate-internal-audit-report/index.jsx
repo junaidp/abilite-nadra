@@ -35,7 +35,7 @@ const GenerateInternalAuditReport = () => {
     addReportLoading,
     internalAuditReportExtraFieldsObject,
     iahFileUploadSuccess,
-  } = useSelector((state) => state?.internalAuditReports);
+  } = useSelector((state) => state?.internalAuditReport);
   const [reportObject, setReportObject] = React.useState({});
   const [jobForInternalAuditReportId, setJobForInternalAuditReportId] =
     React.useState("");

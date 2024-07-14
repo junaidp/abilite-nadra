@@ -13,48 +13,48 @@ import {
 } from "./global-redux/reducers/common/slice";
 import Login from "./pages/auth/login/Login";
 import ForgetPassword from "./pages/auth/forget-password/ForgetPassword";
-import DashboardHomePage from "./pages/dashboard/home/DashboardHome";
-import BusinessObjectivePage from "./pages/dashboard/planning/business-objective/BusinessObjective";
-import RiskAssessmentsPage from "./pages/dashboard/planning/risk-assessments/RiskAssessments";
-import AuditableUnitsPage from "./pages/dashboard/planning/auditable-units/AuditableUnits";
-import JobPrioritizationPage from "./pages/dashboard/planning/job-prioritization/JobPrioritization";
-import JobSechedulingPage from "./pages/dashboard/planning/job-scheduling/JobSeheduling";
-import AuditPlanSummaryPage from "./pages/dashboard/planning/audit-plan-summary/AuditPlanSummary";
-import AuditEngagementPage from "./pages/dashboard/audit-engagement/AuditEngagement";
-import ViewRiskAssessmentPage from "./pages/dashboard/planning/risk-assessments/view-risk-assessment/ViewRiskAssessment";
-import PlanningReportPage from "./pages/dashboard/report/planning-report/PlanningReport";
-import ViewJobschedulePage from "./pages/dashboard/planning/job-scheduling/view-job-schedule/ViewJobschedule";
-import ViewResourcePage from "./pages/dashboard/planning/job-scheduling/view-resource/ViewResource";
-import GeneratePlanningReportPage from "./pages/dashboard/report/planning-report/generate-planning-report/GeneratePlanningReport";
-import UpdatePlanningReportPage from "./pages/dashboard/report/planning-report/update-planning-report/UpdatePlanningReport";
-import ViewPlanningReportPage from "./pages/dashboard/report/planning-report/view-planning-report/ViewPlanningReport";
-import StartSchedulingPage from "./pages/dashboard/planning/job-scheduling/start-scheduling/StartScheduling";
-import BusinessObjectiveRedirectPage from "./pages/dashboard/planning/business-objective/business-objectives-redirect/BusinessObjectiveRedirect";
-import InformationRequestPage from "./pages/dashboard/tasks/information-request/InformationRequest";
-import TaskManagementPage from "./pages/dashboard/tasks/task-management/TaskManagement";
-import SpecialProjectAuditPage from "./pages/dashboard/planning/business-objective/special-project-audit/SpecialProjectAudit";
-import ComplianceCheckListCardPage from "./pages/dashboard/planning/business-objective/compliance-checklist-card/ComplianceCheckListCard";
+import DashboardHome from "./pages/dashboard/home/DashboardHome";
+import BusinessObjective from "./pages/dashboard/planning/business-objective/BusinessObjective";
+import RiskAssessments from "./pages/dashboard/planning/risk-assessments/RiskAssessments";
+import AuditableUnits from "./pages/dashboard/planning/auditable-units/AuditableUnits";
+import JobPrioritization from "./pages/dashboard/planning/job-prioritization/JobPrioritization";
+import JobSecheduling from "./pages/dashboard/planning/job-scheduling/JobSeheduling";
+import AuditPlanSummary from "./pages/dashboard/planning/audit-plan-summary/AuditPlanSummary";
+import AuditEngagement from "./pages/dashboard/audit-engagement/AuditEngagement";
+import ViewRiskAssessment from "./pages/dashboard/planning/risk-assessments/view-risk-assessment/ViewRiskAssessment";
+import PlanningReport from "./pages/dashboard/reports/planning-report/PlanningReport";
+import ViewJobschedule from "./pages/dashboard/planning/job-scheduling/view-job-schedule/ViewJobschedule";
+import ViewResource from "./pages/dashboard/planning/job-scheduling/view-resource/ViewResource";
+import GeneratePlanningReport from "./pages/dashboard/reports/planning-report/generate-planning-report/GeneratePlanningReport";
+import UpdatePlanningReport from "./pages/dashboard/reports/planning-report/update-planning-report/UpdatePlanningReport";
+import ViewPlanningReport from "./pages/dashboard/reports/planning-report/view-planning-report/ViewPlanningReport";
+import StartScheduling from "./pages/dashboard/planning/job-scheduling/start-scheduling/StartScheduling";
+import BusinessObjectiveRedirect from "./pages/dashboard/planning/business-objective/business-objectives-redirect/BusinessObjectiveRedirect";
+import InformationRequest from "./pages/dashboard/tasks/information-request/InformationRequest";
+import TaskManagement from "./pages/dashboard/tasks/task-management/TaskManagement";
+import SpecialProjectAudit from "./pages/dashboard/planning/business-objective/special-project-audit/SpecialProjectAudit";
+import ComplianceCheckListCard from "./pages/dashboard/planning/business-objective/compliance-checklist-card/ComplianceCheckListCard";
 import UserProfile from "./components/user/user-profile/UserProfile";
-import KickOffPage from "./pages/dashboard/audit-engagement/kick-off/KickOff";
-import RiskFactorApproachPage from "./pages/dashboard/planning/risk-assessments/risk-factor-approach/RiskFactorApproach";
-import ReportingPage from "./pages/dashboard/reporting-follow-up/reporting/Reporting";
-import FollowUpPage from "./pages/dashboard/reporting-follow-up/follow-up/FollowUp";
-import ResetPassword from "./pages/auth/reset-password/index";
-import AuditParticularsPage from "./pages/dashboard/reporting-follow-up/reporting/reporting-particulars/ReportingParticulars";
-import FollowUpParticularsPage from "./pages/dashboard/reporting-follow-up/follow-up/follow-up-particulars/FollowUpParticulars";
-import AuditSettingsPage from "./pages/dashboard/audit-settings/AuditSettings";
-import InternalAuditReportPage from "./pages/dashboard/report/internal-audit-report/InternalAuditReport";
-import ViewInternalAuditReportPage from "./pages/dashboard/report/internal-audit-report/view-internal-audit-report/ViewInternalAuditReport";
-import UpdateInternalAuditReportPage from "./pages/dashboard/report/internal-audit-report/update-internal-audit-report/UpdateInternalAuditReport";
+import KickOff from "./pages/dashboard/audit-engagement/kick-off/KickOff";
+import RiskFactorApproach from "./pages/dashboard/planning/risk-assessments/risk-factor-approach/RiskFactorApproach";
+import Reporting from "./pages/dashboard/reporting-follow-up/reporting/Reporting";
+import FollowUp from "./pages/dashboard/reporting-follow-up/follow-up/FollowUp";
+import ResetPassword from "./pages/auth/reset-password/ResetPassword";
+import AuditParticulars from "./pages/dashboard/reporting-follow-up/reporting/reporting-particulars/ReportingParticulars";
+import FollowUpParticulars from "./pages/dashboard/reporting-follow-up/follow-up/follow-up-particulars/FollowUpParticulars";
+import AuditSettings from "./pages/dashboard/audit-settings/AuditSettings";
+import InternalAuditReport from "./pages/dashboard/reports/internal-audit-report/InternalAuditReport";
+import ViewInternalAuditReport from "./pages/dashboard/reports/internal-audit-report/view-internal-audit-report/ViewInternalAuditReport";
+import UpdateInternalAuditReport from "./pages/dashboard/reports/internal-audit-report/update-internal-audit-report/UpdateInternalAuditReport";
 import Layout from "./components/common/layout/Layout";
-import GenerateInternalAuditReportPage from "./pages/dashboard/report/internal-audit-report/generate-internal-audit-report/GenerateInternalAuditReport";
-import JobTimeAllocationPage from "./pages/dashboard/report/job-time-allocation/JobTimeAllocation";
-import AuditPlaningSummaryPage from "./pages/dashboard/report/audit-planing-summary/AuditPlaningSummary";
-import AuditExceptionPage from "./pages/dashboard/report/audit-exception/AuditException";
-import InternalAuditConsolidationReport from "./pages/dashboard/report/internal-audit-consolidation-report/InternalAuditConsolidationReport";
-import GenerateInternalAuditConsolidationReport from "./pages/dashboard/report/internal-audit-consolidation-report/generate-internal-audit-consolidation-report/GenerateInternalAuditConsolidationReport";
-import ViewInternalAuditConsolidationReport from "./pages/dashboard/report/internal-audit-consolidation-report/view-internal-audit-consolidation-report/ViewInternalAuditConsolidationReport";
-import UpdateInternalAuditConsolidationReport from "./pages/dashboard/report/internal-audit-consolidation-report/update-internal-audit-consolidation-report/UpdateInternalAuditConsolidationReport";
+import GenerateInternalAuditReport from "./pages/dashboard/reports/internal-audit-report/generate-internal-audit-report/GenerateInternalAuditReport";
+import JobTimeAllocation from "./pages/dashboard/reports/job-time-allocation/JobTimeAllocation";
+import AuditPlaningSummary from "./pages/dashboard/reports/audit-planing-summary/AuditPlaningSummary";
+import AuditException from "./pages/dashboard/reports/audit-exception/AuditException";
+import InternalAuditConsolidationReport from "./pages/dashboard/reports/internal-audit-consolidation-report/InternalAuditConsolidationReport";
+import GenerateInternalAuditConsolidationReport from "./pages/dashboard/reports/internal-audit-consolidation-report/generate-internal-audit-consolidation-report/GenerateInternalAuditConsolidationReport";
+import ViewInternalAuditConsolidationReport from "./pages/dashboard/reports/internal-audit-consolidation-report/view-internal-audit-consolidation-report/ViewInternalAuditConsolidationReport";
+import UpdateInternalAuditConsolidationReport from "./pages/dashboard/reports/internal-audit-consolidation-report/update-internal-audit-consolidation-report/UpdateInternalAuditConsolidationReport";
 import ProtectedRoute from "./components/common/layout/ProtectedRoute";
 import NotFound from "./components/common/not-found/index";
 
@@ -125,97 +125,88 @@ const App = () => {
               </ProtectedRoute>
             }
           >
-            <Route path="dashboard" element={<DashboardHomePage />} />
-            <Route
-              path="business-objective"
-              element={<BusinessObjectivePage />}
-            />
-            <Route path="risk-assessment" element={<RiskAssessmentsPage />} />
-            <Route path="auditable-unit" element={<AuditableUnitsPage />} />
+            <Route path="dashboard" element={<DashboardHome />} />
+            <Route path="business-objective" element={<BusinessObjective />} />
+            <Route path="risk-assessment" element={<RiskAssessments />} />
+            <Route path="auditable-unit" element={<AuditableUnits />} />
             <Route path="user/profile" element={<UserProfile />} />
             <Route
               path="prioritization-and-finalization"
-              element={<JobPrioritizationPage />}
+              element={<JobPrioritization />}
             />
-            <Route path="job-scheduling" element={<JobSechedulingPage />} />
-            <Route
-              path="audit-plan-summary"
-              element={<AuditPlanSummaryPage />}
-            />
-            <Route path="audit-engagement" element={<AuditEngagementPage />} />
-            <Route path="planning-report" element={<PlanningReportPage />} />
+            <Route path="job-scheduling" element={<JobSecheduling />} />
+            <Route path="audit-plan-summary" element={<AuditPlanSummary />} />
+            <Route path="audit-engagement" element={<AuditEngagement />} />
+            <Route path="planning-report" element={<PlanningReport />} />
             <Route
               path="view-risk-assesment"
-              element={<ViewRiskAssessmentPage />}
+              element={<ViewRiskAssessment />}
             />
-            <Route path="task-management" element={<TaskManagementPage />} />
-            <Route
-              path="view-job-scheduling"
-              element={<ViewJobschedulePage />}
-            />
-            <Route path="view-resource" element={<ViewResourcePage />} />
+            <Route path="task-management" element={<TaskManagement />} />
+            <Route path="view-job-scheduling" element={<ViewJobschedule />} />
+            <Route path="view-resource" element={<ViewResource />} />
             <Route
               path="generate-planning-report"
-              element={<GeneratePlanningReportPage />}
+              element={<GeneratePlanningReport />}
             />
             <Route
               path="update-planning-report"
-              element={<UpdatePlanningReportPage />}
+              element={<UpdatePlanningReport />}
             />
             <Route
               path="view-planning-report"
-              element={<ViewPlanningReportPage />}
+              element={<ViewPlanningReport />}
             />
             <Route
               path="information-request"
-              element={<InformationRequestPage />}
+              element={<InformationRequest />}
             />
-            <Route path="start-scheduling" element={<StartSchedulingPage />} />
+            <Route path="start-scheduling" element={<StartScheduling />} />
             <Route
               path="business-objectives-redirect"
-              element={<BusinessObjectiveRedirectPage />}
+              element={<BusinessObjectiveRedirect />}
             />
 
             <Route
               path="special-project-audit"
-              element={<SpecialProjectAuditPage />}
+              element={<SpecialProjectAudit />}
             />
             <Route
               path="compliance-checklist-card"
-              element={<ComplianceCheckListCardPage />}
+              element={<ComplianceCheckListCard />}
             />
-            <Route path="kick-off" element={<KickOffPage />} />
+            <Route path="kick-off" element={<KickOff />} />
 
             <Route
               path="risk-factor-approach"
-              element={<RiskFactorApproachPage />}
+              element={<RiskFactorApproach />}
             />
             <Route
               path="reporting-particulars"
-              element={<AuditParticularsPage />}
+              element={<AuditParticulars />}
             />
-            <Route path="follow-up" element={<FollowUpPage />} />
-            <Route path="reportings" element={<ReportingPage />} />
+            <Route path="follow-up" element={<FollowUp />} />
+            <Route path="reportings" element={<Reporting />} />
             <Route
               path="follow-up-particulars"
-              element={<FollowUpParticularsPage />}
+              element={<FollowUpParticulars />}
             />
-            <Route path="audit-settings" element={<AuditSettingsPage />} />
+            <Route path="audit-settings" element={<AuditSettings />} />
             <Route
               path="internal-audit-report"
-              element={<InternalAuditReportPage />}
+              element={<InternalAuditReport />}
             />
             <Route
               path="generate-internal-audit-report"
-              element={<GenerateInternalAuditReportPage />}
+              element={<GenerateInternalAuditReport />}
             />
             <Route
               path="view-internal-audit-report"
-              element={<ViewInternalAuditReportPage />}
+              element={<ViewInternalAuditReport />}
             />
             <Route
               path="update-internal-audit-report"
-              element={<UpdateInternalAuditReportPage />}
+              element={<UpdateInternalAuditReport />}
             />
             <Route
               path="internal-audit-consolidation-report"
@@ -235,16 +226,13 @@ const App = () => {
             />
             <Route
               path="job-time-allocation-report"
-              element={<JobTimeAllocationPage />}
+              element={<JobTimeAllocation />}
             />
             <Route
               path="audit-planning-summary-report"
-              element={<AuditPlaningSummaryPage />}
+              element={<AuditPlaningSummary />}
             />
-            <Route
-              path="audit-exception-report"
-              element={<AuditExceptionPage />}
-            />
+            <Route path="audit-exception-report" element={<AuditException />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

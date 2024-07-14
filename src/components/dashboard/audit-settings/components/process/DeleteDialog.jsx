@@ -5,7 +5,7 @@ import { setupDeleteProcess } from "../../../../../global-redux/reducers/setting
 const DeleteProcessDialog = ({ setShowProcessDeleteDialog, processId }) => {
   const dispatch = useDispatch();
   const { loading, processAddSuccess } = useSelector(
-    (state) => state?.setttingsProcess
+    (state) => state?.settingsProcess
   );
 
   function handleDeleteProcess() {

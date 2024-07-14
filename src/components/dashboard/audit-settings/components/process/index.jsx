@@ -25,7 +25,7 @@ const Process = ({ userHierarchy, userRole }) => {
     allSubProcess,
     subLoading,
     subProcessAddSuccess,
-  } = useSelector((state) => state?.setttingsProcess);
+  } = useSelector((state) => state?.settingsProcess);
   const { user } = useSelector((state) => state?.auth);
   const { company } = useSelector((state) => state?.common);
   const [processText, setProcessText] = React.useState("");

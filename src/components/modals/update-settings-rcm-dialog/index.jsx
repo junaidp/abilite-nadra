@@ -11,10 +11,10 @@ import { setupUpdateRiskControlMatrix } from "../../../global-redux/reducers/set
 const UpdateSettingsRCMDialog = ({ setShowUpdateRCMDialog, updatedRCMId }) => {
   const dispatch = useDispatch();
   const { rcmAddSuccess, loading, allRCM } = useSelector(
-    (state) => state?.setttingsRiskControlMatrix
+    (state) => state?.settingsRiskControlMatrix
   );
   let { allProcess, allSubProcess } = useSelector(
-    (state) => state?.setttingsRiskControlMatrix
+    (state) => state?.settingsRiskControlMatrix
   );
   const { company } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);

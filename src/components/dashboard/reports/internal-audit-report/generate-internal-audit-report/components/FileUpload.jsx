@@ -11,7 +11,7 @@ import { baseUrl } from "../../../../../../constants/index";
 const IAHFileUpload = ({ item }) => {
   const dispatch = useDispatch();
   const { addReportLoading, iahFileUploadSuccess } = useSelector(
-    (state) => state?.internalAuditReports
+    (state) => state?.internalAuditReport
   );
   const updatedFileInputRef = React.useRef(null);
   const fileInputRef = React.useRef(null);

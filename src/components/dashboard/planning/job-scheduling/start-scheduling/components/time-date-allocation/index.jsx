@@ -14,7 +14,7 @@ const TimeAndDateAllocation = ({
   const [fieldWorkManHours, setFieldWorkManHours] = React.useState(0);
   const [totalWorkingManHours, setTotalWorkingManHours] = React.useState(0);
   const [totalHours, setTotalHours] = React.useState(0);
-  const { loading } = useSelector((state) => state?.planingJobScheduling);
+  const { loading } = useSelector((state) => state?.planningJobScheduling);
   const { user } = useSelector((state) => state?.auth);
   function handleSave() {
     if (!loading) {

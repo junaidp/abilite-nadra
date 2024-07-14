@@ -13,7 +13,7 @@ const ViewResource = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loading, allUsers } = useSelector(
-    (state) => state?.setttingsUserManagement
+    (state) => state?.settingsUserManagement
   );
   const { user } = useSelector((state) => state?.auth);
   const [page, setPage] = React.useState(1);

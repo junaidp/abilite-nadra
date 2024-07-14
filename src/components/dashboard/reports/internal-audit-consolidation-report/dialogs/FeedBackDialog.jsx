@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 const FeedBackDialog = ({ setFeedBackDialog, Id }) => {
   const dispatch = useDispatch();
   const { loading, internalAuditReportAddSuccess } = useSelector(
-    (state) => state?.consolidationReports
+    (state) => state?.consolidationReport
   );
   const [description, setDescription] = React.useState("");
 

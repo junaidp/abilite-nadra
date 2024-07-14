@@ -15,7 +15,7 @@ const ViewJobSchedule = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { allJobScheduling, loading } = useSelector(
-    (state) => state?.planingJobScheduling
+    (state) => state?.planningJobScheduling
   );
   const { company, year } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);

@@ -12,7 +12,7 @@ const AddEngagementAuditDialog = ({ setBusinessObjectiveDialog }) => {
   let navigate = useNavigate();
   const [route, setRoute] = React.useState("");
   const { engagementAddSuccess, loading, planingEngagementSingleObject } =
-    useSelector((state) => state.planingEngagements);
+    useSelector((state) => state.planningEngagement);
   const { user } = useSelector((state) => state?.auth);
   const { company } = useSelector((state) => state?.common);
 

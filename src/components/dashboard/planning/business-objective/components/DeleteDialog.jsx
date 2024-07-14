@@ -8,7 +8,7 @@ const DeleteEngagementDialog = ({
 }) => {
   const dispatch = useDispatch();
   const { loading, engagementAddSuccess } = useSelector(
-    (state) => state.planingEngagements
+    (state) => state.planningEngagement
   );
 
   function handleDeleteEngagement() {

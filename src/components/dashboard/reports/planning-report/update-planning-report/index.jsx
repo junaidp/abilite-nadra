@@ -56,11 +56,11 @@ const UpdatePlanningReport = () => {
   React.useEffect(() => {
     if (singleReportObject) {
       setValues({
-        summary: singleReportObject?.summary,
-        methodology: singleReportObject?.methodology,
-        riskAssesmentSummary: singleReportObject?.riskAssesmentSummary,
-        orgnizationStrategy: singleReportObject?.orgnizationStrategy,
-        summaryRisk: singleReportObject?.summaryRisk,
+        summary: singleReportObject?.summary || "",
+        methodology: singleReportObject?.methodology || "",
+        riskAssesmentSummary: singleReportObject?.riskAssesmentSummary || "",
+        orgnizationStrategy: singleReportObject?.orgnizationStrategy || "",
+        summaryRisk: singleReportObject?.summaryRisk || "",
       });
     }
   }, [singleReportObject]);

@@ -8,7 +8,7 @@ const DeleteAuditPlanSummarytDialog = ({
 }) => {
   const dispatch = useDispatch();
   const { loading, auditPlanSummaryAddSuccess } = useSelector(
-    (state) => state?.planingAuditPlanSummary
+    (state) => state?.planningAuditPlanSummary
   );
 
   function handleDeleteAuditPlanSummary() {

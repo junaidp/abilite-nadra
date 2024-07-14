@@ -15,7 +15,7 @@ const AddCheckListManagementDialog = ({ setCheckListManagementDialog }) => {
   const { user } = useSelector((state) => state.auth);
   const { resetRichTextFieldState } = useSelector((state) => state.common);
   const { checkListAddSuccess, editLoading, checkListId } = useSelector(
-    (state) => state.setttingsCheckList
+    (state) => state.settingsCheckList
   );
   const initialState = {
     area: "",

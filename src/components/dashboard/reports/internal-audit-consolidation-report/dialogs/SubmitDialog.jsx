@@ -8,7 +8,7 @@ const SubmitInternalAuditConsolidationReportDialog = ({
 }) => {
   const dispatch = useDispatch();
   const { internalAuditReportAddSuccess, addReportLoading } = useSelector(
-    (state) => state?.consolidationReports
+    (state) => state?.consolidationReport
   );
 
   function handleSubmit() {

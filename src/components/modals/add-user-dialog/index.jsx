@@ -11,7 +11,7 @@ import Form from "./component/Form";
 const AddUserDialog = ({ setUserManagementDialog }) => {
   const dispatch = useDispatch();
   const { addUserSuccess, loading, allUsers } = useSelector(
-    (state) => state.setttingsUserManagement
+    (state) => state.settingsUserManagement
   );
   const [nullReportingTo, setNullReportingTo] = React.useState(false);
   const [nullSkillSet, setNullSkillSet] = React.useState(false);

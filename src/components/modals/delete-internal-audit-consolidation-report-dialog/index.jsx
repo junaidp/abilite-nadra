@@ -8,7 +8,7 @@ const DeleteInternalAuditConsolidationReportDialog = ({
 }) => {
   const dispatch = useDispatch();
   const { loading, internalAuditReportAddSuccess } = useSelector(
-    (state) => state?.consolidationReports
+    (state) => state?.consolidationReport
   );
 
   function handleDelete() {

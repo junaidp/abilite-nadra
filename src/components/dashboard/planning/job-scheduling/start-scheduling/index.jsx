@@ -35,8 +35,8 @@ const StartScheduling = () => {
     jobSchedulingAddSuccess,
     singleJobSchedulingObject,
     initialLoading,
-  } = useSelector((state) => state?.planingJobScheduling);
-  const { allUsers } = useSelector((state) => state?.setttingsUserManagement);
+  } = useSelector((state) => state?.planningJobScheduling);
+  const { allUsers } = useSelector((state) => state?.settingsUserManagement);
   const { user } = useSelector((state) => state?.auth);
   const { company } = useSelector((state) => state?.common);
   const [initialLocationList, setInitialLocationList] = React.useState([]);
@@ -44,7 +44,7 @@ const StartScheduling = () => {
     []
   );
   const [initialUserList, setInitialUserList] = React.useState([]);
-  const { allLocations } = useSelector((state) => state?.setttingsLocation);
+  const { allLocations } = useSelector((state) => state?.settingsLocation);
   const [currentJobSchedulingObject, setCurrentJobScheduling] = React.useState(
     {}
   );

@@ -9,7 +9,7 @@ const ResourcesRequired = ({
   singleJobSchedulingObject,
 }) => {
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state?.planingJobScheduling);
+  const { loading } = useSelector((state) => state?.planningJobScheduling);
   const { user } = useSelector((state) => state?.auth);
   function handleSave() {
     if (!loading) {

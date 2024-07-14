@@ -5,7 +5,7 @@ import { setupDeleteLocation } from "../../../../../global-redux/reducers/settin
 const DeleteLocationDialog = ({ setShowDeleteLocationDialog, LocationId }) => {
   const dispatch = useDispatch();
   const { loading, locationAddSuccess } = useSelector(
-    (state) => state.setttingsLocation
+    (state) => state.settingsLocation
   );
 
   function handleDeleteLocation() {

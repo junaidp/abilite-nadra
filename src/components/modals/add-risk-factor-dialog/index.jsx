@@ -7,7 +7,7 @@ const AddRiskFactorDialog = ({ setShowAddRiskFactorDialog }) => {
   const dispatch = useDispatch();
   const [description, setDescription] = React.useState("");
   const { performRiskAssessmentObject, loading,riskAssessmentSuccess } = useSelector(
-    (state) => state?.planingRiskAssessments
+    (state) => state?.planningRiskAssessment
   );
 
   function handleAddRiskAssessment() {

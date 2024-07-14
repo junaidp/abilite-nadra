@@ -1,6 +1,6 @@
 import React from "react";
 import "./index.css";
-import EditAuditableUnit from "../../../modals/edit-auditable-unit";
+import EditAuditableUnitDialog from "../../../modals/edit-auditable-unit-dialog";
 import AuditableUnitRatingDialog from "../../../modals/auditable-unit-rating-dialog/index";
 import {
   setupGetAllAuditableUnits,
@@ -14,7 +14,7 @@ import AuditableUnitRow from "./components/auditable-unit-row";
 const AuditableUnits = () => {
   const dispatch = useDispatch();
   const { loading, allAuditableUnits, auditableUnitAddSuccess } = useSelector(
-    (state) => state?.planingAuditableUnit
+    (state) => state?.planningAuditableUnit
   );
   const { user } = useSelector((state) => state?.auth);
   const { company } = useSelector((state) => state?.common);
@@ -68,7 +68,7 @@ const AuditableUnits = () => {
       {showEditAuditableUnit && (
         <div className="dashboard-modal">
           <div className="model-wrap">
-            <EditAuditableUnit
+            <EditAuditableUnitDialog
               setShowEditAuditableUnit={setShowEditAuditableUnit}
               selectedAuditableUnitId={selectedAuditableUnitId}
               selectedAuditableSubUnitId={selectedAuditableSubUnitId}

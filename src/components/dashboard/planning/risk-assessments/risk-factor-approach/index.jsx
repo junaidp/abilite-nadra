@@ -30,7 +30,7 @@ const RiskFactorApproach = () => {
     riskAssessmentSuccess,
     loading,
     initialLoading,
-  } = useSelector((state) => state?.planingRiskAssessments);
+  } = useSelector((state) => state?.planningRiskAssessment);
   const [scoreSum, setScoreSum] = React.useState(0);
   const [showAddRiskFactorDialog, setShowAddRiskFactorDialog] =
     React.useState(false);

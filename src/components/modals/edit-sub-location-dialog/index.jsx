@@ -9,7 +9,7 @@ const EditSubLocationDialog = ({
   SubLocationId,
 }) => {
   const { locationAddSuccess, allLocations, loading } = useSelector(
-    (state) => state.setttingsLocation
+    (state) => state.settingsLocation
   );
   const [SubLocationName, setSubLocationName] = React.useState("");
   const dispatch = useDispatch();

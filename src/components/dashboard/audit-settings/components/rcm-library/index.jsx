@@ -22,12 +22,12 @@ import DeleteRCMDialog from "./components/DeleteRCMDialog";
 const RCMLibraray = ({ userHierarchy, userRole }) => {
   const dispatch = useDispatch();
   let { allProcess, allSubProcess } = useSelector(
-    (state) => state?.setttingsProcess
+    (state) => state?.settingsProcess
   );
   const { company } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
   const { rcmAddSuccess, loading, initialLoading, allRCM } = useSelector(
-    (state) => state?.setttingsRiskControlMatrix
+    (state) => state?.settingsRiskControlMatrix
   );
   const [processId, setProcessId] = React.useState("");
   const [subProcessId, setSubProcessId] = React.useState("");

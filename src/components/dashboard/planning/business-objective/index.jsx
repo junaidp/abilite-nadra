@@ -22,7 +22,7 @@ const BusinessObjective = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { allEngagements, loading, engagementAddSuccess } = useSelector(
-    (state) => state.planingEngagements
+    (state) => state.planningEngagement
   );
   const { company } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);

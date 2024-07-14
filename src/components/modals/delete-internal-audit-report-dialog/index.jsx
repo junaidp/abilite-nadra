@@ -8,7 +8,7 @@ const AuditableUnitRatingDialog = ({
 }) => {
   const dispatch = useDispatch();
   const { loading, internalAuditReportAddSuccess } = useSelector(
-    (state) => state?.internalAuditReports
+    (state) => state?.internalAuditReport
   );
 
   function handleDelete() {

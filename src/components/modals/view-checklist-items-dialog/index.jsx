@@ -4,7 +4,7 @@ import RichTextEditor from "../../../components/common/rich-text/index";
 
 const ViewCheckListItemDialog = ({ setShowViewCheckListDialog }) => {
   const { currentSubCheckListItem } = useSelector(
-    (state) => state.setttingsCheckList
+    (state) => state.settingsCheckList
   );
 
   return (

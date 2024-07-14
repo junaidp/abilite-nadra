@@ -18,7 +18,7 @@ import DeleteLocationDialog from "./DeleteDialog";
 const Location = ({ userHierarchy, userRole }) => {
   const dispatch = useDispatch();
   const { loading, locationAddSuccess, allLocations } = useSelector(
-    (state) => state.setttingsLocation
+    (state) => state.settingsLocation
   );
   const { company } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);

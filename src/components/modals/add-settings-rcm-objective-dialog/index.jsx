@@ -5,7 +5,7 @@ import { setupCreateObjective } from "../../../global-redux/reducers/settings/ri
 const AddSettingsObjectiveRCMDialog = ({ setShowRCMObjectiveDialog }) => {
   const dispatch = useDispatch();
   const { rcmAddSuccess, loading, allRCM } = useSelector(
-    (state) => state?.setttingsRiskControlMatrix
+    (state) => state?.settingsRiskControlMatrix
   );
   const [rating, setRating] = React.useState("");
   const [description, setDescription] = React.useState("");

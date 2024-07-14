@@ -5,7 +5,7 @@ import { setupDeleteUser } from "../../../../../global-redux/reducers/settings/u
 const DeleteUserDialog = ({ setUserDeleteDialog, currentUserId }) => {
   const dispatch = useDispatch();
   const { loading, addUserSuccess } = useSelector(
-    (state) => state?.setttingsUserManagement
+    (state) => state?.settingsUserManagement
   );
 
   function handleDeleteUser() {

@@ -28,7 +28,7 @@ const ViewInternalAuditConsolidationReport = () => {
   const [viewPdf, setViewPdf] = React.useState(false);
   const { user } = useSelector((state) => state?.auth);
   const { loading, singleInternalAuditReport } = useSelector(
-    (state) => state?.consolidationReports
+    (state) => state?.consolidationReport
   );
 
   React.useEffect(() => {

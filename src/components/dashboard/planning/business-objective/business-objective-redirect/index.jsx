@@ -33,13 +33,13 @@ const BusinessObjectiveRedirect = () => {
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
   const engagementId = searchParams.get("engagementId");
-  const { allLocations } = useSelector((state) => state.setttingsLocation);
+  const { allLocations } = useSelector((state) => state.settingsLocation);
   const {
     planingEngagementSingleObject,
     engagementAddSuccess,
     loading,
     initialLoading,
-  } = useSelector((state) => state.planingEngagements);
+  } = useSelector((state) => state.planningEngagement);
   const { user } = useSelector((state) => state?.auth);
   const { company } = useSelector((state) => state?.common);
   const [showObjectiveListDialog, setShowObjectiveListDialog] =

@@ -6,7 +6,7 @@ import { setupEditSubProcess } from "../../../../../global-redux/reducers/settin
 const EditSubProcessDialog = ({ setShowSubProcessDialog, subProcessId }) => {
   const [subProcessName, setSubProcessName] = React.useState("");
   const { subLoading, subProcessAddSuccess, allSubProcess } = useSelector(
-    (state) => state?.setttingsProcess
+    (state) => state?.settingsProcess
   );
   const dispatch = useDispatch();
   function handleSubmit() {

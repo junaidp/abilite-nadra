@@ -47,7 +47,7 @@ const ReportingParticulars = () => {
     reportingFileUploadSuccess,
   } = useSelector((state) => state?.reporting);
   const [report, setReport] = React.useState([]);
-  const { allUsers } = useSelector((state) => state?.setttingsUserManagement);
+  const { allUsers } = useSelector((state) => state?.settingsUserManagement);
   const [currentApproveItem, setCurrentApproveItem] = React.useState({});
   const [firstApproveDialog, setFirstApproveDialog] = React.useState(false);
   const [secondApproveDialog, setSecondApproveDialog] = React.useState(false);

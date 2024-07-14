@@ -36,8 +36,8 @@ const SpecialProjectAudit = () => {
     engagementAddSuccess,
     loading,
     initialLoading,
-  } = useSelector((state) => state.planingEngagements);
-  const { allLocations } = useSelector((state) => state.setttingsLocation);
+  } = useSelector((state) => state.planningEngagement);
+  const { allLocations } = useSelector((state) => state.settingsLocation);
   const { user } = useSelector((state) => state?.auth);
   const { company } = useSelector((state) => state?.common);
   const [showObjectiveListDialog, setShowObjectiveListDialog] =

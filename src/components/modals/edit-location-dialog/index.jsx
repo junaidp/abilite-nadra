@@ -7,7 +7,7 @@ const EditLocationDialog = ({ setShowEditLocationDialog, LocationId }) => {
   const { user } = useSelector((state) => state.auth);
   const { company } = useSelector((state) => state.common);
   const { locationAddSuccess, allLocations, loading } = useSelector(
-    (state) => state.setttingsLocation
+    (state) => state.settingsLocation
   );
   const [LocationName, setLocationName] = React.useState("");
   const dispatch = useDispatch();

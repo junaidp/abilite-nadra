@@ -12,7 +12,7 @@ const HeadingTable = ({ data }) => {
             </tr>
           </thead>
           <tbody>
-            {data?.newHeading?.length === 0 ? (
+            {data?.newHeading?.length === 0 || !data?.newHeading ? (
               <tr>
                 <td className="w-300">No Heading Added!</td>
               </tr>

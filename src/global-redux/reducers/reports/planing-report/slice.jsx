@@ -117,12 +117,11 @@ export const slice = createSlice({
       })
       .addCase(setupSaveReport.fulfilled, (state) => {
         state.loading = false;
-        toast.success("Report Added Successfully");
         state.reportAddSuccess = true;
+        toast.success("Report Added Successfully");
       })
       .addCase(setupSaveReport.rejected, (state, { payload }) => {
         state.loading = false;
-        state.companyAddSuccess = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
         } else {

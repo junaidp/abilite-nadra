@@ -11,7 +11,7 @@ import { baseUrl } from "../../../../../../constants/index";
 const ConsolidationFileUpload = ({ item }) => {
   const dispatch = useDispatch();
   const { subLoading, consolidationFileUploadAddSuccess } = useSelector(
-    (state) => state?.consolidationReports
+    (state) => state?.consolidationReport
   );
   const updatedFileInputRef = React.useRef(null);
   const fileInputRef = React.useRef(null);
