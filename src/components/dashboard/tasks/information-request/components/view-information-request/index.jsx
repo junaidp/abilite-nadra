@@ -6,14 +6,14 @@ const ViewInformationRequest = ({
   setShowViewInformationRequestDialog,
   updateTaskId,
 }) => {
-  const { users, auditEngagements, allTasks } = useSelector(
+  const { auditEngagements, allTasks } = useSelector(
     (state) => state?.tasksManagement
   );
 
   // Initial form initialValues
   const defaultinitialValues = {
     dueDate: "",
-    auditEngagementId: "",
+    auditEngagement: "",
     userAssigned: "",
     detailedRequirement: "",
     response: "",
@@ -25,12 +25,14 @@ const ViewInformationRequest = ({
     let task = allTasks.find((singleTask) => singleTask?.id === updateTaskId);
     setInitialValues({
       dueDate: task ? moment.utc(task?.dueDate).format("YYYY-MM-DD") : "",
-      auditEngagementId: task?.auditEngagement?.id,
-      userAssigned: task?.assignee?.id,
+      auditEngagement: auditEngagements?.find(
+        (singleEngagement) => singleEngagement?.id === task?.auditEngagement?.id
+      )?.engagementName,
+      userAssigned: task?.assignee?.name,
       detailedRequirement: task?.detailedRequirement,
       response: task?.yourResponse,
     });
-  }, [updateTaskId, allTasks]);
+  }, [updateTaskId]);
 
   return (
     <div className="px-4 py-4 information-request-dialog-main-wrap">
@@ -55,39 +57,19 @@ const ViewInformationRequest = ({
       <div className="row mb-3">
         <div className="col-lg-6">
           <label className="me-3">Selected Job</label>
-          <select
-            className="form-select"
-            aria-label="Default select example"
+          <input
+            className="form-control w-100"
             disabled
-            value={initialValues?.auditEngagementId}
-          >
-            <option value="">Select Job</option>
-            {auditEngagements?.map((job, index) => {
-              return (
-                <option key={index} value={job?.id}>
-                  {job?.engagementName}
-                </option>
-              );
-            })}
-          </select>
+            value={initialValues?.auditEngagement}
+          />
         </div>
         <div className="col-lg-6">
-          <label className="me-3">Selected Assignee</label>
-          <select
-            className="form-select"
-            aria-label="Default select example"
+          <label className="me-3">User Assigned</label>
+          <input
+            className="form-control w-100"
             disabled
             value={initialValues?.userAssigned}
-          >
-            <option value="">Select User</option>
-            {users?.map((user, index) => {
-              return (
-                <option value={user?.id} key={index}>
-                  {user?.name}
-                </option>
-              );
-            })}
-          </select>
+          />
         </div>
       </div>
 
@@ -99,7 +81,7 @@ const ViewInformationRequest = ({
             id="exampleFormControlTextarea1"
             disabled
             rows="3"
-            value={initialValues?.detailedRequirement || ""}
+            value={initialValues?.userAssigned || ""}
           ></textarea>
         </div>
       </div>

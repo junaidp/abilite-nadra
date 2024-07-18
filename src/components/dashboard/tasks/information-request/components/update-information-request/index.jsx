@@ -69,7 +69,7 @@ const UpdateInformationRequest = ({
       userAssigned: task?.assignee?.id,
       detailedRequirement: task?.detailedRequirement,
     });
-  }, [updateTaskId, allTasks]);
+  }, [updateTaskId]);
 
   return (
     <div className="px-4 py-4 information-request-dialog-main-wrap">

@@ -97,6 +97,7 @@ const JobPrioritization = () => {
         dispatch(setupGetAllJobPrioritization(companyId));
       }
       dispatch(resetJobPrioritizationSuccess());
+      setPage(1)
     }
   }, [jobPrioritizationAddSuccess]);
 

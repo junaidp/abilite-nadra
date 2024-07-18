@@ -11,9 +11,8 @@ import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
 } from "./global-redux/reducers/common/slice";
-// Lazy Loading the Home and the Login Page
-const Home = lazy(() => import("./pages/Home"));
-const Login = lazy(() => import("./pages/auth/login/Login"));
+import Home from "./pages/Home";
+import Login from "./pages/auth/login/Login";
 import ForgetPassword from "./pages/auth/forget-password/ForgetPassword";
 import DashboardHome from "./pages/dashboard/home/DashboardHome";
 import BusinessObjective from "./pages/dashboard/planning/business-objective/BusinessObjective";

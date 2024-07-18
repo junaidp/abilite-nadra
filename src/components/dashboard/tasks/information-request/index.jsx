@@ -26,9 +26,8 @@ const InformationRequest = () => {
     setShowViewInformationRequestDialog,
   ] = React.useState(false);
 
-  const { taskAddSuccess, allTasks, initialLoading } = useSelector(
-    (state) => state?.tasksManagement
-  );
+  const { taskAddSuccess, allTasks, initialLoading, auditEngagements } =
+    useSelector((state) => state?.tasksManagement);
   const { company } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
   const [page, setPage] = React.useState(1);
@@ -47,7 +46,7 @@ const InformationRequest = () => {
       dispatch(setupGetAllUsers());
       dispatch(setupGetAllTasks({ companyId: companyId, isTask: false }));
     }
-  }, [user, company]);
+  }, [dispatch, user]);
 
   React.useEffect(() => {
     const companyId = user[0]?.company?.find(
@@ -56,6 +55,7 @@ const InformationRequest = () => {
     if (companyId && taskAddSuccess === true) {
       dispatch(setupGetAllTasks({ companyId: companyId, isTask: false }));
       dispatch(resetTaskAddSuccess());
+      setPage(1);
     }
   }, [taskAddSuccess]);
 
@@ -147,7 +147,15 @@ const InformationRequest = () => {
                           <td>
                             {moment.utc(task?.dueDate).format("DD-MM-YY")}
                           </td>
-                          <td>{task?.auditEngagement?.title}</td>
+                          <td>
+                            {
+                              auditEngagements?.find(
+                                (singleEngagement) =>
+                                  singleEngagement?.id ===
+                                  task?.auditEngagement?.id
+                              )?.engagementName
+                            }
+                          </td>
                           <td>{task?.assignee?.name}</td>
                           <td>{task?.assignedBy?.name}</td>
                           <td>

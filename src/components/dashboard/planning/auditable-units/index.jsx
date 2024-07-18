@@ -41,6 +41,7 @@ const AuditableUnits = () => {
         dispatch(setupGetAllAuditableUnits(companyId));
       }
       dispatch(resetAuditableUnitSuccess());
+      setPage(1)
     }
   }, [auditableUnitAddSuccess]);
 

@@ -62,6 +62,7 @@ const InternalAuditReport = () => {
         );
       }
       dispatch(resetInternalAuditReportAddSuccess());
+      setPage(1)
     }
   }, [internalAuditReportAddSuccess]);
 

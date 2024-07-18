@@ -50,6 +50,7 @@ const PlanningReport = () => {
       if (companyId) {
         dispatch(setupGetAllReports(companyId));
         dispatch(resetReportAddSuccess());
+        setPage(1);
       }
     }
   }, [reportAddSuccess]);

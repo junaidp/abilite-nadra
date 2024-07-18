@@ -162,6 +162,7 @@ const AuditPlanSummary = () => {
         );
       }
       dispatch(resetAuditPlanSummarySuccess());
+      setPage(1)
     }
   }, [auditPlanSummaryAddSuccess]);
 

@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   resetTaskAddSuccess,
   setupGetAllTasks,
+  setupGetAllAuditEngagement,
 } from "../../../../global-redux/reducers/tasks-management/slice";
 import { CircularProgress } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
@@ -14,9 +15,8 @@ const TaskManagement = () => {
   const dispatch = useDispatch();
   const [showUpdateTaskDialog, setShowUpdateTaskDailog] = React.useState(false);
   const [showViewTaskDialog, setShowViewTasktDialog] = React.useState(false);
-  const { taskAddSuccess, allTasks, initialLoading } = useSelector(
-    (state) => state?.tasksManagement
-  );
+  const { taskAddSuccess, allTasks, initialLoading, auditEngagements } =
+    useSelector((state) => state?.tasksManagement);
   const { company } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
   const [page, setPage] = React.useState(1);
@@ -32,8 +32,9 @@ const TaskManagement = () => {
     )?.id;
     if (companyId) {
       dispatch(setupGetAllTasks({ companyId: companyId, isTask: true }));
+      dispatch(setupGetAllAuditEngagement(`?companyId=${companyId}`));
     }
-  }, [user, company]);
+  }, [user, dispatch]);
 
   React.useEffect(() => {
     const companyId = user[0]?.company?.find(
@@ -42,6 +43,7 @@ const TaskManagement = () => {
     if (companyId && taskAddSuccess === true) {
       dispatch(setupGetAllTasks({ companyId: companyId, isTask: true }));
       dispatch(resetTaskAddSuccess());
+      setPage(1);
     }
   }, [taskAddSuccess]);
 
@@ -107,7 +109,15 @@ const TaskManagement = () => {
                           <td>
                             {moment.utc(task?.dueDate).format("DD-MM-YY")}
                           </td>
-                          <td>{task?.auditEngagement?.title}</td>
+                          <td>
+                            {
+                              auditEngagements?.find(
+                                (singleEngagement) =>
+                                  singleEngagement?.id ===
+                                  task?.auditEngagement?.id
+                              )?.engagementName
+                            }
+                          </td>
                           <td>{task?.assignee?.name}</td>
                           <td>{task?.assignedBy?.name}</td>
                           <td>

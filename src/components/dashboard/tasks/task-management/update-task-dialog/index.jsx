@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 
 const UpdateTaskManagement = ({ setShowUpdateTaskDailog, updateTaskId }) => {
   const dispatch = useDispatch();
-  const { loading, taskAddSuccess, allTasks } = useSelector(
+  const { loading, taskAddSuccess, allTasks, auditEngagements } = useSelector(
     (state) => state?.tasksManagement
   );
   const [fileAttachments, setFileAttachments] = React.useState([]);
@@ -59,12 +59,14 @@ const UpdateTaskManagement = ({ setShowUpdateTaskDailog, updateTaskId }) => {
     let task = allTasks.find((singleTask) => singleTask?.id === updateTaskId);
     setInitialValues({
       dueDate: task ? moment.utc(task?.dueDate).format("YYYY-MM-DD") : "",
-      auditEngagement: task?.auditEngagement?.title,
+      auditEngagement: auditEngagements?.find(
+        (singleEngagement) => singleEngagement?.id === task?.auditEngagement?.id
+      )?.engagementName,
       userAssigned: task?.assignee?.name,
       detailedRequirement: task?.detailedRequirement,
     });
     setResponse(task?.yourResponse);
-  }, [updateTaskId, allTasks]);
+  }, [updateTaskId]);
 
   return (
     <div className="px-4 py-4 information-request-dialog-main-wrap">
@@ -126,6 +128,7 @@ const UpdateTaskManagement = ({ setShowUpdateTaskDailog, updateTaskId }) => {
             rows="3"
             value={response}
             onChange={(event) => setResponse(event?.target?.value)}
+            maxLength="400"
           ></textarea>
           <label className="word-limit-info label-text">
             Maximum 400 words

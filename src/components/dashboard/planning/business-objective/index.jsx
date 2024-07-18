@@ -64,6 +64,7 @@ const BusinessObjective = () => {
       if (companyId) {
         dispatch(setupGetAllEngagements(companyId));
         dispatch(resetAddEngagementSuccess());
+        setPage(1)
       }
     }
   }, [engagementAddSuccess]);
