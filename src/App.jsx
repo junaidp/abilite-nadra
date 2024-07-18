@@ -58,7 +58,6 @@ import ViewInternalAuditConsolidationReport from "./pages/dashboard/reports/inte
 import UpdateInternalAuditConsolidationReport from "./pages/dashboard/reports/internal-audit-consolidation-report/update-internal-audit-consolidation-report/UpdateInternalAuditConsolidationReport";
 import ProtectedRoute from "./components/common/layout/ProtectedRoute";
 import NotFound from "./components/common/not-found/index";
-import { CircularProgress } from "@mui/material";
 
 const App = () => {
   const dispatch = useDispatch();

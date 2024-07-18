@@ -81,7 +81,7 @@ const ViewInformationRequest = ({
             id="exampleFormControlTextarea1"
             disabled
             rows="3"
-            value={initialValues?.userAssigned || ""}
+            value={initialValues?.detailedRequirement || ""}
           ></textarea>
         </div>
       </div>

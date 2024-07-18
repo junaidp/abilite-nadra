@@ -137,6 +137,27 @@ let menuItems = [
         route: "/audit/planning-report",
         active: false,
       },
+      {
+        id: "li-audit-exception-report",
+        label: "Audit Exception Report",
+        icon: faFileContract,
+        route: "/audit/audit-exception-report",
+        active: false,
+      },
+      {
+        id: "li-audit-plan-summary-report",
+        label: "Audit Plan Summary Report",
+        icon: faFileContract,
+        route: "/audit/audit-planning-summary-report",
+        active: false,
+      },
+      {
+        id: "li-job-time-allocation-report",
+        label: "Job Time Allocation Report",
+        icon: faFileContract,
+        route: "/audit/job-time-allocation-report",
+        active: false,
+      },
     ],
   },
 
