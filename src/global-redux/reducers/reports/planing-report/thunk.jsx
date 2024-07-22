@@ -166,7 +166,7 @@ export const deleteHeading = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.delete(
-      `${baseUrl}/planningreport/report/heading/delete${data}`,
+      `${baseUrl}/planningreport/report/heading/delete?headingId=${data?.headingId}&planningReportId=${data?.planningReportId}`,
       {
         headers: {
           "Content-Type": "application/json",

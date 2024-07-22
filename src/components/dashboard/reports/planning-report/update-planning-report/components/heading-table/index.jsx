@@ -14,7 +14,7 @@ const HeadingTable = ({ data, reportId }) => {
 
   function handleDeleteHeading(headingId) {
     if (!updateLoading) {
-      dispatch(setupDeleteHeading(headingId));
+      dispatch(setupDeleteHeading({ headingId, planningReportId: reportId }));
     }
   }
 

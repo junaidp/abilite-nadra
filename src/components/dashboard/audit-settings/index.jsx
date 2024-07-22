@@ -12,6 +12,7 @@ import { setupGetAllFiles } from "../../../global-redux/reducers/settings/suppor
 import { handleReset } from "../../../global-redux/reducers/settings/risk-control-matrix/slice";
 import { resetAuthValues } from "../../../global-redux/reducers/auth/slice";
 import UserManagementDialog from "../../modals/add-user-dialog/index";
+import { setupGetAllPreviousObservations } from "../../../global-redux/reducers/settings/previous-observation/slice.jsx";
 import UpdateUserDialog from "../.././modals/update-user-dialog";
 import TFA from "./components/tfa/index.jsx";
 import CheckList from "./components/checklist";
@@ -22,6 +23,7 @@ import Location from "./components/location";
 import RiskFactor from "./components/risk-factor";
 import UserManagement from "./components/user";
 import RCMLibrary from "./components/rcm-library";
+import PreviousObservation from "./components/previous-observation/index.jsx";
 import Process from "./components/process";
 const AuditSettings = () => {
   const dispatch = useDispatch();
@@ -69,6 +71,9 @@ const AuditSettings = () => {
       }
       if (currentSettingOption === "users") {
         dispatch(setupGetAllUsers({ shareWith: true }));
+      }
+      if (currentSettingOption === "previousObservations") {
+        dispatch(setupGetAllPreviousObservations({ companyId: companyId }));
       }
     }
   }, [currentSettingOption, user, company]);
@@ -247,6 +252,22 @@ const AuditSettings = () => {
                     User Details
                   </button>
                 )}
+                {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+                  <button
+                    className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
+                    id="previous-observation-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#previous-observation"
+                    type="button"
+                    role="tab"
+                    aria-controls="previous-observation"
+                    onClick={() =>
+                      setCurrentSettingOption("previousObservations")
+                    }
+                  >
+                    Previous Observations
+                  </button>
+                )}
                 <button
                   className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
                   id="nav-tfa-tab"
@@ -281,6 +302,9 @@ const AuditSettings = () => {
                 userHierarchy={userHierarchy}
                 userRole={userRole}
               />
+              {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+                <PreviousObservation />
+              )}
               {userRole === "ADMIN" && (
                 <UserManagement
                   setUserManagementDialog={setUserManagementDialog}

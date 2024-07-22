@@ -22,6 +22,7 @@ import JobPrioritization from "./pages/dashboard/planning/job-prioritization/Job
 import JobSecheduling from "./pages/dashboard/planning/job-scheduling/JobSeheduling";
 import AuditPlanSummary from "./pages/dashboard/planning/audit-plan-summary/AuditPlanSummary";
 import AuditEngagement from "./pages/dashboard/audit-engagement/AuditEngagement";
+import PreviousObservation from "./pages/dashboard/planning/business-objective/previous-observation/PreviousObservation";
 import ViewRiskAssessment from "./pages/dashboard/planning/risk-assessments/view-risk-assessment/ViewRiskAssessment";
 import PlanningReport from "./pages/dashboard/reports/planning-report/PlanningReport";
 import ViewJobschedule from "./pages/dashboard/planning/job-scheduling/view-job-schedule/ViewJobschedule";
@@ -130,6 +131,10 @@ const App = () => {
             <Route path="job-scheduling" element={<JobSecheduling />} />
             <Route path="audit-plan-summary" element={<AuditPlanSummary />} />
             <Route path="audit-engagement" element={<AuditEngagement />} />
+            <Route
+              path="previous-observation"
+              element={<PreviousObservation />}
+            />
             <Route path="planning-report" element={<PlanningReport />} />
             <Route
               path="view-risk-assesment"

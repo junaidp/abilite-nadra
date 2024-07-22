@@ -263,7 +263,7 @@ export const slice = createSlice({
       .addCase(setupUpdateHeading.fulfilled, (state) => {
         state.updateLoading = false;
         state.reportAddSuccess = true;
-        toast.success("Report Published Successfully");
+        toast.success("Heading Updated Successfully");
       })
       .addCase(setupUpdateHeading.rejected, (state, { payload }) => {
         state.updateLoading = false;
@@ -281,7 +281,7 @@ export const slice = createSlice({
       .addCase(setupDeleteHeading.fulfilled, (state) => {
         state.updateLoading = false;
         state.reportAddSuccess = true;
-        toast.success("Report Deleted Successfully");
+        toast.success("Heading Deleted Successfully");
       })
       .addCase(setupDeleteHeading.rejected, (state, { payload }) => {
         state.updateLoading = false;
