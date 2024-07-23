@@ -1,11 +1,18 @@
 import { toast } from "react-toastify";
-import { uploadFile, getAllPreviousObservations } from "./thunk";
+import {
+  uploadFile,
+  getAllPreviousObservations,
+  createNewJob,
+  getAllUsers,
+} from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
   loading: false,
+  createObservationLoding: false,
   previousObservationAddSuccess: false,
   previousObservations: [],
+  users: [],
 };
 
 export const setupUploadFile = createAsyncThunk(
@@ -20,6 +27,18 @@ export const setupGetAllPreviousObservations = createAsyncThunk(
     return getAllPreviousObservations(data, thunkAPI);
   }
 );
+export const setupCreateNewJob = createAsyncThunk(
+  "previousObservations/createNewJob",
+  async (data, thunkAPI) => {
+    return createNewJob(data, thunkAPI);
+  }
+);
+export const setupGetAllUsers = createAsyncThunk(
+  "previousObservations/getAllUsers",
+  async (data, thunkAPI) => {
+    return getAllUsers(data, thunkAPI);
+  }
+);
 
 export const slice = createSlice({
   name: "previousObservations",
@@ -27,6 +46,13 @@ export const slice = createSlice({
   reducers: {
     resetPreviousObservationsAddSuccess: (state) => {
       state.previousObservationAddSuccess = false;
+    },
+    handleCleanUp: (state) => {
+      (state.loading = false),
+        (state.createObservationLoding = false),
+        (state.previousObservationAddSuccess = false),
+        (state.previousObservations = []),
+        (state.users = []);
     },
   },
   // Upload File
@@ -68,9 +94,45 @@ export const slice = createSlice({
           toast.error("An Error has occurred");
         }
       });
+    // Create New Job
+    builder
+      .addCase(setupCreateNewJob.pending, (state) => {
+        state.createObservationLoding = true;
+      })
+      .addCase(setupCreateNewJob.fulfilled, (state) => {
+        state.createObservationLoding = false;
+        state.previousObservationAddSuccess = true;
+        toast.success("Job Created Successfully");
+      })
+      .addCase(setupCreateNewJob.rejected, (state, action) => {
+        state.createObservationLoding = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Create New Job
+    builder
+      .addCase(setupGetAllUsers.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetAllUsers.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.users = payload?.data || [];
+      })
+      .addCase(setupGetAllUsers.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
   },
 });
 
-export const { resetPreviousObservationsAddSuccess } = slice.actions;
+export const { resetPreviousObservationsAddSuccess, handleCleanUp } =
+  slice.actions;
 
 export default slice.reducer;

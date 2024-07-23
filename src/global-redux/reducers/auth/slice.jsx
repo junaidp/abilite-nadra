@@ -9,6 +9,7 @@ import {
   verifyQRCode,
   updateUser,
   logoutUser,
+  landingCall,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
@@ -110,6 +111,12 @@ export const setupLogoutUser = createAsyncThunk(
   "auth/logoutUser",
   async (data, thunkAPI) => {
     return logoutUser(data, thunkAPI);
+  }
+);
+export const setupLandingCall = createAsyncThunk(
+  "auth/landingCall",
+  async (data, thunkAPI) => {
+    return landingCall(data, thunkAPI);
   }
 );
 
@@ -358,6 +365,22 @@ export const slice = createSlice({
         // toast.success("User Logged Out Successfully");
       })
       .addCase(setupLogoutUser.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Logout User
+    builder
+      .addCase(setupLandingCall.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupLandingCall.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(setupLandingCall.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);
