@@ -1,49 +1,8 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import Chip from "@mui/material/Chip";
 import moment from "moment";
 
-
-const JobScheduleList = ({
-  currentJobSchedulingObject,
-  setCurrentJobScheduling,
-  handleSaveMainJobScheduling,
-}) => {
-  const { loading, singleJobSchedulingObject } = useSelector(
-    (state) => state?.planningJobScheduling
-  );
-  const { user } = useSelector((state) => state?.auth);
-
-  function handleSaveJobScheduling() {
-    if (!loading) {
-      handleSaveMainJobScheduling();
-    }
-  }
-
-  function handleChangeDate(event, id) {
-    const currentValue = event?.target?.value;
-    const totalWeeks = Number(
-      singleJobSchedulingObject?.timeAndDateAllocation?.estimatedWeeks
-    );
-    const newDate = currentValue ? new Date(currentValue) : null;
-    const endDate = new Date(newDate);
-    endDate.setDate(endDate.getDate() + totalWeeks * 5);
-    setCurrentJobScheduling((pre) => {
-      return {
-        ...pre,
-        jobScheduleList: pre?.jobScheduleList?.map((singleItem) =>
-          Number(singleItem?.id) === Number(id)
-            ? {
-                ...singleItem,
-                plannedJobStartDate: event?.target?.value,
-                plannedJobEndDate: endDate || singleItem?.plannedJobEndDate,
-              }
-            : singleItem
-        ),
-      };
-    });
-  }
-
+const JobScheduleList = ({ currentJobSchedulingObject }) => {
   return (
     <div className="accordion-item">
       <h2 className="accordion-header">
@@ -96,16 +55,8 @@ const JobScheduleList = ({
                                 .format("YYYY-MM-DD")
                             : null
                         }
-                        disabled={
-                          singleJobSchedulingObject?.locked === true ||
-                          (singleJobSchedulingObject?.complete === true &&
-                            singleJobSchedulingObject?.locked === false &&
-                            user[0]?.userId?.employeeid?.userHierarchy !==
-                              "IAH")
-                            ? true
-                            : false
-                        }
                         onChange={(event) => handleChangeDate(event, list?.id)}
+                        disabled
                       />
                     </div>
                     <div className="col-lg-6">
@@ -130,26 +81,6 @@ const JobScheduleList = ({
                   </div>
                 );
               })}
-            </div>
-          )}
-          {(singleJobSchedulingObject?.complete === false ||
-            (singleJobSchedulingObject?.complete === true &&
-              singleJobSchedulingObject?.locked === false &&
-              user[0]?.userId?.employeeid?.userHierarchy === "IAH")) && (
-            <div className="row mt-3">
-              <div className="col-lg-12 justify-content-end text-end">
-                <div
-                  className={`btn btn-labeled btn-primary px-3 shadow ${
-                    loading && "disabled"
-                  }`}
-                  onClick={handleSaveJobScheduling}
-                >
-                  <span className="btn-label me-2">
-                    <i className="fa fa-check-circle"></i>
-                  </span>
-                  {loading ? "Loading..." : "Save"}
-                </div>
-              </div>
             </div>
           )}
         </div>

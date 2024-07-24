@@ -6,9 +6,12 @@ import { useSelector, useDispatch } from "react-redux";
 import Pagination from "@mui/material/Pagination";
 import { setupGetAllRiskAssessments } from "../../../../global-redux/reducers/planing/risk-assessment/slice";
 import { CircularProgress } from "@mui/material";
-
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 const poppinsStyle = {
   fontFamily: '"Poppins", sans-serif',
@@ -20,12 +23,13 @@ const RiskAssessments = () => {
   const [performRiskAssessmentModal, setPerformRiskAssessmentModal] =
     React.useState(false);
   const [page, setPage] = React.useState(1);
-  const { allRiskAssessments, loading } = useSelector(
+  const [itemsPerPage, setItemsPerPage] = React.useState(10);
+  const { allRiskAssessments, loading, totalNoOfRecords } = useSelector(
     (state) => state?.planningRiskAssessment
   );
   const { company } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
-  const handleChange = (event, value) => {
+  const handleChange = (_, value) => {
     setPage(value);
   };
 
@@ -39,10 +43,22 @@ const RiskAssessments = () => {
         (all) => all?.companyName === company
       )?.id;
       if (companyId) {
-        dispatch(setupGetAllRiskAssessments(companyId));
+        dispatch(setupGetAllRiskAssessments({ companyId, page, itemsPerPage }));
       }
     }
-  }, [user, company]);
+  }, [dispatch, page]);
+
+  React.useEffect(() => {
+    const companyId = user[0]?.company?.find(
+      (item) => item?.companyName === company
+    )?.id;
+    if (companyId) {
+      setPage(1);
+      dispatch(
+        setupGetAllRiskAssessments({ companyId, page: 1, itemsPerPage })
+      );
+    }
+  }, [itemsPerPage]);
 
   return (
     <div>
@@ -152,11 +168,37 @@ const RiskAssessments = () => {
               </tbody>
             </table>
           </div>
-          <Pagination
-            count={Math.ceil(allRiskAssessments?.length / 10)}
-            page={page}
-            onChange={handleChange}
-          />
+          <div className="row">
+            <div className="col-lg-6 mb-4">
+              <Pagination
+                count={Math.ceil(totalNoOfRecords / itemsPerPage)}
+                page={page}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="col-lg-6 mb-4 d-flex justify-content-end">
+              <div>
+                <FormControl sx={{ minWidth: 200 }} size="small">
+                  <InputLabel id="demo-select-small-label">
+                    Items Per Page
+                  </InputLabel>
+                  <Select
+                    labelId="demo-select-small-label"
+                    id="demo-select-small"
+                    label="Age"
+                    value={itemsPerPage}
+                    onChange={(event) =>
+                      setItemsPerPage(Number(event.target.value))
+                    }
+                  >
+                    <MenuItem value={10}>10</MenuItem>
+                    <MenuItem value={20}>20</MenuItem>
+                    <MenuItem value={30}>30</MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

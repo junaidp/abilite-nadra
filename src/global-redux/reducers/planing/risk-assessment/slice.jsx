@@ -14,6 +14,7 @@ const initialState = {
   allRiskAssessments: [],
   riskAssessmentSuccess: false,
   performRiskAssessmentObject: {},
+  totalNoOfRecords: 0,
 };
 
 export const setupGetAllRiskAssessments = createAsyncThunk(
@@ -59,10 +60,11 @@ export const slice = createSlice({
       state.riskAssessmentSuccess = false;
     },
     handleCleanUp: (state) => {
-      (state.loading = false),
-        (state.allRiskAssessments = []),
-        (state.riskAssessmentSuccess = false),
-        (state.performRiskAssessmentObject = {});
+      state.loading = false;
+      state.allRiskAssessments = [];
+      state.riskAssessmentSuccess = false;
+      state.performRiskAssessmentObject = {};
+      state.totalNoOfRecords = 0;
     },
   },
   extraReducers: (builder) => {
@@ -73,6 +75,7 @@ export const slice = createSlice({
       })
       .addCase(setupGetAllRiskAssessments.fulfilled, (state, { payload }) => {
         state.loading = false;
+        state.totalNoOfRecords = payload?.message;
         const sortedArray = payload?.data?.sort(
           (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
         );

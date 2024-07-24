@@ -6,7 +6,6 @@ import {
   setupGetNavigation,
   setupGetData,
 } from "../../../global-redux/reducers/common/slice";
-import { setupLandingCall } from "../../../global-redux/reducers/auth/slice";
 import { CircularProgress } from "@mui/material";
 import InfoCard from "./components/cards/InfoCard";
 import { useNavigate } from "react-router-dom";
@@ -30,7 +29,6 @@ const DashboardHome = () => {
         (item) => item?.companyName === company
       )?.id;
       if (companyId) {
-        dispatch(setupLandingCall());
         dispatch(resetAuthValues());
         dispatch(setupGetNavigation({ companyId: companyId, year: year }));
         dispatch(setupGetData({ companyId: companyId, year: year }));

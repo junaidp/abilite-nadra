@@ -5,7 +5,7 @@ export const getAllRiskAssessments = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.get(
-      `${baseUrl}/auditPlanningAndScheduling/riskAssessment/getAllByCompanyId?companyId=${data}`,
+      `${baseUrl}/auditPlanningAndScheduling/riskAssessment/getAllByCompanyId?companyId=${data?.companyId}&pageNo=${data?.page}&noOfRecords=${data?.itemsPerPage}`,
       {
         headers: {
           "Content-Type": "application/json",

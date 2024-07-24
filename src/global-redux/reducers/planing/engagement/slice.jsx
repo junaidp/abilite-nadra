@@ -25,6 +25,7 @@ const initialState = {
   engagementAddSuccess: false,
   planingEngagementSingleObject: [],
   selectedCheckListItems: [],
+  totalNoOfRecords: 0,
 };
 
 export const setupGetAllEngagements = createAsyncThunk(
@@ -141,11 +142,12 @@ export const slice = createSlice({
       state.engagementAddSuccess = false;
     },
     handleCleanUp: (state) => {
-      (state.loading = false),
-        (state.allEngagements = []),
-        (state.engagementAddSuccess = false),
-        (state.planingEngagementSingleObject = []),
-        (state.selectedCheckListItems = []);
+      state.loading = false;
+      state.allEngagements = [];
+      state.engagementAddSuccess = false;
+      state.planingEngagementSingleObject = [];
+      state.selectedCheckListItems = [];
+      state.totalNoOfRecords = 0;
     },
   },
   extraReducers: (builder) => {
@@ -155,6 +157,7 @@ export const slice = createSlice({
         state.loading = true;
       })
       .addCase(setupGetAllEngagements.fulfilled, (state, { payload }) => {
+        state.totalNoOfRecords = payload?.message;
         const sortedArray = payload?.data?.sort(
           (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
         );

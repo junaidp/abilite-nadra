@@ -13,6 +13,10 @@ import TableRow from "./components/table-row";
 import DeleteEngagementDialog from "./components/DeleteDialog";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 const poppinsStyle = {
   fontFamily: '"Poppins", sans-serif',
@@ -21,18 +25,18 @@ const poppinsStyle = {
 const BusinessObjective = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { allEngagements, loading, engagementAddSuccess } = useSelector(
-    (state) => state.planningEngagement
-  );
+  const { allEngagements, loading, engagementAddSuccess, totalNoOfRecords } =
+    useSelector((state) => state.planningEngagement);
   const { company } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
   const [page, setPage] = React.useState(1);
+  const [itemsPerPage, setItemsPerPage] = React.useState(10);
   const [businessObjectiveDialog, setBusinessObjectiveDialog] =
     React.useState(false);
   const [deleteEngagementDialog, setShowDeleteEngagementDialog] =
     React.useState(false);
   const [currentEngagementId, setCurrentEngagementId] = React.useState("");
-  const handleChange = (event, value) => {
+  const handleChange = (_, value) => {
     setPage(value);
   };
   function handleClickEngagement(id, name) {
@@ -48,26 +52,39 @@ const BusinessObjective = () => {
   }
 
   React.useEffect(() => {
-    const companyId = user[0]?.company?.find(
-      (item) => item?.companyName === company
-    )?.id;
-    if (companyId) {
-      dispatch(setupGetAllEngagements(companyId));
-    }
-  }, [user, company]);
-
-  React.useEffect(() => {
     if (engagementAddSuccess) {
       const companyId = user[0]?.company?.find(
         (item) => item?.companyName === company
       )?.id;
       if (companyId) {
-        dispatch(setupGetAllEngagements(companyId));
+        setPage(1);
+        setItemsPerPage(10);
+        dispatch(
+          setupGetAllEngagements({ companyId, page: 1, itemsPerPage: 10 })
+        );
         dispatch(resetAddEngagementSuccess());
-        setPage(1)
       }
     }
   }, [engagementAddSuccess]);
+
+  React.useEffect(() => {
+    const companyId = user[0]?.company?.find(
+      (item) => item?.companyName === company
+    )?.id;
+    if (companyId) {
+      dispatch(setupGetAllEngagements({ companyId, page, itemsPerPage }));
+    }
+  }, [dispatch, page]);
+
+  React.useEffect(() => {
+    const companyId = user[0]?.company?.find(
+      (item) => item?.companyName === company
+    )?.id;
+    if (companyId) {
+      setPage(1);
+      dispatch(setupGetAllEngagements({ companyId, page: 1, itemsPerPage }));
+    }
+  }, [itemsPerPage]);
 
   return (
     <div>
@@ -165,32 +182,56 @@ const BusinessObjective = () => {
                           <td className="w-300">No Engagement To Show</td>
                         </tr>
                       ) : (
-                        allEngagements
-                          ?.slice((page - 1) * 10, page * 10)
-                          .map((item, index) => {
-                            return (
-                              <TableRow
-                                key={index}
-                                item={item}
-                                handleClickEngagement={handleClickEngagement}
-                                setShowDeleteEngagementDialog={
-                                  setShowDeleteEngagementDialog
-                                }
-                                setCurrentEngagementId={setCurrentEngagementId}
-                              />
-                            );
-                          })
+                        allEngagements.map((item, index) => {
+                          return (
+                            <TableRow
+                              key={index}
+                              item={item}
+                              handleClickEngagement={handleClickEngagement}
+                              setShowDeleteEngagementDialog={
+                                setShowDeleteEngagementDialog
+                              }
+                              setCurrentEngagementId={setCurrentEngagementId}
+                            />
+                          );
+                        })
                       )}
                     </tbody>
                   </table>
                 </div>
               </div>
             </div>
-            <Pagination
-              count={Math.ceil(allEngagements?.length / 10)}
-              page={page}
-              onChange={handleChange}
-            />
+            <div className="row">
+              <div className="col-lg-6 mb-4">
+                <Pagination
+                  count={Math.ceil(totalNoOfRecords / itemsPerPage)}
+                  page={page}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="col-lg-6 mb-4 d-flex justify-content-end">
+                <div>
+                  <FormControl sx={{ minWidth: 200 }} size="small">
+                    <InputLabel id="demo-select-small-label">
+                      Items Per Page
+                    </InputLabel>
+                    <Select
+                      labelId="demo-select-small-label"
+                      id="demo-select-small"
+                      label="Age"
+                      value={itemsPerPage}
+                      onChange={(event) =>
+                        setItemsPerPage(Number(event.target.value))
+                      }
+                    >
+                      <MenuItem value={10}>10</MenuItem>
+                      <MenuItem value={20}>20</MenuItem>
+                      <MenuItem value={30}>30</MenuItem>
+                    </Select>
+                  </FormControl>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
       </div>

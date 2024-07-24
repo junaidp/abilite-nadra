@@ -3,12 +3,13 @@ import "./index.css";
 import logo from "../../../assets/light-logo-.png";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { setupLandingCall } from "../../../global-redux/reducers/auth/slice";
 import { toast } from "react-toastify";
 import {
   setupLoginUser,
   changeAuthState,
   changeAuthUser,
-  setupLogoutUser
+  setupLogoutUser,
 } from "../../../global-redux/reducers/auth/slice";
 import QRCodeScannerDialog from "../modals/QRCodeScannerDialog";
 import { jwtDecode } from "jwt-decode";
@@ -68,6 +69,10 @@ const Login = () => {
       }
     }
   }, [user]);
+
+  React.useEffect(() => {
+    dispatch(setupLandingCall());
+  }, [dispatch]);
 
   return (
     <section className="fxt-template-animation fxt-template-layout31">
