@@ -11,6 +11,7 @@ const initialState = {
   initialLoading: false,
   allJobPrioritization: [],
   jobPrioritizationAddSuccess: false,
+  totalNoOfRecords: 0,
 };
 
 export const setupGetAllJobPrioritization = createAsyncThunk(
@@ -40,6 +41,7 @@ export const slice = createSlice({
   reducers: {
     resetJobPrioritizationSuccess: (state) => {
       state.jobPrioritizationAddSuccess = false;
+      state.totalNoOfRecords = 0;
     },
   },
   extraReducers: (builder) => {
@@ -49,6 +51,7 @@ export const slice = createSlice({
         state.loading = true;
       })
       .addCase(setupGetAllJobPrioritization.fulfilled, (state, { payload }) => {
+        state.totalNoOfRecords = payload?.message;
         state.loading = false;
         const sortedArray = payload?.data?.sort(
           (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
@@ -71,6 +74,7 @@ export const slice = createSlice({
       .addCase(
         setupGetInitialAllJobPrioritization.fulfilled,
         (state, { payload }) => {
+          state.totalNoOfRecords = payload?.message;
           state.initialLoading = false;
           const sortedArray = payload?.data?.sort(
             (a, b) => new Date(b.createdDate) - new Date(a.createdDate)

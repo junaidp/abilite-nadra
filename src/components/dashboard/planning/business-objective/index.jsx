@@ -51,6 +51,23 @@ const BusinessObjective = () => {
     }
   }
 
+  function handleChangeItemsPerPage(event) {
+    const companyId = user[0]?.company?.find(
+      (item) => item?.companyName === company
+    )?.id;
+    if (companyId) {
+      setPage(1);
+      setItemsPerPage(Number(event.target.value));
+      dispatch(
+        setupGetAllEngagements({
+          companyId,
+          page: 1,
+          itemsPerPage: Number(event.target.value),
+        })
+      );
+    }
+  }
+
   React.useEffect(() => {
     if (engagementAddSuccess) {
       const companyId = user[0]?.company?.find(
@@ -75,16 +92,6 @@ const BusinessObjective = () => {
       dispatch(setupGetAllEngagements({ companyId, page, itemsPerPage }));
     }
   }, [dispatch, page]);
-
-  React.useEffect(() => {
-    const companyId = user[0]?.company?.find(
-      (item) => item?.companyName === company
-    )?.id;
-    if (companyId) {
-      setPage(1);
-      dispatch(setupGetAllEngagements({ companyId, page: 1, itemsPerPage }));
-    }
-  }, [itemsPerPage]);
 
   return (
     <div>
@@ -209,28 +216,28 @@ const BusinessObjective = () => {
                   onChange={handleChange}
                 />
               </div>
-              <div className="col-lg-6 mb-4 d-flex justify-content-end">
-                <div>
-                  <FormControl sx={{ minWidth: 200 }} size="small">
-                    <InputLabel id="demo-select-small-label">
-                      Items Per Page
-                    </InputLabel>
-                    <Select
-                      labelId="demo-select-small-label"
-                      id="demo-select-small"
-                      label="Age"
-                      value={itemsPerPage}
-                      onChange={(event) =>
-                        setItemsPerPage(Number(event.target.value))
-                      }
-                    >
-                      <MenuItem value={10}>10</MenuItem>
-                      <MenuItem value={20}>20</MenuItem>
-                      <MenuItem value={30}>30</MenuItem>
-                    </Select>
-                  </FormControl>
+              {allEngagements?.length > 0 && (
+                <div className="col-lg-6 mb-4 d-flex justify-content-end">
+                  <div>
+                    <FormControl sx={{ minWidth: 200 }} size="small">
+                      <InputLabel id="demo-select-small-label">
+                        Items Per Page
+                      </InputLabel>
+                      <Select
+                        labelId="demo-select-small-label"
+                        id="demo-select-small"
+                        label="Age"
+                        value={itemsPerPage}
+                        onChange={(event) => handleChangeItemsPerPage(event)}
+                      >
+                        <MenuItem value={10}>10</MenuItem>
+                        <MenuItem value={20}>20</MenuItem>
+                        <MenuItem value={30}>30</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </section>

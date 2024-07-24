@@ -9,6 +9,10 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 const JobPrioritization = () => {
   const dispatch = useDispatch();
@@ -17,13 +21,16 @@ const JobPrioritization = () => {
     allJobPrioritization,
     jobPrioritizationAddSuccess,
     initialLoading,
+    totalNoOfRecords,
   } = useSelector((state) => state?.planningJobPrioritization);
   const { user } = useSelector((state) => state?.auth);
   const { company } = useSelector((state) => state?.common);
   const [currentId, setCurrentId] = React.useState("");
   const [data, setData] = React.useState([]);
   const [page, setPage] = React.useState(1);
-  const handleChangePage = (event, value) => {
+  const [itemsPerPage, setItemsPerPage] = React.useState(10);
+
+  const handleChange = (_, value) => {
     setPage(value);
   };
 
@@ -88,16 +95,34 @@ const JobPrioritization = () => {
     );
   }
 
+  function handleChangeItemsPerPage(event) {
+    const companyId = user[0]?.company?.find(
+      (item) => item?.companyName === company
+    )?.id;
+    if (companyId) {
+      setPage(1);
+      setItemsPerPage(Number(event.target.value));
+      dispatch(
+        setupGetInitialAllJobPrioritization({
+          companyId,
+          page: 1,
+          itemsPerPage: Number(event.target.value),
+        })
+      );
+    }
+  }
+
   React.useEffect(() => {
     if (jobPrioritizationAddSuccess) {
       const companyId = user[0]?.company?.find(
         (item) => item?.companyName === company
       )?.id;
       if (companyId) {
-        dispatch(setupGetAllJobPrioritization(companyId));
+        dispatch(
+          setupGetAllJobPrioritization({ companyId, page, itemsPerPage })
+        );
+        dispatch(resetJobPrioritizationSuccess());
       }
-      dispatch(resetJobPrioritizationSuccess());
-      setPage(1)
     }
   }, [jobPrioritizationAddSuccess]);
 
@@ -117,9 +142,12 @@ const JobPrioritization = () => {
       (item) => item?.companyName === company
     )?.id;
     if (companyId) {
-      dispatch(setupGetInitialAllJobPrioritization(companyId));
+      dispatch(
+        setupGetInitialAllJobPrioritization({ companyId, page, itemsPerPage })
+      );
     }
-  }, [user, company]);
+  }, [dispatch, page]);
+
   return (
     <div>
       {initialLoading ? (
@@ -130,32 +158,6 @@ const JobPrioritization = () => {
         <>
           <header className="section-header my-3 align-items-center justify-content-between text-start d-flex ">
             <div className="mb-0 heading">Job Prioritization</div>
-            <div className="d-flex">
-              <div className="d-flex me-3 align-items-center">
-                <label className="me-2 label-text fw-bold">View:</label>
-                <select
-                  className="form-select"
-                  aria-label="Default select example"
-                >
-                  <option>Open this select menu</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
-                </select>
-              </div>
-              <div className="d-flex align-items-center">
-                <label className="me-2 label-text fw-bold">Year:</label>
-                <select
-                  className="form-select"
-                  aria-label="Default select example"
-                >
-                  <option>Open this select menu</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
-                </select>
-              </div>
-            </div>
           </header>
 
           <div className="table-responsive overflow-x-hidden">
@@ -179,148 +181,179 @@ const JobPrioritization = () => {
                     <td className="w-300">No Job Prioritization to show</td>
                   </tr>
                 ) : (
-                  data
-                    ?.slice((page - 1) * 10, page * 10)
-                    ?.map((item, index) => {
-                      return (
-                        <tr key={index}>
-                          <td>{item?.id}</td>
-                          <td className="w-200">{item?.auditableUnitTitle}</td>
-                          <td className="w-200">
-                            {item?.businessObjectiveTitle}
-                          </td>
-                          <td className="moderate">{item?.riskRating}</td>
+                  data?.map((item, index) => {
+                    return (
+                      <tr key={index}>
+                        <td>{item?.id}</td>
+                        <td className="w-200">{item?.auditableUnitTitle}</td>
+                        <td className="w-200">
+                          {item?.businessObjectiveTitle}
+                        </td>
+                        <td className="moderate">{item?.riskRating}</td>
+                        <td>
+                          <div className="form-check">
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              id="flexCheckDefault"
+                              checked={item?.selectedForAudit}
+                              name="selectedForAudit"
+                              onChange={(event) =>
+                                handleChangeCheckValue(event, item?.id)
+                              }
+                              disabled={item?.editable === true ? false : true}
+                            />
+                            <label
+                              className="form-check-label"
+                              htmlFor="flexCheckDefault"
+                            ></label>
+                          </div>
+                        </td>
+                        <td>
+                          <textarea
+                            className="form-control"
+                            placeholder="Enter Reason"
+                            id="exampleFormControlTextarea1"
+                            rows="3"
+                            value={item?.comments || ""}
+                            onChange={(event) =>
+                              handleChangeValue(event, item?.id)
+                            }
+                            disabled={item?.editable === true ? false : true}
+                            name="comments"
+                            maxLength="500"
+                          ></textarea>
+                          <p className="word-limit-info label-text mb-2">
+                            Maximum 500 characters
+                          </p>
+                        </td>
+                        <td className="width-100">
+                          <select
+                            className="form-select"
+                            aria-label="Default select example"
+                            value={item?.year || new Date()}
+                            onChange={(event) =>
+                              handleChangeYearValue(event, item?.id)
+                            }
+                            disabled={item?.editable === true ? false : true}
+                            name="year"
+                          >
+                            <option value="">Select Year</option>
+                            <option value={2024}>2024</option>
+                            <option value={2025}>2025</option>
+                            <option value={2026}>2026</option>
+                            <option value={2027}>2027</option>
+                            <option value={2028}>2028</option>
+                          </select>
+                        </td>
+                        {(allJobPrioritization[index]?.completed === false ||
+                          (allJobPrioritization[index]?.completed === true &&
+                            allJobPrioritization[index]?.locked === false &&
+                            user[0]?.userId?.employeeid?.userHierarchy ===
+                              "IAH")) && (
                           <td>
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                id="flexCheckDefault"
-                                checked={item?.selectedForAudit}
-                                name="selectedForAudit"
-                                onChange={(event) =>
-                                  handleChangeCheckValue(event, item?.id)
-                                }
-                                disabled={
-                                  item?.editable === true ? false : true
-                                }
-                              />
-                              <label
-                                className="form-check-label"
-                                htmlFor="flexCheckDefault"
-                              ></label>
+                            {item?.editable === false && (
+                              <i
+                                className="fa fa-edit  px-3 f-18 cursor-pointer"
+                                onClick={() => handleEditable(item?.id)}
+                              ></i>
+                            )}
+                            {item?.editable === true && (
+                              <div
+                                className={`btn btn-labeled btn-primary px-3 shadow ${
+                                  loading &&
+                                  currentId === item?.id &&
+                                  "disabled"
+                                }`}
+                                onClick={() => handleUpdate(item?.id)}
+                              >
+                                {loading && currentId === item?.id
+                                  ? "Loading..."
+                                  : "Save"}
+                              </div>
+                            )}
+
+                            <div>
+                              {allJobPrioritization[index]?.completed ===
+                                false &&
+                                allJobPrioritization[index]?.comments &&
+                                allJobPrioritization[index]?.comments !== "" &&
+                                allJobPrioritization[index]?.year &&
+                                allJobPrioritization[index]?.year !== 0 &&
+                                allJobPrioritization[index]?.year !== "" && (
+                                  <div
+                                    className={`btn btn-labeled btn-primary px-3 mt-2 shadow ${
+                                      loading &&
+                                      currentId === item?.id &&
+                                      "disabled"
+                                    }`}
+                                    onClick={() => handleSubmit(item?.id)}
+                                  >
+                                    {loading && currentId === item?.id
+                                      ? "Loading..."
+                                      : "Submit"}
+                                  </div>
+                                )}
                             </div>
                           </td>
+                        )}
+                        {allJobPrioritization[index]?.locked === true && (
                           <td>
-                            <textarea
-                              className="form-control"
-                              placeholder="Enter Reason"
-                              id="exampleFormControlTextarea1"
-                              rows="3"
-                              value={item?.comments || ""}
-                              onChange={(event) =>
-                                handleChangeValue(event, item?.id)
-                              }
-                              disabled={item?.editable === true ? false : true}
-                              name="comments"
-                              maxLength="500"
-                            ></textarea>
-                            <p className="word-limit-info label-text mb-2">
-                              Maximum 500 characters
-                            </p>
-                          </td>
-                          <td className="width-100">
-                            <select
-                              className="form-select"
-                              aria-label="Default select example"
-                              value={item?.year || new Date()}
-                              onChange={(event) =>
-                                handleChangeYearValue(event, item?.id)
-                              }
-                              disabled={item?.editable === true ? false : true}
-                              name="year"
+                            <button
+                              className={`btn btn-labeled btn-primary px-3  shadow disabled`}
                             >
-                              <option value="">Select Year</option>
-                              <option value={2024}>2024</option>
-                              <option value={2025}>2025</option>
-                              <option value={2026}>2026</option>
-                              <option value={2027}>2027</option>
-                              <option value={2028}>2028</option>
-                            </select>
+                              Approved
+                            </button>
                           </td>
-                          {(allJobPrioritization[index]?.completed === false ||
-                            (allJobPrioritization[index]?.completed === true &&
-                              allJobPrioritization[index]?.locked === false &&
-                              user[0]?.userId?.employeeid?.userHierarchy ===
-                                "IAH")) && (
-                            <td>
-                              {item?.editable === false && (
-                                <i
-                                  className="fa fa-edit  px-3 f-18 cursor-pointer"
-                                  onClick={() => handleEditable(item?.id)}
-                                ></i>
-                              )}
-                              {item?.editable === true && (
-                                <div
-                                  className={`btn btn-labeled btn-primary px-3 shadow ${
-                                    loading &&
-                                    currentId === item?.id &&
-                                    "disabled"
-                                  }`}
-                                  onClick={() => handleUpdate(item?.id)}
-                                >
-                                  {loading && currentId === item?.id
-                                    ? "Loading..."
-                                    : "Save"}
-                                </div>
-                              )}
-
-                              <div>
-                                {allJobPrioritization[index]?.completed ===
-                                  false &&
-                                  allJobPrioritization[index]?.comments &&
-                                  allJobPrioritization[index]?.comments !==
-                                    "" &&
-                                  allJobPrioritization[index]?.year &&
-                                  allJobPrioritization[index]?.year !== 0 &&
-                                  allJobPrioritization[index]?.year !== "" && (
-                                    <div
-                                      className={`btn btn-labeled btn-primary px-3 mt-2 shadow ${
-                                        loading &&
-                                        currentId === item?.id &&
-                                        "disabled"
-                                      }`}
-                                      onClick={() => handleSubmit(item?.id)}
-                                    >
-                                      {loading && currentId === item?.id
-                                        ? "Loading..."
-                                        : "Submit"}
-                                    </div>
-                                  )}
-                              </div>
-                            </td>
-                          )}
-                          {allJobPrioritization[index]?.locked === true && (
+                        )}
+                        {allJobPrioritization[index]?.locked === false &&
+                          allJobPrioritization[index]?.completed === true && (
                             <td>
                               <button
                                 className={`btn btn-labeled btn-primary px-3  shadow disabled`}
                               >
-                                Approved
+                                Submitted
                               </button>
                             </td>
                           )}
-                        </tr>
-                      );
-                    })
+                      </tr>
+                    );
+                  })
                 )}
               </tbody>
             </table>
 
-            <Pagination
-              count={Math.ceil(allJobPrioritization?.length / 10)}
-              page={page}
-              onChange={handleChangePage}
-            />
+            <div className="row">
+              <div className="col-lg-6 mb-4">
+                <Pagination
+                  count={Math.ceil(totalNoOfRecords / itemsPerPage)}
+                  page={page}
+                  onChange={handleChange}
+                />
+              </div>
+              {allJobPrioritization?.length > 0 && (
+                <div className="col-lg-6 mb-4 d-flex justify-content-end">
+                  <div>
+                    <FormControl sx={{ minWidth: 200 }} size="small">
+                      <InputLabel id="demo-select-small-label">
+                        Items Per Page
+                      </InputLabel>
+                      <Select
+                        labelId="demo-select-small-label"
+                        id="demo-select-small"
+                        label="Age"
+                        value={itemsPerPage}
+                        onChange={(event) => handleChangeItemsPerPage(event)}
+                      >
+                        <MenuItem value={10}>10</MenuItem>
+                        <MenuItem value={20}>20</MenuItem>
+                        <MenuItem value={30}>30</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </>
       )}

@@ -10,17 +10,25 @@ import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import AuditableUnitRow from "./components/auditable-unit-row";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 const AuditableUnits = () => {
   const dispatch = useDispatch();
-  const { loading, allAuditableUnits, auditableUnitAddSuccess } = useSelector(
-    (state) => state?.planningAuditableUnit
-  );
+  const {
+    loading,
+    allAuditableUnits,
+    auditableUnitAddSuccess,
+    totalNoOfRecords,
+  } = useSelector((state) => state?.planningAuditableUnit);
   const { user } = useSelector((state) => state?.auth);
   const { company } = useSelector((state) => state?.common);
   const [auditableUnitRatingDialog, setAuditableUnitRatingDialog] =
     React.useState(false);
   const [page, setPage] = React.useState(1);
+  const [itemsPerPage, setItemsPerPage] = React.useState(10);
   const [selectedAuditableUnitId, setSelectedAuditableUnitId] =
     React.useState("");
   const [selectedAuditableSubUnitId, setSelectedAuditableSubUnitId] =
@@ -28,9 +36,26 @@ const AuditableUnits = () => {
   const [showEditAuditableUnit, setShowEditAuditableUnit] =
     React.useState(false);
 
-  const handleChange = (event, value) => {
+  const handleChange = (_, value) => {
     setPage(value);
   };
+
+  function handleChangeItemsPerPage(event) {
+    const companyId = user[0]?.company?.find(
+      (item) => item?.companyName === company
+    )?.id;
+    if (companyId) {
+      setPage(1);
+      setItemsPerPage(Number(event.target.value));
+      dispatch(
+        setupGetAllAuditableUnits({
+          companyId,
+          page: 1,
+          itemsPerPage: Number(event.target.value),
+        })
+      );
+    }
+  }
 
   React.useEffect(() => {
     if (auditableUnitAddSuccess) {
@@ -38,10 +63,9 @@ const AuditableUnits = () => {
         (item) => item?.companyName === company
       )?.id;
       if (companyId) {
-        dispatch(setupGetAllAuditableUnits(companyId));
+        dispatch(setupGetAllAuditableUnits({ companyId, page, itemsPerPage }));
       }
       dispatch(resetAuditableUnitSuccess());
-      setPage(1)
     }
   }, [auditableUnitAddSuccess]);
 
@@ -50,9 +74,9 @@ const AuditableUnits = () => {
       (item) => item?.companyName === company
     )?.id;
     if (companyId) {
-      dispatch(setupGetAllAuditableUnits(companyId));
+      dispatch(setupGetAllAuditableUnits({ companyId, page, itemsPerPage }));
     }
-  }, [user, company]);
+  }, [dispatch, page]);
 
   return (
     <div>
@@ -89,34 +113,58 @@ const AuditableUnits = () => {
               ) : allAuditableUnits?.length === 0 ? (
                 <p>No data to show!</p>
               ) : (
-                allAuditableUnits
-                  ?.slice((page - 1) * 10, page * 10)
-                  ?.map((item, index) => {
-                    return (
-                      <AuditableUnitRow
-                        setSelectedAuditableUnitId={setSelectedAuditableUnitId}
-                        key={index}
-                        item={item}
-                        setAuditableUnitRatingDialog={
-                          setAuditableUnitRatingDialog
-                        }
-                        setSelectedAuditableSubUnitId={
-                          setSelectedAuditableSubUnitId
-                        }
-                        setShowEditAuditableUnit={setShowEditAuditableUnit}
-                        index={index}
-                        loading={loading}
-                      />
-                    );
-                  })
+                allAuditableUnits?.map((item, index) => {
+                  return (
+                    <AuditableUnitRow
+                      setSelectedAuditableUnitId={setSelectedAuditableUnitId}
+                      key={index}
+                      item={item}
+                      setAuditableUnitRatingDialog={
+                        setAuditableUnitRatingDialog
+                      }
+                      setSelectedAuditableSubUnitId={
+                        setSelectedAuditableSubUnitId
+                      }
+                      setShowEditAuditableUnit={setShowEditAuditableUnit}
+                      index={index}
+                      loading={loading}
+                    />
+                  );
+                })
               )}
             </div>
           </div>
-          <Pagination
-            count={Math.ceil(allAuditableUnits?.length / 10)}
-            page={page}
-            onChange={handleChange}
-          />
+          <div className="row p-0 m-0">
+            <div className="col-lg-6 mb-4">
+              <Pagination
+                count={Math.ceil(totalNoOfRecords / itemsPerPage)}
+                page={page}
+                onChange={handleChange}
+              />
+            </div>
+            {allAuditableUnits?.length > 0 && (
+              <div className="col-lg-6 mb-4 d-flex justify-content-end">
+                <div>
+                  <FormControl sx={{ minWidth: 200 }} size="small">
+                    <InputLabel id="demo-select-small-label">
+                      Items Per Page
+                    </InputLabel>
+                    <Select
+                      labelId="demo-select-small-label"
+                      id="demo-select-small"
+                      label="Age"
+                      value={itemsPerPage}
+                      onChange={(event) => handleChangeItemsPerPage(event)}
+                    >
+                      <MenuItem value={10}>10</MenuItem>
+                      <MenuItem value={20}>20</MenuItem>
+                      <MenuItem value={30}>30</MenuItem>
+                    </Select>
+                  </FormControl>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </>
     </div>

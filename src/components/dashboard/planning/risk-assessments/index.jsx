@@ -37,6 +37,23 @@ const RiskAssessments = () => {
     navigate(`/audit/risk-factor-approach?riskAssessmentId=${item?.id}`);
   }
 
+  function handleChangeItemsPerPage(event) {
+    const companyId = user[0]?.company?.find(
+      (item) => item?.companyName === company
+    )?.id;
+    if (companyId) {
+      setPage(1);
+      setItemsPerPage(Number(event.target.value));
+      dispatch(
+        setupGetAllRiskAssessments({
+          companyId,
+          page: 1,
+          itemsPerPage: Number(event.target.value),
+        })
+      );
+    }
+  }
+
   React.useEffect(() => {
     if (user[0]?.token) {
       let companyId = user[0]?.company.find(
@@ -47,18 +64,6 @@ const RiskAssessments = () => {
       }
     }
   }, [dispatch, page]);
-
-  React.useEffect(() => {
-    const companyId = user[0]?.company?.find(
-      (item) => item?.companyName === company
-    )?.id;
-    if (companyId) {
-      setPage(1);
-      dispatch(
-        setupGetAllRiskAssessments({ companyId, page: 1, itemsPerPage })
-      );
-    }
-  }, [itemsPerPage]);
 
   return (
     <div>
@@ -130,40 +135,37 @@ const RiskAssessments = () => {
                     <td className="w-300">No Risk Assessment to show</td>
                   </tr>
                 ) : (
-                  allRiskAssessments
-                    ?.slice((page - 1) * 10, page * 10)
-                    ?.map((item, index) => {
-                      return (
-                        <tr className="h-40" key={index}>
-                          <td>{item?.id}</td>
-                          <td>
-                            {item?.businessObjectiveMapProcess?.description ||
-                              ""}
-                          </td>
-                          <td>{item?.riskApproach}</td>
-                          <td>{item?.riskRating}</td>
-                          <td className="text-center w-200">
-                            <div
-                              className={`btn btn-outline-light text-primary shadow h-32 w-180 ${
-                                loading && "disabled"
-                              }`}
-                              onClick={() => handleUpdateRiskAssessment(item)}
-                            >
-                              <span className="btn-label me-2">
-                                <i className="fa fa-play"></i>
-                              </span>
-                              {item?.locked === true ||
-                              (item?.complete === true &&
-                                item?.locked === false &&
-                                user[0]?.userId?.employeeid?.userHierarchy !==
-                                  "IAH")
-                                ? "View Risk"
-                                : "Perform Risk"}
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    })
+                  allRiskAssessments?.map((item, index) => {
+                    return (
+                      <tr className="h-40" key={index}>
+                        <td>{item?.id}</td>
+                        <td>
+                          {item?.businessObjectiveMapProcess?.description || ""}
+                        </td>
+                        <td>{item?.riskApproach}</td>
+                        <td>{item?.riskRating}</td>
+                        <td className="text-center w-200">
+                          <div
+                            className={`btn btn-outline-light text-primary shadow h-32 w-180 ${
+                              loading && "disabled"
+                            }`}
+                            onClick={() => handleUpdateRiskAssessment(item)}
+                          >
+                            <span className="btn-label me-2">
+                              <i className="fa fa-play"></i>
+                            </span>
+                            {item?.locked === true ||
+                            (item?.complete === true &&
+                              item?.locked === false &&
+                              user[0]?.userId?.employeeid?.userHierarchy !==
+                                "IAH")
+                              ? "View Risk"
+                              : "Perform Risk"}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
                 )}
               </tbody>
             </table>
@@ -176,28 +178,28 @@ const RiskAssessments = () => {
                 onChange={handleChange}
               />
             </div>
-            <div className="col-lg-6 mb-4 d-flex justify-content-end">
-              <div>
-                <FormControl sx={{ minWidth: 200 }} size="small">
-                  <InputLabel id="demo-select-small-label">
-                    Items Per Page
-                  </InputLabel>
-                  <Select
-                    labelId="demo-select-small-label"
-                    id="demo-select-small"
-                    label="Age"
-                    value={itemsPerPage}
-                    onChange={(event) =>
-                      setItemsPerPage(Number(event.target.value))
-                    }
-                  >
-                    <MenuItem value={10}>10</MenuItem>
-                    <MenuItem value={20}>20</MenuItem>
-                    <MenuItem value={30}>30</MenuItem>
-                  </Select>
-                </FormControl>
+            {allRiskAssessments?.length > 0 && (
+              <div className="col-lg-6 mb-4 d-flex justify-content-end">
+                <div>
+                  <FormControl sx={{ minWidth: 200 }} size="small">
+                    <InputLabel id="demo-select-small-label">
+                      Items Per Page
+                    </InputLabel>
+                    <Select
+                      labelId="demo-select-small-label"
+                      id="demo-select-small"
+                      label="Age"
+                      value={itemsPerPage}
+                      onChange={(event) => handleChangeItemsPerPage(event)}
+                    >
+                      <MenuItem value={10}>10</MenuItem>
+                      <MenuItem value={20}>20</MenuItem>
+                      <MenuItem value={30}>30</MenuItem>
+                    </Select>
+                  </FormControl>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

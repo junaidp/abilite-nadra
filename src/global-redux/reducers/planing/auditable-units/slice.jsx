@@ -10,6 +10,7 @@ const initialState = {
   loading: false,
   allAuditableUnits: [],
   auditableUnitAddSuccess: false,
+  totalNoOfRecords: 0,
 };
 
 export const setupGetAllAuditableUnits = createAsyncThunk(
@@ -38,6 +39,7 @@ export const slice = createSlice({
   reducers: {
     resetAuditableUnitSuccess: (state) => {
       state.auditableUnitAddSuccess = false;
+      state.totalNoOfRecords = 0;
     },
   },
   extraReducers: (builder) => {
@@ -47,6 +49,7 @@ export const slice = createSlice({
         state.loading = true;
       })
       .addCase(setupGetAllAuditableUnits.fulfilled, (state, { payload }) => {
+        state.totalNoOfRecords = payload?.message;
         state.loading = false;
         const sortedArray = payload?.data?.sort(
           (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
