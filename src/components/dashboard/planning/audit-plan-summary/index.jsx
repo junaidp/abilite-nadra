@@ -14,18 +14,23 @@ import DeletePlanSummaryDialog from "./component/DeleteDialog";
 import FeedBackDialog from "./component/FeedBackDialog";
 import ViewFeedBackDialog from "./component/ViewFeedBack";
 import ApproveAuditPlanSummaryDialog from "./component/ApproveDialog";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 const AuditPlanSummary = () => {
+  const dispatch = useDispatch();
+  const isInitialRender = React.useRef(true);
   const {
     loading,
     allAuditPlanSummary,
     auditPlanSummaryAddSuccess,
     initialLoading,
+    totalNoOfRecords,
   } = useSelector((state) => state?.planningAuditPlanSummary);
   const [feedBackDialog, setFeedBackDialog] = React.useState(false);
   const [viewFeedBackDialog, setViewFeedBackDialog] = React.useState(false);
-
-  const dispatch = useDispatch();
   const { user } = useSelector((state) => state?.auth);
   const [currentId, setCurrentId] = React.useState("");
   const { company, year } = useSelector((state) => state?.common);
@@ -35,6 +40,7 @@ const AuditPlanSummary = () => {
     React.useState(false);
   const [currentPlanSummaryId, setCurrentPlanSummaryId] = React.useState("");
   const [page, setPage] = React.useState(1);
+  const [itemsPerPage, setItemsPerPage] = React.useState(10);
   const [data, setData] = React.useState([]);
   const [totals, setTotals] = React.useState({
     serviceProvider: 0,
@@ -46,7 +52,7 @@ const AuditPlanSummary = () => {
     q4: 0,
   });
 
-  const handleChange = (event, value) => {
+  const handleChange = (_, value) => {
     setPage(value);
   };
 
@@ -111,6 +117,24 @@ const AuditPlanSummary = () => {
     );
   }
 
+  function handleChangeItemsPerPage(event) {
+    const companyId = user[0]?.company?.find(
+      (item) => item?.companyName === company
+    )?.id;
+    if (companyId) {
+      setPage(1);
+      setItemsPerPage(Number(event.target.value));
+      dispatch(
+        setupGetAllAuditPlanSummary({
+          companyId,
+          page: 1,
+          itemsPerPage: Number(event.target.value),
+          year,
+        })
+      );
+    }
+  }
+
   React.useEffect(() => {
     if (allAuditPlanSummary?.length !== 0) {
       setData(
@@ -157,12 +181,18 @@ const AuditPlanSummary = () => {
         (item) => item?.companyName === company
       )?.id;
       if (companyId) {
+        setPage(1);
+        setItemsPerPage(10);
         dispatch(
-          setupGetAllAuditPlanSummary(`?companyId=${companyId}&year=${year}`)
+          setupGetAllAuditPlanSummary({
+            companyId,
+            page: 1,
+            itemsPerPage: 10,
+            year,
+          })
         );
       }
       dispatch(resetAuditPlanSummarySuccess());
-      setPage(1)
     }
   }, [auditPlanSummaryAddSuccess]);
 
@@ -172,12 +202,39 @@ const AuditPlanSummary = () => {
     )?.id;
     if (companyId) {
       dispatch(
-        setupGetInitialAllAuditPlanSummary(
-          `?companyId=${companyId}&year=${Number(year)}`
-        )
+        setupGetInitialAllAuditPlanSummary({
+          companyId,
+          page,
+          itemsPerPage,
+          year,
+        })
       );
     }
-  }, [user, year, company]);
+  }, [dispatch, page]);
+
+  React.useEffect(() => {
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+      return; // Skip the initial render
+    }
+
+    const companyId = user[0]?.company?.find(
+      (item) => item?.companyName === company
+    )?.id;
+
+    if (companyId) {
+      setPage(1);
+      setItemsPerPage(10);
+      dispatch(
+        setupGetInitialAllAuditPlanSummary({
+          companyId,
+          page: 1,
+          itemsPerPage: 10,
+          year,
+        })
+      );
+    }
+  }, [year]);
 
   return (
     <div>
@@ -321,11 +378,39 @@ const AuditPlanSummary = () => {
                   </table>
                 )}
                 <div className="mb-4">
-                  <Pagination
-                    count={Math.ceil(allAuditPlanSummary?.length / 10)}
-                    page={page}
-                    onChange={handleChange}
-                  />
+                  {allAuditPlanSummary?.length > 0 && (
+                    <div className="row">
+                      <div className="col-lg-6 mb-4">
+                        <Pagination
+                          count={Math.ceil(totalNoOfRecords / itemsPerPage)}
+                          page={page}
+                          onChange={handleChange}
+                        />
+                      </div>
+                      <div className="col-lg-6 mb-4 d-flex justify-content-end">
+                        <div>
+                          <FormControl sx={{ minWidth: 200 }} size="small">
+                            <InputLabel id="demo-select-small-label">
+                              Items Per Page
+                            </InputLabel>
+                            <Select
+                              labelId="demo-select-small-label"
+                              id="demo-select-small"
+                              label="Age"
+                              value={itemsPerPage}
+                              onChange={(event) =>
+                                handleChangeItemsPerPage(event)
+                              }
+                            >
+                              <MenuItem value={10}>10</MenuItem>
+                              <MenuItem value={20}>20</MenuItem>
+                              <MenuItem value={30}>30</MenuItem>
+                            </Select>
+                          </FormControl>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

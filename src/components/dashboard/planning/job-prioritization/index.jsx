@@ -323,15 +323,15 @@ const JobPrioritization = () => {
               </tbody>
             </table>
 
-            <div className="row">
-              <div className="col-lg-6 mb-4">
-                <Pagination
-                  count={Math.ceil(totalNoOfRecords / itemsPerPage)}
-                  page={page}
-                  onChange={handleChange}
-                />
-              </div>
-              {allJobPrioritization?.length > 0 && (
+            {allJobPrioritization?.length > 0 && (
+              <div className="row">
+                <div className="col-lg-6 mb-4">
+                  <Pagination
+                    count={Math.ceil(totalNoOfRecords / itemsPerPage)}
+                    page={page}
+                    onChange={handleChange}
+                  />
+                </div>
                 <div className="col-lg-6 mb-4 d-flex justify-content-end">
                   <div>
                     <FormControl sx={{ minWidth: 200 }} size="small">
@@ -352,8 +352,8 @@ const JobPrioritization = () => {
                     </FormControl>
                   </div>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </>
       )}

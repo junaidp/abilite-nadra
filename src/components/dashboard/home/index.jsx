@@ -34,7 +34,8 @@ const DashboardHome = () => {
         dispatch(setupGetData({ companyId: companyId, year: year }));
       }
     }
-  }, [user]);
+  }, [dispatch]);
+
   return (
     <div className="overflow-y-hidden">
       {showKickOffDialog && (

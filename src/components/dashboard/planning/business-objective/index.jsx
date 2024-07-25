@@ -208,15 +208,15 @@ const BusinessObjective = () => {
                 </div>
               </div>
             </div>
-            <div className="row">
-              <div className="col-lg-6 mb-4">
-                <Pagination
-                  count={Math.ceil(totalNoOfRecords / itemsPerPage)}
-                  page={page}
-                  onChange={handleChange}
-                />
-              </div>
-              {allEngagements?.length > 0 && (
+            {allEngagements?.length > 0 && (
+              <div className="row">
+                <div className="col-lg-6 mb-4">
+                  <Pagination
+                    count={Math.ceil(totalNoOfRecords / itemsPerPage)}
+                    page={page}
+                    onChange={handleChange}
+                  />
+                </div>
                 <div className="col-lg-6 mb-4 d-flex justify-content-end">
                   <div>
                     <FormControl sx={{ minWidth: 200 }} size="small">
@@ -237,8 +237,8 @@ const BusinessObjective = () => {
                     </FormControl>
                   </div>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </section>
       </div>

@@ -14,6 +14,7 @@ const initialState = {
   initialLoading: false,
   allAuditPlanSummary: [],
   auditPlanSummaryAddSuccess: false,
+  totalNoOfRecords: 0,
 };
 
 export const setupGetAllAuditPlanSummary = createAsyncThunk(
@@ -69,6 +70,7 @@ export const slice = createSlice({
         state.loading = true;
       })
       .addCase(setupGetAllAuditPlanSummary.fulfilled, (state, { payload }) => {
+        state.totalNoOfRecords = payload?.message;
         state.loading = false;
         const sortedArray = payload?.data?.sort(
           (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
@@ -91,6 +93,7 @@ export const slice = createSlice({
       .addCase(
         setupGetInitialAllAuditPlanSummary.fulfilled,
         (state, { payload }) => {
+          state.totalNoOfRecords = payload?.message;
           state.initialLoading = false;
           const sortedArray = payload?.data?.sort(
             (a, b) => new Date(b.createdDate) - new Date(a.createdDate)

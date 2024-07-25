@@ -41,7 +41,6 @@ export const slice = createSlice({
   reducers: {
     resetJobPrioritizationSuccess: (state) => {
       state.jobPrioritizationAddSuccess = false;
-      state.totalNoOfRecords = 0;
     },
   },
   extraReducers: (builder) => {

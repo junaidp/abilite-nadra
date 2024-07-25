@@ -4,12 +4,15 @@ import { baseUrl } from "../../../constants/index";
 export const getAllAuditEngagement = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
-    let props = await axios.get(`${baseUrl}/auditEngagement/getAll${data}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${user[0]?.token}`,
-      },
-    });
+    let props = await axios.get(
+      `${baseUrl}/auditEngagement/getAll?companyId=${data?.companyId}&pageNo=${data?.page}&noOfRecords=${data?.itemsPerPage}&currentYear=${data?.year}&userId=${user[0]?.id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
     return props.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);

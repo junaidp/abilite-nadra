@@ -16,6 +16,7 @@ const initialState = {
   allJobScheduling: [],
   jobSchedulingAddSuccess: false,
   singleJobSchedulingObject: {},
+  totalNoOfRecords: 0,
 };
 
 export const setupGetAllJobScheduling = createAsyncThunk(
@@ -76,10 +77,11 @@ export const slice = createSlice({
       state.jobSchedulingAddSuccess = false;
     },
     handleCleanUp: (state) => {
-      (state.loading = false),
-        (state.allJobScheduling = []),
-        (state.jobSchedulingAddSuccess = false),
-        (state.singleJobSchedulingObject = {});
+      state.loading = false;
+      state.allJobScheduling = [];
+      state.jobSchedulingAddSuccess = false;
+      state.singleJobSchedulingObject = {};
+      state.totalNoOfRecords = 0;
     },
   },
   extraReducers: (builder) => {
@@ -89,6 +91,7 @@ export const slice = createSlice({
         state.loading = true;
       })
       .addCase(setupGetAllJobScheduling.fulfilled, (state, { payload }) => {
+        state.totalNoOfRecords = payload?.message;
         state.loading = false;
         const sortedArray = payload?.data?.sort(
           (a, b) => new Date(b.createdDate) - new Date(a.createdDate)

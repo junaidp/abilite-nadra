@@ -53,7 +53,7 @@ export const getAllTasks = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.get(
-      `${baseUrl}/IRTMC/getAllInformationRequestOrTasks?companyId=${data?.companyId}&isTask=${data?.isTask}`,
+      `${baseUrl}/IRTMC/getAllInformationRequestOrTasks?companyId=${data?.companyId}&pageNo=${data?.page}&noOfRecords=${data?.itemsPerPage}&isTask=${data?.isTask}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -97,7 +97,7 @@ export const getAllAuditEngagement = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.get(
-      `${baseUrl}/auditPlanningAndScheduling/engagments/getAllByCompanyId${data}&userId=${user[0]?.id}&year=2024`,
+      `${baseUrl}/auditPlanningAndScheduling/engagments/getAllByCompanyId?companyId=${data?.companyId}&pageNo=${data?.page}&noOfRecords=${data?.itemsPerPage}`,
       {
         headers: {
           "Content-Type": "application/json",

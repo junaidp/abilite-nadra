@@ -170,15 +170,15 @@ const RiskAssessments = () => {
               </tbody>
             </table>
           </div>
-          <div className="row">
-            <div className="col-lg-6 mb-4">
-              <Pagination
-                count={Math.ceil(totalNoOfRecords / itemsPerPage)}
-                page={page}
-                onChange={handleChange}
-              />
-            </div>
-            {allRiskAssessments?.length > 0 && (
+          {allRiskAssessments?.length > 0 && (
+            <div className="row">
+              <div className="col-lg-6 mb-4">
+                <Pagination
+                  count={Math.ceil(totalNoOfRecords / itemsPerPage)}
+                  page={page}
+                  onChange={handleChange}
+                />
+              </div>
               <div className="col-lg-6 mb-4 d-flex justify-content-end">
                 <div>
                   <FormControl sx={{ minWidth: 200 }} size="small">
@@ -199,8 +199,8 @@ const RiskAssessments = () => {
                   </FormControl>
                 </div>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

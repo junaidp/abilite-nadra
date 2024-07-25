@@ -5,7 +5,7 @@ export const getAllReporting = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.get(
-      `${baseUrl}/reportingAndFollowUp/reporting/getAll${data}`,
+      `${baseUrl}/reportingAndFollowUp/reporting/getAll?companyId=${data?.companyId}&pageNo=${data?.page}&noOfRecords=${data?.itemsPerPage}&currentYear=${data?.year}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -109,7 +109,7 @@ export const getAllFollowUp = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.get(
-      `${baseUrl}/reportingAndFollowUp/followup/getAll${data}`,
+      `${baseUrl}/reportingAndFollowUp/followup/getAll?companyId=${data?.companyId}&pageNo=${data?.page}&noOfRecords=${data?.itemsPerPage}&currentYear=${data?.year}`,
       {
         headers: {
           "Content-Type": "application/json",

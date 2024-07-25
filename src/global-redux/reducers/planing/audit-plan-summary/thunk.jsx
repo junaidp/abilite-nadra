@@ -5,7 +5,7 @@ export const getAllAuditPlanSummary = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.get(
-      `${baseUrl}/auditPlanningAndScheduling/auditPlanSummary/getAllByCompanyId${data}`,
+      `${baseUrl}/auditPlanningAndScheduling/auditPlanSummary/getAllByCompanyId?companyId=${data?.companyId}&pageNo=${data?.page}&noOfRecords=${data?.itemsPerPage}&year=${data?.year}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -23,7 +23,7 @@ export const getInitialAllAuditPlanSummary = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.get(
-      `${baseUrl}/auditPlanningAndScheduling/auditPlanSummary/getAllByCompanyId${data}`,
+      `${baseUrl}/auditPlanningAndScheduling/auditPlanSummary/getAllByCompanyId?companyId=${data?.companyId}&pageNo=${data?.page}&noOfRecords=${data?.itemsPerPage}&year=${data?.year}`,
       {
         headers: {
           "Content-Type": "application/json",

@@ -44,6 +44,7 @@ import {
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
+
 const initialState = {
   loading: false,
   initialLoading: false,
@@ -51,6 +52,7 @@ const initialState = {
   singleAuditEngagementObject: {},
   auditEngagementObservationAddSuccess: false,
   allAuditEngagement: [],
+  totalNoOfRecords: 0,
 };
 
 export const setupGetAllAuditEngagement = createAsyncThunk(
@@ -334,11 +336,11 @@ export const slice = createSlice({
       state.auditEngagementObservationAddSuccess = false;
     },
     handleCleanUp: (state) => {
-      (state.loading = false),
-        (state.auditEngagementAddSuccess = false),
-        (state.auditEngagementObservationAddSuccess = false),
-        (state.singleAuditEngagementObject = {}),
-        (state.allAuditEngagement = []);
+      (state.loading = false), (state.auditEngagementAddSuccess = false);
+      state.auditEngagementObservationAddSuccess = false;
+      state.singleAuditEngagementObject = {};
+      state.allAuditEngagement = [];
+      state.totalNoOfRecords = 0;
     },
   },
   // Get all Audit Engagements
@@ -348,6 +350,7 @@ export const slice = createSlice({
         state.loading = true;
       })
       .addCase(setupGetAllAuditEngagement.fulfilled, (state, { payload }) => {
+        state.totalNoOfRecords = payload?.message;
         state.loading = false;
         const sortedArray = payload?.data?.sort(
           (a, b) => new Date(b.createdDate) - new Date(a.createdDate)

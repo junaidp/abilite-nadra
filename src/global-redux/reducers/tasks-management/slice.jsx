@@ -17,6 +17,8 @@ const initialState = {
   allTasks: [],
   singleTask: {},
   taskAddSuccess: false,
+  totalEngagements: 0,
+  totalNoOfRecords: 0,
 };
 
 export const setupAddTask = createAsyncThunk(
@@ -124,6 +126,7 @@ export const slice = createSlice({
         state.initialLoading = true;
       })
       .addCase(setupGetAllTasks.fulfilled, (state, { payload }) => {
+        state.totalNoOfRecords = payload?.message;
         state.initialLoading = false;
         state.allTasks = payload?.data || [];
       })
@@ -163,8 +166,9 @@ export const slice = createSlice({
         state.loading = true;
       })
       .addCase(setupGetAllAuditEngagement.fulfilled, (state, { payload }) => {
-        state.loading = false;
+        state.totalEngagements = payload?.message;
         state.auditEngagements = payload?.data;
+        state.loading = false;
       })
       .addCase(setupGetAllAuditEngagement.rejected, (state, { payload }) => {
         state.loading = false;

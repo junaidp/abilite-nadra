@@ -7,6 +7,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 const poppinsStyle = {
   fontFamily: '"Poppins", sans-serif',
@@ -16,29 +20,67 @@ const poppinsStyle = {
 const JobScheduling = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { allJobScheduling, loading } = useSelector(
+  const isInitialRender = React.useRef(true);
+  const { allJobScheduling, loading, totalNoOfRecords } = useSelector(
     (state) => state?.planningJobScheduling
   );
   const { company, year } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
   const [page, setPage] = React.useState(1);
+  const [itemsPerPage, setItemsPerPage] = React.useState(10);
   const [searchValue, setSearchValue] = React.useState("");
 
-  const handleChange = (event, value) => {
+  const handleChange = (_, value) => {
     setPage(value);
   };
+
+  function handleChangeItemsPerPage(event) {
+    const companyId = user[0]?.company?.find(
+      (item) => item?.companyName === company
+    )?.id;
+    if (companyId) {
+      setPage(1);
+      setItemsPerPage(Number(event.target.value));
+      dispatch(
+        setupGetAllJobScheduling({
+          companyId,
+          page: 1,
+          itemsPerPage: Number(event.target.value),
+          year,
+        })
+      );
+    }
+  }
+
   React.useEffect(() => {
     const companyId = user[0]?.company?.find(
       (item) => item?.companyName === company
     )?.id;
     if (companyId) {
       dispatch(
-        setupGetAllJobScheduling(
-          `?companyId=${companyId}&currentYear=${Number(year)}`
-        )
+        setupGetAllJobScheduling({ companyId, page, itemsPerPage, year })
       );
     }
-  }, [user, year, company]);
+  }, [dispatch, page]);
+
+  React.useEffect(() => {
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+      return; // Skip the initial render
+    }
+
+    const companyId = user[0]?.company?.find(
+      (item) => item?.companyName === company
+    )?.id;
+
+    if (companyId) {
+      setPage(1);
+      setItemsPerPage(10);
+      dispatch(
+        setupGetAllJobScheduling({ companyId, page: 1, itemsPerPage: 10, year })
+      );
+    }
+  }, [year]);
 
   return (
     <div>
@@ -126,7 +168,6 @@ const JobScheduling = () => {
                         ?.toLowerCase()
                         .includes(searchValue?.toLowerCase())
                     )
-                    ?.slice((page - 1) * 10, page * 10)
                     ?.map((item, index) => {
                       return (
                         <tr className="h-40" key={index}>
@@ -163,11 +204,37 @@ const JobScheduling = () => {
             </table>
           </div>
         </div>
-        <Pagination
-          count={Math.ceil(allJobScheduling?.length / 10)}
-          page={page}
-          onChange={handleChange}
-        />
+        {allJobScheduling?.length > 0 && (
+          <div className="row p-0 m-0">
+            <div className="col-lg-6 mb-4">
+              <Pagination
+                count={Math.ceil(totalNoOfRecords / itemsPerPage)}
+                page={page}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="col-lg-6 mb-4 d-flex justify-content-end">
+              <div>
+                <FormControl sx={{ minWidth: 200 }} size="small">
+                  <InputLabel id="demo-select-small-label">
+                    Items Per Page
+                  </InputLabel>
+                  <Select
+                    labelId="demo-select-small-label"
+                    id="demo-select-small"
+                    label="Age"
+                    value={itemsPerPage}
+                    onChange={(event) => handleChangeItemsPerPage(event)}
+                  >
+                    <MenuItem value={10}>10</MenuItem>
+                    <MenuItem value={20}>20</MenuItem>
+                    <MenuItem value={30}>30</MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

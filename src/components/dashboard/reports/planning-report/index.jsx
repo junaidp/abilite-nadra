@@ -11,16 +11,20 @@ import moment from "moment";
 import Pagination from "@mui/material/Pagination";
 import ReportDeleteDailog from "./components/report-delete-dialog";
 import ReportPublishDialog from "./components/report-publish-dialog";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 const PlanningReport = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, allReports, reportAddSuccess, users } = useSelector(
-    (state) => state?.planningReport
-  );
+  const { loading, allReports, reportAddSuccess, users, totalNoOfRecords } =
+    useSelector((state) => state?.planningReport);
   const { user } = useSelector((state) => state?.auth);
   const { company } = useSelector((state) => state?.common);
   const [page, setPage] = React.useState(1);
+  const [itemsPerPage, setItemsPerPage] = React.useState(10);
   const [selectedReportId, setSelectedReportId] = React.useState("");
   const [showReportDeleteDialog, setShowReportDeleteDialog] =
     React.useState(false);
@@ -42,15 +46,39 @@ const PlanningReport = () => {
     setShowReportDeleteDialog(true);
   }
 
+  function handleChangeItemsPerPage(event) {
+    const companyId = user[0]?.company?.find(
+      (item) => item?.companyName === company
+    )?.id;
+    if (companyId) {
+      setPage(1);
+      setItemsPerPage(Number(event.target.value));
+      dispatch(
+        setupGetAllReports({
+          companyId,
+          page: 1,
+          itemsPerPage: Number(event.target.value),
+        })
+      );
+    }
+  }
+
   React.useEffect(() => {
     if (reportAddSuccess) {
       const companyId = user[0]?.company?.find(
         (item) => item?.companyName === company
       )?.id;
       if (companyId) {
-        dispatch(setupGetAllReports(companyId));
-        dispatch(resetReportAddSuccess());
         setPage(1);
+        setItemsPerPage(10);
+        dispatch(
+          setupGetAllReports({
+            companyId,
+            page: 1,
+            itemsPerPage: 10,
+          })
+        );
+        dispatch(resetReportAddSuccess());
       }
     }
   }, [reportAddSuccess]);
@@ -60,7 +88,18 @@ const PlanningReport = () => {
       (item) => item?.companyName === company
     )?.id;
     if (companyId) {
-      dispatch(setupGetAllReports(companyId));
+      dispatch(
+        setupGetAllReports({
+          companyId,
+          page,
+          itemsPerPage,
+        })
+      );
+    }
+  }, [dispatch, page]);
+
+  React.useEffect(() => {
+    if (user[0]?.token) {
       dispatch(setupGetAllUsers());
     }
   }, [dispatch]);
@@ -141,7 +180,6 @@ const PlanningReport = () => {
                         ?.toLowerCase()
                         .includes(reportNameValue?.toLowerCase())
                     )
-                    ?.slice((page - 1) * 10, page * 10)
                     ?.map((item, index) => {
                       return (
                         <tr className="h-40" key={index}>
@@ -216,11 +254,37 @@ const PlanningReport = () => {
             </table>
           </div>
         </div>
-        <Pagination
-          count={Math.ceil(allReports?.length / 10)}
-          page={page}
-          onChange={handleChange}
-        />
+        {allReports?.length > 0 && (
+          <div className="row p-0 m-0">
+            <div className="col-lg-6 mb-4">
+              <Pagination
+                count={Math.ceil(totalNoOfRecords / itemsPerPage)}
+                page={page}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="col-lg-6 mb-4 d-flex justify-content-end">
+              <div>
+                <FormControl sx={{ minWidth: 200 }} size="small">
+                  <InputLabel id="demo-select-small-label">
+                    Items Per Page
+                  </InputLabel>
+                  <Select
+                    labelId="demo-select-small-label"
+                    id="demo-select-small"
+                    label="Age"
+                    value={itemsPerPage}
+                    onChange={(event) => handleChangeItemsPerPage(event)}
+                  >
+                    <MenuItem value={10}>10</MenuItem>
+                    <MenuItem value={20}>20</MenuItem>
+                    <MenuItem value={30}>30</MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

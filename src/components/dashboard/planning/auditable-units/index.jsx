@@ -134,15 +134,15 @@ const AuditableUnits = () => {
               )}
             </div>
           </div>
-          <div className="row p-0 m-0">
-            <div className="col-lg-6 mb-4">
-              <Pagination
-                count={Math.ceil(totalNoOfRecords / itemsPerPage)}
-                page={page}
-                onChange={handleChange}
-              />
-            </div>
-            {allAuditableUnits?.length > 0 && (
+          {allAuditableUnits?.length > 0 && (
+            <div className="row p-0 m-0">
+              <div className="col-lg-6 mb-4">
+                <Pagination
+                  count={Math.ceil(totalNoOfRecords / itemsPerPage)}
+                  page={page}
+                  onChange={handleChange}
+                />
+              </div>
               <div className="col-lg-6 mb-4 d-flex justify-content-end">
                 <div>
                   <FormControl sx={{ minWidth: 200 }} size="small">
@@ -163,8 +163,8 @@ const AuditableUnits = () => {
                   </FormControl>
                 </div>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </>
     </div>

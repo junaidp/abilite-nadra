@@ -241,6 +241,31 @@ const Table = ({
                 </div>
               </div>
             )}
+            {item?.approved === true && item?.locked === true && (
+              <div className="mt-3 mx-3">
+                <div className="justify-content-end text-end">
+                  <button
+                    className={`btn btn-labeled btn-primary  shadow disabled`}
+                  >
+                    Approved
+                  </button>
+                </div>
+              </div>
+            )}
+            {item?.approved === false &&
+              item?.locked === false &&
+              item?.submitted === true &&
+              item?.completed === true && (
+                <div className="mt-3 mx-3">
+                  <div className="justify-content-end text-end">
+                    <button
+                      className={`btn btn-labeled btn-primary  shadow disabled`}
+                    >
+                      Submitted
+                    </button>
+                  </div>
+                </div>
+              )}
           </td>
         )}
       </tr>

@@ -21,6 +21,7 @@ const initialState = {
   allReports: [],
   users: [],
   updateLoading: false,
+  totalNoOfRecords: 0,
 };
 
 export const setupSaveReport = createAsyncThunk(
@@ -107,6 +108,7 @@ export const slice = createSlice({
       state.updateLoading = false;
       state.reportAddSuccess = false;
       state.singleReportObject = {};
+      state.totalNoOfRecords = 0;
     },
   },
   extraReducers: (builder) => {
@@ -135,6 +137,7 @@ export const slice = createSlice({
         state.loading = true;
       })
       .addCase(setupGetAllReports.fulfilled, (state, { payload }) => {
+        state.totalNoOfRecords = payload?.message;
         state.loading = false;
         state.allReports = payload?.data || [];
       })

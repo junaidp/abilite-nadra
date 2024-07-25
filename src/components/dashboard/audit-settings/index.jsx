@@ -76,25 +76,22 @@ const AuditSettings = () => {
         dispatch(setupGetAllPreviousObservations({ companyId: companyId }));
       }
     }
-  }, [currentSettingOption, user, company]);
+  }, [currentSettingOption]);
 
   React.useEffect(() => {
     if (user[0]?.token) {
-      let companyId = user[0]?.company.find(
-        (all) => all?.companyName === company
-      )?.id;
       setUserHierarchy(user[0]?.userId?.employeeid?.userHierarchy);
       setUserRole(user[0]?.userId?.authorities[0]);
-      dispatch(setupGetAllFiles(`?companyId=${companyId}`));
     }
     return () => {
       dispatch(handleReset());
     };
-  }, [user]);
+  }, [dispatch]);
 
   React.useEffect(() => {
     dispatch(resetAuthValues());
   }, []);
+
   return (
     <div>
       {checkListManagementDialog && (

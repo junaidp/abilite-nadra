@@ -15,15 +15,25 @@ import ApproveDialog from "./dialogs/ApproveDialog";
 import FeedBackDialog from "./dialogs/FeedBackDialog";
 import ViewFeedBackDialog from "./dialogs/ViewFeedBackDialog";
 import Tooltip from "@mui/material/Tooltip";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 const InternalAuditReport = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const isInitialRender = React.useRef(true);
   const { company, year } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
+  const {
+    allInternalAuditReports,
+    loading,
+    internalAuditReportAddSuccess,
+    totalNoOfRecords,
+  } = useSelector((state) => state?.internalAuditReport);
   const [page, setPage] = React.useState(1);
-  const { allInternalAuditReports, loading, internalAuditReportAddSuccess } =
-    useSelector((state) => state?.internalAuditReport);
+  const [itemsPerPage, setItemsPerPage] = React.useState(10);
   const [currentReportItem, setCurrentReportItem] = React.useState({});
   const [showSubmitReportDialog, setShowSubmitReportDialog] =
     React.useState(false);
@@ -49,20 +59,42 @@ const InternalAuditReport = () => {
     setShowApproveDialog(true);
   }
 
+  function handleChangeItemsPerPage(event) {
+    const companyId = user[0]?.company?.find(
+      (item) => item?.companyName === company
+    )?.id;
+    if (companyId) {
+      setPage(1);
+      setItemsPerPage(Number(event.target.value));
+      dispatch(
+        setupGetAllInternalAuditReports({
+          companyId,
+          page: 1,
+          itemsPerPage: Number(event.target.value),
+          year,
+        })
+      );
+    }
+  }
+
   React.useEffect(() => {
     if (internalAuditReportAddSuccess) {
       const companyId = user[0]?.company?.find(
         (item) => item?.companyName === company
       )?.id;
       if (companyId) {
+        setPage(1);
+        setItemsPerPage(10);
         dispatch(
-          setupGetAllInternalAuditReports(
-            `?companyId=${companyId}&Year=${Number(year)}`
-          )
+          setupGetAllInternalAuditReports({
+            companyId,
+            page: 1,
+            itemsPerPage: 10,
+            year,
+          })
         );
+        dispatch(resetInternalAuditReportAddSuccess());
       }
-      dispatch(resetInternalAuditReportAddSuccess());
-      setPage(1);
     }
   }, [internalAuditReportAddSuccess]);
 
@@ -72,12 +104,39 @@ const InternalAuditReport = () => {
     )?.id;
     if (companyId) {
       dispatch(
-        setupGetAllInternalAuditReports(
-          `?companyId=${companyId}&Year=${Number(year)}`
-        )
+        setupGetAllInternalAuditReports({
+          companyId,
+          page,
+          itemsPerPage,
+          year,
+        })
       );
     }
-  }, [user, company, year]);
+  }, [dispatch, page]);
+
+  React.useEffect(() => {
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+      return; // Skip the initial render
+    }
+
+    const companyId = user[0]?.company?.find(
+      (item) => item?.companyName === company
+    )?.id;
+
+    if (companyId) {
+      setPage(1);
+      setItemsPerPage(10);
+      dispatch(
+        setupGetAllInternalAuditReports({
+          companyId,
+          page: 1,
+          itemsPerPage: 10,
+          year,
+        })
+      );
+    }
+  }, [year]);
 
   return (
     <div>
@@ -180,134 +239,154 @@ const InternalAuditReport = () => {
                     <td className="w-300">Internal Audit Report Not Found</td>
                   </tr>
                 ) : (
-                  allInternalAuditReports
-                    ?.slice((page - 1) * 10, page * 10)
-                    ?.map((item, index) => {
-                      return (
-                        <tr key={index}>
-                          <td>{index + 1}</td>
-                          <td>{item?.jobName || ""}</td>
-                          <td>{item?.reportName || ""}</td>
-                          <td>
-                            {moment(item?.reportDate).format("DD-MM-YYYY")}
-                          </td>
-                          <td>{item?.preparedBy || ""}</td>
-                          <td>{item?.status}</td>
-                          <td>
-                            <div className="d-flex flex-wrap gap-4">
+                  allInternalAuditReports?.map((item, index) => {
+                    return (
+                      <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td>{item?.jobName || ""}</td>
+                        <td>{item?.reportName || ""}</td>
+                        <td>{moment(item?.reportDate).format("DD-MM-YYYY")}</td>
+                        <td>{item?.preparedBy || ""}</td>
+                        <td>{item?.status}</td>
+                        <td>
+                          <div className="d-flex flex-wrap gap-4">
+                            <i
+                              className="fa-eye fa f-18 cursor-pointer"
+                              onClick={() =>
+                                navigate(
+                                  `/audit/view-internal-audit-report?reportId=${item?.id}`
+                                )
+                              }
+                            ></i>
+                            {item?.approved === false && (
                               <i
-                                className="fa-eye fa f-18 cursor-pointer"
+                                className="fa fa-edit f-18 cursor-pointer"
                                 onClick={() =>
                                   navigate(
-                                    `/audit/view-internal-audit-report?reportId=${item?.id}`
+                                    `/audit/update-internal-audit-report?reportId=${item?.id}`
                                   )
                                 }
                               ></i>
-                              {item?.approved === false && (
+                            )}
+                            {item?.approved === false && (
+                              <i
+                                className={`fa fa-trash text-danger cursor-pointer f-18`}
+                                onClick={() => {
+                                  setDeleteInternalAuditReportId(item?.id);
+                                  setShowDeleteInternalAuditReportDialog(true);
+                                }}
+                              ></i>
+                            )}
+                            {item?.reportName &&
+                              item?.reportName !== "" &&
+                              item?.executiveSummary &&
+                              item?.executiveSummary !== "" &&
+                              item?.auditPurpose &&
+                              item?.auditPurpose !== "" &&
+                              item?.intAuditExtraFieldsList &&
+                              item?.intAuditExtraFieldsList?.length !== 0 &&
+                              item?.submitted === false &&
+                              Number(item?.createdBy) ===
+                                Number(user[0]?.userId?.id) && (
+                                <div
+                                  className={`btn btn-labeled btn-primary shadow h-35`}
+                                  onClick={() => handleSubmitReport(item)}
+                                >
+                                  Submit
+                                </div>
+                              )}
+                            {item?.submitted === true &&
+                              item?.approved === false &&
+                              user[0]?.userId?.employeeid?.userHierarchy ===
+                                "IAH" && (
+                                <div
+                                  className={`btn btn-labeled btn-primary shadow h-35`}
+                                  onClick={() => handleApproveReport(item)}
+                                >
+                                  Approve
+                                </div>
+                              )}
+
+                            {item?.submitted === true &&
+                              item?.approved === false &&
+                              user[0]?.userId?.employeeid?.userHierarchy ===
+                                "IAH" && (
+                                <div
+                                  className={`btn btn-labeled btn-primary shadow h-35`}
+                                  onClick={() => {
+                                    setCurrentReportItem(item);
+                                    setFeedBackDialog(true);
+                                  }}
+                                >
+                                  FeedBack
+                                </div>
+                              )}
+                            {item?.feedback && item?.feedback?.id && (
+                              <div
+                                className={`btn btn-labeled btn-primary shadow  h-35`}
+                                onClick={() => {
+                                  setCurrentReportItem(item);
+                                  setViewFeedBackDialog(true);
+                                }}
+                              >
+                                View FeedBack
+                              </div>
+                            )}
+                            {item?.submitted === true && (
+                              <Tooltip
+                                title="Link to download pdf"
+                                placement="top"
+                              >
                                 <i
-                                  className="fa fa-edit f-18 cursor-pointer"
+                                  className="fa fa-download f-18 cursor-pointer"
                                   onClick={() =>
                                     navigate(
-                                      `/audit/update-internal-audit-report?reportId=${item?.id}`
+                                      `/audit/view-internal-audit-report?reportId=${item?.id}`
                                     )
                                   }
                                 ></i>
-                              )}
-                              {item?.approved === false && (
-                                <i
-                                  className={`fa fa-trash text-danger cursor-pointer f-18`}
-                                  onClick={() => {
-                                    setDeleteInternalAuditReportId(item?.id);
-                                    setShowDeleteInternalAuditReportDialog(
-                                      true
-                                    );
-                                  }}
-                                ></i>
-                              )}
-                              {item?.reportName &&
-                                item?.reportName !== "" &&
-                                item?.executiveSummary &&
-                                item?.executiveSummary !== "" &&
-                                item?.auditPurpose &&
-                                item?.auditPurpose !== "" &&
-                                item?.intAuditExtraFieldsList &&
-                                item?.intAuditExtraFieldsList?.length !== 0 &&
-                                item?.submitted === false &&
-                                Number(item?.createdBy) ===
-                                  Number(user[0]?.userId?.id) && (
-                                  <div
-                                    className={`btn btn-labeled btn-primary shadow h-35`}
-                                    onClick={() => handleSubmitReport(item)}
-                                  >
-                                    Submit
-                                  </div>
-                                )}
-                              {item?.submitted === true &&
-                                item?.approved === false &&
-                                user[0]?.userId?.employeeid?.userHierarchy ===
-                                  "IAH" && (
-                                  <div
-                                    className={`btn btn-labeled btn-primary shadow h-35`}
-                                    onClick={() => handleApproveReport(item)}
-                                  >
-                                    Approve
-                                  </div>
-                                )}
-
-                              {item?.submitted === true &&
-                                item?.approved === false &&
-                                user[0]?.userId?.employeeid?.userHierarchy ===
-                                  "IAH" && (
-                                  <div
-                                    className={`btn btn-labeled btn-primary shadow h-35`}
-                                    onClick={() => {
-                                      setCurrentReportItem(item);
-                                      setFeedBackDialog(true);
-                                    }}
-                                  >
-                                    FeedBack
-                                  </div>
-                                )}
-                              {item?.feedback && item?.feedback?.id && (
-                                <div
-                                  className={`btn btn-labeled btn-primary shadow  h-35`}
-                                  onClick={() => {
-                                    setCurrentReportItem(item);
-                                    setViewFeedBackDialog(true);
-                                  }}
-                                >
-                                  View FeedBack
-                                </div>
-                              )}
-                              {item?.submitted === true && (
-                                <Tooltip
-                                  title="Link to download pdf"
-                                  placement="top"
-                                >
-                                  <i
-                                    className="fa fa-download f-18 cursor-pointer"
-                                    onClick={() =>
-                                      navigate(
-                                        `/audit/view-internal-audit-report?reportId=${item?.id}`
-                                      )
-                                    }
-                                  ></i>
-                                </Tooltip>
-                              )}
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    })
+                              </Tooltip>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
                 )}
               </tbody>
             </table>
-            <Pagination
-              count={Math.ceil(allInternalAuditReports?.length / 10)}
-              page={page}
-              onChange={handleChange}
-            />
           </div>
+          {allInternalAuditReports?.length > 0 && (
+            <div className="row">
+              <div className="col-lg-6 mb-4">
+                <Pagination
+                  count={Math.ceil(totalNoOfRecords / itemsPerPage)}
+                  page={page}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="col-lg-6 mb-4 d-flex justify-content-end">
+                <div>
+                  <FormControl sx={{ minWidth: 200 }} size="small">
+                    <InputLabel id="demo-select-small-label">
+                      Items Per Page
+                    </InputLabel>
+                    <Select
+                      labelId="demo-select-small-label"
+                      id="demo-select-small"
+                      label="Age"
+                      value={itemsPerPage}
+                      onChange={(event) => handleChangeItemsPerPage(event)}
+                    >
+                      <MenuItem value={10}>10</MenuItem>
+                      <MenuItem value={20}>20</MenuItem>
+                      <MenuItem value={30}>30</MenuItem>
+                    </Select>
+                  </FormControl>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

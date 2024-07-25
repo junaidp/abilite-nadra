@@ -4,9 +4,8 @@ import { baseUrl } from "../../../../constants/index";
 export const getAllInternalAuditReports = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
-    let props = await axios.post(
-      `${baseUrl}/consolidatedReports/report/getAll${data}`,
-      null,
+    let props = await axios.get(
+      `${baseUrl}/consolidatedReports/report/getAll?companyId=${data?.companyId}&pageNo=${data?.page}&pageSize=${data?.itemsPerPage}&Year=${data?.year}`,
       {
         headers: {
           Authorization: `Bearer ${user[0]?.token}`,

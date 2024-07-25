@@ -24,6 +24,7 @@ const initialState = {
   singleReport: {},
   managementAuditeeReportingAddSuccess: false,
   reportingFileUploadSuccess: false,
+  totalNoOfRecords: 0,
 };
 
 export const setupGetAllReporting = createAsyncThunk(
@@ -118,12 +119,13 @@ export const slice = createSlice({
       state.managementAuditeeReportingAddSuccess = false;
     },
     resetReports: (state) => {
-      (state.loading = false),
-        (state.initialLoading = false),
-        (state.reportingAddSuccess = false),
-        (state.allReporting = []),
-        (state.allFollowUp = []),
-        (state.singleReport = {});
+      state.loading = false;
+      state.initialLoading = false;
+      state.reportingAddSuccess = false;
+      state.allReporting = [];
+      state.allFollowUp = [];
+      state.singleReport = {};
+      state.totalNoOfRecords = 0;
     },
   },
   extraReducers: (builder) => {
@@ -133,6 +135,7 @@ export const slice = createSlice({
         state.loading = true;
       })
       .addCase(setupGetAllReporting.fulfilled, (state, { payload }) => {
+        state.totalNoOfRecords = payload?.message;
         state.loading = false;
         state.allReporting = payload?.data || [{ error: "Not Found" }];
       })
@@ -222,6 +225,7 @@ export const slice = createSlice({
         state.loading = true;
       })
       .addCase(setupGetAllFollowUp.fulfilled, (state, { payload }) => {
+        state.totalNoOfRecords = payload?.message;
         state.loading = false;
         state.allFollowUp = payload?.data || [{ error: "Not Found" }];
       })

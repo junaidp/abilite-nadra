@@ -24,7 +24,7 @@ export const getAllReports = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.get(
-      `${baseUrl}/planningreport/getAll?companyId=${data}`,
+      `${baseUrl}/planningreport/getAll?companyId=${data?.companyId}&pageNo=${data?.page}&pageSize=${data?.itemsPerPage}`,
       {
         headers: {
           "Content-Type": "application/json",

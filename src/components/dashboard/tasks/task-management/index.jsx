@@ -10,42 +10,121 @@ import { CircularProgress } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import ViewTaskManagement from "./view-task-dialog";
 import moment from "moment";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 const TaskManagement = () => {
   const dispatch = useDispatch();
+  const isInitialRender = React.useRef(true);
   const [showUpdateTaskDialog, setShowUpdateTaskDailog] = React.useState(false);
   const [showViewTaskDialog, setShowViewTasktDialog] = React.useState(false);
-  const { taskAddSuccess, allTasks, initialLoading, auditEngagements } =
-    useSelector((state) => state?.tasksManagement);
+  const {
+    taskAddSuccess,
+    allTasks,
+    initialLoading,
+    auditEngagements,
+    totalNoOfRecords,
+    totalEngagements,
+  } = useSelector((state) => state?.tasksManagement);
   const { company } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
   const [page, setPage] = React.useState(1);
+  const [itemsPerPage, setItemsPerPage] = React.useState(10);
   const [updateTaskId, setUpdateTaskId] = React.useState("");
 
-  const handleChange = (event, value) => {
+  const handleChange = (_, value) => {
     setPage(value);
   };
 
-  React.useEffect(() => {
+  function handleChangeItemsPerPage(event) {
     const companyId = user[0]?.company?.find(
       (item) => item?.companyName === company
     )?.id;
     if (companyId) {
-      dispatch(setupGetAllTasks({ companyId: companyId, isTask: true }));
-      dispatch(setupGetAllAuditEngagement(`?companyId=${companyId}`));
+      setPage(1);
+      setItemsPerPage(Number(event.target.value));
+      dispatch(
+        setupGetAllTasks({
+          companyId,
+          page: 1,
+          itemsPerPage: Number(event.target.value),
+          isTask: true,
+        })
+      );
     }
-  }, [user, dispatch]);
+  }
 
   React.useEffect(() => {
     const companyId = user[0]?.company?.find(
       (item) => item?.companyName === company
     )?.id;
     if (companyId && taskAddSuccess === true) {
-      dispatch(setupGetAllTasks({ companyId: companyId, isTask: true }));
-      dispatch(resetTaskAddSuccess());
       setPage(1);
+      setItemsPerPage(10);
+      dispatch(
+        setupGetAllTasks({
+          companyId,
+          page: 1,
+          itemsPerPage: 10,
+          isTask: true,
+        })
+      );
+      dispatch(resetTaskAddSuccess());
     }
   }, [taskAddSuccess]);
+
+  React.useEffect(() => {
+    const companyId = user[0]?.company?.find(
+      (item) => item?.companyName === company
+    )?.id;
+    if (companyId) {
+      dispatch(
+        setupGetAllTasks({
+          companyId,
+          page,
+          itemsPerPage,
+          isTask: true,
+        })
+      );
+    }
+  }, [dispatch, page]);
+
+  React.useEffect(() => {
+    const companyId = user[0]?.company?.find(
+      (item) => item?.companyName === company
+    )?.id;
+    if (companyId) {
+      dispatch(
+        setupGetAllAuditEngagement({
+          companyId,
+          page: 1,
+          itemsPerPage: 10,
+        })
+      );
+    }
+  }, [dispatch]);
+
+  React.useEffect(() => {
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+      return; // Skip the initial render
+    }
+    const companyId = user[0]?.company?.find(
+      (item) => item?.companyName === company
+    )?.id;
+
+    if (companyId) {
+      dispatch(
+        setupGetAllAuditEngagement({
+          companyId,
+          page: 1,
+          itemsPerPage: totalEngagements,
+        })
+      );
+    }
+  }, [totalEngagements]);
 
   return (
     <div>
@@ -99,55 +178,77 @@ const TaskManagement = () => {
                     <td className="w-300">No data available!</td>
                   </tr>
                 ) : (
-                  allTasks
-                    ?.slice((page - 1) * 10, page * 10)
-                    ?.map((task, index) => {
-                      return (
-                        <tr key={index}>
-                          <td>{index + 1}</td>
-                          <td>{task?.detailedRequirement}</td>
-                          <td>
-                            {moment.utc(task?.dueDate).format("DD-MM-YY")}
-                          </td>
-                          <td>
-                            {
-                              auditEngagements?.find(
-                                (singleEngagement) =>
-                                  singleEngagement?.id ===
-                                  task?.auditEngagement?.id
-                              )?.engagementName
-                            }
-                          </td>
-                          <td>{task?.assignee?.name}</td>
-                          <td>{task?.assignedBy?.name}</td>
-                          <td>
-                            <i
-                              className="fa fa-edit mx-3 text-secondary f-18 cursor-pointer mx-2"
-                              onClick={() => {
-                                setUpdateTaskId(task?.id);
-                                setShowUpdateTaskDailog(true);
-                              }}
-                            ></i>
-                            <i
-                              className="fa-eye fa f-18 cursor-pointer mx-2"
-                              onClick={() => {
-                                setUpdateTaskId(task?.id);
-                                setShowViewTasktDialog(true);
-                              }}
-                            ></i>
-                          </td>
-                        </tr>
-                      );
-                    })
+                  allTasks?.map((task, index) => {
+                    return (
+                      <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td>{task?.detailedRequirement}</td>
+                        <td>{moment.utc(task?.dueDate).format("DD-MM-YY")}</td>
+                        <td>
+                          {
+                            auditEngagements?.find(
+                              (singleEngagement) =>
+                                singleEngagement?.id ===
+                                task?.auditEngagement?.id
+                            )?.engagementName
+                          }
+                        </td>
+                        <td>{task?.assignee?.name}</td>
+                        <td>{task?.assignedBy?.name}</td>
+                        <td>
+                          <i
+                            className="fa fa-edit mx-3 text-secondary f-18 cursor-pointer mx-2"
+                            onClick={() => {
+                              setUpdateTaskId(task?.id);
+                              setShowUpdateTaskDailog(true);
+                            }}
+                          ></i>
+                          <i
+                            className="fa-eye fa f-18 cursor-pointer mx-2"
+                            onClick={() => {
+                              setUpdateTaskId(task?.id);
+                              setShowViewTasktDialog(true);
+                            }}
+                          ></i>
+                        </td>
+                      </tr>
+                    );
+                  })
                 )}
               </tbody>
             </table>
-            <Pagination
-              count={Math.ceil(allTasks?.length / 10)}
-              page={page}
-              onChange={handleChange}
-            />
           </div>
+          {allTasks?.length > 0 && (
+            <div className="row">
+              <div className="col-lg-6 mb-4">
+                <Pagination
+                  count={Math.ceil(totalNoOfRecords / itemsPerPage)}
+                  page={page}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="col-lg-6 mb-4 d-flex justify-content-end">
+                <div>
+                  <FormControl sx={{ minWidth: 200 }} size="small">
+                    <InputLabel id="demo-select-small-label">
+                      Items Per Page
+                    </InputLabel>
+                    <Select
+                      labelId="demo-select-small-label"
+                      id="demo-select-small"
+                      label="Age"
+                      value={itemsPerPage}
+                      onChange={(event) => handleChangeItemsPerPage(event)}
+                    >
+                      <MenuItem value={10}>10</MenuItem>
+                      <MenuItem value={20}>20</MenuItem>
+                      <MenuItem value={30}>30</MenuItem>
+                    </Select>
+                  </FormControl>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

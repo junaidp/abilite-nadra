@@ -39,7 +39,6 @@ export const slice = createSlice({
   reducers: {
     resetAuditableUnitSuccess: (state) => {
       state.auditableUnitAddSuccess = false;
-      state.totalNoOfRecords = 0;
     },
   },
   extraReducers: (builder) => {

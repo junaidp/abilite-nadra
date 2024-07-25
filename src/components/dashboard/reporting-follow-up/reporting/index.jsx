@@ -5,15 +5,24 @@ import { setupGetAllReporting } from "../../../../global-redux/reducers/reportin
 import { useDispatch, useSelector } from "react-redux";
 import { CircularProgress } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 const Reporting = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const isInitialRender = React.useRef(true);
   const { user } = useSelector((state) => state?.auth);
   const { company, year } = useSelector((state) => state?.common);
-  const { allReporting, loading } = useSelector((state) => state?.reporting);
+  const { allReporting, loading, totalNoOfRecords } = useSelector(
+    (state) => state?.reporting
+  );
   const [page, setPage] = React.useState(1);
-  const handleChange = (event, value) => {
+  const [itemsPerPage, setItemsPerPage] = React.useState(10);
+
+  const handleChange = (_, value) => {
     setPage(value);
   };
 
@@ -46,18 +55,51 @@ const Reporting = () => {
     return "Exception To Be Implemented";
   }
 
+  function handleChangeItemsPerPage(event) {
+    const companyId = user[0]?.company?.find(
+      (item) => item?.companyName === company
+    )?.id;
+    if (companyId) {
+      setPage(1);
+      setItemsPerPage(Number(event.target.value));
+      dispatch(
+        setupGetAllReporting({
+          companyId,
+          page: 1,
+          itemsPerPage: Number(event.target.value),
+          year,
+        })
+      );
+    }
+  }
+
   React.useEffect(() => {
     const companyId = user[0]?.company?.find(
       (item) => item?.companyName === company
     )?.id;
     if (companyId) {
+      dispatch(setupGetAllReporting({ companyId, page, itemsPerPage, year }));
+    }
+  }, [dispatch, page]);
+
+  React.useEffect(() => {
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+      return; // Skip the initial render
+    }
+
+    const companyId = user[0]?.company?.find(
+      (item) => item?.companyName === company
+    )?.id;
+
+    if (companyId) {
+      setPage(1);
+      setItemsPerPage(10);
       dispatch(
-        setupGetAllReporting(
-          `?companyId=${companyId}&currentYear=${Number(year)}`
-        )
+        setupGetAllReporting({ companyId, page: 1, itemsPerPage: 10, year })
       );
     }
-  }, [user, year, company]);
+  }, [year]);
 
   return (
     <div>
@@ -88,50 +130,74 @@ const Reporting = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {allReporting
-                      ?.slice((page - 1) * 10, page * 10)
-                      ?.map((item, index) => {
-                        return (
-                          <tr key={index}>
-                            <td>
-                              <label>{index + 1}</label>
-                            </td>
-                            <td>
-                              <a
-                                className=" text-primary  fw-bold f-12"
-                                onClick={() =>
-                                  navigate(
-                                    `/audit/reporting-particulars?reportingId=${item?.id}`
-                                  )
-                                }
-                              >
-                                {item?.title}
-                              </a>
-                            </td>
-                            <td>{handleCalculateStatus(item)}</td>
-                            <td>{item?.reportingList?.length}</td>
-                            <td>
-                              <i
-                                onClick={() =>
-                                  navigate(
-                                    `/audit/reporting-particulars?reportingId=${item?.id}`
-                                  )
-                                }
-                                className="fa fa-edit  px-3 f-18 cursor-pointer"
-                              ></i>
-                            </td>
-                          </tr>
-                        );
-                      })}
+                    {allReporting?.map((item, index) => {
+                      return (
+                        <tr key={index}>
+                          <td>
+                            <label>{index + 1}</label>
+                          </td>
+                          <td>
+                            <a
+                              className=" text-primary  fw-bold f-12"
+                              onClick={() =>
+                                navigate(
+                                  `/audit/reporting-particulars?reportingId=${item?.id}`
+                                )
+                              }
+                            >
+                              {item?.title}
+                            </a>
+                          </td>
+                          <td>{handleCalculateStatus(item)}</td>
+                          <td>{item?.reportingList?.length}</td>
+                          <td>
+                            <i
+                              onClick={() =>
+                                navigate(
+                                  `/audit/reporting-particulars?reportingId=${item?.id}`
+                                )
+                              }
+                              className="fa fa-edit  px-3 f-18 cursor-pointer"
+                            ></i>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               )}
-              <Pagination
-                count={Math.ceil(allReporting?.length / 10)}
-                page={page}
-                onChange={handleChange}
-              />
             </div>
+            {allReporting?.length > 0 && (
+              <div className="row">
+                <div className="col-lg-6 mb-4">
+                  <Pagination
+                    count={Math.ceil(totalNoOfRecords / itemsPerPage)}
+                    page={page}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="col-lg-6 mb-4 d-flex justify-content-end">
+                  <div>
+                    <FormControl sx={{ minWidth: 200 }} size="small">
+                      <InputLabel id="demo-select-small-label">
+                        Items Per Page
+                      </InputLabel>
+                      <Select
+                        labelId="demo-select-small-label"
+                        id="demo-select-small"
+                        label="Age"
+                        value={itemsPerPage}
+                        onChange={(event) => handleChangeItemsPerPage(event)}
+                      >
+                        <MenuItem value={10}>10</MenuItem>
+                        <MenuItem value={20}>20</MenuItem>
+                        <MenuItem value={30}>30</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

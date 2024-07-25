@@ -32,6 +32,7 @@ const initialState = {
   addReportLoading: false,
   createExtraFieldsLoading: false,
   internalAuditReportExtraFieldsObject: {},
+  totalNoOfRecords: 0,
 };
 
 export const setupGetAllInternalAuditReports = createAsyncThunk(
@@ -153,16 +154,17 @@ export const slice = createSlice({
       state.consolidationFileUploadAddSuccess = false;
     },
     handleResetData: (state) => {
-      (state.loading = false),
-        (state.allInternalAuditReports = []),
-        (state.jobsForInternalAuditReports = []),
-        (state.internalAuditReportObject = {}),
-        (state.singleInternalAuditReport = {}),
-        (state.internalAuditReportAddSuccess = false),
-        (state.internalAuditReportExtraFieldsAddSuccess = false),
-        (state.addReportLoading = false),
-        (state.createExtraFieldsLoading = false),
-        (state.internalAuditReportExtraFieldsObject = {});
+      state.loading = false;
+      state.allInternalAuditReports = [];
+      state.jobsForInternalAuditReports = [];
+      state.internalAuditReportObject = {};
+      state.singleInternalAuditReport = {};
+      state.internalAuditReportAddSuccess = false;
+      state.internalAuditReportExtraFieldsAddSuccess = false;
+      state.addReportLoading = false;
+      state.createExtraFieldsLoading = false;
+      state.internalAuditReportExtraFieldsObject = {};
+      state.totalNoOfRecords = 0;
     },
   },
   extraReducers: (builder) => {
@@ -174,6 +176,7 @@ export const slice = createSlice({
       .addCase(
         setupGetAllInternalAuditReports.fulfilled,
         (state, { payload }) => {
+          state.totalNoOfRecords = payload?.message;
           state.loading = false;
           state.allInternalAuditReports = payload?.data || [
             { error: "Not Found" },

@@ -5,7 +5,7 @@ export const getAllJobScheduling = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.get(
-      `${baseUrl}/auditPlanningAndScheduling/jobScheduling/getAll${data}`,
+      `${baseUrl}/auditPlanningAndScheduling/jobScheduling/getAll?companyId=${data?.companyId}&pageNo=${data?.page}&noOfRecords=${data?.itemsPerPage}&currentYear=${data?.year}`,
       {
         headers: {
           "Content-Type": "application/json",
