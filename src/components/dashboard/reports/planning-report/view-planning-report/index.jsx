@@ -14,6 +14,7 @@ import { CircularProgress } from "@mui/material";
 import Editors from "./components/editors/index";
 import HeadingTable from "./components/heading-table";
 import { useNavigate } from "react-router-dom";
+import PlanningReportFileUpload from "./components/file-upload";
 
 const UpdatePlanningReport = () => {
   const navigate = useNavigate();
@@ -54,6 +55,7 @@ const UpdatePlanningReport = () => {
           <Headers data={singleReportObject} />
           <Editors data={singleReportObject} />
           <HeadingTable data={singleReportObject} />
+          <PlanningReportFileUpload item={singleReportObject} />
         </>
       )}
     </div>

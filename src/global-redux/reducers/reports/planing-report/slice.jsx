@@ -11,6 +11,9 @@ import {
   updateHeading,
   deleteHeading,
   getAllUsers,
+  planningReportFileUpload,
+  planningReportFileDelete,
+  planningReportFileDownload,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -93,6 +96,27 @@ export const setupGetAllUsers = createAsyncThunk(
   "planningReport/getAllUsers",
   async (data, thunkAPI) => {
     return getAllUsers(data, thunkAPI);
+  }
+);
+
+export const setupPlanningReportFileUpload = createAsyncThunk(
+  "planningReport/planningReportFileUpload",
+  async (data, thunkAPI) => {
+    return planningReportFileUpload(data, thunkAPI);
+  }
+);
+
+export const setupPlanningReportFileDelete = createAsyncThunk(
+  "planningReport/planningReportFileDelete",
+  async (data, thunkAPI) => {
+    return planningReportFileDelete(data, thunkAPI);
+  }
+);
+
+export const setupPlanningReportFileDownload = createAsyncThunk(
+  "planningReport/planningReportFileDownload",
+  async (data, thunkAPI) => {
+    return planningReportFileDownload(data, thunkAPI);
   }
 );
 
@@ -306,6 +330,59 @@ export const slice = createSlice({
       })
       .addCase(setupGetAllUsers.rejected, (state, action) => {
         state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+
+    builder
+      .addCase(setupPlanningReportFileUpload.pending, (state) => {
+        state.updateLoading = true;
+      })
+      .addCase(setupPlanningReportFileUpload.fulfilled, (state) => {
+        state.updateLoading = false;
+        state.reportAddSuccess = true;
+        toast.success("File Uploaded Successfully");
+      })
+      .addCase(setupPlanningReportFileUpload.rejected, (state, action) => {
+        state.updateLoading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    builder
+      .addCase(setupPlanningReportFileDelete.pending, (state) => {
+        state.updateLoading = true;
+      })
+      .addCase(setupPlanningReportFileDelete.fulfilled, (state) => {
+        state.updateLoading = false;
+        state.reportAddSuccess = true;
+        toast.success("File Deleted Successfully");
+      })
+      .addCase(setupPlanningReportFileDelete.rejected, (state, action) => {
+        state.updateLoading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    builder
+      .addCase(setupPlanningReportFileDownload.pending, (state) => {
+        state.updateLoading = true;
+      })
+      .addCase(
+        setupPlanningReportFileDownload.fulfilled,
+        (state, { payload }) => {
+          state.updateLoading = false;
+        }
+      )
+      .addCase(setupPlanningReportFileDownload.rejected, (state, action) => {
+        state.updateLoading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);
         } else {

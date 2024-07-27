@@ -333,33 +333,31 @@ const AuditPlanSummary = () => {
                         <th className="bg-white"></th>
                       </tr>
                     </thead>
-                    {data
-                      ?.slice((page - 1) * 10, page * 10)
-                      ?.map((item, index) => {
-                        return (
-                          <Table
-                            key={index}
-                            index={index}
-                            item={item}
-                            handleChangePriority={handleChangePriority}
-                            handleChangeYear={handleChangeYear}
-                            handleEditEditable={handleEditEditable}
-                            handleEdit={handleEdit}
-                            handleSubmit={handleSubmit}
-                            handleApprove={handleApprove}
-                            allAuditPlanSummary={allAuditPlanSummary}
-                            user={user}
-                            currentId={currentId}
-                            loading={loading}
-                            setDeletePlanSummaryDialog={
-                              setDeletePlanSummaryDialog
-                            }
-                            setCurrentPlanSummaryId={setCurrentPlanSummaryId}
-                            setFeedBackDialog={setFeedBackDialog}
-                            setViewFeedBackDialog={setViewFeedBackDialog}
-                          />
-                        );
-                      })}
+                    {data?.map((item, index) => {
+                      return (
+                        <Table
+                          key={index}
+                          index={index}
+                          item={item}
+                          handleChangePriority={handleChangePriority}
+                          handleChangeYear={handleChangeYear}
+                          handleEditEditable={handleEditEditable}
+                          handleEdit={handleEdit}
+                          handleSubmit={handleSubmit}
+                          handleApprove={handleApprove}
+                          allAuditPlanSummary={allAuditPlanSummary}
+                          user={user}
+                          currentId={currentId}
+                          loading={loading}
+                          setDeletePlanSummaryDialog={
+                            setDeletePlanSummaryDialog
+                          }
+                          setCurrentPlanSummaryId={setCurrentPlanSummaryId}
+                          setFeedBackDialog={setFeedBackDialog}
+                          setViewFeedBackDialog={setViewFeedBackDialog}
+                        />
+                      );
+                    })}
                     <tbody>
                       <tr>
                         <td colSpan="7"></td>

@@ -16,6 +16,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
 import Editors from "./components/editors/index";
 import HeadingTable from "./components/heading-table";
+import PlanningReportFileUpload from "./components/file-upload";
 
 const UpdatePlanningReport = () => {
   const dispatch = useDispatch();
@@ -104,6 +105,10 @@ const UpdatePlanningReport = () => {
             data={singleReportObject}
           />
           <HeadingTable data={singleReportObject} reportId={reportId} />
+          <PlanningReportFileUpload
+            reportId={reportId}
+            item={singleReportObject}
+          />
           <button
             className={`btn btn-outline-primary  my-4 ${
               updateLoading && "disabled"

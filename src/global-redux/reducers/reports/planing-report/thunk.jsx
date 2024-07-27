@@ -205,3 +205,57 @@ export const getAllUsers = async (_, thunkAPI) => {
     return thunkAPI.rejectWithValue(error);
   }
 };
+
+export const planningReportFileUpload = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.post(
+      `${baseUrl}/planningreport/file/upload?planningReportId=${data?.planningReportId}`,
+      data?.formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+export const planningReportFileDelete = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.delete(
+      `${baseUrl}/planningreport/file/delete?fileId=${data?.fileId}&planningReportId=${data?.planningReportId}`,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
+export const planningReportFileDownload = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.get(
+      `${baseUrl}/planningreport/file/download?fileId=${data?.fileId}`,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
