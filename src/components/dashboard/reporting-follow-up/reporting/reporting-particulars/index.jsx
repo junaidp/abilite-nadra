@@ -295,7 +295,7 @@ const ReportingParticulars = () => {
   return (
     <div>
       {firstApproveDialog && (
-        <div className="modal-objective">
+        <div className="model-parent">
           <div className="model-wrap">
             <FirstApproveReportingDialog
               setFirstApproveDialog={setFirstApproveDialog}
@@ -305,7 +305,7 @@ const ReportingParticulars = () => {
         </div>
       )}
       {secondApproveDialog && (
-        <div className="modal-objective">
+        <div className="model-parent">
           <div className="model-wrap">
             <SecondApproveReportingDialog
               setSecondApproveDialog={setSecondApproveDialog}
@@ -315,7 +315,7 @@ const ReportingParticulars = () => {
         </div>
       )}
       {feedBackDialog && (
-        <div className="modal-objective">
+        <div className="model-parent">
           <div className="model-wrap">
             <FeedBackDialog
               setFeedBackDialog={setFeedBackDialog}
@@ -325,7 +325,7 @@ const ReportingParticulars = () => {
         </div>
       )}
       {viewFirstFeedBackDialog && (
-        <div className="modal-objective">
+        <div className="model-parent">
           <div className="model-wrap">
             <ViewFirstFeedBackDialog
               setViewFirstFeedBackDialog={setViewFirstFeedBackDialog}
@@ -335,7 +335,7 @@ const ReportingParticulars = () => {
         </div>
       )}
       {viewSecondFeedBackDialog && (
-        <div className="modal-objective">
+        <div className="model-parent">
           <div className="model-wrap">
             <ViewSecondFeedBackDialog
               setViewSecondFeedBackDialog={setViewSecondFeedBackDialog}

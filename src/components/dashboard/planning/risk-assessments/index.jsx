@@ -68,8 +68,8 @@ const RiskAssessments = () => {
   return (
     <div>
       {performRiskAssessmentModal && (
-        <div className="modal-objective-assessment">
-          <div className="model-wrap-assessment">
+        <div className="model-parent">
+          <div className="model-wrap">
             <RiskAssessmentModal
               setPerformRiskAssessmentModal={setPerformRiskAssessmentModal}
             />

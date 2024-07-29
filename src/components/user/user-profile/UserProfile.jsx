@@ -1,6 +1,5 @@
 import React from "react";
 import UserProfileDialog from "../../modals/user-profile-dialog/index";
-import "./UserProfile.css";
 import { useSelector, useDispatch } from "react-redux";
 import {
   resetUpdateUserNameSuccess,
@@ -44,7 +43,7 @@ const UserProfile = () => {
   return (
     <div>
       {updateUserDialog && (
-        <div className="audit-settings-modal">
+        <div className="model-parent">
           <div className="model-wrap">
             <UserProfileDialog setUpdateUserDialog={setUpdateUserDialog} />
           </div>

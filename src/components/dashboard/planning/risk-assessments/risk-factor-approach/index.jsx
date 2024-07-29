@@ -201,13 +201,11 @@ const RiskFactorApproach = () => {
       ) : (
         <>
           {showAddRiskFactorDialog && (
-            <div className="add-risk-factor-dialog">
-              <div className="modal-objective-factor ">
-                <div className="model-wrap-factor">
-                  <AddRiskFactorDialog
-                    setShowAddRiskFactorDialog={setShowAddRiskFactorDialog}
-                  />
-                </div>
+            <div className="model-parent">
+              <div className="model-wrap">
+                <AddRiskFactorDialog
+                  setShowAddRiskFactorDialog={setShowAddRiskFactorDialog}
+                />
               </div>
             </div>
           )}

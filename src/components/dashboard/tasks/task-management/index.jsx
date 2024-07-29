@@ -129,7 +129,7 @@ const TaskManagement = () => {
   return (
     <div>
       {showUpdateTaskDialog && (
-        <div className="dashboard-modal ">
+        <div className="model-parent">
           <div className="model-wrap ">
             <UpdateTaskDialog
               setShowUpdateTaskDailog={setShowUpdateTaskDailog}
@@ -139,7 +139,7 @@ const TaskManagement = () => {
         </div>
       )}
       {showViewTaskDialog && (
-        <div className="dashboard-modal ">
+        <div className="model-parent">
           <div className="model-wrap ">
             <ViewTaskManagement
               setShowViewTasktDialog={setShowViewTasktDialog}

@@ -1,24 +1,8 @@
-.w-400{
+.w-400 {
   width: 400px;
 }
-.invisble{
+.invisble {
   opacity: 0 !important;
-}
-
-#SideComponents {
-  width: 76%;
-  height: 100%;
-  margin-left: 20px;
-  margin-top: 10px;
-  transition: all 0.5s linear;
-}
-
-#SideComponentsFullWidth {
-  width: 94%;
-  height: 100%;
-  margin-left: -250px;
-  margin-top: 10px;
-  transition: all 0.5s linear;
 }
 
 .add-risk-factor-dialog {
@@ -48,25 +32,8 @@
   overflow-x: hidden;
 }
 
-.model-wrap-factor {
-  width: 40%;
-  background-color: white;
-  margin-left: 50%;
-  transform: translateX(-50%);
-  position: relative;
-  top: 10px;
-  border-radius: 10px;
-}
-
 @media screen and (max-width: 900px) {
   .dialog-risk-factor-main {
     width: 100%;
   }
-  .model-wrap-factor {
-    width: 90%;
-  }
 }
-/* 
-.bg-yellow{
-  background-color: #d9d900 !important;
-} */

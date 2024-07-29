@@ -77,8 +77,8 @@ const Login = () => {
   return (
     <section className="fxt-template-animation fxt-template-layout31">
       {showQRCodeScanner && (
-        <div className="modal-compliance-check-list">
-          <div className="model-wrap-compliance-check-list">
+        <div className="model-parent">
+          <div className="model-wrap">
             <QRCodeScannerDialog setShowQRCodeScanner={setShowQRCodeScanner} />
           </div>
         </div>

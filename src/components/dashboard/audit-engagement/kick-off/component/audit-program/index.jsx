@@ -197,7 +197,7 @@ const AuditProgram = ({
   return (
     <div className="accordion-item">
       {feedBackDialog && (
-        <div className="modal-objective">
+        <div className="model-parent">
           <div className="model-wrap">
             <FeedBackDialog
               setFeedBackDialog={setFeedBackDialog}
@@ -207,7 +207,7 @@ const AuditProgram = ({
         </div>
       )}
       {viewFeedBackDialog && (
-        <div className="modal-objective">
+        <div className="model-parent">
           <div className="model-wrap">
             <ViewFeedBackDialog
               setViewFeedBackDialog={setViewFeedBackDialog}
@@ -217,7 +217,7 @@ const AuditProgram = ({
         </div>
       )}
       {showApproveDialog && (
-        <div className="modal-objective">
+        <div className="model-parent">
           <div className="model-wrap">
             <ApproveDialog
               setShowApproveDialog={setShowApproveDialog}

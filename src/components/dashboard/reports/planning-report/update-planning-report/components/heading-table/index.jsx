@@ -29,7 +29,7 @@ const HeadingTable = ({ data, reportId }) => {
   return (
     <div>
       {showAddHeadingDialog && (
-        <div className="modal-objective">
+        <div className="model-parent">
           <div className="model-wrap">
             <AddHeadingDialog
               setShowAddHeadingDialog={setShowAddHeadingDialog}
@@ -39,7 +39,7 @@ const HeadingTable = ({ data, reportId }) => {
         </div>
       )}
       {showUpdateHeadingDialog && (
-        <div className="modal-objective">
+        <div className="model-parent">
           <div className="model-wrap">
             <UpdateHeadingDialog
               setShowUpdateHeadingDialog={setShowUpdateHeadingDialog}

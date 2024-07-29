@@ -39,7 +39,7 @@ const DashboardHome = () => {
   return (
     <div className="overflow-y-hidden">
       {showKickOffDialog && (
-        <div className="dashboard-modal">
+        <div className="model-parent">
           <div className="model-wrap">
             <KickOffModal
               setShowKickOffDialog={setShowKickOffDialog}

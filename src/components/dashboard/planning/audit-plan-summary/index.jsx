@@ -245,7 +245,7 @@ const AuditPlanSummary = () => {
       ) : (
         <div>
           {deletePlanSummaryDialog && (
-            <div className="modal-objective">
+            <div className="model-parent">
               <div className="model-wrap">
                 <DeletePlanSummaryDialog
                   setDeletePlanSummaryDialog={setDeletePlanSummaryDialog}
@@ -255,7 +255,7 @@ const AuditPlanSummary = () => {
             </div>
           )}
           {feedBackDialog && (
-            <div className="modal-objective">
+            <div className="model-parent">
               <div className="model-wrap">
                 <FeedBackDialog
                   setFeedBackDialog={setFeedBackDialog}
@@ -265,7 +265,7 @@ const AuditPlanSummary = () => {
             </div>
           )}
           {viewFeedBackDialog && (
-            <div className="modal-objective">
+            <div className="model-parent">
               <div className="model-wrap">
                 <ViewFeedBackDialog
                   setViewFeedBackDialog={setViewFeedBackDialog}
@@ -275,7 +275,7 @@ const AuditPlanSummary = () => {
             </div>
           )}
           {showApproveDialog && (
-            <div className="modal-objective">
+            <div className="model-parent">
               <div className="model-wrap">
                 <ApproveAuditPlanSummaryDialog
                   setShowApproveDialog={setShowApproveDialog}

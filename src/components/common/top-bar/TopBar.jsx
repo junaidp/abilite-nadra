@@ -225,7 +225,7 @@ const TopBar = () => {
                               <span className="d-flex align-items-center justify-content-center bg-light rounded-1 p-6">
                                 <FontAwesomeIcon
                                   icon={faIdBadge}
-                                  style={{ fontSize: "30px" }}
+                                  className="f-30"
                                 />
                               </span>
                               <div className="w-75 d-inline-block v-middle ps-3">

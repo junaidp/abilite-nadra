@@ -141,7 +141,7 @@ const InformationRequest = () => {
   return (
     <div>
       {showAddInformationRequestDialog && (
-        <div className="dashboard-modal ">
+        <div className="model-parent">
           <div className="model-wrap ">
             <AddInformationRequestDialog
               setShowAddInformationRequestDialog={
@@ -152,7 +152,7 @@ const InformationRequest = () => {
         </div>
       )}
       {showUpdateInformationRequestDialog && (
-        <div className="dashboard-modal ">
+        <div className="model-parent">
           <div className="model-wrap ">
             <UpdateInformationRequestDialog
               setShowUpdateInformationRequestDialog={
@@ -164,7 +164,7 @@ const InformationRequest = () => {
         </div>
       )}
       {showViewInformationRequestDialog && (
-        <div className="dashboard-modal ">
+        <div className="model-parent">
           <div className="model-wrap ">
             <ViewInformationRequestDialog
               setShowViewInformationRequestDialog={

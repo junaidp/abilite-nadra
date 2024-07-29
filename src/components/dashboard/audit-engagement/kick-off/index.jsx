@@ -180,8 +180,8 @@ const KickOff = () => {
       ) : (
         <>
           {showViewLibrary && (
-            <div className="modal-objective-library">
-              <div className="model-wrap-library">
+            <div className="model-parent">
+              <div className="model-wrap">
                 <ViewRiskLibraryDialog
                   setShowViewLibrary={setShowViewLibrary}
                   currentAuditEngagement={currentAuditEngagement}
@@ -191,8 +191,8 @@ const KickOff = () => {
           )}
 
           {showAuditStepsDialog && (
-            <div className="modal-objective-audit-steps-library">
-              <div className="model-wrap-audit-steps-library">
+            <div className="model-parent">
+              <div className="model-wrap">
                 <AuditStepsDialog
                   setShowAuditStepsDialog={setShowAuditStepsDialog}
                   auditStepId={auditStepId}
@@ -202,8 +202,8 @@ const KickOff = () => {
             </div>
           )}
           {showComplianceCheckListDialog && (
-            <div className="modal-compliance-check-list">
-              <div className="model-wrap-compliance-check-list">
+            <div className="model-parent">
+              <div className="model-wrap">
                 <ComplianceCheckListDialog
                   setShowComplianceCheckListDialog={
                     setShowComplianceCheckListDialog
@@ -215,8 +215,8 @@ const KickOff = () => {
             </div>
           )}
           {showAddAuditProgramDialog && (
-            <div className="modal-compliance-check-list">
-              <div className="model-wrap-compliance-check-list">
+            <div className="model-parent">
+              <div className="model-wrap">
                 <AddAuditProgramDialog
                   setShowAddAuditProgramDialog={setShowAddAuditProgramDialog}
                   auditEngagementId={auditEngagementId}
@@ -227,8 +227,8 @@ const KickOff = () => {
           )}
           {/* Risk Control Matrix Dialogs */}
           {showKickOffObjectiveDialog && (
-            <div className="modal-compliance-check-list">
-              <div className="model-wrap-compliance-check-list">
+            <div className="model-parent">
+              <div className="model-wrap">
                 <AddKickOffObjectiveDialog
                   setShowKickOffObjectiveDialog={setShowKickOffObjectiveDialog}
                   auditEngagementId={auditEngagementId}
@@ -237,8 +237,8 @@ const KickOff = () => {
             </div>
           )}
           {showKickOffRatingDialog && (
-            <div className="modal-compliance-check-list">
-              <div className="model-wrap-compliance-check-list">
+            <div className="model-parent">
+              <div className="model-wrap">
                 <AddKickOffRatingDialog
                   setShowKickOffRatingDialog={setShowKickOffRatingDialog}
                   currentAuditEngagement={currentAuditEngagement}
@@ -247,8 +247,8 @@ const KickOff = () => {
             </div>
           )}
           {showKickOffControlDialog && (
-            <div className="modal-compliance-check-list">
-              <div className="model-wrap-compliance-check-list">
+            <div className="model-parent">
+              <div className="model-wrap">
                 <AddKickOffControlDialog
                   setShowKickOffControlDialog={setShowKickOffControlDialog}
                   currentAuditEngagement={currentAuditEngagement}

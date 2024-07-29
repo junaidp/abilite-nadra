@@ -42,7 +42,7 @@ const Table = ({
   return (
     <div className="row my-3">
       {deleteFileDialog && (
-        <div className="modal-objective">
+        <div className="model-parent">
           <div className="model-wrap">
             <DeleteFileDialog
               setDeleteFileDialog={setDeleteFileDialog}

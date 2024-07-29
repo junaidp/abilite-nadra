@@ -1,24 +1,7 @@
-#SideComponents {
-  width: 76%;
-  height: 100%;
-  margin-left: 20px;
-  margin-top: 10px;
-  transition: all 0.5s linear;
-}
-
-#SideComponentsFullWidth {
-  width: 94%;
-  height: 100%;
-  margin-left: -250px;
-  margin-top: 10px;
-  transition: all 0.5s linear;
-}
-
 .select-grid {
   display: flex;
   flex-direction: column;
   width: 100%;
-  /* gap: 10px; */
 }
 
 .single-select-grid {
@@ -42,7 +25,6 @@
   color: white;
   padding: 9px 30px;
   margin-left: -10px;
-  /* height: 100%; */
 }
 
 .single-select-grid-part-1 p {

@@ -41,7 +41,7 @@ const UserManagement = ({
       aria-labelledby="nav-user-tab"
     >
       {userDeleteDialog && (
-        <div className="modal-objective">
+        <div className="model-parent">
           <div className="model-wrap">
             <DeleteUserDialog
               setUserDeleteDialog={setUserDeleteDialog}

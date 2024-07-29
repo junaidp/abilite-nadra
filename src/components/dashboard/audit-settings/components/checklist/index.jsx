@@ -126,7 +126,7 @@ const CheckList = ({
       aria-labelledby="nav-check-tab"
     >
       {deleteCheckListDialog && (
-        <div className="modal-objective">
+        <div className="model-parent">
           <div className="model-wrap">
             <DeleteCheckListDialog
               setShowDeleteCheckListDialog={setShowDeleteCheckListDialog}
@@ -135,7 +135,7 @@ const CheckList = ({
         </div>
       )}
       {showEditCheckListDialog && (
-        <div className="dashboard-modal">
+        <div className="model-parent">
           <div className="model-wrap">
             <EditCheckListDialog
               setShowEditCheckListDialog={setShowEditCheckListDialog}
@@ -144,7 +144,7 @@ const CheckList = ({
         </div>
       )}
       {showEditCheckListItemDialog && (
-        <div className="dashboard-modal">
+        <div className="model-parent">
           <div className="model-wrap">
             <EditCheckListItemDialog
               setShowEditCheckListItemDialog={setShowEditCheckListItemDialog}
@@ -153,7 +153,7 @@ const CheckList = ({
         </div>
       )}
       {showViewCheckListDialog && (
-        <div className="dashboard-modal">
+        <div className="model-parent">
           <div className="model-wrap">
             <ViewCheckListItemsDialog
               setShowViewCheckListDialog={setShowViewCheckListDialog}

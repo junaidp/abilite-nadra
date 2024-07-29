@@ -1,5 +1,4 @@
 import React from "react";
-import "./index.css";
 import { useNavigate } from "react-router-dom";
 import Pagination from "@mui/material/Pagination";
 import { setupGetAllJobScheduling } from "../../../../../global-redux/reducers/planing/job-scheduling/slice";

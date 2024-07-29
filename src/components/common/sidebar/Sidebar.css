@@ -3,10 +3,14 @@
 }
 
 .submenu {
-  max-height: 500px; /* Adjust based on content size */
+  max-height: 500px;
   opacity: 1;
   overflow: hidden;
   transition: max-height 0.5s ease, opacity 0.5s ease;
+}
+
+.left-side-bar-margins {
+  margin-top: -50px !important;
 }
 
 .page-wrapper-closed {

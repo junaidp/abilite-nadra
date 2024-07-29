@@ -107,7 +107,7 @@ const PlanningReport = () => {
   return (
     <div>
       {showReportPublishDialog && (
-        <div className="modal-objective">
+        <div className="model-parent">
           <div className="model-wrap">
             <ReportPublishDialog
               setShowReportPublishDialog={setShowReportPublishDialog}
@@ -117,7 +117,7 @@ const PlanningReport = () => {
         </div>
       )}
       {showReportDeleteDialog && (
-        <div className="modal-objective">
+        <div className="model-parent">
           <div className="model-wrap">
             <ReportDeleteDailog
               setShowReportDeleteDialog={setShowReportDeleteDialog}

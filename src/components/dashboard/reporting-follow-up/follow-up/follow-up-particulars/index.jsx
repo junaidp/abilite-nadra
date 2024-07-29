@@ -220,7 +220,7 @@ const FollowUpParticulars = () => {
   return (
     <div>
       {approveDialog && (
-        <div className="modal-objective">
+        <div className="model-parent">
           <div className="model-wrap">
             <ApproveDialog
               setApproveDialog={setApproveDialog}
@@ -230,7 +230,7 @@ const FollowUpParticulars = () => {
         </div>
       )}
       {feedBackDialog && (
-        <div className="modal-objective">
+        <div className="model-parent">
           <div className="model-wrap">
             <FeedBackDialog
               setFeedBackDialog={setFeedBackDialog}
@@ -240,7 +240,7 @@ const FollowUpParticulars = () => {
         </div>
       )}
       {viewThirdFeedBackDialog && (
-        <div className="modal-objective">
+        <div className="model-parent">
           <div className="model-wrap">
             <ViewThirdFeedBackDialog
               setViewThirdFeedBackDialog={setViewThirdFeedBackDialog}

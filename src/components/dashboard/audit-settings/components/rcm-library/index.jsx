@@ -170,8 +170,8 @@ const RCMLibraray = ({ userHierarchy, userRole }) => {
       aria-labelledby="nav-rcm-library-tab"
     >
       {showCreateRCMDialog && (
-        <div className="modal-compliance-check-list">
-          <div className="model-wrap-compliance-check-list">
+        <div className="model-parent">
+          <div className="model-wrap">
             <AddSettingsRCMDialog
               setShowCreateRCMDialog={setShowCreateRCMDialog}
             />
@@ -179,8 +179,8 @@ const RCMLibraray = ({ userHierarchy, userRole }) => {
         </div>
       )}
       {showUpdateRCMDialog && (
-        <div className="modal-compliance-check-list">
-          <div className="model-wrap-compliance-check-list">
+        <div className="model-parent">
+          <div className="model-wrap">
             <UpdateSettinsRCMDialog
               setShowUpdateRCMDialog={setShowUpdateRCMDialog}
               updatedRCMId={updatedRCMId}
@@ -189,8 +189,8 @@ const RCMLibraray = ({ userHierarchy, userRole }) => {
         </div>
       )}
       {showRCMObjectiveDialog && (
-        <div className="modal-compliance-check-list">
-          <div className="model-wrap-compliance-check-list">
+        <div className="model-parent">
+          <div className="model-wrap">
             <AddSettingsObjectiveRCMDialog
               setShowRCMObjectiveDialog={setShowRCMObjectiveDialog}
             />
@@ -198,8 +198,8 @@ const RCMLibraray = ({ userHierarchy, userRole }) => {
         </div>
       )}
       {showRCMRiskDialog && (
-        <div className="modal-compliance-check-list">
-          <div className="model-wrap-compliance-check-list">
+        <div className="model-parent">
+          <div className="model-wrap">
             <AddSettingsRiskRCMDialog
               setShowRCMRiskDialog={setShowRCMRiskDialog}
             />
@@ -207,8 +207,8 @@ const RCMLibraray = ({ userHierarchy, userRole }) => {
         </div>
       )}
       {showRCMControlDialog && (
-        <div className="modal-compliance-check-list">
-          <div className="model-wrap-compliance-check-list">
+        <div className="model-parent">
+          <div className="model-wrap">
             <AddSettingsControlRCMDialog
               setShowRCMControlDialog={setShowRCMControlDialog}
             />
@@ -216,8 +216,8 @@ const RCMLibraray = ({ userHierarchy, userRole }) => {
         </div>
       )}
       {showRCMProgramDialog && (
-        <div className="modal-compliance-check-list">
-          <div className="model-wrap-compliance-check-list">
+        <div className="model-parent">
+          <div className="model-wrap">
             <AddSettingsProgramRCMDialog
               setShowRCMProgramDialog={setShowRCMProgramDialog}
             />
@@ -225,8 +225,8 @@ const RCMLibraray = ({ userHierarchy, userRole }) => {
         </div>
       )}
       {showDeleteRCMDialog && (
-        <div className="modal-compliance-check-list">
-          <div className="model-wrap-compliance-check-list">
+        <div className="model-parent">
+          <div className="model-wrap">
             <DeleteRCMDialog
               setShowDeleteRCMDialog={setShowDeleteRCMDialog}
               updatedRCMId={updatedRCMId}

@@ -1,20 +1,3 @@
-#SideComponents {
-  width: 76%;
-  height: 100%;
-  margin-left: 20px;
-  margin-top: 10px;
-  transition: all 0.5s linear;
-  overflow-x: auto;
-}
-
-#SideComponentsFullWidth {
-  width: 94%;
-  height: 100%;
-  margin-left: -250px;
-  margin-top: 10px;
-  transition: all 0.5s linear;
-}
-
 .nav-tabs .nav-item.show .nav-link,
 .nav-tabs .nav-link.active {
   color: white;
@@ -35,20 +18,15 @@ td {
   border-top: 3px solid rgba(255, 255, 255, 0.7);
 }
 .nav-item .nav-link {
-  margin-right: 2px; /* Gives spacing between tabs */
+  margin-right: 2px;
   transition: color 0.2s, background-color 0.2s;
   text-transform: capitalize;
   font-size: 15px;
 }
 .nav-item .nav-link.active {
-  background-color: rgba(
-    255,
-    255,
-    255,
-    0.3
-  ); /* Slightly more opaque for active tab */
+  background-color: rgba(255, 255, 255, 0.3);
   color: #0a7386;
 }
 .nav-item .nav-link:hover {
-  background-color: rgba(255, 255, 255, 0.2); /* Adds hover effect for tabs */
+  background-color: rgba(255, 255, 255, 0.2);
 }

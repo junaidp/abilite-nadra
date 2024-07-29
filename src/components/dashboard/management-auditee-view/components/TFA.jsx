@@ -43,14 +43,14 @@ const TwoFactorAuthentication = () => {
       aria-labelledby="nav-tfa-tab"
     >
       {showDialog && (
-        <div className="audit-settings-modal">
+        <div className="model-parent">
           <div className="model-wrap">
             <TFADialog setShowDialog={setShowDialog} />
           </div>
         </div>
       )}
       {showEnableTfaDialog && (
-        <div className="audit-settings-modal">
+        <div className="model-parent">
           <div className="model-wrap">
             <EnableTfaDialog
               setShowEnableTfaDialog={setShowEnableTfaDialog}

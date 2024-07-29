@@ -1,30 +1,13 @@
-#SideComponents {
-  width: 94%;
-  height: 100%;
-  margin-left: 20px;
-  margin-top: 10px;
-  transition: all 0.5s linear;
-}
-
-#SideComponentsFullWidth {
-  width: 100%;
-  height: 100%;
-  margin-left: -250px;
-  margin-top: 10px;
-  transition: all 0.5s linear;
-}
-
 .dashboard-charts-wrapper {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 30px;
 }
-span{
+span {
   font-size: 12px;
 }
 
-
-p{
+p {
   font-size: 12px;
   margin-bottom: 0px;
 }
@@ -38,16 +21,16 @@ p{
 }
 
 .glassmorphism-card .card-body {
-  color: #000; /* Black text color */
+  color: #000;
 }
 
 .primary {
-  color: #0A7386; /* Icon color */
+  color: #0a7386;
 }
 
 .media-body h3,
 .media-body span {
-  color: #000; /* Black text color */
+  color: #000;
 }
 
 .media-body {
@@ -55,10 +38,10 @@ p{
 }
 
 .align-self-center {
-  margin-right: 15px; /* Space between icon and text */
+  margin-right: 15px;
 }
 .glassmorphism-card- {
-  background: #0A7386;
+  background: #0a7386;
   border-radius: 15px;
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -82,45 +65,44 @@ p{
 }
 
 .high {
-  background-color: #4472C4;
+  background-color: #4472c4;
   color: white;
 }
 
 .medium {
-  background-color: #ED7D31;
+  background-color: #ed7d31;
   color: white;
 }
-.yellow{
-  background-color: #FFC61C;
+.yellow {
+  background-color: #ffc61c;
   color: white;
 }
 .low {
-  background-color: #A5A5A5;
+  background-color: #a5a5a5;
   color: white;
 }
-.highh{
-  background-color: #70AD47;
+.highh {
+  background-color: #70ad47;
   color: white;
 }
-.mediumm{
-  background-color: #5B9BD5;
+.mediumm {
+  background-color: #5b9bd5;
   color: white;
 }
-.card-header{
-  background:#0A7386 ;
+.card-header {
+  background: #0a7386;
   color: white;
 }
-.job-card{
+.job-card {
   height: 240px;
   overflow-x: auto;
 }
 
-.dashboard-content-wrap{
+.dashboard-content-wrap {
   margin-left: -12px !important;
 }
 
-
-@media screen and (max-width:1100px) {
+@media screen and (max-width: 1100px) {
   .dashboard-charts-wrapper {
     grid-template-columns: 1fr;
   }

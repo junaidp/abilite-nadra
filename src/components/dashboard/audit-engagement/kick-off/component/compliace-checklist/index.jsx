@@ -127,7 +127,7 @@ const ComplianceCheckList = ({
   return (
     <div className="accordion-item">
       {showApproveDialog && (
-        <div className="modal-objective">
+        <div className="model-parent">
           <div className="model-wrap">
             <ApproveDialog
               setShowApproveDialog={setShowApproveDialog}

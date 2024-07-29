@@ -143,7 +143,7 @@ const InternalAuditReport = () => {
   return (
     <div>
       {showDeleteInternalAuditReportDialog && (
-        <div className="modal-objective">
+        <div className="model-parent">
           <div className="model-wrap">
             <DeleteInternalAuditConsolidationReportDialog
               setShowDeleteInternalAuditReportDialog={
@@ -155,7 +155,7 @@ const InternalAuditReport = () => {
         </div>
       )}
       {showSubmitReportDialog && (
-        <div className="modal-objective">
+        <div className="model-parent">
           <div className="model-wrap">
             <SubmitDialog
               currentReportItem={currentReportItem}
@@ -165,7 +165,7 @@ const InternalAuditReport = () => {
         </div>
       )}
       {showApproveDialog && (
-        <div className="modal-objective">
+        <div className="model-parent">
           <div className="model-wrap">
             <ApproveDialog
               currentReportItem={currentReportItem}
@@ -175,7 +175,7 @@ const InternalAuditReport = () => {
         </div>
       )}
       {showFeedBackDialog && (
-        <div className="modal-objective">
+        <div className="model-parent">
           <div className="model-wrap">
             <FeedBackDialog
               Id={currentReportItem?.id}
@@ -185,7 +185,7 @@ const InternalAuditReport = () => {
         </div>
       )}
       {viewFeedBackDialog && (
-        <div className="modal-objective">
+        <div className="model-parent">
           <div className="model-wrap">
             <ViewFeedBackDialog
               currentReportItem={currentReportItem}

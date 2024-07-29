@@ -85,7 +85,7 @@ const CPList = ({ userHierarchy, userRole }) => {
       aria-labelledby="cp-list-tab"
     >
       {showDeleteCpListDialog && (
-        <div className="modal-objective">
+        <div className="model-parent">
           <div className="model-wrap">
             <DeleteCpListDialog
               setShowDeleteCpListDialog={setShowDeleteCpListDialog}

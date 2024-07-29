@@ -54,7 +54,7 @@ const AditSteps = ({
   return (
     <div className="accordion-item">
       {feedBackDialog && (
-        <div className="modal-objective">
+        <div className="model-parent">
           <div className="model-wrap">
             <FeedBackDialog
               setFeedBackDialog={setFeedBackDialog}
@@ -64,7 +64,7 @@ const AditSteps = ({
         </div>
       )}
       {viewFeedBackDialog && (
-        <div className="modal-objective">
+        <div className="model-parent">
           <div className="model-wrap">
             <ViewFeedBackDialog
               setViewFeedBackDialog={setViewFeedBackDialog}
@@ -74,7 +74,7 @@ const AditSteps = ({
         </div>
       )}
       {showApproveDialog && (
-        <div className="modal-objective">
+        <div className="model-parent">
           <div className="model-wrap">
             <ApproveDialog
               setShowApproveDialog={setShowApproveDialog}

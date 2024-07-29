@@ -1,5 +1,4 @@
 import React from "react";
-import "./index.css";
 import { useNavigate } from "react-router-dom";
 import { setupGetAllFollowUp } from "../../../../global-redux/reducers/reporting/slice";
 import { useDispatch, useSelector } from "react-redux";

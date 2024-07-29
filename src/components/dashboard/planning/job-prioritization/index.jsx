@@ -295,27 +295,28 @@ const JobPrioritization = () => {
                                   </div>
                                 )}
                             </div>
+                            {allJobPrioritization[index]?.locked === true && (
+                              <div className="px-3 mt-2">
+                                <button
+                                  className={`btn btn-labeled btn-primary px-3  shadow disabled`}
+                                >
+                                  Approved
+                                </button>
+                              </div>
+                            )}
+                            {allJobPrioritization[index]?.locked === false &&
+                              allJobPrioritization[index]?.completed ===
+                                true && (
+                                <div className="px-3 mt-2">
+                                  <button
+                                    className={`btn btn-labeled btn-primary px-3  shadow disabled`}
+                                  >
+                                    Submitted
+                                  </button>
+                                </div>
+                              )}
                           </td>
                         )}
-                        {allJobPrioritization[index]?.locked === true && (
-                          <td>
-                            <button
-                              className={`btn btn-labeled btn-primary px-3  shadow disabled`}
-                            >
-                              Approved
-                            </button>
-                          </td>
-                        )}
-                        {allJobPrioritization[index]?.locked === false &&
-                          allJobPrioritization[index]?.completed === true && (
-                            <td>
-                              <button
-                                className={`btn btn-labeled btn-primary px-3  shadow disabled`}
-                              >
-                                Submitted
-                              </button>
-                            </td>
-                          )}
                       </tr>
                     );
                   })

@@ -96,7 +96,7 @@ const BusinessObjective = () => {
   return (
     <div>
       {businessObjectiveDialog && (
-        <div className="modal-objective">
+        <div className="model-parent">
           <div className="model-wrap">
             <BusinessObjectiveModal
               setBusinessObjectiveDialog={setBusinessObjectiveDialog}
@@ -105,7 +105,7 @@ const BusinessObjective = () => {
         </div>
       )}
       {deleteEngagementDialog && (
-        <div className="modal-objective">
+        <div className="model-parent">
           <div className="model-wrap">
             <DeleteEngagementDialog
               setShowDeleteEngagementDialog={setShowDeleteEngagementDialog}

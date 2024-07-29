@@ -75,7 +75,7 @@ export default function SmallScreenSidebar() {
 
   const DrawerList = (
     <Box sx={{ width: 285 }} role="presentation" ref={userRef}>
-      <div className="left-sidebar" style={{ marginTop: "-50px" }}>
+      <div className="left-sidebar left-side-bar-margins">
         <div className="min-h-100">
           <nav
             className="sidebar-nav scroll-sidebar mt-4 pt-4"

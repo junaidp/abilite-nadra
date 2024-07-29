@@ -95,7 +95,7 @@ const AuditSettings = () => {
   return (
     <div>
       {checkListManagementDialog && (
-        <div className="audit-settings-modal">
+        <div className="model-parent">
           <div className="model-wrap">
             <AddCheckListManagementDialog
               setCheckListManagementDialog={setCheckListManagementDialog}
@@ -104,7 +104,7 @@ const AuditSettings = () => {
         </div>
       )}
       {userManagementDialog && (
-        <div className="audit-settings-modal">
+        <div className="model-parent">
           <div className="model-wrap">
             <UserManagementDialog
               setUserManagementDialog={setUserManagementDialog}
@@ -114,7 +114,7 @@ const AuditSettings = () => {
       )}
 
       {updateUserDialog && (
-        <div className="audit-settings-modal">
+        <div className="model-parent">
           <div className="model-wrap">
             <UpdateUserDialog
               setUpdateUserDialog={setUpdateUserDialog}

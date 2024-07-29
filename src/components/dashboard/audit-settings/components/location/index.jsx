@@ -90,7 +90,7 @@ const Location = ({ userHierarchy, userRole }) => {
       aria-labelledby="nav-profile-tab"
     >
       {deleteLocationDialog && (
-        <div className="modal-objective">
+        <div className="model-parent">
           <div className="model-wrap">
             <DeleteLocationDialog
               setShowDeleteLocationDialog={setShowDeleteLocationDialog}
