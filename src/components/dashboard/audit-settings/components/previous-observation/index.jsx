@@ -123,6 +123,7 @@ const PreviousObservation = () => {
                   <tr>
                     <th className="w-80">Sr No.</th>
                     <th>Management Comments</th>
+                    <th>Observation</th>
                     <th>Jobs Created</th>
                   </tr>
                 </thead>
@@ -134,9 +135,8 @@ const PreviousObservation = () => {
                         <tr key={index}>
                           <td>{index + 1}</td>
                           <td>{item?.managementComments}</td>
-                          <td>
-                            {item?.jobCreated === false ? "False" : "True"}
-                          </td>
+                          <td>{item?.observation}</td>
+                          <td>{item?.jobCreated === false ? "No" : "Yess"}</td>
                         </tr>
                       );
                     })}

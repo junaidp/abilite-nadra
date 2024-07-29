@@ -8,7 +8,9 @@ import * as Yup from "yup";
 
 // Validation schema
 const validationSchema = Yup.object({
-  dueDate: Yup.date().required("Due Date is required"),
+  dueDate: Yup.date()
+    .required("Due Date is required")
+    .min(new Date(), "Due Date must be today or later"),
   auditEngagementId: Yup.string().required("Job is required"),
   userAssigned: Yup.string().required("Assignee is required"),
   detailedRequirement: Yup.string()

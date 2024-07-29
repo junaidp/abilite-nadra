@@ -104,19 +104,22 @@ const UpdatePlanningReport = () => {
             handleEditorContentChange={handleEditorContentChange}
             data={singleReportObject}
           />
+          <div className="d-flex justify-end">
+            <button
+              className={`btn btn-outline-primary  my-4 ${
+                updateLoading && "disabled"
+              }`}
+              onClick={handleUpdate}
+            >
+              {updateLoading ? "Loading..." : "Save Report"}
+            </button>
+          </div>
+          <hr />
           <HeadingTable data={singleReportObject} reportId={reportId} />
           <PlanningReportFileUpload
             reportId={reportId}
             item={singleReportObject}
           />
-          <button
-            className={`btn btn-outline-primary  my-4 ${
-              updateLoading && "disabled"
-            }`}
-            onClick={handleUpdate}
-          >
-            {updateLoading ? "Loading..." : "Update Report"}
-          </button>
         </>
       )}
     </div>

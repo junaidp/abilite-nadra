@@ -49,7 +49,7 @@ const HeadingTable = ({ data, reportId }) => {
           </div>
         </div>
       )}
-      <div className="flex justify-end">
+      <div className="flex justify-start">
         <button
           className={`btn btn-secondary  my-4 `}
           onClick={handleAddHeading}

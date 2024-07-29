@@ -2,12 +2,13 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setupAddTask } from "../../../../../../global-redux/reducers/tasks-management/slice";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import FileUpload from "./file-upload";
 import * as Yup from "yup";
 
 // Validation schema
 const validationSchema = Yup.object({
-  dueDate: Yup.date().required("Due Date is required"),
+  dueDate: Yup.date()
+    .required("Due Date is required")
+    .min(new Date(), "Due Date must be today or later"),
   auditEngagementId: Yup.string().required("Job is required"),
   userAssigned: Yup.string().required("Assignee is required"),
   detailedRequirement: Yup.string()
@@ -21,7 +22,6 @@ const AddInformationRequest = ({ setShowAddInformationRequestDialog }) => {
     (state) => state?.tasksManagement
   );
   const { user } = useSelector((state) => state?.auth);
-  const [fileAttachments, setFileAttachments] = React.useState([]);
 
   // Initial form values
   const initialValues = {
@@ -56,7 +56,7 @@ const AddInformationRequest = ({ setShowAddInformationRequestDialog }) => {
   }, [taskAddSuccess]);
 
   return (
-    <div className="px-4 py-4 information-request-dialog-main-wrap">
+    <div className="px-4 py-4">
       <header className="section-header my-3 text-start d-flex align-items-center justify-content-between">
         <div className="mb-0 heading d-flex align-items-center">
           <h2 className="heading">Add Information Request</h2>
@@ -151,11 +151,6 @@ const AddInformationRequest = ({ setShowAddInformationRequestDialog }) => {
                 </label>
               </div>
             </div>
-
-            <FileUpload
-              fileAttachments={fileAttachments}
-              setFileAttachments={setFileAttachments}
-            />
 
             <div className="row mb-2">
               <div className="col-lg-8 align-self-end">

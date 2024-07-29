@@ -35,13 +35,24 @@ const Header = () => {
       const companyId = user[0]?.company?.find(
         (item) => item?.companyName === company
       )?.id;
+
       if (companyId) {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const startDate = new Date(data?.startDate);
+        const endDate = new Date(data?.endDate);
+
         if (
           data?.startDate === "" ||
           data?.endDate === "" ||
           data?.reportTitle === ""
         ) {
           toast.error("Provide all values");
+        } else if (startDate < today) {
+          toast.error("Start date cannot be a past date");
+        } else if (endDate <= startDate) {
+          toast.error("End date must be greater than the start date");
         } else {
           dispatch(
             setupSaveReport({
