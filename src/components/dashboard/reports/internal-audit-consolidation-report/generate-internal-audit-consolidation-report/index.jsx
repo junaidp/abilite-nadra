@@ -147,7 +147,7 @@ const GenerateInternalAuditConsolidationReport = () => {
         )
       );
     }
-  }, [user, year, company]);
+  }, [dispatch, year]);
 
   React.useEffect(() => {
     let isNotNull =

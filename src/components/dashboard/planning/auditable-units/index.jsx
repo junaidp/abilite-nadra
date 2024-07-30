@@ -81,7 +81,7 @@ const AuditableUnits = () => {
   return (
     <div>
       {auditableUnitRatingDialog && (
-        <div className="dashboard-modal">
+        <div className="model-parent">
           <div className="model-wrap">
             <AuditableUnitRatingDialog
               setAuditableUnitRatingDialog={setAuditableUnitRatingDialog}
@@ -91,7 +91,7 @@ const AuditableUnits = () => {
         </div>
       )}
       {showEditAuditableUnit && (
-        <div className="dashboard-modal">
+        <div className="model-parent">
           <div className="model-wrap">
             <EditAuditableUnitDialog
               setShowEditAuditableUnit={setShowEditAuditableUnit}

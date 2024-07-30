@@ -12,7 +12,7 @@ import {
 const PreviousObservation = () => {
   const dispatch = useDispatch();
   const fileInputRef = React.useRef(null);
-  let { loading, previousObservations, previousObservationAddSuccess } =
+  const { loading, previousObservations, previousObservationAddSuccess } =
     useSelector((state) => state.settingsPreviousObservation);
   const { user } = useSelector((state) => state?.auth);
   const { company } = useSelector((state) => state?.common);
@@ -56,6 +56,7 @@ const PreviousObservation = () => {
         (item) => item?.companyName === company
       )?.id;
       setSelectedFile(null);
+      fileInputRef.current.value = "";
       setPage(1);
       dispatch(resetPreviousObservationsAddSuccess());
       dispatch(setupGetAllPreviousObservations({ companyId: companyId }));

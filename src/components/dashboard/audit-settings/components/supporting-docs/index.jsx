@@ -107,6 +107,7 @@ const SupportingDocs = ({ userHierarchy, userRole }) => {
       dispatch(setupGetAllFiles(`?companyId=${companyId}`));
       setSelectedFile(null);
       setSelectedUpdateFile(null);
+      fileInputRef.current.value = "";
       setPage(1);
       setSearchValue("");
       dispatch(resetFileAddSuccess());

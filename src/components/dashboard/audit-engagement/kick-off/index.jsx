@@ -139,7 +139,7 @@ const KickOff = () => {
     if (user[0]?.token && auditEngagementId) {
       dispatch(setupGetInitialSingleAuditEngagement(auditEngagementId));
     }
-  }, [user, auditEngagementId]);
+  }, [dispatch]);
 
   React.useEffect(() => {
     if (singleAuditEngagementObject?.status === "Kick Off") {

@@ -100,7 +100,7 @@ const Location = ({ userHierarchy, userRole }) => {
         </div>
       )}
       {showEditLocationDialog && (
-        <div className="dashboard-modal">
+        <div className="model-parent">
           <div className="model-wrap">
             <EditLocationDialog
               setShowEditLocationDialog={setShowEditLocationDialog}
@@ -110,7 +110,7 @@ const Location = ({ userHierarchy, userRole }) => {
         </div>
       )}
       {showEditSubLocationDialog && (
-        <div className="dashboard-modal">
+        <div className="model-parent">
           <div className="model-wrap">
             <EditSubLocationDialog
               setShowEditSubLocationDialog={setShowEditSubLocationDialog}

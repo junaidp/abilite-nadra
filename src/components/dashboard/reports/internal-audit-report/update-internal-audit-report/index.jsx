@@ -151,7 +151,7 @@ const UpdateInternalAuditReport = () => {
         setupGetSingleInternalAuditReport(`?reportId=${Number(reportId)}`)
       );
     }
-  }, [reportId, user]);
+  }, [dispatch]);
 
   React.useEffect(() => {
     dispatch(changeActiveLink("li-internal-audit-report"));

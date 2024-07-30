@@ -51,7 +51,7 @@ const ViewInternalAuditConsolidationReport = () => {
         setupGetSingleInternalAuditReport(`?reportId=${Number(reportId)}`)
       );
     }
-  }, [reportId, user]);
+  }, [dispatch]);
 
   return (
     <div className="overflow-y-hidden">

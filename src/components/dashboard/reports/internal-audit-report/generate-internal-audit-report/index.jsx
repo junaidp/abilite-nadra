@@ -140,7 +140,7 @@ const GenerateInternalAuditReport = () => {
         )
       );
     }
-  }, [user, year, company]);
+  }, [dispatch, year]);
 
   React.useEffect(() => {
     let isNotNull =

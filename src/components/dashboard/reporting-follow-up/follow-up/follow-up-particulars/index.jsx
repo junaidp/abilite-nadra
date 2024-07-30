@@ -201,7 +201,7 @@ const FollowUpParticulars = () => {
         )
       );
     }
-  }, [user, year, company]);
+  }, [dispatch]);
 
   React.useEffect(() => {
     if (!followUpId) {

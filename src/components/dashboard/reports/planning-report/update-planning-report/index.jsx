@@ -83,7 +83,7 @@ const UpdatePlanningReport = () => {
     if (user[0]?.token && reportId) {
       dispatch(setupGetSingleReport(Number(reportId)));
     }
-  }, [dispatch, reportId]);
+  }, [dispatch]);
 
   React.useEffect(() => {
     dispatch(changeActiveLink("li-internal-audit-planing-report"));

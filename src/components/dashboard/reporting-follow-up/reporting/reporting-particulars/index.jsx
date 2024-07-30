@@ -276,7 +276,7 @@ const ReportingParticulars = () => {
       );
       dispatch(setupGetAllUsers({ shareWith: true }));
     }
-  }, [user, year, company]);
+  }, [dispatch]);
 
   React.useEffect(() => {
     if (!reportingId) {
