@@ -110,10 +110,10 @@ const ProcedureFileUpload = ({
       setSelectedFile(null);
       setSelectedUpdateFile(null);
       if (fileInputRef?.current) {
-        fileInputRef.current.value = null;
+        fileInputRef.current.value = "";
       }
       if (updatedFileInputRef?.current) {
-        updatedFileInputRef.current.value = null;
+        updatedFileInputRef.current.value = "";
       }
     }
   }, [auditEngagementObservationAddSuccess]);

@@ -101,105 +101,66 @@ const Table = ({
         <td className="normal-text">{item?.q3}</td>
         <td className="normal-text">{item?.q4}</td>
         <td className="normal-text"></td>
-        {(allAuditPlanSummary[index]?.completed === false ||
-          (allAuditPlanSummary[index]?.completed === true &&
-            allAuditPlanSummary[index]?.locked === false &&
-            (Number(item?.initiatorTLEB) ===
-              Number(user[0]?.userId?.employeeid?.id) ||
-              user[0]?.userId?.employeeid?.userHierarchy === "IAH"))) && (
-          <td className="normal-text ">
-            <div className="d-flex justify-between">
-              {item?.editable === false && (
-                <div className="mt-3">
-                  <div className="justify-content-end text-end">
-                    <i
-                      className="fa fa-edit  px-3 f-18 cursor-pointer"
-                      onClick={() => handleEditEditable(item)}
-                    ></i>
-                  </div>
-                </div>
-              )}
-              {item?.editable === true && (
-                <div className="mt-3 mx-3">
-                  <div className="justify-content-end text-end">
-                    <div
-                      className={`btn btn-labeled btn-primary px-3 shadow ${
-                        loading &&
-                        Number(currentId) === Number(item?.id) &&
-                        "disabled"
-                      }`}
-                      onClick={() => handleEdit(item)}
-                    >
-                      {loading && Number(currentId) === Number(item?.id)
-                        ? "Loading..."
-                        : "Save"}
-                    </div>
-                  </div>
-                </div>
-              )}
-              {item?.approved === false && (
-                <i
-                  className="fa fa-trash mt-3  text-danger f-18 cursor-pointer"
-                  onClick={() => {
-                    setDeletePlanSummaryDialog(true);
-                    setCurrentPlanSummaryId(item?.id);
-                  }}
-                ></i>
-              )}
-              {(allAuditPlanSummary[index]?.submitted === false ||
-                allAuditPlanSummary[index]?.completed === false) &&
-                allAuditPlanSummary[index]?.priority &&
-                allAuditPlanSummary[index]?.priority !== "" &&
-                allAuditPlanSummary[index]?.threeYearsAgo !== null &&
-                allAuditPlanSummary[index]?.twoYearsAgo !== null &&
-                allAuditPlanSummary[index]?.lastYear !== null && (
-                  <div className="mt-3 mx-3">
-                    <div className="justify-content-end text-end">
-                      <div
-                        className={`btn btn-labeled btn-primary px-3 shadow ${
-                          loading &&
-                          Number(currentId) === Number(item?.id) &&
-                          "disabled"
-                        }`}
-                        onClick={() => handleSubmit(item)}
-                      >
-                        {loading && Number(currentId) === Number(item?.id)
-                          ? "Loading..."
-                          : "Submit"}
-                      </div>
-                    </div>
-                  </div>
-                )}
-              {allAuditPlanSummary[index]?.submitted === true &&
-                allAuditPlanSummary[index]?.completed === true &&
-                allAuditPlanSummary[index]?.approved === false &&
+        <td className="w-300">
+          <div className={`d-flex flex-wrap gap-2`}>
+            {(allAuditPlanSummary[index]?.completed === false ||
+              (allAuditPlanSummary[index]?.completed === true &&
                 allAuditPlanSummary[index]?.locked === false &&
-                allAuditPlanSummary[index]?.priority &&
-                allAuditPlanSummary[index]?.priority !== "" &&
-                allAuditPlanSummary[index]?.threeYearsAgo !== null &&
-                allAuditPlanSummary[index]?.twoYearsAgo !== null &&
-                allAuditPlanSummary[index]?.lastYear !== null &&
                 (Number(item?.initiatorTLEB) ===
                   Number(user[0]?.userId?.employeeid?.id) ||
-                  user[0]?.userId?.employeeid?.userHierarchy === "IAH") && (
-                  <div className="mt-3 mx-3">
-                    <div className="justify-content-end text-end">
-                      <div
-                        className={`btn btn-labeled btn-primary px-3 shadow ${
-                          loading &&
-                          Number(currentId) === Number(item?.id) &&
-                          "disabled"
-                        }`}
-                        onClick={() => handleApprove(item)}
-                      >
-                        {loading && Number(currentId) === Number(item?.id)
-                          ? "Loading..."
-                          : "Approve"}
-                      </div>
-                    </div>
+                  user[0]?.userId?.employeeid?.userHierarchy === "IAH"))) && (
+              <div>
+                {item?.editable === false && (
+                  <i
+                    className="fa fa-edit f-18 cursor-pointer"
+                    onClick={() => handleEditEditable(item)}
+                  ></i>
+                )}
+                {item?.editable === true && (
+                  <div
+                    className={`btn btn-labeled btn-primary shadow ${
+                      loading &&
+                      Number(currentId) === Number(item?.id) &&
+                      "disabled"
+                    }`}
+                    onClick={() => handleEdit(item)}
+                  >
+                    {loading && Number(currentId) === Number(item?.id)
+                      ? "Loading..."
+                      : "Save"}
                   </div>
                 )}
-            </div>
+              </div>
+            )}
+            {item?.approved === false && (
+              <i
+                className="fa fa-trash text-danger f-18 cursor-pointer"
+                onClick={() => {
+                  setDeletePlanSummaryDialog(true);
+                  setCurrentPlanSummaryId(item?.id);
+                }}
+              ></i>
+            )}
+            {(allAuditPlanSummary[index]?.submitted === false ||
+              allAuditPlanSummary[index]?.completed === false) &&
+              allAuditPlanSummary[index]?.priority &&
+              allAuditPlanSummary[index]?.priority !== "" &&
+              allAuditPlanSummary[index]?.threeYearsAgo !== null &&
+              allAuditPlanSummary[index]?.twoYearsAgo !== null &&
+              allAuditPlanSummary[index]?.lastYear !== null && (
+                <div
+                  className={`btn btn-labeled btn-primary shadow ${
+                    loading &&
+                    Number(currentId) === Number(item?.id) &&
+                    "disabled"
+                  }`}
+                  onClick={() => handleSubmit(item)}
+                >
+                  {loading && Number(currentId) === Number(item?.id)
+                    ? "Loading..."
+                    : "Submit"}
+                </div>
+              )}
             {allAuditPlanSummary[index]?.submitted === true &&
               allAuditPlanSummary[index]?.completed === true &&
               allAuditPlanSummary[index]?.approved === false &&
@@ -212,62 +173,70 @@ const Table = ({
               (Number(item?.initiatorTLEB) ===
                 Number(user[0]?.userId?.employeeid?.id) ||
                 user[0]?.userId?.employeeid?.userHierarchy === "IAH") && (
-                <div className="mt-3 mx-3">
-                  <div className="justify-content-end text-end">
-                    <div
-                      className={`btn btn-labeled btn-primary px-3 shadow `}
-                      onClick={() => {
-                        setCurrentPlanSummaryId(item?.id);
-                        setFeedBackDialog(true);
-                      }}
-                    >
-                      FeedBack
-                    </div>
-                  </div>
+                <div
+                  className={`btn btn-labeled btn-primary shadow ${
+                    loading &&
+                    Number(currentId) === Number(item?.id) &&
+                    "disabled"
+                  }`}
+                  onClick={() => handleApprove(item)}
+                >
+                  {loading && Number(currentId) === Number(item?.id)
+                    ? "Loading..."
+                    : "Approve"}
+                </div>
+              )}
+
+            {allAuditPlanSummary[index]?.submitted === true &&
+              allAuditPlanSummary[index]?.completed === true &&
+              allAuditPlanSummary[index]?.approved === false &&
+              allAuditPlanSummary[index]?.locked === false &&
+              allAuditPlanSummary[index]?.priority &&
+              allAuditPlanSummary[index]?.priority !== "" &&
+              allAuditPlanSummary[index]?.threeYearsAgo !== null &&
+              allAuditPlanSummary[index]?.twoYearsAgo !== null &&
+              allAuditPlanSummary[index]?.lastYear !== null &&
+              (Number(item?.initiatorTLEB) ===
+                Number(user[0]?.userId?.employeeid?.id) ||
+                user[0]?.userId?.employeeid?.userHierarchy === "IAH") && (
+                <div
+                  className={`btn btn-labeled btn-primary shadow `}
+                  onClick={() => {
+                    setCurrentPlanSummaryId(item?.id);
+                    setFeedBackDialog(true);
+                  }}
+                >
+                  FeedBack
                 </div>
               )}
             {item?.feedback && item?.feedback?.id && (
-              <div className="mt-3 mx-3">
-                <div className="justify-content-end text-end">
-                  <div
-                    className={`btn btn-labeled btn-primary px-3 shadow `}
-                    onClick={() => {
-                      setCurrentPlanSummaryId(item?.id);
-                      setViewFeedBackDialog(true);
-                    }}
-                  >
-                    View FeedBack
-                  </div>
-                </div>
+              <div
+                className={`btn btn-labeled btn-primary shadow `}
+                onClick={() => {
+                  setCurrentPlanSummaryId(item?.id);
+                  setViewFeedBackDialog(true);
+                }}
+              >
+                View FeedBack
               </div>
             )}
             {item?.approved === true && item?.locked === true && (
-              <div className="mt-3 mx-3">
-                <div className="justify-content-end text-end">
-                  <button
-                    className={`btn btn-labeled btn-primary  shadow disabled`}
-                  >
-                    Approved
-                  </button>
-                </div>
-              </div>
+              <button className={`btn btn-labeled btn-primary shadow disabled`}>
+                Approved
+              </button>
             )}
             {item?.approved === false &&
               item?.locked === false &&
               item?.submitted === true &&
               item?.completed === true && (
-                <div className="mt-3 mx-3">
-                  <div className="justify-content-end text-end">
-                    <button
-                      className={`btn btn-labeled btn-primary  shadow disabled`}
-                    >
-                      Submitted
-                    </button>
-                  </div>
-                </div>
+                <button
+                  className={`btn btn-labeled btn-primary shadow disabled`}
+                >
+                  Submitted
+                </button>
               )}
-          </td>
-        )}
+          </div>
+        </td>
       </tr>
     </tbody>
   );

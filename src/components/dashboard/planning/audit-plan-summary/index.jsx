@@ -92,9 +92,12 @@ const AuditPlanSummary = () => {
   function handleSubmit(item) {
     if (!loading) {
       setCurrentId(item?.id);
+      const object = allAuditPlanSummary.find(
+        (singleItem) => singleItem?.id === item?.id
+      );
       dispatch(
         setupUpdateAuditPlanSummary({
-          ...item,
+          ...object,
           submitted: true,
           completed: true,
         })
@@ -103,7 +106,9 @@ const AuditPlanSummary = () => {
   }
 
   function handleApprove(item) {
-    setCurrentApproveItem(item);
+    setCurrentApproveItem(
+      allAuditPlanSummary?.find((singleItem) => singleItem?.id === item?.id)
+    );
     setShowApproveDialog(true);
   }
 

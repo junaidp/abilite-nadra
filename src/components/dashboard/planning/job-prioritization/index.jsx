@@ -47,7 +47,7 @@ const JobPrioritization = () => {
   }
   function handleSubmit(id) {
     setCurrentId(id);
-    let object = data?.find((item) => item?.id === id);
+    let object = allJobPrioritization?.find((item) => item?.id === id);
     object = {
       ...object,
       year: Number(object?.year),
@@ -247,75 +247,82 @@ const JobPrioritization = () => {
                           </select>
                         </td>
                         <td>
-                          {(allJobPrioritization[index]?.completed === false ||
-                            (allJobPrioritization[index]?.completed === true &&
+                          <div
+                            className={`d-flex flex-wrap ${
                               allJobPrioritization[index]?.locked === false &&
-                              user[0]?.userId?.employeeid?.userHierarchy ===
-                                "IAH")) && (
-                            <div>
-                              {item?.editable === false && (
-                                <i
-                                  className="fa fa-edit  px-3 f-18 cursor-pointer"
-                                  onClick={() => handleEditable(item?.id)}
-                                ></i>
-                              )}
-                              {item?.editable === true && (
-                                <div
-                                  className={`btn btn-labeled btn-primary px-3 shadow ${
-                                    loading &&
-                                    currentId === item?.id &&
-                                    "disabled"
-                                  }`}
-                                  onClick={() => handleUpdate(item?.id)}
-                                >
-                                  {loading && currentId === item?.id
-                                    ? "Loading..."
-                                    : "Save"}
-                                </div>
-                              )}
-                            </div>
-                          )}
+                              "gap-2"
+                            }`}
+                          >
+                            {(allJobPrioritization[index]?.completed ===
+                              false ||
+                              (allJobPrioritization[index]?.completed ===
+                                true &&
+                                allJobPrioritization[index]?.locked === false &&
+                                user[0]?.userId?.employeeid?.userHierarchy ===
+                                  "IAH")) && (
+                              <div>
+                                {item?.editable === false && (
+                                  <i
+                                    className="fa fa-edit f-18 cursor-pointer"
+                                    onClick={() => handleEditable(item?.id)}
+                                  ></i>
+                                )}
+                                {item?.editable === true && (
+                                  <div
+                                    className={`btn btn-labeled btn-primary shadow ${
+                                      loading &&
+                                      currentId === item?.id &&
+                                      "disabled"
+                                    }`}
+                                    onClick={() => handleUpdate(item?.id)}
+                                  >
+                                    {loading && currentId === item?.id
+                                      ? "Loading..."
+                                      : "Save"}
+                                  </div>
+                                )}
+                              </div>
+                            )}
 
-                          <div>
-                            {allJobPrioritization[index]?.completed === false &&
-                              allJobPrioritization[index]?.comments &&
-                              allJobPrioritization[index]?.comments !== "" &&
-                              allJobPrioritization[index]?.year &&
-                              allJobPrioritization[index]?.year !== 0 &&
-                              allJobPrioritization[index]?.year !== "" && (
-                                <div
-                                  className={`btn btn-labeled btn-primary px-3 mt-2 shadow ${
-                                    loading &&
-                                    currentId === item?.id &&
-                                    "disabled"
-                                  }`}
-                                  onClick={() => handleSubmit(item?.id)}
-                                >
-                                  {loading && currentId === item?.id
-                                    ? "Loading..."
-                                    : "Submit"}
-                                </div>
-                              )}
-                          </div>
-                          {allJobPrioritization[index]?.locked === true && (
-                            <div className="px-3 mt-2">
+                            <div>
+                              {allJobPrioritization[index]?.completed ===
+                                false &&
+                                allJobPrioritization[index]?.comments &&
+                                allJobPrioritization[index]?.comments !== "" &&
+                                allJobPrioritization[index]?.year &&
+                                allJobPrioritization[index]?.year !== 0 &&
+                                allJobPrioritization[index]?.year !== "" && (
+                                  <div
+                                    className={`btn btn-labeled btn-primary shadow ${
+                                      loading &&
+                                      currentId === item?.id &&
+                                      "disabled"
+                                    }`}
+                                    onClick={() => handleSubmit(item?.id)}
+                                  >
+                                    {loading && currentId === item?.id
+                                      ? "Loading..."
+                                      : "Submit"}
+                                  </div>
+                                )}
+                            </div>
+                            {allJobPrioritization[index]?.locked === true && (
                               <button
-                                className={`btn btn-labeled btn-primary px-3  shadow disabled`}
+                                className={`btn btn-labeled btn-primary shadow disabled`}
                               >
                                 Approved
                               </button>
-                            </div>
-                          )}
-                          {allJobPrioritization[index]?.locked === false &&
-                            allJobPrioritization[index]?.completed === true && (
-                              <div className="px-3 mt-2">
+                            )}
+                            {allJobPrioritization[index]?.locked === false &&
+                              allJobPrioritization[index]?.completed ===
+                                true && (
                                 <button
-                                  className={`btn btn-labeled btn-primary px-3  shadow disabled`}
+                                  className={`btn btn-labeled btn-primary shadow disabled`}
                                 >
                                   Submitted
                                 </button>
-                              </div>
-                            )}
+                              )}
+                          </div>
                         </td>
                       </tr>
                     );

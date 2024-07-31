@@ -6,6 +6,7 @@ import {
   resetReportAddSuccess,
 } from "../../../../../../../global-redux/reducers/reports/planing-report/slice";
 import { toast } from "react-toastify";
+import moment from "moment";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -37,21 +38,21 @@ const Header = () => {
       )?.id;
 
       if (companyId) {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-
-        const startDate = new Date(data?.startDate);
-        const endDate = new Date(data?.endDate);
-
+        const today = moment.utc().startOf("day");
+        const startDate = moment.utc(data?.startDate).startOf("day");
+        const endDate = moment.utc(data?.endDate).startOf("day");
         if (
+          !data?.startDate ||
+          !data?.endDate ||
+          !data?.reportTitle ||
           data?.startDate === "" ||
           data?.endDate === "" ||
           data?.reportTitle === ""
         ) {
           toast.error("Provide all values");
-        } else if (startDate < today) {
+        } else if (startDate.isBefore(today)) {
           toast.error("Start date cannot be a past date");
-        } else if (endDate <= startDate) {
+        } else if (!endDate.isAfter(startDate)) {
           toast.error("End date must be greater than the start date");
         } else {
           dispatch(

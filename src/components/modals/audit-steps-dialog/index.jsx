@@ -128,7 +128,7 @@ const AuditStepsDialog = ({
     return allowEdit;
   }
   return (
-    <div className="mx-5">
+    <div className="px-4 py-2">
       <FirstLayout
         currentAuditStep={currentAuditStep}
         handleChange={handleChange}
@@ -136,7 +136,7 @@ const AuditStepsDialog = ({
       />
       {handleAllowEdit() === true && (
         <div className="row mb-3">
-          <div className="col-lg-2">
+          <div className="col-lg-4">
             <button
               className={`btn btn-labeled float-start btn-primary px-3 shadow ${
                 loading && "disabled"
@@ -179,7 +179,11 @@ const AuditStepsDialog = ({
             <div key={i}>
               {`${i + 1})`}
               <div className="row mb-3">
-                <div className="col-lg-10">
+                <div
+                  className={`${
+                    handleAllowEdit() === true ? "col-lg-10" : "col-lg-12"
+                  }`}
+                >
                   <textarea
                     className="form-control"
                     placeholder="Lorem Ipsum is simply dummy text of the printing and typesetting industry."

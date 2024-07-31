@@ -95,7 +95,6 @@ export const deleteSubLocation = async (data, thunkAPI) => {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.delete(
       `${baseUrl}/configurations/sublocation/delete${data}`,
-      null,
       {
         headers: {
           Authorization: `Bearer ${user[0]?.token}`,

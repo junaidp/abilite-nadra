@@ -93,21 +93,6 @@ const FirstLayout = ({ currentAuditStep, handleChange, handleAllowEdit }) => {
         </div>
       </div>
 
-      <div className="row mb-3">
-        <div className="col-lg-12">
-          <div>
-            <label className="me-3 fw-normal  ">Population size:</label>
-            <label className="fw-bolder">50</label>
-          </div>
-        </div>
-        <div className="col-lg-12">
-          <div>
-            <label className="me-3 fw-normal  ">Sample Size</label>
-            <label className="fw-bolder">50</label>
-          </div>
-        </div>
-      </div>
-
       <SamplingFileUpload
         currentAuditStep={currentAuditStep}
         handleAllowEdit={handleAllowEdit}

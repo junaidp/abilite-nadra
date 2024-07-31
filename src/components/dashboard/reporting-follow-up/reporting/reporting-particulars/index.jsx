@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 import {
   resetReportingAddSuccess,
   setupGetSingleReport,
@@ -146,17 +147,28 @@ const ReportingParticulars = () => {
 
   function handleSaveToStep3(item) {
     if (!loading) {
+      const today = moment.utc().startOf("day");
+      const implementationDate = moment
+        .utc(item?.implementationDate)
+        .startOf("day");
+
       if (
-        item?.managementComments === "" ||
         !item?.managementComments ||
-        item?.implementationDate === "" ||
-        !item?.implementationDate
+        !item?.implementationDate ||
+        item?.managementComments === "" ||
+        item?.implementationDate === ""
       ) {
         toast.error(
-          "Fields missing. Please fill them  first and then submit the observation"
+          "Fields missing. Please fill them first and then submit the observation"
         );
         return;
       }
+
+      if (implementationDate.isBefore(today)) {
+        toast.error("Implementation date must be today or greater than today");
+        return;
+      }
+
       dispatch(
         setupUpdateReportingByManagementAuditee({
           ...item,

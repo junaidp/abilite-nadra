@@ -96,37 +96,43 @@ const BusinessObjectiveRedirect = () => {
 
   function handleSaveMinuteMeetings() {
     if (!loading) {
+      const today = moment.utc().startOf("day");
+
+      const fromDate = moment.utc(object?.meetingDateTimeFrom).startOf("day");
+      const toDate = moment.utc(object?.meetingDateTimeTo).startOf("day");
+
       if (
-        object?.location_Id === "" ||
-        object?.subLocation_Id === "" ||
-        object?.meetingDateTimeFrom === "" ||
-        object?.meetingDateTimeTo === ""
+        !object?.location_Id ||
+        !object?.subLocation_Id ||
+        !object?.meetingDateTimeFrom ||
+        !object?.meetingDateTimeTo
       ) {
         toast.error("Please provide all values");
+        return;
       }
-      const fromDate = new Date(object?.meetingDateTimeFrom);
-      const toDate = new Date(object?.meetingDateTimeTo);
-      if (fromDate > toDate) {
-        toast.error("InValid meeting date range");
+
+      if (fromDate.isBefore(today)) {
+        toast.error("Start date must be today or greater than today");
+        return;
       }
-      if (
-        object?.location_Id !== "" &&
-        object?.subLocation_Id !== "" &&
-        object?.meetingDateTimeFrom !== "" &&
-        object?.meetingDateTimeTo !== "" &&
-        toDate > fromDate
-      ) {
-        dispatch(
-          setupUpdateBusinessMinuteMeeting({
-            engagementId: engagementId,
-            location_Id: object?.location_Id,
-            subLocation_Id: object?.subLocation_Id,
-            meetingDateTimeFrom: object?.meetingDateTimeFrom,
-            meetingDateTimeTo: object?.meetingDateTimeTo,
-            meetingMinutes: "",
-          })
+
+      if (!toDate.isAfter(fromDate)) {
+        toast.error(
+          "Invalid meeting date range. End date must be greater than start date"
         );
+        return;
       }
+
+      dispatch(
+        setupUpdateBusinessMinuteMeeting({
+          engagementId: engagementId,
+          location_Id: object?.location_Id,
+          subLocation_Id: object?.subLocation_Id,
+          meetingDateTimeFrom: object?.meetingDateTimeFrom,
+          meetingDateTimeTo: object?.meetingDateTimeTo,
+          meetingMinutes: "",
+        })
+      );
     }
   }
 
@@ -185,17 +191,21 @@ const BusinessObjectiveRedirect = () => {
             ?.location_Id || "",
         meetingDateTimeFrom: planingEngagementSingleObject
           ?.meetingScheduleAndMinutes?.meetingDateTimeFrom
-          ? moment.utc(
-              planingEngagementSingleObject?.meetingScheduleAndMinutes
-                ?.meetingDateTimeFrom
-            ).format("YYYY-MM-DD")
+          ? moment
+              .utc(
+                planingEngagementSingleObject?.meetingScheduleAndMinutes
+                  ?.meetingDateTimeFrom
+              )
+              .format("YYYY-MM-DD")
           : "",
         meetingDateTimeTo: planingEngagementSingleObject
           ?.meetingScheduleAndMinutes?.meetingDateTimeTo
-          ? moment.utc(
-              planingEngagementSingleObject?.meetingScheduleAndMinutes
-                ?.meetingDateTimeTo
-            ).format("YYYY-MM-DD")
+          ? moment
+              .utc(
+                planingEngagementSingleObject?.meetingScheduleAndMinutes
+                  ?.meetingDateTimeTo
+              )
+              .format("YYYY-MM-DD")
           : "",
         subLocation_Id:
           planingEngagementSingleObject?.meetingScheduleAndMinutes
