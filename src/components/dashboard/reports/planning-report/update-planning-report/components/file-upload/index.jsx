@@ -64,7 +64,7 @@ const PlanningReportFileUpload = ({ reportId, item }) => {
   React.useEffect(() => {
     if (reportAddSuccess) {
       setSelectedFile(null);
-      fileInputRef.current.value = null;
+      fileInputRef.current.value = "";
     }
   }, [reportAddSuccess]);
 

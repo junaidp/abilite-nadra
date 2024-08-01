@@ -42,9 +42,6 @@ const Header = () => {
         const startDate = moment.utc(data?.startDate).startOf("day");
         const endDate = moment.utc(data?.endDate).startOf("day");
         if (
-          !data?.startDate ||
-          !data?.endDate ||
-          !data?.reportTitle ||
           data?.startDate === "" ||
           data?.endDate === "" ||
           data?.reportTitle === ""

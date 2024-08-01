@@ -25,6 +25,7 @@ import UserManagement from "./components/user";
 import RCMLibrary from "./components/rcm-library";
 import PreviousObservation from "./components/previous-observation/index.jsx";
 import Process from "./components/process";
+import Notification from "./components/notification";
 const AuditSettings = () => {
   const dispatch = useDispatch();
   const [checkListManagementDialog, setCheckListManagementDialog] =
@@ -249,6 +250,19 @@ const AuditSettings = () => {
                     User Details
                   </button>
                 )}
+                {userRole !== "ADMIN" && (
+                  <button
+                    className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
+                    id="nav-notification-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#nav-notification"
+                    type="button"
+                    role="tab"
+                    aria-controls="nav-notification"
+                  >
+                    Notification
+                  </button>
+                )}
                 {(userRole === "ADMIN" || userHierarchy === "IAH") && (
                   <button
                     className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
@@ -299,6 +313,7 @@ const AuditSettings = () => {
                 userHierarchy={userHierarchy}
                 userRole={userRole}
               />
+              {userRole !== "ADMIN" && <Notification />}
               {(userRole === "ADMIN" || userHierarchy === "IAH") && (
                 <PreviousObservation />
               )}

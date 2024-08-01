@@ -6,9 +6,7 @@ const ViewInformationRequest = ({
   setShowViewInformationRequestDialog,
   updateTaskId,
 }) => {
-  const { auditEngagements, allTasks } = useSelector(
-    (state) => state?.tasksManagement
-  );
+  const { allTasks } = useSelector((state) => state?.tasksManagement);
 
   // Initial form initialValues
   const defaultinitialValues = {
@@ -25,10 +23,8 @@ const ViewInformationRequest = ({
     let task = allTasks.find((singleTask) => singleTask?.id === updateTaskId);
     setInitialValues({
       dueDate: task ? moment.utc(task?.dueDate).format("YYYY-MM-DD") : "",
-      auditEngagement: auditEngagements?.find(
-        (singleEngagement) => singleEngagement?.id === task?.auditEngagement?.id
-      )?.engagementName,
       userAssigned: task?.assignee?.name,
+      auditEngagement: task?.engagement?.engagementName,
       detailedRequirement: task?.detailedRequirement,
       response: task?.yourResponse,
     });

@@ -3,9 +3,7 @@ import { useSelector } from "react-redux";
 import moment from "moment";
 
 const ViewTaskManagement = ({ setShowViewTasktDialog, updateTaskId }) => {
-  const { allTasks, auditEngagements } = useSelector(
-    (state) => state?.tasksManagement
-  );
+  const { allTasks } = useSelector((state) => state?.tasksManagement);
 
   // Initial form initialValues
   const defaultinitialValues = {
@@ -22,9 +20,7 @@ const ViewTaskManagement = ({ setShowViewTasktDialog, updateTaskId }) => {
     let task = allTasks.find((singleTask) => singleTask?.id === updateTaskId);
     setInitialValues({
       dueDate: task ? moment.utc(task?.dueDate).format("YYYY-MM-DD") : "",
-      auditEngagement: auditEngagements?.find(
-        (singleEngagement) => singleEngagement?.id === task?.auditEngagement?.id
-      )?.engagementName,
+      auditEngagement: task?.engagement?.engagementName,
       userAssigned: task?.assignee?.name,
       detailedRequirement: task?.detailedRequirement,
       response: task?.yourResponse,

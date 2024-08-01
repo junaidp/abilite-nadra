@@ -19,15 +19,8 @@ import Select from "@mui/material/Select";
 
 const InformationRequest = () => {
   const dispatch = useDispatch();
-  const isInitialRender = React.useRef(true);
-  const {
-    taskAddSuccess,
-    allTasks,
-    initialLoading,
-    auditEngagements,
-    totalNoOfRecords,
-    totalEngagements,
-  } = useSelector((state) => state?.tasksManagement);
+  const { taskAddSuccess, allTasks, initialLoading, totalNoOfRecords } =
+    useSelector((state) => state?.tasksManagement);
   const { company } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
   const [showAddInformationRequestDialog, setShowAddInformationRequestDialog] =
@@ -110,33 +103,11 @@ const InformationRequest = () => {
       dispatch(
         setupGetAllAuditEngagement({
           companyId,
-          page: 1,
-          itemsPerPage: 10,
         })
       );
       dispatch(setupGetAllUsers());
     }
   }, [dispatch]);
-
-  React.useEffect(() => {
-    if (isInitialRender.current) {
-      isInitialRender.current = false;
-      return; // Skip the initial render
-    }
-    const companyId = user[0]?.company?.find(
-      (item) => item?.companyName === company
-    )?.id;
-
-    if (companyId) {
-      dispatch(
-        setupGetAllAuditEngagement({
-          companyId,
-          page: 1,
-          itemsPerPage: totalEngagements,
-        })
-      );
-    }
-  }, [totalEngagements]);
 
   return (
     <div>
@@ -222,20 +193,12 @@ const InformationRequest = () => {
                         <td>{index + 1}</td>
                         <td>{task?.detailedRequirement}</td>
                         <td>{moment.utc(task?.dueDate).format("DD-MM-YY")}</td>
-                        <td>
-                          {
-                            auditEngagements?.find(
-                              (singleEngagement) =>
-                                singleEngagement?.id ===
-                                task?.auditEngagement?.id
-                            )?.engagementName
-                          }
-                        </td>
+                        <td>{task?.engagement?.engagementName}</td>
                         <td>{task?.assignee?.name}</td>
                         <td>{task?.assignedBy?.name}</td>
                         <td>
                           <i
-                            className="fa fa-edit mx-3 text-secondary f-18 cursor-pointer mx-2"
+                            className="fa fa-edit text-secondary f-18 cursor-pointer"
                             onClick={() => {
                               setUpdateTaskId(task?.id);
                               setShowUpdateInformationRequestDialog(true);

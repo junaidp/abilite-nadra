@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 
 const UpdateTaskManagement = ({ setShowUpdateTaskDailog, updateTaskId }) => {
   const dispatch = useDispatch();
-  const { loading, taskAddSuccess, allTasks, auditEngagements } = useSelector(
+  const { loading, taskAddSuccess, allTasks } = useSelector(
     (state) => state?.tasksManagement
   );
   const [fileAttachments, setFileAttachments] = React.useState([]);
@@ -36,7 +36,7 @@ const UpdateTaskManagement = ({ setShowUpdateTaskDailog, updateTaskId }) => {
             id: updateTaskId,
             dueDate: task?.dueDate,
             status: "string",
-            auditEngagementId: Number(task?.auditEngagement?.id),
+            auditEngagementId: Number(task?.engagement?.id),
             createdBy: Number(task?.assignedBy?.id),
             companyId: Number(task?.companyId),
             userAssigned: Number(task?.assignee?.id),
@@ -59,9 +59,7 @@ const UpdateTaskManagement = ({ setShowUpdateTaskDailog, updateTaskId }) => {
     let task = allTasks.find((singleTask) => singleTask?.id === updateTaskId);
     setInitialValues({
       dueDate: task ? moment.utc(task?.dueDate).format("YYYY-MM-DD") : "",
-      auditEngagement: auditEngagements?.find(
-        (singleEngagement) => singleEngagement?.id === task?.auditEngagement?.id
-      )?.engagementName,
+      auditEngagement: task?.engagement?.engagementName,
       userAssigned: task?.assignee?.name,
       detailedRequirement: task?.detailedRequirement,
     });

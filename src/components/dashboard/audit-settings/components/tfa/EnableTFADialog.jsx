@@ -40,9 +40,10 @@ const EnableTFADialog = ({ setShowEnableTfaDialog, setCheck }) => {
       setShowEnableTfaDialog(false);
     }
   }, [verifyCodeSuccess]);
+
   React.useEffect(() => {
     dispatch(setupGenerateQRCode());
-  }, [user]);
+  }, [dispatch]);
 
   return (
     <div className="px-4 py-4 min-h-70">

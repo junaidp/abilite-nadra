@@ -17,7 +17,6 @@ const initialState = {
   allTasks: [],
   singleTask: {},
   taskAddSuccess: false,
-  totalEngagements: 0,
   totalNoOfRecords: 0,
 };
 
@@ -166,7 +165,6 @@ export const slice = createSlice({
         state.loading = true;
       })
       .addCase(setupGetAllAuditEngagement.fulfilled, (state, { payload }) => {
-        state.totalEngagements = payload?.message;
         state.auditEngagements = payload?.data;
         state.loading = false;
       })

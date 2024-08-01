@@ -2,14 +2,16 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setupAddTask } from "../../../../../../global-redux/reducers/tasks-management/slice";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import moment from "moment";
 import * as Yup from "yup";
 
 // Validation schema
+const today = moment.utc().startOf("day");
 const validationSchema = Yup.object({
   dueDate: Yup.date()
     .required("Due Date is required")
-    .min(new Date(), "Due Date must be today or later"),
-  auditEngagementId: Yup.string().required("Job is required"),
+    .min(today.toDate(), "Due Date must be today or later"),
+  engagementId: Yup.string().required("Job is required"),
   userAssigned: Yup.string().required("Assignee is required"),
   detailedRequirement: Yup.string()
     .required("Detailed Requirement is required")
@@ -26,7 +28,7 @@ const AddInformationRequest = ({ setShowAddInformationRequestDialog }) => {
   // Initial form values
   const initialValues = {
     dueDate: "",
-    auditEngagementId: "",
+    engagementId: "",
     userAssigned: "",
     detailedRequirement: "",
   };
@@ -37,7 +39,7 @@ const AddInformationRequest = ({ setShowAddInformationRequestDialog }) => {
         setupAddTask({
           dueDate: values?.dueDate,
           status: "string",
-          auditEngagementId: Number(values?.auditEngagementId),
+          engagementId: Number(values?.engagementId),
           createdBy: Number(user[0]?.userId?.id),
           companyId: Number(user[0]?.userId?.company[0]?.id),
           userAssigned: Number(values?.userAssigned),
@@ -91,7 +93,7 @@ const AddInformationRequest = ({ setShowAddInformationRequestDialog }) => {
                 <label className="me-3">Selected Job</label>
                 <Field
                   as="select"
-                  name="auditEngagementId"
+                  name="engagementId"
                   className="form-select"
                   aria-label="Default select example"
                 >
@@ -103,7 +105,7 @@ const AddInformationRequest = ({ setShowAddInformationRequestDialog }) => {
                   ))}
                 </Field>
                 <ErrorMessage
-                  name="auditEngagementId"
+                  name="engagementId"
                   component="div"
                   className="text-danger f-14"
                 />

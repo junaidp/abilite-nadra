@@ -101,12 +101,17 @@ export const internalResetPassword = async (data, thunkAPI) => {
     return thunkAPI.rejectWithValue(error);
   }
 };
+
 export const generateQRCode = async (_, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.get(
       `${baseUrl}/account/user/generate/${user[0]?.email}`,
       {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
         responseType: "arraybuffer",
       }
     );
@@ -115,13 +120,22 @@ export const generateQRCode = async (_, thunkAPI) => {
     return thunkAPI.rejectWithValue(error);
   }
 };
+
 export const verifyQRCode = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
-    let props = await axios.post(`${baseUrl}/account/user/validate/key`, {
-      code: data?.code,
-      username: user[0]?.email,
-    });
+    let props = await axios.post(
+      `${baseUrl}/account/user/validate/key`,
+      {
+        code: data?.code,
+        username: user[0]?.email,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
     return props.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
