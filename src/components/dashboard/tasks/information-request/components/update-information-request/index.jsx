@@ -26,7 +26,6 @@ const UpdateInformationRequest = ({
   const dispatch = useDispatch();
   const { users, auditEngagements, loading, taskAddSuccess, allTasks } =
     useSelector((state) => state?.tasksManagement);
-  const [fileAttachments, setFileAttachments] = React.useState([]);
 
   // Initial form values
   const defaultValues = {
@@ -51,7 +50,7 @@ const UpdateInformationRequest = ({
           companyId: task?.companyId,
           userAssigned: Number(values?.userAssigned),
           yourResponse: task?.yourResponse,
-          fileAttachments: [],
+          fileAttachments: task?.fileAttachments,
           detailedRequirement: values?.detailedRequirement,
         })
       );
@@ -172,28 +171,21 @@ const UpdateInformationRequest = ({
               </div>
             </div>
 
-            <FileUpload
-              fileAttachments={fileAttachments}
-              setFileAttachments={setFileAttachments}
-            />
-
-            <div className="row mb-2">
-              <div className="col-lg-8 align-self-end">
-                <button
-                  type="submit"
-                  className={`btn btn-primary ${loading && "disabled"}`}
-                >
-                  {loading ? "Loading.." : "Update"}
-                </button>
-              </div>
+            <div className="d-flex justify-end">
+              <button
+                type="submit"
+                className={`btn btn-primary ${loading && "disabled"}`}
+              >
+                {loading ? "Loading.." : "Update"}
+              </button>
             </div>
           </Form>
         )}
       </Formik>
+      <FileUpload updateTaskId={updateTaskId} />
       <div className="row mb-2">
         <div className="col-lg-12 align-self-end">
           <button
-            type="submit"
             className="btn btn-danger float-end"
             onClick={() => {
               setShowUpdateInformationRequestDialog(false);

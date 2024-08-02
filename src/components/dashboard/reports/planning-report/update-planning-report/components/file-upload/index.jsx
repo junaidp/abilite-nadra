@@ -3,9 +3,9 @@ import { toast } from "react-toastify";
 import {
   setupPlanningReportFileUpload,
   setupPlanningReportFileDelete,
-  setupPlanningReportFileDownload,
 } from "../../../../../../../global-redux/reducers/reports/planing-report/slice";
 import { useSelector, useDispatch } from "react-redux";
+import { handleDownload } from "../../../../../../../constants";
 
 const PlanningReportFileUpload = ({ reportId, item }) => {
   const dispatch = useDispatch();
@@ -54,12 +54,6 @@ const PlanningReportFileUpload = ({ reportId, item }) => {
       toast.error("No file selected.");
     }
   };
-
-  function handleDownload(id) {
-    if (!updateLoading) {
-      dispatch(setupPlanningReportFileDownload({ fileId: id }));
-    }
-  }
 
   React.useEffect(() => {
     if (reportAddSuccess) {
@@ -122,7 +116,12 @@ const PlanningReportFileUpload = ({ reportId, item }) => {
                       <td className="w-130">
                         <i
                           className="fa fa-download f-18 mx-2 cursor-pointer"
-                          onClick={() => handleDownload(fileItem?.id)}
+                          onClick={() =>
+                            handleDownload({
+                              base64String: fileItem?.fileData,
+                              fileName: fileItem?.fileName,
+                            })
+                          }
                         ></i>
                         <i
                           className="fa fa-trash text-danger f-18 cursor-pointer px-2"

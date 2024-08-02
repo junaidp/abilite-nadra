@@ -6,7 +6,7 @@ import {
   setupAuditStepSamplingFileUpdate,
 } from "../../../../global-redux/reducers/audit-engagement/slice";
 import { useSelector, useDispatch } from "react-redux";
-import { baseUrl } from "../../../../constants/index";
+import { handleDownload } from "../../../../constants/index";
 
 const SamplingFileUpload = ({ currentAuditStep, handleAllowEdit }) => {
   const dispatch = useDispatch();
@@ -95,12 +95,6 @@ const SamplingFileUpload = ({ currentAuditStep, handleAllowEdit }) => {
     }
   };
 
-  function handleDownload(id) {
-    window.open(
-      `${baseUrl}/auditEngagement/auditStep/samplingFileUploads/download?fileId=${id}`,
-      "_blank"
-    );
-  }
   React.useEffect(() => {
     if (auditEngagementObservationAddSuccess) {
       setSelectedFile(null);
@@ -113,6 +107,7 @@ const SamplingFileUpload = ({ currentAuditStep, handleAllowEdit }) => {
       }
     }
   }, [auditEngagementObservationAddSuccess]);
+
   return (
     <div className="my-4">
       <hr />
@@ -176,9 +171,12 @@ const SamplingFileUpload = ({ currentAuditStep, handleAllowEdit }) => {
                       <i
                         className="fa fa-download f-18 mx-2 cursor-pointer"
                         onClick={() =>
-                          handleDownload(
-                            currentAuditStep?.samplingFileAuditStep?.id
-                          )
+                          handleDownload({
+                            base64String:
+                              currentAuditStep?.samplingFileAuditStep?.fileData,
+                            fileName:
+                              currentAuditStep?.samplingFileAuditStep?.fileName,
+                          })
                         }
                       ></i>
                       {handleAllowEdit() === true && (

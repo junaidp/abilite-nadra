@@ -6,7 +6,7 @@ import {
   setupIahFileUpdate,
 } from "../../../../../../global-redux/reducers/reports/internal-audit-report/slice";
 import { useSelector, useDispatch } from "react-redux";
-import { baseUrl } from "../../../../../../constants/index";
+import { handleDownload } from "../../../../../../constants/index";
 
 const IAHFileUpload = ({ item }) => {
   const dispatch = useDispatch();
@@ -90,12 +90,6 @@ const IAHFileUpload = ({ item }) => {
     }
   };
 
-  function handleDownload(id) {
-    window.open(
-      `${baseUrl}/internalauditreport/IARAnnexureUploads/download?fileId=${id}`,
-      "_blank"
-    );
-  }
   React.useEffect(() => {
     if (iahFileUploadSuccess) {
       setSelectedFile(null);
@@ -175,7 +169,12 @@ const IAHFileUpload = ({ item }) => {
                       <td className="w-130">
                         <i
                           className="fa fa-download f-18 mx-2 cursor-pointer"
-                          onClick={() => handleDownload(fileItem?.id)}
+                          onClick={() =>
+                            handleDownload({
+                              base64String: fileItem?.fileData,
+                              fileName: fileItem?.fileName,
+                            })
+                          }
                         ></i>
                         <i
                           className="fa fa-trash text-danger f-18 cursor-pointer px-2"

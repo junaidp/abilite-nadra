@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import moment from "moment";
+import FileUpload from "./file-upload";
 
 const ViewTaskManagement = ({ setShowViewTasktDialog, updateTaskId }) => {
   const { allTasks } = useSelector((state) => state?.tasksManagement);
@@ -90,6 +91,8 @@ const ViewTaskManagement = ({ setShowViewTasktDialog, updateTaskId }) => {
           ></textarea>
         </div>
       </div>
+
+      <FileUpload updateTaskId={updateTaskId} allTasks={allTasks} />
 
       <div className="row mb-2">
         <div className="col-lg-12 ">

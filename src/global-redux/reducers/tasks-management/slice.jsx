@@ -6,6 +6,8 @@ import {
   getAllTasks,
   getAllUsers,
   getAllAuditEngagement,
+  taskFileUpload,
+  taskFileDelete,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -17,6 +19,7 @@ const initialState = {
   allTasks: [],
   singleTask: {},
   taskAddSuccess: false,
+  fileUploadSuccess: false,
   totalNoOfRecords: 0,
 };
 
@@ -56,6 +59,18 @@ export const setupGetAllAuditEngagement = createAsyncThunk(
     return getAllAuditEngagement(data, thunkAPI);
   }
 );
+export const setupTaskFileUpload = createAsyncThunk(
+  "tasks/taskFileUpload",
+  async (data, thunkAPI) => {
+    return taskFileUpload(data, thunkAPI);
+  }
+);
+export const setupTaskFileDelete = createAsyncThunk(
+  "tasks/taskFileDelete",
+  async (data, thunkAPI) => {
+    return taskFileDelete(data, thunkAPI);
+  }
+);
 
 export const slice = createSlice({
   name: "tasks",
@@ -63,6 +78,9 @@ export const slice = createSlice({
   reducers: {
     resetTaskAddSuccess: (state) => {
       state.taskAddSuccess = false;
+    },
+    resetFileUploadSuccess: (state) => {
+      state.fileUploadSuccess = false;
     },
   },
   extraReducers: (builder) => {
@@ -176,9 +194,45 @@ export const slice = createSlice({
           toast.error("An Error has occurred");
         }
       });
+    // File Upload
+    builder
+      .addCase(setupTaskFileUpload.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupTaskFileUpload.fulfilled, (state) => {
+        state.loading = false;
+        state.fileUploadSuccess = true;
+        toast.success("File Uploaded Successfully");
+      })
+      .addCase(setupTaskFileUpload.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // File Delete
+    builder
+      .addCase(setupTaskFileDelete.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupTaskFileDelete.fulfilled, (state) => {
+        state.loading = false;
+        state.fileUploadSuccess = true;
+        toast.success("File Deleted Successfully");
+      })
+      .addCase(setupTaskFileDelete.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
   },
 });
 
-export const { resetTaskAddSuccess } = slice.actions;
+export const { resetTaskAddSuccess, resetFileUploadSuccess } = slice.actions;
 
 export default slice.reducer;

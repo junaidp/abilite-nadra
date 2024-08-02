@@ -8,6 +8,7 @@ import {
   setupGetAllAuditEngagement,
   resetTaskAddSuccess,
   setupGetAllTasks,
+  resetFileUploadSuccess,
 } from "../../../../global-redux/reducers/tasks-management/slice";
 import { CircularProgress } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
@@ -19,8 +20,13 @@ import Select from "@mui/material/Select";
 
 const InformationRequest = () => {
   const dispatch = useDispatch();
-  const { taskAddSuccess, allTasks, initialLoading, totalNoOfRecords } =
-    useSelector((state) => state?.tasksManagement);
+  const {
+    taskAddSuccess,
+    allTasks,
+    initialLoading,
+    totalNoOfRecords,
+    fileUploadSuccess,
+  } = useSelector((state) => state?.tasksManagement);
   const { company } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
   const [showAddInformationRequestDialog, setShowAddInformationRequestDialog] =
@@ -94,6 +100,23 @@ const InformationRequest = () => {
       );
     }
   }, [dispatch, page]);
+
+  React.useEffect(() => {
+    const companyId = user[0]?.company?.find(
+      (item) => item?.companyName === company
+    )?.id;
+    if (companyId && fileUploadSuccess === true) {
+      dispatch(
+        setupGetAllTasks({
+          companyId,
+          page,
+          itemsPerPage,
+          isTask: false,
+        })
+      );
+      dispatch(resetFileUploadSuccess());
+    }
+  }, [fileUploadSuccess]);
 
   React.useEffect(() => {
     const companyId = user[0]?.company?.find(

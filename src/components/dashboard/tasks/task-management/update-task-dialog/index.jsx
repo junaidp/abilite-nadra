@@ -10,7 +10,6 @@ const UpdateTaskManagement = ({ setShowUpdateTaskDailog, updateTaskId }) => {
   const { loading, taskAddSuccess, allTasks } = useSelector(
     (state) => state?.tasksManagement
   );
-  const [fileAttachments, setFileAttachments] = React.useState([]);
   const [response, setResponse] = React.useState("");
 
   // Initial form initialValues
@@ -36,12 +35,12 @@ const UpdateTaskManagement = ({ setShowUpdateTaskDailog, updateTaskId }) => {
             id: updateTaskId,
             dueDate: task?.dueDate,
             status: "string",
-            auditEngagementId: Number(task?.engagement?.id),
+            engagementId: Number(task?.engagement?.id),
             createdBy: Number(task?.assignedBy?.id),
             companyId: Number(task?.companyId),
             userAssigned: Number(task?.assignee?.id),
             yourResponse: response,
-            fileAttachments: [],
+            fileAttachments: task?.fileAttachments,
             detailedRequirement: task?.detailedRequirement,
           })
         );
@@ -133,23 +132,19 @@ const UpdateTaskManagement = ({ setShowUpdateTaskDailog, updateTaskId }) => {
           </label>
         </div>
       </div>
-
-      <FileUpload
-        fileAttachments={fileAttachments}
-        setFileAttachments={setFileAttachments}
-      />
-
-      <div className="row mb-2">
-        <div className="col-lg-8 align-self-end">
-          <button
-            type="submit"
-            className={`btn btn-primary ${loading && "disabled"}`}
-            onClick={handleSubmit}
-          >
-            {loading ? "Loading..." : "Update"}
-          </button>
-        </div>
+      <div className="d-flex justify-end">
+        <button
+          type="submit"
+          className={`btn btn-primary ${loading && "disabled"}`}
+          onClick={handleSubmit}
+        >
+          {loading ? "Loading..." : "Update"}
+        </button>
       </div>
+
+      <FileUpload updateTaskId={updateTaskId} />
+
+
       <div className="row mb-2">
         <div className="col-lg-12 align-self-end">
           <button

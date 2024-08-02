@@ -1,7 +1,13 @@
 import React from "react";
-import { handleDownload } from "../../../../../../../constants";
+import { handleDownload } from "../../../../../../constants";
 
-const PlanningReportFileUpload = ({ item }) => {
+const InformationRequestFileUpload = ({ updateTaskId, allTasks }) => {
+  const [files, setFiles] = React.useState([]);
+  React.useEffect(() => {
+    let task = allTasks.find((singleTask) => singleTask?.id === updateTaskId);
+    setFiles(task?.fileAttachments);
+  }, [updateTaskId]);
+
   return (
     <div className="row mb-3">
       <div className="col-lg-12">
@@ -11,23 +17,23 @@ const PlanningReportFileUpload = ({ item }) => {
           <table className="table table-bordered  table-hover rounded">
             <thead className="bg-secondary text-white">
               <tr>
-                <th>File Name</th>
-                <th>Download</th>
+                <th>Attach Files </th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              {!item?.uploads || item?.uploads?.length == 0 ? (
+              {!files || files?.length == 0 ? (
                 <tr>
                   <td className="w-300">No Files Added Yet!</td>
                 </tr>
               ) : (
-                item?.uploads?.map((fileItem, index) => {
+                files?.map((fileItem, index) => {
                   return (
                     <tr key={index}>
                       <td>
                         <a>{fileItem?.fileName}</a>
                       </td>
-                      <td>
+                      <td className="w-130">
                         <i
                           className="fa fa-download f-18 mx-2 cursor-pointer"
                           onClick={() =>
@@ -36,7 +42,7 @@ const PlanningReportFileUpload = ({ item }) => {
                               fileName: fileItem?.fileName,
                             })
                           }
-                        ></i>{" "}
+                        ></i>
                       </td>
                     </tr>
                   );
@@ -50,4 +56,4 @@ const PlanningReportFileUpload = ({ item }) => {
   );
 };
 
-export default PlanningReportFileUpload;
+export default InformationRequestFileUpload;

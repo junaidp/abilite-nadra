@@ -6,7 +6,7 @@ import {
   setupAuditStepProcedureFileUpdate,
 } from "../../../../global-redux/reducers/audit-engagement/slice";
 import { useSelector, useDispatch } from "react-redux";
-import { baseUrl } from "../../../../constants/index";
+import { handleDownload } from "../../../../constants/index";
 
 const ProcedureFileUpload = ({
   handleChange,
@@ -99,12 +99,6 @@ const ProcedureFileUpload = ({
     }
   };
 
-  function handleDownload(id) {
-    window.open(
-      `${baseUrl}/auditEngagement/auditStep/procedureFileUploads/download?fileId=${id}`,
-      "_blank"
-    );
-  }
   React.useEffect(() => {
     if (auditEngagementObservationAddSuccess) {
       setSelectedFile(null);
@@ -203,9 +197,14 @@ const ProcedureFileUpload = ({
                       <i
                         className="fa fa-download f-18 mx-2 cursor-pointer"
                         onClick={() =>
-                          handleDownload(
-                            currentAuditStep?.procedureFileAuditStep?.id
-                          )
+                          handleDownload({
+                            base64String:
+                              currentAuditStep?.procedureFileAuditStep
+                                ?.fileData,
+                            fileName:
+                              currentAuditStep?.procedureFileAuditStep
+                                ?.fileName,
+                          })
                         }
                       ></i>
                       {handleAllowEdit() === true && (

@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   resetTaskAddSuccess,
   setupGetAllTasks,
+  resetFileUploadSuccess,
 } from "../../../../global-redux/reducers/tasks-management/slice";
 import { CircularProgress } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
@@ -18,8 +19,13 @@ const TaskManagement = () => {
   const dispatch = useDispatch();
   const [showUpdateTaskDialog, setShowUpdateTaskDailog] = React.useState(false);
   const [showViewTaskDialog, setShowViewTasktDialog] = React.useState(false);
-  const { taskAddSuccess, allTasks, initialLoading, totalNoOfRecords } =
-    useSelector((state) => state?.tasksManagement);
+  const {
+    taskAddSuccess,
+    allTasks,
+    initialLoading,
+    totalNoOfRecords,
+    fileUploadSuccess,
+  } = useSelector((state) => state?.tasksManagement);
   const { company } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
   const [page, setPage] = React.useState(1);
@@ -82,6 +88,23 @@ const TaskManagement = () => {
       );
     }
   }, [dispatch, page]);
+
+  React.useEffect(() => {
+    const companyId = user[0]?.company?.find(
+      (item) => item?.companyName === company
+    )?.id;
+    if (companyId && fileUploadSuccess === true) {
+      dispatch(
+        setupGetAllTasks({
+          companyId,
+          page,
+          itemsPerPage,
+          isTask: true,
+        })
+      );
+      dispatch(resetFileUploadSuccess());
+    }
+  }, [fileUploadSuccess]);
 
   return (
     <div>

@@ -6,7 +6,7 @@ import {
   setupReportingFileUpdate,
 } from "../../../../../../../global-redux/reducers/reporting/slice";
 import { useSelector, useDispatch } from "react-redux";
-import { baseUrl } from "../../../../../../../constants/index";
+import { handleDownload } from "../../../../../../../constants/index";
 
 const ReportingFileUpload = ({ item }) => {
   const dispatch = useDispatch();
@@ -92,12 +92,6 @@ const ReportingFileUpload = ({ item }) => {
     }
   };
 
-  function handleDownload(id) {
-    window.open(
-      `${baseUrl}/reportingAndFollowUp/reporting/reportingFileAttachments/download?fileId=${id}`,
-      "_blank"
-    );
-  }
   React.useEffect(() => {
     if (reportingFileUploadSuccess) {
       setSelectedFile(null);
@@ -177,7 +171,12 @@ const ReportingFileUpload = ({ item }) => {
                       <td className="w-130">
                         <i
                           className="fa fa-download f-18 mx-2 cursor-pointer"
-                          onClick={() => handleDownload(fileItem?.id)}
+                          onClick={() =>
+                            handleDownload({
+                              base64String: fileItem?.fileData,
+                              fileName: fileItem?.fileName,
+                            })
+                          }
                         ></i>
                         {Number(item?.stepNo) <= 1 && (
                           <i

@@ -1,13 +1,7 @@
 import React from "react";
-import { baseUrl } from "../../../../../../constants/index";
+import { handleDownload } from "../../../../../../constants/index";
 
 const ConsolidationAttachments = ({ item }) => {
-  function handleDownload(id) {
-    window.open(
-      `${baseUrl}/consolidatedReports/ConsolidatedIARAnnexureUploads/download?fileId=${id}`,
-      "_blank"
-    );
-  }
   return (
     <div className="row mb-3">
       <div className="col-lg-12">
@@ -35,7 +29,12 @@ const ConsolidationAttachments = ({ item }) => {
                       <td className="w-130">
                         <i
                           className="fa fa-download f-18 mx-2 cursor-pointer"
-                          onClick={() => handleDownload(fileItem?.id)}
+                          onClick={() =>
+                            handleDownload({
+                              base64String: fileItem?.fileData,
+                              fileName: fileItem?.fileName,
+                            })
+                          }
                         ></i>
                       </td>
                     </tr>
