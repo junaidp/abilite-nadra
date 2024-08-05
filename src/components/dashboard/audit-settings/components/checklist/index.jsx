@@ -22,6 +22,7 @@ const CheckList = ({
   setCheckListManagementDialog,
   userHierarchy,
   userRole,
+  currentSettingOption,
 }) => {
   const dispatch = useDispatch();
   const {
@@ -45,7 +46,8 @@ const CheckList = ({
   const [showEditCheckListItemDialog, setShowEditCheckListItemDialog] =
     React.useState(false);
   const [page, setPage] = React.useState(1);
-  const handleChange = (event, value) => {
+
+  const handleChange = (_, value) => {
     setPage(value);
   };
 
@@ -117,6 +119,12 @@ const CheckList = ({
       }
     }
   }, [checkListId]);
+
+  React.useEffect(() => {
+    setPage(1);
+    setDescription("");
+    setDefaultRemarks("");
+  }, [currentSettingOption]);
 
   return (
     <div

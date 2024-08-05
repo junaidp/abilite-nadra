@@ -4,12 +4,11 @@ import {
   setupUploadFile,
   resetFileAddSuccess,
   setupGetAllFiles,
-  setupUpdateFile,
 } from "../../../../../global-redux/reducers/settings/supporting-docs/slice";
 import { toast } from "react-toastify";
 import Table from "./components/Table";
 
-const SupportingDocs = ({ userHierarchy, userRole }) => {
+const SupportingDocs = ({ userHierarchy, userRole, currentSettingOption }) => {
   const dispatch = useDispatch();
   const fileInputRef = React.useRef(null);
   const { allFiles, loading, fileAddSuccess } = useSelector(
@@ -19,7 +18,6 @@ const SupportingDocs = ({ userHierarchy, userRole }) => {
   const { company } = useSelector((state) => state.common);
   const [page, setPage] = React.useState(1);
   const [selectedFile, setSelectedFile] = React.useState(null);
-  const [selectedUpdateFile, setSelectedUpdateFile] = React.useState(null);
   const [searchValue, setSearchValue] = React.useState("");
   const handleChangePage = (_, value) => {
     setPage(value);
@@ -44,25 +42,6 @@ const SupportingDocs = ({ userHierarchy, userRole }) => {
     }
   };
 
-  const handleUpdateFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const fileType = file.type;
-      const validTypes = [
-        "application/pdf",
-        "application/vnd.ms-excel",
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      ];
-      if (validTypes.includes(fileType)) {
-        setSelectedUpdateFile(file);
-      } else {
-        toast.error(
-          "Invalid file type. Only Pdf and Excel files are acceptable"
-        );
-      }
-    }
-  };
-
   const onApiCall = async (file) => {
     if (!loading) {
       const companyId = user[0]?.company?.find(
@@ -75,22 +54,6 @@ const SupportingDocs = ({ userHierarchy, userRole }) => {
     }
   };
 
-  const updateFileApiCal = async (file, id) => {
-    if (!loading) {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("supportingDocId", Number(id));
-      dispatch(setupUpdateFile(formData));
-    }
-  };
-
-  const handleFileUpdate = (id) => {
-    if (selectedUpdateFile) {
-      updateFileApiCal(selectedUpdateFile, id);
-    } else {
-      toast.error("No file selected.");
-    }
-  };
   const handleFileUpload = () => {
     if (selectedFile) {
       onApiCall(selectedFile);
@@ -106,13 +69,18 @@ const SupportingDocs = ({ userHierarchy, userRole }) => {
       )?.id;
       dispatch(setupGetAllFiles(`?companyId=${companyId}`));
       setSelectedFile(null);
-      setSelectedUpdateFile(null);
       fileInputRef.current.value = "";
       setPage(1);
       setSearchValue("");
       dispatch(resetFileAddSuccess());
     }
   }, [fileAddSuccess]);
+
+  React.useEffect(() => {
+    setPage(1);
+    setSearchValue("");
+    setSelectedFile(null);
+  }, [currentSettingOption]);
 
   return (
     <div
@@ -193,11 +161,8 @@ const SupportingDocs = ({ userHierarchy, userRole }) => {
         allFiles={allFiles}
         loading={loading}
         searchValue={searchValue}
-        handleUpdateFileChange={handleUpdateFileChange}
-        handleFileUpdate={handleFileUpdate}
         handleChangePage={handleChangePage}
         page={page}
-        selectedUpdateFile={selectedUpdateFile}
       />
     </div>
   );

@@ -24,7 +24,7 @@ const UpdateInformationRequest = ({
   updateTaskId,
 }) => {
   const dispatch = useDispatch();
-  const { users, auditEngagements, loading, taskAddSuccess, allTasks } =
+  const { users, auditEngagements, loading, allTasks } =
     useSelector((state) => state?.tasksManagement);
 
   // Initial form values
@@ -50,18 +50,12 @@ const UpdateInformationRequest = ({
           companyId: task?.companyId,
           userAssigned: Number(values?.userAssigned),
           yourResponse: task?.yourResponse,
-          fileAttachments: task?.fileAttachments,
+          uploads: task?.fileAttachments,
           detailedRequirement: values?.detailedRequirement,
         })
       );
     }
   };
-
-  React.useEffect(() => {
-    if (taskAddSuccess) {
-      setShowUpdateInformationRequestDialog(false);
-    }
-  }, [taskAddSuccess]);
 
   React.useEffect(() => {
     let task = allTasks.find((singleTask) => singleTask?.id === updateTaskId);

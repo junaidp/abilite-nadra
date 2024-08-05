@@ -33,7 +33,7 @@ const DeleteCheckListDialog = ({ setShowDeleteCheckListDialog }) => {
             } `}
             onClick={handleDeleteCheckList}
           >
-            {editLoading ? "editLoading..." : "Delete"}
+            {editLoading ? "Loading..." : "Delete"}
           </button>
         </div>
         <div className="mx-2">

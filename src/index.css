@@ -128,7 +128,7 @@ body {
   min-width: 500px;
 }
 
-.f-30{
+.f-30 {
   font-size: 30px !important;
 }
 
@@ -893,6 +893,10 @@ span[aria-label="Insert Ordered List"] .jodit-toolbar-button__trigger {
   position: relative;
   top: -90px;
   border-radius: 10px;
+}
+
+.min-h-170 {
+  min-height: 170px !important;
 }
 
 @media screen and (max-width: 1000px) {

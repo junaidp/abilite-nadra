@@ -44,7 +44,7 @@ const AddInformationRequest = ({ setShowAddInformationRequestDialog }) => {
           companyId: Number(user[0]?.userId?.company[0]?.id),
           userAssigned: Number(values?.userAssigned),
           yourResponse: "",
-          fileAttachments: [],
+          uploads: [],
           detailedRequirement: values?.detailedRequirement,
         })
       );

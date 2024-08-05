@@ -11,7 +11,7 @@ import {
 } from "../../../../../global-redux/reducers/settings/cp-list/slice";
 import DeleteCpListDialog from "./DeleteDialog";
 
-const CPList = ({ userHierarchy, userRole }) => {
+const CPList = ({ userHierarchy, userRole, currentSettingOption }) => {
   const dispatch = useDispatch();
   const { loading, allCPList, cpListAddSuccess } = useSelector(
     (state) => state?.settingsCPList
@@ -24,7 +24,8 @@ const CPList = ({ userHierarchy, userRole }) => {
   const [cpLists, setCPLists] = React.useState([]);
   const [page, setPage] = React.useState(1);
   const [description, setDescription] = React.useState("");
-  const handleChange = (event, value) => {
+
+  const handleChange = (_, value) => {
     setPage(value);
   };
 
@@ -77,6 +78,13 @@ const CPList = ({ userHierarchy, userRole }) => {
       setCPLists(allCPList);
     }
   }, [allCPList]);
+
+  React.useEffect(() => {
+    setPage(1);
+    setDescription("");
+  }, [currentSettingOption]);
+
+  
   return (
     <div
       className="tab-pane fade"

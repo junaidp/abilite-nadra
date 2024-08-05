@@ -11,7 +11,7 @@ import {
 } from "../../../../../global-redux/reducers/settings/risk-factor/slice";
 import DeleteRiskFactorDialog from "./DeleteDialog";
 
-const RiskFactor = ({ userHierarchy, userRole }) => {
+const RiskFactor = ({ userHierarchy, userRole, currentSettingOption }) => {
   const dispatch = useDispatch();
   const { loading, allRiskFactors, riskFactorAddSuccess } = useSelector(
     (state) => state?.settingsRiskFactor
@@ -24,7 +24,7 @@ const RiskFactor = ({ userHierarchy, userRole }) => {
   const [riskFactorList, setRiskFactorList] = React.useState([]);
   const [page, setPage] = React.useState(1);
   const [description, setDescription] = React.useState("");
-  const handleChange = (event, value) => {
+  const handleChange = (_, value) => {
     setPage(value);
   };
 
@@ -79,6 +79,14 @@ const RiskFactor = ({ userHierarchy, userRole }) => {
       setRiskFactorList(allRiskFactors);
     }
   }, [allRiskFactors]);
+
+  React.useEffect(() => {
+    if (currentSettingOption) {
+      setPage(1);
+      setCurrentRiskFactorId("");
+      setDescription("");
+    }
+  }, [currentSettingOption]);
   return (
     <div
       className="tab-pane fade"

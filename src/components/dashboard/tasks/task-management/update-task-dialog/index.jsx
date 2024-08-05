@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 
 const UpdateTaskManagement = ({ setShowUpdateTaskDailog, updateTaskId }) => {
   const dispatch = useDispatch();
-  const { loading, taskAddSuccess, allTasks } = useSelector(
+  const { loading, allTasks } = useSelector(
     (state) => state?.tasksManagement
   );
   const [response, setResponse] = React.useState("");
@@ -40,19 +40,13 @@ const UpdateTaskManagement = ({ setShowUpdateTaskDailog, updateTaskId }) => {
             companyId: Number(task?.companyId),
             userAssigned: Number(task?.assignee?.id),
             yourResponse: response,
-            fileAttachments: task?.fileAttachments,
+            uploads: task?.fileAttachments,
             detailedRequirement: task?.detailedRequirement,
           })
         );
       }
     }
   };
-
-  React.useEffect(() => {
-    if (taskAddSuccess) {
-      setShowUpdateTaskDailog(false);
-    }
-  }, [taskAddSuccess]);
 
   React.useEffect(() => {
     let task = allTasks.find((singleTask) => singleTask?.id === updateTaskId);

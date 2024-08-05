@@ -154,14 +154,14 @@ const UserProfileDialog = ({ setUpdateUserDialog }) => {
           type="submit"
           className={`btn btn-primary ${loading && "disabled"}`}
         >
-          {loading ? "Loading" : "Submit"}
+          {loading ? "Loading" : "Change Password"}
         </button>
       </form>
 
       <div className="row py-3">
         <div className="col-lg-12 text-end">
           <button
-            className="btn btn-primary float-end"
+            className="btn btn-danger float-end"
             onClick={() => {
               setUpdateUserDialog(false);
               setFormData({

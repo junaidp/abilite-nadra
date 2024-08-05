@@ -9,7 +9,7 @@ import {
   setupGetAllPreviousObservations,
 } from "../../../../../global-redux/reducers/settings/previous-observation/slice";
 
-const PreviousObservation = () => {
+const PreviousObservation = ({ currentSettingOption }) => {
   const dispatch = useDispatch();
   const fileInputRef = React.useRef(null);
   const { loading, previousObservations, previousObservationAddSuccess } =
@@ -62,6 +62,11 @@ const PreviousObservation = () => {
       dispatch(setupGetAllPreviousObservations({ companyId: companyId }));
     }
   }, [previousObservationAddSuccess]);
+
+  React.useEffect(() => {
+    setPage(1);
+    setSelectedFile(null);
+  }, [currentSettingOption]);
 
   return (
     <div

@@ -44,12 +44,12 @@ const EditSubLocationDialog = ({
     );
     setSubLocationName(subLocationText?.description);
   }, [LocationId, SubLocationId]);
+
   return (
-    <div className="p-4">
-      <h4 className="mb-4">Edit Sub Location</h4>
+    <div className="p-4 min-h-170">
+      <h4 className="mb-4 heading">Update Sub Location</h4>
       <div className="row mb-4 flex items-center">
-        <div className="col-lg-2 label-text">Sub Name:</div>
-        <div className="col-lg-8">
+        <div className="col-lg-12">
           <div className="form-group">
             <input
               type="description"
@@ -61,25 +61,25 @@ const EditSubLocationDialog = ({
             />
           </div>
         </div>
-        <div className="col-lg-6 w-100">
-          <button
-            className={`btn btn-primary ${loading && "disabled"}`}
-            onClick={handleSubmit}
-          >
-            {loading ? "Loading" : "Edit"}
-          </button>
-        </div>
-        <div className="mb-4">
-          <button
-            className="btn btn-danger float-end"
-            onClick={() => {
-              setShowEditSubLocationDialog(false);
-              setSubLocationName("");
-            }}
-          >
-            Close
-          </button>
-        </div>
+      </div>
+      <div>
+        <button
+          className={`btn float-start btn-primary ${loading && "disabled"}`}
+          onClick={handleSubmit}
+        >
+          {loading ? "Loading" : "Edit"}
+        </button>
+      </div>
+      <div>
+        <button
+          className="btn btn-danger float-end"
+          onClick={() => {
+            setShowEditSubLocationDialog(false);
+            setSubLocationName("");
+          }}
+        >
+          Close
+        </button>
       </div>
     </div>
   );

@@ -19,7 +19,7 @@ import AddSettingsProgramRCMDialog from "../../../../modals/add-settings-rcm-pro
 import AddButtons from "./components/AddButtons";
 import DeleteRCMDialog from "./components/DeleteRCMDialog";
 
-const RCMLibraray = ({ userHierarchy, userRole }) => {
+const RCMLibraray = ({ userHierarchy, userRole, currentSettingOption }) => {
   const dispatch = useDispatch();
   let { allProcess, allSubProcess } = useSelector(
     (state) => state?.settingsProcess
@@ -161,6 +161,13 @@ const RCMLibraray = ({ userHierarchy, userRole }) => {
       dispatch(setupGetAllSubProcess(`?processId=${Number(processId)}`));
     }
   }, [processId]);
+
+  React.useEffect(() => {
+    setProcessId("");
+    setSubProcessId("");
+    setUpdatedRCMId("");
+    setRiskControlMatrix([]);
+  }, [currentSettingOption]);
 
   return (
     <div

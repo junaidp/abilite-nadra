@@ -12,6 +12,7 @@ const UserManagement = ({
   setUserManagementDialog,
   setUpdateUserDialog,
   setUpdateUserObject,
+  currentSettingOption,
 }) => {
   const dispatch = useDispatch();
   const { loading, addUserSuccess, allUsers } = useSelector(
@@ -32,6 +33,12 @@ const UserManagement = ({
       dispatch(setupGetAllUsers({ shareWith: true }));
     }
   }, [addUserSuccess]);
+
+  React.useEffect(() => {
+    setPage(1);
+    setNameVal("");
+    setCurrentUserId("");
+  }, [currentSettingOption]);
 
   return (
     <div

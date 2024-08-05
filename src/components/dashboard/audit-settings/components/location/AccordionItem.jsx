@@ -69,9 +69,9 @@ const AccordionItem = ({
                 </div>
               )}
             </div>
-            <div className="row mb-3 col-lg-12 mt-2">
+            <div className="d-flex justify-content-between">
               <div className="col-lg-6">
-                <label className="w-100">Add SubLocation:</label>
+                <label>Add Sub Location:</label>
                 <input
                   className="form-control w-100"
                   placeholder="Enter"
@@ -80,9 +80,9 @@ const AccordionItem = ({
                   onChange={(event) => setSubLocationText(event?.target?.value)}
                 />
               </div>
-              <div className="col-lg-6 text-end float-end align-self-end">
+              <div className="col-lg-6 text-end float-end align-self-end p-0 m-0">
                 <div
-                  className={`btn btn-labeled btn-primary px-3 shadow ${
+                  className={`btn btn-labeled btn-primary  shadow ${
                     loading && "disabled"
                   }`}
                   onClick={handleAddSubLocation}
@@ -96,14 +96,14 @@ const AccordionItem = ({
             </div>
           </div>
 
-          <div className="row">
+          <div className="row mt-3">
             <div className="col-lg-12">
               <div className="table-responsive">
                 <table className="table table-bordered  table-hover rounded">
                   <thead className="bg-secondary text-white">
                     <tr>
                       <th className="w-80">Sr No.</th>
-                      <th>Particulars</th>
+                      <th>Sub Location</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
@@ -116,29 +116,31 @@ const AccordionItem = ({
                       item?.subLocations?.map((subItem, subIndex) => {
                         return (
                           <tr key={subIndex}>
-                            <td>{subItem?.id}</td>
+                            <td>{subIndex + 1}</td>
                             <td>{subItem?.description}</td>
                             <td>
-                              <i
-                                className="fa fa-edit  px-3 f-18 cursor-pointer"
-                                onClick={() => {
-                                  setSubLocationId(subItem?.id);
-                                  setShowEditSubLocationDialog(true);
-                                }}
-                              ></i>
-                              {(userRole === "ADMIN" ||
-                                userHierarchy === "IAH") && (
+                              <div className="d-flex gap-2">
                                 <i
-                                  className="fa fa-trash text-danger f-18 cusrsor-pointer"
+                                  className="fa fa-edit f-18 cursor-pointer"
                                   onClick={() => {
-                                    dispatch(
-                                      setupDeleteSubLocation(
-                                        `?deleteId=${subItem?.id}`
-                                      )
-                                    );
+                                    setSubLocationId(subItem?.id);
+                                    setShowEditSubLocationDialog(true);
                                   }}
                                 ></i>
-                              )}
+                                {(userRole === "ADMIN" ||
+                                  userHierarchy === "IAH") && (
+                                  <i
+                                    className="fa fa-trash text-danger f-18 cusrsor-pointer"
+                                    onClick={() => {
+                                      dispatch(
+                                        setupDeleteSubLocation(
+                                          `?deleteId=${subItem?.id}`
+                                        )
+                                      );
+                                    }}
+                                  ></i>
+                                )}
+                              </div>
                             </td>
                           </tr>
                         );

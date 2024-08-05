@@ -15,7 +15,7 @@ import EditSubLocationDialog from "../../../../modals/edit-sub-location-dialog";
 import AccordionItem from "./AccordionItem";
 import DeleteLocationDialog from "./DeleteDialog";
 
-const Location = ({ userHierarchy, userRole }) => {
+const Location = ({ userHierarchy, userRole, currentSettingOption }) => {
   const dispatch = useDispatch();
   const { loading, locationAddSuccess, allLocations } = useSelector(
     (state) => state.settingsLocation
@@ -34,9 +34,10 @@ const Location = ({ userHierarchy, userRole }) => {
   const [showEditSubLocationDialog, setShowEditSubLocationDialog] =
     React.useState(false);
 
-  const handleChange = (event, value) => {
+  const handleChange = (_, value) => {
     setPage(value);
   };
+
   function handleSaveLocation() {
     if (!loading) {
       if (locationDescription === "") {
@@ -81,6 +82,14 @@ const Location = ({ userHierarchy, userRole }) => {
       setPage(1);
     }
   }, [locationAddSuccess]);
+
+  React.useEffect(() => {
+    setPage(1);
+    setLocationDescription("");
+    setSubLocationId("");
+    setLocationId("");
+    setSubLocationText("");
+  }, [currentSettingOption]);
 
   return (
     <div

@@ -172,18 +172,6 @@ const AuditSettings = () => {
                   Residual Risk
                 </button>
                 <button
-                  className="nav-link shadow-sm  border-0 mb-3  rounded-0  me-3 "
-                  id="nav-rcm-library-tab"
-                  data-bs-toggle="tab"
-                  data-bs-target="#nav-rcm-library"
-                  type="button"
-                  role="tab"
-                  aria-controls="nav-rcm-library"
-                  onClick={() => setCurrentSettingOption("rcm-library")}
-                >
-                  RCM Library
-                </button>
-                <button
                   className="nav-link shadow-sm border-0 mb-3  rounded-0 me-3 "
                   id="nav-risk-factor-tab"
                   data-bs-toggle="tab"
@@ -194,6 +182,30 @@ const AuditSettings = () => {
                   onClick={() => setCurrentSettingOption("risk-factor")}
                 >
                   Risk Factor
+                </button>
+                <button
+                  className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
+                  id="nav-com-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#nav-process"
+                  type="button"
+                  role="tab"
+                  aria-controls="nav-com"
+                  onClick={() => setCurrentSettingOption("process")}
+                >
+                  Process
+                </button>
+                <button
+                  className="nav-link shadow-sm  border-0 mb-3  rounded-0  me-3 "
+                  id="nav-rcm-library-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#nav-rcm-library"
+                  type="button"
+                  role="tab"
+                  aria-controls="nav-rcm-library"
+                  onClick={() => setCurrentSettingOption("rcm-library")}
+                >
+                  RCM Library
                 </button>
                 <button
                   className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
@@ -221,19 +233,6 @@ const AuditSettings = () => {
                     User Management
                   </button>
                 )}
-
-                <button
-                  className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
-                  id="nav-com-tab"
-                  data-bs-toggle="tab"
-                  data-bs-target="#nav-process"
-                  type="button"
-                  role="tab"
-                  aria-controls="nav-com"
-                  onClick={() => setCurrentSettingOption("process")}
-                >
-                  Process
-                </button>
 
                 {/* For Admins Only */}
 
@@ -303,29 +302,54 @@ const AuditSettings = () => {
               <SupportingDocs
                 userHierarchy={userHierarchy}
                 userRole={userRole}
+                currentSettingOption={currentSettingOption}
               />
-              <Location userHierarchy={userHierarchy} userRole={userRole} />
-              <CPList userHierarchy={userHierarchy} userRole={userRole} />
-              <RCMLibrary userHierarchy={userHierarchy} userRole={userRole} />
-              <RiskFactor userHierarchy={userHierarchy} userRole={userRole} />
+              <Location
+                userHierarchy={userHierarchy}
+                userRole={userRole}
+                currentSettingOption={currentSettingOption}
+              />
+              <CPList
+                userHierarchy={userHierarchy}
+                userRole={userRole}
+                currentSettingOption={currentSettingOption}
+              />
+              <RCMLibrary
+                userHierarchy={userHierarchy}
+                userRole={userRole}
+                currentSettingOption={currentSettingOption}
+              />
+              <RiskFactor
+                userHierarchy={userHierarchy}
+                userRole={userRole}
+                currentSettingOption={currentSettingOption}
+              />
               <CheckList
                 setCheckListManagementDialog={setCheckListManagementDialog}
                 userHierarchy={userHierarchy}
                 userRole={userRole}
+                currentSettingOption={currentSettingOption}
               />
               {userRole !== "ADMIN" && <Notification />}
               {(userRole === "ADMIN" || userHierarchy === "IAH") && (
-                <PreviousObservation />
+                <PreviousObservation
+                  currentSettingOption={currentSettingOption}
+                />
               )}
               {userRole === "ADMIN" && (
                 <UserManagement
                   setUserManagementDialog={setUserManagementDialog}
                   setUpdateUserDialog={setUpdateUserDialog}
                   setUpdateUserObject={setUpdateUserObject}
+                  currentSettingOption={currentSettingOption}
                 />
               )}
 
-              <Process userHierarchy={userHierarchy} userRole={userRole} />
+              <Process
+                userHierarchy={userHierarchy}
+                userRole={userRole}
+                currentSettingOption={currentSettingOption}
+              />
 
               {userRole === "ADMIN" && <UserInfo />}
               <TFA />

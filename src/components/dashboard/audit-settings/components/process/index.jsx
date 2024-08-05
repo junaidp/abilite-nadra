@@ -16,7 +16,7 @@ import EditSubProcessDialog from "./EditSubProcessDialog";
 import ProcessDeleteDialog from "./DeleteDialog";
 import EditProcessDialog from "./EditProcessDialog";
 
-const Process = ({ userHierarchy, userRole }) => {
+const Process = ({ userHierarchy, userRole, currentSettingOption }) => {
   const dispatch = useDispatch();
   const {
     loading,
@@ -37,7 +37,8 @@ const Process = ({ userHierarchy, userRole }) => {
     React.useState(false);
   const [processId, setProcessId] = React.useState("");
   const [page, setPage] = React.useState(1);
-  const handleChange = (event, value) => {
+
+  const handleChange = (_, value) => {
     setPage(value);
   };
 
@@ -108,6 +109,14 @@ const Process = ({ userHierarchy, userRole }) => {
       dispatch(resetSubProcessAddSuccess());
     }
   }, [subProcessAddSuccess]);
+
+  React.useEffect(() => {
+    setPage(1);
+    setProcessId("");
+    setSubProcessId("");
+    setProcessText("");
+    setSubProcessText("");
+  }, [currentSettingOption]);
 
   return (
     <div

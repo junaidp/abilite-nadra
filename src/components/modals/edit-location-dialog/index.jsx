@@ -38,7 +38,7 @@ const EditLocationDialog = ({ setShowEditLocationDialog, LocationId }) => {
       }, 500);
     }
   }, [locationAddSuccess]);
-  
+
   React.useEffect(() => {
     const { description } = allLocations.find(
       (item) => item?.id === LocationId
@@ -46,11 +46,10 @@ const EditLocationDialog = ({ setShowEditLocationDialog, LocationId }) => {
     setLocationName(description);
   }, []);
   return (
-    <div className="p-4">
-      <h4 className="mb-4">Edit Location</h4>
+    <div className="p-4 min-h-170">
+      <h4 className="mb-4 heading">Update Location</h4>
       <div className="row mb-4 flex items-center">
-        <div className="col-lg-2 label-text">Location Name:</div>
-        <div className="col-lg-8">
+        <div className="col-lg-12">
           <div className="form-group">
             <input
               type="description"
@@ -62,25 +61,25 @@ const EditLocationDialog = ({ setShowEditLocationDialog, LocationId }) => {
             />
           </div>
         </div>
-        <div className="col-lg-6 w-100">
-          <button
-            className={`btn btn-primary ${loading && "disabled"}`}
-            onClick={handleSubmit}
-          >
-            {loading ? "Loading" : "Edit"}
-          </button>
-        </div>
-        <div className="mb-4">
-          <button
-            className="btn btn-danger float-end"
-            onClick={() => {
-              setShowEditLocationDialog(false);
-              setLocationName("");
-            }}
-          >
-            Close
-          </button>
-        </div>
+      </div>
+      <div className="w-100 mb-4">
+        <button
+          className={`btn float-start btn-primary ${loading && "disabled"}`}
+          onClick={handleSubmit}
+        >
+          {loading ? "Loading" : "Edit"}
+        </button>
+      </div>
+      <div className="mb-4">
+        <button
+          className="btn btn-danger float-end"
+          onClick={() => {
+            setShowEditLocationDialog(false);
+            setLocationName("");
+          }}
+        >
+          Close
+        </button>
       </div>
     </div>
   );
