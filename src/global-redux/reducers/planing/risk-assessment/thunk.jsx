@@ -76,6 +76,25 @@ export const updateRiskAssessment = async (data, thunkAPI) => {
   }
 };
 
+export const submitRiskAssessment = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.post(
+      `${baseUrl}/auditPlanningAndScheduling/riskAssessment/riskFactorApproach/update`,
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
 export const addRiskAssessment = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;

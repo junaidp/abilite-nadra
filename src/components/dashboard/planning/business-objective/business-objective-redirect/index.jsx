@@ -26,10 +26,12 @@ import SetMeetingTime from "./components/set-meeting-time";
 import BusinessObjectiveMapProcess from "./components/business-objective-map-process";
 import { toast } from "react-toastify";
 import { CircularProgress } from "@mui/material";
+import SubmitDialog from "./submit-dialog";
 
 const BusinessObjectiveRedirect = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [showSubmitDialog, setShowSubmitDialog] = React.useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const engagementId = searchParams.get("engagementId");
   const { allLocations } = useSelector((state) => state.settingsLocation);
@@ -45,7 +47,6 @@ const BusinessObjectiveRedirect = () => {
     React.useState(false);
   const [domain, setDomain] = React.useState("");
   const [description, setDescription] = React.useState("");
-  const [allSubLocations, setAllSubLocations] = React.useState([]);
 
   const [object, setObject] = React.useState({
     engagementName: "",
@@ -148,16 +149,6 @@ const BusinessObjectiveRedirect = () => {
       );
     }
   }
-  function handleSubmitBusinessObjective() {
-    if (!loading) {
-      dispatch(
-        setupUpdateBusinessObjective({
-          ...planingEngagementSingleObject,
-          complete: true,
-        })
-      );
-    }
-  }
 
   function handleSaveBusinessObjectiveMapProcess(item) {
     if (!loading) {
@@ -222,23 +213,16 @@ const BusinessObjectiveRedirect = () => {
   }, [engagementAddSuccess]);
 
   React.useEffect(() => {
-    if (object?.location_Id) {
-      const item = allLocations?.find(
-        (all) => all?.id === Number(object?.location_Id)
-      );
-      setAllSubLocations(item?.subLocations);
-    }
-  }, [object?.location_Id]);
-
-  React.useEffect(() => {
     if (user[0]?.token && engagementId) {
       let companyId = user[0]?.company.find(
         (all) => all?.companyName === company
       )?.id;
       dispatch(setupGetInitialSingleEngagementObject(engagementId));
-      dispatch(setupGetAllLocations(`?companyId=${companyId}`));
+      setTimeout(() => {
+        dispatch(setupGetAllLocations(`?companyId=${companyId}`));
+      }, 1200);
     }
-  }, [engagementId, user]);
+  }, [dispatch]);
 
   React.useEffect(() => {
     if (!engagementId) {
@@ -256,6 +240,16 @@ const BusinessObjectiveRedirect = () => {
 
   return (
     <div>
+      {showSubmitDialog && (
+        <div className="model-parent">
+          <div className="model-wrap">
+            <SubmitDialog
+              object={planingEngagementSingleObject}
+              setShowSubmitDialog={setShowSubmitDialog}
+            />
+          </div>
+        </div>
+      )}
       {initialLoading ? (
         <div className="my-3">
           <CircularProgress />
@@ -331,7 +325,6 @@ const BusinessObjectiveRedirect = () => {
                   object={object}
                   handleChange={handleChange}
                   allLocations={allLocations}
-                  allSubLocations={allSubLocations}
                   loading={loading}
                   handleSaveMinuteMeetings={handleSaveMinuteMeetings}
                 />
@@ -371,15 +364,13 @@ const BusinessObjectiveRedirect = () => {
                 planingEngagementSingleObject
                   ?.businessObjectiveAndMapProcessList?.length > 0 && (
                   <button
-                    className={`btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow mx-4 float-end ${
-                      loading && "disabled"
-                    }`}
-                    onClick={handleSubmitBusinessObjective}
+                    className={`btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow mx-4 float-end`}
+                    onClick={() => setShowSubmitDialog(true)}
                   >
                     <span className="btn-label me-2">
                       <i className="fa fa-check-circle"></i>
                     </span>
-                    {loading ? "loading..." : "Submit"}
+                    Submit
                   </button>
                 )}
             </div>

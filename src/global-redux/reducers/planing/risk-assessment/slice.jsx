@@ -1,6 +1,7 @@
 import {
   getAllRiskAssessments,
   updateRiskAssessment,
+  submitRiskAssessment,
   performRiskAssessment,
   performInitialRiskAssessment,
   addRiskAssessment,
@@ -28,6 +29,13 @@ export const setupUpdateRiskAssessment = createAsyncThunk(
   "riskAssessment/updateRiskAssessment",
   async (data, thunkAPI) => {
     return updateRiskAssessment(data, thunkAPI);
+  }
+);
+
+export const setupSubmitRiskAssessment = createAsyncThunk(
+  "riskAssessment/submitRiskAssessment",
+  async (data, thunkAPI) => {
+    return submitRiskAssessment(data, thunkAPI);
   }
 );
 
@@ -95,12 +103,32 @@ export const slice = createSlice({
       .addCase(setupUpdateRiskAssessment.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupUpdateRiskAssessment.fulfilled, (state, { payload }) => {
+      .addCase(setupUpdateRiskAssessment.fulfilled, (state) => {
         state.loading = false;
         state.riskAssessmentSuccess = true;
         toast.success("Risk Assessment Updated Successfully");
       })
       .addCase(setupUpdateRiskAssessment.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.riskAssessmentSuccess = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+
+    // Submit Risk Assessment
+    builder
+      .addCase(setupSubmitRiskAssessment.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupSubmitRiskAssessment.fulfilled, (state) => {
+        state.loading = false;
+        state.riskAssessmentSuccess = true;
+        toast.success("Risk Assessment Submitted Successfully");
+      })
+      .addCase(setupSubmitRiskAssessment.rejected, (state, { payload }) => {
         state.loading = false;
         state.riskAssessmentSuccess = false;
         if (payload?.response?.data?.message) {

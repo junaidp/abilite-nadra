@@ -6,11 +6,12 @@ const CPListRows = ({
   handleChangeCpList,
   handleChangeCpListComments,
   performRiskAssessmentObject,
+  index,
 }) => {
   const { user } = useSelector((state) => state?.auth);
   return (
     <tr>
-      <td>{cpItem?.id}</td>
+      <td>{index + 1}</td>
       <td className="w-400">{cpItem?.description || ""}</td>
       <td>
         <div className="form-check">

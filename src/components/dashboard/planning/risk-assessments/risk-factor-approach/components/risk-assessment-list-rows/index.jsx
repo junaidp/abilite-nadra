@@ -5,11 +5,12 @@ const RiskAssessmentListRows = ({
   item,
   handleChangeSingleRiskAssessmentItem,
   performRiskAssessmentObject,
+  index,
 }) => {
   const { user } = useSelector((state) => state?.auth);
   return (
     <tr>
-      <td>{item?.id}</td>
+      <td>{index + 1}</td>
       <td>
         <p>{item?.description || ""}</p>
       </td>

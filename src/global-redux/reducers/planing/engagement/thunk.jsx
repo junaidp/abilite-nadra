@@ -112,6 +112,25 @@ export const updateBusinessObjective = async (data, thunkAPI) => {
   }
 };
 
+export const submitBusinessObjective = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.post(
+      `${baseUrl}/auditPlanningAndScheduling/engagments/businessObjective/update`,
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
 export const saveMapProcessBusinessObjective = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
@@ -208,6 +227,25 @@ export const updateBusinessMinuteMeeting = async (data, thunkAPI) => {
 };
 
 export const updateSpecialProjectAudit = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.post(
+      `${baseUrl}/auditPlanningAndScheduling/engagments/specialProjectOrAudit/update`,
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
+export const submitSpecialProjectAudit = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.post(

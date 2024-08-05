@@ -14,15 +14,19 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import SubmitDialog from "./components/submit-dialog";
+import ViewDialog from "./components/view-dialog";
 
 const AuditableUnits = () => {
   const dispatch = useDispatch();
+  const [showSubmitDialog, setShowSubmitDialog] = React.useState(false);
   const {
     loading,
     allAuditableUnits,
     auditableUnitAddSuccess,
     totalNoOfRecords,
   } = useSelector((state) => state?.planningAuditableUnit);
+  const [currentObject, setCurrentObject] = React.useState({});
   const { user } = useSelector((state) => state?.auth);
   const { company } = useSelector((state) => state?.common);
   const [auditableUnitRatingDialog, setAuditableUnitRatingDialog] =
@@ -33,6 +37,7 @@ const AuditableUnits = () => {
     React.useState("");
   const [selectedAuditableSubUnitId, setSelectedAuditableSubUnitId] =
     React.useState("");
+  const [showViewDialog, setShowViewDialog] = React.useState(false);
   const [showEditAuditableUnit, setShowEditAuditableUnit] =
     React.useState(false);
 
@@ -80,12 +85,33 @@ const AuditableUnits = () => {
 
   return (
     <div>
+      {showSubmitDialog && (
+        <div className="model-parent">
+          <div className="model-wrap">
+            <SubmitDialog
+              object={currentObject}
+              setShowSubmitDialog={setShowSubmitDialog}
+            />
+          </div>
+        </div>
+      )}
       {auditableUnitRatingDialog && (
         <div className="model-parent">
           <div className="model-wrap">
             <AuditableUnitRatingDialog
               setAuditableUnitRatingDialog={setAuditableUnitRatingDialog}
               selectedAuditableUnitId={selectedAuditableUnitId}
+            />
+          </div>
+        </div>
+      )}
+      {showViewDialog && (
+        <div className="model-parent">
+          <div className="model-wrap">
+            <ViewDialog
+              setShowViewDialog={setShowViewDialog}
+              selectedAuditableUnitId={selectedAuditableUnitId}
+              selectedAuditableSubUnitId={selectedAuditableSubUnitId}
             />
           </div>
         </div>
@@ -125,9 +151,12 @@ const AuditableUnits = () => {
                       setSelectedAuditableSubUnitId={
                         setSelectedAuditableSubUnitId
                       }
-                      setShowEditAuditableUnit={setShowEditAuditableUnit}
                       index={index}
                       loading={loading}
+                      setCurrentObject={setCurrentObject}
+                      setShowSubmitDialog={setShowSubmitDialog}
+                      setShowEditAuditableUnit={setShowEditAuditableUnit}
+                      setShowViewDialog={setShowViewDialog}
                     />
                   );
                 })

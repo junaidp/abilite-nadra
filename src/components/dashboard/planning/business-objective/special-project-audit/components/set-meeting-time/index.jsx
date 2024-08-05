@@ -6,7 +6,6 @@ const SetMeetingTime = ({
   object,
   handleChange,
   allLocations,
-  allSubLocations,
   handleSaveMinuteMeetings,
   loading,
 }) => {
@@ -89,13 +88,15 @@ const SetMeetingTime = ({
                 }
               >
                 <option>List of Sub Locations</option>
-                {allSubLocations?.map((item, index) => {
-                  return (
-                    <option value={item?.id} key={index}>
-                      {item?.description}
-                    </option>
-                  );
-                })}
+                {allLocations
+                  ?.find((all) => all?.id === Number(object?.location_Id))
+                  ?.subLocations?.map((item, index) => {
+                    return (
+                      <option value={item?.id} key={index}>
+                        {item?.description}
+                      </option>
+                    );
+                  })}
               </select>
             </div>
           </div>

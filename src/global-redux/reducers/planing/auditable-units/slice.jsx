@@ -2,6 +2,7 @@ import {
   getAllAuditableUnits,
   addAuditableUnit,
   EditAuditableUnit,
+  SubmitAuditableUnit,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
@@ -30,6 +31,13 @@ export const setupEditAuditableUnit = createAsyncThunk(
   "auditableUnits/EditAuditableUnit",
   async (data, thunkAPI) => {
     return EditAuditableUnit(data, thunkAPI);
+  }
+);
+
+export const setupSubmitAuditableUnit = createAsyncThunk(
+  "auditableUnits/SubmitAuditableUnit",
+  async (data, thunkAPI) => {
+    return SubmitAuditableUnit(data, thunkAPI);
   }
 );
 
@@ -89,12 +97,32 @@ export const slice = createSlice({
       .addCase(setupEditAuditableUnit.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupEditAuditableUnit.fulfilled, (state, { payload }) => {
+      .addCase(setupEditAuditableUnit.fulfilled, (state) => {
         state.loading = false;
         state.auditableUnitAddSuccess = true;
         toast.success("Auditable Unit Updated Successfully");
       })
       .addCase(setupEditAuditableUnit.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.auditableUnitAddSuccess = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+
+    // Edit Auditable Unit
+    builder
+      .addCase(setupSubmitAuditableUnit.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupSubmitAuditableUnit.fulfilled, (state) => {
+        state.loading = false;
+        state.auditableUnitAddSuccess = true;
+        toast.success("Auditable Unit Submitted Successfully");
+      })
+      .addCase(setupSubmitAuditableUnit.rejected, (state, { payload }) => {
         state.loading = false;
         state.auditableUnitAddSuccess = false;
         if (payload?.response?.data?.message) {

@@ -18,10 +18,12 @@ import {
 import CPListRows from "./components/cp-list-rows";
 import RiskAssessmentListRows from "./components/risk-assessment-list-rows";
 import { CircularProgress } from "@mui/material";
+import SubmitDialog from "./submit-dialog";
 
 const RiskFactorApproach = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [showSubmitDialog, setShowSubmitDialog] = React.useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const riskAssessmentId = searchParams.get("riskAssessmentId");
   const { user } = useSelector((state) => state?.auth);
@@ -174,7 +176,7 @@ const RiskFactorApproach = () => {
         })
       );
     }
-  }, [riskAssessmentId, user]);
+  }, [dispatch]);
 
   React.useEffect(() => {
     if (!riskAssessmentId) {
@@ -192,6 +194,16 @@ const RiskFactorApproach = () => {
 
   return (
     <div>
+      {showSubmitDialog && (
+        <div className="model-parent">
+          <div className="model-wrap">
+            <SubmitDialog
+              object={performRiskAssessmentObject}
+              setShowSubmitDialog={setShowSubmitDialog}
+            />
+          </div>
+        </div>
+      )}
       {initialLoading ? (
         <div className="my-3">
           <CircularProgress />
@@ -210,8 +222,8 @@ const RiskFactorApproach = () => {
             </div>
           )}
 
-          <div className="section-header my-3  text-start d-flex align-items-center justify-content-between">
-            <div className="align-items-center  text-start d-flex my-3">
+          <div className="section-header my-3 row px-2">
+            <div className="align-items-center col-lg-10 text-start d-flex">
               <a
                 className="text-primary"
                 onClick={() => navigate("/audit/risk-assessment")}
@@ -229,14 +241,16 @@ const RiskFactorApproach = () => {
                 performRiskAssessmentObject?.riskAssessments?.locked ===
                   false &&
                 user[0]?.userId?.employeeid?.userHierarchy === "IAH")) && (
-              <div
-                className="btn btn-labeled btn-primary px-3 shadow"
-                onClick={() => setShowAddRiskFactorDialog(true)}
-              >
-                <span className="btn-label me-2">
-                  <i className="fa fa-plus-circle"></i>
-                </span>
-                Add Risk Factor
+              <div className="col-lg-2 float-end d-flex justify-content-end align-items-center">
+                <div
+                  className="btn btn-labeled btn-primary px-3 shadow"
+                  onClick={() => setShowAddRiskFactorDialog(true)}
+                >
+                  <span className="btn-label me-2">
+                    <i className="fa fa-plus-circle"></i>
+                  </span>
+                  Add Risk Factor
+                </div>
               </div>
             )}
           </div>
@@ -261,6 +275,7 @@ const RiskFactorApproach = () => {
                           return (
                             <RiskAssessmentListRows
                               key={index}
+                              index={index}
                               item={item}
                               handleChangeSingleRiskAssessmentItem={
                                 handleChangeSingleRiskAssessmentItem
@@ -334,6 +349,7 @@ const RiskFactorApproach = () => {
                             <CPListRows
                               cpItem={cpItem}
                               key={index}
+                              index={index}
                               handleChangeCpList={handleChangeCpList}
                               handleChangeCpListComments={
                                 handleChangeCpListComments
@@ -408,15 +424,13 @@ const RiskFactorApproach = () => {
                       performRiskAssessmentObject?.riskAssessments?.riskRating
                     ) > 0 && (
                       <div
-                        className={`btn btn-labeled btn-primary px-3 shadow float-end my-4 mx-4 ${
-                          loading && "disabled"
-                        }`}
-                        onClick={handleSubmitRiskAssessment}
+                        className={`btn btn-labeled btn-primary px-3 shadow float-end my-4 mx-4 `}
+                        onClick={() => setShowSubmitDialog(true)}
                       >
                         <span className="btn-label me-2">
                           <i className="fa fa-check-circle f-18"></i>
                         </span>
-                        {loading ? "Loading.." : "Submit"}
+                        Submit
                       </div>
                     )}
                 </div>

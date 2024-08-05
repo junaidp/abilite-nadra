@@ -32,7 +32,8 @@ const ComplianceCheckListCard = () => {
   const { user } = useSelector((state) => state?.auth);
   const [page, setPage] = React.useState(1);
   const [checkListId, setCheckListId] = React.useState("");
-  const handleChange = (event, value) => {
+
+  const handleChange = (_, value) => {
     setPage(value);
   };
 
@@ -63,7 +64,7 @@ const ComplianceCheckListCard = () => {
     if (engagementId && user[0]?.token) {
       dispatch(setupGetInitialSingleCheckListObjective(engagementId));
     }
-  }, [engagementId, user]);
+  }, [dispatch]);
 
   React.useEffect(() => {
     if (!engagementId) {

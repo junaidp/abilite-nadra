@@ -5,12 +5,14 @@ import {
   getInitialSingleEngagementObject,
   getSingleEngagementObject,
   updateBusinessObjective,
+  submitBusinessObjective,
   saveMapProcessBusinessObjective,
   getInitialSingleCheckListObjective,
   getInitialSingleSpecialProjectAuditObjective,
   getSingleSpecialProjectAuditObjective,
   updateBusinessMinuteMeeting,
   updateSpecialProjectAudit,
+  submitSpecialProjectAudit,
   updateBusinessObjectiveAndMapProcessSpecialProjectOrAudit,
   getCheckListItems,
   deleteEngagement,
@@ -68,6 +70,14 @@ export const setupUpdateBusinessObjective = createAsyncThunk(
     return updateBusinessObjective(data, thunkAPI);
   }
 );
+
+export const setupSubmitBusinessObjective = createAsyncThunk(
+  "engagement/submitBusinessObjective",
+  async (data, thunkAPI) => {
+    return submitBusinessObjective(data, thunkAPI);
+  }
+);
+
 export const setupSaveMapProcessBusinessObjective = createAsyncThunk(
   "engagement/saveMapProcessBusinessObjective",
   async (data, thunkAPI) => {
@@ -103,10 +113,18 @@ export const setupUpdateBusinessMinuteMeeting = createAsyncThunk(
     return updateBusinessMinuteMeeting(data, thunkAPI);
   }
 );
+
 export const setupUpdateSpecialProjectAudit = createAsyncThunk(
   "engagement/updateSpecialProjectAudit",
   async (data, thunkAPI) => {
     return updateSpecialProjectAudit(data, thunkAPI);
+  }
+);
+
+export const setupSubmitSpecialProjectAudit = createAsyncThunk(
+  "engagement/submitSpecialProjectAudit",
+  async (data, thunkAPI) => {
+    return submitSpecialProjectAudit(data, thunkAPI);
   }
 );
 
@@ -266,7 +284,7 @@ export const slice = createSlice({
       .addCase(setupUpdateBusinessObjective.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupUpdateBusinessObjective.fulfilled, (state, { payload }) => {
+      .addCase(setupUpdateBusinessObjective.fulfilled, (state) => {
         state.loading = false;
         state.engagementAddSuccess = true;
         toast.success("Business Objective Updated Successfully");
@@ -274,6 +292,25 @@ export const slice = createSlice({
       .addCase(setupUpdateBusinessObjective.rejected, (state, { payload }) => {
         state.loading = false;
         state.engagementAddSuccess = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+
+    // Submit Business Objective
+    builder
+      .addCase(setupSubmitBusinessObjective.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupSubmitBusinessObjective.fulfilled, (state) => {
+        state.loading = false;
+        state.engagementAddSuccess = true;
+        toast.success("Business Objective Submitted Successfully");
+      })
+      .addCase(setupSubmitBusinessObjective.rejected, (state, { payload }) => {
+        state.loading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
         } else {
@@ -421,16 +458,35 @@ export const slice = createSlice({
       .addCase(setupUpdateSpecialProjectAudit.pending, (state) => {
         state.loading = true;
       })
-      .addCase(
-        setupUpdateSpecialProjectAudit.fulfilled,
-        (state, { payload }) => {
-          state.loading = false;
-          toast.success("Special Project Audit Updated Successfully");
-          state.engagementAddSuccess = true;
-        }
-      )
+      .addCase(setupUpdateSpecialProjectAudit.fulfilled, (state) => {
+        state.loading = false;
+        toast.success("Special Project Audit Updated Successfully");
+        state.engagementAddSuccess = true;
+      })
       .addCase(
         setupUpdateSpecialProjectAudit.rejected,
+        (state, { payload }) => {
+          state.loading = false;
+          if (payload?.response?.data?.message) {
+            toast.error(payload?.response?.data?.message);
+          } else {
+            toast.error("An Error has occurred");
+          }
+        }
+      );
+
+    // Submit Special Project Audit
+    builder
+      .addCase(setupSubmitSpecialProjectAudit.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupSubmitSpecialProjectAudit.fulfilled, (state) => {
+        state.loading = false;
+        state.engagementAddSuccess = true;
+        toast.success("Special Project Audit Submitted Successfully");
+      })
+      .addCase(
+        setupSubmitSpecialProjectAudit.rejected,
         (state, { payload }) => {
           state.loading = false;
           if (payload?.response?.data?.message) {

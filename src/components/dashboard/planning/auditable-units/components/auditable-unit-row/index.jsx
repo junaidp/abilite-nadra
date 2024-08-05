@@ -1,27 +1,22 @@
 import React from "react";
-import { setupEditAuditableUnit } from "../../../../../../global-redux/reducers/planing/auditable-units/slice";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 const AuditableUnitRow = ({
   setSelectedAuditableUnitId,
   item,
   setAuditableUnitRatingDialog,
   setSelectedAuditableSubUnitId,
-  setShowEditAuditableUnit,
   index,
   loading,
+  setCurrentObject,
+  setShowSubmitDialog,
+  setShowEditAuditableUnit,
+  setShowViewDialog,
 }) => {
-  const dispatch = useDispatch();
   const { user } = useSelector((state) => state?.auth);
   function handleSubmitAuditableUnit(object) {
-    if (!loading) {
-      dispatch(
-        setupEditAuditableUnit({
-          ...object,
-          completed: true,
-        })
-      );
-    }
+    setCurrentObject(object);
+    setShowSubmitDialog(true);
   }
   return (
     <div className="accordion-item">
@@ -35,6 +30,9 @@ const AuditableUnitRow = ({
           aria-controls={`flush-collapse${index}`}
           onClick={() => setSelectedAuditableUnitId(item?.id)}
         >
+          {item?.completed && (
+            <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
+          )}
           {item?.jobName}
         </button>
       </h2>
@@ -54,9 +52,6 @@ const AuditableUnitRow = ({
               }`}
               onClick={() => setAuditableUnitRatingDialog(true)}
             >
-              <span className="btn-label me-2">
-                <i className="fa fa-check-circle f-18"></i>
-              </span>
               {loading ? "Loading.." : "Add Auditable Unit"}
             </div>
           )}
@@ -69,9 +64,6 @@ const AuditableUnitRow = ({
                 }`}
                 onClick={() => handleSubmitAuditableUnit(item)}
               >
-                <span className="btn-label me-2">
-                  <i className="fa fa-check-circle f-18"></i>
-                </span>
                 {loading ? "Loading.." : "Submit Auditable Unit"}
               </div>
             )}
@@ -82,11 +74,7 @@ const AuditableUnitRow = ({
                   <th className="w-80">Sr. #</th>
                   <th>Auditable Unit</th>
                   <th>Job Type</th>
-                  {(item?.completed === false ||
-                    (item?.completed === true &&
-                      item?.locked === false &&
-                      user[0]?.userId?.employeeid?.userHierarchy ===
-                        "IAH")) && <th>Actions</th>}
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -98,24 +86,31 @@ const AuditableUnitRow = ({
                   item?.unitList?.map((unit, i) => {
                     return (
                       <tr className="h-40" key={i}>
-                        <td>{unit?.id}</td>
+                        <td>{i + 1}</td>
                         <td className="cursor-pointer">{unit?.reason}</td>
                         <td>{unit?.jobType}</td>
-                        {(item?.completed === false ||
-                          (item?.completed === true &&
-                            item?.locked === false &&
-                            user[0]?.userId?.employeeid?.userHierarchy ===
-                              "IAH")) && (
-                          <td>
+                        <td>
+                          <i
+                            className="fa-eye fa f-18 cursor-pointer"
+                            onClick={() => {
+                              setSelectedAuditableSubUnitId(unit?.id);
+                              setShowViewDialog(true);
+                            }}
+                          ></i>
+                          {(item?.completed === false ||
+                            (item?.completed === true &&
+                              item?.locked === false &&
+                              user[0]?.userId?.employeeid?.userHierarchy ===
+                                "IAH")) && (
                             <i
-                              className="fa fa-edit  px-3 f-18 cursor-pointer"
+                              className="fa fa-edit px-3 f-18 cursor-pointer"
                               onClick={() => {
                                 setSelectedAuditableSubUnitId(unit?.id);
                                 setShowEditAuditableUnit(true);
                               }}
                             ></i>
-                          </td>
-                        )}
+                          )}
+                        </td>
                       </tr>
                     );
                   })
