@@ -1,14 +1,13 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import {
-  setupUpdateAuditProgram,
-  setupUpdateAuditProgramApproval,
-} from "../../../../../../global-redux/reducers/audit-engagement/slice";
+import { setupUpdateAuditProgram } from "../../../../../../global-redux/reducers/audit-engagement/slice";
 import Table from "./components/Table";
 import FeedBackDialog from "./components/FeedBackDialog";
 import ViewFeedBackDialog from "./components/ViewFeedBackDialog";
 import ApproveDialog from "./components/ApproveDialog";
+import SubmitDialog from "./components/submit-dialog";
+
 const AuditProgram = ({
   currentAuditEngagement,
   setCurrentAuditEngagement,
@@ -18,7 +17,7 @@ const AuditProgram = ({
 }) => {
   const dispatch = useDispatch();
   const [showApproveDialog, setShowApproveDialog] = React.useState(false);
-
+  const [showSubmitDialog, setShowSubmitDialog] = React.useState(false);
   const { loading, auditEngagementAddSuccess } = useSelector(
     (state) => state?.auditEngagement
   );
@@ -44,17 +43,7 @@ const AuditProgram = ({
   }
 
   function handleSubmit() {
-    if (!loading) {
-      dispatch(
-        setupUpdateAuditProgramApproval({
-          auditProgram: {
-            ...currentAuditEngagement?.auditProgram,
-            submitted: true,
-          },
-          engagement_id: Number(auditEngagementId),
-        })
-      );
-    }
+    setShowSubmitDialog(true);
   }
 
   function handleApprove() {
@@ -196,6 +185,17 @@ const AuditProgram = ({
 
   return (
     <div className="accordion-item">
+      {showSubmitDialog && (
+        <div className="model-parent">
+          <div className="model-wrap">
+            <SubmitDialog
+              object={currentAuditEngagement}
+              setShowSubmitDialog={setShowSubmitDialog}
+              auditEngagementId={auditEngagementId}
+            />
+          </div>
+        </div>
+      )}
       {feedBackDialog && (
         <div className="model-parent">
           <div className="model-wrap">
@@ -264,9 +264,6 @@ const AuditProgram = ({
                     className="btn btn-labeled float-end btn-primary px-3 mt-3 shadow"
                     onClick={() => setShowAddAuditProgramDialog(true)}
                   >
-                    <span className="btn-label me-2">
-                      <i className="fa fa-eye"></i>
-                    </span>
                     Add Audit Program
                   </button>
                 </div>
@@ -298,9 +295,6 @@ const AuditProgram = ({
                           }`}
                           onClick={() => handleSubmit()}
                         >
-                          <span className="btn-label me-2">
-                            <i className="fa fa-save"></i>
-                          </span>
                           {loading ? "Loading..." : "Submit"}
                         </button>
                       </div>
@@ -325,9 +319,6 @@ const AuditProgram = ({
                           }`}
                           onClick={() => handleApprove()}
                         >
-                          <span className="btn-label me-2">
-                            <i className="fa fa-save"></i>
-                          </span>
                           {loading ? "Loading..." : "Approve"}
                         </button>
                       </div>

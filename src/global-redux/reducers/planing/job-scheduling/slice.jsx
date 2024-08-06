@@ -1,6 +1,7 @@
 import {
   getAllJobScheduling,
   updateJobScheduling,
+  submitJobScheduling,
   getSingleJobScheduling,
   getInitialSingleJobScheduling,
   updateJobSchedulingTimeAndDateAllocation,
@@ -44,6 +45,13 @@ export const setupUpdateJobScheduling = createAsyncThunk(
   "jobScheduling/updateJobScheduling",
   async (data, thunkAPI) => {
     return updateJobScheduling(data, thunkAPI);
+  }
+);
+
+export const setupSubmitJobScheduling = createAsyncThunk(
+  "jobScheduling/submitJobScheduling",
+  async (data, thunkAPI) => {
+    return submitJobScheduling(data, thunkAPI);
   }
 );
 
@@ -156,12 +164,32 @@ export const slice = createSlice({
       .addCase(setupUpdateJobScheduling.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupUpdateJobScheduling.fulfilled, (state, { payload }) => {
+      .addCase(setupUpdateJobScheduling.fulfilled, (state) => {
         state.loading = false;
         toast.success("Job Scheduling Updated Successfully");
         state.jobSchedulingAddSuccess = true;
       })
       .addCase(setupUpdateJobScheduling.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.jobSchedulingAddSuccess = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+
+    // Submit job scheduling
+    builder
+      .addCase(setupSubmitJobScheduling.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupSubmitJobScheduling.fulfilled, (state) => {
+        state.loading = false;
+        state.jobSchedulingAddSuccess = true;
+        toast.success("Job Scheduling Submitted Successfully");
+      })
+      .addCase(setupSubmitJobScheduling.rejected, (state, { payload }) => {
         state.loading = false;
         state.jobSchedulingAddSuccess = false;
         if (payload?.response?.data?.message) {

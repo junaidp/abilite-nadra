@@ -141,24 +141,7 @@ const AuditableUnitRatingDialog = ({
             </div>
 
             <div className="row mb-3">
-              <div className="col-lg-9 sub-heading">
-                <span className="me-2 fw-bold">1.</span>
-                {auditableUnitName}
-              </div>
-              <div className=" col-lg-3 text-end">
-                <div
-                  className="text-white bg-danger float-end  px-2 py-3 rounded shadow risk-rating-btn cursor-pointer"
-                  onClick={() => {
-                    setShowEditAuditableUnit(false);
-                    setData({ jobType: "", reason: "" });
-                    setProcessId("");
-                    setSubProcessId("");
-                    dispatch(resetAllValues());
-                  }}
-                >
-                  Close
-                </div>
-              </div>
+              <div className="col-lg-9 sub-heading">{auditableUnitName}</div>
             </div>
 
             {processLoading ? (
@@ -294,14 +277,29 @@ const AuditableUnitRatingDialog = ({
             )}
           </div>
         </div>
-
-        <div className="pb-4">
-          <button
-            className={`btn btn-primary   float-end ${loading && "disabled"}`}
-            onClick={handleEdit}
-          >
-            {loading ? "Loading..." : "Edit"}
-          </button>
+        <div className="d-flex justify-content-between">
+          <div>
+            <button
+              className={`btn btn-primary   float-end ${loading && "disabled"}`}
+              onClick={handleEdit}
+            >
+              {loading ? "Loading..." : "Edit"}
+            </button>
+          </div>
+          <div>
+            <div
+              className="text-white bg-danger float-end  px-2 py-3 rounded shadow risk-rating-btn cursor-pointer"
+              onClick={() => {
+                setShowEditAuditableUnit(false);
+                setData({ jobType: "", reason: "" });
+                setProcessId("");
+                setSubProcessId("");
+                dispatch(resetAllValues());
+              }}
+            >
+              Close
+            </div>
+          </div>
         </div>
       </div>
     </div>

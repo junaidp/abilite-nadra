@@ -32,19 +32,19 @@ const ApproveInternalAuditReportDialog = ({
     <div className="p-4">
       <div className="row mb-3">
         <div className="col-lg-12">
-          <p>Are You Sure You Want To Approve The Report?</p>
+          <p>Are You Sure You Want To Approve Report?</p>
         </div>
       </div>
 
-      <div className="pb-4">
+      <div className="d-flex justify-content-between">
         <button
-          className={`btn btn-secondary   float-end ${loading && "disabled"}`}
+          className={`btn btn-secondary ${loading && "disabled"}`}
           onClick={handleApprove}
         >
           {loading ? "Loading..." : "Approve"}
         </button>
         <button
-          className={`btn btn-primary   float-end mx-2`}
+          className={`btn btn-danger  mx-2`}
           onClick={() => setShowApproveDialog(false)}
         >
           Close

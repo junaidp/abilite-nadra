@@ -155,10 +155,7 @@ const AuditableUnitRatingDialog = ({
             </div>
 
             <div className="row mb-3">
-              <div className="col-lg-9 sub-heading">
-                <span className="me-2 fw-bold">1.</span>
-                {auditableUnitName}
-              </div>
+              <div className="col-lg-9 sub-heading">{auditableUnitName}</div>
               <div className=" col-lg-3 text-end">
                 <div
                   className="text-white bg-danger float-end  px-2 py-3 rounded shadow risk-rating-btn cursor-pointer"

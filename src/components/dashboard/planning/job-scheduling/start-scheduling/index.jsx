@@ -23,13 +23,13 @@ import JobScheduleList from "./components/job-schedule-list";
 import ResourceAllocation from "./components/resource-allocation";
 import { CircularProgress } from "@mui/material";
 import { toast } from "react-toastify";
+import SubmitDialog from "./components/submit-dialog";
 
 const StartScheduling = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
   const jobSchedulingId = searchParams.get("jobScheduling");
-
   const {
     loading,
     jobSchedulingAddSuccess,
@@ -39,6 +39,7 @@ const StartScheduling = () => {
   const { allUsers } = useSelector((state) => state?.settingsUserManagement);
   const { user } = useSelector((state) => state?.auth);
   const { company } = useSelector((state) => state?.common);
+  const [showSubmitDialog, setShowSubmitDialog] = React.useState(false);
   const [initialLocationList, setInitialLocationList] = React.useState([]);
   const [initialSubLocationList, setInitialSubLocationList] = React.useState(
     []
@@ -149,29 +150,9 @@ const StartScheduling = () => {
       dispatch(setupUpdateJobScheduling(object));
     }
   }
+
   function handleSubmitJobScheduling() {
-    if (!loading) {
-      const filteredLocationArray = allLocations.filter((item) =>
-        currentJobSchedulingObject?.locationList.includes(item?.description)
-      );
-      const filteredSubLocationArray = allSubLocations.filter((item) =>
-        currentJobSchedulingObject?.subLocation.includes(item?.description)
-      );
-      let object;
-      object = {
-        ...currentJobSchedulingObject,
-        locationList: filteredLocationArray.map((list) => {
-          return {
-            id: list?.id,
-            description: list?.description,
-            companyid: list?.companyid,
-          };
-        }),
-        subLocation: filteredSubLocationArray,
-        complete: true,
-      };
-      dispatch(setupUpdateJobScheduling(object));
-    }
+    setShowSubmitDialog(true);
   }
 
   React.useEffect(() => {
@@ -253,9 +234,11 @@ const StartScheduling = () => {
       )?.id;
       dispatch(setupGetInitialSingleJobScheduling(jobSchedulingId));
       dispatch(setupGetAllLocations(`?companyId=${companyId}`));
-      dispatch(setupGetAllUsers({ shareWith: true }));
+      setTimeout(() => {
+        dispatch(setupGetAllUsers({ shareWith: true }));
+      }, 1200);
     }
-  }, [user, jobSchedulingId, company]);
+  }, [dispatch]);
 
   React.useEffect(() => {
     if (!jobSchedulingId) {
@@ -273,6 +256,18 @@ const StartScheduling = () => {
 
   return (
     <div>
+      {showSubmitDialog && (
+        <div className="model-parent">
+          <div className="model-wrap">
+            <SubmitDialog
+              currentJobSchedulingObject={currentJobSchedulingObject}
+              setShowSubmitDialog={setShowSubmitDialog}
+              allLocations={allLocations}
+              allSubLocations={allSubLocations}
+            />
+          </div>
+        </div>
+      )}
       {initialLoading ? (
         <div className="my-3">
           <CircularProgress />
@@ -422,9 +417,6 @@ const StartScheduling = () => {
                         }`}
                         onClick={handleSubmitJobScheduling}
                       >
-                        <span className="btn-label me-2">
-                          <i className="fa fa-check-circle"></i>
-                        </span>
                         {loading ? "Loading..." : "Submit"}
                       </div>
                     </div>
@@ -444,9 +436,6 @@ const StartScheduling = () => {
                       }`}
                       onClick={handleSaveMainJobScheduling}
                     >
-                      <span className="btn-label me-2">
-                        <i className="fa fa-check-circle"></i>
-                      </span>
                       {loading ? "Loading..." : "Save"}
                     </div>
                   </div>

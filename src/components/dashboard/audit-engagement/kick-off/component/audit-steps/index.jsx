@@ -1,9 +1,9 @@
 import React from "react";
-import { setupUpdateAuditStepApproval } from "../../../../../../global-redux/reducers/audit-engagement/slice";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import FeedBackDialog from "./FeedBackDialog";
 import ViewFeedBackDialog from "./ViewFeedBackDialog";
 import ApproveDialog from "./ApproveDialog";
+import SubmitDialog from "./submit-dialog";
 
 const AditSteps = ({
   setShowAuditStepsDialog,
@@ -12,22 +12,15 @@ const AditSteps = ({
   singleAuditEngagementObject,
   loading,
 }) => {
-  const dispatch = useDispatch();
   const { user } = useSelector((state) => state?.auth);
+  const [showSubmitDialog, setShowSubmitDialog] = React.useState(false);
   const [showSubmitButton, setShowSubmitButton] = React.useState(false);
   const [feedBackDialog, setFeedBackDialog] = React.useState(false);
   const [viewFeedBackDialog, setViewFeedBackDialog] = React.useState(false);
   const [showApproveDialog, setShowApproveDialog] = React.useState(false);
 
   function handleSubmit() {
-    if (!loading) {
-      dispatch(
-        setupUpdateAuditStepApproval({
-          ...currentAuditEngagement?.auditStep,
-          submitted: true,
-        })
-      );
-    }
+    setShowSubmitDialog(true);
   }
 
   function handleApprove() {
@@ -53,6 +46,16 @@ const AditSteps = ({
 
   return (
     <div className="accordion-item">
+      {showSubmitDialog && (
+        <div className="model-parent">
+          <div className="model-wrap">
+            <SubmitDialog
+              object={currentAuditEngagement}
+              setShowSubmitDialog={setShowSubmitDialog}
+            />
+          </div>
+        </div>
+      )}
       {feedBackDialog && (
         <div className="model-parent">
           <div className="model-wrap">

@@ -1,12 +1,13 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import Objective from "./component/objective";
 import Rating from "./component/rating";
 import Control from "./component/control";
 import FeedBackDialog from "./component/feedback/FeedBackDialog";
 import ViewFeedBackDialog from "./component/feedback/ViewFeedBackDialog";
 import ApproveDialog from "./component/approve/ApproveDialog";
-import { setupUpdateRiskControlMatrixApproval } from "../../../../../../global-redux/reducers/audit-engagement/slice";
+import SubmitDialog from "./component/submit-dialog";
+
 const RiskControlMatrix = ({
   currentAuditEngagement,
   setCurrentAuditEngagement,
@@ -15,10 +16,10 @@ const RiskControlMatrix = ({
   setShowKickOffControlDialog,
   auditEngagementId,
 }) => {
-  const dispatch = useDispatch();
   const { loading, singleAuditEngagementObject } = useSelector(
     (state) => state?.auditEngagement
   );
+  const [showSubmitDialog, setShowSubmitDialog] = React.useState(false);
   const { user } = useSelector((state) => state?.auth);
   const [feedBackDialog, setFeedBackDialog] = React.useState(false);
   const [viewFeedBackDialog, setViewFeedBackDialog] = React.useState(false);
@@ -29,14 +30,7 @@ const RiskControlMatrix = ({
   }
 
   function handleSubmit() {
-    if (!loading) {
-      dispatch(
-        setupUpdateRiskControlMatrixApproval({
-          ...currentAuditEngagement?.riskControlMatrix,
-          submitted: true,
-        })
-      );
-    }
+    setShowSubmitDialog(true);
   }
 
   function handleAllowEdit() {
@@ -68,6 +62,16 @@ const RiskControlMatrix = ({
 
   return (
     <div className="accordion-item">
+      {showSubmitDialog && (
+        <div className="model-parent">
+          <div className="model-wrap">
+            <SubmitDialog
+              object={currentAuditEngagement}
+              setShowSubmitDialog={setShowSubmitDialog}
+            />
+          </div>
+        </div>
+      )}
       {feedBackDialog && (
         <div className="model-parent">
           <div className="model-wrap">
@@ -123,20 +127,6 @@ const RiskControlMatrix = ({
       >
         <div className="accordion-body">
           <div className="container">
-            {/* <div className="row mb-2">
-              <div className="col-lg-12">
-                <button
-                  className="btn btn-labeled float-end btn-primary px-3 mt-3 shadow"
-                  onClick={() => setShowViewLibrary(true)}
-                >
-                  <span className="btn-label me-2">
-                    <i className="fa fa-eye"></i>
-                  </span>
-                  View Library
-                </button>
-              </div>
-            </div> */}
-
             {currentAuditEngagement?.riskControlMatrix === null && (
               <div className="row">
                 <div className="col-lg-4">

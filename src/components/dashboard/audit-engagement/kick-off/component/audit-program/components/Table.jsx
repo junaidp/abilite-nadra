@@ -32,7 +32,7 @@ const Table = ({
             (item, index) => {
               return (
                 <tr key={index}>
-                  <td>{item?.id}</td>
+                  <td>{index + 1}</td>
                   <td>
                     <textarea
                       className="form-control"
@@ -79,7 +79,7 @@ const Table = ({
                     <td>
                       {item?.editable === false && (
                         <i
-                          className="fa fa-edit  px-3 f-18 cursor-pointer"
+                          className="fa fa-edit f-18 cursor-pointer"
                           onClick={() => handleEditable(item)}
                         ></i>
                       )}
@@ -92,9 +92,6 @@ const Table = ({
                           }`}
                           onClick={() => handleUpdate(item)}
                         >
-                          <span className="btn-label me-2">
-                            <i className="fa fa-save"></i>
-                          </span>
                           {loading && item?.id === currentButtonId
                             ? "Loading..."
                             : "Save"}

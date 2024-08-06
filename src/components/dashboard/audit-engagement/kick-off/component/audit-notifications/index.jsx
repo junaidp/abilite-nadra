@@ -82,11 +82,10 @@ const AuditNotifications = ({ currentAuditEngagement, auditEngagementId }) => {
           <div className="container upload-table">
             <div className="row mb-3">
               <div className="col-lg-12">
-                <div className="d-flex mb-2 align-items-center">
+                <div className="d-flex mb-2 align-items-start">
                   <label className="me-3 w-80">To</label>
                   <input
                     className="form-control w-100"
-                    placeholder="Enter Email"
                     type="text"
                     name="toEmail"
                     value={data?.toEmail}
@@ -94,11 +93,10 @@ const AuditNotifications = ({ currentAuditEngagement, auditEngagementId }) => {
                     disabled={showSubmitButton === false ? true : false}
                   />
                 </div>
-                <div className="d-flex mb-2  align-items-center">
+                <div className="d-flex mb-2  align-items-start">
                   <label className="me-3 w-80">CC</label>
                   <input
                     className="form-control w-100"
-                    placeholder="Enter Email"
                     type="text"
                     name="ccEmail"
                     value={data?.ccEmail}
@@ -106,11 +104,10 @@ const AuditNotifications = ({ currentAuditEngagement, auditEngagementId }) => {
                     disabled={showSubmitButton === false ? true : false}
                   />
                 </div>
-                <div className="d-flex mb-2  align-items-center">
+                <div className="d-flex mb-2  align-items-start">
                   <label className="me-3 w-80">Subject</label>
                   <input
                     className="form-control w-100"
-                    placeholder="Enter Subject"
                     type="text"
                     name="subject"
                     value={data?.subject}
@@ -118,11 +115,10 @@ const AuditNotifications = ({ currentAuditEngagement, auditEngagementId }) => {
                     disabled={showSubmitButton === false ? true : false}
                   />
                 </div>
-                <div className="d-flex mb-2  align-items-center">
-                  <label className="me-3 w-80"></label>
+                <div className="d-flex mb-2  align-items-start">
+                  <label className="me-3 w-80">Detail</label>
                   <textarea
                     className="form-control"
-                    placeholder="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
                     id="exampleFormControlT"
                     rows="15"
                     name="body"
@@ -132,7 +128,7 @@ const AuditNotifications = ({ currentAuditEngagement, auditEngagementId }) => {
                   ></textarea>
                 </div>
 
-                <div className="d-flex justify-content-between">
+                <div className="d-flex float-end">
                   {showSubmitButton && (
                     <button
                       className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${

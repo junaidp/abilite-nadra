@@ -5,6 +5,7 @@ import {
   deletePlanSummary,
   auditPlanSummaryFeedback,
   approveAuditPlanSummary,
+  submitAuditPlanSummary,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
@@ -37,6 +38,14 @@ export const setupUpdateAuditPlanSummary = createAsyncThunk(
     return updateAuditPlanSummary(data, thunkAPI);
   }
 );
+
+export const setupSubmitAuditPlanSummary = createAsyncThunk(
+  "auditPlanSummary/submitAuditPlanSummary",
+  async (data, thunkAPI) => {
+    return submitAuditPlanSummary(data, thunkAPI);
+  }
+);
+
 export const setupApproveAuditPlanSummary = createAsyncThunk(
   "auditPlanSummary/approveAuditPlanSummary",
   async (data, thunkAPI) => {
@@ -123,6 +132,24 @@ export const slice = createSlice({
         toast.success("Audit Plan Summary Updated Successfully");
       })
       .addCase(setupUpdateAuditPlanSummary.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Submit Audit Plan Summary
+    builder
+      .addCase(setupSubmitAuditPlanSummary.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupSubmitAuditPlanSummary.fulfilled, (state) => {
+        state.loading = false;
+        state.auditPlanSummaryAddSuccess = true;
+        toast.success("Audit Plan Summary Submitted Successfully");
+      })
+      .addCase(setupSubmitAuditPlanSummary.rejected, (state, { payload }) => {
         state.loading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);

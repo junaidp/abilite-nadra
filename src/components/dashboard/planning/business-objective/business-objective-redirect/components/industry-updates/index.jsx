@@ -59,7 +59,7 @@ const CompanyUpdates = ({
                 planingEngagementSingleObject?.locked === false &&
                 user[0]?.userId?.employeeid?.userHierarchy === "IAH")) && (
               <button
-                className={`btn btn-labeled btn-primary px-3 mb-2  shadow float-end ${
+                className={`btn btn-labeled btn-primary px-3 mb-2  shadow float-start ${
                   loading && "disabled"
                 }`}
                 onClick={handleUpdateBusinessObjective}

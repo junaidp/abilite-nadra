@@ -123,12 +123,16 @@ const InformationRequest = () => {
       (item) => item?.companyName === company
     )?.id;
     if (companyId) {
-      dispatch(
-        setupGetAllAuditEngagement({
-          companyId,
-        })
-      );
-      dispatch(setupGetAllUsers());
+      setTimeout(() => {
+        dispatch(
+          setupGetAllAuditEngagement({
+            companyId,
+          })
+        );
+        setTimeout(() => {
+          dispatch(setupGetAllUsers());
+        }, 800);
+      }, 1200);
     }
   }, [dispatch]);
 

@@ -24,19 +24,15 @@ const PlanningReportPublishDialog = ({
   }, [reportAddSuccess]);
 
   return (
-    <div class="p-4 h-200">
-      <p>Are you sure you want to pusblish the report!</p>
-      <div className="row">
-        <div className="col-lg-6">
-          <button
-            class={`btn btn-primary   ${loading && "disabled"}`}
-            onClick={handleReportStatusUpdate}
-          >
-            {loading ? "Loading..." : "Publish"}
-          </button>
-        </div>
-      </div>
-      <div>
+    <div class="p-4">
+      <p>Are You Sure You Want To Publish Report.</p>
+      <div className="d-flex justify-content-between">
+        <button
+          class={`btn btn-primary  ${loading && "disabled"}`}
+          onClick={handleReportStatusUpdate}
+        >
+          {loading ? "Loading..." : "Publish"}
+        </button>
         <button
           class="btn btn-danger report-delete-close-btn"
           onClick={() => setShowReportPublishDialog(false)}

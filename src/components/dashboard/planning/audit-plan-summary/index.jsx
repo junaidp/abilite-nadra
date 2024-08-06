@@ -18,6 +18,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import SubmitDialog from "./component/submit-dialog";
 
 const AuditPlanSummary = () => {
   const dispatch = useDispatch();
@@ -29,7 +30,9 @@ const AuditPlanSummary = () => {
     initialLoading,
     totalNoOfRecords,
   } = useSelector((state) => state?.planningAuditPlanSummary);
+  const [selectedItem, setSelectedItem] = React.useState({});
   const [feedBackDialog, setFeedBackDialog] = React.useState(false);
+  const [showSubmitDialog, setShowSubmitDialog] = React.useState(false);
   const [viewFeedBackDialog, setViewFeedBackDialog] = React.useState(false);
   const { user } = useSelector((state) => state?.auth);
   const [currentId, setCurrentId] = React.useState("");
@@ -90,19 +93,8 @@ const AuditPlanSummary = () => {
   }
 
   function handleSubmit(item) {
-    if (!loading) {
-      setCurrentId(item?.id);
-      const object = allAuditPlanSummary.find(
-        (singleItem) => singleItem?.id === item?.id
-      );
-      dispatch(
-        setupUpdateAuditPlanSummary({
-          ...object,
-          submitted: true,
-          completed: true,
-        })
-      );
-    }
+    setSelectedItem(item);
+    setShowSubmitDialog(true);
   }
 
   function handleApprove(item) {
@@ -249,6 +241,16 @@ const AuditPlanSummary = () => {
         </div>
       ) : (
         <div>
+          {showSubmitDialog && (
+            <div className="model-parent">
+              <div className="model-wrap">
+                <SubmitDialog
+                  item={selectedItem}
+                  setShowSubmitDialog={setShowSubmitDialog}
+                />
+              </div>
+            </div>
+          )}
           {deletePlanSummaryDialog && (
             <div className="model-parent">
               <div className="model-wrap">

@@ -13,6 +13,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import SubmitDialog from "./submit-dialog";
 
 const JobPrioritization = () => {
   const dispatch = useDispatch();
@@ -29,6 +30,7 @@ const JobPrioritization = () => {
   const [data, setData] = React.useState([]);
   const [page, setPage] = React.useState(1);
   const [itemsPerPage, setItemsPerPage] = React.useState(10);
+  const [showSubmitDialog, setShowSubmitDialog] = React.useState(false);
 
   const handleChange = (_, value) => {
     setPage(value);
@@ -45,17 +47,10 @@ const JobPrioritization = () => {
       dispatch(setupUpdateJobPrioritization(object));
     }
   }
+
   function handleSubmit(id) {
     setCurrentId(id);
-    let object = allJobPrioritization?.find((item) => item?.id === id);
-    object = {
-      ...object,
-      year: Number(object?.year),
-      completed: true,
-    };
-    if (!loading) {
-      dispatch(setupUpdateJobPrioritization(object));
-    }
+    setShowSubmitDialog(true);
   }
 
   function handleChangeYearValue(event, id) {
@@ -150,6 +145,16 @@ const JobPrioritization = () => {
 
   return (
     <div>
+      {showSubmitDialog && (
+        <div className="model-parent">
+          <div className="model-wrap">
+            <SubmitDialog
+              currentItemId={currentId}
+              setShowSubmitDialog={setShowSubmitDialog}
+            />
+          </div>
+        </div>
+      )}
       {initialLoading ? (
         <div className="my-3">
           <CircularProgress />

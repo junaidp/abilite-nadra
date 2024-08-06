@@ -286,7 +286,9 @@ const ReportingParticulars = () => {
           `?reportingAndFollowUpId=${Number(reportingId)}`
         )
       );
-      dispatch(setupGetAllUsers({ shareWith: true }));
+      setTimeout(() => {
+        dispatch(setupGetAllUsers({ shareWith: true }));
+      }, 800);
     }
   }, [dispatch]);
 

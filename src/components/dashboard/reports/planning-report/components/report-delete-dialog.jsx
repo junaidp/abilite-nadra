@@ -23,21 +23,17 @@ const PlanningReportDeleteDialog = ({
     }
   }, [reportAddSuccess]);
   return (
-    <div class="p-4 h-200">
-      <p>Are you sure you want to delete the report!</p>
-      <div className="row mt-80">
-        <div className="float-start col-lg-6">
-          <button
-            class={`btn btn-primary  float-start mx-2 ${loading && "disabled"}`}
-            onClick={handleReportDelete}
-          >
-            {loading ? "Loading..." : "Delete"}
-          </button>
-        </div>
-      </div>
-      <div className="col-lg-6 report-delete-close-btn">
+    <div class="p-4">
+      <p>Are You Sure You Want To Delete Report.</p>
+      <div className="d-flex justify-content-between">
         <button
-          class="btn btn-danger"
+          class={`btn btn-danger ${loading && "disabled"}`}
+          onClick={handleReportDelete}
+        >
+          {loading ? "Loading..." : "Delete"}
+        </button>
+        <button
+          class="btn btn-primary"
           onClick={() => setShowReportDeleteDialog(false)}
         >
           Close

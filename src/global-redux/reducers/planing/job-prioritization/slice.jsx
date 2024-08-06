@@ -1,6 +1,7 @@
 import {
   getAllJobPrioritization,
   updateJobPrioritization,
+  submitJobPrioritization,
   getInitialAllJobPrioritization,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
@@ -32,6 +33,12 @@ export const setupUpdateJobPrioritization = createAsyncThunk(
   "jobPrioritization/updateJobPrioritization",
   async (data, thunkAPI) => {
     return updateJobPrioritization(data, thunkAPI);
+  }
+);
+export const setupSubmitJobPrioritization = createAsyncThunk(
+  "jobPrioritization/submitJobPrioritization",
+  async (data, thunkAPI) => {
+    return submitJobPrioritization(data, thunkAPI);
   }
 );
 
@@ -104,6 +111,25 @@ export const slice = createSlice({
         state.jobPrioritizationAddSuccess = true;
       })
       .addCase(setupUpdateJobPrioritization.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.jobPrioritizationAddSuccess = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Submit job Prioritization
+    builder
+      .addCase(setupSubmitJobPrioritization.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupSubmitJobPrioritization.fulfilled, (state) => {
+        state.loading = false;
+        state.jobPrioritizationAddSuccess = true;
+        toast.success("Job Prioritizing Submitted Successfully");
+      })
+      .addCase(setupSubmitJobPrioritization.rejected, (state, { payload }) => {
         state.loading = false;
         state.jobPrioritizationAddSuccess = false;
         if (payload?.response?.data?.message) {
