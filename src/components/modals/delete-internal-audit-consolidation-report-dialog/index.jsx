@@ -28,24 +28,19 @@ const DeleteInternalAuditConsolidationReportDialog = ({
     <div className="p-4">
       <div className="row mb-3">
         <div className="col-lg-12">
-          <p>
-            Are You Sure You Want To Delete Consolidation Report With ID
-            {deleteInternalAuditReportId}
-          </p>
+          <p>Are You Sure You Want To Delete Report.</p>
         </div>
       </div>
 
-      <div className="pb-4">
+      <div className="d-flex justify-content-between">
         <button
-          className={`btn btn-danger   float-end ${loading && "disabled"}`}
+          className={`btn btn-danger ${loading && "disabled"}`}
           onClick={handleDelete}
         >
           {loading ? "Loading..." : "Delete"}
         </button>
         <button
-          className={`btn btn-primary   float-end ${
-            loading && "disabled"
-          } mx-2`}
+          className={`btn btn-primary ${loading && "disabled"} mx-2`}
           onClick={() => setShowDeleteInternalAuditReportDialog(false)}
         >
           Close

@@ -3,6 +3,7 @@ import {
   setupGenerateQRCode,
   setupVerifyQRCode,
   resetVerifyCode,
+  updateUserTfa,
 } from "../../../../../global-redux/reducers/auth/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
@@ -37,6 +38,7 @@ const EnableTFADialog = ({ setShowEnableTfaDialog, setCheck }) => {
     if (verifyCodeSuccess) {
       dispatch(resetVerifyCode());
       setCheck(true);
+      dispatch(updateUserTfa(true));
       setShowEnableTfaDialog(false);
     }
   }, [verifyCodeSuccess]);

@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   setupUpdateUser,
   resetTfaDisableAddSucess,
+  updateUserTfa,
 } from "../../../../../global-redux/reducers/auth/slice";
 
 const TwoFactorAuthentication = () => {
@@ -14,7 +15,7 @@ const TwoFactorAuthentication = () => {
     (state) => state?.auth
   );
   const [showDialog, setShowDialog] = React.useState(false);
-  const [check, setCheck] = React.useState(user[0]?.userId?.tfa || false);
+  const [check, setCheck] = React.useState(user[0]?.tfa || false);
   const [showEnableTfaDialog, setShowEnableTfaDialog] = React.useState(false);
 
   function handleChangeCheck(event) {
@@ -32,6 +33,7 @@ const TwoFactorAuthentication = () => {
     if (disableTfaSuccess === true) {
       setCheck(false);
       dispatch(resetTfaDisableAddSucess());
+      dispatch(updateUserTfa(false));
     }
   }, [disableTfaSuccess]);
 

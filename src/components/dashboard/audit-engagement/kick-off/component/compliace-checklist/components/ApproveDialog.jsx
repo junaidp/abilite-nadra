@@ -30,29 +30,23 @@ const ApproveComplianceCheckListDialog = ({
   return (
     <div className="px-4 py-4">
       <div>
-        <p>Are you sure you want to approve the checklist?</p>
+        <p>Are You Sure You Want To Approve Compliance CheckList?</p>
       </div>
-      <div className="flex mb-2 flex-end">
-        <div>
-          <button
-            type="submit"
-            className={`btn btn-secondary float-start ${
-              loading && "disabled"
-            } `}
-            onClick={handleApproveAuditCheckList}
-          >
-            {loading ? "Loading..." : "Approve"}
-          </button>
-        </div>
-        <div className="mx-2">
-          <button
-            type="button"
-            className="btn btn-primary float-end"
-            onClick={() => setShowApproveDialog(false)}
-          >
-            Close
-          </button>
-        </div>
+      <div className="d-flex justify-content-between">
+        <button
+          type="submit"
+          className={`btn btn-secondary ${loading && "disabled"} `}
+          onClick={handleApproveAuditCheckList}
+        >
+          {loading ? "Loading..." : "Approve"}
+        </button>
+        <button
+          type="button"
+          className="btn btn-danger"
+          onClick={() => setShowApproveDialog(false)}
+        >
+          Close
+        </button>
       </div>
     </div>
   );

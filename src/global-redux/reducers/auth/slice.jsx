@@ -147,6 +147,27 @@ export const slice = createSlice({
     },
     updateUserState: (state, action) => {
       state.user = [{ ...state?.user[0], name: action.payload }];
+      localStorage.setItem(
+        "user",
+        JSON.stringify([
+          {
+            ...state?.user[0],
+            name: action.payload,
+          },
+        ])
+      );
+    },
+    updateUserTfa: (state, action) => {
+      state.user = [{ ...state?.user[0], tfa: action.payload }];
+      localStorage.setItem(
+        "user",
+        JSON.stringify([
+          {
+            ...state?.user[0],
+            tfa: action.payload,
+          },
+        ])
+      );
     },
     resetVerifyCode: (state) => {
       state.verifyCodeSuccess = false;
@@ -193,12 +214,14 @@ export const slice = createSlice({
           toast.error(
             "User is already logged in. Please remove the previous session and then try login in here"
           );
+          return;
         }
         state.loading = false;
         state.loginEmail = "";
         state.loginPassword = "";
         state.user = [
           {
+            tfa: action?.payload?.data?.userId?.tfa,
             name: action.payload?.data?.userId?.name,
             token: action.payload?.data?.jwt,
             email: action.payload?.data?.email,
@@ -211,6 +234,7 @@ export const slice = createSlice({
           "user",
           JSON.stringify([
             {
+              tfa: action?.payload?.data?.userId?.tfa,
               name: action.payload?.data?.userId?.name,
               token: action.payload?.data?.jwt,
               email: action.payload?.data?.email,
@@ -402,6 +426,7 @@ export const {
   resetUpdateUserNameSuccess,
   resetVerifyCode,
   resetTfaDisableAddSucess,
+  updateUserTfa,
 } = slice.actions;
 
 export default slice.reducer;

@@ -32,23 +32,19 @@ const SubmitInternalAuditConsolidationReportDialog = ({
     <div className="p-4">
       <div className="row mb-3">
         <div className="col-lg-12">
-          <p>Are You Sure You Want To Submit The Report?</p>
+          <p>Are You Sure You Want To Submit Report?</p>
         </div>
       </div>
 
-      <div className="pb-4">
+      <div className="d-flex justify-content-between">
         <button
-          className={`btn btn-secondary   float-end ${
-            addReportLoading && "disabled"
-          }`}
+          className={`btn btn-secondary ${addReportLoading && "disabled"}`}
           onClick={handleSubmit}
         >
           {addReportLoading ? "Loading..." : "Submit"}
         </button>
         <button
-          className={`btn btn-primary   float-end ${
-            addReportLoading && "disabled"
-          } mx-2`}
+          className={`btn btn-danger`}
           onClick={() => setShowSubmitReportDialog(false)}
         >
           Close

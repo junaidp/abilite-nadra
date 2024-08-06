@@ -1,6 +1,5 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { setupSubmitComplianceCheckList } from "../../../../../../global-redux/reducers/audit-engagement/slice";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import { toast } from "react-toastify";
 import TableRow from "./components/TableRow";
@@ -10,6 +9,7 @@ import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { baseUrl } from "../../../../../../constants/index";
 import ApproveDialog from "./components/ApproveDialog";
+import SubmitDialog from "./components/submit-dialog";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -29,14 +29,15 @@ const ComplianceCheckList = ({
   setComplianceCheckListMainId,
   singleAuditEngagementObject,
 }) => {
-  const dispatch = useDispatch();
   const fileInputRef = React.useRef(null);
   const { loading } = useSelector((state) => state?.auditEngagement);
   const [currentButtonId, setCurrentButtonId] = React.useState("");
+  const [showSubmitDialog, setShowSubmitDialog] = React.useState(false);
   const [selectedFile, setSelectedFile] = React.useState(null);
   const [showUpdateButton, setShowUpdateButton] = React.useState(true);
   const [showApproveDialog, setShowApproveDialog] = React.useState(false);
   const [currentApproveItem, setCurrentApproveItem] = React.useState({});
+  const [currentSubmittedItem, setCurrentSubmittedItem] = React.useState({});
 
   const { user } = useSelector((state) => state?.auth);
   function checkStaus(item) {
@@ -57,9 +58,8 @@ const ComplianceCheckList = ({
   }
 
   function handleSubmit(item) {
-    if (!loading) {
-      dispatch(setupSubmitComplianceCheckList({ ...item, submitted: true }));
-    }
+    setCurrentSubmittedItem(item);
+    setShowSubmitDialog(true);
   }
   function handleApprove(item) {
     setCurrentApproveItem(item);
@@ -126,6 +126,16 @@ const ComplianceCheckList = ({
 
   return (
     <div className="accordion-item">
+      {showSubmitDialog && (
+        <div className="model-parent">
+          <div className="model-wrap">
+            <SubmitDialog
+              object={currentSubmittedItem}
+              setShowSubmitDialog={setShowSubmitDialog}
+            />
+          </div>
+        </div>
+      )}
       {showApproveDialog && (
         <div className="model-parent">
           <div className="model-wrap">
@@ -204,7 +214,7 @@ const ComplianceCheckList = ({
                     <thead className="bg-secondary text-white">
                       <tr>
                         <th className="f-80">Sr No.</th>
-                        <th>Sub Location Name</th>
+                        <th>Sub Location</th>
                         <th>Status</th>
                         <th>Actions</th>
                       </tr>
@@ -220,6 +230,7 @@ const ComplianceCheckList = ({
                           (mainItem, index) => {
                             return (
                               <TableRow
+                                index={index}
                                 key={index}
                                 mainItem={mainItem}
                                 setComplianceCheckListMainId={

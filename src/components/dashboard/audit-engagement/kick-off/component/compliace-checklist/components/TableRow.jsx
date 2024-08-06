@@ -13,10 +13,11 @@ const TableRow = ({
   handleDownload,
   setCurrentButtonId,
   currentAuditEngagement,
+  index,
 }) => {
   return (
     <tr>
-      <td>{mainItem?.id}</td>
+      <td>{index + 1}</td>
       <td>
         <a
           className="fw-bold  text-primary  px-3 py-1 f-10"
@@ -36,48 +37,48 @@ const TableRow = ({
         )}
       </td>
       <td>
-        {mainItem?.submitted === false && (
-          <div className="mb-2">
-            <div
-              className={`btn btn-labeled btn-secondary px-3  shadow `}
-              onClick={() => handleDownload(mainItem?.id)}
-            >
-              <span className="btn-label me-2">
-                <i className="bi bi-box-arrow-down  f-18"></i>
-              </span>
-              Download
+        <div className="row">
+          {mainItem?.submitted === false && (
+            <div className="col-lg-4">
+              <div
+                className={`btn btn-labeled btn-secondary shadow items-center d-flex`}
+                onClick={() => handleDownload(mainItem?.id)}
+              >
+                <span className="btn-label me-2">
+                  <i className="bi bi-box-arrow-down f-18"></i>
+                </span>
+                Download
+              </div>
             </div>
-          </div>
-        )}
-
-        {mainItem?.approved === true && (
-          <button
-            className={`btn btn-labeled btn-primary px-3  shadow disabled`}
-          >
-            Approved
-          </button>
-        )}
-
-        <div className="mb-2">
-          {checkStaus(mainItem) && mainItem?.submitted === false && (
-            <button
-              className={`btn btn-labeled btn-primary px-3  shadow ${
-                loading &&
-                Number(mainItem?.id) === Number(currentButtonId) &&
-                "disabled"
-              }`}
-              onClick={() => {
-                setCurrentButtonId(mainItem?.id);
-                handleSubmit(mainItem);
-              }}
-            >
-              {loading && Number(mainItem?.id) === Number(currentButtonId)
-                ? "Loading..."
-                : "Submit"}
-            </button>
           )}
-        </div>
-        <div className="mb-2">
+
+          {mainItem?.approved === true && (
+            <div className="col-lg-3">
+              <button className={`btn btn-labeled btn-primary shadow disabled`}>
+                Approved
+              </button>
+            </div>
+          )}
+
+          {checkStaus(mainItem) && mainItem?.submitted === false && (
+            <div className="col-lg-3">
+              <button
+                className={`btn btn-labeled btn-primary shadow ${
+                  loading &&
+                  Number(mainItem?.id) === Number(currentButtonId) &&
+                  "disabled"
+                }`}
+                onClick={() => {
+                  setCurrentButtonId(mainItem?.id);
+                  handleSubmit(mainItem);
+                }}
+              >
+                {loading && Number(mainItem?.id) === Number(currentButtonId)
+                  ? "Loading..."
+                  : "Submit"}
+              </button>
+            </div>
+          )}
           {checkStaus(mainItem) &&
             mainItem?.submitted === true &&
             mainItem?.approved === false &&
@@ -92,21 +93,23 @@ const TableRow = ({
                   currentAuditEngagement?.resourceAllocation
                     ?.proposedJobApprover?.id
                 )) && (
-              <button
-                className={`btn btn-labeled btn-primary px-3  shadow ${
-                  loading &&
-                  Number(mainItem?.id) === Number(currentButtonId) &&
-                  "disabled"
-                }`}
-                onClick={() => {
-                  setCurrentButtonId(mainItem?.id);
-                  handleApprove(mainItem);
-                }}
-              >
-                {loading && Number(mainItem?.id) === Number(currentButtonId)
-                  ? "Loading..."
-                  : "Approve"}
-              </button>
+              <div className="col-lg-3">
+                <button
+                  className={`btn btn-labeled btn-primary shadow ${
+                    loading &&
+                    Number(mainItem?.id) === Number(currentButtonId) &&
+                    "disabled"
+                  }`}
+                  onClick={() => {
+                    setCurrentButtonId(mainItem?.id);
+                    handleApprove(mainItem);
+                  }}
+                >
+                  {loading && Number(mainItem?.id) === Number(currentButtonId)
+                    ? "Loading..."
+                    : "Approve"}
+                </button>
+              </div>
             )}
         </div>
       </td>
