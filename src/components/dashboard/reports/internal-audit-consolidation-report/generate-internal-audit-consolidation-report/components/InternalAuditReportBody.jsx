@@ -22,6 +22,7 @@ const InternalAuditReportBody = ({
   addReportLoading,
   handleChangeExtraFields,
   handleChangeAnnexure,
+  setDeleteFileId,
 }) => {
   const dispatch = useDispatch();
   const [extraFieldsArray, setExtraFieldsArray] = React.useState([]);
@@ -88,7 +89,7 @@ const InternalAuditReportBody = ({
         reportObject={reportObject}
         handleChangeReportObject={handleChangeReportObject}
       />
-     
+
       {/* Editors Start */}
       <div className="border px-3 py-2  mt-3 rounded">
         <div className="row mb-3">
@@ -120,9 +121,7 @@ const InternalAuditReportBody = ({
       {/* Editors Ends */}
 
       {/* Findings Start */}
-      <KeyKindings
-        reportObject={reportObject}
-      />
+      <KeyKindings reportObject={reportObject} />
 
       {/* Extra Fields Starts */}
       <ExtraFields
@@ -152,7 +151,7 @@ const InternalAuditReportBody = ({
         </div>
       </div>
       <div className="mt-4">
-        <FileUpload item={reportObject} />
+        <FileUpload item={reportObject} setDeleteFileId={setDeleteFileId} />
       </div>
 
       <div className="row my-3">

@@ -19,6 +19,7 @@ import {
   faGear,
   faCheck,
   faChartBar,
+  faChartSimple,
 } from "@fortawesome/free-solid-svg-icons";
 let menuItems = [
   {
@@ -166,6 +167,13 @@ let menuItems = [
     label: "Settings",
     icon: faGear,
     route: "/audit/audit-settings",
+    active: false,
+  },
+  {
+    id: "li-audit-analytics",
+    label: "Analytics",
+    icon: faChartSimple,
+    route: "/audit/audit-analytics",
     active: false,
   },
   {

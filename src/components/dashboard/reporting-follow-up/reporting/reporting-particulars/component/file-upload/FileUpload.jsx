@@ -8,7 +8,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { handleDownload } from "../../../../../../../constants/index";
 
-const ReportingFileUpload = ({ item }) => {
+const ReportingFileUpload = ({ item, setDeleteFileId }) => {
   const dispatch = useDispatch();
   const { loading, reportingFileUploadSuccess } = useSelector(
     (state) => state?.reporting
@@ -183,6 +183,7 @@ const ReportingFileUpload = ({ item }) => {
                             className="fa fa-trash text-danger f-18 cursor-pointer px-2"
                             onClick={() => {
                               if (!loading) {
+                                setDeleteFileId(fileItem?.id);
                                 dispatch(
                                   setupReportingFileDelete({
                                     fileId: Number(fileItem?.id),

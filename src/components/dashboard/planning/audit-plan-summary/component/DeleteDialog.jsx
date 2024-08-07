@@ -25,7 +25,7 @@ const DeleteAuditPlanSummarytDialog = ({
   return (
     <div className="px-4 py-4">
       <div>
-        <p>Are you sure you want to delete the plan summary?</p>
+        <p>Are You Sure You Want To Delete Audit Plan Summary?</p>
       </div>
       <div className="flex mb-2 flex-end">
         <div>

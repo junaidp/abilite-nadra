@@ -175,25 +175,21 @@ const ComplianceCheckListDialog = ({
         </div>
       </div>
 
-      <div className="row py-4 px-4">
-        <div className="col-lg-6 text-start">
-          <button
-            className="btn btn-danger float-start"
-            onClick={() => setShowComplianceCheckListDialog(false)}
-          >
-            Close
-          </button>
-        </div>
+      <div className="d-flex justify-content-between">
         {handleAllowEdit() === true && (
-          <div className="col-lg-6 text-end">
-            <button
-              className={`btn btn-primary float-end ${loading && "disabled"}`}
-              onClick={handleUpdate}
-            >
-              {loading ? "Loading..." : "Save"}
-            </button>
-          </div>
+          <button
+            className={`btn btn-primary ${loading && "disabled"}`}
+            onClick={handleUpdate}
+          >
+            {loading ? "Loading..." : "Save"}
+          </button>
         )}
+        <button
+          className="btn btn-danger"
+          onClick={() => setShowComplianceCheckListDialog(false)}
+        >
+          Close
+        </button>
       </div>
     </div>
   );

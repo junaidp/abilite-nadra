@@ -27,6 +27,7 @@ const AccordianItem = ({
   setViewSecondFeedBackDialog,
   setViewFeedBackItem,
   handleSaveStep1,
+  setDeleteFileId,
 }) => {
   const { user } = useSelector((state) => state?.auth);
   const [currentItem, setCurrentItem] = React.useState({});
@@ -238,7 +239,7 @@ const AccordianItem = ({
             </div>
           )}
 
-          <ReportingFileUpload item={item} />
+          <ReportingFileUpload item={item} setDeleteFileId={setDeleteFileId} />
 
           <div>
             <div className="d-flex flex-end w-100 gap-4">

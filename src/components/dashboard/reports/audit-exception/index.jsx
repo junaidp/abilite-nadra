@@ -1,6 +1,27 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setupGetJobsBasedOnNatureThrough } from "../../../../global-redux/reducers/reports/audit-exception/slice";
 
 const AuditExceptionReport = () => {
+  const dispatch = useDispatch();
+  const [nature, setNature] = React.useState("");
+  const { user } = useSelector((state) => state?.auth);
+  const { company } = useSelector((state) => state?.common);
+
+  React.useEffect(() => {
+    if (nature && nature !== "") {
+      let companyId = user[0]?.company.find(
+        (all) => all?.companyName === company
+      )?.id;
+      dispatch(
+        setupGetJobsBasedOnNatureThrough({
+          companyId: companyId,
+          natureThrough: nature,
+        })
+      );
+    }
+  }, [nature]);
+
   return (
     <div>
       <header className="section-header my-3 text-start d-flex align-items-center justify-content-between">
@@ -10,14 +31,17 @@ const AuditExceptionReport = () => {
       <div className="row mb-3">
         <div className="col-lg-2">
           <div>
-            <label className="me-2 label-text fw-bold">
-              Business Objective:
-            </label>
-            <select className="form-select" aria-label="Default select example">
-              <option selected>Open this select menu</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
+            <label className="me-2 label-text fw-bold">Nature Through:</label>
+            <select
+              className="form-select"
+              aria-label="Default select example"
+              value={nature}
+              onChange={(event) => setNature(event.target.value)}
+            >
+              <option value="">Select Nature</option>
+              <option value="Business Objective">Business Objective</option>
+              <option value="Compliance Checklist">Compliance Checklist</option>
+              <option value="Both">Both</option>
             </select>
           </div>
         </div>

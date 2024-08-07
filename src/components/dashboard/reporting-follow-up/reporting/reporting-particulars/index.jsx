@@ -47,6 +47,7 @@ const ReportingParticulars = () => {
     managementAuditeeReportingAddSuccess,
     reportingFileUploadSuccess,
   } = useSelector((state) => state?.reporting);
+  const [deleteFileId, setDeleteFileId] = React.useState("");
   const [report, setReport] = React.useState([]);
   const { allUsers } = useSelector((state) => state?.settingsUserManagement);
   const [currentApproveItem, setCurrentApproveItem] = React.useState({});
@@ -206,7 +207,6 @@ const ReportingParticulars = () => {
   }
 
   // Editibility 1 Ends
-
   React.useEffect(() => {
     if (reportingAddSuccess) {
       const companyId = user[0]?.company?.find(
@@ -225,15 +225,21 @@ const ReportingParticulars = () => {
     if (reportingFileUploadSuccess === true) {
       if (currentOpenItem && Object?.keys(currentOpenItem)?.length !== 0) {
         setTimeout(() => {
+          let updatedItem = report?.reportingList?.find(
+            (item) => Number(item?.id) === Number(currentOpenItem?.id)
+          );
           dispatch(
-            setupUpdateReporting(
-              report?.reportingList?.find(
-                (item) => Number(item?.id) === Number(currentOpenItem?.id)
-              )
-            )
+            setupUpdateReporting({
+              ...updatedItem,
+              reportingFileAttachmentsList:
+                updatedItem?.reportingFileAttachmentsList?.filter(
+                  (singleFileItem) => singleFileItem?.id !== deleteFileId
+                ),
+            })
           );
         }, 1500);
       }
+      setDeleteFileId("");
       dispatch(resetReportingFileUploadAddSuccess());
     }
   }, [reportingFileUploadSuccess]);
@@ -425,6 +431,7 @@ const ReportingParticulars = () => {
                               }
                               setViewFeedBackItem={setViewFeedBackItem}
                               handleSaveStep1={handleSaveStep1}
+                              setDeleteFileId={setDeleteFileId}
                             />
                           );
                         })}

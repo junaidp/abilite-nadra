@@ -9,7 +9,7 @@ const KickOffModal = ({ setShowKickOffDialog, kickOffId }) => {
     <div className="px-4 py-4">
       <h2 className="heading">Kick Off Dialog</h2>
       <p className="py-4">
-        Are you sure you want to kick this job (
+        Are You Sure You Want To Kick This Job (
         {
           navigationInfo?.jobsDueForKickOffWithinAWeek?.find(
             (job) => job?.id === kickOffId

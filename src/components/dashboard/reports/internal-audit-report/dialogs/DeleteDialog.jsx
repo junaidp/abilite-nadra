@@ -28,7 +28,7 @@ const DeleteInternalAuditReportDialog = ({
     <div className="p-4">
       <div className="row mb-3">
         <div className="col-lg-12">
-          <p>Are You Sure You Want To Delete Internal Audit Report.</p>
+          <p>Are You Sure You Want To Delete Internal Audit Report?</p>
         </div>
       </div>
 

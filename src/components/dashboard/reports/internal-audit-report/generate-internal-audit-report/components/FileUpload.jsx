@@ -8,7 +8,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { handleDownload } from "../../../../../../constants/index";
 
-const IAHFileUpload = ({ item }) => {
+const IAHFileUpload = ({ item, setDeleteFileId }) => {
   const dispatch = useDispatch();
   const { addReportLoading, iahFileUploadSuccess } = useSelector(
     (state) => state?.internalAuditReport
@@ -180,6 +180,7 @@ const IAHFileUpload = ({ item }) => {
                           className="fa fa-trash text-danger f-18 cursor-pointer px-2"
                           onClick={() => {
                             if (!addReportLoading) {
+                              setDeleteFileId(fileItem?.id);
                               dispatch(
                                 setupIahFileDelete({
                                   fileId: Number(fileItem?.id),

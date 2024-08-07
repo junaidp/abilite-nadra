@@ -80,15 +80,6 @@ const RiskAssessments = () => {
       <header className="section-header my-3 text-start d-flex align-items-center justify-content-between">
         <div className="mb-0 heading">Risk Assessment</div>
         <div className="">
-          <div
-            className="btn btn-labeled btn-primary px-3 shadow"
-            onClick={() => navigate("/audit/view-risk-assesment")}
-          >
-            <span className="btn-label me-2">
-              <i className="fa fa-eye"></i>
-            </span>
-            View Risk Assessment
-          </div>
           <Tooltip
             title={
               <React.Fragment>

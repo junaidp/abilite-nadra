@@ -25,27 +25,23 @@ const DeleteRiskFactorDialog = ({
   return (
     <div className="px-4 py-4">
       <div>
-        <p>Are you sure you want to delete this risk factor?</p>
+        <p>Are You Sure You Want To Delete Risk Factor?</p>
       </div>
-      <div className="flex mb-2 flex-end">
-        <div>
-          <button
-            type="submit"
-            className={`btn btn-danger float-start ${loading && "disabled"} `}
-            onClick={handleDeleteRiskFactor}
-          >
-            {loading ? "Loading..." : "Delete"}
-          </button>
-        </div>
-        <div className="mx-2">
-          <button
-            type="button"
-            className="btn btn-primary float-end"
-            onClick={() => setShowDeleteRiskFactorDialog(false)}
-          >
-            Close
-          </button>
-        </div>
+      <div className="d-flex justify-content-between">
+        <button
+          type="submit"
+          className={`btn btn-danger ${loading && "disabled"} `}
+          onClick={handleDeleteRiskFactor}
+        >
+          {loading ? "Loading..." : "Delete"}
+        </button>
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={() => setShowDeleteRiskFactorDialog(false)}
+        >
+          Close
+        </button>
       </div>
     </div>
   );

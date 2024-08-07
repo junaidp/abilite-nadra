@@ -38,6 +38,7 @@ const GenerateInternalAuditReport = () => {
   const [reportObject, setReportObject] = React.useState({});
   const [jobForInternalAuditReportId, setJobForInternalAuditReportId] =
     React.useState("");
+  const [deleteFileId, setDeleteFileId] = React.useState("");
 
   const handleChange = (event) => {
     setJobForInternalAuditReportId(event.target.value);
@@ -154,7 +155,15 @@ const GenerateInternalAuditReport = () => {
   React.useEffect(() => {
     if (iahFileUploadSuccess) {
       dispatch(resetFileUploadAddSuccess());
-      dispatch(setupSaveInternalAuditReport(reportObject));
+      dispatch(
+        setupSaveInternalAuditReport({
+          ...reportObject,
+          annexureUploads: reportObject?.annexureUploads?.filter(
+            (singleFileItem) => singleFileItem?.id !== deleteFileId
+          ),
+        })
+      );
+      setDeleteFileId("");
     }
   }, [iahFileUploadSuccess]);
 
@@ -245,6 +254,7 @@ const GenerateInternalAuditReport = () => {
             addReportLoading={addReportLoading}
             handleChangeExtraFields={handleChangeExtraFields}
             handleChangeAnnexure={handleChangeAnnexure}
+            setDeleteFileId={setDeleteFileId}
           />
         )
       )}

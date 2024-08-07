@@ -86,17 +86,7 @@ const JobScheduling = () => {
     <div>
       <header className="section-header my-3  text-start d-flex align-items-center justify-content-between">
         <div className="mb-0 heading">Job Scheduling</div>
-
-        <div className="">
-          <div
-            className="btn btn-labeled btn-primary px-3 shadow me-3"
-            onClick={() => navigate("/audit/view-resource")}
-          >
-            <span className="btn-label me-2">
-              <i className="fa fa-eye"></i>
-            </span>
-            View Resource
-          </div>
+        <div>
           <div
             className="btn btn-labeled btn-primary px-3 shadow"
             onClick={() => navigate("/audit/view-job-scheduling")}

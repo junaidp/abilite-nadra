@@ -24,7 +24,7 @@ const PlanningReportDeleteDialog = ({
   }, [reportAddSuccess]);
   return (
     <div class="p-4">
-      <p>Are You Sure You Want To Delete Report.</p>
+      <p>Are You Sure You Want To Delete Report?</p>
       <div className="d-flex justify-content-between">
         <button
           class={`btn btn-danger ${loading && "disabled"}`}

@@ -23,10 +23,8 @@ import JobSecheduling from "./pages/dashboard/planning/job-scheduling/JobSehedul
 import AuditPlanSummary from "./pages/dashboard/planning/audit-plan-summary/AuditPlanSummary";
 import AuditEngagement from "./pages/dashboard/audit-engagement/AuditEngagement";
 import PreviousObservation from "./pages/dashboard/planning/business-objective/previous-observation/PreviousObservation";
-import ViewRiskAssessment from "./pages/dashboard/planning/risk-assessments/view-risk-assessment/ViewRiskAssessment";
 import PlanningReport from "./pages/dashboard/reports/planning-report/PlanningReport";
 import ViewJobschedule from "./pages/dashboard/planning/job-scheduling/view-job-schedule/ViewJobschedule";
-import ViewResource from "./pages/dashboard/planning/job-scheduling/view-resource/ViewResource";
 import GeneratePlanningReport from "./pages/dashboard/reports/planning-report/generate-planning-report/GeneratePlanningReport";
 import UpdatePlanningReport from "./pages/dashboard/reports/planning-report/update-planning-report/UpdatePlanningReport";
 import ViewPlanningReport from "./pages/dashboard/reports/planning-report/view-planning-report/ViewPlanningReport";
@@ -45,6 +43,7 @@ import ResetPassword from "./pages/auth/reset-password/ResetPassword";
 import AuditParticulars from "./pages/dashboard/reporting-follow-up/reporting/reporting-particulars/ReportingParticulars";
 import FollowUpParticulars from "./pages/dashboard/reporting-follow-up/follow-up/follow-up-particulars/FollowUpParticulars";
 import AuditSettings from "./pages/dashboard/audit-settings/AuditSettings";
+import Analytics from "./pages/dashboard/analytics/Analytics";
 import InternalAuditReport from "./pages/dashboard/reports/internal-audit-report/InternalAuditReport";
 import ViewInternalAuditReport from "./pages/dashboard/reports/internal-audit-report/view-internal-audit-report/ViewInternalAuditReport";
 import UpdateInternalAuditReport from "./pages/dashboard/reports/internal-audit-report/update-internal-audit-report/UpdateInternalAuditReport";
@@ -136,13 +135,8 @@ const App = () => {
               element={<PreviousObservation />}
             />
             <Route path="planning-report" element={<PlanningReport />} />
-            <Route
-              path="view-risk-assesment"
-              element={<ViewRiskAssessment />}
-            />
             <Route path="task-management" element={<TaskManagement />} />
             <Route path="view-job-scheduling" element={<ViewJobschedule />} />
-            <Route path="view-resource" element={<ViewResource />} />
             <Route
               path="generate-planning-report"
               element={<GeneratePlanningReport />}
@@ -190,6 +184,7 @@ const App = () => {
               element={<FollowUpParticulars />}
             />
             <Route path="audit-settings" element={<AuditSettings />} />
+            <Route path="audit-analytics" element={<Analytics />} />
             <Route
               path="internal-audit-report"
               element={<InternalAuditReport />}
