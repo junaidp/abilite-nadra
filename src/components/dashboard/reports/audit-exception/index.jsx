@@ -41,7 +41,7 @@ const AuditExceptionReport = () => {
               <option value="">Select Nature</option>
               <option value="Business Objective">Business Objective</option>
               <option value="Compliance Checklist">Compliance Checklist</option>
-              <option value="Both">Both</option>
+              <option value="both">Both</option>
             </select>
           </div>
         </div>
@@ -90,17 +90,6 @@ const AuditExceptionReport = () => {
             </select>
           </div>
         </div>
-        <div className="col-lg-2">
-          <div>
-            <label className="me-2 label-text fw-bold">Exception Status:</label>
-            <select className="form-select" aria-label="Default select example">
-              <option selected>Open this select menu</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
-            </select>
-          </div>
-        </div>
       </div>
       <div className="row">
         <div className="col-lg-12">
@@ -109,15 +98,12 @@ const AuditExceptionReport = () => {
               <thead className="bg-secondary text-white">
                 <tr>
                   <th className="min-w-80">Sr No.</th>
-                  <th>Business Objective</th>
-                  <th>Auditable Unit</th>
-                  <th>Audit Exception</th>
+                  <th>Job Name</th>
                   <th>Recommendations</th>
                   <th>Location</th>
                   <th>Sub-Location</th>
                   <th>Exception Status</th>
                   <th>Due Date</th>
-                  <th>Recommendations</th>
                 </tr>
               </thead>
               <tbody>
@@ -127,8 +113,6 @@ const AuditExceptionReport = () => {
                     Lorem Ipsum is simply dummy text of the printing and
                     typesetting industry.
                   </td>
-                  <td>Strategic</td>
-                  <td>XYZABC</td>
                   <td>XYZABC</td>
                   <td>Low</td>
                   <td>XYZABC</td>
