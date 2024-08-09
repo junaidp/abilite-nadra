@@ -45,17 +45,6 @@ const AuditExceptionReport = () => {
             </select>
           </div>
         </div>
-        <div className="col-lg-2">
-          <div>
-            <label className="me-2 label-text fw-bold">Job Name:</label>
-            <select className="form-select" aria-label="Default select example">
-              <option selected>Open this select menu</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
-            </select>
-          </div>
-        </div>
 
         <div className="col-lg-2">
           <div>
@@ -99,7 +88,6 @@ const AuditExceptionReport = () => {
                 <tr>
                   <th className="min-w-80">Sr No.</th>
                   <th>Job Name</th>
-                  <th>Recommendations</th>
                   <th>Location</th>
                   <th>Sub-Location</th>
                   <th>Exception Status</th>
@@ -113,7 +101,6 @@ const AuditExceptionReport = () => {
                     Lorem Ipsum is simply dummy text of the printing and
                     typesetting industry.
                   </td>
-                  <td>XYZABC</td>
                   <td>Low</td>
                   <td>XYZABC</td>
                   <td>XYZABC</td>
