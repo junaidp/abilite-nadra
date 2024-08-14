@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { getJobsBasedOnNatureThrough } from "./thunk";
+import { getAllAuditExceptions, getAllLocations } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -7,10 +7,17 @@ const initialState = {
   jobs: [],
 };
 
-export const setupGetJobsBasedOnNatureThrough = createAsyncThunk(
-  "auditException/getJobsBasedOnNatureThrough",
+export const setupGetAllAuditExceptions = createAsyncThunk(
+  "auditException/getAllAuditExceptions",
   async (data, thunkAPI) => {
-    return getJobsBasedOnNatureThrough(data, thunkAPI);
+    return getAllAuditExceptions(data, thunkAPI);
+  }
+);
+
+export const setupGetAllLocations = createAsyncThunk(
+  "auditException/getAllLocations",
+  async (data, thunkAPI) => {
+    return getAllLocations(data, thunkAPI);
   }
 );
 
@@ -19,18 +26,32 @@ export const slice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    // Get All Internal Audit Reports
+    // Get All Audit Exception
     builder
-      .addCase(setupGetJobsBasedOnNatureThrough.pending, (state) => {
+      .addCase(setupGetAllAuditExceptions.pending, (state) => {
         state.loading = true;
       })
-      .addCase(
-        setupGetJobsBasedOnNatureThrough.fulfilled,
-        (state, { payload }) => {
-          console.log(payload);
+      .addCase(setupGetAllAuditExceptions.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.jobs = payload?.data;
+      })
+      .addCase(setupGetAllAuditExceptions.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
         }
-      )
-      .addCase(setupGetJobsBasedOnNatureThrough.rejected, (state, action) => {
+      });
+    // Get All Locations
+    builder
+      .addCase(setupGetAllLocations.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetAllLocations.fulfilled, (state, { payload }) => {
+        state.jobs = payload?.data;
+      })
+      .addCase(setupGetAllLocations.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);

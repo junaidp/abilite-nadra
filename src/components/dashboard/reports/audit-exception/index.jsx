@@ -1,26 +1,45 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setupGetJobsBasedOnNatureThrough } from "../../../../global-redux/reducers/reports/audit-exception/slice";
+import { setupGetAllAuditExceptions } from "../../../../global-redux/reducers/reports/audit-exception/slice";
+import { CircularProgress } from "@mui/material";
 
 const AuditExceptionReport = () => {
   const dispatch = useDispatch();
-  const [nature, setNature] = React.useState("");
+  const { jobs, loading } = useSelector((state) => state?.auditExceptionReport);
   const { user } = useSelector((state) => state?.auth);
   const { company } = useSelector((state) => state?.common);
+  let [data, setData] = React.useState({
+    natureThrough: "",
+    location: "",
+    subLocation: "",
+    stepNo: "",
+  });
+
+  function handleChange(event) {
+    setData((pre) => {
+      return {
+        ...pre,
+        [event.target.name]: event.target.value,
+      };
+    });
+  }
 
   React.useEffect(() => {
-    if (nature && nature !== "") {
-      let companyId = user[0]?.company.find(
-        (all) => all?.companyName === company
-      )?.id;
-      dispatch(
-        setupGetJobsBasedOnNatureThrough({
-          companyId: companyId,
-          natureThrough: nature,
-        })
-      );
-    }
-  }, [nature]);
+    let companyId = user[0]?.company.find(
+      (all) => all?.companyName === company
+    )?.id;
+    dispatch(
+      setupGetAllAuditExceptions({
+        companyId: companyId,
+        natureThrough: data?.natureThrough !== "" ? data?.natureThrough : null,
+        location: data?.location !== "" ? data?.location : null,
+        subLocation: data?.subLocation !== "" ? data?.subLocation : null,
+        stepNo: data?.stepNo !== "" ? data?.stepNo : -1,
+      })
+    );
+  }, [dispatch, data]);
+
+  console.log(jobs);
 
   return (
     <div>
@@ -35,8 +54,9 @@ const AuditExceptionReport = () => {
             <select
               className="form-select"
               aria-label="Default select example"
-              value={nature}
-              onChange={(event) => setNature(event.target.value)}
+              value={data?.nature}
+              name="nature"
+              onChange={(event) => handleChange(event)}
             >
               <option value="">Select Nature</option>
               <option value="Business Objective">Business Objective</option>
@@ -90,22 +110,29 @@ const AuditExceptionReport = () => {
                   <th>Job Name</th>
                   <th>Location</th>
                   <th>Sub-Location</th>
-                  <th>Exception Status</th>
-                  <th>Due Date</th>
+                  <th>Step No</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry.
-                  </td>
-                  <td>Low</td>
-                  <td>XYZABC</td>
-                  <td>XYZABC</td>
-                  <td>Low</td>
-                </tr>
+                {loading ? (
+                  <tr>
+                    <td>
+                      <CircularProgress />
+                    </td>
+                  </tr>
+                ) : (
+                  jobs?.map((job, index) => {
+                    return (
+                      <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td>{job[1]} </td>
+                        <td>{job[2]}</td>
+                        <td>{job[3]}</td>
+                        <td>{job[4]}</td>
+                      </tr>
+                    );
+                  })
+                )}
               </tbody>
             </table>
           </div>
