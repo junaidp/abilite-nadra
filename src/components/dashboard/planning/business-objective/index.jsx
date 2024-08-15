@@ -199,6 +199,7 @@ const BusinessObjective = () => {
                                 setShowDeleteEngagementDialog
                               }
                               setCurrentEngagementId={setCurrentEngagementId}
+                              index={index}
                             />
                           );
                         })

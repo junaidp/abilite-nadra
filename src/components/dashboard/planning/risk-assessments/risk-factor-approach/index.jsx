@@ -101,7 +101,7 @@ const RiskFactorApproach = () => {
             return {
               ...singleItem,
               score:
-                Number(singleItem?.likelihood) + Number(singleItem?.impact),
+                Number(singleItem?.likelihood) * Number(singleItem?.impact),
             };
           }),
           score: scoreSum,
@@ -109,19 +109,6 @@ const RiskFactorApproach = () => {
             ...performRiskAssessmentObject?.riskAssessments,
             riskAsssessmentCriteriaForRiskManagementCPList:
               data?.riskAsssessmentCriteriaForRiskManagementCPList,
-          },
-        })
-      );
-    }
-  }
-  function handleSubmitRiskAssessment() {
-    if (!loading) {
-      dispatch(
-        setupUpdateRiskAssessment({
-          ...performRiskAssessmentObject,
-          riskAssessments: {
-            ...performRiskAssessmentObject?.riskAssessments,
-            complete: true,
           },
         })
       );
@@ -150,7 +137,7 @@ const RiskFactorApproach = () => {
   React.useEffect(() => {
     let value = 0;
     data?.riskAssessmentList?.forEach((element) => {
-      value = value + (Number(element?.likelihood) + Number(element?.impact));
+      value = value + Number(element?.likelihood) * Number(element?.impact);
     });
     setScoreSum(value);
   }, [data]);
@@ -249,7 +236,7 @@ const RiskFactorApproach = () => {
                   <span className="btn-label me-2">
                     <i className="fa fa-plus-circle"></i>
                   </span>
-                  Add Risk Factor
+                  Specific Risk
                 </div>
               </div>
             )}
@@ -263,7 +250,7 @@ const RiskFactorApproach = () => {
                       <thead className="bg-secondary text-white">
                         <tr>
                           <th className="sr-col">Sr. #</th>
-                          <th>Risk factors</th>
+                          <th>Specific Risk</th>
                           <th>Likelihood</th>
                           <th>Impact</th>
                           <th>Score</th>

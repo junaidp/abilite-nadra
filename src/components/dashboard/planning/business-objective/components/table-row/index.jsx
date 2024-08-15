@@ -5,10 +5,11 @@ const TableRow = ({
   handleClickEngagement,
   setShowDeleteEngagementDialog,
   setCurrentEngagementId,
+  index,
 }) => {
   return (
     <tr>
-      <td>{item?.id}</td>
+      <td>{index + 1}</td>
       <td
         onClick={() => handleClickEngagement(item?.id, item?.natureThrough)}
         className="cursor-pointer"

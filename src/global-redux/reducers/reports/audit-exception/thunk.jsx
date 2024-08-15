@@ -34,3 +34,20 @@ export const getAllLocations = async (data, thunkAPI) => {
     return thunkAPI.rejectWithValue(error);
   }
 };
+
+export const getAllTimeAllocation = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.get(
+      `${baseUrl}/jobResourceTimeAllocation/reports/getAll?companyId=${data?.companyId}&natureThrough=${data?.natureThrough}&location=${data?.location}&subLocation=${data?.subLocation}`,
+      {
+        headers: {
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};

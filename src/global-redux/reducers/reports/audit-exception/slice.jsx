@@ -1,10 +1,17 @@
 import { toast } from "react-toastify";
-import { getAllAuditExceptions, getAllLocations } from "./thunk";
+import {
+  getAllAuditExceptions,
+  getAllLocations,
+  getAllTimeAllocation,
+} from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
   loading: false,
-  jobs: [],
+  subLoading: false,
+  auditExceptionJobs: [],
+  resourceTimeAllocationJobs: [],
+  locations: [],
 };
 
 export const setupGetAllAuditExceptions = createAsyncThunk(
@@ -21,10 +28,24 @@ export const setupGetAllLocations = createAsyncThunk(
   }
 );
 
+export const setupGetAllTimeAllocation = createAsyncThunk(
+  "auditException/getAllTimeAllocation",
+  async (data, thunkAPI) => {
+    return getAllTimeAllocation(data, thunkAPI);
+  }
+);
+
 export const slice = createSlice({
   name: "auditException",
   initialState,
-  reducers: {},
+  reducers: {
+    handleReset: (state) => {
+      (state.loading = false),
+        (state.auditExceptionJobs = []),
+        (state.resourceTimeAllocationJobs = []),
+        (state.locations = []);
+    },
+  },
   extraReducers: (builder) => {
     // Get All Audit Exception
     builder
@@ -33,7 +54,7 @@ export const slice = createSlice({
       })
       .addCase(setupGetAllAuditExceptions.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.jobs = payload?.data;
+        state.auditExceptionJobs = payload?.data || [];
       })
       .addCase(setupGetAllAuditExceptions.rejected, (state, action) => {
         state.loading = false;
@@ -46,12 +67,30 @@ export const slice = createSlice({
     // Get All Locations
     builder
       .addCase(setupGetAllLocations.pending, (state) => {
-        state.loading = true;
+        state.subLoading = true;
       })
       .addCase(setupGetAllLocations.fulfilled, (state, { payload }) => {
-        state.jobs = payload?.data;
+        state.subLoading = false;
+        state.locations = payload?.data;
       })
       .addCase(setupGetAllLocations.rejected, (state, action) => {
+        state.subLoading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Get All Resource Time Allocation
+    builder
+      .addCase(setupGetAllTimeAllocation.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetAllTimeAllocation.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.resourceTimeAllocationJobs = payload?.data || [];
+      })
+      .addCase(setupGetAllTimeAllocation.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);
@@ -62,6 +101,6 @@ export const slice = createSlice({
   },
 });
 
-export const {} = slice.actions;
+export const { handleReset } = slice.actions;
 
 export default slice.reducer;

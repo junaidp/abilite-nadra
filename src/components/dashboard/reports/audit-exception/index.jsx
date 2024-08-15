@@ -1,21 +1,44 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setupGetAllAuditExceptions } from "../../../../global-redux/reducers/reports/audit-exception/slice";
+import {
+  setupGetAllAuditExceptions,
+  setupGetAllLocations,
+  handleReset,
+} from "../../../../global-redux/reducers/reports/audit-exception/slice";
 import { CircularProgress } from "@mui/material";
+import Pagination from "@mui/material/Pagination";
 
 const AuditExceptionReport = () => {
   const dispatch = useDispatch();
-  const { jobs, loading } = useSelector((state) => state?.auditExceptionReport);
+  const { auditExceptionJobs, loading, locations } = useSelector(
+    (state) => state?.auditExceptionReport
+  );
+  const [page, setPage] = React.useState(1);
+  const [subLocations, setSubLocations] = React.useState([]);
   const { user } = useSelector((state) => state?.auth);
   const { company } = useSelector((state) => state?.common);
   let [data, setData] = React.useState({
-    natureThrough: "",
+    natureThrough: "Both",
     location: "",
     subLocation: "",
-    stepNo: "",
+    stepNo: -1,
   });
 
+  const handleChangePage = (_, value) => {
+    setPage(value);
+  };
+
   function handleChange(event) {
+    if (event?.target?.name === "location") {
+      setData((pre) => {
+        return {
+          ...pre,
+          [event.target.name]: event.target.value,
+          subLocation: "",
+        };
+      });
+      return;
+    }
     setData((pre) => {
       return {
         ...pre,
@@ -24,6 +47,37 @@ const AuditExceptionReport = () => {
     });
   }
 
+  function handleCalculateStatus(step) {
+    if (Number(step) === 0 || Number(step) === 1) {
+      return "Exceptions To Be Sent To Management For Comments";
+    }
+    if (Number(step) === 2) {
+      return "Awaiting Management Comments";
+    }
+    if (Number(step) === 3) {
+      return "Management Comments Received";
+    }
+    if (Number(step) === 4) {
+      return "Exception To Be Implemented";
+    }
+    if (Number(step) === 5) {
+      return "Exception To Be  Implemented";
+    }
+    if (Number(step) === 6) {
+      return "Exceptions  Implemented";
+    }
+    return "Observation Completed";
+  }
+
+  React.useEffect(() => {
+    if (locations?.length !== 0) {
+      let subLocations = locations?.find(
+        (location) => location?.description === data?.location
+      )?.subLocations;
+      setSubLocations(subLocations);
+    }
+  }, [data?.location]);
+
   React.useEffect(() => {
     let companyId = user[0]?.company.find(
       (all) => all?.companyName === company
@@ -31,7 +85,10 @@ const AuditExceptionReport = () => {
     dispatch(
       setupGetAllAuditExceptions({
         companyId: companyId,
-        natureThrough: data?.natureThrough !== "" ? data?.natureThrough : null,
+        natureThrough:
+          data?.natureThrough !== "" && data?.natureThrough !== "Both"
+            ? data?.natureThrough
+            : null,
         location: data?.location !== "" ? data?.location : null,
         subLocation: data?.subLocation !== "" ? data?.subLocation : null,
         stepNo: data?.stepNo !== "" ? data?.stepNo : -1,
@@ -39,7 +96,22 @@ const AuditExceptionReport = () => {
     );
   }, [dispatch, data]);
 
-  console.log(jobs);
+  React.useEffect(() => {
+    let companyId = user[0]?.company.find(
+      (all) => all?.companyName === company
+    )?.id;
+    setTimeout(() => {
+      dispatch(
+        setupGetAllLocations({
+          companyId: companyId,
+        })
+      );
+    }, 1200);
+
+    return () => {
+      dispatch(handleReset());
+    };
+  }, [dispatch]);
 
   return (
     <div>
@@ -54,14 +126,13 @@ const AuditExceptionReport = () => {
             <select
               className="form-select"
               aria-label="Default select example"
-              value={data?.nature}
-              name="nature"
+              value={data?.natureThrough}
+              name="natureThrough"
               onChange={(event) => handleChange(event)}
             >
-              <option value="">Select Nature</option>
               <option value="Business Objective">Business Objective</option>
               <option value="Compliance Checklist">Compliance Checklist</option>
-              <option value="both">Both</option>
+              <option value="Both">Both</option>
             </select>
           </div>
         </div>
@@ -69,33 +140,65 @@ const AuditExceptionReport = () => {
         <div className="col-lg-2">
           <div>
             <label className="me-2 label-text fw-bold">Location:</label>
-            <select className="form-select" aria-label="Default select example">
-              <option selected>Open this select menu</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
+            <select
+              className="form-select"
+              aria-label="Default select example"
+              value={data?.location}
+              name="location"
+              onChange={(event) => handleChange(event)}
+            >
+              <option value="">All</option>
+              {locations?.map((location) => {
+                return (
+                  <option value={location?.description}>
+                    {location?.description}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+        </div>
+
+        <div className="col-lg-2">
+          <div>
+            <label className="me-2 label-text fw-bold">Sub Location:</label>
+            <select
+              className="form-select"
+              aria-label="Default select example"
+              value={data?.subLocation}
+              name="subLocation"
+              onChange={(event) => handleChange(event)}
+            >
+              <option value="">select sub-location</option>
+              {subLocations?.map((subLocation) => {
+                return (
+                  <option value={subLocation?.description}>
+                    {subLocation?.description}
+                  </option>
+                );
+              })}
             </select>
           </div>
         </div>
         <div className="col-lg-2">
           <div>
-            <label className="me-2 label-text fw-bold">Sub-Location:</label>
-            <select className="form-select" aria-label="Default select example">
-              <option selected>Open this select menu</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
-            </select>
-          </div>
-        </div>
-        <div className="col-lg-2">
-          <div>
-            <label className="me-2 label-text fw-bold">Exception Status:</label>
-            <select className="form-select" aria-label="Default select example">
-              <option selected>Open this select menu</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
+            <label className="me-2 label-text fw-bold">Step No:</label>
+            <select
+              className="form-select"
+              aria-label="Default select example"
+              value={data?.stepNo}
+              name="stepNo"
+              onChange={(event) => handleChange(event)}
+            >
+              <option value={-1}>All</option>
+              <option value={0}>0</option>
+              <option value={1}>1</option>
+              <option value={2}>2</option>
+              <option value={3}>3</option>
+              <option value={4}>4</option>
+              <option value={5}>5</option>
+              <option value={6}>6</option>
+              <option value={7}>7</option>
             </select>
           </div>
         </div>
@@ -108,33 +211,48 @@ const AuditExceptionReport = () => {
                 <tr>
                   <th className="min-w-80">Sr No.</th>
                   <th>Job Name</th>
+                  <th>Reporting Name</th>
+                  <th>Nature</th>
                   <th>Location</th>
                   <th>Sub-Location</th>
-                  <th>Step No</th>
+                  <th>Exception Status</th>
                 </tr>
               </thead>
               <tbody>
                 {loading ? (
                   <tr>
-                    <td>
+                    <td className="w-300">
                       <CircularProgress />
                     </td>
                   </tr>
+                ) : auditExceptionJobs?.length === 0 ? (
+                  <tr>
+                    <td className="w-300">No Jobs To Show!</td>
+                  </tr>
                 ) : (
-                  jobs?.map((job, index) => {
-                    return (
-                      <tr key={index}>
-                        <td>{index + 1}</td>
-                        <td>{job[1]} </td>
-                        <td>{job[2]}</td>
-                        <td>{job[3]}</td>
-                        <td>{job[4]}</td>
-                      </tr>
-                    );
-                  })
+                  auditExceptionJobs
+                    ?.slice((page - 1) * 10, page * 10)
+                    ?.map((job, index) => {
+                      return (
+                        <tr key={index}>
+                          <td>{index + 1}</td>
+                          <td>{job[1]} </td>
+                          <td>{job[3]}</td>
+                          <td>{job[4]}</td>
+                          <td>{job[5]}</td>
+                          <td>{job[6]}</td>
+                          <td>{handleCalculateStatus(job[7])}</td>
+                        </tr>
+                      );
+                    })
                 )}
               </tbody>
             </table>
+            <Pagination
+              count={Math.ceil(auditExceptionJobs?.length / 10)}
+              page={page}
+              onChange={handleChangePage}
+            />
           </div>
         </div>
       </div>
