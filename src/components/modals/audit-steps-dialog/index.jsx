@@ -17,6 +17,7 @@ const AuditStepsDialog = ({
   const dispatch = useDispatch();
   const [currentAuditStep, setCurrentAuditStep] = React.useState({});
   const [description, setDescription] = React.useState("");
+  const [currentDeletedFileId, setCurrentDeletedFileId] = React.useState("");
   React.useState(false);
   const {
     auditEngagementAddSuccess,
@@ -52,7 +53,31 @@ const AuditStepsDialog = ({
 
   function handleSave() {
     if (!loading) {
-      dispatch(setupUpdateAuditSteps(currentAuditStep));
+      dispatch(
+        setupUpdateAuditSteps({
+          ...currentAuditStep,
+          procedureFileAuditStep:
+            currentAuditStep?.procedureFileAuditStep?.id ===
+            currentDeletedFileId
+              ? null
+              : currentAuditStep?.procedureFileAuditStep,
+          samplingFileAuditStep:
+            currentAuditStep?.samplingFileAuditStep?.id === currentDeletedFileId
+              ? null
+              : currentAuditStep?.samplingFileAuditStep,
+          auditStepObservationsList:
+            currentAuditStep?.auditStepObservationsList?.map(
+              (observationItem) => {
+                return {
+                  ...observationItem,
+                  fileEntities: observationItem?.fileEntities?.filter(
+                    (file) => file?.id !== currentDeletedFileId
+                  ),
+                };
+              }
+            ),
+        })
+      );
     }
   }
 
@@ -133,6 +158,7 @@ const AuditStepsDialog = ({
         currentAuditStep={currentAuditStep}
         handleChange={handleChange}
         handleAllowEdit={handleAllowEdit}
+        setCurrentDeletedFileId={setCurrentDeletedFileId}
       />
       {handleAllowEdit() === true && (
         <div className="row mb-3">
@@ -234,6 +260,7 @@ const AuditStepsDialog = ({
               <ObservationFileUpload
                 item={item}
                 handleAllowEdit={handleAllowEdit}
+                setCurrentDeletedFileId={setCurrentDeletedFileId}
               />
               {i !==
                 currentAuditStep?.auditStepObservationsList?.length - 1 && (

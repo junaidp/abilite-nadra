@@ -2,7 +2,12 @@ import React from "react";
 import ProcedureFileUpload from "./ProcedureFileUpload";
 import SamplingFileUpload from "./SamplingFileUpload";
 
-const FirstLayout = ({ currentAuditStep, handleChange, handleAllowEdit }) => {
+const FirstLayout = ({
+  currentAuditStep,
+  handleChange,
+  handleAllowEdit,
+  setCurrentDeletedFileId,
+}) => {
   return (
     <div>
       <div className="row mb-3">
@@ -96,12 +101,14 @@ const FirstLayout = ({ currentAuditStep, handleChange, handleAllowEdit }) => {
       <SamplingFileUpload
         currentAuditStep={currentAuditStep}
         handleAllowEdit={handleAllowEdit}
+        setCurrentDeletedFileId={setCurrentDeletedFileId}
       />
 
       <ProcedureFileUpload
         handleChange={handleChange}
         currentAuditStep={currentAuditStep}
         handleAllowEdit={handleAllowEdit}
+        setCurrentDeletedFileId={setCurrentDeletedFileId}
       />
     </div>
   );

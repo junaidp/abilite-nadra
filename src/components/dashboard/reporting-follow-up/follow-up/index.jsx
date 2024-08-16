@@ -151,7 +151,7 @@ const FollowUp = () => {
                                   `/audit/follow-up-particulars?followUpId=${item?.id}`
                                 )
                               }
-                              className="fa fa-edit  px-3 f-18 cursor-pointer"
+                              className="fa fa-eye f-18 cursor-pointer"
                             ></i>
                           </td>
                         </tr>

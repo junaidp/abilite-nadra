@@ -38,7 +38,7 @@ let menuItems = [
     subMenu: [
       {
         id: "li-business-objective",
-        label: "Engagement",
+        label: "Audit Universe",
         icon: faHourglassStart,
         route: "/audit/business-objective",
         active: false,

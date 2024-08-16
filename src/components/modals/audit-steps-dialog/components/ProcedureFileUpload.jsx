@@ -12,6 +12,7 @@ const ProcedureFileUpload = ({
   handleChange,
   currentAuditStep,
   handleAllowEdit,
+  setCurrentDeletedFileId,
 }) => {
   const dispatch = useDispatch();
   const fileInputRef = React.useRef(null);
@@ -211,6 +212,9 @@ const ProcedureFileUpload = ({
                         <i
                           className="fa fa-trash text-danger f-18 mx-2 cursor-pointer"
                           onClick={() => {
+                            setCurrentDeletedFileId(
+                              currentAuditStep?.procedureFileAuditStep?.id
+                            );
                             dispatch(
                               setupAuditStepProcedureFileDelete({
                                 fileId:

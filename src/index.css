@@ -899,6 +899,16 @@ span[aria-label="Insert Ordered List"] .jodit-toolbar-button__trigger {
   min-height: 170px !important;
 }
 
+.model-wrap-compliance {
+  width: 95% !important;
+  background-color: white;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  position: relative;
+  top: -90px;
+  border-radius: 10px;
+}
+
 @media screen and (max-width: 1000px) {
   .fxt-shape {
     display: none;

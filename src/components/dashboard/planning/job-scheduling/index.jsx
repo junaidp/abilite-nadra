@@ -137,7 +137,7 @@ const JobScheduling = () => {
                   <th className="sr-col">Sr. #</th>
                   <th>Auditable Unit</th>
                   <th>Audit Year</th>
-                  <th>Actions</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -161,7 +161,7 @@ const JobScheduling = () => {
                     ?.map((item, index) => {
                       return (
                         <tr className="h-40" key={index}>
-                          <td>{item?.id}</td>
+                          <td>{index + 1}</td>
                           <td>{item?.auditableUnitTitle}</td>
                           <td>{item?.year}</td>
                           <td>

@@ -4,14 +4,14 @@ import {
   setupGetAllAuditExceptions,
   setupGetAllLocations,
   handleReset,
-} from "../../../../global-redux/reducers/reports/audit-exception/slice";
+} from "../../../../global-redux/reducers/reports/extra-report/slice";
 import { CircularProgress } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 
 const AuditExceptionReport = () => {
   const dispatch = useDispatch();
   const { auditExceptionJobs, loading, locations } = useSelector(
-    (state) => state?.auditExceptionReport
+    (state) => state?.extraReport
   );
   const [page, setPage] = React.useState(1);
   const [subLocations, setSubLocations] = React.useState([]);

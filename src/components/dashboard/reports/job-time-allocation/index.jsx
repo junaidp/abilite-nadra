@@ -4,7 +4,7 @@ import {
   setupGetAllTimeAllocation,
   setupGetAllLocations,
   handleReset,
-} from "../../../../global-redux/reducers/reports/audit-exception/slice";
+} from "../../../../global-redux/reducers/reports/extra-report/slice";
 import { CircularProgress } from "@mui/material";
 import moment from "moment";
 import Pagination from "@mui/material/Pagination";
@@ -14,7 +14,7 @@ const ResourceTimeAllocation = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { resourceTimeAllocationJobs, loading, locations } = useSelector(
-    (state) => state?.auditExceptionReport
+    (state) => state?.extraReport
   );
   const [page, setPage] = React.useState(1);
   const [subLocations, setSubLocations] = React.useState([]);
@@ -34,22 +34,22 @@ const ResourceTimeAllocation = () => {
     let string = "";
     string = job[3] + job[4] + job[5] + job[6] + job[7] + job[8] + " (";
     if (job[3] > 0) {
-      string = string + job[3] + " (Business)";
+      string = string + job[3] + " (Business) ";
     }
     if (job[4] > 0) {
-      string = string + ", " + job[4] + " (Fraud)";
+      string = string + job[4] + " (Fraud) ";
     }
     if (job[5] > 0) {
-      string = string + ", " + job[5] + " (Finance)";
+      string = string + job[5] + " (Finance) ";
     }
     if (job[6] > 0) {
-      string = string + ", " + job[6] + " (IT)";
+      string = string + job[6] + " (IT) ";
     }
     if (job[7] > 0) {
-      string = string + ", " + job[7] + " (Operations)";
+      string = string + job[7] + " (Operations) ";
     }
     if (job[8] > 0) {
-      string = string + ", " + job[8] + " (Others)";
+      string = string + job[8] + " (Others)";
     }
     string = string + " )";
     return string;

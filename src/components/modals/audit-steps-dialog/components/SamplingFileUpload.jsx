@@ -8,7 +8,11 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { handleDownload } from "../../../../constants/index";
 
-const SamplingFileUpload = ({ currentAuditStep, handleAllowEdit }) => {
+const SamplingFileUpload = ({
+  currentAuditStep,
+  handleAllowEdit,
+  setCurrentDeletedFileId,
+}) => {
   const dispatch = useDispatch();
   const fileInputRef = React.useRef(null);
   const updatedFileInputRef = React.useRef(null);
@@ -183,6 +187,9 @@ const SamplingFileUpload = ({ currentAuditStep, handleAllowEdit }) => {
                         <i
                           className="fa fa-trash text-danger f-18 mx-2 cursor-pointer"
                           onClick={() => {
+                            setCurrentDeletedFileId(
+                              currentAuditStep?.samplingFileAuditStep?.id
+                            );
                             dispatch(
                               setupAuditStepSamplingFileDelete({
                                 fileId:

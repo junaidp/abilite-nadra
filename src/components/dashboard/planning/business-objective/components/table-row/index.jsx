@@ -30,7 +30,7 @@ const TableRow = ({
       </td>
       <td className="cursor-pointer">
         <i
-          className="fa fa-edit  f-18 cursor-pointer"
+          className="fa fa-eye  f-18 cursor-pointer"
           onClick={() => handleClickEngagement(item?.id, item?.natureThrough)}
         ></i>
         {item?.locked === false && (

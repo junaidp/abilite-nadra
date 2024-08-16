@@ -8,7 +8,11 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { handleDownload } from "../../../../constants/index";
 
-const ObservationFileUpload = ({ item, handleAllowEdit }) => {
+const ObservationFileUpload = ({
+  item,
+  handleAllowEdit,
+  setCurrentDeletedFileId,
+}) => {
   const dispatch = useDispatch();
   const { loading, auditEngagementObservationAddSuccess } = useSelector(
     (state) => state?.auditEngagement
@@ -185,6 +189,7 @@ const ObservationFileUpload = ({ item, handleAllowEdit }) => {
                             className="fa fa-trash text-danger f-18 cursor-pointer px-2"
                             onClick={() => {
                               if (!loading) {
+                                setCurrentDeletedFileId(fileItem?.id);
                                 dispatch(
                                   setupDeleteAuditStepFile({
                                     fileId: Number(fileItem?.id),

@@ -203,7 +203,7 @@ const KickOff = () => {
           )}
           {showComplianceCheckListDialog && (
             <div className="model-parent">
-              <div className="model-wrap">
+              <div className="model-wrap-compliance">
                 <ComplianceCheckListDialog
                   setShowComplianceCheckListDialog={
                     setShowComplianceCheckListDialog

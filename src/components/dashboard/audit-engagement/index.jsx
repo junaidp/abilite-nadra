@@ -117,6 +117,7 @@ const AuditEngagement = () => {
                         <th>Planned End Date </th>
                         <th>Job Type </th>
                         <th>Status </th>
+                        <th>Action </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -158,6 +159,16 @@ const AuditEngagement = () => {
                                 >
                                   {item?.status}
                                 </Link>
+                              </td>
+                              <td>
+                                <i
+                                  className="fa-eye fa f-18 cursor-pointer"
+                                  onClick={() =>
+                                    navigate(
+                                      `/audit/kick-off?auditEngagementId=${item?.id}`
+                                    )
+                                  }
+                                ></i>
                               </td>
                             </tr>
                           );

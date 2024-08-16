@@ -37,47 +37,48 @@ const TableRow = ({
         )}
       </td>
       <td>
-        <div className="row">
+        <div className="d-flex flex-wrap gap-4">
+          <i
+            className="fa-eye fa f-18 cursor-pointer"
+            onClick={() => {
+              setComplianceCheckListMainId(mainItem?.id);
+              setShowComplianceCheckListDialog(true);
+            }}
+          ></i>
           {mainItem?.submitted === false && (
-            <div className="col-lg-4">
-              <div
-                className={`btn btn-labeled btn-secondary shadow items-center d-flex`}
-                onClick={() => handleDownload(mainItem?.id)}
-              >
-                <span className="btn-label me-2">
-                  <i className="bi bi-box-arrow-down f-18"></i>
-                </span>
-                Download
-              </div>
+            <div
+              className={`btn btn-labeled btn-secondary shadow items-center d-flex`}
+              onClick={() => handleDownload(mainItem?.id)}
+            >
+              <span className="btn-label me-2">
+                <i className="bi bi-box-arrow-down f-18"></i>
+              </span>
+              Download
             </div>
           )}
 
           {mainItem?.approved === true && (
-            <div className="col-lg-3">
-              <button className={`btn btn-labeled btn-primary shadow disabled`}>
-                Approved
-              </button>
-            </div>
+            <button className={`btn btn-labeled btn-primary shadow disabled`}>
+              Approved
+            </button>
           )}
 
           {checkStaus(mainItem) && mainItem?.submitted === false && (
-            <div className="col-lg-3">
-              <button
-                className={`btn btn-labeled btn-primary shadow ${
-                  loading &&
-                  Number(mainItem?.id) === Number(currentButtonId) &&
-                  "disabled"
-                }`}
-                onClick={() => {
-                  setCurrentButtonId(mainItem?.id);
-                  handleSubmit(mainItem);
-                }}
-              >
-                {loading && Number(mainItem?.id) === Number(currentButtonId)
-                  ? "Loading..."
-                  : "Submit"}
-              </button>
-            </div>
+            <button
+              className={`btn btn-labeled btn-primary shadow ${
+                loading &&
+                Number(mainItem?.id) === Number(currentButtonId) &&
+                "disabled"
+              }`}
+              onClick={() => {
+                setCurrentButtonId(mainItem?.id);
+                handleSubmit(mainItem);
+              }}
+            >
+              {loading && Number(mainItem?.id) === Number(currentButtonId)
+                ? "Loading..."
+                : "Submit"}
+            </button>
           )}
           {checkStaus(mainItem) &&
             mainItem?.submitted === true &&
@@ -93,23 +94,21 @@ const TableRow = ({
                   currentAuditEngagement?.resourceAllocation
                     ?.proposedJobApprover?.id
                 )) && (
-              <div className="col-lg-3">
-                <button
-                  className={`btn btn-labeled btn-primary shadow ${
-                    loading &&
-                    Number(mainItem?.id) === Number(currentButtonId) &&
-                    "disabled"
-                  }`}
-                  onClick={() => {
-                    setCurrentButtonId(mainItem?.id);
-                    handleApprove(mainItem);
-                  }}
-                >
-                  {loading && Number(mainItem?.id) === Number(currentButtonId)
-                    ? "Loading..."
-                    : "Approve"}
-                </button>
-              </div>
+              <button
+                className={`btn btn-labeled btn-primary shadow ${
+                  loading &&
+                  Number(mainItem?.id) === Number(currentButtonId) &&
+                  "disabled"
+                }`}
+                onClick={() => {
+                  setCurrentButtonId(mainItem?.id);
+                  handleApprove(mainItem);
+                }}
+              >
+                {loading && Number(mainItem?.id) === Number(currentButtonId)
+                  ? "Loading..."
+                  : "Approve"}
+              </button>
             )}
         </div>
       </td>

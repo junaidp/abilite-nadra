@@ -17,10 +17,25 @@ const ComplianceCheckListDialog = ({
   } = useSelector((state) => state?.auditEngagement);
   const { user } = useSelector((state) => state?.auth);
   const [complianceItem, setComplianceItem] = React.useState({});
+  const [currentDeleteFileId, setCurrentDeleteFileId] = React.useState("");
 
   function handleUpdate() {
     if (!loading) {
-      dispatch(setupUpdateComplianceCheckList(complianceItem));
+      dispatch(
+        setupUpdateComplianceCheckList({
+          ...complianceItem,
+          checklistObservationsList:
+            complianceItem?.checklistObservationsList?.map((complianceItem) => {
+              return {
+                ...complianceItem,
+                observationsDataAttachmentsList:
+                  complianceItem?.observationsDataAttachmentsList?.filter(
+                    (file) => file?.id !== currentDeleteFileId
+                  ),
+              };
+            }),
+        })
+      );
     }
   }
 
@@ -162,6 +177,9 @@ const ComplianceCheckListDialog = ({
                                 <ObservationFileUpload
                                   item={singleItem}
                                   handleAllowEdit={handleAllowEdit}
+                                  setCurrentDeleteFileId={
+                                    setCurrentDeleteFileId
+                                  }
                                 />
                               </tr>
                             );

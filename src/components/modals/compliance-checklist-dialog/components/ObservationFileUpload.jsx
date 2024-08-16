@@ -6,10 +6,14 @@ import {
   setupUpdateAuditStepCheckListFile,
 } from "../../../../global-redux/reducers/audit-engagement/slice";
 import { useSelector, useDispatch } from "react-redux";
-import { baseUrl } from "../../../../constants/index";
+import { handleDownload } from "../../../../constants/index";
 import "./index.css";
 
-const ObservationFileUpload = ({ item, handleAllowEdit }) => {
+const ObservationFileUpload = ({
+  item,
+  handleAllowEdit,
+  setCurrentDeleteFileId,
+}) => {
   const dispatch = useDispatch();
   const { loading, auditEngagementObservationAddSuccess } = useSelector(
     (state) => state?.auditEngagement
@@ -98,12 +102,6 @@ const ObservationFileUpload = ({ item, handleAllowEdit }) => {
     }
   };
 
-  function handleDownload(id) {
-    window.open(
-      `${baseUrl}/auditEngagement/auditStep/auditStepChecklist/ObservationDataAttachments/download?fileId=${id}`,
-      "_blank"
-    );
-  }
   React.useEffect(() => {
     if (auditEngagementObservationAddSuccess) {
       setSelectedFile(null);
@@ -188,13 +186,19 @@ const ObservationFileUpload = ({ item, handleAllowEdit }) => {
                           <td className="w-130">
                             <i
                               class="fa fa-download f-18 mx-2 cursor-pointer"
-                              onClick={() => handleDownload(fileItem?.id)}
+                              onClick={() =>
+                                handleDownload({
+                                  base64String: fileItem?.fileData,
+                                  fileName: fileItem?.fileName,
+                                })
+                              }
                             ></i>
                             {handleAllowEdit() === true && (
                               <i
                                 className="fa fa-trash text-danger f-18 cursor-pointer px-2"
                                 onClick={() => {
                                   if (!loading) {
+                                    setCurrentDeleteFileId(fileItem?.id);
                                     dispatch(
                                       setupDeleteAuditStepCheckListFile({
                                         fileId: Number(fileItem?.id),
