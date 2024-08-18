@@ -1,12 +1,10 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import moment from "moment";
 import {
   resetReportingAddSuccess,
   setupGetSingleReport,
   setupUpdateReporting,
   setupGetInitialSingleReport,
-  setupUpdateReportingByManagementAuditee,
   resetReports,
   resetManagementAuditeeReportingAddSuccess,
   resetReportingFileUploadAddSuccess,
@@ -25,6 +23,7 @@ import SecondApproveReportingDialog from "./component/approve-dialogs/SecondAppr
 import FeedBackDialog from "../../components/FeedBackDialog";
 import ViewFirstFeedBackDialog from "../../components/FirstFeedBack";
 import ViewSecondFeedBackDialog from "../../components/SecondFeedBack";
+import SubmitDialog from "./component/submit-dialog";
 import { toast } from "react-toastify";
 
 const ReportingParticulars = () => {
@@ -33,12 +32,7 @@ const ReportingParticulars = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const reportingId = searchParams.get("reportingId");
   const { user } = useSelector((state) => state?.auth);
-  const { company, year } = useSelector((state) => state?.common);
-  const [viewFeedBackItem, setViewFeedBackItem] = React.useState({});
-  const [viewFirstFeedBackDialog, setViewFirstFeedBackDialog] =
-    React.useState(false);
-  const [viewSecondFeedBackDialog, setViewSecondFeedBackDialog] =
-    React.useState(false);
+  const { company } = useSelector((state) => state?.common);
   const {
     singleReport,
     loading,
@@ -47,6 +41,11 @@ const ReportingParticulars = () => {
     managementAuditeeReportingAddSuccess,
     reportingFileUploadSuccess,
   } = useSelector((state) => state?.reporting);
+  const [viewFeedBackItem, setViewFeedBackItem] = React.useState({});
+  const [viewFirstFeedBackDialog, setViewFirstFeedBackDialog] =
+    React.useState(false);
+  const [viewSecondFeedBackDialog, setViewSecondFeedBackDialog] =
+    React.useState(false);
   const [deleteFileId, setDeleteFileId] = React.useState("");
   const [report, setReport] = React.useState([]);
   const { allUsers } = useSelector((state) => state?.settingsUserManagement);
@@ -57,6 +56,10 @@ const ReportingParticulars = () => {
   const [currentReportingAndFollowUpId, setCurrentReportingAndFollowUpId] =
     React.useState("");
   const [currentOpenItem, setCurrentOpenItem] = React.useState({});
+  const [showSubmitDialog, setShowSubmitDialog] = React.useState(false);
+  const [currentSubmittedItem, setShowCurrentSubmittedItem] = React.useState(
+    {}
+  );
 
   function handleChange(event, id) {
     setReport((pre) => {
@@ -143,39 +146,6 @@ const ReportingParticulars = () => {
   function handleSaveStep2(item) {
     if (!loading) {
       dispatch(setupUpdateReporting(item));
-    }
-  }
-
-  function handleSaveToStep3(item) {
-    if (!loading) {
-      const today = moment.utc().startOf("day");
-      const implementationDate = moment
-        .utc(item?.implementationDate)
-        .startOf("day");
-
-      if (
-        !item?.managementComments ||
-        !item?.implementationDate ||
-        item?.managementComments === "" ||
-        item?.implementationDate === ""
-      ) {
-        toast.error(
-          "Fields missing. Please fill them first and then submit the observation"
-        );
-        return;
-      }
-
-      if (implementationDate.isBefore(today)) {
-        toast.error("Implementation date must be today or greater than today");
-        return;
-      }
-
-      dispatch(
-        setupUpdateReportingByManagementAuditee({
-          ...item,
-          stepNo: 3,
-        })
-      );
     }
   }
 
@@ -314,6 +284,16 @@ const ReportingParticulars = () => {
 
   return (
     <div>
+      {showSubmitDialog && (
+        <div className="model-parent">
+          <div className="model-wrap">
+            <SubmitDialog
+              setShowSubmitDialog={setShowSubmitDialog}
+              item={currentSubmittedItem}
+            />
+          </div>
+        </div>
+      )}
       {firstApproveDialog && (
         <div className="model-parent">
           <div className="model-wrap">
@@ -414,7 +394,6 @@ const ReportingParticulars = () => {
                               handleSaveToStep1={handleSaveToStep1}
                               handleSaveToStep2={handleSaveToStep2}
                               handleSaveStep2={handleSaveStep2}
-                              handleSaveToStep3={handleSaveToStep3}
                               handleSaveToStep4={handleSaveToStep4}
                               handleObservationChange={handleObservationChange}
                               setCurrentReportingAndFollowUpId={
@@ -432,6 +411,10 @@ const ReportingParticulars = () => {
                               setViewFeedBackItem={setViewFeedBackItem}
                               handleSaveStep1={handleSaveStep1}
                               setDeleteFileId={setDeleteFileId}
+                              setShowSubmitDialog={setShowSubmitDialog}
+                              setShowCurrentSubmittedItem={
+                                setShowCurrentSubmittedItem
+                              }
                             />
                           );
                         })}

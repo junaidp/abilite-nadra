@@ -14,7 +14,6 @@ const AccordianItem = ({
   handleSaveToStep1,
   handleSaveToStep2,
   handleSaveStep2,
-  handleSaveToStep3,
   handleSaveToStep4,
   singleReport,
   reportingId,
@@ -28,6 +27,8 @@ const AccordianItem = ({
   setViewFeedBackItem,
   handleSaveStep1,
   setDeleteFileId,
+  setShowSubmitDialog,
+  setShowCurrentSubmittedItem,
 }) => {
   const { user } = useSelector((state) => state?.auth);
   const [currentItem, setCurrentItem] = React.useState({});
@@ -352,9 +353,12 @@ const AccordianItem = ({
                       className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
                         loading && "disabled"
                       }`}
-                      onClick={() => handleSaveToStep3(item)}
+                      onClick={() => {
+                        setShowCurrentSubmittedItem(item);
+                        setShowSubmitDialog(true);
+                      }}
                     >
-                      {loading ? "Loading..." : "Submit"}
+                      Submit
                     </button>
                   </div>
                 )}

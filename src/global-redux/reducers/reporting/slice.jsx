@@ -4,6 +4,7 @@ import {
   getInitialSingleReport,
   getAllReporting,
   updateReporting,
+  submitReportingInFollowUp,
   approveReporting,
   getAllFollowUp,
   updateFollowUp,
@@ -19,6 +20,7 @@ const initialState = {
   loading: false,
   initialLoading: false,
   reportingAddSuccess: false,
+  followUpSubmittedAddSuccess: false,
   allReporting: [],
   allFollowUp: [],
   singleReport: {},
@@ -54,6 +56,14 @@ export const setupUpdateReporting = createAsyncThunk(
     return updateReporting(data, thunkAPI);
   }
 );
+
+export const setupSubmitReportingInFollowUp = createAsyncThunk(
+  "reporting/submitReportingInFollowUp",
+  async (data, thunkAPI) => {
+    return submitReportingInFollowUp(data, thunkAPI);
+  }
+);
+
 export const setupApproveReporting = createAsyncThunk(
   "reporting/approveReporting",
   async (data, thunkAPI) => {
@@ -111,6 +121,9 @@ export const slice = createSlice({
   reducers: {
     resetReportingAddSuccess: (state) => {
       state.reportingAddSuccess = false;
+    },
+    resetFollowUpSubmittedAddSuccess: (state) => {
+      state.followUpSubmittedAddSuccess = false;
     },
     resetReportingFileUploadAddSuccess: (state) => {
       state.reportingFileUploadSuccess = false;
@@ -200,6 +213,29 @@ export const slice = createSlice({
           toast.error("An Error has occurred");
         }
       });
+
+    // Update Reporting
+    builder
+      .addCase(setupSubmitReportingInFollowUp.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupSubmitReportingInFollowUp.fulfilled, (state) => {
+        state.loading = false;
+        state.reportingAddSuccess = true;
+        state.followUpSubmittedAddSuccess = true;
+        toast.success("Follow Up Submitted Successfully");
+      })
+      .addCase(
+        setupSubmitReportingInFollowUp.rejected,
+        (state, { payload }) => {
+          state.loading = false;
+          if (payload?.response?.data?.message) {
+            toast.error(payload?.response?.data?.message);
+          } else {
+            toast.error("An Error has occurred");
+          }
+        }
+      );
     // Approve Reporting
     builder
       .addCase(setupApproveReporting.pending, (state) => {
@@ -357,6 +393,7 @@ export const {
   resetReports,
   resetManagementAuditeeReportingAddSuccess,
   resetReportingFileUploadAddSuccess,
+  resetFollowUpSubmittedAddSuccess
 } = slice.actions;
 
 export default slice.reducer;

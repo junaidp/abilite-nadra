@@ -4,9 +4,9 @@ import {
   resetReportingAddSuccess,
   setupGetInitialSingleReport,
   setupGetSingleReport,
-  setupUpdateReporting,
   setupUpdateFollowUp,
   resetReports,
+  resetFollowUpSubmittedAddSuccess,
 } from "../../../../../global-redux/reducers/reporting/slice";
 import {
   changeActiveLink,
@@ -20,7 +20,7 @@ import AccordianItem from "./components/AccordianItem";
 import ApproveDialog from "./components/ApproveDialog";
 import FeedBackDialog from "../../components/FeedBackDialog";
 import ViewThirdFeedBackDialog from "../../components/ThirdFeedBack";
-import { toast } from "react-toastify";
+import SubmitDialog from "./components/SubmitDialog";
 
 const FollowUpParticulars = () => {
   let navigate = useNavigate();
@@ -28,9 +28,14 @@ const FollowUpParticulars = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const followUpId = searchParams.get("followUpId");
   const { user } = useSelector((state) => state?.auth);
-  const { company, year } = useSelector((state) => state?.common);
-  const { singleReport, loading, reportingAddSuccess, initialLoading } =
-    useSelector((state) => state?.reporting);
+  const { company } = useSelector((state) => state?.common);
+  const {
+    singleReport,
+    loading,
+    reportingAddSuccess,
+    initialLoading,
+    followUpSubmittedAddSuccess,
+  } = useSelector((state) => state?.reporting);
   const [report, setReport] = React.useState([]);
   const [currentApproveItem, setCurrentApproveItem] = React.useState({});
   const [approveDialog, setApproveDialog] = React.useState(false);
@@ -40,7 +45,10 @@ const FollowUpParticulars = () => {
   const [viewFeedBackItem, setViewFeedBackItem] = React.useState({});
   const [viewThirdFeedBackDialog, setViewThirdFeedBackDialog] =
     React.useState(false);
-
+  const [showSubmitDialog, setShowSubmitDialog] = React.useState(false);
+  const [currentSubmittedItem, setShowCurrentSubmittedItem] = React.useState(
+    {}
+  );
   function handleChange(event, id) {
     setReport((pre) => {
       return {
@@ -58,41 +66,6 @@ const FollowUpParticulars = () => {
         ),
       };
     });
-  }
-
-  function handleSaveToStep6(item) {
-    if (
-      item?.followUp?.recommendationsImplemented.toString() === "true" &&
-      (item?.followUp?.finalComments === null ||
-        item?.followUp?.finalComments === "")
-    ) {
-      toast.error(
-        "Final Comments missing. Please provide them first and then submit the observation"
-      );
-      return;
-    }
-    dispatch(
-      setupUpdateFollowUp({
-        ...item?.followUp,
-        recommendationsImplemented:
-          item?.followUp?.recommendationsImplemented.toString() === "true"
-            ? true
-            : false,
-        finalComments:
-          item?.followUp?.recommendationsImplemented.toString() === "true"
-            ? item?.followUp?.finalComments
-            : "",
-      })
-    );
-
-    setTimeout(() => {
-      dispatch(
-        setupUpdateReporting({
-          ...item,
-          stepNo: 6,
-        })
-      );
-    }, 900);
   }
 
   function handleSave(item) {
@@ -182,6 +155,12 @@ const FollowUpParticulars = () => {
   }, [reportingAddSuccess]);
 
   React.useEffect(() => {
+    if (followUpSubmittedAddSuccess) {
+      dispatch(resetFollowUpSubmittedAddSuccess());
+    }
+  }, [followUpSubmittedAddSuccess]);
+
+  React.useEffect(() => {
     const isEmptyObject =
       Object.keys(singleReport).length === 0 &&
       singleReport.constructor === Object;
@@ -219,6 +198,16 @@ const FollowUpParticulars = () => {
 
   return (
     <div>
+      {showSubmitDialog && (
+        <div className="model-parent">
+          <div className="model-wrap">
+            <SubmitDialog
+              item={currentSubmittedItem}
+              setShowSubmitDialog={setShowSubmitDialog}
+            />
+          </div>
+        </div>
+      )}
       {approveDialog && (
         <div className="model-parent">
           <div className="model-wrap">
@@ -296,7 +285,6 @@ const FollowUpParticulars = () => {
                                 item={item}
                                 handleChange={handleChange}
                                 handleSave={handleSave}
-                                handleSaveToStep6={handleSaveToStep6}
                                 handleSaveToStep7={handleSaveToStep7}
                                 loading={loading}
                                 singleReport={singleReport}
@@ -314,6 +302,10 @@ const FollowUpParticulars = () => {
                                 setViewFeedBackItem={setViewFeedBackItem}
                                 handleShowTestInNextYear={
                                   handleShowTestInNextYear
+                                }
+                                setShowSubmitDialog={setShowSubmitDialog}
+                                setShowCurrentSubmittedItem={
+                                  setShowCurrentSubmittedItem
                                 }
                               />
                             );
