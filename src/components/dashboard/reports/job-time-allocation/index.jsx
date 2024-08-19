@@ -101,6 +101,12 @@ const ResourceTimeAllocation = () => {
   }, [dispatch, data]);
 
   React.useEffect(() => {
+    if (resourceTimeAllocationJobs) {
+      setPage(1);
+    }
+  }, [resourceTimeAllocationJobs]);
+
+  React.useEffect(() => {
     let companyId = user[0]?.company.find(
       (all) => all?.companyName === company
     )?.id;

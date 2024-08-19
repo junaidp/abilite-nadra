@@ -75,6 +75,10 @@ const AuditPlanSummaryReport = () => {
   }, [dispatch, data]);
 
   React.useEffect(() => {
+    setPage(1);
+  }, [planSummaryReports]);
+
+  React.useEffect(() => {
     let companyId = user[0]?.company.find(
       (all) => all?.companyName === company
     )?.id;
@@ -155,9 +159,9 @@ const AuditPlanSummaryReport = () => {
               onChange={(event) => handleChange(event)}
             >
               <option value="">select rating</option>
-              <option value="high">High</option>
-              <option value="medium">Medium</option>
-              <option value="low">Low</option>
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
             </select>
           </div>
         </div>

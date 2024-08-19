@@ -97,6 +97,10 @@ const AuditExceptionReport = () => {
   }, [dispatch, data]);
 
   React.useEffect(() => {
+    setPage(1);
+  }, [auditExceptionJobs]);
+
+  React.useEffect(() => {
     let companyId = user[0]?.company.find(
       (all) => all?.companyName === company
     )?.id;
@@ -191,14 +195,24 @@ const AuditExceptionReport = () => {
               onChange={(event) => handleChange(event)}
             >
               <option value={-1}>All</option>
-              <option value={0}>0</option>
-              <option value={1}>1</option>
-              <option value={2}>2</option>
-              <option value={3}>3</option>
-              <option value={4}>4</option>
-              <option value={5}>5</option>
-              <option value={6}>6</option>
-              <option value={7}>7</option>
+              <option value={0}>
+                Step-0 (Without Submitted Exceptions, To Be Sent to Management
+                for Comments)
+              </option>
+              <option value={1}>
+                Step-1 (Submitted Exceptions, To Be Sent to Management for
+                Comments)
+              </option>
+              <option value={2}>Step-2 (Awaiting Management Comments)</option>
+              <option value={3}>Step-3 (Management Comments Received)</option>
+              <option value={4}>
+                Step-4 (Without Submitted, Exception To Be Implemented)
+              </option>
+              <option value={5}>
+                Step-5 (Submitted, Exception To Be Implemented)
+              </option>
+              <option value={6}>Step-6 (Implemented Exceptions)</option>
+              <option value={7}>Step-7 (Completed Observations)</option>
             </select>
           </div>
         </div>

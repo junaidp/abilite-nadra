@@ -105,17 +105,11 @@ const AuditableUnitRatingDialog = ({
                   <div className="row mb-3">
                     <div className="col-lg-12">
                       <label>Job Type</label>
-                      <select
-                        className="form-select"
-                        aria-label="Default select example"
-                        name="jobType"
+                      <input
+                        value={data?.jobType}
+                        className="form-control"
                         disabled
-                        readOnly
-                      >
-                        <option value="Compliance Checklist">
-                          Compliance Checklist
-                        </option>
-                      </select>
+                      />
                     </div>
                   </div>
                   <div className="row">
