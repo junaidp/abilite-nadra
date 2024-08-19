@@ -6,7 +6,7 @@ import moment from "moment";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { setupGetAllAuditEngagement } from "../../../global-redux/reducers/audit-engagement/slice";
-import { CircularProgress } from "@mui/material";
+import { Chip, CircularProgress } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -116,6 +116,7 @@ const AuditEngagement = () => {
                         <th>Planned Start Date </th>
                         <th>Planned End Date </th>
                         <th>Job Type </th>
+                        <th>Sub Location </th>
                         <th>Status </th>
                         <th>Action </th>
                       </tr>
@@ -152,6 +153,20 @@ const AuditEngagement = () => {
                                   : "null"}
                               </td>
                               <td>{item?.jobType ? item?.jobType : "null"}</td>
+                              <td>
+                                <div className="d-flex gap-2">
+                                  {item?.subLocationList?.map(
+                                    (location, index) => {
+                                      return (
+                                        <Chip
+                                          label={location?.description}
+                                          key={index}
+                                        />
+                                      );
+                                    }
+                                  )}
+                                </div>
+                              </td>
                               <td className="kink-off">
                                 <Link
                                   to={`/audit/kick-off?auditEngagementId=${item?.id}`}

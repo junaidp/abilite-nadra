@@ -61,23 +61,31 @@ const ObservationList = ({ setValues, values }) => {
         data-bs-parent="#accordionFlushExamp"
       >
         <div className="accordion-body">
-          {list?.map((observation, index) => {
-            return (
-              <div className="row mb-2" key={index}>
-                <p className="col-lg-10">{observation?.managementComments}</p>
-                <div className="form-check col-lg-2">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="flexCheckDefault"
-                    name="repeatJob"
-                    onChange={(event) => handleChange(event, observation?.id)}
-                  />
+          {list?.length === 0 ? (
+            <p>
+              No previous observation available. Please add previous observation
+              files from the settings section, and then you will be able to
+              create the previous observation.
+            </p>
+          ) : (
+            list?.map((observation, index) => {
+              return (
+                <div className="row mb-2" key={index}>
+                  <p className="col-lg-10">{observation?.managementComments}</p>
+                  <div className="form-check col-lg-2">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value=""
+                      id="flexCheckDefault"
+                      name="repeatJob"
+                      onChange={(event) => handleChange(event, observation?.id)}
+                    />
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          )}
         </div>
       </div>
     </div>
