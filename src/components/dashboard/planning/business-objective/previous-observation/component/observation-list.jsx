@@ -71,7 +71,7 @@ const ObservationList = ({ setValues, values }) => {
             list?.map((observation, index) => {
               return (
                 <div className="row mb-2" key={index}>
-                  <p className="col-lg-10">{observation?.managementComments}</p>
+                  <p className="col-lg-10">{observation?.observation}</p>
                   <div className="form-check col-lg-2">
                     <input
                       className="form-check-input"

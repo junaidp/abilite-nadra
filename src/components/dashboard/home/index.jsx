@@ -30,8 +30,20 @@ const DashboardHome = () => {
       )?.id;
       if (companyId) {
         dispatch(resetAuthValues());
-        dispatch(setupGetNavigation({ companyId: companyId, year: year }));
-        dispatch(setupGetData({ companyId: companyId, year: year }));
+        dispatch(
+          setupGetNavigation({
+            companyId: companyId,
+            year: year,
+            userId: user[0]?.id,
+          })
+        );
+        dispatch(
+          setupGetData({
+            companyId: companyId,
+            year: year,
+            userId: user[0]?.id,
+          })
+        );
       }
     }
   }, [dispatch]);

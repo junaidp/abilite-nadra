@@ -5,7 +5,7 @@ export const getNavigation = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.get(
-      `${baseUrl}/dashboard/getNavigation?companyId=${data?.companyId}&currentYear=${data?.year}`,
+      `${baseUrl}/dashboard/getNavigation?companyId=${data?.companyId}&currentYear=${data?.year}&userId=${data?.userId}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -22,7 +22,7 @@ export const getData = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.get(
-      `${baseUrl}/dashboard/getData?companyId=${data?.companyId}&currentYear=${data?.year}`,
+      `${baseUrl}/dashboard/getData?companyId=${data?.companyId}&currentYear=${data?.year}&userId=${data?.userId}`,
       {
         headers: {
           "Content-Type": "application/json",
