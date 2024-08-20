@@ -40,9 +40,9 @@ const NotFound = () => {
           </div>
 
           <footer className="home__footer">
-            <span>(554) 987-654</span>
+            <span>0092518480701</span>
             <span>|</span>
-            <span>hyphen@company.com</span>
+            <span>faheem.piracha@hyphenconsultancy.com</span>
           </footer>
         </section>
       </main>

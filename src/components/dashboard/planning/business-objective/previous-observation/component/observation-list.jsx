@@ -80,6 +80,7 @@ const ObservationList = ({ setValues, values }) => {
                       id="flexCheckDefault"
                       name="repeatJob"
                       onChange={(event) => handleChange(event, observation?.id)}
+                      style={{ border: "2px solid" }}
                     />
                   </div>
                 </div>

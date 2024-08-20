@@ -128,9 +128,8 @@ const PreviousObservation = ({ currentSettingOption }) => {
                 <thead className="bg-secondary text-white">
                   <tr>
                     <th className="w-80">Sr No.</th>
+                    <th>Observations</th>
                     <th>Management Comments</th>
-                    <th>Observation</th>
-                    <th>Jobs Created</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -140,9 +139,8 @@ const PreviousObservation = ({ currentSettingOption }) => {
                       return (
                         <tr key={index}>
                           <td>{index + 1}</td>
-                          <td>{item?.managementComments}</td>
                           <td>{item?.observation}</td>
-                          <td>{item?.jobCreated === false ? "No" : "Yess"}</td>
+                          <td>{item?.managementComments}</td>
                         </tr>
                       );
                     })}
