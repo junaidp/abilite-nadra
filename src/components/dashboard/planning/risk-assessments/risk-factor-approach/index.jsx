@@ -209,7 +209,7 @@ const RiskFactorApproach = () => {
             </div>
           )}
 
-          <div className="section-header my-3 row px-2">
+          <div className="section-header my-3 row">
             <div className="align-items-center col-lg-10 text-start d-flex">
               <a
                 className="text-primary"
@@ -241,7 +241,7 @@ const RiskFactorApproach = () => {
               </div>
             )}
           </div>
-          <div className="container">
+          <div>
             <div className="row mb-5">
               <div className="col-lg-12">
                 {data?.riskAssessmentList.length !== 0 ? (

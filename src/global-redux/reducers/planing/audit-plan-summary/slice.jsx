@@ -126,7 +126,7 @@ export const slice = createSlice({
       .addCase(setupUpdateAuditPlanSummary.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupUpdateAuditPlanSummary.fulfilled, (state, { payload }) => {
+      .addCase(setupUpdateAuditPlanSummary.fulfilled, (state) => {
         state.loading = false;
         state.auditPlanSummaryAddSuccess = true;
         toast.success("Audit Plan Summary Updated Successfully");

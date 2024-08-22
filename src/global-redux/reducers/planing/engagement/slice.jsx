@@ -182,7 +182,7 @@ export const slice = createSlice({
         state.allEngagements = sortedArray || [];
         state.loading = false;
       })
-      .addCase(setupGetAllEngagements.rejected, (state, { payload }) => {
+      .addCase(setupGetAllEngagements.rejected, (state) => {
         state.loading = false;
       });
 
@@ -323,14 +323,11 @@ export const slice = createSlice({
       .addCase(setupSaveMapProcessBusinessObjective.pending, (state) => {
         state.loading = true;
       })
-      .addCase(
-        setupSaveMapProcessBusinessObjective.fulfilled,
-        (state, { payload }) => {
-          state.loading = false;
-          state.engagementAddSuccess = true;
-          toast.success("Business Objective Map Process Updated Successfully");
-        }
-      )
+      .addCase(setupSaveMapProcessBusinessObjective.fulfilled, (state) => {
+        state.loading = false;
+        state.engagementAddSuccess = true;
+        toast.success("Business Objective Map Process Updated Successfully");
+      })
       .addCase(
         setupSaveMapProcessBusinessObjective.rejected,
         (state, { payload }) => {
@@ -433,14 +430,11 @@ export const slice = createSlice({
       .addCase(setupUpdateBusinessMinuteMeeting.pending, (state) => {
         state.loading = true;
       })
-      .addCase(
-        setupUpdateBusinessMinuteMeeting.fulfilled,
-        (state, { payload }) => {
-          state.loading = false;
-          toast.success("Meeting Updated Successfully");
-          state.engagementAddSuccess = true;
-        }
-      )
+      .addCase(setupUpdateBusinessMinuteMeeting.fulfilled, (state) => {
+        state.loading = false;
+        toast.success("Meeting Updated Successfully");
+        state.engagementAddSuccess = true;
+      })
       .addCase(
         setupUpdateBusinessMinuteMeeting.rejected,
         (state, { payload }) => {
@@ -507,7 +501,7 @@ export const slice = createSlice({
       )
       .addCase(
         setupUpdateBusinessObjectiveAndMapProcessSpecialProjectOrAudit.fulfilled,
-        (state, { payload }) => {
+        (state) => {
           state.loading = false;
           toast.success(
             "Special Project Audit Map Process Updated Successfully"

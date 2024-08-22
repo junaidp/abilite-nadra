@@ -91,7 +91,7 @@ export const slice = createSlice({
       .addCase(setupAddProcess.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupAddProcess.fulfilled, (state, action) => {
+      .addCase(setupAddProcess.fulfilled, (state) => {
         state.loading = false;
         state.processAddSuccess = true;
         toast.success("Process Added Successfully");

@@ -208,7 +208,7 @@ export const slice = createSlice({
       )
       .addCase(
         setupUpdateJobSehedulingTimeAndDateAllocation.fulfilled,
-        (state, { payload }) => {
+        (state) => {
           state.loading = false;
           toast.success("Time and date allocation updated successfully");
         }
@@ -234,7 +234,7 @@ export const slice = createSlice({
       )
       .addCase(
         setupUpdateJobSchedulingNumberOfResourcesRequired.fulfilled,
-        (state, { payload }) => {
+        (state) => {
           state.loading = false;
           toast.success("Resource required updated successfully");
         }
@@ -257,7 +257,7 @@ export const slice = createSlice({
       })
       .addCase(
         setUpupdateJobSchedulingResourcesAllocation.fulfilled,
-        (state, { payload }) => {
+        (state) => {
           state.loading = false;
           toast.success("Resource allocation updated successfully");
         }

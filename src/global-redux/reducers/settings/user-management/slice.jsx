@@ -37,7 +37,7 @@ export const slice = createSlice({
   name: "userManagement",
   initialState,
   reducers: {
-    resetAddUserSuccess: (state, action) => {
+    resetAddUserSuccess: (state) => {
       state.addUserSuccess = false;
     },
   },
@@ -47,7 +47,7 @@ export const slice = createSlice({
       .addCase(setupAddUser.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupAddUser.fulfilled, (state, action) => {
+      .addCase(setupAddUser.fulfilled, (state) => {
         state.loading = false;
         state.addUserSuccess = true;
         toast.success("User Added Successfully");
@@ -72,7 +72,7 @@ export const slice = createSlice({
       .addCase(setupUpdateUser.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupUpdateUser.fulfilled, (state, action) => {
+      .addCase(setupUpdateUser.fulfilled, (state) => {
         state.loading = false;
         state.addUserSuccess = true;
         toast.success("User Updated Successfully");

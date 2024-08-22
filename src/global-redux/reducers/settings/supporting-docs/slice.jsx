@@ -49,7 +49,7 @@ export const slice = createSlice({
       .addCase(setupUploadFile.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupUploadFile.fulfilled, (state, action) => {
+      .addCase(setupUploadFile.fulfilled, (state) => {
         state.loading = false;
         state.fileAddSuccess = true;
         toast.success("File Added Successfully");
@@ -67,7 +67,7 @@ export const slice = createSlice({
       .addCase(setupUpdateFile.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupUpdateFile.fulfilled, (state, action) => {
+      .addCase(setupUpdateFile.fulfilled, (state) => {
         state.loading = false;
         state.fileAddSuccess = true;
         toast.success("File Updated Successfully");

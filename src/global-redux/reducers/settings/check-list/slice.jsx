@@ -108,7 +108,7 @@ export const slice = createSlice({
         state.currentSubCheckListItem = {};
         toast.success("Check List Added Successfully");
       })
-      .addCase(setupAddCheckList.rejected, (state, { payload }) => {
+      .addCase(setupAddCheckList.rejected, (_, { payload }) => {
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
         } else {
@@ -163,7 +163,7 @@ export const slice = createSlice({
         state.checkListAddSuccess = true;
         toast.success("Check List Remarks Edited Successfully");
       })
-      .addCase(setupUpdateCheckListRemarks.rejected, (state, { payload }) => {
+      .addCase(setupUpdateCheckListRemarks.rejected, (_, { payload }) => {
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
         } else {
@@ -256,7 +256,7 @@ export const slice = createSlice({
         state.currentSubCheckListItem = {};
         toast.success("Check List Item  Deleted Successfully");
       })
-      .addCase(setupDeleteSubCheckList.rejected, (state, { payload }) => {
+      .addCase(setupDeleteSubCheckList.rejected, (_, { payload }) => {
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
         } else {

@@ -407,7 +407,7 @@ export const slice = createSlice({
       .addCase(setupUpdateExtraField.pending, (state) => {
         state.createExtraFieldsLoading = true;
       })
-      .addCase(setupUpdateExtraField.fulfilled, (state, { payload }) => {
+      .addCase(setupUpdateExtraField.fulfilled, (state) => {
         state.createExtraFieldsLoading = false;
         toast.success("Extra Field Updated Successfully");
       })

@@ -118,7 +118,7 @@ const BusinessObjective = () => {
         <section className="faq-section ">
           <div data-aos="fade-up">
             <header className="section-header my-3  text-start d-flex align-items-center justify-content-between">
-              <div className="mb-0 heading">Business Objective</div>
+              <div className="mb-0 heading">Audit Universe</div>
               <div className="">
                 <div
                   className={`btn btn-labeled btn-primary px-3 shadow ${
@@ -171,8 +171,8 @@ const BusinessObjective = () => {
                     <thead className="bg-secondary text-white">
                       <tr>
                         <th className="w-80">Sr No.</th>
-                        <th>Engagement Name</th>
-                        <th>Nature Through</th>
+                        <th>Audit Universe</th>
+                        <th>Identities</th>
                         <th>Initiated By</th>
                         <th>Actions</th>
                       </tr>
@@ -186,7 +186,7 @@ const BusinessObjective = () => {
                         </tr>
                       ) : allEngagements?.length === 0 ? (
                         <tr>
-                          <td className="w-300">No Engagement To Show</td>
+                          <td className="w-300">No Audit Universe To Show</td>
                         </tr>
                       ) : (
                         allEngagements.map((item, index) => {

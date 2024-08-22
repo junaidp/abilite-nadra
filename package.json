@@ -1,7 +1,6 @@
 {
   "name": "ablite",
   "private": true,
-  "homepage": "http://localhost:8080/abilite",
   "version": "0.0.0",
   "type": "module",
   "scripts": {

@@ -354,10 +354,10 @@ export const slice = createSlice({
   name: "auditEngagement",
   initialState,
   reducers: {
-    resetAuditEngagementAddSuccess: (state, action) => {
+    resetAuditEngagementAddSuccess: (state) => {
       state.auditEngagementAddSuccess = false;
     },
-    resetAuditEngagementObservationAddSuccess: (state, action) => {
+    resetAuditEngagementObservationAddSuccess: (state) => {
       state.auditEngagementObservationAddSuccess = false;
     },
     handleCleanUp: (state) => {
@@ -453,7 +453,7 @@ export const slice = createSlice({
       .addCase(setupSaveAuditNotification.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupSaveAuditNotification.fulfilled, (state, { payload }) => {
+      .addCase(setupSaveAuditNotification.fulfilled, (state) => {
         state.loading = false;
         state.auditEngagementAddSuccess = true;
         toast.success("Audit notification saved successfully");

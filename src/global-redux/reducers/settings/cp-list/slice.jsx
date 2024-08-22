@@ -39,7 +39,7 @@ export const slice = createSlice({
   name: "cpList",
   initialState,
   reducers: {
-    resetCpListAddSuccess: (state, action) => {
+    resetCpListAddSuccess: (state) => {
       state.cpListAddSuccess = false;
     },
   },
@@ -67,7 +67,7 @@ export const slice = createSlice({
       .addCase(setupAddCPList.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupAddCPList.fulfilled, (state, { payload }) => {
+      .addCase(setupAddCPList.fulfilled, (state) => {
         state.loading = false;
         state.cpListAddSuccess = true;
         toast.success("Cp List Added Successfully");
@@ -86,7 +86,7 @@ export const slice = createSlice({
       .addCase(setupUpdateCPList.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupUpdateCPList.fulfilled, (state, { payload }) => {
+      .addCase(setupUpdateCPList.fulfilled, (state) => {
         state.loading = false;
         state.cpListAddSuccess = true;
         toast.success("CP List Updated Successfully");

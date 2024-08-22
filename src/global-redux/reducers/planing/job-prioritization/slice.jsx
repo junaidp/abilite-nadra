@@ -105,7 +105,7 @@ export const slice = createSlice({
       .addCase(setupUpdateJobPrioritization.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupUpdateJobPrioritization.fulfilled, (state, { payload }) => {
+      .addCase(setupUpdateJobPrioritization.fulfilled, (state) => {
         state.loading = false;
         toast.success("Job Prioritizing Updated Successfully");
         state.jobPrioritizationAddSuccess = true;

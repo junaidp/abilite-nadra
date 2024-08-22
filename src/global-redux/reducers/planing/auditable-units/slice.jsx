@@ -77,7 +77,7 @@ export const slice = createSlice({
       .addCase(setupAddAuditableUnit.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupAddAuditableUnit.fulfilled, (state, { payload }) => {
+      .addCase(setupAddAuditableUnit.fulfilled, (state) => {
         state.loading = false;
         state.auditableUnitAddSuccess = true;
         toast.success("Auditable Unit Added Successfully");

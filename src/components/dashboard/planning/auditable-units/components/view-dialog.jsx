@@ -96,9 +96,6 @@ const AuditableUnitRatingDialog = ({
                         readOnly
                         maxLength="500"
                       ></textarea>
-                      <p className="word-limit-info label-text mb-2">
-                        Maximum 500 characters
-                      </p>
                     </div>
                   </div>
 
@@ -112,47 +109,58 @@ const AuditableUnitRatingDialog = ({
                       />
                     </div>
                   </div>
-                  <div className="row">
-                    <div className="col-lg-6">
-                      <label>Process</label>
-                      <select
-                        className="form-select"
-                        aria-label="Default select example"
-                        value={processId}
-                        disabled
-                        readOnly
-                      >
-                        <option value="">Select Process</option>
-                        {allProcess?.map((item, index) => {
-                          return (
-                            <option value={item?.id} key={index}>
-                              {item?.description}
-                            </option>
-                          );
-                        })}
-                      </select>
+                  {data?.jobType === "Previous Observation" ? (
+                    <div className="row">
+                      <div className="col-lg-6">
+                        <label>Process</label>
+                        <input
+                          value="Previous Observation Process"
+                          className="form-control"
+                          readOnly
+                          disabled
+                        />
+                      </div>
+                      <div className="col-lg-6">
+                        <label>Sub Process</label>
+                        <input
+                          value="Previous Observation Sub Process"
+                          className="form-control"
+                          readOnly
+                          disabled
+                        />
+                      </div>
                     </div>
+                  ) : (
+                    <div className="row">
+                      <div className="col-lg-6">
+                        <label>Process</label>
+                        <input
+                          value={
+                            allProcess?.find(
+                              (process) => process?.id === processId
+                            )?.description
+                          }
+                          className="form-control"
+                          readOnly
+                          disabled
+                        />
+                      </div>
 
-                    <div className="col-lg-6">
-                      <label>Sub-Process</label>
-                      <select
-                        className="form-select"
-                        aria-label="Default select example"
-                        value={subProcessId}
-                        disabled
-                        readOnly
-                      >
-                        <option value="">Select SubProcess</option>
-                        {allSubProcess?.map((item, index) => {
-                          return (
-                            <option key={index} value={item?.id}>
-                              {item?.description}
-                            </option>
-                          );
-                        })}
-                      </select>
+                      <div className="col-lg-6">
+                        <label>Sub Process</label>
+                        <input
+                          value={
+                            allSubProcess?.find(
+                              (subProcess) => subProcess?.id === subProcessId
+                            )?.description
+                          }
+                          className="form-control"
+                          readOnly
+                          disabled
+                        />
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               )
             )}

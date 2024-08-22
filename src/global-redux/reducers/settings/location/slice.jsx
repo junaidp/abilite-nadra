@@ -67,7 +67,7 @@ export const slice = createSlice({
   name: "location",
   initialState,
   reducers: {
-    resetLocationAddSuccess: (state, action) => {
+    resetLocationAddSuccess: (state) => {
       state.locationAddSuccess = false;
     },
   },
@@ -77,7 +77,7 @@ export const slice = createSlice({
       .addCase(setupAddLocation.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupAddLocation.fulfilled, (state, { payload }) => {
+      .addCase(setupAddLocation.fulfilled, (state) => {
         state.loading = false;
         state.locationAddSuccess = true;
         toast.success("Location Added Successfully");
@@ -114,7 +114,7 @@ export const slice = createSlice({
       .addCase(setupUpdateLocation.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupUpdateLocation.fulfilled, (state, { payload }) => {
+      .addCase(setupUpdateLocation.fulfilled, (state) => {
         state.loading = false;
         state.locationAddSuccess = true;
         toast.success("Location Updated Successfully");
@@ -133,7 +133,7 @@ export const slice = createSlice({
       .addCase(setupSaveSubLocation.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupSaveSubLocation.fulfilled, (state, { payload }) => {
+      .addCase(setupSaveSubLocation.fulfilled, (state) => {
         state.loading = false;
         toast.success("Sub Location Added Successfully");
         state.locationAddSuccess = true;
@@ -152,7 +152,7 @@ export const slice = createSlice({
       .addCase(setupUpdateSubLocation.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupUpdateSubLocation.fulfilled, (state, { payload }) => {
+      .addCase(setupUpdateSubLocation.fulfilled, (state) => {
         state.loading = false;
         toast.success("Sub Location Updated Successfully");
         state.locationAddSuccess = true;
@@ -171,7 +171,7 @@ export const slice = createSlice({
       .addCase(setupDeleteSubLocation.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupDeleteSubLocation.fulfilled, (state, { payload }) => {
+      .addCase(setupDeleteSubLocation.fulfilled, (state) => {
         state.loading = false;
         state.locationAddSuccess = true;
         toast.success("Sub Location Deleted Successfully");

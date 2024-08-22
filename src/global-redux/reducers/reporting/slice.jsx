@@ -393,7 +393,7 @@ export const {
   resetReports,
   resetManagementAuditeeReportingAddSuccess,
   resetReportingFileUploadAddSuccess,
-  resetFollowUpSubmittedAddSuccess
+  resetFollowUpSubmittedAddSuccess,
 } = slice.actions;
 
 export default slice.reducer;
