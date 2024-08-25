@@ -100,7 +100,7 @@ const UserProfileDialog = ({ setUpdateUserDialog }) => {
     <div className="px-4 py-4">
       <form onSubmit={handleSubmit}>
         <div className="row mb-4 flex items-center">
-          <div className="col-lg-2 label-text ">Password:</div>
+          <div className="col-lg-2 label-text ">Current Password:</div>
           <div className="col-lg-8">
             <div className="form-group">
               <input

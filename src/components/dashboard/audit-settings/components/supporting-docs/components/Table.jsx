@@ -1,23 +1,8 @@
 import React from "react";
 import { CircularProgress } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
-import Button from "@mui/material/Button";
-import { faUpload } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { styled } from "@mui/material/styles";
 import DeleteFileDialog from "./DeleteDailog";
 import { handleDownload } from "../../../../../../constants/index";
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: 1,
-  overflow: "hidden",
-  position: "absolute",
-  bottom: 0,
-  left: 1,
-  whiteSpace: "nowrap",
-  width: 1,
-});
 
 const Table = ({
   userRole,
@@ -84,7 +69,7 @@ const Table = ({
                               className="fa fa-download f-18  cursor-pointer"
                               onClick={() =>
                                 handleDownload({
-                                  base64String: file?.fileData,
+                                  base64String: file?.fileBufferblob,
                                   fileName: file?.fileName,
                                 })
                               }
