@@ -171,7 +171,7 @@ const PlanningReport = () => {
                   </tr>
                 ) : allReports?.length === 0 ? (
                   <tr>
-                    <td className="w-300">No Reports To Show!</td>
+                    <td className="w-300">No Planning Summary Reports To Show.</td>
                   </tr>
                 ) : (
                   allReports

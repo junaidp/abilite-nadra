@@ -213,7 +213,7 @@ const ResourceTimeAllocation = () => {
                   </tr>
                 ) : resourceTimeAllocationJobs?.length === 0 ? (
                   <tr>
-                    <td className="w-300">No Jobs To Show!</td>
+                    <td className="w-300">No Job Time Allocations To Show.</td>
                   </tr>
                 ) : (
                   resourceTimeAllocationJobs

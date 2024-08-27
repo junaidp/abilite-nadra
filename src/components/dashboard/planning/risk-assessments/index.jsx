@@ -123,7 +123,7 @@ const RiskAssessments = () => {
                   </tr>
                 ) : allRiskAssessments?.length == 0 ? (
                   <tr>
-                    <td className="w-300">No Risk Assessment to show</td>
+                    <td className="w-300">No Risk Assessments To Show.</td>
                   </tr>
                 ) : (
                   allRiskAssessments?.map((item, index) => {
@@ -133,7 +133,11 @@ const RiskAssessments = () => {
                         <td>
                           {item?.businessObjectiveMapProcess?.description || ""}
                         </td>
-                        <td>{item?.riskApproach}</td>
+                        <td>
+                          {item?.riskApproach === "Risk Factor Approach"
+                            ? "Specific Risk Approach"
+                            : item?.riskApproach}
+                        </td>
                         <td>{item?.riskRating}</td>
                         <td className="text-center w-200">
                           <div

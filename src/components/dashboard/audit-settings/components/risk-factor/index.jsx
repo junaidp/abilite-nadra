@@ -147,7 +147,7 @@ const RiskFactor = ({ userHierarchy, userRole, currentSettingOption }) => {
               <CircularProgress />
             ) : allRiskFactors?.length === 0 ||
               allRiskFactors[0]?.error === "Not Found" ? (
-              <p>No Risk Factors To Show</p>
+              <p>No Risk Factors To Show.</p>
             ) : (
               <table className="table table-bordered  table-hover rounded">
                 <thead className="bg-secondary text-white">

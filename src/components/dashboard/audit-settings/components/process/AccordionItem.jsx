@@ -125,7 +125,7 @@ const AccordionItem = ({
                       {allSubProcess?.length === 0 ||
                       allSubProcess[0]?.error === "Not Found" ? (
                         <tr>
-                          <td className="w-300">No sub-process to show!</td>
+                          <td className="w-300">No Sub Process To Show.</td>
                         </tr>
                       ) : (
                         allSubProcess?.map((subItem, ind) => {

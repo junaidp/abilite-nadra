@@ -299,7 +299,7 @@ const AuditPlanSummary = () => {
             <div className="col-lg-12">
               <div className="table-responsive">
                 {data?.length === 0 ? (
-                  <p>No data to show!</p>
+                  <p>No Audit Plan Summary To Show.</p>
                 ) : (
                   <table className="table table-bordered table-hover rounded equal-columns">
                     <thead>

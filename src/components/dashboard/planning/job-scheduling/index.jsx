@@ -149,7 +149,7 @@ const JobScheduling = () => {
                   </tr>
                 ) : allJobScheduling?.length === 0 ? (
                   <tr>
-                    <td className="w-300">No data to show</td>
+                    <td className="w-300">No Job Schedulings To Show.</td>
                   </tr>
                 ) : (
                   allJobScheduling

@@ -178,9 +178,7 @@ export const slice = createSlice({
         (state, { payload }) => {
           state.totalNoOfRecords = payload?.message;
           state.loading = false;
-          state.allInternalAuditReports = payload?.data || [
-            { error: "Not Found" },
-          ];
+          state.allInternalAuditReports = payload?.data || [];
         }
       )
       .addCase(setupGetAllInternalAuditReports.rejected, (state, action) => {

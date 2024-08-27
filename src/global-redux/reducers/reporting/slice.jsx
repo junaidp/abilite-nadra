@@ -150,7 +150,7 @@ export const slice = createSlice({
       .addCase(setupGetAllReporting.fulfilled, (state, { payload }) => {
         state.totalNoOfRecords = payload?.message;
         state.loading = false;
-        state.allReporting = payload?.data || [{ error: "Not Found" }];
+        state.allReporting = payload?.data || [];
       })
       .addCase(setupGetAllReporting.rejected, (state, { payload }) => {
         state.loading = false;
@@ -263,7 +263,7 @@ export const slice = createSlice({
       .addCase(setupGetAllFollowUp.fulfilled, (state, { payload }) => {
         state.totalNoOfRecords = payload?.message;
         state.loading = false;
-        state.allFollowUp = payload?.data || [{ error: "Not Found" }];
+        state.allFollowUp = payload?.data || [];
       })
       .addCase(setupGetAllFollowUp.rejected, (state, { payload }) => {
         state.loading = false;

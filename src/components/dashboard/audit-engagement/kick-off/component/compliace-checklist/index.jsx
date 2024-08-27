@@ -1,27 +1,9 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import axios from "axios";
-import { toast } from "react-toastify";
 import TableRow from "./components/TableRow";
-import { styled } from "@mui/material/styles";
-import Button from "@mui/material/Button";
-import { faUpload } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { baseUrl } from "../../../../../../constants/index";
 import ApproveDialog from "./components/ApproveDialog";
 import SubmitDialog from "./components/submit-dialog";
-
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: 1,
-  overflow: "hidden",
-  position: "absolute",
-  bottom: 0,
-  left: 1,
-  whiteSpace: "nowrap",
-  width: 1,
-});
 
 const ComplianceCheckList = ({
   setShowComplianceCheckListDialog,
@@ -29,17 +11,14 @@ const ComplianceCheckList = ({
   setComplianceCheckListMainId,
   singleAuditEngagementObject,
 }) => {
-  const fileInputRef = React.useRef(null);
   const { loading } = useSelector((state) => state?.auditEngagement);
+  const { user } = useSelector((state) => state?.auth);
   const [currentButtonId, setCurrentButtonId] = React.useState("");
   const [showSubmitDialog, setShowSubmitDialog] = React.useState(false);
-  const [selectedFile, setSelectedFile] = React.useState(null);
-  const [showUpdateButton, setShowUpdateButton] = React.useState(true);
   const [showApproveDialog, setShowApproveDialog] = React.useState(false);
   const [currentApproveItem, setCurrentApproveItem] = React.useState({});
   const [currentSubmittedItem, setCurrentSubmittedItem] = React.useState({});
 
-  const { user } = useSelector((state) => state?.auth);
   function checkStaus(item) {
     let submit = true;
     item?.checklistObservationsList?.forEach((all) => {
@@ -61,6 +40,7 @@ const ComplianceCheckList = ({
     setCurrentSubmittedItem(item);
     setShowSubmitDialog(true);
   }
+
   function handleApprove(item) {
     setCurrentApproveItem(item);
     setShowApproveDialog(true);
@@ -72,57 +52,6 @@ const ComplianceCheckList = ({
       "_blank"
     );
   };
-
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setSelectedFile(file);
-    }
-  };
-
-  const onApiCall = async (file) => {
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-      await axios.post(
-        `${baseUrl}/auditEngagement/auditStepChecklist/offlineUpdate`,
-        formData
-      );
-      toast.success("File Updated Successfully");
-      setSelectedFile(null);
-    } catch (error) {
-      if (error?.message) {
-        toast.error(error.message);
-      } else {
-        toast.error("An Error has occurred");
-      }
-    }
-  };
-
-  const handleFileUpdate = () => {
-    if (selectedFile) {
-      onApiCall(selectedFile);
-    } else {
-      toast.error("No file selected.");
-    }
-  };
-
-  React.useEffect(() => {
-    if (
-      singleAuditEngagementObject?.auditStepChecklistList &&
-      singleAuditEngagementObject?.auditStepChecklistList?.length !== 0
-    ) {
-      const containsSubmittedFalse =
-        singleAuditEngagementObject?.auditStepChecklistList.some(
-          (item) => !item.submitted
-        );
-      if (containsSubmittedFalse) {
-        setShowUpdateButton(true);
-      } else {
-        setShowUpdateButton(false);
-      }
-    }
-  }, [singleAuditEngagementObject]);
 
   return (
     <div className="accordion-item">
@@ -174,38 +103,6 @@ const ComplianceCheckList = ({
         data-bs-parent="#accordionFlushExample"
       >
         <div className="accordion-body">
-          {currentAuditEngagement?.auditStepChecklistList?.length !== 0 &&
-            showUpdateButton === true && (
-              <>
-                <div className="row">
-                  <div className="mx-2 mb-2 col-lg-3">
-                    <Button
-                      component="label"
-                      role={undefined}
-                      variant="contained"
-                      tabIndex={-1}
-                      startIcon={<FontAwesomeIcon icon={faUpload} />}
-                      ref={fileInputRef}
-                      onChange={handleFileChange}
-                    >
-                      File
-                      <VisuallyHiddenInput type="file" />
-                    </Button>
-                    <Button
-                      component="label"
-                      className="mx-2"
-                      onClick={handleFileUpdate}
-                    >
-                      Update File
-                    </Button>
-                  </div>
-                </div>
-                <p className="mx-2">
-                  {selectedFile?.name ? selectedFile?.name : "Select file"}
-                </p>
-              </>
-            )}
-
           <div className="container">
             <div className="row">
               <div className="col-lg-12">

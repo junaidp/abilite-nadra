@@ -91,7 +91,7 @@ const PreviousObservation = ({ currentSettingOption }) => {
                 onChange={handleFileChange}
               />
               <p className="mb-0">
-                Drag your files here or click in this area.
+              Click in this area.
               </p>
             </form>
           </div>
@@ -122,7 +122,7 @@ const PreviousObservation = ({ currentSettingOption }) => {
             {loading ? (
               <CircularProgress />
             ) : previousObservations?.length === 0 || !previousObservations ? (
-              <p>No Observations To Show</p>
+              <p>No Observations To Show.</p>
             ) : (
               <table className="table table-bordered  table-hover rounded">
                 <thead className="bg-secondary text-white">

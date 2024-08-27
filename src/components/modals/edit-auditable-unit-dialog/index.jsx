@@ -136,7 +136,7 @@ const AuditableUnitRatingDialog = ({
           <div className="col-lg-12">
             <div className="row mb-3">
               <div className="col-lg-12">
-                <div className="heading">Auditable Units</div>
+                <div className="heading">Audit Job</div>
               </div>
             </div>
 

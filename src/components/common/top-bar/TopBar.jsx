@@ -1,6 +1,6 @@
 import React from "react";
 import "./TopBar.css";
-import user1 from "../../../assets/user-1.jpg";
+import user1 from "../../../assets/person.png";
 import logo from "../../../assets/light-logo-.png";
 import { Link } from "react-router-dom";
 import { changeShowSidebar } from "../../../global-redux/reducers/common/slice";
@@ -11,13 +11,14 @@ import {
   changeAuthUser,
   setupLogoutUser,
 } from "../../../global-redux/reducers/auth/slice";
-import nadraLogo from "../../../assets/logo.png";
+import nadraLogo from "../../../assets/hyphen.jpeg";
 import {
   changeCompany,
   changeYear,
 } from "../../../global-redux/reducers/common/slice";
 import { faIdBadge } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Tooltip from "@mui/material/Tooltip";
 
 const TopBar = () => {
   const [showUserProfile, setShowUserProfile] = React.useState(false);
@@ -165,28 +166,33 @@ const TopBar = () => {
                 )}
 
               <li className="nav-item dropdown">
-                <a
-                  className="nav-link pe-0"
-                  id="drop1"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                  onClick={() => {
-                    setShowUserProfile((pre) => !pre);
-                  }}
-                  ref={userRef}
+                <Tooltip
+                  title={`Click To See More(${user[0]?.userId?.name})`}
+                  placement="top"
                 >
-                  <div className="d-flex align-items-center">
-                    <div className="user-profile-img w-32">
-                      <img
-                        src={user1}
-                        className="rounded-circle"
-                        width="35"
-                        height="35"
-                        alt=""
-                      />
+                  <a
+                    className="nav-link pe-0"
+                    id="drop1"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    onClick={() => {
+                      setShowUserProfile((pre) => !pre);
+                    }}
+                    ref={userRef}
+                  >
+                    <div className="d-flex align-items-center">
+                      <div className="user-profile-img w-32">
+                        <img
+                          src={user1}
+                          className="rounded-circle"
+                          width="35"
+                          height="35"
+                          alt=""
+                        />
+                      </div>
                     </div>
-                  </div>
-                </a>
+                  </a>
+                </Tooltip>
                 {showUserProfile && (
                   <div
                     className="px-4 content-dd dropdown-menu-end  dropdown-menu-animate-up user-profile-dropdown absolute left-300"

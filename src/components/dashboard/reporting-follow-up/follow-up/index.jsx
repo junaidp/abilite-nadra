@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { setupGetAllFollowUp } from "../../../../global-redux/reducers/reporting/slice";
 import { useDispatch, useSelector } from "react-redux";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Chip } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -111,7 +111,7 @@ const FollowUp = () => {
                 <CircularProgress />
               ) : allFollowUp?.length === 0 ||
                 allFollowUp[0]?.error === "Not Found" ? (
-                <p>No Follow Up to Show</p>
+                <p>No Follow Ups To Show.</p>
               ) : (
                 <table className="table table-bordered  table-hover rounded">
                   <thead>
@@ -120,6 +120,8 @@ const FollowUp = () => {
                       <th>Particulars</th>
                       <th>Status</th>
                       <th>No. of Observations</th>
+                      <th>Locations</th>
+                      <th>Sub Locations</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -144,6 +146,30 @@ const FollowUp = () => {
                           </td>
                           <td>{handleCalculateStatus(item)}</td>
                           <td>{item?.reportingList?.length}</td>
+                          <td>
+                            <div className="d-flex gap-1">
+                              {[
+                                ...new Set(
+                                  item?.subLocationList?.map(
+                                    (item) => item?.locationid?.description
+                                  )
+                                ),
+                              ]?.map((locationItem, index) => {
+                                return (
+                                  <Chip label={locationItem} key={index} />
+                                );
+                              })}
+                            </div>
+                          </td>
+                          <td>
+                            <div className="d-flex gap-1">
+                              {item?.subLocationList?.map((item, index) => {
+                                return (
+                                  <Chip label={item?.description} key={index} />
+                                );
+                              })}
+                            </div>
+                          </td>
                           <td>
                             <i
                               onClick={() =>

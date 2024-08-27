@@ -327,7 +327,7 @@ const PDFGenerator = ({ reportObject }) => {
             </Text>
             <View style={styles.overviewFields}>
               {reportObject?.consolidatedIARKeyFindingsList?.map((list) =>
-                list?.reportingList?.map((singleItem,index) => {
+                list?.reportingList?.map((singleItem, index) => {
                   return (
                     <Text style={styles.h4} key={index}>
                       {singleItem?.observationTitle.slice(0, 40)}...
@@ -341,13 +341,15 @@ const PDFGenerator = ({ reportObject }) => {
               -------------------------------------------------
             </Text>
             <View style={styles.overviewFields}>
-              {reportObject?.intAuditExtraFieldsList?.map((singleItem,index) => {
-                return (
-                  <Text style={styles.h4} key={index}>
-                    {singleItem?.heading.slice(0, 40)}...
-                  </Text>
-                );
-              })}
+              {reportObject?.intAuditExtraFieldsList?.map(
+                (singleItem, index) => {
+                  return (
+                    <Text style={styles.h4} key={index}>
+                      {singleItem?.heading.slice(0, 40)}...
+                    </Text>
+                  );
+                }
+              )}
             </View>
             <Text style={styles.h4}>
               ANNEXURE -------------------------------------------------------
@@ -405,7 +407,7 @@ const PDFGenerator = ({ reportObject }) => {
                       (item) => item?.locationid?.description
                     )
                   ),
-                ]?.map((locationItem,index) => {
+                ]?.map((locationItem, index) => {
                   return (
                     <Text style={styles.reportInfoSubTitle} key={index}>
                       {locationItem}
@@ -417,7 +419,7 @@ const PDFGenerator = ({ reportObject }) => {
             <View style={styles.reportInfoViewItem}>
               <Text style={styles.reportInfoTitle}>Sub Location:</Text>
               <View style={styles.locationWrap}>
-                {reportObject?.subLocationList?.map((item,index) => {
+                {reportObject?.subLocationList?.map((item, index) => {
                   return (
                     <Text style={styles.reportInfoSubTitle} key={index}>
                       {item?.description}
@@ -431,12 +433,16 @@ const PDFGenerator = ({ reportObject }) => {
         {/* Page 3 */}
         <View style={styles.page2} break>
           <Text style={styles.contents}>EXECUTIVE SUMMARY </Text>
-          <Html>{reportObject?.executiveSummary}</Html>
+          <Html style={styles.singleFindSummaryPara}>
+            {reportObject?.executiveSummary}
+          </Html>
         </View>
         {/* Page 4 */}
         <View style={styles.page2} break>
           <Text style={styles.contents}>AUDIT PURPOSE </Text>
-          <Html>{reportObject?.auditPurpose}</Html>
+          <Html style={styles.singleFindSummaryPara}>
+            {reportObject?.auditPurpose}
+          </Html>
         </View>
         {/* Page 5 */}
         <View style={styles.page2} break>
@@ -448,7 +454,9 @@ const PDFGenerator = ({ reportObject }) => {
               return (
                 <View key={index}>
                   <Text style={styles.indexNumber}> Finding {index + 1}</Text>
-                  <Html>{list?.summaryOfKeyFinding}</Html>
+                  <Html style={styles.singleFindSummaryPara}>
+                    {list?.summaryOfKeyFinding}
+                  </Html>
                 </View>
               );
             })
@@ -473,7 +481,9 @@ const PDFGenerator = ({ reportObject }) => {
                         <Text style={styles.singleFindSummaryHeader}>
                           Consolidated Observation
                         </Text>
-                        <Html>{list?.summaryOfKeyFinding}</Html>
+                        <Html style={styles.singleFindSummaryPara}>
+                          {list?.summaryOfKeyFinding}
+                        </Html>
                       </>
                     )}
                   <View style={styles.reportInfoViewItem}>
@@ -485,7 +495,7 @@ const PDFGenerator = ({ reportObject }) => {
                             (item) => item?.locationid?.description
                           )
                         ),
-                      ]?.map((locationItem,index) => {
+                      ]?.map((locationItem, index) => {
                         return (
                           <Text style={styles.reportInfoSubTitle} key={index}>
                             {locationItem}
@@ -497,7 +507,7 @@ const PDFGenerator = ({ reportObject }) => {
                   <View style={styles.reportInfoViewItem}>
                     <Text style={styles.reportInfoTitle}>Sub Location:</Text>
                     <View style={styles.locationWrap}>
-                      {list?.subLocationList?.map((item,index) => {
+                      {list?.subLocationList?.map((item, index) => {
                         return (
                           <Text style={styles.reportInfoSubTitle} key={index}>
                             {item?.description}
@@ -525,7 +535,9 @@ const PDFGenerator = ({ reportObject }) => {
                           <Text style={styles.singleFindSummaryHeader}>
                             Observation
                           </Text>
-                          <Html>{followUpItem?.observationName}</Html>
+                          <Html style={styles.singleFindSummaryPara}>
+                            {followUpItem?.observationName}
+                          </Html>
                         </View>
                         <View style={styles.singleFindSummaryWrap}>
                           <Text style={styles.singleFindSummaryHeader}>
@@ -585,33 +597,42 @@ const PDFGenerator = ({ reportObject }) => {
         </View>
 
         {/* Page 8 */}
-        <View style={styles.page2} break>
-          {reportObject?.intAuditExtraFieldsList?.map((item, index) => {
-            return (
-              <View style={styles.findings} key={index}>
-                <View style={styles.summaryInfoWrap}>
-                  <View style={styles.singleFindSummaryWrap}>
-                    <Text style={styles.singleFindSummaryHeader}>Heading</Text>
-                    <Text style={styles.singleFindSummaryPara}>
-                      {item?.heading.trim()}
-                    </Text>
+        {reportObject?.intAuditExtraFieldsList &&
+          reportObject?.intAuditExtraFieldsList?.length !== 0 && (
+            <View style={styles.page2} break>
+              {reportObject?.intAuditExtraFieldsList?.map((item, index) => {
+                return (
+                  <View style={styles.findings} key={index}>
+                    <View style={styles.summaryInfoWrap}>
+                      <View style={styles.singleFindSummaryWrap}>
+                        <Text style={styles.singleFindSummaryHeader}>
+                          Heading
+                        </Text>
+                        <Text style={styles.singleFindSummaryPara}>
+                          {item?.heading.trim()}
+                        </Text>
+                      </View>
+                      <View style={styles.singleFindSummaryWrap}>
+                        <Text style={styles.singleFindSummaryHeader}>Data</Text>
+                        <Text style={styles.singleFindSummaryPara}>
+                          {item?.data.trim()}
+                        </Text>
+                      </View>
+                    </View>
                   </View>
-                  <View style={styles.singleFindSummaryWrap}>
-                    <Text style={styles.singleFindSummaryHeader}>Data</Text>
-                    <Text style={styles.singleFindSummaryPara}>
-                      {item?.data.trim()}
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            );
-          })}
-        </View>
+                );
+              })}
+            </View>
+          )}
         {/* Page 9 */}
-        <View style={styles.page2} break>
-          <Text style={styles.contents}>ANNEXURE </Text>
-          <Html>{reportObject?.annexure}</Html>
-        </View>
+        {reportObject?.annexure && reportObject?.annexure !== "" && (
+          <View style={styles.page2} break>
+            <Text style={styles.contents}>ANNEXURE </Text>
+            <Html style={styles.singleFindSummaryPara}>
+              {reportObject?.annexure}
+            </Html>
+          </View>
+        )}
         <Text
           style={styles.pageNumber}
           render={({ pageNumber, totalPages }) =>

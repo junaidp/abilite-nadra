@@ -42,7 +42,7 @@ const ApproveAuditStepDialog = ({
         </button>
         <button
           type="button"
-          className="btn btn-primary float-end"
+          className="btn btn-danger float-end"
           onClick={() => setShowApproveDialog(false)}
         >
           Close

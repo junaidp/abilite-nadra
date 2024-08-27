@@ -211,7 +211,7 @@ const InformationRequest = () => {
                   </tr>
                 ) : allTasks?.length === 0 ? (
                   <tr>
-                    <td className="w-300">No data available!</td>
+                    <td className="w-300">No Information Requests To Show.</td>
                   </tr>
                 ) : (
                   allTasks?.map((task, index) => {

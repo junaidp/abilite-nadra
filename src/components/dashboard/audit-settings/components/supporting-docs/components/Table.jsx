@@ -48,7 +48,7 @@ const Table = ({
               ) : allFiles?.length === 0 ||
                 allFiles[0]?.error === "Not Found" ? (
                 <tr>
-                  <td className="w-300">No Files Added Yet</td>
+                  <td className="w-300">No Files To Show.</td>
                 </tr>
               ) : (
                 allFiles

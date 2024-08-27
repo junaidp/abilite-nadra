@@ -29,12 +29,12 @@ const renderCustomizedLabel = ({
 
 const PieChartComponent = ({ dataInfo }) => {
   const data = [
-    { name: "High", value: dataInfo?.orrhigh },
+    { name: "High", value: 20 },
     {
       name: "Medium",
-      value: dataInfo?.orrmedium,
+      value: 40,
     },
-    { name: "Low", value: dataInfo?.orrlow },
+    { name: "Low", value: 40 },
   ];
 
   const defaultData = [

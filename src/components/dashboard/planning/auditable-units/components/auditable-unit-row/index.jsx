@@ -52,7 +52,7 @@ const AuditableUnitRow = ({
               }`}
               onClick={() => setAuditableUnitRatingDialog(true)}
             >
-              {loading ? "Loading.." : "Add Auditable Unit"}
+              {loading ? "Loading.." : "Add Audit Job"}
             </div>
           )}
           {item?.completed === false &&
@@ -64,7 +64,7 @@ const AuditableUnitRow = ({
                 }`}
                 onClick={() => handleSubmitAuditableUnit(item)}
               >
-                {loading ? "Loading.." : "Submit Auditable Unit"}
+                {loading ? "Loading.." : "Submit Audit Job"}
               </div>
             )}
           <div className="table-responsive">
@@ -72,7 +72,7 @@ const AuditableUnitRow = ({
               <thead className="bg-secondary text-white">
                 <tr>
                   <th className="w-80">Sr. #</th>
-                  <th>Auditable Unit</th>
+                  <th>Audit Jobs</th>
                   <th>Job Type</th>
                   <th>Actions</th>
                 </tr>

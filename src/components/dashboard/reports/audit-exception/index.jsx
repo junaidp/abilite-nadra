@@ -241,7 +241,7 @@ const AuditExceptionReport = () => {
                   </tr>
                 ) : auditExceptionJobs?.length === 0 ? (
                   <tr>
-                    <td className="w-300">No Jobs To Show!</td>
+                    <td className="w-300">No Audit Exceptions To Show.</td>
                   </tr>
                 ) : (
                   auditExceptionJobs

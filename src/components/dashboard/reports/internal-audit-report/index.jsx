@@ -236,7 +236,7 @@ const InternalAuditReport = () => {
                 ) : allInternalAuditReports?.length === 0 ||
                   allInternalAuditReports[0]?.error === "Not Found" ? (
                   <tr>
-                    <td className="w-300">Internal Audit Report Not Found</td>
+                    <td className="w-300">No Internal Audit Reports To Show.</td>
                   </tr>
                 ) : (
                   allInternalAuditReports?.map((item, index) => {
@@ -283,8 +283,6 @@ const InternalAuditReport = () => {
                               item?.executiveSummary !== "" &&
                               item?.auditPurpose &&
                               item?.auditPurpose !== "" &&
-                              item?.intAuditExtraFieldsList &&
-                              item?.intAuditExtraFieldsList?.length !== 0 &&
                               item?.submitted === false &&
                               Number(item?.createdBy) ===
                                 Number(user[0]?.userId?.id) && (

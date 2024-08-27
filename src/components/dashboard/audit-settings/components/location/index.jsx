@@ -175,7 +175,7 @@ const Location = ({ userHierarchy, userRole, currentSettingOption }) => {
               <CircularProgress />
             ) : allLocations?.length === 0 ||
               allLocations[0]?.error === "Not Found" ? (
-              <p>No Location to show!</p>
+              <p>No Locations To Show.</p>
             ) : (
               allLocations
                 ?.slice((page - 1) * 15, page * 15)

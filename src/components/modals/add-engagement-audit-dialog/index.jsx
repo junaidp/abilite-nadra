@@ -190,7 +190,7 @@ const AddEngagementAuditDialog = ({ setBusinessObjectiveDialog }) => {
         </div>
         <div className="col-lg-4"></div>
 
-        <div className="col-lg-4">
+        {/* <div className="col-lg-4">
           <a
             className="w-100 "
             type="button"
@@ -226,7 +226,7 @@ const AddEngagementAuditDialog = ({ setBusinessObjectiveDialog }) => {
               </div>
             </div>
           </a>
-        </div>
+        </div> */}
         <div className="col-lg-4"></div>
       </div>
 

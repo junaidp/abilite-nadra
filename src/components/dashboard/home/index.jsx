@@ -80,7 +80,7 @@ const DashboardHome = () => {
                           <i className="fa fa-tasks primary fa-2xl f-40"></i>
                         }
                         value={
-                          dataInfo?.totalJobs + "/" + dataInfo?.jobsCompleted
+                          "4/5"
                         }
                       />
                     </div>
@@ -90,7 +90,7 @@ const DashboardHome = () => {
                         icon={
                           <i className="fa fa-calculator primary fa-2xl f-40"></i>
                         }
-                        value={dataInfo?.averageObservationPerJob}
+                        value={"3"}
                       />
                     </div>
                     <div className="col-xl-4 col-sm-6 col-12">
@@ -99,14 +99,14 @@ const DashboardHome = () => {
                         icon={
                           <i className="fa fa-check-circle primary fa-2xl f-40"></i>
                         }
-                        value={dataInfo?.jobsCompleted}
+                        value={4}
                       />
                     </div>
                     <div className="col-xl-4 col-sm-6 col-12">
                       <InfoCard
                         name="Jobs By Business Objective"
                         icon={<i className="bi bi-share primary f-40"></i>}
-                        value={dataInfo?.jobsByBusinessObjective}
+                        value={18}
                       />
                     </div>
 
@@ -116,7 +116,7 @@ const DashboardHome = () => {
                         icon={
                           <i className="bi bi-shield-shaded primary f-40"></i>
                         }
-                        value={dataInfo?.jobsByCompliance}
+                        value={12}
                       />
                     </div>
 
@@ -126,7 +126,7 @@ const DashboardHome = () => {
                         icon={
                           <i className="fa fa-exclamation-triangle primary fa-2xl f-40"></i>
                         }
-                        value={dataInfo?.exceptionsImplemented}
+                        value={3}
                       />
                     </div>
                   </div>
@@ -305,7 +305,7 @@ const DashboardHome = () => {
                                 Exceptions Overdue
                               </span>
                               <h3 className="text-white">
-                                {dataInfo?.exceptionsOverDue}%
+                                {100}%
                               </h3>
                             </div>
                           </div>

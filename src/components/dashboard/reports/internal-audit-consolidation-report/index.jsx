@@ -241,7 +241,7 @@ const InternalAuditReport = () => {
                   allInternalAuditReports[0]?.error === "Not Found" ? (
                   <tr>
                     <td className="w-300">
-                      Internal Audit Consolidation Report Not Found
+                     No Internal Audit Consolidation Reports To Show.
                     </td>
                   </tr>
                 ) : (
@@ -289,8 +289,6 @@ const InternalAuditReport = () => {
                               item?.executiveSummary !== "" &&
                               item?.auditPurpose &&
                               item?.auditPurpose !== "" &&
-                              item?.intAuditExtraFieldsList &&
-                              item?.intAuditExtraFieldsList?.length !== 0 &&
                               item?.submitted === false &&
                               Number(item?.createdBy) ===
                                 Number(user[0]?.userId?.id) && (

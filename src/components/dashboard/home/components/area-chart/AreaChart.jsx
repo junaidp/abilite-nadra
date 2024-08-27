@@ -30,8 +30,8 @@ const renderCustomizedLabel = ({
 
 const AreaChart = ({ dataInfo }) => {
   const data = [
-    { name: "Medium", value: dataInfo?.odiddue },
-    { name: "High", value: dataInfo?.odidnotDue },
+    { name: "Medium", value: 40 },
+    { name: "High", value: 60 },
   ];
 
   const COLORS = ["#0088FE", "#70AD47"];

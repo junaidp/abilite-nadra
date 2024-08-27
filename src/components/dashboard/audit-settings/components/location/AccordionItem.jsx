@@ -110,7 +110,7 @@ const AccordionItem = ({
                   <tbody>
                     {item?.subLocations?.length === 0 ? (
                       <tr>
-                        <td className="w-300">No sub location to show!</td>
+                        <td className="w-300">No Sub Locations To Show.</td>
                       </tr>
                     ) : (
                       item?.subLocations?.map((subItem, subIndex) => {

@@ -203,7 +203,7 @@ const Process = ({ userHierarchy, userRole, currentSettingOption }) => {
               <CircularProgress />
             ) : allProcess?.length === 0 ||
               allProcess[0]?.error === "Not Found" ? (
-              <p>No Process To Show</p>
+              <p>No Process To Show.</p>
             ) : (
               allProcess
                 ?.slice((page - 1) * 15, page * 15)

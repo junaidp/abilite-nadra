@@ -145,7 +145,7 @@ const CPList = ({ userHierarchy, userRole, currentSettingOption }) => {
             {loading ? (
               <CircularProgress />
             ) : cpLists?.length === 0 || cpLists[0]?.error === "Not Found" ? (
-              <p>No CP List To Show</p>
+              <p>No CP Lists To Show.</p>
             ) : (
               <table className="table table-bordered  table-hover rounded">
                 <thead className="bg-secondary text-white">

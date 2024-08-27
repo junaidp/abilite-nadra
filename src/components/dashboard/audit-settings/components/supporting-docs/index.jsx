@@ -104,9 +104,7 @@ const SupportingDocs = ({ userHierarchy, userRole, currentSettingOption }) => {
                   ref={fileInputRef}
                   onChange={handleFileChange}
                 />
-                <p className="mb-0">
-                  Drag your files here or click in this area.
-                </p>
+                <p className="mb-0">Click in this area.</p>
               </form>
             </div>
             <p className="my-2">

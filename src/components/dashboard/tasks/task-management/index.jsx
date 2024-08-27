@@ -155,7 +155,7 @@ const TaskManagement = () => {
                   </tr>
                 ) : allTasks?.length === 0 ? (
                   <tr>
-                    <td className="w-300">No data available!</td>
+                    <td className="w-300">No Tasks Management To Show.</td>
                   </tr>
                 ) : (
                   allTasks?.map((task, index) => {

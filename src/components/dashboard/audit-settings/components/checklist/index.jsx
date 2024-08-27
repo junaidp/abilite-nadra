@@ -212,7 +212,7 @@ const CheckList = ({
               <CircularProgress />
             ) : checkList?.length === 0 ||
               checkList[0]?.error === "Not Found" ? (
-              <p>No Checklist to show!</p>
+              <p>No CheckLists To Show.</p>
             ) : (
               checkList?.slice((page - 1) * 5, page * 5)?.map((item, index) => {
                 return (

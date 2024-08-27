@@ -22,7 +22,7 @@ export const getAllLocations = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.get(
-      `${baseUrl}/auditExceptionReports/reports/getJobsLocations?companyId=${data?.companyId}`,
+      `${baseUrl}/configurations/location/getall?companyId=${data?.companyId}`,
       {
         headers: {
           Authorization: `Bearer ${user[0]?.token}`,

@@ -129,7 +129,7 @@ const AuditableUnits = () => {
       )}
       <>
         <header className="section-header my-3 align-items-center  text-start d-flex ">
-          <div className="mb-0 heading">Auditable Units</div>
+          <div className="mb-0 heading">Audit Jobs</div>
         </header>
         <div className="row">
           <div className="col-md-12">
@@ -137,7 +137,7 @@ const AuditableUnits = () => {
               {loading ? (
                 <CircularProgress />
               ) : allAuditableUnits?.length === 0 ? (
-                <p>No data to show!</p>
+                <p>No Audit Jobs To Show.</p>
               ) : (
                 allAuditableUnits?.map((item, index) => {
                   return (

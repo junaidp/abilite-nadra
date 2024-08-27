@@ -180,7 +180,7 @@ const AccordionItem = ({
                         ) : (
                           <tr>
                             <td className="w-300">
-                              No CheckListItem Available
+                              No Sub CheckLists To Show.
                             </td>
                           </tr>
                         )}

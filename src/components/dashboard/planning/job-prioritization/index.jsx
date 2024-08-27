@@ -183,7 +183,7 @@ const JobPrioritization = () => {
               <tbody>
                 {allJobPrioritization?.length === 0 ? (
                   <tr>
-                    <td className="w-300">No Job Prioritization to show</td>
+                    <td className="w-300">No Job Prioritizations To Show.</td>
                   </tr>
                 ) : (
                   data?.map((item, index) => {

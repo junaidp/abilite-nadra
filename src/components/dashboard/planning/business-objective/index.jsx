@@ -171,7 +171,7 @@ const BusinessObjective = () => {
                     <thead className="bg-secondary text-white">
                       <tr>
                         <th className="w-80">Sr No.</th>
-                        <th>Audit Universe</th>
+                        <th>Business Objective</th>
                         <th>Identities</th>
                         <th>Initiated By</th>
                         <th>Actions</th>
@@ -186,7 +186,7 @@ const BusinessObjective = () => {
                         </tr>
                       ) : allEngagements?.length === 0 ? (
                         <tr>
-                          <td className="w-300">No Audit Universe To Show</td>
+                          <td className="w-300">No Audit Universe To Show.</td>
                         </tr>
                       ) : (
                         allEngagements.map((item, index) => {

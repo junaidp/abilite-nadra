@@ -52,7 +52,7 @@ let menuItems = [
       },
       {
         id: "li-auditable",
-        label: "Auditable Units",
+        label: "Audit Jobs",
         icon: faBriefcase,
         route: "/audit/auditable-unit",
         active: false,
