@@ -167,7 +167,7 @@ const TopBar = () => {
 
               <li className="nav-item dropdown">
                 <Tooltip
-                  title={`Click To See More(${user[0]?.userId?.name})`}
+                  title={`Click To See More (${user[0]?.userId?.name})`}
                   placement="top"
                 >
                   <a

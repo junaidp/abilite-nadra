@@ -120,8 +120,8 @@ const FollowUp = () => {
                       <th>Particulars</th>
                       <th>Status</th>
                       <th>No. of Observations</th>
-                      <th>Locations</th>
-                      <th>Sub Locations</th>
+                      <th>Location</th>
+                      <th>Sub Location</th>
                       <th>Action</th>
                     </tr>
                   </thead>

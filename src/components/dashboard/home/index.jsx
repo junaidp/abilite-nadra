@@ -72,62 +72,103 @@ const DashboardHome = () => {
             <div className="row mb-3 dashboard-content-wrap">
               <div className="col-lg-9">
                 <section id="minimal-statistics">
-                  <div className="row">
-                    <div className="col-xl-4 col-sm-6 col-12">
-                      <InfoCard
-                        name="Jobs In Progress"
-                        icon={
-                          <i className="fa fa-tasks primary fa-2xl f-40"></i>
-                        }
-                        value={
-                          "4/5"
-                        }
-                      />
+                  <div style={{ width: "100%" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "30px",
+                        flexWrap: "wrap",
+                        width: "100%",
+                      }}
+                    >
+                      <div style={{ flex: "1" }}>
+                        <InfoCard
+                          name="Jobs By Business Objective"
+                          icon={<i className="bi bi-share primary f-40"></i>}
+                          value={dataInfo?.jobsByBusinessObjective}
+                        />
+                      </div>
+                      <div style={{ flex: "1" }}>
+                        <InfoCard
+                          name="Jobs By Compliance"
+                          icon={
+                            <i className="bi bi-shield-shaded primary f-40"></i>
+                          }
+                          value={dataInfo?.jobsByCompliance}
+                        />
+                      </div>
                     </div>
-                    <div className="col-xl-4 col-sm-6 col-12">
-                      <InfoCard
-                        name="Avg obs. per job"
-                        icon={
-                          <i className="fa fa-calculator primary fa-2xl f-40"></i>
-                        }
-                        value={"3"}
-                      />
-                    </div>
-                    <div className="col-xl-4 col-sm-6 col-12">
-                      <InfoCard
-                        name="Jobs Completed"
-                        icon={
-                          <i className="fa fa-check-circle primary fa-2xl f-40"></i>
-                        }
-                        value={4}
-                      />
-                    </div>
-                    <div className="col-xl-4 col-sm-6 col-12">
-                      <InfoCard
-                        name="Jobs By Business Objective"
-                        icon={<i className="bi bi-share primary f-40"></i>}
-                        value={18}
-                      />
-                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "30px",
+                        flexWrap: "wrap",
+                        width: "100%",
+                      }}
+                    >
+                      <div
+                        className="col-xl-4 col-sm-6 col-12"
+                        style={{ flex: "1" }}
+                      >
+                        <InfoCard
+                          name="Jobs By Special Project/Audit"
+                          icon={
+                            <i className="fa fa-calculator primary fa-2xl f-40"></i>
+                          }
+                          value={dataInfo?.jobsBySpecialAudit}
+                        />
+                      </div>
 
-                    <div className="col-xl-4 col-sm-6 col-12">
-                      <InfoCard
-                        name="Jobs By Compliance"
-                        icon={
-                          <i className="bi bi-shield-shaded primary f-40"></i>
-                        }
-                        value={12}
-                      />
+                      <div
+                        className="col-xl-4 col-sm-6 col-12"
+                        style={{ flex: "1" }}
+                      >
+                        <InfoCard
+                          name="Jobs In Progress"
+                          extra="Implemented"
+                          icon={
+                            <i className="fa fa-tasks primary fa-2xl f-40"></i>
+                          }
+                          value={
+                            dataInfo?.jobsInProgress + "/" + dataInfo?.totalJobs
+                          }
+                        />
+                      </div>
                     </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "30px",
+                        flexWrap: "wrap",
+                        width: "100%",
+                      }}
+                    >
+                      <div
+                        className="col-xl-4 col-sm-6 col-12"
+                        style={{ flex: "1" }}
+                      >
+                        <InfoCard
+                          name="Jobs Completed"
+                          extra="Implemented"
+                          icon={
+                            <i className="fa fa-check-circle primary fa-2xl f-40"></i>
+                          }
+                          value={dataInfo?.jobsCompleted}
+                        />
+                      </div>
 
-                    <div className="col-xl-4 col-sm-6 col-12">
-                      <InfoCard
-                        name="Exceptions Implemented"
-                        icon={
-                          <i className="fa fa-exclamation-triangle primary fa-2xl f-40"></i>
-                        }
-                        value={3}
-                      />
+                      <div
+                        className="col-xl-4 col-sm-6 col-12"
+                        style={{ flex: "1" }}
+                      >
+                        <InfoCard
+                          name="Exceptions Implemented"
+                          icon={
+                            <i className="fa fa-exclamation-triangle primary fa-2xl f-40"></i>
+                          }
+                          value={dataInfo?.exceptionsImplemented}
+                        />
+                      </div>
                     </div>
                   </div>
 
@@ -305,7 +346,7 @@ const DashboardHome = () => {
                                 Exceptions Overdue
                               </span>
                               <h3 className="text-white">
-                                {100}%
+                                {dataInfo?.exceptionsOverDue}%
                               </h3>
                             </div>
                           </div>

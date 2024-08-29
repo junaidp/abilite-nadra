@@ -262,7 +262,7 @@ const AuditSettings = () => {
                     Notification
                   </button>
                 )} */}
-                {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+                {/* {(userRole === "ADMIN" || userHierarchy === "IAH") && (
                   <button
                     className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
                     id="previous-observation-tab"
@@ -277,7 +277,7 @@ const AuditSettings = () => {
                   >
                     Previous Observations
                   </button>
-                )}
+                )} */}
                 <button
                   className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
                   id="nav-tfa-tab"
@@ -331,11 +331,11 @@ const AuditSettings = () => {
                 currentSettingOption={currentSettingOption}
               />
               {/* {userRole !== "ADMIN" && <Notification />} */}
-              {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+              {/* {(userRole === "ADMIN" || userHierarchy === "IAH") && (
                 <PreviousObservation
                   currentSettingOption={currentSettingOption}
                 />
-              )}
+              )} */}
               {userRole === "ADMIN" && (
                 <UserManagement
                   setUserManagementDialog={setUserManagementDialog}
