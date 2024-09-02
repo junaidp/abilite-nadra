@@ -111,21 +111,20 @@ const UserManagement = ({
                       <CircularProgress />
                     </td>
                   </tr>
-                ) : allUsers?.length === 0 ||
-                  allUsers[0]?.error === "Not Found" ? (
+                ) : allUsers?.length === 0 ? (
                   <tr>
-                    <td className="w-300">No user to show!</td>
+                    <td className="w-300">No Users To Show.</td>
                   </tr>
                 ) : (
                   allUsers
                     ?.filter((all) =>
                       all?.name?.toLowerCase().includes(nameVal?.toLowerCase())
                     )
-                    ?.slice((page - 1) * 15, page * 15)
+                    ?.slice((page - 1) * 10, page * 10)
                     ?.map((userItem, index) => {
                       return (
                         <tr key={index}>
-                          <td>{index + 1}</td>
+                          <td>{(page - 1) * 10 + index + 1}</td>
                           <td>{userItem?.name || ""}</td>
                           <td>{userItem?.employeeid?.userHierarchy || ""}</td>
                           <td>{userItem?.employeeid?.designation || ""}</td>
@@ -155,11 +154,13 @@ const UserManagement = ({
                 )}
               </tbody>
             </table>
-            <Pagination
-              count={Math.ceil(allUsers?.length / 15)}
-              page={page}
-              onChange={handleChange}
-            />
+            {allUsers && allUsers?.length > 0 && (
+              <Pagination
+                count={Math.ceil(allUsers?.length / 10)}
+                page={page}
+                onChange={handleChange}
+              />
+            )}
           </div>
         </div>
       </div>

@@ -73,7 +73,7 @@ export const slice = createSlice({
       })
       .addCase(setupGetAllRiskFactors.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.allRiskFactors = payload?.data || [{ error: "Not Found" }];
+        state.allRiskFactors = payload?.data || [];
       })
       .addCase(setupGetAllRiskFactors.rejected, (state, action) => {
         state.loading = false;

@@ -98,7 +98,7 @@ export const slice = createSlice({
       })
       .addCase(setupGetAllLocations.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.allLocations = payload?.data || [{ error: "Not Found" }];
+        state.allLocations = payload?.data || [];
       })
       .addCase(setupGetAllLocations.rejected, (state, { payload }) => {
         state.loading = false;

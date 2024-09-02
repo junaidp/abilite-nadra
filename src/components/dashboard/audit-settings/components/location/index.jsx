@@ -173,12 +173,11 @@ const Location = ({ userHierarchy, userRole, currentSettingOption }) => {
           <div className="accordion" id="accordionLocationExample">
             {loading ? (
               <CircularProgress />
-            ) : allLocations?.length === 0 ||
-              allLocations[0]?.error === "Not Found" ? (
+            ) : allLocations?.length === 0 ? (
               <p>No Locations To Show.</p>
             ) : (
               allLocations
-                ?.slice((page - 1) * 15, page * 15)
+                ?.slice((page - 1) * 10, page * 10)
                 ?.map((item, index) => {
                   return (
                     <AccordionItem
@@ -203,11 +202,13 @@ const Location = ({ userHierarchy, userRole, currentSettingOption }) => {
                   );
                 })
             )}
-            <Pagination
-              count={Math.ceil(allLocations?.length / 15)}
-              page={page}
-              onChange={handleChange}
-            />
+            {allLocations && allLocations?.length > 0 && (
+              <Pagination
+                count={Math.ceil(allLocations?.length / 10)}
+                page={page}
+                onChange={handleChange}
+              />
+            )}
           </div>
         </div>
       </div>

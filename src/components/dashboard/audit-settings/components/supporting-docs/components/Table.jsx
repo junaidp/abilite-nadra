@@ -45,8 +45,7 @@ const Table = ({
                     <CircularProgress />
                   </td>
                 </tr>
-              ) : allFiles?.length === 0 ||
-                allFiles[0]?.error === "Not Found" ? (
+              ) : allFiles?.length === 0 ? (
                 <tr>
                   <td className="w-300">No Files To Show.</td>
                 </tr>
@@ -92,11 +91,13 @@ const Table = ({
               )}
             </tbody>
           </table>
-          <Pagination
-            count={Math.ceil(allFiles?.length / 10)}
-            page={page}
-            onChange={handleChangePage}
-          />
+          {allFiles && allFiles?.length > 0 && (
+            <Pagination
+              count={Math.ceil(allFiles?.length / 10)}
+              page={page}
+              onChange={handleChangePage}
+            />
+          )}
         </div>
       </div>
     </div>

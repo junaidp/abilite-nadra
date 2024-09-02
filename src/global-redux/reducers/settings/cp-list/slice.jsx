@@ -51,7 +51,7 @@ export const slice = createSlice({
       })
       .addCase(setupGetAllCPList.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.allCPList = payload?.data || [{ error: "Not Found" }];
+        state.allCPList = payload?.data || [];
       })
       .addCase(setupGetAllCPList.rejected, (state, { payload }) => {
         state.loading = false;

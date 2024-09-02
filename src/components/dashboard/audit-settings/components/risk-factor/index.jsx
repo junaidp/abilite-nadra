@@ -145,8 +145,7 @@ const RiskFactor = ({ userHierarchy, userRole, currentSettingOption }) => {
           <div className="table-responsive">
             {loading ? (
               <CircularProgress />
-            ) : allRiskFactors?.length === 0 ||
-              allRiskFactors[0]?.error === "Not Found" ? (
+            ) : allRiskFactors?.length === 0 ? (
               <p>No Risk Factors To Show.</p>
             ) : (
               <table className="table table-bordered  table-hover rounded">
@@ -159,7 +158,7 @@ const RiskFactor = ({ userHierarchy, userRole, currentSettingOption }) => {
                 </thead>
                 <tbody>
                   {riskFactorList
-                    ?.slice((page - 1) * 15, page * 15)
+                    ?.slice((page - 1) * 10, page * 10)
                     ?.map((item, index) => {
                       return (
                         <tr key={index}>
@@ -212,11 +211,13 @@ const RiskFactor = ({ userHierarchy, userRole, currentSettingOption }) => {
                 </tbody>
               </table>
             )}
-            <Pagination
-              count={Math.ceil(allRiskFactors?.length / 15)}
-              page={page}
-              onChange={handleChange}
-            />
+            {allRiskFactors && allRiskFactors?.length > 0 && (
+              <Pagination
+                count={Math.ceil(allRiskFactors?.length / 10)}
+                page={page}
+                onChange={handleChange}
+              />
+            )}
           </div>
         </div>
       </div>

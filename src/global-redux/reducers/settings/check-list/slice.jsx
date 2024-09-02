@@ -123,7 +123,7 @@ export const slice = createSlice({
       })
       .addCase(setupGetAllCheckLists.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.checkList = payload.data || [{ error: "Not Found" }];
+        state.checkList = payload.data || [];
       })
       .addCase(setupGetAllCheckLists.rejected, (state, { payload }) => {
         state.loading = false;

@@ -210,43 +210,52 @@ const CheckList = ({
           <div className="accordion" id="accordionCheckListExample">
             {loading ? (
               <CircularProgress />
-            ) : checkList?.length === 0 ||
-              checkList[0]?.error === "Not Found" ? (
+            ) : checkList?.length === 0 ? (
               <p>No CheckLists To Show.</p>
             ) : (
-              checkList?.slice((page - 1) * 5, page * 5)?.map((item, index) => {
-                return (
-                  <AccordionItem
-                    item={item}
-                    subLoading={subLoading}
-                    dispatch={dispatch}
-                    key={index}
-                    index={index}
-                    handleChangeCurrentCheckListId={
-                      handleChangeCurrentCheckListId
-                    }
-                    setShowEditCheckListDialog={setShowEditCheckListDialog}
-                    handleChangeCheckListRemarks={handleChangeCheckListRemarks}
-                    setCheckListManagementDialog={setCheckListManagementDialog}
-                    checkListItems={checkListItems}
-                    setShowEditCheckListItemDialog={
-                      setShowEditCheckListItemDialog
-                    }
-                    changeCurrentSubListItem={changeCurrentSubListItem}
-                    userHierarchy={userHierarchy}
-                    userRole={userRole}
-                    setShowViewCheckListDialog={setShowViewCheckListDialog}
-                    setShowDeleteCheckListDialog={setShowDeleteCheckListDialog}
-                  />
-                );
-              })
+              checkList
+                ?.slice((page - 1) * 10, page * 10)
+                ?.map((item, index) => {
+                  return (
+                    <AccordionItem
+                      item={item}
+                      subLoading={subLoading}
+                      dispatch={dispatch}
+                      key={index}
+                      index={index}
+                      handleChangeCurrentCheckListId={
+                        handleChangeCurrentCheckListId
+                      }
+                      setShowEditCheckListDialog={setShowEditCheckListDialog}
+                      handleChangeCheckListRemarks={
+                        handleChangeCheckListRemarks
+                      }
+                      setCheckListManagementDialog={
+                        setCheckListManagementDialog
+                      }
+                      checkListItems={checkListItems}
+                      setShowEditCheckListItemDialog={
+                        setShowEditCheckListItemDialog
+                      }
+                      changeCurrentSubListItem={changeCurrentSubListItem}
+                      userHierarchy={userHierarchy}
+                      userRole={userRole}
+                      setShowViewCheckListDialog={setShowViewCheckListDialog}
+                      setShowDeleteCheckListDialog={
+                        setShowDeleteCheckListDialog
+                      }
+                    />
+                  );
+                })
             )}
           </div>
-          <Pagination
-            count={Math.ceil(checkList?.length / 5)}
-            page={page}
-            onChange={handleChange}
-          />
+          {checkList && checkList?.length > 0 && (
+            <Pagination
+              count={Math.ceil(checkList?.length / 10)}
+              page={page}
+              onChange={handleChange}
+            />
+          )}
         </div>
       </div>
     </div>

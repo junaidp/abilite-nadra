@@ -201,12 +201,11 @@ const Process = ({ userHierarchy, userRole, currentSettingOption }) => {
           <div className="accordion" id="accordionProcessExample">
             {loading ? (
               <CircularProgress />
-            ) : allProcess?.length === 0 ||
-              allProcess[0]?.error === "Not Found" ? (
+            ) : allProcess?.length === 0 ? (
               <p>No Process To Show.</p>
             ) : (
               allProcess
-                ?.slice((page - 1) * 15, page * 15)
+                ?.slice((page - 1) * 10, page * 10)
                 ?.map((item, index) => {
                   return (
                     <AccordionItem
@@ -230,11 +229,13 @@ const Process = ({ userHierarchy, userRole, currentSettingOption }) => {
                   );
                 })
             )}
-            <Pagination
-              count={Math.ceil(allProcess?.length / 15)}
-              page={page}
-              onChange={handleChange}
-            />
+            {allProcess && allProcess?.length > 0 && (
+              <Pagination
+                count={Math.ceil(allProcess?.length / 10)}
+                page={page}
+                onChange={handleChange}
+              />
+            )}
           </div>
         </div>
       </div>

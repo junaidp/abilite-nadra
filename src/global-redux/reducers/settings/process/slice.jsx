@@ -129,7 +129,7 @@ export const slice = createSlice({
       })
       .addCase(setupGetAllProcess.fulfilled, (state, action) => {
         state.loading = false;
-        state.allProcess = action.payload?.data || [{ error: "Not Found" }];
+        state.allProcess = action.payload?.data || [];
       })
       .addCase(setupGetAllProcess.rejected, (state, action) => {
         state.loading = false;
@@ -165,17 +165,13 @@ export const slice = createSlice({
       .addCase(setupGetAllSubProcess.fulfilled, (state, action) => {
         state.subLoading = false;
         if (Array.isArray(action.payload?.data)) {
-          state.allSubProcess = action.payload?.data || [
-            { error: "Not Found" },
-          ];
+          state.allSubProcess = action.payload?.data || [];
         }
         if (!Array.isArray(action.payload?.data) && action.payload?.data) {
-          state.allSubProcess = [{ ...action.payload?.data }] || [
-            { error: "Not Found" },
-          ];
+          state.allSubProcess = [{ ...action.payload?.data }] || [];
         }
         if (!Array.isArray(action.payload?.data) && !action.payload?.data) {
-          state.allSubProcess = [{ error: "Not Found" }];
+          state.allSubProcess = [];
         }
       })
       .addCase(setupGetAllSubProcess.rejected, (state, action) => {

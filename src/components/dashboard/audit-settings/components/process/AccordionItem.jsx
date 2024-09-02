@@ -122,8 +122,7 @@ const AccordionItem = ({
                       </tr>
                     </thead>
                     <tbody>
-                      {allSubProcess?.length === 0 ||
-                      allSubProcess[0]?.error === "Not Found" ? (
+                      {allSubProcess?.length === 0 ? (
                         <tr>
                           <td className="w-300">No Sub Process To Show.</td>
                         </tr>
@@ -138,24 +137,24 @@ const AccordionItem = ({
                                 userHierarchy === "Team_Lead") && (
                                 <td>
                                   <div className="d-flex gap-2">
-                                  <i
-                                    className="fa fa-edit  f-18 cursor-pointer"
-                                    onClick={() => {
-                                      setSubProcessId(subItem?.id);
-                                      setShowSubProcessDialog(true);
-                                    }}
-                                  ></i>
-                                  <i
-                                    className="fa fa-trash text-danger  f-18 cursor-pointer"
-                                    onClick={() => {
-                                      if (!subLoading) {
-                                        dispatch(
-                                          setupDeleteSubProcess(subItem?.id)
-                                        );
-                                      }
-                                    }}
+                                    <i
+                                      className="fa fa-edit  f-18 cursor-pointer"
+                                      onClick={() => {
+                                        setSubProcessId(subItem?.id);
+                                        setShowSubProcessDialog(true);
+                                      }}
                                     ></i>
-                                    </div>
+                                    <i
+                                      className="fa fa-trash text-danger  f-18 cursor-pointer"
+                                      onClick={() => {
+                                        if (!subLoading) {
+                                          dispatch(
+                                            setupDeleteSubProcess(subItem?.id)
+                                          );
+                                        }
+                                      }}
+                                    ></i>
+                                  </div>
                                 </td>
                               )}
                             </tr>

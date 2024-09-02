@@ -143,7 +143,7 @@ const CPList = ({ userHierarchy, userRole, currentSettingOption }) => {
           <div className="table-responsive">
             {loading ? (
               <CircularProgress />
-            ) : cpLists?.length === 0 || cpLists[0]?.error === "Not Found" ? (
+            ) : cpLists?.length === 0 ? (
               <p>No CP Lists To Show.</p>
             ) : (
               <table className="table table-bordered  table-hover rounded">
@@ -156,7 +156,7 @@ const CPList = ({ userHierarchy, userRole, currentSettingOption }) => {
                 </thead>
                 <tbody>
                   {cpLists
-                    ?.slice((page - 1) * 15, page * 15)
+                    ?.slice((page - 1) * 10, page * 10)
                     ?.map((item, index) => {
                       return (
                         <tr key={index}>
@@ -209,11 +209,13 @@ const CPList = ({ userHierarchy, userRole, currentSettingOption }) => {
                 </tbody>
               </table>
             )}
-            <Pagination
-              count={Math.ceil(allCPList?.length / 15)}
-              page={page}
-              onChange={handleChange}
-            />
+            {allCPList && allCPList?.length > 0 && (
+              <Pagination
+                count={Math.ceil(allCPList?.length / 10)}
+                page={page}
+                onChange={handleChange}
+              />
+            )}
           </div>
         </div>
       </div>

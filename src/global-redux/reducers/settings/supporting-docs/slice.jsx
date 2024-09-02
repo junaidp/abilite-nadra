@@ -87,7 +87,7 @@ export const slice = createSlice({
       })
       .addCase(setupGetAllFiles.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.allFiles = payload?.data || [{ error: "Not Found" }];
+        state.allFiles = payload?.data || [];
       })
       .addCase(setupGetAllFiles.rejected, (state, action) => {
         state.loading = false;
