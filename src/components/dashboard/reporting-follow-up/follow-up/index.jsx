@@ -130,7 +130,9 @@ const FollowUp = () => {
                       return (
                         <tr key={index}>
                           <td>
-                            <label>{index + 1}</label>
+                            <label>
+                              {(page - 1) * itemsPerPage + index + 1}
+                            </label>
                           </td>
                           <td>
                             <a

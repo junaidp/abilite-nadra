@@ -129,7 +129,7 @@ const RiskAssessments = () => {
                   allRiskAssessments?.map((item, index) => {
                     return (
                       <tr className="h-40" key={index}>
-                        <td>{index + 1}</td>
+                        <td>{(page - 1) * itemsPerPage + index + 1}</td>
                         <td>
                           {item?.businessObjectiveMapProcess?.description || ""}
                         </td>

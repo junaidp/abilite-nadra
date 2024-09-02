@@ -125,7 +125,6 @@ const DashboardHome = () => {
                       >
                         <InfoCard
                           name="Jobs In Progress"
-                          extra="Implemented"
                           icon={
                             <i className="fa fa-tasks primary fa-2xl f-40"></i>
                           }
@@ -149,7 +148,6 @@ const DashboardHome = () => {
                       >
                         <InfoCard
                           name="Jobs Completed"
-                          extra="Implemented"
                           icon={
                             <i className="fa fa-check-circle primary fa-2xl f-40"></i>
                           }

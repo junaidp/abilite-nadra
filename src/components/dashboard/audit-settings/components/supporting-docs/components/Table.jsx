@@ -61,7 +61,7 @@ const Table = ({
                   ?.map((file, index) => {
                     return (
                       <tr key={index}>
-                        <td>{index + 1}</td>
+                        <td>{(page - 1) * 10 + index + 1}</td>
                         <td>{file?.fileName}</td>
                         <td>
                           <div className="d-flex gap-2">

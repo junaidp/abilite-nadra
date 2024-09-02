@@ -6,10 +6,13 @@ const TableRow = ({
   setShowDeleteEngagementDialog,
   setCurrentEngagementId,
   index,
+  page,
+  itemsPerPage,
 }) => {
+  const serialNumber = (page - 1) * itemsPerPage + index + 1;
   return (
     <tr>
-      <td>{index + 1}</td>
+      <td>{serialNumber}</td>
       <td
         onClick={() => handleClickEngagement(item?.id, item?.natureThrough)}
         className="cursor-pointer"

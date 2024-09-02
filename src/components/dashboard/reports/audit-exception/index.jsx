@@ -249,7 +249,7 @@ const AuditExceptionReport = () => {
                     ?.map((job, index) => {
                       return (
                         <tr key={index}>
-                          <td>{index + 1}</td>
+                          <td>{(page - 1) * 10 + index + 1}</td>
                           <td>{job[1]} </td>
                           <td>{job[3]}</td>
                           <td>{job[4]}</td>

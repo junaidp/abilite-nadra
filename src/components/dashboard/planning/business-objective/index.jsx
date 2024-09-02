@@ -200,6 +200,8 @@ const BusinessObjective = () => {
                               }
                               setCurrentEngagementId={setCurrentEngagementId}
                               index={index}
+                              page={page}
+                              itemsPerPage={itemsPerPage}
                             />
                           );
                         })

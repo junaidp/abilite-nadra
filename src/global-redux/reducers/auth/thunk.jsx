@@ -26,7 +26,6 @@ export const forgetPassword = async (data, thunkAPI) => {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${user[0]?.token}`,
         },
       }
     );
@@ -38,7 +37,6 @@ export const forgetPassword = async (data, thunkAPI) => {
 
 export const resetPassword = async (data, thunkAPI) => {
   try {
-    const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
       `${baseUrl}/account/user/resetPassword`,
       {
@@ -49,7 +47,6 @@ export const resetPassword = async (data, thunkAPI) => {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${user[0]?.token}`,
         },
       }
     );

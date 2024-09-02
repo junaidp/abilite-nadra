@@ -221,7 +221,7 @@ const ResourceTimeAllocation = () => {
                     ?.map((job, index) => {
                       return (
                         <tr key={index}>
-                          <td>{index + 1}</td>
+                          <td>{(page - 1) * 10 + index + 1}</td>
                           <td>{job[1]} </td>
                           <td>{job[2]}</td>
                           <td>{getUserString(job)}</td>

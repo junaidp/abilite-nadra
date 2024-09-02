@@ -136,7 +136,7 @@ const AuditEngagement = () => {
                         allAuditEngagement?.map((item, index) => {
                           return (
                             <tr key={index}>
-                              <td>{index + 1}</td>
+                              <td>{(page - 1) * itemsPerPage + index + 1}</td>
                               <td>{item?.title}</td>
                               <td>
                                 {item?.plannedStartDate

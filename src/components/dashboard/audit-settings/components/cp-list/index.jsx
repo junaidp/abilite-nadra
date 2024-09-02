@@ -84,7 +84,6 @@ const CPList = ({ userHierarchy, userRole, currentSettingOption }) => {
     setDescription("");
   }, [currentSettingOption]);
 
-  
   return (
     <div
       className="tab-pane fade"
@@ -161,7 +160,7 @@ const CPList = ({ userHierarchy, userRole, currentSettingOption }) => {
                     ?.map((item, index) => {
                       return (
                         <tr key={index}>
-                          <td>{index + 1}</td>
+                          <td>{(page - 1) * 10 + index + 1}</td>
                           <td>
                             <textarea
                               className="form-control"

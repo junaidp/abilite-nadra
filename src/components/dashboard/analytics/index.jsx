@@ -6,7 +6,7 @@ import Tooltip from "@mui/material/Tooltip";
 const TableauEmbed = () => {
   const vizRef = useRef(null);
   let url =
-    "https://public.tableau.com/views/SQLQueryResults/Dashboard1?:language=en-US&publish=yes&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link";
+  "https://public.tableau.com/shared/JXXGXMWYC?:display_count=n&:origin=viz_share_link"
 
   let [selectedProcess, setSelectedProcess] = React.useState("");
   let [selectedCategory, setSelectedCategory] = React.useState("");

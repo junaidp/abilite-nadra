@@ -189,7 +189,7 @@ const JobPrioritization = () => {
                   data?.map((item, index) => {
                     return (
                       <tr key={index}>
-                        <td>{index + 1}</td>
+                        <td>{(page - 1) * itemsPerPage + index + 1}</td>
                         <td className="w-200">{item?.auditableUnitTitle}</td>
                         <td className="w-200">
                           {item?.businessObjectiveTitle}

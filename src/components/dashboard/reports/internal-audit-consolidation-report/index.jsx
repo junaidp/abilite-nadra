@@ -248,7 +248,7 @@ const InternalAuditReport = () => {
                   allInternalAuditReports?.map((item, index) => {
                     return (
                       <tr key={index}>
-                        <td>{index + 1}</td>
+                        <td>{(page - 1) * itemsPerPage + index + 1}</td>
                         <td>{item?.jobName || ""}</td>
                         <td>{item?.reportName || ""}</td>
                         <td>{moment(item?.reportDate).format("DD-MM-YYYY")}</td>

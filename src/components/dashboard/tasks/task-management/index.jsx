@@ -161,7 +161,7 @@ const TaskManagement = () => {
                   allTasks?.map((task, index) => {
                     return (
                       <tr key={index}>
-                        <td>{index + 1}</td>
+                        <td>{(page - 1) * itemsPerPage + index + 1}</td>
                         <td>{task?.detailedRequirement}</td>
                         <td>{moment.utc(task?.dueDate).format("DD-MM-YY")}</td>
                         <td>{task?.engagement?.engagementName}</td>
