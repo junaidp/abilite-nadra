@@ -324,6 +324,9 @@ body {
 .w-full {
   width: 100%;
 }
+.flex-1 {
+  flex: 1 !important;
+}
 
 .fitContent {
   height: fit-content;

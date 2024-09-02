@@ -4,6 +4,7 @@ import moment from "moment";
 import { useSelector } from "react-redux";
 import RichTextEditor from "../rich-text/RichText";
 import ReportingFileUpload from "../file-upload/FileUpload";
+import { Chip } from "@mui/material";
 
 const AccordianItem = ({
   item,
@@ -85,8 +86,8 @@ const AccordianItem = ({
         data-bs-parent="#accordionFlushExample"
       >
         <div className="accordion-body">
-          <div className="row mb-3">
-            <div className="col-lg-6">
+          <div className="d-flex items-center mb-3 justify-content-between">
+            <div className="flex-1">
               <label>Observation Title:</label>
               <input
                 className="form-control w-100"
@@ -96,6 +97,15 @@ const AccordianItem = ({
                 name="observationTitle"
                 onChange={(event) => handleChange(event, item?.id)}
                 disabled={handleAllowEditSection1(item) === true ? false : true}
+              />
+            </div>
+            <div className="flex-1 d-flex flex-end">
+              <Chip
+                label={
+                  singleReport?.subLocationList?.find(
+                    (subLocation) => subLocation?.id === item?.subLocation
+                  )?.description
+                }
               />
             </div>
           </div>

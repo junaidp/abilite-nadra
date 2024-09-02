@@ -18,6 +18,7 @@ const ObservationFileUpload = ({
   const { loading, auditEngagementObservationAddSuccess } = useSelector(
     (state) => state?.auditEngagement
   );
+  const { user } = useSelector((state) => state?.auth);
   const updatedFileInputRef = React.useRef(null);
   const fileInputRef = React.useRef(null);
   const [selectedUpdateFile, setSelectedUpdateFile] = React.useState(null);
@@ -198,15 +199,28 @@ const ObservationFileUpload = ({
                                 className="fa fa-trash text-danger f-18 cursor-pointer px-2"
                                 onClick={() => {
                                   if (!loading) {
-                                    setCurrentDeleteFileId(fileItem?.id);
-                                    dispatch(
-                                      setupDeleteAuditStepCheckListFile({
-                                        fileId: Number(fileItem?.id),
-                                        ChecklistObservationsId: Number(
-                                          item?.id
-                                        ),
-                                      })
-                                    );
+                                    if (
+                                      user[0]?.userId?.employeeid
+                                        ?.userHierarchy !== "IAH"
+                                    ) {
+                                      toast.error(
+                                        "Only the Head of Internal Audit can delete a file."
+                                      );
+                                    }
+                                    if (
+                                      user[0]?.userId?.employeeid
+                                        ?.userHierarchy === "IAH"
+                                    ) {
+                                      setCurrentDeleteFileId(fileItem?.id);
+                                      dispatch(
+                                        setupDeleteAuditStepCheckListFile({
+                                          fileId: Number(fileItem?.id),
+                                          ChecklistObservationsId: Number(
+                                            item?.id
+                                          ),
+                                        })
+                                      );
+                                    }
                                   }
                                 }}
                               ></i>

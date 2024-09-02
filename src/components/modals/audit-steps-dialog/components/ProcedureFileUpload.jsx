@@ -20,6 +20,7 @@ const ProcedureFileUpload = ({
   const { loading, auditEngagementObservationAddSuccess } = useSelector(
     (state) => state?.auditEngagement
   );
+  const { user } = useSelector((state) => state?.auth);
   const [selectedFile, setSelectedFile] = React.useState(null);
   const [selectedUpdateFile, setSelectedUpdateFile] = React.useState(null);
 
@@ -112,6 +113,7 @@ const ProcedureFileUpload = ({
       }
     }
   }, [auditEngagementObservationAddSuccess]);
+
   return (
     <div className="my-4">
       <div className="row mb-3">
@@ -212,16 +214,32 @@ const ProcedureFileUpload = ({
                         <i
                           className="fa fa-trash text-danger f-18 mx-2 cursor-pointer"
                           onClick={() => {
-                            setCurrentDeletedFileId(
-                              currentAuditStep?.procedureFileAuditStep?.id
-                            );
-                            dispatch(
-                              setupAuditStepProcedureFileDelete({
-                                fileId:
-                                  currentAuditStep?.procedureFileAuditStep?.id,
-                                stepId: currentAuditStep?.id,
-                              })
-                            );
+                            if (!loading) {
+                              if (
+                                user[0]?.userId?.employeeid?.userHierarchy !==
+                                "IAH"
+                              ) {
+                                toast.error(
+                                  "Only the Head of Internal Audit can delete a file."
+                                );
+                              }
+                              if (
+                                user[0]?.userId?.employeeid?.userHierarchy ===
+                                "IAH"
+                              ) {
+                                setCurrentDeletedFileId(
+                                  currentAuditStep?.procedureFileAuditStep?.id
+                                );
+                                dispatch(
+                                  setupAuditStepProcedureFileDelete({
+                                    fileId:
+                                      currentAuditStep?.procedureFileAuditStep
+                                        ?.id,
+                                    stepId: currentAuditStep?.id,
+                                  })
+                                );
+                              }
+                            }
                           }}
                         ></i>
                       )}

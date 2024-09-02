@@ -3,6 +3,7 @@ import { setupUpdateComplianceCheckList } from "../../../global-redux/reducers/a
 import { useDispatch, useSelector } from "react-redux";
 import RichTextEditor from "./components/TextEditor";
 import ObservationFileUpload from "./components/ObservationFileUpload";
+import { Chip } from "@mui/material";
 
 const ComplianceCheckListDialog = ({
   setShowComplianceCheckListDialog,
@@ -111,8 +112,12 @@ const ComplianceCheckListDialog = ({
       <div className="row">
         <div className="col-lg-12">
           <div className="row mb-3">
-            <div className="col-lg-12">
+            <div className="d-flex items-center justify-content-between">
               <div className="heading">Compliance Checklist</div>
+              <Chip
+                label={complianceItem?.subLocationDescription}
+                className="float-end"
+              />
             </div>
           </div>
 

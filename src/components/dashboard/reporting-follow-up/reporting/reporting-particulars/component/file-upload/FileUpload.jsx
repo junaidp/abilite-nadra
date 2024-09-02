@@ -13,6 +13,7 @@ const ReportingFileUpload = ({ item, setDeleteFileId }) => {
   const { loading, reportingFileUploadSuccess } = useSelector(
     (state) => state?.reporting
   );
+  const { user } = useSelector((state) => state?.auth);
   const updatedFileInputRef = React.useRef(null);
   const fileInputRef = React.useRef(null);
   const [selectedUpdateFile, setSelectedUpdateFile] = React.useState(null);
@@ -183,13 +184,26 @@ const ReportingFileUpload = ({ item, setDeleteFileId }) => {
                             className="fa fa-trash text-danger f-18 cursor-pointer px-2"
                             onClick={() => {
                               if (!loading) {
-                                setDeleteFileId(fileItem?.id);
-                                dispatch(
-                                  setupReportingFileDelete({
-                                    fileId: Number(fileItem?.id),
-                                    reportingId: Number(item?.id),
-                                  })
-                                );
+                                if (
+                                  user[0]?.userId?.employeeid?.userHierarchy !==
+                                  "IAH"
+                                ) {
+                                  toast.error(
+                                    "Only the Head of Internal Audit can delete a file."
+                                  );
+                                }
+                                if (
+                                  user[0]?.userId?.employeeid?.userHierarchy ===
+                                  "IAH"
+                                ) {
+                                  setDeleteFileId(fileItem?.id);
+                                  dispatch(
+                                    setupReportingFileDelete({
+                                      fileId: Number(fileItem?.id),
+                                      reportingId: Number(item?.id),
+                                    })
+                                  );
+                                }
                               }
                             }}
                           ></i>
