@@ -18,7 +18,9 @@ import AuditExtraFields from "./components/AuditExtraFields";
 import Header from "./components/Header";
 import { PDFViewer } from "@react-pdf/renderer";
 import FileUpload from "./components/FileUpload";
+import ConsolidatedObservations from "./components/ConsolidatedObservataion";
 import PDFGenerator from "./components/PDFGenerator";
+import { groupObservationsByTitle } from "../../../../../constants/index";
 
 const ViewInternalAuditConsolidationReport = () => {
   const dispatch = useDispatch();
@@ -26,6 +28,8 @@ const ViewInternalAuditConsolidationReport = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const reportId = searchParams.get("reportId");
   const [viewPdf, setViewPdf] = React.useState(false);
+  const [consolidatedObservations, setConsolidatedObservations] =
+    React.useState([]);
   const { user } = useSelector((state) => state?.auth);
   const { loading, singleInternalAuditReport } = useSelector(
     (state) => state?.consolidationReport
@@ -53,6 +57,14 @@ const ViewInternalAuditConsolidationReport = () => {
     }
   }, [dispatch]);
 
+  React.useEffect(() => {
+    if (singleInternalAuditReport?.reportingsList) {
+      setConsolidatedObservations(
+        groupObservationsByTitle(singleInternalAuditReport?.reportingsList)
+      );
+    }
+  }, [singleInternalAuditReport]);
+
   return (
     <div className="overflow-y-hidden">
       {loading ? (
@@ -72,9 +84,20 @@ const ViewInternalAuditConsolidationReport = () => {
             singleInternalAuditReport={singleInternalAuditReport}
           />
           <KeyFindings reportObject={singleInternalAuditReport} />
-          <AuditExtraFields
-            singleInternalAuditReport={singleInternalAuditReport}
-          />
+          {consolidatedObservations &&
+            consolidatedObservations?.length !== 0 && (
+              <ConsolidatedObservations
+                consolidatedObservations={consolidatedObservations}
+                reportObject={singleInternalAuditReport}
+              />
+            )}
+          {singleInternalAuditReport?.intAuditExtraFieldsList &&
+            singleInternalAuditReport?.intAuditExtraFieldsList?.length !==
+              0 && (
+              <AuditExtraFields
+                singleInternalAuditReport={singleInternalAuditReport}
+              />
+            )}
           <div className="mt-4">
             <FileUpload item={singleInternalAuditReport} />
           </div>

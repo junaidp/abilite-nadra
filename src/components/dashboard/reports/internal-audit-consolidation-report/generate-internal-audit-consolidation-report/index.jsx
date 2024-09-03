@@ -21,6 +21,7 @@ import InternalAuditReportBody from "./components/InternalAuditReportBody";
 import Header from "./components/Header";
 import { toast } from "react-toastify";
 import { CircularProgress } from "@mui/material";
+import { groupObservationsByTitle } from "../../../../../constants/index";
 
 const GenerateInternalAuditConsolidationReport = () => {
   const dispatch = useDispatch();
@@ -35,6 +36,8 @@ const GenerateInternalAuditConsolidationReport = () => {
     internalAuditReportExtraFieldsObject,
     consolidationFileUploadAddSuccess,
   } = useSelector((state) => state?.consolidationReport);
+  const [consolidatedObservations, setConsolidatedObservations] =
+    React.useState([]);
   const [reportObject, setReportObject] = React.useState({});
   const [jobForInternalAuditReportId, setJobForInternalAuditReportId] =
     React.useState("");
@@ -189,6 +192,14 @@ const GenerateInternalAuditConsolidationReport = () => {
   }, [internalAuditReportExtraFieldsObject]);
 
   React.useEffect(() => {
+    if (internalAuditReportObject?.reportingsList) {
+      setConsolidatedObservations(
+        groupObservationsByTitle(internalAuditReportObject?.reportingsList)
+      );
+    }
+  }, [internalAuditReportObject]);
+
+  React.useEffect(() => {
     dispatch(changeActiveLink("li-consolidation-report"));
     dispatch(InitialLoadSidebarActiveLink("li-reports"));
     return () => {
@@ -255,6 +266,7 @@ const GenerateInternalAuditConsolidationReport = () => {
             handleChangeExtraFields={handleChangeExtraFields}
             handleChangeAnnexure={handleChangeAnnexure}
             setDeleteFileId={setDeleteFileId}
+            consolidatedObservations={consolidatedObservations}
           />
         )
       )}

@@ -1,11 +1,17 @@
 import React from "react";
 import moment from "moment";
-import RichTextEditor from "../../view-internal-audit-consolidation-report/components/RichText";
-import FileAttachement from "./Attachments"
+import RichTextEditor from "./RichText";
+import FileAttachement from "./Attachments";
 
-const FollowUpItem = ({ item }) => {
+const FollowUpItem = ({ item, consolidatedObservationsItem }) => {
   return (
     <div>
+      {consolidatedObservationsItem === false && (
+        <div className="mb-3">
+          <label>Observation Title:</label>
+          <p>{item?.observationTitle}</p>
+        </div>
+      )}
       <div className="mb-3">
         <label>Observation:</label>
         <RichTextEditor initialValue={item?.observationName} />
@@ -121,8 +127,7 @@ const FollowUpItem = ({ item }) => {
           <option value="false">No</option>
         </select>
       </div>
-      <FileAttachement item={item}/>
-      <hr />
+      <FileAttachement item={item} />
     </div>
   );
 };

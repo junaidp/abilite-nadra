@@ -236,7 +236,9 @@ const InternalAuditReport = () => {
                 ) : allInternalAuditReports?.length === 0 ||
                   allInternalAuditReports[0]?.error === "Not Found" ? (
                   <tr>
-                    <td className="w-300">No Internal Audit Reports To Show.</td>
+                    <td className="w-300">
+                      No Internal Audit Reports To Show.
+                    </td>
                   </tr>
                 ) : (
                   allInternalAuditReports?.map((item, index) => {
@@ -258,7 +260,11 @@ const InternalAuditReport = () => {
                                 )
                               }
                             ></i>
-                            {item?.approved === false && (
+                            {(Number(item?.createdBy) ===
+                              Number(user[0]?.userId?.id) &&
+                              item?.submitted === false) ||
+                            user[0]?.userId?.employeeid?.userHierarchy ===
+                              "IAH" ? (
                               <i
                                 className="fa fa-edit f-18 cursor-pointer"
                                 onClick={() =>
@@ -267,8 +273,12 @@ const InternalAuditReport = () => {
                                   )
                                 }
                               ></i>
-                            )}
-                            {item?.approved === false && (
+                            ) : null}
+                            {(Number(item?.createdBy) ===
+                              Number(user[0]?.userId?.id) &&
+                              item?.submitted === false) ||
+                            user[0]?.userId?.employeeid?.userHierarchy ===
+                              "IAH" ? (
                               <i
                                 className={`fa fa-trash text-danger cursor-pointer f-18`}
                                 onClick={() => {
@@ -276,7 +286,7 @@ const InternalAuditReport = () => {
                                   setShowDeleteInternalAuditReportDialog(true);
                                 }}
                               ></i>
-                            )}
+                            ) : null}
                             {item?.reportName &&
                               item?.reportName !== "" &&
                               item?.executiveSummary &&

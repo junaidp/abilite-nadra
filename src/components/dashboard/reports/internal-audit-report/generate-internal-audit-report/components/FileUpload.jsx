@@ -13,6 +13,7 @@ const IAHFileUpload = ({ item, setDeleteFileId }) => {
   const { addReportLoading, iahFileUploadSuccess } = useSelector(
     (state) => state?.internalAuditReport
   );
+  const { user } = useSelector((state) => state?.auth);
   const updatedFileInputRef = React.useRef(null);
   const fileInputRef = React.useRef(null);
   const [selectedUpdateFile, setSelectedUpdateFile] = React.useState(null);
@@ -180,13 +181,26 @@ const IAHFileUpload = ({ item, setDeleteFileId }) => {
                           className="fa fa-trash text-danger f-18 cursor-pointer px-2"
                           onClick={() => {
                             if (!addReportLoading) {
-                              setDeleteFileId(fileItem?.id);
-                              dispatch(
-                                setupIahFileDelete({
-                                  fileId: Number(fileItem?.id),
-                                  id: Number(item?.id),
-                                })
-                              );
+                              if (
+                                user[0]?.userId?.employeeid?.userHierarchy !==
+                                "IAH"
+                              ) {
+                                toast.error(
+                                  "Only the Head of Internal Audit can delete a file."
+                                );
+                              }
+                              if (
+                                user[0]?.userId?.employeeid?.userHierarchy ===
+                                "IAH"
+                              ) {
+                                setDeleteFileId(fileItem?.id);
+                                dispatch(
+                                  setupIahFileDelete({
+                                    fileId: Number(fileItem?.id),
+                                    id: Number(item?.id),
+                                  })
+                                );
+                              }
                             }
                           }}
                         ></i>

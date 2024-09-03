@@ -336,6 +336,11 @@ body {
   border-radius: 8px !important;
 }
 
+.consolidatedTitle {
+  font-weight: bold;
+  font-size: 12px;
+}
+
 .mt-13 {
   margin-top: 13px !important;
 }

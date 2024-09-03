@@ -3,7 +3,7 @@ import { handleDownload } from "../../../../../../constants/index";
 
 const ConsolidationAttachments = ({ item }) => {
   return (
-    <div className="row mb-3">
+    <div className="row">
       <div className="col-lg-12">
         <div className="table-responsive">
           <table className="table table-bordered  table-hover rounded">

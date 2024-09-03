@@ -12,6 +12,7 @@ import { v4 as uuidv4 } from "uuid";
 import KeyKindings from "./KeyFindings";
 import ExtraFields from "./ExtraFields";
 import FileUpload from "./FileUpload";
+import ConsolidatedObservations from "../components/ConsolidatedObservataion";
 
 const InternalAuditReportBody = ({
   reportObject,
@@ -23,6 +24,7 @@ const InternalAuditReportBody = ({
   handleChangeExtraFields,
   handleChangeAnnexure,
   setDeleteFileId,
+  consolidatedObservations,
 }) => {
   const dispatch = useDispatch();
   const [extraFieldsArray, setExtraFieldsArray] = React.useState([]);
@@ -124,6 +126,12 @@ const InternalAuditReportBody = ({
       <KeyKindings reportObject={reportObject} />
 
       {/* Extra Fields Starts */}
+      {consolidatedObservations && consolidatedObservations?.length !== 0 && (
+        <ConsolidatedObservations
+          consolidatedObservations={consolidatedObservations}
+          reportObject={reportObject}
+        />
+      )}
       <ExtraFields
         reportObject={reportObject}
         handleChangeExtraFields={handleChangeExtraFields}

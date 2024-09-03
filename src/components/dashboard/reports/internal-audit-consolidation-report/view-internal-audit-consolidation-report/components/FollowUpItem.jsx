@@ -3,9 +3,15 @@ import moment from "moment";
 import RichTextEditor from "./RichText";
 import FileAttachement from "./Attachments";
 
-const FollowUpItem = ({ item }) => {
+const FollowUpItem = ({ item, consolidatedObservationsItem }) => {
   return (
     <div>
+      {consolidatedObservationsItem === false && (
+        <div className="mb-3">
+          <label>Observation Title:</label>
+          <p>{item?.observationTitle}</p>
+        </div>
+      )}
       <div className="mb-3">
         <label>Observation:</label>
         <RichTextEditor initialValue={item?.observationName} />
@@ -122,7 +128,6 @@ const FollowUpItem = ({ item }) => {
         </select>
       </div>
       <FileAttachement item={item} />
-      <hr />
     </div>
   );
 };

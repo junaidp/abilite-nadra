@@ -22,4 +22,25 @@ const handleDownload = ({ base64String, fileName }) => {
   URL.revokeObjectURL(blobUrl);
 };
 
-export { baseUrl, handleDownload };
+function groupObservationsByTitle(array) {
+  const grouped = array.reduce((acc, item) => {
+    const title = item.observationTitle;
+
+    if (!acc[title]) {
+      acc[title] = {
+        commonTitle: title,
+        observations: [],
+      };
+    }
+    acc[title].observations.push(item);
+    return acc;
+  }, {});
+
+  const result = Object.values(grouped).filter(
+    (group) => group.observations.length > 1
+  );
+
+  return result;
+}
+
+export { baseUrl, handleDownload, groupObservationsByTitle };

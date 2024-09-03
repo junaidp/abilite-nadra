@@ -17,11 +17,14 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import InternalAuditReportBody from "./components/InternalAuditReportBody";
 import Header from "./components/Header";
+import { groupObservationsByTitle } from "../../../../../constants/index";
 
 const UpdateInternalAuditConsolidationReport = () => {
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
   const reportId = searchParams.get("reportId");
+  const [consolidatedObservations, setConsolidatedObservations] =
+    React.useState([]);
   const navigate = useNavigate();
   const { user } = useSelector((state) => state?.auth);
   const {
@@ -168,6 +171,14 @@ const UpdateInternalAuditConsolidationReport = () => {
     }
   }, [dispatch]);
 
+  React.useEffect(() => {
+    if (singleInternalAuditReport?.reportingsList) {
+      setConsolidatedObservations(
+        groupObservationsByTitle(singleInternalAuditReport?.reportingsList)
+      );
+    }
+  }, [singleInternalAuditReport]);
+
   return (
     <div className="overflow-y-hidden">
       {loading ? (
@@ -189,6 +200,7 @@ const UpdateInternalAuditConsolidationReport = () => {
             handleChangeExtraFields={handleChangeExtraFields}
             handleChangeAnnexure={handleChangeAnnexure}
             setDeleteFileId={setDeleteFileId}
+            consolidatedObservations={consolidatedObservations}
           />
         </div>
       )}
