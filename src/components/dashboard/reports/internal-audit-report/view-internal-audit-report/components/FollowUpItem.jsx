@@ -2,21 +2,23 @@ import React from "react";
 import moment from "moment";
 import RichTextEditor from "./RichText";
 
-const FollowUpItem = ({ item }) => {
+const FollowUpItem = ({ item, consolidatedObservationsItem }) => {
   return (
-    <div className="border px-3 py-2  mt-3 rounded">
-      <div className="row mb-3">
-        <div className="col-lg-12">
-          <label>Observation Title:</label>
-          <input
-            className="form-control w-100"
-            placeholder="Enter Observation Title here"
-            type="text"
-            value={item?.observationTitle}
-            disabled
-          />
+    <div>
+      {!consolidatedObservationsItem && (
+        <div className="row mb-3">
+          <div className="col-lg-12">
+            <label>Observation Title:</label>
+            <input
+              className="form-control w-100"
+              placeholder="Enter Observation Title here"
+              type="text"
+              value={item?.observationTitle}
+              disabled
+            />
+          </div>
         </div>
-      </div>
+      )}
       <div className="mb-3">
         <label>Observation:</label>
         <RichTextEditor initialValue={item?.observationName} />

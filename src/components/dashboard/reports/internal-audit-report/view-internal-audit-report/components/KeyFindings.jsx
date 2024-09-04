@@ -6,7 +6,7 @@ const KeyFindings = ({ singleInternalAuditReport }) => {
     <div>
       <div className="row my-3">
         <div className="col-lg-12">
-          <div className="sub-heading   fw-bold">Summary of key Finding(s)</div>
+          <div className="heading   fw-bold">Summary of key Finding(s)</div>
         </div>
       </div>
 

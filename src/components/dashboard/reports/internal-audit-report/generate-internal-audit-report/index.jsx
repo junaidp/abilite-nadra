@@ -21,9 +21,12 @@ import InternalAuditReportBody from "./components/InternalAuditReportBody";
 import Header from "./components/Header";
 import { toast } from "react-toastify";
 import { CircularProgress } from "@mui/material";
+import { groupObservationsByTitle } from "../../../../../constants/index";
 
 const GenerateInternalAuditReport = () => {
   const dispatch = useDispatch();
+  const [consolidatedObservations, setConsolidatedObservations] =
+    React.useState([]);
   const { user } = useSelector((state) => state?.auth);
   const { company, year } = useSelector((state) => state?.common);
   const {
@@ -196,6 +199,16 @@ const GenerateInternalAuditReport = () => {
     };
   }, []);
 
+  React.useEffect(() => {
+    if (internalAuditReportObject?.reportingAndFollowUp?.reportingList) {
+      setConsolidatedObservations(
+        groupObservationsByTitle(
+          internalAuditReportObject?.reportingAndFollowUp?.reportingList
+        )
+      );
+    }
+  }, [internalAuditReportObject]);
+
   return (
     <div className="overflow-y-hidden">
       <Header />
@@ -255,6 +268,7 @@ const GenerateInternalAuditReport = () => {
             handleChangeExtraFields={handleChangeExtraFields}
             handleChangeAnnexure={handleChangeAnnexure}
             setDeleteFileId={setDeleteFileId}
+            consolidatedObservations={consolidatedObservations}
           />
         )
       )}
