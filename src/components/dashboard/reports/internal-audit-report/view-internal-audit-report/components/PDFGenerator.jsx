@@ -3,6 +3,7 @@ import moment from "moment";
 import React from "react";
 import font from "../../../../../../font/Poppins-Medium.ttf";
 import Html from "react-pdf-html";
+import { groupObservationsByTitle } from "../../../../../../constants/index";
 import {
   Document,
   Page,
@@ -41,6 +42,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 20,
     width: "100%",
+  },
+  line: {
+    marginTop: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "black",
+    borderBottomStyle: "solid",
   },
   logo: {
     width: 100,
@@ -247,6 +254,19 @@ const styles = StyleSheet.create({
 });
 
 const PDFGenerator = ({ reportObject }) => {
+  const [consolidatedObservations, setConsolidatedObservations] =
+    React.useState([]);
+
+  React.useEffect(() => {
+    if (reportObject?.reportingAndFollowUp?.reportingList) {
+      setConsolidatedObservations(
+        groupObservationsByTitle(
+          reportObject?.reportingAndFollowUp?.reportingList
+        )
+      );
+    }
+  }, [reportObject]);
+
   return (
     <Document>
       <Page style={styles.firstPage} size="A4">
@@ -527,11 +547,113 @@ const PDFGenerator = ({ reportObject }) => {
                       )}
                     </Text>
                   </View>
+                  <View style={styles.line} />
                 </View>
               );
             }
           )}
         </View>
+        {/* Page 8 */}
+        {consolidatedObservations && consolidatedObservations?.length > 0 && (
+          <View style={styles.allFindingMianHeadingWrap} break>
+            <Text style={styles.globalFont}>Consolidated Findings</Text>
+          </View>
+        )}
+        {/* Page 9 */}
+        {consolidatedObservations && consolidatedObservations?.length > 0 && (
+          <View style={styles.page2} break>
+            {consolidatedObservations?.map((singleGroup, index) => {
+              return (
+                <View style={styles.findings} key={index}>
+                  <Text style={styles.findingTitle}>
+                    {singleGroup?.commonTitle}
+                  </Text>
+                  {singleGroup?.observations?.map((followUpItem, subIndex) => {
+                    return (
+                      <View key={subIndex}>
+                        <View style={styles.reportInfoViewItem}>
+                          <Text style={styles.reportInfoTitle}>
+                            Sub Location:
+                          </Text>
+                          <View style={styles.locationWrap}>
+                            <Text style={styles.reportInfoSubTitle} key={index}>
+                              {
+                                reportObject?.subLocationList?.find(
+                                  (subLocation) =>
+                                    subLocation?.id ===
+                                    followUpItem?.subLocation
+                                )?.description
+                              }
+                            </Text>
+                          </View>
+                        </View>
+                        <View>
+                          <View style={styles.singleFindSummaryWrap}>
+                            <Text style={styles.singleFindSummaryHeader}>
+                              Observation
+                            </Text>
+                            <Html style={styles.singleFindSummaryPara}>
+                              {followUpItem?.observationName}
+                            </Html>
+                          </View>
+                          <View style={styles.singleFindSummaryWrap}>
+                            <Text style={styles.singleFindSummaryHeader}>
+                              Implication
+                            </Text>
+                            <Text style={styles.singleFindSummaryPara}>
+                              {followUpItem?.implication}
+                            </Text>
+                          </View>
+                          <View style={styles.singleFindSummaryWrap}>
+                            <Text style={styles.singleFindSummaryHeader}>
+                              Management Comments
+                            </Text>
+                            <Text style={styles.singleFindSummaryPara}>
+                              {followUpItem?.managementComments}
+                            </Text>
+                          </View>
+                          <View style={styles.singleFindSummaryWrap}>
+                            <Text style={styles.singleFindSummaryHeader}>
+                              Implication Rating
+                            </Text>
+                            <Text style={styles.singleFindSummaryPara}>
+                              {followUpItem?.implicationRating === 1
+                                ? "High"
+                                : followUpItem?.implicationRating === 2
+                                ? "Medium"
+                                : followUpItem?.implicationRating === 3
+                                ? "Low"
+                                : ""}
+                            </Text>
+                          </View>
+                          <View style={styles.singleFindSummaryWrap}>
+                            <Text style={styles.singleFindSummaryHeader}>
+                              Auditee
+                            </Text>
+                            <Text style={styles.singleFindSummaryPara}>
+                              {followUpItem?.auditee?.name}
+                            </Text>
+                          </View>
+                          <View style={styles.singleFindSummaryWrap}>
+                            <Text style={styles.singleFindingsHeaderInfoHeader}>
+                              Implementation Date
+                            </Text>
+                            <Text style={styles.singleFindSummaryPara}>
+                              {moment(followUpItem?.implementationDate).format(
+                                "YYYY-MM-DD"
+                              )}
+                            </Text>
+                          </View>
+                        </View>
+                        <View style={styles.line} />
+                      </View>
+                    );
+                  })}
+                </View>
+              );
+            })}
+          </View>
+        )}
 
         {/* Page 8 */}
         {reportObject?.intAuditExtraFieldsList &&

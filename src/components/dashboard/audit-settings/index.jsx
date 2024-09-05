@@ -23,9 +23,9 @@ import Location from "./components/location";
 import RiskFactor from "./components/risk-factor";
 import UserManagement from "./components/user";
 import RCMLibrary from "./components/rcm-library";
-import PreviousObservation from "./components/previous-observation/index.jsx";
+// import PreviousObservation from "./components/previous-observation/index.jsx";
 import Process from "./components/process";
-// import Notification from "./components/notification";
+import Notification from "./components/notification";
 const AuditSettings = () => {
   const dispatch = useDispatch();
   const [checkListManagementDialog, setCheckListManagementDialog] =
@@ -249,7 +249,7 @@ const AuditSettings = () => {
                     User Details
                   </button>
                 )}
-                {/* {userRole !== "ADMIN" && (
+                {userRole === "ADMIN" && (
                   <button
                     className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
                     id="nav-notification-tab"
@@ -261,7 +261,7 @@ const AuditSettings = () => {
                   >
                     Notification
                   </button>
-                )} */}
+                )}
                 {/* {(userRole === "ADMIN" || userHierarchy === "IAH") && (
                   <button
                     className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
@@ -330,7 +330,7 @@ const AuditSettings = () => {
                 userRole={userRole}
                 currentSettingOption={currentSettingOption}
               />
-              {/* {userRole !== "ADMIN" && <Notification />} */}
+              {userRole === "ADMIN" && <Notification />}
               {/* {(userRole === "ADMIN" || userHierarchy === "IAH") && (
                 <PreviousObservation
                   currentSettingOption={currentSettingOption}
