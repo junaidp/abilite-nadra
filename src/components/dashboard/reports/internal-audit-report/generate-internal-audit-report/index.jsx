@@ -13,20 +13,14 @@ import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
 } from "../../../../../global-redux/reducers/common/slice";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
 import InternalAuditReportBody from "./components/InternalAuditReportBody";
 import Header from "./components/Header";
 import { toast } from "react-toastify";
 import { CircularProgress } from "@mui/material";
-import { groupObservationsByTitle } from "../../../../../constants/index";
+import SelectJob from "./components/SelectJob";
 
 const GenerateInternalAuditReport = () => {
   const dispatch = useDispatch();
-  const [consolidatedObservations, setConsolidatedObservations] =
-    React.useState([]);
   const { user } = useSelector((state) => state?.auth);
   const { company, year } = useSelector((state) => state?.common);
   const {
@@ -44,7 +38,8 @@ const GenerateInternalAuditReport = () => {
   const [deleteFileId, setDeleteFileId] = React.useState("");
 
   const handleChange = (event) => {
-    setJobForInternalAuditReportId(event.target.value);
+    const selectedSubLocation = event.target.value;
+    setJobForInternalAuditReportId(selectedSubLocation);
   };
 
   function handleGetInternalAuditReportObject() {
@@ -53,9 +48,14 @@ const GenerateInternalAuditReport = () => {
         toast.error("Please Select Report");
       }
       if (jobForInternalAuditReportId !== "") {
+        const reportingAndFollowUpId =
+          jobForInternalAuditReportId?.split(" ")[0];
+        const subLocationId = jobForInternalAuditReportId?.split(" ")[1];
         dispatch(
           setupCreateInternalAuditReportObject(
-            `?reportingAndFollowUpId=${Number(jobForInternalAuditReportId)}`
+            `?reportingAndFollowUpId=${Number(
+              reportingAndFollowUpId
+            )}&subLocationId=${Number(subLocationId)}`
           )
         );
       }
@@ -199,60 +199,17 @@ const GenerateInternalAuditReport = () => {
     };
   }, []);
 
-  React.useEffect(() => {
-    if (internalAuditReportObject?.reportingAndFollowUp?.reportingList) {
-      setConsolidatedObservations(
-        groupObservationsByTitle(
-          internalAuditReportObject?.reportingAndFollowUp?.reportingList
-        )
-      );
-    }
-  }, [internalAuditReportObject]);
-
   return (
     <div className="overflow-y-hidden">
       <Header />
-      {Object.keys(internalAuditReportObject).length === 0 &&
-        internalAuditReportObject.constructor === Object && (
-          <div className="row pt-4">
-            <div className="col-lg-10">
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">
-                  Internal Audit Report
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={jobForInternalAuditReportId}
-                  label="Reporting And Follow Up"
-                  onChange={handleChange}
-                >
-                  <MenuItem value="">Select One</MenuItem>
-                  {jobsForInternalAuditReports?.map((item, index) => {
-                    return (
-                      <MenuItem value={item?.id} key={index}>
-                        {item?.title}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
-            </div>
-            <div className="col-lg-2">
-              <div
-                className={`btn btn-labeled btn-primary px-3 shadow  my-4 ${
-                  loading && "disabled"
-                }`}
-                onClick={handleGetInternalAuditReportObject}
-              >
-                <span className="btn-label me-2">
-                  <i className="fa fa-check-circle f-18"></i>
-                </span>
-                {loading ? "Loading.." : "Create Report"}
-              </div>
-            </div>
-          </div>
-        )}
+      <SelectJob
+        internalAuditReportObject={internalAuditReportObject}
+        jobForInternalAuditReportId={jobForInternalAuditReportId}
+        handleChange={handleChange}
+        jobsForInternalAuditReports={jobsForInternalAuditReports}
+        handleGetInternalAuditReportObject={handleGetInternalAuditReportObject}
+        loading={loading}
+      />
       {loading ? (
         <CircularProgress />
       ) : (
@@ -268,7 +225,6 @@ const GenerateInternalAuditReport = () => {
             handleChangeExtraFields={handleChangeExtraFields}
             handleChangeAnnexure={handleChangeAnnexure}
             setDeleteFileId={setDeleteFileId}
-            consolidatedObservations={consolidatedObservations}
           />
         )
       )}

@@ -17,7 +17,6 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import InternalAuditReportBody from "./components/InternalAuditReportBody";
 import Header from "./components/Header";
-import { groupObservationsByTitle } from "../../../../../constants/index";
 
 const UpdateInternalAuditReport = () => {
   const dispatch = useDispatch();
@@ -25,8 +24,6 @@ const UpdateInternalAuditReport = () => {
   const reportId = searchParams.get("reportId");
   const navigate = useNavigate();
   const { user } = useSelector((state) => state?.auth);
-  const [consolidatedObservations, setConsolidatedObservations] =
-    React.useState([]);
   const {
     loading,
     internalAuditReportAddSuccess,
@@ -173,16 +170,6 @@ const UpdateInternalAuditReport = () => {
     };
   }, []);
 
-  React.useEffect(() => {
-    if (singleInternalAuditReport?.reportingAndFollowUp?.reportingList) {
-      setConsolidatedObservations(
-        groupObservationsByTitle(
-          singleInternalAuditReport?.reportingAndFollowUp?.reportingList
-        )
-      );
-    }
-  }, [singleInternalAuditReport]);
-
   return (
     <div className="overflow-y-hidden">
       {loading ? (
@@ -204,7 +191,6 @@ const UpdateInternalAuditReport = () => {
             handleChangeExtraFields={handleChangeExtraFields}
             handleChangeAnnexure={handleChangeAnnexure}
             setDeleteFileId={setDeleteFileId}
-            consolidatedObservations={consolidatedObservations}
           />
         </div>
       )}

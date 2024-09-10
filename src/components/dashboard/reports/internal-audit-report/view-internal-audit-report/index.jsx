@@ -20,8 +20,6 @@ import FollowUpItem from "./components/FollowUpItem";
 import PDFGenerator from "./components/PDFGenerator";
 import { PDFViewer } from "@react-pdf/renderer";
 import FileUpload from "./components/FileUpload";
-import { groupObservationsByTitle } from "../../../../../constants/index";
-import ConsolidatedObservation from "./components/ConsolidatedObservation";
 import { Chip } from "@mui/material";
 
 const ViewInternalAuditReport = () => {
@@ -29,8 +27,6 @@ const ViewInternalAuditReport = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const reportId = searchParams.get("reportId");
-  const [consolidatedObservations, setConsolidatedObservations] =
-    React.useState([]);
   const { user } = useSelector((state) => state?.auth);
   const { loading, singleInternalAuditReport } = useSelector(
     (state) => state?.internalAuditReport
@@ -60,16 +56,6 @@ const ViewInternalAuditReport = () => {
     }
   }, [dispatch]);
 
-  React.useEffect(() => {
-    if (singleInternalAuditReport?.reportingAndFollowUp?.reportingList) {
-      setConsolidatedObservations(
-        groupObservationsByTitle(
-          singleInternalAuditReport?.reportingAndFollowUp?.reportingList
-        )
-      );
-    }
-  }, [singleInternalAuditReport]);
-
   return (
     <div className="overflow-y-hidden">
       {loading ? (
@@ -93,36 +79,27 @@ const ViewInternalAuditReport = () => {
             <div className="col-lg-12 mt-4">
               <div className="heading  fw-bold">All Findings</div>
             </div>
-            {singleInternalAuditReport?.reportingAndFollowUp?.reportingList?.map(
-              (item, index) => {
-                return (
-                  <div className="border px-3 py-2  mt-3 rounded" key={index}>
-                    <div className="d-flex items-center justify-content-between">
-                      <div></div>
-                      <Chip
-                        label={
-                          singleInternalAuditReport?.subLocationList?.find(
-                            (subLocation) =>
-                              subLocation?.id === item?.subLocation
-                          )?.description
-                        }
-                      />
-                    </div>
-                    <FollowUpItem
-                      item={item}
-                      consolidatedObservationsItem={false}
+            {singleInternalAuditReport?.reportingList?.map((item, index) => {
+              return (
+                <div className="border px-3 py-2  mt-3 rounded" key={index}>
+                  <div className="d-flex items-center justify-content-between">
+                    <div></div>
+                    <Chip
+                      label={
+                        singleInternalAuditReport?.subLocationList?.find(
+                          (subLocation) => subLocation?.id === item?.subLocation
+                        )?.description
+                      }
                     />
                   </div>
-                );
-              }
-            )}
+                  <FollowUpItem
+                    item={item}
+                    consolidatedObservationsItem={false}
+                  />
+                </div>
+              );
+            })}
           </div>
-          {consolidatedObservations && consolidatedObservations?.length > 0 && (
-            <ConsolidatedObservation
-              reportObject={singleInternalAuditReport}
-              consolidatedObservations={consolidatedObservations}
-            />
-          )}
           {singleInternalAuditReport?.intAuditExtraFieldsList &&
             singleInternalAuditReport?.intAuditExtraFieldsList?.length > 0 && (
               <AuditExtraFields

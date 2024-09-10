@@ -13,7 +13,6 @@ import { v4 as uuidv4 } from "uuid";
 import KeyFindings from "./KeyFindings";
 import ExtraFields from "./ExtraFields";
 import FileUpload from "./FileUpload";
-import ConsolidatedObservation from "./ConsolidatedObservation";
 import Chip from "@mui/material/Chip";
 
 const InternalAuditReportBody = ({
@@ -26,7 +25,6 @@ const InternalAuditReportBody = ({
   handleChangeExtraFields,
   handleChangeAnnexure,
   setDeleteFileId,
-  consolidatedObservations,
 }) => {
   const dispatch = useDispatch();
   const [extraFieldsArray, setExtraFieldsArray] = React.useState([]);
@@ -133,7 +131,7 @@ const InternalAuditReportBody = ({
           <div className="heading  fw-bold">All Findings</div>
         </div>
       </div>
-      {reportObject?.reportingAndFollowUp?.reportingList?.map((item, index) => {
+      {reportObject?.reportingList?.map((item, index) => {
         return (
           <div className="border px-3 py-2  mt-3 rounded" key={index}>
             <div className="d-flex items-center justify-content-between">
@@ -151,12 +149,6 @@ const InternalAuditReportBody = ({
         );
       })}
       {/* Reporting And Follow Up Ends */}
-      {consolidatedObservations && consolidatedObservations?.length > 0 && (
-        <ConsolidatedObservation
-          reportObject={reportObject}
-          consolidatedObservations={consolidatedObservations}
-        />
-      )}
 
       {/* Extra Field Starts */}
       <ExtraFields

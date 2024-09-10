@@ -1,8 +1,56 @@
 import React from "react";
 import Chip from "@mui/material/Chip";
 import moment from "moment";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
-const JobScheduleList = ({ currentJobSchedulingObject }) => {
+const JobScheduleList = ({
+  currentJobSchedulingObject,
+  setCurrentJobScheduling,
+  handleSaveMainJobScheduling,
+}) => {
+  const { singleJobSchedulingObject, loading } = useSelector(
+    (state) => state?.planningJobScheduling
+  );
+  const { user } = useSelector((state) => state?.auth);
+
+  function handleChangeDate(event, id) {
+    if (
+      !singleJobSchedulingObject?.timeAndDateAllocation?.estimatedWeeks ||
+      singleJobSchedulingObject?.timeAndDateAllocation?.estimatedWeeks === 0
+    ) {
+      toast.error(
+        "Please select the estimated number of weeks, then save the time and date allocation to change the planned start date."
+      );
+      return;
+    }
+
+    const selectedDate = new Date(event.target.value);
+    const weeksToAdd =
+      singleJobSchedulingObject?.timeAndDateAllocation?.estimatedWeeks || 0;
+
+    setCurrentJobScheduling((pre) => {
+      return {
+        ...pre,
+        jobScheduleList: pre?.jobScheduleList?.map((listItem) =>
+          listItem?.id === id
+            ? {
+                ...listItem,
+                plannedJobStartDate: event.target.value,
+                plannedJobEndDate: selectedDate.setDate(
+                  selectedDate.getDate() + weeksToAdd * 7
+                ),
+              }
+            : listItem
+        ),
+      };
+    });
+  }
+
+  function handleSave() {
+    handleSaveMainJobScheduling();
+  }
+
   return (
     <div className="accordion-item">
       <h2 className="accordion-header">
@@ -55,9 +103,20 @@ const JobScheduleList = ({ currentJobSchedulingObject }) => {
                                 .format("YYYY-MM-DD")
                             : null
                         }
+                        disabled={
+                          singleJobSchedulingObject?.locked === true ||
+                          (singleJobSchedulingObject?.complete === true &&
+                            singleJobSchedulingObject?.locked === false &&
+                            user[0]?.userId?.employeeid?.userHierarchy !==
+                              "IAH")
+                            ? true
+                            : false
+                        }
                         onChange={(event) => handleChangeDate(event, list?.id)}
-                        disabled
                       />
+                      {list?.plannedJobStartDate === null && (
+                        <p className="error mt-1">date is required</p>
+                      )}
                     </div>
                     <div className="col-lg-6">
                       <label className="form-label me-2">
@@ -81,6 +140,26 @@ const JobScheduleList = ({ currentJobSchedulingObject }) => {
                   </div>
                 );
               })}
+            </div>
+          )}
+          {(singleJobSchedulingObject?.complete === false ||
+            (singleJobSchedulingObject?.complete === true &&
+              singleJobSchedulingObject?.locked === false &&
+              user[0]?.userId?.employeeid?.userHierarchy === "IAH")) && (
+            <div className="row mt-3">
+              <div className="col-lg-12 justify-content-end text-end">
+                <div
+                  className={`btn btn-labeled btn-primary px-3 shadow ${
+                    loading && "disabled"
+                  }`}
+                  onClick={handleSave}
+                >
+                  <span className="btn-label me-2">
+                    <i className="fa fa-check-circle"></i>
+                  </span>
+                  {loading ? "Loading..." : "Save"}
+                </div>
+              </div>
             </div>
           )}
         </div>

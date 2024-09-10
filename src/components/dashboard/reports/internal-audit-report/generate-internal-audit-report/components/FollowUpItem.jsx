@@ -5,7 +5,7 @@ import RichTextEditor from "./RichText";
 const FollowUpItem = ({ item, consolidatedObservationsItem }) => {
   return (
     <div>
-      {!consolidatedObservationsItem && (
+      {consolidatedObservationsItem===false && (
         <div className="row mb-3">
           <div className="col-lg-12">
             <label>Observation Title:</label>

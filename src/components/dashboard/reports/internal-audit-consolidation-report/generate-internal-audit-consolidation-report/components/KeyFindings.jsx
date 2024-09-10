@@ -54,7 +54,10 @@ const KeyFindings = ({ reportObject }) => {
                   }
                 />
               </div>
-              <FollowUpItem item={singleMainItem} consolidatedObservationsItem={true}  />
+              <FollowUpItem
+                item={singleMainItem}
+                consolidatedObservationsItem={false}
+              />
             </div>
           );
         })}

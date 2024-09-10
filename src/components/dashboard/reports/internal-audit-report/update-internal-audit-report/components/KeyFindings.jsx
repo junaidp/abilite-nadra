@@ -9,14 +9,13 @@ const KeyFindings = ({ reportObject }) => {
           <div className="heading   fw-bold">Summary of key Finding(s)</div>
         </div>
       </div>
-
       <div className="border px-3 py-2  mt-3 rounded">
-        {reportObject?.reportingAndFollowUp?.reportingList?.filter(
+        {reportObject?.reportingList?.filter(
           (singleItem) => singleItem?.implicationRating === 1
         )?.length == 0 ? (
-          <p> No summary of key findings in this job!</p>
+          <p> No summary of key findings in this job.</p>
         ) : (
-          reportObject?.reportingAndFollowUp?.reportingList
+          reportObject?.reportingList
             ?.filter((reportItem) => reportItem?.implicationRating === 1)
             ?.map((item, index) => {
               return (

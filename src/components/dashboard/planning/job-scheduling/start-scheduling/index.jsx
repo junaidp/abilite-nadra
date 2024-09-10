@@ -155,6 +155,19 @@ const StartScheduling = () => {
     setShowSubmitDialog(true);
   }
 
+  function handleCheckJobScheduling() {
+    let isTrue = true;
+    currentJobSchedulingObject?.JobScheduleList?.forEach((listItem) => {
+      if (
+        listItem?.plannedJobStartDate === null ||
+        listItem?.plannedJobEndDate === null
+      ) {
+        isTrue = false;
+      }
+    });
+    return isTrue;
+  }
+
   React.useEffect(() => {
     const isEmptyObject =
       Object.keys(singleJobSchedulingObject).length === 0 &&
@@ -384,15 +397,13 @@ const StartScheduling = () => {
           </div>
           <div className="row flex mb-2">
             <div className="col-lg-10 ">
-              {singleJobSchedulingObject?.complete === false &&
-                singleJobSchedulingObject?.timeAndDateAllocation?.placeOfWork &&
-                singleJobSchedulingObject?.timeAndDateAllocation
-                  ?.placeOfWork !== "" &&
-                singleJobSchedulingObject?.resourceAllocation?.resourcesList &&
-                singleJobSchedulingObject?.resourceAllocation?.resourcesList
+              {handleCheckJobScheduling() &&
+                singleJobSchedulingObject?.complete === false &&
+                currentJobSchedulingObject?.resourceAllocation?.resourcesList &&
+                currentJobSchedulingObject?.resourceAllocation?.resourcesList
                   ?.length !== 0 &&
-                singleJobSchedulingObject?.locationList &&
-                singleJobSchedulingObject?.locationList?.length !== 0 && (
+                currentJobSchedulingObject?.locationList &&
+                currentJobSchedulingObject?.locationList?.length !== 0 && (
                   <div className=" mt-3">
                     <div className="col-lg-12 justify-content-end text-end">
                       <div
