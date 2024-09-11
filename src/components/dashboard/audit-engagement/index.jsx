@@ -139,7 +139,7 @@ const AuditEngagement = () => {
                           return (
                             <tr key={index}>
                               <td>{(page - 1) * itemsPerPage + index + 1}</td>
-                              <td>{item?.title}</td>
+                              <td>{item?.aetitle}</td>
                               <td>
                                 {item?.plannedStartDate
                                   ? moment

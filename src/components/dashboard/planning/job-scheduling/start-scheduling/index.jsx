@@ -405,7 +405,9 @@ const StartScheduling = () => {
                 currentJobSchedulingObject?.resourceAllocation?.resourcesList
                   ?.length !== 0 &&
                 currentJobSchedulingObject?.locationList &&
-                currentJobSchedulingObject?.locationList?.length !== 0 && (
+                currentJobSchedulingObject?.locationList?.length !== 0 &&
+                currentJobSchedulingObject?.subLocation &&
+                currentJobSchedulingObject?.subLocation?.length !== 0 && (
                   <div className=" mt-3">
                     <div className="col-lg-12 justify-content-end text-end">
                       <div

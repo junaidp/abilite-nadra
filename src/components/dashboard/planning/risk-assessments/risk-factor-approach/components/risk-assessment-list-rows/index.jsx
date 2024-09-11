@@ -109,8 +109,8 @@ const RiskAssessmentListRows = ({
                 !loading &&
                   dispatch(
                     setupDeleteResidualRisk({
-                      riskAssessmentId: Number(riskAssessmentId),
-                      riskFactorApproachId: item?.id,
+                      riskAssessmentId: item?.id,
+                      riskFactorApproachId: performRiskAssessmentObject?.id,
                     })
                   );
               }}
