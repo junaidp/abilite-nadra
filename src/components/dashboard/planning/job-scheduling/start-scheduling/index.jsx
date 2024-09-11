@@ -155,17 +155,16 @@ const StartScheduling = () => {
     setShowSubmitDialog(true);
   }
 
-  function handleCheckJobScheduling() {
-    let isTrue = true;
-    currentJobSchedulingObject?.JobScheduleList?.forEach((listItem) => {
-      if (
-        listItem?.plannedJobStartDate === null ||
-        listItem?.plannedJobEndDate === null
-      ) {
-        isTrue = false;
-      }
-    });
-    return isTrue;
+  function handleCheckJobScheduling(list) {
+    if (list) {
+      let isTrue = true;
+      list?.forEach((listItem) => {
+        if (!listItem?.plannedJobStartDate || !listItem?.plannedJobEndDate) {
+          isTrue = false;
+        }
+      });
+      return isTrue;
+    }
   }
 
   React.useEffect(() => {
@@ -397,7 +396,10 @@ const StartScheduling = () => {
           </div>
           <div className="row flex mb-2">
             <div className="col-lg-10 ">
-              {handleCheckJobScheduling() &&
+              {singleJobSchedulingObject?.jobScheduleList &&
+                handleCheckJobScheduling(
+                  singleJobSchedulingObject?.jobScheduleList
+                ) &&
                 singleJobSchedulingObject?.complete === false &&
                 currentJobSchedulingObject?.resourceAllocation?.resourcesList &&
                 currentJobSchedulingObject?.resourceAllocation?.resourcesList

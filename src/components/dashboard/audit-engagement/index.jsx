@@ -130,7 +130,9 @@ const AuditEngagement = () => {
                         </tr>
                       ) : allAuditEngagement?.length === 0 ? (
                         <tr>
-                          <td className="w-300">No Audit Engagements To Show.</td>
+                          <td className="w-300">
+                            No Audit Engagements To Show.
+                          </td>
                         </tr>
                       ) : (
                         allAuditEngagement?.map((item, index) => {
@@ -148,7 +150,7 @@ const AuditEngagement = () => {
                               <td>
                                 {item?.plannedEndDate
                                   ? moment
-                                      .utc(item?.item?.plannedEndDate)
+                                      .utc(item?.plannedEndDate)
                                       .format("DD-MM-YYYY")
                                   : "null"}
                               </td>

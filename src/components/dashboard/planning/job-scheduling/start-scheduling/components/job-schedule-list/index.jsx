@@ -51,6 +51,18 @@ const JobScheduleList = ({
     handleSaveMainJobScheduling();
   }
 
+  function handleCheckJobScheduling(list) {
+    if (list) {
+      let isTrue = true;
+      list?.forEach((listItem) => {
+        if (!listItem?.plannedJobStartDate || !listItem?.plannedJobEndDate) {
+          isTrue = false;
+        }
+      });
+      return isTrue;
+    }
+  }
+
   return (
     <div className="accordion-item">
       <h2 className="accordion-header">
@@ -62,7 +74,9 @@ const JobScheduleList = ({
           aria-expanded="false"
           aria-controls="flush-collapseFour"
         >
-          <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
+          {handleCheckJobScheduling(
+            singleJobSchedulingObject?.jobScheduleList
+          ) && <i className="fa fa-check-circle fs-3 text-success pe-3"></i>}
           Job Schedule List
         </button>
       </h2>

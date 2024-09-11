@@ -5,6 +5,8 @@ import {
   performRiskAssessment,
   performInitialRiskAssessment,
   addRiskAssessment,
+  deleteRiskFactor,
+  deleteResidualRisk,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
@@ -57,6 +59,20 @@ export const setupAddRiskAssessment = createAsyncThunk(
   "riskAssessment/addRiskAssessment",
   async (data, thunkAPI) => {
     return addRiskAssessment(data, thunkAPI);
+  }
+);
+
+export const setupDeleteRiskFactor = createAsyncThunk(
+  "riskAssessment/deleteRiskFactor",
+  async (data, thunkAPI) => {
+    return deleteRiskFactor(data, thunkAPI);
+  }
+);
+
+export const setupDeleteResidualRisk = createAsyncThunk(
+  "riskAssessment/deleteResidualRisk",
+  async (data, thunkAPI) => {
+    return deleteResidualRisk(data, thunkAPI);
   }
 );
 
@@ -197,6 +213,44 @@ export const slice = createSlice({
         state.riskAssessmentSuccess = true;
       })
       .addCase(setupAddRiskAssessment.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Delete Risk Factor
+    builder
+      .addCase(setupDeleteRiskFactor.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupDeleteRiskFactor.fulfilled, (state) => {
+        state.loading = false;
+        state.riskAssessmentSuccess = true;
+        toast.success(
+          "Criteria for Risk Management and Control Processes	 Deleted Successfully"
+        );
+      })
+      .addCase(setupDeleteRiskFactor.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Delete Residual Risk
+    builder
+      .addCase(setupDeleteResidualRisk.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupDeleteResidualRisk.fulfilled, (state) => {
+        state.loading = false;
+        state.riskAssessmentSuccess = true;
+        toast.success("Specific Risk Deleted Successfully");
+      })
+      .addCase(setupDeleteResidualRisk.rejected, (state, { payload }) => {
         state.loading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);

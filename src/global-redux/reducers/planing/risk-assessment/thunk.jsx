@@ -113,3 +113,39 @@ export const addRiskAssessment = async (data, thunkAPI) => {
     return thunkAPI.rejectWithValue(error);
   }
 };
+
+export const deleteRiskFactor = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.delete(
+      `${baseUrl}/auditPlanningAndScheduling/riskAssessment/deleteRiskAsssessmentCriteriaForRiskManagementCP?riskAssessmentsId=${data?.riskAssessmentsId}&riskAsssessmentCriteriaForRiskManagementCPId=${data?.riskAsssessmentCriteriaForRiskManagementCPId}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
+export const deleteResidualRisk = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.delete(
+      `${baseUrl}/auditPlanningAndScheduling/riskAssessment/deleteRiskAssessment?riskAssessmentId=${data?.riskAssessmentId}&riskFactorApproachId=${data?.riskFactorApproachId}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};

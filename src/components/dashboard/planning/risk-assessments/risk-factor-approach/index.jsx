@@ -255,12 +255,19 @@ const RiskFactorApproach = () => {
                           <th>Impact</th>
                           <th>Score</th>
                           <th>Comments</th>
+                          {performRiskAssessmentObject?.riskAssessments
+                            ?.complete === false &&
+                            data?.riskAssessmentList &&
+                            data?.riskAssessmentList?.length > 1 && (
+                              <th>Delete</th>
+                            )}
                         </tr>
                       </thead>
                       <tbody>
                         {data?.riskAssessmentList?.map((item, index) => {
                           return (
                             <RiskAssessmentListRows
+                              riskAssessmentId={riskAssessmentId}
                               key={index}
                               index={index}
                               item={item}
@@ -270,6 +277,7 @@ const RiskFactorApproach = () => {
                               performRiskAssessmentObject={
                                 performRiskAssessmentObject
                               }
+                              data={data}
                             />
                           );
                         })}
@@ -327,6 +335,11 @@ const RiskFactorApproach = () => {
                         <th className="width-100">Needs Improvement</th>
                         <th className="width-100">Adequate</th>
                         <th className="width-100">Comments</th>
+                        {performRiskAssessmentObject?.riskAssessments
+                          ?.complete === false &&
+                          data?.riskAsssessmentCriteriaForRiskManagementCPList &&
+                          data?.riskAsssessmentCriteriaForRiskManagementCPList
+                            ?.length > 1 && <th>Delete</th>}
                       </tr>
                     </thead>
                     <tbody>
@@ -334,6 +347,7 @@ const RiskFactorApproach = () => {
                         (cpItem, index) => {
                           return (
                             <CPListRows
+                              riskAssessmentId={riskAssessmentId}
                               cpItem={cpItem}
                               key={index}
                               index={index}
@@ -344,6 +358,7 @@ const RiskFactorApproach = () => {
                               performRiskAssessmentObject={
                                 performRiskAssessmentObject
                               }
+                              data={data}
                             />
                           );
                         }

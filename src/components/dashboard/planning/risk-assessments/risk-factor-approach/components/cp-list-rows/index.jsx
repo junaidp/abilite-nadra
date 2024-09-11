@@ -1,5 +1,6 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setupDeleteRiskFactor } from "../../../../../../../global-redux/reducers/planing/risk-assessment/slice";
 
 const CPListRows = ({
   cpItem,
@@ -7,8 +8,12 @@ const CPListRows = ({
   handleChangeCpListComments,
   performRiskAssessmentObject,
   index,
+  data,
+  riskAssessmentId,
 }) => {
+  const dispatch = useDispatch();
   const { user } = useSelector((state) => state?.auth);
+  const { loading } = useSelector((state) => state?.planningRiskAssessment);
   return (
     <tr>
       <td>{index + 1}</td>
@@ -114,6 +119,24 @@ const CPListRows = ({
           Maximum 500 characters
         </p>
       </td>
+      {performRiskAssessmentObject?.riskAssessments?.complete === false &&
+        data?.riskAsssessmentCriteriaForRiskManagementCPList &&
+        data?.riskAsssessmentCriteriaForRiskManagementCPList?.length > 1 && (
+          <td>
+            <i
+              className="fa fa-trash text-danger f-18 cursor-pointer"
+              onClick={() => {
+                !loading &&
+                  dispatch(
+                    setupDeleteRiskFactor({
+                      riskAssessmentsId: Number(riskAssessmentId),
+                      riskAsssessmentCriteriaForRiskManagementCPId: cpItem?.id,
+                    })
+                  );
+              }}
+            ></i>
+          </td>
+        )}
     </tr>
   );
 };
