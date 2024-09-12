@@ -26,23 +26,6 @@ const ViewJobSchedule = () => {
   const [page, setPage] = React.useState(1);
   const [itemsPerPage, setItemsPerPage] = React.useState(10);
 
-  function calculateHours(item) {
-    let totalResources =
-      Number(item?.numberOfResourcesRequired?.finance) +
-      Number(item?.numberOfResourcesRequired?.business) +
-      Number(item?.numberOfResourcesRequired?.fraud) +
-      Number(item?.numberOfResourcesRequired?.operations) +
-      Number(item?.numberOfResourcesRequired?.other) +
-      Number(item?.numberOfResourcesRequired?.it);
-    let totalWeeksHours =
-      Number(item?.timeAndDateAllocation?.estimatedWeeks) * 40;
-    return (
-      Number(item?.timeAndDateAllocation?.travellingDays) * 8 +
-      totalResources * totalWeeksHours +
-      Number(item?.timeAndDateAllocation?.internalAuditManagementHours)
-    );
-  }
-
   const handleChange = (_, value) => {
     setPage(value);
   };
@@ -125,10 +108,7 @@ const ViewJobSchedule = () => {
                     <th>Year</th>
                     <th>Planned Start Date</th>
                     <th>Planned End Date</th>
-                    <th>Resources Allocated</th>
-                    <th>Total Estimated Hours</th>
                     <th>Risk Rating</th>
-                    <th>Created by</th>
                     <th>Status</th>
                     <th>Actions</th>
                   </tr>
@@ -171,10 +151,7 @@ const ViewJobSchedule = () => {
                               ).format("YYYY-MM-DD")}
                             />
                           </td>
-                          <td>
-                            {item?.resourceAllocation?.resourcesList?.length}
-                          </td>
-                          <td>{calculateHours(item)}</td>
+
                           <td
                             className={` text-white ${
                               item?.riskRating?.toUpperCase() ===
@@ -191,7 +168,6 @@ const ViewJobSchedule = () => {
                           >
                             {item?.riskRating}
                           </td>
-                          <td>{item?.resourceAllocation?.createdBy?.name}</td>
                           <td>
                             {item?.locked === true
                               ? "Completed"

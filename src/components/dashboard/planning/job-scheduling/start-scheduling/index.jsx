@@ -401,8 +401,8 @@ const StartScheduling = () => {
                   singleJobSchedulingObject?.jobScheduleList
                 ) &&
                 singleJobSchedulingObject?.complete === false &&
-                currentJobSchedulingObject?.resourceAllocation?.resourcesList &&
-                currentJobSchedulingObject?.resourceAllocation?.resourcesList
+                singleJobSchedulingObject?.resourceAllocation?.resourcesList &&
+                singleJobSchedulingObject?.resourceAllocation?.resourcesList
                   ?.length !== 0 &&
                 currentJobSchedulingObject?.locationList &&
                 currentJobSchedulingObject?.locationList?.length !== 0 &&
