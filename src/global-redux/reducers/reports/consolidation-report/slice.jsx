@@ -340,9 +340,7 @@ export const slice = createSlice({
         setupGetAllJobsForInternalAuditReport.fulfilled,
         (state, { payload }) => {
           state.loading = false;
-          state.jobsForInternalAuditReports = payload?.data || [
-            { error: "Not Found" },
-          ];
+          state.jobsForInternalAuditReports = payload?.data || [];
         }
       )
       .addCase(

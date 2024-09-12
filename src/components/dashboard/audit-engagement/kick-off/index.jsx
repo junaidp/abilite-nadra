@@ -266,7 +266,7 @@ const KickOff = () => {
               ></i>
 
               <h2 className="mx-2 m-2 heading">
-                {currentAuditEngagement?.title}
+                {currentAuditEngagement?.aetitle}
               </h2>
             </div>
           </header>

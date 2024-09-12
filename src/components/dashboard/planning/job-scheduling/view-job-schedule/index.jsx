@@ -161,9 +161,11 @@ const ViewJobSchedule = () => {
                                   "Medium"?.toUpperCase()
                                 ? "bg-yellow"
                                 : item?.riskRating?.toUpperCase() ===
-                                  "High"?.toUpperCase()
+                                    "High"?.toUpperCase() ||
+                                  item?.riskRating?.toUpperCase() ===
+                                    "Extreme"?.toUpperCase()
                                 ? "bg-danger"
-                                : ""
+                                : "bg-success"
                             }`}
                           >
                             {item?.riskRating}
