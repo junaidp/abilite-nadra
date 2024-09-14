@@ -165,8 +165,8 @@ const JobPrioritization = () => {
             <div className="mb-0 heading">Job Prioritization</div>
           </header>
 
-          <div className="table-responsive overflow-x-hidden">
-            <table className="table table-bordered table-hover rounded equal-columns">
+          <div className="table-responsive">
+            <table className="table table-bordered  table-hover rounded">
               <thead>
                 <tr>
                   <th className="sr-col">Sr. #</th>

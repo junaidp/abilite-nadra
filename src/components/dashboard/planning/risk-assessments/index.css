@@ -26,10 +26,3 @@ td {
 .border-bottom {
   border-bottom: 1px solid black !important;
 }
-
-@media screen and (max-width: 900px) {
-  #SideComponents {
-    padding-right: 30px !important;
-    width: 60% !important;
-  }
-}

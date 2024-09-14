@@ -214,7 +214,7 @@ const InternalAuditReport = () => {
       <div className="row">
         <div className="col-lg-12">
           <div className="table-responsive">
-            <table className="table table-bordered  table-hover rounded w-100">
+            <table className="table table-bordered  table-hover rounded">
               <thead className="bg-secondary text-white">
                 <tr>
                   <th>Sr No.</th>

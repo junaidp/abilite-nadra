@@ -105,6 +105,7 @@ const DashboardHome = () => {
                         flexWrap: "wrap",
                         width: "100%",
                       }}
+                      className="special-audit-wrap"
                     >
                       <div
                         className="col-xl-4 col-sm-6 col-12"
@@ -330,8 +331,8 @@ const DashboardHome = () => {
                 </section>
               </div>
               <div className="col-lg-3">
-                <div className="row">
-                  <div className="col-xl-12 col-sm-6 col-12">
+                <div className="row exceptions-wrap">
+                  <div className="col-xl-12 col-sm-12 col-12">
                     <div className="card mb-4 application-main-color  glassmorphism-card-">
                       <div className="card-content">
                         <div className="card-body">

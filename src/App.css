@@ -46084,7 +46084,6 @@ html[dir=rtl] .welcome-bg-img {
 .left-sidebar {
   width: 285px;
   background-color: #fff;
-  /* position: absolute; */
   transition: .2s ease-in;
   height: 100%;
   z-index: 11;
@@ -46097,7 +46096,6 @@ html[dir=rtl] .welcome-bg-img {
 .left-sidebar .scroll-sidebar {
   overflow-y: auto;
   padding: 0 13px;
-  /* height: calc(100vh - 80px); */
   border-radius: 7px
 }
 

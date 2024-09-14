@@ -12,8 +12,8 @@ import SmallScreenSidebar from "./SmallScreenSidebar";
 const Sidebar = () => {
   let navigate = useNavigate();
   let dispatch = useDispatch();
-  const [isWidthLessThan990, setIsWidthLessThan990] = React.useState(
-    window.innerWidth < 990
+  const [isWidthLessThan1250, setIsWidthLessThan1250] = React.useState(
+    window.innerWidth < 1250
   );
   let { showSidebar, activeLink, menuItems } = useSelector(
     (state) => state.common
@@ -43,7 +43,7 @@ const Sidebar = () => {
 
   React.useEffect(() => {
     function handleResize() {
-      setIsWidthLessThan990(window.innerWidth < 990);
+      setIsWidthLessThan1250(window.innerWidth < 1250);
     }
     window.addEventListener("resize", handleResize);
     return () => {
@@ -233,7 +233,7 @@ const Sidebar = () => {
           </div>
         </div>
       </div>
-      {isWidthLessThan990 && (
+      {isWidthLessThan1250 && (
         <div className="smallScreenSidebar">
           <SmallScreenSidebar />
         </div>
