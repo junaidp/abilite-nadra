@@ -207,7 +207,7 @@ const DashboardHome = () => {
                     <div className="col-lg-6 ">
                       <div className="card job-card p-0 cursor-auto">
                         <div className="card-header application-main-color color-white">
-                          Jobs Due for Kick Off within a week
+                          Jobs Due for Kick Off
                         </div>
                         <div className="card-body d-flex flex-column">
                           {navigationInfo?.jobsDueForKickOffWithinAWeek
@@ -292,7 +292,7 @@ const DashboardHome = () => {
                                       key={index}
                                       onClick={() =>
                                         navigate(
-                                          `/audit/follow-up-particulars?followUpId=${job?.id}`
+                                          `/audit/reporting-particulars?reportingId=${job?.id}`
                                         )
                                       }
                                     >

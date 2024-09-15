@@ -811,11 +811,9 @@ span[aria-label="Insert Ordered List"] .jodit-toolbar-button__trigger {
 }
 
 .recharts-wrapper {
-  left: -170px !important;
+  left: -100px !important;
   cursor: default !important;
   width: 338px !important;
-  padding-left: 20% !important;
-  height: 120px !important;
 }
 
 .w-full {
