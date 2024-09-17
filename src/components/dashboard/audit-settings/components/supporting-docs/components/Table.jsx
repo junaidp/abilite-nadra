@@ -63,7 +63,7 @@ const Table = ({
                         <td>{(page - 1) * 10 + index + 1}</td>
                         <td>{file?.fileName}</td>
                         <td>
-                          <div className="d-flex gap-2">
+                          <div className="d-flex flex-wrap gap-4">
                             <i
                               className="fa fa-download f-18  cursor-pointer"
                               onClick={() =>

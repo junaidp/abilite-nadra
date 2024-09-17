@@ -119,7 +119,7 @@ const AccordionItem = ({
                             <td>{subIndex + 1}</td>
                             <td>{subItem?.description}</td>
                             <td>
-                              <div className="d-flex gap-2">
+                              <div className="d-flex flex-wrap gap-4">
                                 <i
                                   className="fa fa-edit f-18 cursor-pointer"
                                   onClick={() => {

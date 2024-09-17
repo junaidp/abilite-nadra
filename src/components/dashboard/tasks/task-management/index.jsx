@@ -167,7 +167,7 @@ const TaskManagement = () => {
                         <td>{task?.engagement?.engagementName}</td>
                         <td>{task?.assignee?.name}</td>
                         <td>{task?.assignedBy?.name}</td>
-                        <td>
+                        <td className="d-flex flex-wrap gap-4">
                           <i
                             className="fa fa-edit text-secondary f-18 cursor-pointer"
                             onClick={() => {
@@ -176,7 +176,7 @@ const TaskManagement = () => {
                             }}
                           ></i>
                           <i
-                            className="fa-eye fa f-18 cursor-pointer mx-2"
+                            className="fa-eye fa f-18 cursor-pointer"
                             onClick={() => {
                               setUpdateTaskId(task?.id);
                               setShowViewTasktDialog(true);

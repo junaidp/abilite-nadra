@@ -110,8 +110,8 @@ const CPList = ({ userHierarchy, userRole, currentSettingOption }) => {
         </div>
       </div>
 
-      <div className="row mt-3">
-        <div className="col-lg-6">
+      <div className="mt-3 d-flex flex-wrap gap-4">
+        <div className="flex-1 w-100">
           <label className="w-100">
             Add Criteria for Risk Management and Control Processes:
           </label>
@@ -178,30 +178,32 @@ const CPList = ({ userHierarchy, userRole, currentSettingOption }) => {
                             </label>
                           </td>
                           <td>
-                            <div
-                              className={`btn btn-labeled btn-primary px-3 shadow `}
-                              onClick={() => handleUpdate(item?.id)}
-                            >
-                              <span className="btn-label me-2">
-                                <i className="fa fa-check-circle"></i>
-                              </span>
-                              Save
-                            </div>
-                            {(userRole === "ADMIN" ||
-                              userHierarchy === "IAH") && (
+                            <div className="d-flex flex-wrap gap-4">
                               <div
-                                className={`btn btn-labeled btn-danger mx-4 px-3 shadow  my-4 `}
-                                onClick={() => {
-                                  setCurrentCpListId(item?.id);
-                                  setShowDeleteCpListDialog(true);
-                                }}
+                                className={`btn btn-labeled btn-primary `}
+                                onClick={() => handleUpdate(item?.id)}
                               >
                                 <span className="btn-label me-2">
-                                  <i className="fa fa-check-circle f-18"></i>
+                                  <i className="fa fa-check-circle"></i>
                                 </span>
-                                Delete
+                                Save
                               </div>
-                            )}
+                              {(userRole === "ADMIN" ||
+                                userHierarchy === "IAH") && (
+                                <div
+                                  className={`btn btn-labeled btn-danger`}
+                                  onClick={() => {
+                                    setCurrentCpListId(item?.id);
+                                    setShowDeleteCpListDialog(true);
+                                  }}
+                                >
+                                  <span className="btn-label me-2">
+                                    <i className="fa fa-check-circle f-18"></i>
+                                  </span>
+                                  Delete
+                                </div>
+                              )}
+                            </div>
                           </td>
                         </tr>
                       );

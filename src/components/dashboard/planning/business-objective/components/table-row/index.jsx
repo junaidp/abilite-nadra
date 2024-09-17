@@ -31,18 +31,18 @@ const TableRow = ({
       >
         {item?.initiatedBy?.name}
       </td>
-      <td className="cursor-pointer">
+      <td className="cursor-pointer d-flex flex-wrap gap-4">
         {item?.natureThrough === "Previous Observation" ? (
           <p>View Only</p>
         ) : (
           <i
-            className="fa fa-eye  f-18 cursor-pointer"
+            className="fa fa-eye f-18 cursor-pointer"
             onClick={() => handleClickEngagement(item?.id, item?.natureThrough)}
           ></i>
         )}
         {item?.locked === false && (
           <i
-            className="fa fa-trash text-danger f-18 px-3 cursor-pointer"
+            className="fa fa-trash text-danger f-18 cursor-pointer"
             onClick={() => {
               setCurrentEngagementId(item?.id);
               setShowDeleteEngagementDialog(true);

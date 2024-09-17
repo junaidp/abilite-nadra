@@ -136,16 +136,16 @@ const AccordionItem = ({
                                 userHierarchy === "IAH" ||
                                 userHierarchy === "Team_Lead") && (
                                 <td>
-                                  <div className="d-flex gap-2">
+                                  <div className="d-flex flex-wrap gap-4">
                                     <i
-                                      className="fa fa-edit  f-18 cursor-pointer"
+                                      className="fa fa-edit f-18 cursor-pointer"
                                       onClick={() => {
                                         setSubProcessId(subItem?.id);
                                         setShowSubProcessDialog(true);
                                       }}
                                     ></i>
                                     <i
-                                      className="fa fa-trash text-danger  f-18 cursor-pointer"
+                                      className="fa fa-trash text-danger f-18 cursor-pointer"
                                       onClick={() => {
                                         if (!subLoading) {
                                           dispatch(

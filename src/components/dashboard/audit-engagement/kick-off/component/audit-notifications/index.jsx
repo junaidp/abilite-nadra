@@ -1,11 +1,11 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setupSaveAuditNotification } from "../../../../../../global-redux/reducers/audit-engagement/slice";
+import { toast } from "react-toastify";
 
 const AuditNotifications = ({ currentAuditEngagement, auditEngagementId }) => {
-  const { loading } = useSelector((state) => state?.auditEngagement);
-  const [showSubmitButton, setShowSubmitButton] = React.useState(true);
   const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state?.auditEngagement);
   const [data, setData] = React.useState({
     toEmail: "",
     ccEmail: "",
@@ -23,38 +23,48 @@ const AuditNotifications = ({ currentAuditEngagement, auditEngagementId }) => {
   }
 
   function handleSend() {
-    dispatch(
-      setupSaveAuditNotification({
-        ...data,
-        engagementId: Number(auditEngagementId),
-      })
-    );
+    if (!loading) {
+      let { body, ccEmail, subject, toEmail } = data;
+      if (
+        body &&
+        body !== "" &&
+        ccEmail &&
+        ccEmail !== "" &&
+        subject &&
+        subject !== "" &&
+        toEmail &&
+        toEmail !== ""
+      ) {
+        dispatch(
+          setupSaveAuditNotification({
+            ...data,
+            engagementId: Number(auditEngagementId),
+          })
+        );
+      } else {
+        toast.error("Please provide all values");
+      }
+    }
   }
 
   React.useEffect(() => {
     if (currentAuditEngagement?.auditNotification) {
-      setData((pre) => {
-        return {
-          toEmail: currentAuditEngagement?.auditNotification?.toEmail || "",
-          ccEmail: currentAuditEngagement?.auditNotification?.ccEmail || "",
-          subject: currentAuditEngagement?.auditNotification?.subject || "",
-          body: currentAuditEngagement?.auditNotification?.body || "",
-        };
+      setData({
+        toEmail: currentAuditEngagement?.auditNotification?.toEmail || "",
+        ccEmail: currentAuditEngagement?.auditNotification?.ccEmail || "",
+        subject: currentAuditEngagement?.auditNotification?.subject || "",
+        body: currentAuditEngagement?.auditNotification?.body || "",
       });
     }
   }, [currentAuditEngagement]);
 
-  React.useEffect(() => {
-    if (currentAuditEngagement?.auditNotification) {
-      let { body, ccEmail, subject, toEmail } =
-        currentAuditEngagement?.auditNotification;
-      if (!body || !ccEmail || !subject || !toEmail) {
-        setShowSubmitButton(true);
-      } else {
-        setShowSubmitButton(false);
-      }
+  function isDisabled() {
+    let disabled = true;
+    if (!currentAuditEngagement?.auditNotification) {
+      disabled = false;
     }
-  }, [currentAuditEngagement]);
+    return disabled;
+  }
 
   return (
     <div className="accordion-item">
@@ -67,7 +77,7 @@ const AuditNotifications = ({ currentAuditEngagement, auditEngagementId }) => {
           aria-expanded="false"
           aria-controls="flush-collapseTwo"
         >
-          {showSubmitButton === false && (
+          {isDisabled() && (
             <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
           )}
           Audit Notification
@@ -90,7 +100,7 @@ const AuditNotifications = ({ currentAuditEngagement, auditEngagementId }) => {
                     name="toEmail"
                     value={data?.toEmail}
                     onChange={(event) => handleChange(event)}
-                    disabled={showSubmitButton === false ? true : false}
+                    disabled={isDisabled()}
                   />
                 </div>
                 <div className="d-flex mb-2  align-items-start">
@@ -101,7 +111,7 @@ const AuditNotifications = ({ currentAuditEngagement, auditEngagementId }) => {
                     name="ccEmail"
                     value={data?.ccEmail}
                     onChange={(event) => handleChange(event)}
-                    disabled={showSubmitButton === false ? true : false}
+                    disabled={isDisabled()}
                   />
                 </div>
                 <div className="d-flex mb-2  align-items-start">
@@ -112,7 +122,7 @@ const AuditNotifications = ({ currentAuditEngagement, auditEngagementId }) => {
                     name="subject"
                     value={data?.subject}
                     onChange={(event) => handleChange(event)}
-                    disabled={showSubmitButton === false ? true : false}
+                    disabled={isDisabled()}
                   />
                 </div>
                 <div className="d-flex mb-2  align-items-start">
@@ -124,12 +134,12 @@ const AuditNotifications = ({ currentAuditEngagement, auditEngagementId }) => {
                     name="body"
                     value={data?.body}
                     onChange={(event) => handleChange(event)}
-                    disabled={showSubmitButton === false ? true : false}
+                    disabled={isDisabled()}
                   ></textarea>
                 </div>
 
                 <div className="d-flex float-end">
-                  {showSubmitButton && (
+                  {!isDisabled() && (
                     <button
                       className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
                         loading && "disabled"

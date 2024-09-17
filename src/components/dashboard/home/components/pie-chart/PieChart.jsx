@@ -29,49 +29,22 @@ const renderCustomizedLabel = ({
 
 const PieChartComponent = ({ dataInfo }) => {
   const data = [
-    { name: "High", value: 20 },
+    { name: "High", value: dataInfo?.orrhigh },
     {
       name: "Medium",
-      value: 40,
+      value: dataInfo?.orrmedium,
     },
-    { name: "Low", value: 40 },
-  ];
-
-  const defaultData = [
-    { name: "High", value: 33.33 },
-    {
-      name: "Medium",
-      value: 33.33,
-    },
-    { name: "Low", value: 33.33 },
+    { name: "Low", value: dataInfo?.orrlow },
   ];
 
   const COLORS = ["#0088FE", "#ED7D31", "#A5A5A5"];
 
   return (
     <>
-      {dataInfo?.orrhigh === 0 &&
-      dataInfo?.orrmedium === 0 &&
-      dataInfo?.orrlow === 0 ? (
-        <PieChart width={500} height={300}>
-          <Pie
-            data={data}
-            cx="50%"
-            cy="50%"
-            labelLine={false}
-            label={renderCustomizedLabel}
-            outerRadius={120}
-            fill="#8884d8"
-            dataKey="value"
-          >
-            {defaultData?.map((_, index) => (
-              <Cell
-                key={`cell-${index}`}
-                fill={COLORS[index % COLORS.length]}
-              />
-            ))}
-          </Pie>
-        </PieChart>
+      {(dataInfo?.orrhigh === 0 || !dataInfo?.orrhigh) &&
+      (dataInfo?.orrmedium === 0 || !dataInfo?.orrmedium) &&
+      (dataInfo?.orrlow === 0 || !dataInfo?.orrlow) ? (
+        <h5 className="my-4">No Observation Added Yet</h5>
       ) : (
         <PieChart width={500} height={300}>
           <Pie

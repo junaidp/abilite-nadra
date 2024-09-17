@@ -280,14 +280,14 @@ export const slice = createSlice({
     // Get the navigation Info
     builder
       .addCase(setupGetNavigation.pending, (state) => {
-        state.loading = true;
+        // state.loading = true;
       })
       .addCase(setupGetNavigation.fulfilled, (state, { payload }) => {
-        state.loading = false;
+        // state.loading = false;
         state.navigationInfo = payload?.data || [];
       })
       .addCase(setupGetNavigation.rejected, (state, { payload }) => {
-        state.loading = false;
+        // state.loading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
         } else {

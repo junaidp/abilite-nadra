@@ -142,7 +142,7 @@ const AccordionItem = ({
                                 <td>{item?.area}</td>
                                 <td>{item?.subject}</td>
                                 <td>{item?.particulars}</td>
-                                <td>
+                                <td className="d-flex flex-wrap gap-4">
                                   <i
                                     className="fa-eye fa f-18 cursor-pointer"
                                     onClick={() => {
@@ -153,7 +153,7 @@ const AccordionItem = ({
                                   {(userRole === "ADMIN" ||
                                     userHierarchy === "IAH") && (
                                     <i
-                                      className="fa fa-edit  px-3 f-18"
+                                      className="fa fa-edit f-18"
                                       onClick={() => {
                                         setShowEditCheckListItemDialog(true);
                                         dispatch(

@@ -31,19 +31,21 @@ const DashboardHome = () => {
       if (companyId) {
         dispatch(resetAuthValues());
         dispatch(
-          setupGetNavigation({
-            companyId: companyId,
-            year: year,
-            userId: user[0]?.id,
-          })
-        );
-        dispatch(
           setupGetData({
             companyId: companyId,
             year: year,
             userId: user[0]?.id,
           })
         );
+        setTimeout(() => {
+          dispatch(
+            setupGetNavigation({
+              companyId: companyId,
+              year: year,
+              userId: user[0]?.id,
+            })
+          );
+        }, 1200);
       }
     }
   }, [dispatch]);
@@ -186,7 +188,7 @@ const DashboardHome = () => {
                                 (job, index) => {
                                   return (
                                     <h5
-                                      className="card-title cursor-pointer"
+                                      className="card-title cursor-pointer mb-4"
                                       key={index}
                                       onClick={() =>
                                         navigate(
@@ -219,7 +221,7 @@ const DashboardHome = () => {
                                 (job, index) => {
                                   return (
                                     <h5
-                                      className="card-title cursor-pointer"
+                                      className="card-title cursor-pointer mb-4"
                                       key={index}
                                       onClick={() => {
                                         setKickOffId(job?.id);
@@ -254,7 +256,7 @@ const DashboardHome = () => {
                                 (job, index) => {
                                   return (
                                     <h5
-                                      className="card-title cursor-pointer"
+                                      className="card-title cursor-pointer mb-4"
                                       key={index}
                                       onClick={() =>
                                         navigate(
@@ -288,7 +290,7 @@ const DashboardHome = () => {
                                 (job, index) => {
                                   return (
                                     <h5
-                                      className="card-title cursor-pointer"
+                                      className="card-title cursor-pointer mb-4"
                                       key={index}
                                       onClick={() =>
                                         navigate(
@@ -310,12 +312,12 @@ const DashboardHome = () => {
                   <div className="card  glassmorphism-card text-center">
                     <div className="card-content">
                       <div className="card-body ">
-                        <p className="text-start">
+                        <p className="text-center">
                           Observation by Due Implementation Date
                         </p>
 
                         <div>
-                          <AreaChartComponent dataInfo={dataInfo} />
+                          <AreaChartComponent navigationInfo={navigationInfo} />
                         </div>
                         <div className="row">
                           <div className="label mb-2 mediumm">

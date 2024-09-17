@@ -141,8 +141,8 @@ const Location = ({ userHierarchy, userRole, currentSettingOption }) => {
         </div>
       </div>
 
-      <div className="row mt-3">
-        <div className="col-lg-6">
+      <div className="mt-3 d-flex flex-wrap gap-4">
+        <div className="flex-1 w-100">
           <label className="w-100">Add Location:</label>
           <input
             className="form-control w-100"
