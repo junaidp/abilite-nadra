@@ -1,9 +1,6 @@
 import React from "react";
 
 const Notifications = () => {
-  const [data,setData]=React.useState({
-    
-  })
   return (
     <div
       className="tab-pane fade"
@@ -18,6 +15,18 @@ const Notifications = () => {
             Manage your notifications from here
           </label>
         </div>
+      </div>
+      <div className="d-flex align-items-center mt-2">
+        <select
+          className="form-select"
+          aria-label="Default select example"
+          name="rating"
+        >
+          <option value="">Select One</option>
+          <option value={1}>Interal Audit Head</option>
+          <option value={2}>Team Lead</option>
+          <option value={3}>Auditee</option>
+        </select>
       </div>
 
       <div className="row mt-3">
