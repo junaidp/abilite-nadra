@@ -303,22 +303,22 @@ const RiskFactorApproach = () => {
                 <div className="row">
                   <div className="col-lg-3">
                     <div className="px-3 py-2 border-0 card shadow bg-success text-white label-text ">
-                      Low(L) = 0 to 32
+                      Low(L) = 1 to 4
                     </div>
                   </div>
                   <div className="col-lg-3">
                     <div className="px-3 py-2 border-0 card shadow text-white label-text  label-text  label-text bg-yellow">
-                      Moderate(M) = 33 to 45
+                      Moderate(M) = 5 to 8
                     </div>
                   </div>
                   <div className="col-lg-3">
                     <div className="px-3 py-2 border-0 card shadow  text-white label-text bg-orange">
-                      High(H) = 46 to 59
+                      High(H) = 9 to 16
                     </div>
                   </div>
                   <div className="col-lg-3">
                     <div className="px-3 py-2 border-0 card shadow bg-danger text-white label-text">
-                      Extreme = 60
+                      Extreme = 17 to 25
                     </div>
                   </div>
                 </div>
