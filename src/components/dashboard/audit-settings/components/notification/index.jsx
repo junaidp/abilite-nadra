@@ -43,30 +43,6 @@ const Notifications = () => {
               </thead>
               <tbody>
                 <tr>
-                  <td>1</td>
-                  <td>Enable All / Disable All</td>
-                  <td>
-                    <div className="form-check form-switch">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        role="switch"
-                        id="flexSwitchCheckDefault"
-                      />
-                    </div>
-                  </td>
-                  <td>
-                    <div className="form-check form-switch">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        role="switch"
-                        id="flexSwitchCheckDefault"
-                      />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
                   <td>2</td>
                   <td>User Creation</td>
                   <td>
