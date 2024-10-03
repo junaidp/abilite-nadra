@@ -4,18 +4,18 @@ import {
   saveCheckListObjective,
   getInitialSingleEngagementObject,
   getSingleEngagementObject,
-  updateBusinessObjective,
   submitBusinessObjective,
   saveMapProcessBusinessObjective,
   getInitialSingleCheckListObjective,
   getInitialSingleSpecialProjectAuditObjective,
   getSingleSpecialProjectAuditObjective,
-  updateBusinessMinuteMeeting,
   updateSpecialProjectAudit,
   submitSpecialProjectAudit,
   updateBusinessObjectiveAndMapProcessSpecialProjectOrAudit,
   getCheckListItems,
   deleteEngagement,
+  saveIndustryAndCompanyUpdates,
+  getIndustryAndCompanyUpdates,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
@@ -28,6 +28,8 @@ const initialState = {
   planingEngagementSingleObject: [],
   selectedCheckListItems: [],
   totalNoOfRecords: 0,
+  companyAndIndustryUpdates: null,
+  companyAndIndustryUpdateAddSuccess: false,
 };
 
 export const setupGetAllEngagements = createAsyncThunk(
@@ -61,13 +63,6 @@ export const setupGetInitialSingleEngagementObject = createAsyncThunk(
   "engagement/getInitialSingleEngagementObject",
   async (data, thunkAPI) => {
     return getInitialSingleEngagementObject(data, thunkAPI);
-  }
-);
-
-export const setupUpdateBusinessObjective = createAsyncThunk(
-  "engagement/updateBusinessObjective",
-  async (data, thunkAPI) => {
-    return updateBusinessObjective(data, thunkAPI);
   }
 );
 
@@ -107,13 +102,6 @@ export const setupGetInitialSingleSpecialProjectAuditObjective =
     }
   );
 
-export const setupUpdateBusinessMinuteMeeting = createAsyncThunk(
-  "engagement/updateBusinessMinuteMeeting",
-  async (data, thunkAPI) => {
-    return updateBusinessMinuteMeeting(data, thunkAPI);
-  }
-);
-
 export const setupUpdateSpecialProjectAudit = createAsyncThunk(
   "engagement/updateSpecialProjectAudit",
   async (data, thunkAPI) => {
@@ -145,10 +133,25 @@ export const setupGetCheckListItems = createAsyncThunk(
     return getCheckListItems(data, thunkAPI);
   }
 );
+
 export const setupDeleteEngagement = createAsyncThunk(
   "engagement/deleteEngagement",
   async (data, thunkAPI) => {
     return deleteEngagement(data, thunkAPI);
+  }
+);
+
+export const setupSaveIndustryAndCompanyUpdates = createAsyncThunk(
+  "engagement/saveIndustryAndCompanyUpdates",
+  async (data, thunkAPI) => {
+    return saveIndustryAndCompanyUpdates(data, thunkAPI);
+  }
+);
+
+export const setupGetIndustryAndCompanyUpdates = createAsyncThunk(
+  "engagement/getIndustryAndCompanyUpdates",
+  async (data, thunkAPI) => {
+    return getIndustryAndCompanyUpdates(data, thunkAPI);
   }
 );
 
@@ -158,6 +161,7 @@ export const slice = createSlice({
   reducers: {
     resetAddEngagementSuccess: (state) => {
       state.engagementAddSuccess = false;
+      state.companyAndIndustryUpdateAddSuccess=false
     },
     handleCleanUp: (state) => {
       state.loading = false;
@@ -278,26 +282,6 @@ export const slice = createSlice({
           }
         }
       );
-
-    // Update Business Objective
-    builder
-      .addCase(setupUpdateBusinessObjective.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(setupUpdateBusinessObjective.fulfilled, (state) => {
-        state.loading = false;
-        state.engagementAddSuccess = true;
-        toast.success("Business Objective Updated Successfully");
-      })
-      .addCase(setupUpdateBusinessObjective.rejected, (state, { payload }) => {
-        state.loading = false;
-        state.engagementAddSuccess = false;
-        if (payload?.response?.data?.message) {
-          toast.error(payload?.response?.data?.message);
-        } else {
-          toast.error("An Error has occurred");
-        }
-      });
 
     // Submit Business Objective
     builder
@@ -425,28 +409,6 @@ export const slice = createSlice({
         }
       );
 
-    // Update Business Minute Meeting
-    builder
-      .addCase(setupUpdateBusinessMinuteMeeting.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(setupUpdateBusinessMinuteMeeting.fulfilled, (state) => {
-        state.loading = false;
-        toast.success("Meeting Updated Successfully");
-        state.engagementAddSuccess = true;
-      })
-      .addCase(
-        setupUpdateBusinessMinuteMeeting.rejected,
-        (state, { payload }) => {
-          state.loading = false;
-          if (payload?.response?.data?.message) {
-            toast.error(payload?.response?.data?.message);
-          } else {
-            toast.error("An Error has occurred");
-          }
-        }
-      );
-
     // Update Special Project Audit
     builder
       .addCase(setupUpdateSpecialProjectAudit.pending, (state) => {
@@ -556,6 +518,52 @@ export const slice = createSlice({
           toast.error("An Error has occurred");
         }
       });
+
+    // Save Industry And Company Updates
+    builder
+      .addCase(setupSaveIndustryAndCompanyUpdates.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupSaveIndustryAndCompanyUpdates.fulfilled, (state) => {
+        state.loading = false;
+        state.companyAndIndustryUpdateAddSuccess = true;
+        toast.success("Industry And Company Updates Saved Successfully");
+      })
+      .addCase(
+        setupSaveIndustryAndCompanyUpdates.rejected,
+        (state, { payload }) => {
+          state.loading = false;
+          if (payload?.response?.data?.message) {
+            toast.error(payload?.response?.data?.message);
+          } else {
+            toast.error("An Error has occurred");
+          }
+        }
+      );
+
+    // Get Industry And Company Updates
+    builder
+      .addCase(setupGetIndustryAndCompanyUpdates.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(
+        setupGetIndustryAndCompanyUpdates.fulfilled,
+        (state, { payload }) => {
+          state.loading = false;
+          state.companyAndIndustryUpdates = payload?.data || null;
+        }
+      )
+      .addCase(
+        setupGetIndustryAndCompanyUpdates.rejected,
+        (state, { payload }) => {
+          state.loading = false;
+          if (payload?.response?.data?.message) {
+            toast.error(payload?.response?.data?.message);
+          } else {
+            toast.error("An Error has occurred");
+          }
+        }
+      );
   },
 });
 

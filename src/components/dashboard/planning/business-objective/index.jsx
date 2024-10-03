@@ -171,8 +171,8 @@ const BusinessObjective = () => {
                     <thead className="bg-secondary text-white">
                       <tr>
                         <th className="w-80">Sr No.</th>
-                        <th>Business Objective</th>
-                        <th>Identities</th>
+                        <th>Audit Universe</th>
+                        <th>Identified Through</th>
                         <th>Initiated By</th>
                         <th>Actions</th>
                       </tr>

@@ -1,28 +1,22 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import ObjectiveListDialog from "../../../../modals/objective-list-dialog/index";
-import Dialog from "@mui/material/Dialog";
 import {
   resetAddEngagementSuccess,
   setupGetSingleEngagementObject,
-  setupUpdateBusinessObjective,
   setupSaveMapProcessBusinessObjective,
-  setupUpdateBusinessMinuteMeeting,
   handleCleanUp,
   setupGetInitialSingleEngagementObject,
+  setupGetIndustryAndCompanyUpdates,
+  setupSaveIndustryAndCompanyUpdates,
 } from "../../../../../global-redux/reducers/planing/engagement/slice";
-import { setupGetAllLocations } from "../../../../../global-redux/reducers/settings/location/slice";
 import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
 } from "../../../../../global-redux/reducers/common/slice";
-import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
 import IndustryUpdates from "./components/industry-updates";
 import CompanyUpdates from "./components/company-updates";
-import SetMeetingTime from "./components/set-meeting-time";
 import BusinessObjectiveMapProcess from "./components/business-objective-map-process";
 import { toast } from "react-toastify";
 import { CircularProgress } from "@mui/material";
@@ -31,44 +25,32 @@ import SubmitDialog from "./submit-dialog";
 const BusinessObjectiveRedirect = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { company } = useSelector((state) => state?.common);
+  const { user } = useSelector((state) => state?.auth);
   const [showSubmitDialog, setShowSubmitDialog] = React.useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const engagementId = searchParams.get("engagementId");
-  const { allLocations } = useSelector((state) => state.settingsLocation);
   const {
     planingEngagementSingleObject,
     engagementAddSuccess,
     loading,
     initialLoading,
+    companyAndIndustryUpdates,
+    companyAndIndustryUpdateAddSuccess,
   } = useSelector((state) => state.planningEngagement);
-  const { user } = useSelector((state) => state?.auth);
-  const { company } = useSelector((state) => state?.common);
-  const [showObjectiveListDialog, setShowObjectiveListDialog] =
-    React.useState(false);
   const [domain, setDomain] = React.useState("");
   const [description, setDescription] = React.useState("");
-
   const [object, setObject] = React.useState({
-    engagementName: "",
-    industryUpdate: "",
-    companyUpdate: "",
-    meetingDateTimeFrom: "",
-    meetingDateTimeTo: "",
-    strategicDocuments: [],
-    subLocation_Id: "",
-    location_Id: "",
-    businessObjectiveAndMapProcessList: [
-      {
-        description: "",
-        domain: "",
-        id: 1,
-      },
-    ],
+    industryUpdates: "",
+    companyUpdates: "",
   });
-
-  function handleClose() {
-    setShowObjectiveListDialog(false);
-  }
+  const [values, setValues] = React.useState({
+    enterpriseValue: "",
+    companyProfitability: "",
+    companyRevenue: "",
+    impactOnBrand: "",
+    impactOnPeople: "",
+  });
 
   function handleChange(event) {
     setObject((pre) => {
@@ -79,88 +61,35 @@ const BusinessObjectiveRedirect = () => {
     });
   }
 
-  function handleSumMapProcess() {
-    setObject((pre) => {
-      return {
-        ...pre,
-        businessObjectiveAndMapProcessList: [
-          ...pre?.businessObjectiveAndMapProcessList,
-          {
-            description: "",
-            domain: "",
-            id: uuidv4(),
-          },
-        ],
-      };
-    });
-  }
-
-  function handleSaveMinuteMeetings() {
-    if (!loading) {
-      const today = moment.utc().startOf("day");
-
-      const fromDate = moment.utc(object?.meetingDateTimeFrom).startOf("day");
-      const toDate = moment.utc(object?.meetingDateTimeTo).startOf("day");
-
-      if (
-        !object?.location_Id ||
-        !object?.subLocation_Id ||
-        !object?.meetingDateTimeFrom ||
-        !object?.meetingDateTimeTo
-      ) {
-        toast.error("Please provide all values");
-        return;
-      }
-
-      if (fromDate.isBefore(today)) {
-        toast.error("Start date must be today or greater than today");
-        return;
-      }
-
-      if (!toDate.isAfter(fromDate)) {
-        toast.error(
-          "Invalid meeting date range. End date must be greater than start date"
-        );
-        return;
-      }
-
-      dispatch(
-        setupUpdateBusinessMinuteMeeting({
-          engagementId: engagementId,
-          location_Id: object?.location_Id,
-          subLocation_Id: object?.subLocation_Id,
-          meetingDateTimeFrom: object?.meetingDateTimeFrom,
-          meetingDateTimeTo: object?.meetingDateTimeTo,
-          meetingMinutes: "",
-        })
-      );
-    }
-  }
-
   function handleUpdateBusinessObjective() {
     if (!loading) {
+      const companyId = user[0]?.company?.find(
+        (item) => item?.companyName === company
+      )?.id;
       dispatch(
-        setupUpdateBusinessObjective({
-          ...planingEngagementSingleObject,
-          industryUpdate: object?.industryUpdate,
-          companyUpdate: object?.companyUpdate,
-          engagementName: object?.engagementName,
-        })
+        setupSaveIndustryAndCompanyUpdates({ ...object, companyId: companyId })
       );
     }
   }
 
-  function handleSaveBusinessObjectiveMapProcess(item) {
+  function handleSaveBusinessObjectiveMapProcess() {
     if (!loading) {
-      if (description === "" || domain === "") {
+      if (!description || description === "" || domain === "" || !domain) {
         toast.error("Provide all values");
       } else {
         dispatch(
           setupSaveMapProcessBusinessObjective({
+            ...values,
             businessObjective: planingEngagementSingleObject,
             description,
             domain,
-            id: typeof item?.id === "number" ? item?.id : 0,
+            id:
+              planingEngagementSingleObject?.businessObjectiveAndMapProcessList &&
+              planingEngagementSingleObject?.businessObjectiveAndMapProcessList
+                ?.length !== 0
+                ? planingEngagementSingleObject
+                    ?.businessObjectiveAndMapProcessList[0]?.id
+                : 0,
           })
         );
       }
@@ -168,42 +97,53 @@ const BusinessObjectiveRedirect = () => {
   }
 
   React.useEffect(() => {
-    setObject((pre) => {
-      return {
-        ...pre,
-        industryUpdate: planingEngagementSingleObject?.industryUpdate || "",
-        companyUpdate: planingEngagementSingleObject?.companyUpdate || "",
-        engagementName: planingEngagementSingleObject?.engagementName || "",
-        businessObjectiveAndMapProcessList:
-          planingEngagementSingleObject?.businessObjectiveAndMapProcessList ||
-          [],
-        location_Id:
-          planingEngagementSingleObject?.meetingScheduleAndMinutes
-            ?.location_Id || "",
-        meetingDateTimeFrom: planingEngagementSingleObject
-          ?.meetingScheduleAndMinutes?.meetingDateTimeFrom
-          ? moment
-              .utc(
-                planingEngagementSingleObject?.meetingScheduleAndMinutes
-                  ?.meetingDateTimeFrom
-              )
-              .format("YYYY-MM-DD")
-          : "",
-        meetingDateTimeTo: planingEngagementSingleObject
-          ?.meetingScheduleAndMinutes?.meetingDateTimeTo
-          ? moment
-              .utc(
-                planingEngagementSingleObject?.meetingScheduleAndMinutes
-                  ?.meetingDateTimeTo
-              )
-              .format("YYYY-MM-DD")
-          : "",
-        subLocation_Id:
-          planingEngagementSingleObject?.meetingScheduleAndMinutes
-            ?.subLocation_Id || "",
-      };
-    });
+    if (companyAndIndustryUpdates) {
+      setObject({
+        industryUpdates: companyAndIndustryUpdates?.industryUpdates,
+        companyUpdates: companyAndIndustryUpdates?.companyUpdates,
+      });
+    }
+  }, [companyAndIndustryUpdates]);
+
+  React.useEffect(() => {
+    if (planingEngagementSingleObject?.businessObjectiveAndMapProcessList) {
+      setDomain(
+        planingEngagementSingleObject?.businessObjectiveAndMapProcessList[0]
+          ?.domain
+      );
+      setDescription(
+        planingEngagementSingleObject?.businessObjectiveAndMapProcessList[0]
+          ?.description
+      );
+      setValues({
+        enterpriseValue:
+          planingEngagementSingleObject?.businessObjectiveAndMapProcessList[0]
+            ?.enterpriseValue || "",
+        companyProfitability:
+          planingEngagementSingleObject?.businessObjectiveAndMapProcessList[0]
+            ?.companyProfitability || "",
+        companyRevenue:
+          planingEngagementSingleObject?.businessObjectiveAndMapProcessList[0]
+            ?.companyRevenue || "",
+        impactOnBrand:
+          planingEngagementSingleObject?.businessObjectiveAndMapProcessList[0]
+            ?.impactOnBrand || "",
+        impactOnPeople:
+          planingEngagementSingleObject?.businessObjectiveAndMapProcessList[0]
+            ?.impactOnPeople || "",
+      });
+    }
   }, [planingEngagementSingleObject]);
+
+  React.useEffect(() => {
+    if (companyAndIndustryUpdateAddSuccess) {
+      const companyId = user[0]?.company?.find(
+        (item) => item?.companyName === company
+      )?.id;
+      dispatch(resetAddEngagementSuccess());
+      dispatch(setupGetIndustryAndCompanyUpdates({ companyId }));
+    }
+  }, [companyAndIndustryUpdateAddSuccess]);
 
   React.useEffect(() => {
     if (engagementAddSuccess) {
@@ -214,13 +154,13 @@ const BusinessObjectiveRedirect = () => {
 
   React.useEffect(() => {
     if (user[0]?.token && engagementId) {
-      let companyId = user[0]?.company.find(
-        (all) => all?.companyName === company
+      const companyId = user[0]?.company?.find(
+        (item) => item?.companyName === company
       )?.id;
       dispatch(setupGetInitialSingleEngagementObject(engagementId));
       setTimeout(() => {
-        dispatch(setupGetAllLocations(`?companyId=${companyId}`));
-      }, 1200);
+        dispatch(setupGetIndustryAndCompanyUpdates({ companyId }));
+      }, 900);
     }
   }, [dispatch]);
 
@@ -258,12 +198,6 @@ const BusinessObjectiveRedirect = () => {
         "Engagement Not Found"
       ) : (
         <>
-          <Dialog open={showObjectiveListDialog} onClose={handleClose}>
-            <ObjectiveListDialog
-              setShowObjectiveListDialog={setShowObjectiveListDialog}
-            />
-          </Dialog>
-
           <header className="section-header my-3 align-items-center  text-start d-flex ">
             <a
               className="text-primary"
@@ -275,34 +209,6 @@ const BusinessObjectiveRedirect = () => {
           </header>
 
           <div className="row px-4">
-            <div>
-              <div className="mb-4">
-                <div className="col-lg-2 label-text w-100 mb-2">
-                  Engagement Name
-                </div>
-                <div className="col-lg-12">
-                  <div className="form-group w-100">
-                    <input
-                      type="text"
-                      id="description"
-                      value={object?.engagementName}
-                      onChange={handleChange}
-                      name="engagementName"
-                      className="form-control h-40 w-100"
-                      placeholder="Enter"
-                      disabled={
-                        planingEngagementSingleObject?.locked === true ||
-                        (planingEngagementSingleObject?.complete === true &&
-                          planingEngagementSingleObject?.locked === false &&
-                          user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
-                          ? true
-                          : false
-                      }
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
             <div className="col-md-12">
               <div className="accordion" id="accordionFlushExample">
                 <IndustryUpdates
@@ -320,18 +226,7 @@ const BusinessObjectiveRedirect = () => {
                   loading={loading}
                 />
 
-                <SetMeetingTime
-                  planingEngagementSingleObject={planingEngagementSingleObject}
-                  object={object}
-                  handleChange={handleChange}
-                  allLocations={allLocations}
-                  loading={loading}
-                  handleSaveMinuteMeetings={handleSaveMinuteMeetings}
-                />
                 <BusinessObjectiveMapProcess
-                  handleSumMapProcess={handleSumMapProcess}
-                  setShowObjectiveListDialog={setShowObjectiveListDialog}
-                  object={object}
                   handleSaveBusinessObjectiveMapProcess={
                     handleSaveBusinessObjectiveMapProcess
                   }
@@ -341,24 +236,11 @@ const BusinessObjectiveRedirect = () => {
                   setDomain={setDomain}
                   setDescription={setDescription}
                   planingEngagementSingleObject={planingEngagementSingleObject}
+                  values={values}
+                  setValues={setValues}
                 />
               </div>
-              {(planingEngagementSingleObject?.complete === false ||
-                (planingEngagementSingleObject?.complete === true &&
-                  planingEngagementSingleObject?.locked === false &&
-                  user[0]?.userId?.employeeid?.userHierarchy === "IAH")) && (
-                <button
-                  className={`btn btn-labeled btn-primary px-3 mb-2 mt-4 shadow float-end ${
-                    loading && "disabled"
-                  }`}
-                  onClick={handleUpdateBusinessObjective}
-                >
-                  <span className="btn-label me-2">
-                    <i className="fa fa-check-circle"></i>
-                  </span>
-                  {loading ? "loading..." : "Save"}
-                </button>
-              )}
+
               {planingEngagementSingleObject?.complete === false &&
                 planingEngagementSingleObject?.businessObjectiveAndMapProcessList &&
                 planingEngagementSingleObject

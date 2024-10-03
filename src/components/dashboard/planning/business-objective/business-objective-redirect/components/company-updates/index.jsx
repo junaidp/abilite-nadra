@@ -9,6 +9,9 @@ const CompanyUpdates = ({
   loading,
 }) => {
   const { user } = useSelector((state) => state?.auth);
+  const { companyAndIndustryUpdates } = useSelector(
+    (state) => state?.planningEngagement
+  );
   return (
     <div className="accordion-item">
       <h2 className="accordion-header">
@@ -20,7 +23,7 @@ const CompanyUpdates = ({
           aria-expanded="false"
           aria-controls="flush-collapseTwo"
         >
-          {planingEngagementSingleObject?.companyUpdate && (
+          {companyAndIndustryUpdates?.companyUpdates && (
             <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
           )}
           Company Updates
@@ -39,8 +42,8 @@ const CompanyUpdates = ({
             className="form-control w-100 min-height-100"
             placeholder="Enter update"
             type="textarea"
-            name="companyUpdate"
-            value={object?.companyUpdate}
+            name="companyUpdates"
+            value={object?.companyUpdates}
             onChange={handleChange}
             disabled={
               planingEngagementSingleObject?.locked === true ||

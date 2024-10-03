@@ -93,25 +93,6 @@ export const getInitialSingleEngagementObject = async (data, thunkAPI) => {
   }
 };
 
-export const updateBusinessObjective = async (data, thunkAPI) => {
-  try {
-    const { user } = thunkAPI.getState().auth;
-    let props = await axios.post(
-      `${baseUrl}/auditPlanningAndScheduling/engagments/businessObjective/update`,
-      data,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user[0]?.token}`,
-        },
-      }
-    );
-    return props.data;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
-  }
-};
-
 export const submitBusinessObjective = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
@@ -194,25 +175,6 @@ export const getInitialSingleSpecialProjectAuditObjective = async (
     const { user } = thunkAPI.getState().auth;
     let props = await axios.get(
       `${baseUrl}/auditPlanningAndScheduling/engagments/specialProjectOrAudit/getByEngagementId?engagementId=${data}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user[0]?.token}`,
-        },
-      }
-    );
-    return props.data;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
-  }
-};
-
-export const updateBusinessMinuteMeeting = async (data, thunkAPI) => {
-  try {
-    const { user } = thunkAPI.getState().auth;
-    let props = await axios.post(
-      `${baseUrl}/auditPlanningAndScheduling/engagments/meetingScheduleAndMinutes/update`,
-      data,
       {
         headers: {
           "Content-Type": "application/json",
@@ -309,6 +271,43 @@ export const deleteEngagement = async (data, thunkAPI) => {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.delete(
       `${baseUrl}/auditPlanningAndScheduling/engagments/delete?engagementId=${data}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
+export const saveIndustryAndCompanyUpdates = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.post(
+      `${baseUrl}/auditPlanningAndScheduling/engagments/businessObjective/industryAndCompanyUpdates/save`,
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
+export const getIndustryAndCompanyUpdates = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.get(
+      `${baseUrl}/auditPlanningAndScheduling/engagments/businessObjective/industryAndCompanyUpdates/get?companyId=${data?.companyId}`,
       {
         headers: {
           "Content-Type": "application/json",

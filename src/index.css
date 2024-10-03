@@ -366,6 +366,10 @@ body {
   margin-left: 100px !important;
 }
 
+.ml-12 {
+  margin-left: 12px;
+}
+
 .bg-yellow {
   background-color: #d9d900 !important;
 }
