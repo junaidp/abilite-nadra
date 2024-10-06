@@ -17,7 +17,9 @@ const TableRow = ({
         onClick={() => handleClickEngagement(item?.id, item?.natureThrough)}
         className="cursor-pointer"
       >
-        {item?.engagementName}
+        {item?.natureThrough !== "Compliance Checklist"
+          ? item?.name || ""
+          : item?.engagementName}
       </td>
       <td
         onClick={() => handleClickEngagement(item?.id, item?.natureThrough)}

@@ -5,7 +5,7 @@ export const updateNotifications = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
-      `${baseUrl}/account/userNotificationsOptions/add`,
+      `${baseUrl}/notificationEmailAndSystem/updateEmailAndSystemNotification`,
       data,
       {
         headers: {
@@ -23,7 +23,7 @@ export const getNotifications = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.get(
-      `${baseUrl}/account/userNotificationsOptions/get?userId=${data?.userId}`,
+      `${baseUrl}/notificationEmailAndSystem/get?userId=${data?.userId}`,
       {
         headers: {
           Authorization: `Bearer ${user[0]?.token}`,

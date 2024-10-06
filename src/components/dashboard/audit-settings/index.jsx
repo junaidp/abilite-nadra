@@ -70,7 +70,10 @@ const AuditSettings = () => {
       ) {
         dispatch(setupGetAllProcess(companyId));
       }
-      if (currentSettingOption === "users") {
+      if (
+        currentSettingOption === "users" ||
+        currentSettingOption === "notification"
+      ) {
         dispatch(setupGetAllUsers({ shareWith: true }));
       }
       if (currentSettingOption === "previousObservations") {
@@ -245,6 +248,7 @@ const AuditSettings = () => {
                     type="button"
                     role="tab"
                     aria-controls="nav-user-info"
+                    onClick={() => setCurrentSettingOption("user-details")}
                   >
                     User Details
                   </button>
@@ -258,6 +262,7 @@ const AuditSettings = () => {
                     type="button"
                     role="tab"
                     aria-controls="nav-notification"
+                    onClick={() => setCurrentSettingOption("notification")}
                   >
                     Notification
                   </button>
@@ -330,7 +335,9 @@ const AuditSettings = () => {
                 userRole={userRole}
                 currentSettingOption={currentSettingOption}
               />
-              {userRole === "ADMIN" && <Notification />}
+              {userRole === "ADMIN" && (
+                <Notification currentSettingOption={currentSettingOption} />
+              )}
               {/* {(userRole === "ADMIN" || userHierarchy === "IAH") && (
                 <PreviousObservation
                   currentSettingOption={currentSettingOption}

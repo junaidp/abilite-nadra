@@ -39,7 +39,6 @@ export const slice = createSlice({
       .addCase(setupUpdateNotifications.fulfilled, (state) => {
         state.loading = false;
         state.notificationAddSuccess = true;
-        toast.success("Notification Updated Successfully");
       })
       .addCase(setupUpdateNotifications.rejected, (state, { payload }) => {
         state.loading = false;

@@ -24,8 +24,9 @@ const UpdateInformationRequest = ({
   updateTaskId,
 }) => {
   const dispatch = useDispatch();
-  const { users, auditEngagements, loading, allTasks } =
-    useSelector((state) => state?.tasksManagement);
+  const { users, auditEngagements, loading, allTasks } = useSelector(
+    (state) => state?.tasksManagement
+  );
 
   // Initial form values
   const defaultValues = {
@@ -109,11 +110,13 @@ const UpdateInformationRequest = ({
                   aria-label="Default select example"
                 >
                   <option value="">Select Job</option>
-                  {auditEngagements?.map((job, index) => (
-                    <option key={index} value={job?.id}>
-                      {job?.engagementName}
-                    </option>
-                  ))}
+                  {auditEngagements
+                    ?.filter((item) => item?.name && item?.name !== "")
+                    ?.map((job, index) => (
+                      <option key={index} value={job?.id}>
+                        {job?.name}
+                      </option>
+                    ))}
                 </Field>
                 <ErrorMessage
                   name="engagementId"

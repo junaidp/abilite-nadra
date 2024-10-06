@@ -7,9 +7,7 @@ import { toast } from "react-toastify";
 
 const UpdateTaskManagement = ({ setShowUpdateTaskDailog, updateTaskId }) => {
   const dispatch = useDispatch();
-  const { loading, allTasks } = useSelector(
-    (state) => state?.tasksManagement
-  );
+  const { loading, allTasks } = useSelector((state) => state?.tasksManagement);
   const [response, setResponse] = React.useState("");
 
   // Initial form initialValues
@@ -52,7 +50,7 @@ const UpdateTaskManagement = ({ setShowUpdateTaskDailog, updateTaskId }) => {
     let task = allTasks.find((singleTask) => singleTask?.id === updateTaskId);
     setInitialValues({
       dueDate: task ? moment.utc(task?.dueDate).format("YYYY-MM-DD") : "",
-      auditEngagement: task?.engagement?.engagementName,
+      auditEngagement: task?.engagement?.name || "",
       userAssigned: task?.assignee?.name,
       detailedRequirement: task?.detailedRequirement,
     });
@@ -137,7 +135,6 @@ const UpdateTaskManagement = ({ setShowUpdateTaskDailog, updateTaskId }) => {
       </div>
 
       <FileUpload updateTaskId={updateTaskId} />
-
 
       <div className="row mb-2">
         <div className="col-lg-12 align-self-end">

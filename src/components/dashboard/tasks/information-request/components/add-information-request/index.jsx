@@ -98,11 +98,13 @@ const AddInformationRequest = ({ setShowAddInformationRequestDialog }) => {
                   aria-label="Default select example"
                 >
                   <option value="">Select Job</option>
-                  {auditEngagements?.map((job, index) => (
-                    <option key={index} value={job?.id}>
-                      {job?.engagementName}
-                    </option>
-                  ))}
+                  {auditEngagements
+                    ?.filter((item) => item?.name && item?.name !== "")
+                    ?.map((job, index) => (
+                      <option key={index} value={job?.id}>
+                        {job?.name}
+                      </option>
+                    ))}
                 </Field>
                 <ErrorMessage
                   name="engagementId"

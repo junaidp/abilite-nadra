@@ -220,7 +220,7 @@ const InformationRequest = () => {
                         <td>{(page - 1) * itemsPerPage + index + 1}</td>
                         <td>{task?.detailedRequirement}</td>
                         <td>{moment.utc(task?.dueDate).format("DD-MM-YY")}</td>
-                        <td>{task?.engagement?.engagementName}</td>
+                        <td>{task?.engagement?.name || ""}</td>
                         <td>{task?.assignee?.name}</td>
                         <td>{task?.assignedBy?.name}</td>
                         <td className="d-flex flex-wrap gap-4">

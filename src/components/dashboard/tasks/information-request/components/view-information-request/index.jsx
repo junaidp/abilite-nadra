@@ -25,7 +25,7 @@ const ViewInformationRequest = ({
     setInitialValues({
       dueDate: task ? moment.utc(task?.dueDate).format("YYYY-MM-DD") : "",
       userAssigned: task?.assignee?.name,
-      auditEngagement: task?.engagement?.engagementName,
+      auditEngagement: task?.engagement?.name || "",
       detailedRequirement: task?.detailedRequirement,
       response: task?.yourResponse,
     });
