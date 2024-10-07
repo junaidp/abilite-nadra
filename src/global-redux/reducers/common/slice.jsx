@@ -20,6 +20,7 @@ import {
   faCheck,
   faChartBar,
   faChartSimple,
+  faCopy,
 } from "@fortawesome/free-solid-svg-icons";
 let menuItems = [
   {
@@ -161,7 +162,6 @@ let menuItems = [
       },
     ],
   },
-
   {
     id: "li-audit-settings",
     label: "Settings",
@@ -173,8 +173,16 @@ let menuItems = [
     id: "li-audit-analytics",
     label: "Analytics",
     icon: faChartSimple,
-    route: "/audit/audit-analytics",
     active: false,
+    subMenu: [
+      {
+        id: "li-duplicate-enteries",
+        label: "Duplicate Enteries",
+        icon: faCopy,
+        route: "/audit/audit-analytics",
+        active: false,
+      },
+    ],
   },
   {
     id: "li-audit-information-request",
@@ -270,6 +278,13 @@ export const slice = createSlice({
       if (action.payload === "li-reporting-and-followup") {
         state.menuItems = state.menuItems.map((all) => {
           return all?.id === "li-reporting-and-followup"
+            ? { ...all, open: !all?.open }
+            : all;
+        });
+      }
+      if (action.payload === "li-audit-analytics") {
+        state.menuItems = state.menuItems.map((all) => {
+          return all?.id === "li-audit-analytics"
             ? { ...all, open: !all?.open }
             : all;
         });

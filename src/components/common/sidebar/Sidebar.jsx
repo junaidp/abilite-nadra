@@ -34,6 +34,9 @@ const Sidebar = () => {
     if (id === "li-reporting-and-followup") {
       dispatch(changeExpanded("li-reporting-and-followup"));
     }
+    if (id === "li-audit-analytics") {
+      dispatch(changeExpanded("li-audit-analytics"));
+    }
   }
 
   function handleSubItemClick(link, id) {
@@ -105,6 +108,13 @@ const Sidebar = () => {
                           ></i>
                         )}
                         {item?.id === "li-reporting-and-followup" && (
+                          <i
+                            className="fa fa-angle-down cheveron-icon"
+                            aria-hidden="true"
+                            id={item?.open ? "animate" : "non-animate"}
+                          ></i>
+                        )}
+                        {item?.id === "li-audit-analytics" && (
                           <i
                             className="fa fa-angle-down cheveron-icon"
                             aria-hidden="true"

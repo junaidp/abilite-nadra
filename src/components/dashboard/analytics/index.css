@@ -20,3 +20,10 @@
   gap: 40px;
   margin-top: 42vh;
 }
+
+.queryBoxResult {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  margin-top: 15vh;
+}

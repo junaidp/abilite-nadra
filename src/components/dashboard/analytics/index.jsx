@@ -1,199 +1,65 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import "./index.css";
-import Chip from "@mui/material/Chip";
-import Tooltip from "@mui/material/Tooltip";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { CircularProgress } from "@mui/material";
+import {
+  changeActiveLink,
+  InitialLoadSidebarActiveLink,
+} from "../../../global-redux/reducers/common/slice";
+import { useDispatch } from "react-redux";
 
-const TableauEmbed = () => {
-  const vizRef = useRef(null);
-  let url =
-  "https://public.tableau.com/shared/JXXGXMWYC?:display_count=n&:origin=viz_share_link"
+const Analytics = () => {
+  const dispatch = useDispatch();
+  const [loading, setLoading] = React.useState(false);
+  const [response, setResponse] = React.useState([]);
 
-  let [selectedProcess, setSelectedProcess] = React.useState("");
-  let [selectedCategory, setSelectedCategory] = React.useState("");
-  let [array, setArray] = React.useState([
-    {
-      name: "Order To Cash",
-      selected: false,
-      category: [
-        {
-          name: "Financial Anomalies",
-          query: "Duplicate Transactions, Late payments, … etc",
-          selected: false,
-        },
-        {
-          name: "Operational Process Anomalies",
-          query: "Inconsistent Tax Calculations, … etc",
-          selected: false,
-        },
-        {
-          name: "Customer Interaction Anomalies ",
-          query: "Unusual Discounts, … etc",
-          selected: false,
-        },
-      ],
-    },
-    {
-      name: "Procurement",
-      selected: false,
-      category: [
-        {
-          name: "Process & Approval Anomalies",
-          query: "Order Approval Delays, … etc",
-          selected: false,
-        },
-        {
-          name: "Vendor and Supplier Performance",
-          query: "Inactive Vendor Transactions, … etc",
-          selected: false,
-        },
-      ],
-    },
-    {
-      name: "Payroll",
-      selected: false,
-      category: [
-        {
-          name: "Compensation Consistency ",
-          query: "Inconsistent Deductions, … etc",
-          selected: false,
-        },
-        {
-          name: "Unusual Benefits & Disbursements ",
-          query: " Unusual Patterns in Bonus Payments, … etc",
-          selected: false,
-        },
-      ],
-    },
-  ]);
-
-  function handleClickProcess(processName) {
-    setSelectedProcess(processName);
-    setSelectedCategory("");
-    setArray((pre) =>
-      pre?.map((process) =>
-        process?.name === processName
-          ? { ...process, selected: true }
-          : {
-              ...process,
-              selected: false,
-              category: process?.category?.map((singleCategory) => {
-                return {
-                  ...singleCategory,
-                  selected: false,
-                };
-              }),
-            }
-      )
-    );
-  }
-
-  function handleClickCategory(categoryName) {
-    setSelectedCategory(categoryName);
-    setArray((pre) =>
-      pre?.map((process) =>
-        process?.name === selectedProcess
-          ? {
-              ...process,
-              category: process?.category?.map((category) =>
-                category?.name === categoryName
-                  ? { ...category, selected: true }
-                  : { ...category, selected: false }
-              ),
-            }
-          : process
-      )
-    );
-  }
-
-  useEffect(() => {
-    const options = {
-      width: "100%",
-      height: "600px",
-      hideTabs: true,
-      hideToolbar: true,
+  React.useEffect(() => {
+    const start = async () => {
+      if (loading) return;
+      setLoading(true);
+      try {
+        let url =
+          "https://797bd14ad31e.ngrok.app/api/transactions/duplicateEntries";
+        const { data } = await axios.get(url);
+        setResponse(data);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        toast.error("An error has accoured. Please try again later");
+      }
     };
+    start();
+  }, []);
 
-    const viz = new window.tableau.Viz(vizRef.current, url, options);
-
-    return () => {
-      viz.dispose();
-    };
+  React.useEffect(() => {
+    dispatch(changeActiveLink("li-duplicate-enteries"));
+    dispatch(InitialLoadSidebarActiveLink("li-audit-analytics"));
   }, []);
 
   return (
     <div className="row">
-      <div className="col-lg-6">
-        <div className="row">
-          <div className="col-lg-4 graphBox">
-            <h1 className="heading text-center mt-2">Process</h1>
-            <hr />
-            <div className="processBox">
-              {array.map((process, index) => {
-                return (
-                  <Chip
-                    label={process?.name}
-                    key={index}
-                    variant={process?.selected ? "" : "outlined"}
-                    onClick={() => handleClickProcess(process?.name)}
-                  />
-                );
+      <div className="col-lg-12 graphBox">
+        <h1 className="heading text-center mt-2">Result</h1>
+        <hr />
+        <div className="queryBoxResult">
+          {loading ? (
+            <div className="d-flex justify-center">
+              <CircularProgress />
+            </div>
+          ) : (
+            <div className="d-flex justify-center flex-col gap-3 align-items-center">
+              {response?.map((singleItem) => {
+                return Object.entries(singleItem).map(([key, value], index) => {
+                  return <>{key !== "id" && <p>{`${key}: ${value}`}</p>}</>;
+                });
               })}
             </div>
-          </div>
-          <div className="col-lg-4 graphBox">
-            <h1 className="heading text-center mt-2">Category</h1>
-            <hr />
-            <div className="categoryBox">
-              {array
-                .filter((process) => process?.selected)[0]
-                ?.category?.map((category, index) => {
-                  return (
-                    <Tooltip title={category?.name}>
-                      <Chip
-                        label={category?.name}
-                        key={index}
-                        variant={category?.selected ? "" : "outlined"}
-                        onClick={() => handleClickCategory(category?.name)}
-                      />
-                    </Tooltip>
-                  );
-                })}
-            </div>
-          </div>
-          <div className="col-lg-4 graphBox">
-            <h1 className="heading text-center mt-2">Query</h1>
-            <hr />
-            <div className="queryBox">
-              {selectedCategory && selectedProcess && (
-                <Tooltip
-                  title={
-                    array
-                      ?.find((process) => process?.name === selectedProcess)
-                      ?.category?.find(
-                        (category) => category?.name === selectedCategory
-                      )?.query
-                  }
-                >
-                  <Chip
-                    label={
-                      array
-                        ?.find((process) => process?.name === selectedProcess)
-                        ?.category?.find(
-                          (category) => category?.name === selectedCategory
-                        )?.query
-                    }
-                  />
-                </Tooltip>
-              )}
-            </div>
-          </div>
+          )}
         </div>
-      </div>
-      <div className="col-lg-6">
-        <div ref={vizRef}></div>
       </div>
     </div>
   );
 };
 
-export default TableauEmbed;
+export default Analytics;

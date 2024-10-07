@@ -409,8 +409,15 @@ body {
   font-family: "Poppins", sans-serif !important;
 }
 
+.css-1jzq0dw-MuiChip-label {
+  font-family: "Poppins", sans-serif !important;
+}
+
 .min-h-150 {
   min-height: 150px !important;
+}
+.min-h-140 {
+  min-height: 140px !important;
 }
 
 .disabled {
