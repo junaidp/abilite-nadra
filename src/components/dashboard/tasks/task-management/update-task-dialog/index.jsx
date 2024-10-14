@@ -33,7 +33,7 @@ const UpdateTaskManagement = ({ setShowUpdateTaskDailog, updateTaskId }) => {
             id: updateTaskId,
             dueDate: task?.dueDate,
             status: "string",
-            engagementId: Number(task?.engagement?.id),
+            engagementId: Number(task?.auditEngagement?.id),
             createdBy: Number(task?.assignedBy?.id),
             companyId: Number(task?.companyId),
             userAssigned: Number(task?.assignee?.id),
@@ -50,7 +50,7 @@ const UpdateTaskManagement = ({ setShowUpdateTaskDailog, updateTaskId }) => {
     let task = allTasks.find((singleTask) => singleTask?.id === updateTaskId);
     setInitialValues({
       dueDate: task ? moment.utc(task?.dueDate).format("YYYY-MM-DD") : "",
-      auditEngagement: task?.engagement?.name || "",
+      auditEngagement: task?.auditEngagement?.aetitle || "",
       userAssigned: task?.assignee?.name,
       detailedRequirement: task?.detailedRequirement,
     });

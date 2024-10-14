@@ -21,7 +21,7 @@ const ViewTaskManagement = ({ setShowViewTasktDialog, updateTaskId }) => {
     let task = allTasks.find((singleTask) => singleTask?.id === updateTaskId);
     setInitialValues({
       dueDate: task ? moment.utc(task?.dueDate).format("YYYY-MM-DD") : "",
-      auditEngagement: task?.engagement?.name || "",
+      auditEngagement: task?.auditEngagement?.aetitle || "",
       userAssigned: task?.assignee?.name,
       detailedRequirement: task?.detailedRequirement,
       response: task?.yourResponse,

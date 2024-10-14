@@ -1,11 +1,11 @@
 import React from "react";
 import moment from "moment";
-import RichTextEditor from "./RichText";
+import RichTextEditor from "../../view-internal-audit-report/components/RichText";
 
 const FollowUpItem = ({ item, consolidatedObservationsItem }) => {
   return (
     <div>
-      {consolidatedObservationsItem===false && (
+      {consolidatedObservationsItem === false && (
         <div className="row mb-3">
           <div className="col-lg-12">
             <label>Observation Title:</label>

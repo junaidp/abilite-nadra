@@ -123,7 +123,8 @@ const AditSteps = ({
                       <tr>
                         <th className="f-80">Sr No.</th>
                         <th>Program Step</th>
-                        <th>Actions</th>
+                        <th>Status</th>
+                        <th>View/Update</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -149,13 +150,22 @@ const AditSteps = ({
                                     {item?.program?.description}
                                   </a>
                                 </td>
-                                <td>
+                                <td className="d-flex gap-4">
                                   {item?.auditStepObservationsList?.length !==
                                   0 ? (
                                     <i className="fa fa-check-circle text-success f-18"></i>
                                   ) : (
                                     <i className="fa fa-check-circle text-danger  f-18"></i>
                                   )}
+                                </td>
+                                <td>
+                                  <i
+                                    className="fa-eye fa f-18 cursor-pointer"
+                                    onClick={() => {
+                                      setAuditStepId(item?.id);
+                                      setShowAuditStepsDialog(true);
+                                    }}
+                                  ></i>
                                 </td>
                               </tr>
                             );

@@ -6,10 +6,10 @@ import { CircularProgress } from "@mui/material";
 import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
-} from "../../../global-redux/reducers/common/slice";
+} from "../../../../global-redux/reducers/common/slice";
 import { useDispatch } from "react-redux";
 
-const Analytics = () => {
+const OverDue = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = React.useState(false);
   const [response, setResponse] = React.useState([]);
@@ -19,8 +19,7 @@ const Analytics = () => {
       if (loading) return;
       setLoading(true);
       try {
-        let url =
-          "https://797bd14ad31e.ngrok.app/api/transactions/duplicateEntries";
+        let url = "https://16309d26240e.ngrok.app/api/payments/overdue";
         const { data } = await axios.get(url);
         setResponse(data);
         setLoading(false);
@@ -33,7 +32,7 @@ const Analytics = () => {
   }, []);
 
   React.useEffect(() => {
-    dispatch(changeActiveLink("li-duplicate-enteries"));
+    dispatch(changeActiveLink("li-overdue"));
     dispatch(InitialLoadSidebarActiveLink("li-audit-analytics"));
   }, []);
 
@@ -51,7 +50,11 @@ const Analytics = () => {
             <div className="d-flex justify-center flex-col gap-3 align-items-center">
               {response?.map((singleItem) => {
                 return Object.entries(singleItem).map(([key, value], index) => {
-                  return <>{key !== "id" && <p>{`${key}: ${value}`}</p>}</>;
+                  return (
+                    <div key={index}>
+                      {key !== "id" && <p>{`${key}: ${value}`}</p>}
+                    </div>
+                  );
                 });
               })}
             </div>
@@ -62,4 +65,4 @@ const Analytics = () => {
   );
 };
 
-export default Analytics;
+export default OverDue;

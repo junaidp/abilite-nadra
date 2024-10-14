@@ -1,17 +1,14 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  setupGetNotifications,
-  setupUpdateNotifications,
-} from "../../../../../global-redux/reducers/settings/notification/slice";
+import { setupUpdateNotifications } from "../../../../../global-redux/reducers/settings/notification/slice";
 
-const Notifications = ({ currentSettingOption }) => {
+const Notifications = () => {
   const dispatch = useDispatch();
-  const { allUsers } = useSelector((state) => state?.settingsUserManagement);
   const { notifications, loading } = useSelector(
     (state) => state?.settingsNotification
   );
-  const [userId, setUserId] = React.useState("");
+  const { user } = useSelector((state) => state?.auth);
+
   const array = [
     {
       name: "onLogin",
@@ -308,6 +305,7 @@ const Notifications = ({ currentSettingOption }) => {
       value: "Information Request Due",
     },
   ];
+
   const [emailArray, setEmailArray] = React.useState(array);
 
   function handleChange(event, id, emailType) {
@@ -320,7 +318,7 @@ const Notifications = ({ currentSettingOption }) => {
     let array;
     array = {
       id: Number(notifications?.id),
-      userId: Number(userId),
+      userId: Number(user[0]?.id),
     };
     let changedEmailArray = emailArray?.map((item) =>
       item?.id === id ? { ...item, [emailType]: event.target.checked } : item
@@ -409,16 +407,6 @@ const Notifications = ({ currentSettingOption }) => {
     }
   }, [notifications]);
 
-  React.useEffect(() => {
-    if (userId && userId !== "") {
-      dispatch(setupGetNotifications({ userId }));
-    }
-  }, [userId]);
-
-  React.useEffect(() => {
-    setUserId("");
-  }, [currentSettingOption]);
-
   return (
     <div
       className="tab-pane fade"
@@ -434,24 +422,6 @@ const Notifications = ({ currentSettingOption }) => {
           </label>
         </div>
       </div>
-      <div className="d-flex align-items-center mt-2">
-        <select
-          className="form-select"
-          aria-label="Default select example"
-          name="rating"
-          value={userId}
-          onChange={(e) => setUserId(e.target.value)}
-        >
-          <option value="">Select One</option>
-          {allUsers?.map((user, index) => {
-            return (
-              <option value={user?.id} key={index}>
-                {user?.name}({user?.employeeid?.userHierarchy})
-              </option>
-            );
-          })}
-        </select>
-      </div>
 
       <div className="row mt-3">
         <div className="col-lg-12">
@@ -465,7 +435,7 @@ const Notifications = ({ currentSettingOption }) => {
                   <th>System Notification</th>
                 </tr>
               </thead>
-              {!userId || userId === "" ? (
+              {!notifications && Object.keys(notifications)?.length === 0 ? (
                 <tbody>
                   <tr>
                     <td className="w-300">

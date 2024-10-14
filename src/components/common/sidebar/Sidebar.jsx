@@ -202,6 +202,13 @@ const Sidebar = () => {
                             id={item?.open ? "animate" : "non-animate"}
                           ></i>
                         )}
+                        {item?.id === "li-audit-analytics" && (
+                          <i
+                            className="fa fa-angle-down cheveron-icon"
+                            aria-hidden="true"
+                            id={item?.open ? "animate" : "non-animate"}
+                          ></i>
+                        )}
                       </div>
                       {item?.subMenu &&
                         item?.subMenu?.map((subItem) => {

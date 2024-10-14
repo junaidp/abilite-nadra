@@ -21,6 +21,7 @@ import {
   faChartBar,
   faChartSimple,
   faCopy,
+  faCalendar,
 } from "@fortawesome/free-solid-svg-icons";
 let menuItems = [
   {
@@ -174,12 +175,20 @@ let menuItems = [
     label: "Analytics",
     icon: faChartSimple,
     active: false,
+    open: false,
     subMenu: [
       {
         id: "li-duplicate-enteries",
         label: "Duplicate Enteries",
         icon: faCopy,
-        route: "/audit/audit-analytics",
+        route: "/audit/audit-analytics-duplicate-enteries",
+        active: false,
+      },
+      {
+        id: "li-overdue",
+        label: "Overdue",
+        icon: faCalendar,
+        route: "/audit/audit-analytics-overdue",
         active: false,
       },
     ],

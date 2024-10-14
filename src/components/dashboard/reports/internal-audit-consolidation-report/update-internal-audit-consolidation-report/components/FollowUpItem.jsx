@@ -1,6 +1,6 @@
 import React from "react";
 import moment from "moment";
-import RichTextEditor from "./RichText";
+import RichTextEditor from "../../view-internal-audit-consolidation-report/components/RichText";
 import FileAttachement from "./Attachments";
 
 const FollowUpItem = ({ item, consolidatedObservationsItem }) => {

@@ -62,7 +62,7 @@ const UpdateInformationRequest = ({
     let task = allTasks.find((singleTask) => singleTask?.id === updateTaskId);
     setInitialValues({
       dueDate: task ? moment.utc(task?.dueDate).format("YYYY-MM-DD") : "",
-      engagementId: task?.engagement?.id,
+      engagementId: task?.auditEngagement?.id,
       userAssigned: task?.assignee?.id,
       detailedRequirement: task?.detailedRequirement,
     });
@@ -111,10 +111,9 @@ const UpdateInformationRequest = ({
                 >
                   <option value="">Select Job</option>
                   {auditEngagements
-                    ?.filter((item) => item?.name && item?.name !== "")
                     ?.map((job, index) => (
                       <option key={index} value={job?.id}>
-                        {job?.name}
+                        {job?.aetitle}
                       </option>
                     ))}
                 </Field>

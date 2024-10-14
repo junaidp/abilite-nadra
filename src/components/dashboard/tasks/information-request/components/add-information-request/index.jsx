@@ -99,10 +99,9 @@ const AddInformationRequest = ({ setShowAddInformationRequestDialog }) => {
                 >
                   <option value="">Select Job</option>
                   {auditEngagements
-                    ?.filter((item) => item?.name && item?.name !== "")
                     ?.map((job, index) => (
                       <option key={index} value={job?.id}>
-                        {job?.name}
+                        {job?.aetitle}
                       </option>
                     ))}
                 </Field>

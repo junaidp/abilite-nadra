@@ -97,7 +97,7 @@ export const getAllAuditEngagement = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.get(
-      `${baseUrl}/auditPlanningAndScheduling/engagments/getAllWithoutPaginationByCompanyId?companyId=${data?.companyId}`,
+      `${baseUrl}/auditEngagement/getAllWithoutPagination?companyId=${data?.companyId}`,
       {
         headers: {
           "Content-Type": "application/json",

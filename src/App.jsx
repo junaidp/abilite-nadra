@@ -43,7 +43,6 @@ import ResetPassword from "./pages/auth/reset-password/ResetPassword";
 import AuditParticulars from "./pages/dashboard/reporting-follow-up/reporting/reporting-particulars/ReportingParticulars";
 import FollowUpParticulars from "./pages/dashboard/reporting-follow-up/follow-up/follow-up-particulars/FollowUpParticulars";
 import AuditSettings from "./pages/dashboard/audit-settings/AuditSettings";
-import Analytics from "./pages/dashboard/analytics/Analytics";
 import InternalAuditReport from "./pages/dashboard/reports/internal-audit-report/InternalAuditReport";
 import ViewInternalAuditReport from "./pages/dashboard/reports/internal-audit-report/view-internal-audit-report/ViewInternalAuditReport";
 import UpdateInternalAuditReport from "./pages/dashboard/reports/internal-audit-report/update-internal-audit-report/UpdateInternalAuditReport";
@@ -57,6 +56,8 @@ import GenerateInternalAuditConsolidationReport from "./pages/dashboard/reports/
 import ViewInternalAuditConsolidationReport from "./pages/dashboard/reports/internal-audit-consolidation-report/view-internal-audit-consolidation-report/ViewInternalAuditConsolidationReport";
 import UpdateInternalAuditConsolidationReport from "./pages/dashboard/reports/internal-audit-consolidation-report/update-internal-audit-consolidation-report/UpdateInternalAuditConsolidationReport";
 import ProtectedRoute from "./components/common/layout/ProtectedRoute";
+import DuplicateEnteries from "./pages/dashboard/analytics/duplicate-enteries/DuplicateEnteries";
+import OverDue from "./pages/dashboard/analytics/overdue/OverDue";
 import NotFound from "./components/common/not-found/index";
 
 const App = () => {
@@ -184,7 +185,11 @@ const App = () => {
               element={<FollowUpParticulars />}
             />
             <Route path="audit-settings" element={<AuditSettings />} />
-            <Route path="audit-analytics" element={<Analytics />} />
+            <Route
+              path="audit-analytics-duplicate-enteries"
+              element={<DuplicateEnteries />}
+            />
+            <Route path="audit-analytics-overdue" element={<OverDue />} />
             <Route
               path="internal-audit-report"
               element={<InternalAuditReport />}

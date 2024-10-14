@@ -5,6 +5,7 @@ import { setupGetAllCheckLists } from "../../../global-redux/reducers/settings/c
 import { setupGetAllLocations } from "../../../global-redux/reducers/settings/location/slice";
 import { setupGetAllProcess } from "../../../global-redux/reducers/settings/process/slice";
 import { setupGetAllUsers } from "../../../global-redux/reducers/settings/user-management/slice";
+import { setupGetNotifications } from "../../../global-redux/reducers/settings/notification/slice.jsx";
 import { setupGetAllCPList } from "../../../global-redux/reducers/settings/cp-list/slice";
 import { setupGetAllRiskFactors } from "../../../global-redux/reducers/settings/risk-factor/slice";
 import AddCheckListManagementDialog from "../../modals/add-checklist-management-dialog/index";
@@ -70,10 +71,10 @@ const AuditSettings = () => {
       ) {
         dispatch(setupGetAllProcess(companyId));
       }
-      if (
-        currentSettingOption === "users" ||
-        currentSettingOption === "notification"
-      ) {
+      if (currentSettingOption === "notification") {
+        dispatch(setupGetNotifications({ userId: user[0]?.id }));
+      }
+      if (currentSettingOption === "users") {
         dispatch(setupGetAllUsers({ shareWith: true }));
       }
       if (currentSettingOption === "previousObservations") {
@@ -253,7 +254,7 @@ const AuditSettings = () => {
                     User Details
                   </button>
                 )}
-                {userRole === "ADMIN" && (
+                {userRole !== "ADMIN" && (
                   <button
                     className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
                     id="nav-notification-tab"
@@ -335,9 +336,7 @@ const AuditSettings = () => {
                 userRole={userRole}
                 currentSettingOption={currentSettingOption}
               />
-              {userRole === "ADMIN" && (
-                <Notification currentSettingOption={currentSettingOption} />
-              )}
+              {userRole !== "ADMIN" && <Notification />}
               {/* {(userRole === "ADMIN" || userHierarchy === "IAH") && (
                 <PreviousObservation
                   currentSettingOption={currentSettingOption}
