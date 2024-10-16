@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setupAddTask } from "../../../../../../global-redux/reducers/tasks-management/slice";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import moment from "moment";
+import FileUpload from "./file-upload";
 import * as Yup from "yup";
 
 // Validation schema
@@ -20,6 +21,7 @@ const validationSchema = Yup.object({
 
 const AddInformationRequest = ({ setShowAddInformationRequestDialog }) => {
   const dispatch = useDispatch();
+  const [uploads, setUploads] = React.useState([]);
   const { users, auditEngagements, loading, taskAddSuccess } = useSelector(
     (state) => state?.tasksManagement
   );
@@ -37,15 +39,23 @@ const AddInformationRequest = ({ setShowAddInformationRequestDialog }) => {
     if (!loading) {
       dispatch(
         setupAddTask({
-          dueDate: values?.dueDate,
-          status: "string",
-          engagementId: Number(values?.engagementId),
-          createdBy: Number(user[0]?.userId?.id),
-          companyId: Number(user[0]?.userId?.company[0]?.id),
-          userAssigned: Number(values?.userAssigned),
-          yourResponse: "",
-          uploads: [],
-          detailedRequirement: values?.detailedRequirement,
+          informationRequestAndTaskManagement: {
+            dueDate: values?.dueDate,
+            status: "string",
+            engagementId: Number(values?.engagementId),
+            createdBy: Number(user[0]?.userId?.id),
+            companyId: Number(user[0]?.userId?.company[0]?.id),
+            userAssigned: Number(values?.userAssigned),
+            yourResponse: "",
+            uploads: [],
+            detailedRequirement: values?.detailedRequirement,
+          },
+          files: uploads?.map((item) => {
+            return {
+              fileName: item?.fileName,
+              fileData: item?.fileData,
+            };
+          }),
         })
       );
     }
@@ -98,12 +108,11 @@ const AddInformationRequest = ({ setShowAddInformationRequestDialog }) => {
                   aria-label="Default select example"
                 >
                   <option value="">Select Job</option>
-                  {auditEngagements
-                    ?.map((job, index) => (
-                      <option key={index} value={job?.id}>
-                        {job?.aetitle}
-                      </option>
-                    ))}
+                  {auditEngagements?.map((job, index) => (
+                    <option key={index} value={job?.id}>
+                      {job?.aetitle}
+                    </option>
+                  ))}
                 </Field>
                 <ErrorMessage
                   name="engagementId"
@@ -154,6 +163,7 @@ const AddInformationRequest = ({ setShowAddInformationRequestDialog }) => {
                 </label>
               </div>
             </div>
+            <FileUpload uploads={uploads} setUploads={setUploads} />
 
             <div className="row mb-2">
               <div className="col-lg-8 align-self-end">

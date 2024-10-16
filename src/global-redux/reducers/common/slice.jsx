@@ -193,13 +193,13 @@ let menuItems = [
       },
     ],
   },
-  {
-    id: "li-audit-information-request",
-    label: "Information Request",
-    icon: faCheck,
-    route: "/audit/information-request",
-    active: false,
-  },
+  // {
+  //   id: "li-audit-information-request",
+  //   label: "Information Request",
+  //   icon: faCheck,
+  //   route: "/audit/information-request",
+  //   active: false,
+  // },
   {
     id: "li-audit-tasks-management",
     label: "Tasks Management",

@@ -30,16 +30,19 @@ const UpdateTaskManagement = ({ setShowUpdateTaskDailog, updateTaskId }) => {
         );
         dispatch(
           setupUpdateTask({
-            id: updateTaskId,
-            dueDate: task?.dueDate,
-            status: "string",
-            engagementId: Number(task?.auditEngagement?.id),
-            createdBy: Number(task?.assignedBy?.id),
-            companyId: Number(task?.companyId),
-            userAssigned: Number(task?.assignee?.id),
-            yourResponse: response,
-            uploads: task?.fileAttachments,
-            detailedRequirement: task?.detailedRequirement,
+            informationRequestAndTaskManagement: {
+              id: updateTaskId,
+              dueDate: task?.dueDate,
+              status: "string",
+              engagementId: Number(task?.auditEngagement?.id),
+              createdBy: Number(task?.assignedBy?.id),
+              companyId: Number(task?.companyId),
+              userAssigned: Number(task?.assignee?.id),
+              yourResponse: response,
+              uploads: task?.fileAttachments,
+              detailedRequirement: task?.detailedRequirement,
+            },
+            files: task?.fileAttachments,
           })
         );
       }

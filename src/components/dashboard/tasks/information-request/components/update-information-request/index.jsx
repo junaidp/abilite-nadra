@@ -43,16 +43,19 @@ const UpdateInformationRequest = ({
       let task = allTasks.find((singleTask) => singleTask?.id === updateTaskId);
       dispatch(
         setupUpdateTask({
-          id: updateTaskId,
-          dueDate: values?.dueDate,
-          status: "string",
-          engagementId: Number(values?.engagementId),
-          createdBy: task?.assignedBy?.id,
-          companyId: task?.companyId,
-          userAssigned: Number(values?.userAssigned),
-          yourResponse: task?.yourResponse,
-          uploads: task?.fileAttachments,
-          detailedRequirement: values?.detailedRequirement,
+          informationRequestAndTaskManagement: {
+            id: updateTaskId,
+            dueDate: values?.dueDate,
+            status: "string",
+            engagementId: Number(values?.engagementId),
+            createdBy: task?.assignedBy?.id,
+            companyId: task?.companyId,
+            userAssigned: Number(values?.userAssigned),
+            yourResponse: task?.yourResponse || "",
+            uploads: task?.fileAttachments,
+            detailedRequirement: values?.detailedRequirement,
+          },
+          files: task?.fileAttachments,
         })
       );
     }
@@ -110,12 +113,11 @@ const UpdateInformationRequest = ({
                   aria-label="Default select example"
                 >
                   <option value="">Select Job</option>
-                  {auditEngagements
-                    ?.map((job, index) => (
-                      <option key={index} value={job?.id}>
-                        {job?.aetitle}
-                      </option>
-                    ))}
+                  {auditEngagements?.map((job, index) => (
+                    <option key={index} value={job?.id}>
+                      {job?.aetitle}
+                    </option>
+                  ))}
                 </Field>
                 <ErrorMessage
                   name="engagementId"

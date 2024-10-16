@@ -1,6 +1,7 @@
 import React from "react";
 import FollowUp from "./components/FollowUp";
 import Reporting from "./components/Reporting";
+import InformationRequest from "./components/InformationRequest";
 import UserInfo from "./components/UserInfo";
 import TFA from "./components/TFA";
 import SupportingDocs from "./components/SupportingDocs";
@@ -13,6 +14,7 @@ const ManagementAuditeeView = () => {
   React.useEffect(() => {
     dispatch(resetAuthValues());
   }, []);
+
   return (
     <div>
       <div className="card p-3 shadow-sm setting-tab min-h-80">
@@ -88,6 +90,18 @@ const ManagementAuditeeView = () => {
                 >
                   Two Factor Authentication
                 </button>
+                <button
+                  className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
+                  id="nav-info-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#nav-info"
+                  type="button"
+                  role="tab"
+                  aria-controls="nav-info"
+                  onClick={() => setTab("information-request")}
+                >
+                  Information Request
+                </button>
               </div>
             </nav>
           </div>
@@ -102,6 +116,7 @@ const ManagementAuditeeView = () => {
               <FollowUp tab={tab} />
               <UserInfo tab={tab} />
               <TFA tab={tab} />
+              <InformationRequest tab={tab} />
             </div>
           </div>
         </div>
