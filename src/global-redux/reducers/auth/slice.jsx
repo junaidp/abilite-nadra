@@ -10,6 +10,7 @@ import {
   updateUser,
   logoutUser,
   landingCall,
+  getSystemNotifications,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
@@ -46,6 +47,9 @@ const initialState = {
   codeLoading: false,
   verifyCodeSuccess: false,
   disableTfaSuccess: false,
+  // system notifications
+  notificationLoading: false,
+  notifications: [],
 };
 
 export const setupRegisterUser = createAsyncThunk(
@@ -117,6 +121,13 @@ export const setupLandingCall = createAsyncThunk(
   "auth/landingCall",
   async (data, thunkAPI) => {
     return landingCall(data, thunkAPI);
+  }
+);
+
+export const setupGetSystemNotifications = createAsyncThunk(
+  "auth/getSystemNotifications",
+  async (data, thunkAPI) => {
+    return getSystemNotifications(data, thunkAPI);
   }
 );
 
@@ -406,6 +417,22 @@ export const slice = createSlice({
       })
       .addCase(setupLandingCall.rejected, (state, action) => {
         state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    builder
+      .addCase(setupGetSystemNotifications.pending, (state) => {
+        state.notificationLoading = true;
+      })
+      .addCase(setupGetSystemNotifications.fulfilled, (state, { payload }) => {
+        state.notificationLoading = false;
+        state.notifications = payload?.data || [];
+      })
+      .addCase(setupGetSystemNotifications.rejected, (state, action) => {
+        state.notificationLoading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);
         } else {

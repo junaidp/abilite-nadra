@@ -446,6 +446,10 @@ body {
   width: 46px !important;
 }
 
+.wrap-text{
+  text-wrap: wrap;
+}
+
 input::placeholder {
   font-size: 11px;
 }

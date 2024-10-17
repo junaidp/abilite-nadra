@@ -178,12 +178,14 @@ const InformationRequest = () => {
         <div className="">
           <div
             className="btn btn-labeled btn-primary px-3 shadow "
-            onClick={() => setShowAddInformationRequestDialog(true)}
+            onClick={() =>
+              !initialLoading && setShowAddInformationRequestDialog(true)
+            }
           >
             <span className="btn-label me-2">
               <i className="fa fa-plus-circle"></i>
             </span>
-            Add Information Request
+            {initialLoading ? "Loading..." : "Add Information Request"}
           </div>
         </div>
       </header>
@@ -220,7 +222,7 @@ const InformationRequest = () => {
                         <td>{(page - 1) * itemsPerPage + index + 1}</td>
                         <td>{task?.detailedRequirement}</td>
                         <td>{moment.utc(task?.dueDate).format("DD-MM-YY")}</td>
-                        <td>{task?.auditEngagement?.aetitle || ""}</td>
+                        <td>{task?.aeTitle || ""}</td>
                         <td>{task?.assignee?.name}</td>
                         <td>{task?.assignedBy?.name}</td>
                         <td className="d-flex flex-wrap gap-4">

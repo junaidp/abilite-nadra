@@ -182,3 +182,21 @@ export const landingCall = async (_, thunkAPI) => {
     return thunkAPI.rejectWithValue(error);
   }
 };
+
+export const getSystemNotifications = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.get(
+      `${baseUrl}/account/notifications/getAllForAnyUser?userId=${user[0]?.id}&pageNo=${data.page}&pageSize=${data?.itemsPerPage}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};

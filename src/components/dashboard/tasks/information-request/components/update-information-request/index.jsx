@@ -65,7 +65,7 @@ const UpdateInformationRequest = ({
     let task = allTasks.find((singleTask) => singleTask?.id === updateTaskId);
     setInitialValues({
       dueDate: task ? moment.utc(task?.dueDate).format("YYYY-MM-DD") : "",
-      engagementId: task?.auditEngagement?.id,
+      engagementId: task?.auditEngagementId,
       userAssigned: task?.assignee?.id,
       detailedRequirement: task?.detailedRequirement,
     });
@@ -113,11 +113,13 @@ const UpdateInformationRequest = ({
                   aria-label="Default select example"
                 >
                   <option value="">Select Job</option>
-                  {auditEngagements?.map((job, index) => (
-                    <option key={index} value={job?.id}>
-                      {job?.aetitle}
-                    </option>
-                  ))}
+                  {auditEngagements
+                    ?.filter((item) => item?.jobType !== "Compliance Checklist")
+                    ?.map((job, index) => (
+                      <option key={index} value={job?.id}>
+                        {job?.aetitle}
+                      </option>
+                    ))}
                 </Field>
                 <ErrorMessage
                   name="engagementId"
