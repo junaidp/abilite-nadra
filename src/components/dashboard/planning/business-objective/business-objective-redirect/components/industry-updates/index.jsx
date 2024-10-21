@@ -54,7 +54,7 @@ const CompanyUpdates = ({
                   ? true
                   : false
               }
-              maxLength="500"
+              maxLength="5000"
             ></textarea>
             <p className="word-limit-info label-text">Maximum 500 characters</p>
             {(planingEngagementSingleObject?.complete === false ||
