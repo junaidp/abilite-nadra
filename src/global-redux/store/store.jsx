@@ -8,6 +8,7 @@ import settingsUserManagementReducer from "../reducers/settings/user-management/
 import settingsProcessReducer from "../reducers/settings/process/slice";
 import settingsPreviousObservationReducer from "../reducers/settings/previous-observation/slice";
 import settingsNotificationReducer from "../reducers/settings//notification/slice";
+import settingsBusinessObjectiveReducer from "../reducers/settings/business-objective/slice";
 import planningEngagementReducer from "../reducers/planing/engagement/slice";
 import planningAuditPlanSummaryReducer from "../reducers/planing/audit-plan-summary/slice";
 import planningRiskAssessmentReducer from "../reducers/planing/risk-assessment/slice";
@@ -39,6 +40,7 @@ export const store = configureStore({
     settingsRiskFactor: settingsRiskFactorReducer,
     settingsDocs: settingsDocsReducer,
     settingsNotification: settingsNotificationReducer,
+    settingsBusinessObjective: settingsBusinessObjectiveReducer,
     // planing
     planningEngagement: planningEngagementReducer,
     planningRiskAssessment: planningRiskAssessmentReducer,

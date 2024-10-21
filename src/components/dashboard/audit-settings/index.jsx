@@ -13,6 +13,10 @@ import { setupGetAllFiles } from "../../../global-redux/reducers/settings/suppor
 import { handleReset } from "../../../global-redux/reducers/settings/risk-control-matrix/slice";
 import { resetAuthValues } from "../../../global-redux/reducers/auth/slice";
 import UserManagementDialog from "../../modals/add-user-dialog/index";
+import {
+  setupGetFinancialQuantifiableYesForCompany,
+  setupGetFinancialQuantifiableNoForCompany,
+} from "../../../global-redux/reducers/settings/business-objective/slice.jsx";
 import { setupGetAllPreviousObservations } from "../../../global-redux/reducers/settings/previous-observation/slice.jsx";
 import UpdateUserDialog from "../.././modals/update-user-dialog";
 import TFA from "./components/tfa/index.jsx";
@@ -24,6 +28,7 @@ import Location from "./components/location";
 import RiskFactor from "./components/risk-factor";
 import UserManagement from "./components/user";
 import RCMLibrary from "./components/rcm-library";
+import BusinessObjective from "./components/business-objective/index.jsx";
 // import PreviousObservation from "./components/previous-observation/index.jsx";
 import Process from "./components/process";
 import Notification from "./components/notification";
@@ -79,6 +84,10 @@ const AuditSettings = () => {
       }
       if (currentSettingOption === "previousObservations") {
         dispatch(setupGetAllPreviousObservations({ companyId: companyId }));
+      }
+      if (currentSettingOption === "business-objective") {
+        dispatch(setupGetFinancialQuantifiableYesForCompany({ companyId }));
+        dispatch(setupGetFinancialQuantifiableNoForCompany({ companyId }));
       }
     }
   }, [currentSettingOption]);
@@ -223,6 +232,18 @@ const AuditSettings = () => {
                 >
                   Checklist Management
                 </button>
+                <button
+                  className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
+                  id="nav-business-objective-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#nav-business-objective"
+                  type="button"
+                  role="tab"
+                  aria-controls="nav-business-objective"
+                  onClick={() => setCurrentSettingOption("business-objective")}
+                >
+                  Business Objective
+                </button>
                 {userRole === "ADMIN" && (
                   <button
                     className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
@@ -359,6 +380,11 @@ const AuditSettings = () => {
 
               {userRole === "ADMIN" && <UserInfo />}
               <TFA />
+              <BusinessObjective
+                userHierarchy={userHierarchy}
+                userRole={userRole}
+                currentSettingOption={currentSettingOption}
+              />
             </div>
           </div>
         </div>
