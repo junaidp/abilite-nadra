@@ -1,66 +1,121 @@
-import React from "react";
-import "./index.css";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
 import { CircularProgress } from "@mui/material";
+import { toast } from "react-toastify";
 import {
-  changeActiveLink,
-  InitialLoadSidebarActiveLink,
-} from "../../../../global-redux/reducers/common/slice";
-import { useDispatch } from "react-redux";
+  LineChart,
+  Line,
+  BarChart,
+  Bar,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
+import "./index.css";
 
 const OverDue = () => {
-  const dispatch = useDispatch();
-  const [loading, setLoading] = React.useState(false);
-  const [response, setResponse] = React.useState([]);
+  const [loading, setLoading] = useState(false);
+  const [response, setResponse] = useState([]);
+  const [chartType, setChartType] = useState("area");
 
-  React.useEffect(() => {
+  useEffect(() => {
     const start = async () => {
-      if (loading) return;
       setLoading(true);
       try {
         let url = "https://16309d26240e.ngrok.app/api/payments/overdue";
         const { data } = await axios.get(url);
         setResponse(data);
-        setLoading(false);
       } catch (error) {
+        toast.error("An error has occurred. Please try again later.");
+      } finally {
         setLoading(false);
-        toast.error("An error has accoured. Please try again later");
       }
     };
     start();
   }, []);
 
-  React.useEffect(() => {
-    dispatch(changeActiveLink("li-overdue"));
-    dispatch(InitialLoadSidebarActiveLink("li-audit-analytics"));
-  }, []);
+  const formattedData = response.map((item) => ({
+    id: item.id,
+    dueDate: new Date(item.dueDate).toLocaleDateString(),
+  }));
+
+  const renderChart = () => {
+    switch (chartType) {
+      case "bar":
+        return (
+          <BarChart data={formattedData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="dueDate" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Bar dataKey="id" fill="#8884d8" />
+          </BarChart>
+        );
+      case "area":
+        return (
+          <AreaChart data={formattedData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="dueDate" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Area
+              type="monotone"
+              dataKey="id"
+              stroke="#82ca9d"
+              fill="#82ca9d"
+            />
+          </AreaChart>
+        );
+      case "line":
+      default:
+        return (
+          <LineChart data={formattedData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="dueDate" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Line type="monotone" dataKey="id" stroke="#8884d8" />
+          </LineChart>
+        );
+    }
+  };
 
   return (
-    <div className="row">
-      <div className="col-lg-12 graphBox">
-        <h1 className="heading text-center mt-2">Result</h1>
-        <hr />
-        <div className="queryBoxResult">
-          {loading ? (
-            <div className="d-flex justify-center">
-              <CircularProgress />
-            </div>
-          ) : (
-            <div className="d-flex justify-center flex-col gap-3 align-items-center">
-              {response?.map((singleItem) => {
-                return Object.entries(singleItem).map(([key, value], index) => {
-                  return (
-                    <div key={index}>
-                      {key !== "id" && <p>{`${key}: ${value}`}</p>}
-                    </div>
-                  );
-                });
-              })}
-            </div>
-          )}
-        </div>
+    <div className="overdue-container">
+      <h1 className="heading">Overdue Payments</h1>
+      <div className="chart-selector row">
+        <select
+          id="chartType"
+          className="form-select h-40 col-lg-10"
+          aria-label="Default select example"
+          value={chartType}
+          onChange={(e) => setChartType(e.target.value)}
+        >
+          <option value="area">Area Chart</option>
+          <option value="line">Line Chart</option>
+          <option value="bar">Bar Chart</option>
+        </select>
       </div>
+
+      {loading ? (
+        <div className="loading-container">
+          <CircularProgress />
+        </div>
+      ) : (
+        <div className="chart-container">
+          <ResponsiveContainer width="100%" height={400}>
+            {renderChart()}
+          </ResponsiveContainer>
+        </div>
+      )}
     </div>
   );
 };

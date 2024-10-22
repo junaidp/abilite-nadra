@@ -1,5 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import FinanciallyQuantifiableNo from "../not-financially";
+import FinanciallyQuantifiableYes from "../financially";
 
 const BusinessObjectiveMapProcess = ({
   handleSaveBusinessObjectiveMapProcess,
@@ -9,29 +11,10 @@ const BusinessObjectiveMapProcess = ({
   setDomain,
   setDescription,
   planingEngagementSingleObject,
-  values,
-  setValues,
+  engagementId,
 }) => {
   const { user } = useSelector((state) => state?.auth);
   const [check, setCheck] = React.useState(true);
-
-  function handleInputChange(event) {
-    setValues((pre) => {
-      return {
-        ...pre,
-        [event.target.name]: event.target.value,
-      };
-    });
-  }
-
-  function handleCheckChange(event) {
-    setValues((pre) => {
-      return {
-        ...pre,
-        [event.target.name]: event.target.checked === true ? "true" : "false",
-      };
-    });
-  }
 
   return (
     <div>
@@ -114,135 +97,7 @@ const BusinessObjectiveMapProcess = ({
                   <option value="compliance">compliance</option>
                 </select>
               </div>
-              <div className="row mt-4 mb-4">
-                <label className="form-label">Financially Quantifiable</label>
-                <div className="form-check form-switch ml-12">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    role="switch"
-                    id="flexSwitchCheckDefault"
-                    checked={check}
-                    onChange={(event) => setCheck(event.target.checked)}
-                  />
-                </div>
-              </div>
-              {check && (
-                <div className="col-lg-12 mb-4">
-                  <label className="form-label">Enterprise Value</label>
-                  <input
-                    type="email"
-                    id="email"
-                    className="form-control"
-                    name="enterpriseValue"
-                    required="required"
-                    onChange={(e) => handleInputChange(e)}
-                    value={values.enterpriseValue}
-                    disabled={
-                      planingEngagementSingleObject?.locked === true ||
-                      (planingEngagementSingleObject?.complete === true &&
-                        planingEngagementSingleObject?.locked === false &&
-                        user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
-                        ? true
-                        : false
-                    }
-                  />
-                </div>
-              )}
-              {check && (
-                <div className="col-lg-12">
-                  <label className="form-label">Company Profitability</label>
-                  <input
-                    type="email"
-                    id="email"
-                    className="form-control"
-                    name="companyProfitability"
-                    required="required"
-                    onChange={(e) => handleInputChange(e)}
-                    value={values.companyProfitability}
-                    disabled={
-                      planingEngagementSingleObject?.locked === true ||
-                      (planingEngagementSingleObject?.complete === true &&
-                        planingEngagementSingleObject?.locked === false &&
-                        user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
-                        ? true
-                        : false
-                    }
-                  />
-                </div>
-              )}
-              {!check && (
-                <div className="row mt-4">
-                  <label className="form-label">Company Revenue</label>
-                  <div className="form-check form-switch ml-12">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      name="companyRevenue"
-                      role="switch"
-                      id="flexSwitchCheckDefault"
-                      onChange={(e) => handleCheckChange(e)}
-                      checked={values.companyRevenue === "true" ? true : false}
-                      disabled={
-                        planingEngagementSingleObject?.locked === true ||
-                        (planingEngagementSingleObject?.complete === true &&
-                          planingEngagementSingleObject?.locked === false &&
-                          user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
-                          ? true
-                          : false
-                      }
-                    />
-                  </div>
-                </div>
-              )}
-              {!check && (
-                <div className="row mt-4">
-                  <label className="form-label">Impact On Brand</label>
-                  <div className="form-check form-switch ml-12">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      name="impactOnBrand"
-                      role="switch"
-                      id="flexSwitchCheckDefault"
-                      onChange={(e) => handleCheckChange(e)}
-                      checked={values.impactOnBrand === "true" ? true : false}
-                      disabled={
-                        planingEngagementSingleObject?.locked === true ||
-                        (planingEngagementSingleObject?.complete === true &&
-                          planingEngagementSingleObject?.locked === false &&
-                          user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
-                          ? true
-                          : false
-                      }
-                    />
-                  </div>
-                </div>
-              )}
-              {!check && (
-                <div className="row mt-4">
-                  <label className="form-label">Impact On People</label>
-                  <div className="form-check form-switch ml-12">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      name="impactOnPeople"
-                      role="switch"
-                      id="flexSwitchCheckDefault"
-                      onChange={(e) => handleCheckChange(e)}
-                      checked={values.impactOnPeople === "true" ? true : false}
-                      disabled={
-                        planingEngagementSingleObject?.locked === true ||
-                        (planingEngagementSingleObject?.complete === true &&
-                          planingEngagementSingleObject?.locked === false &&
-                          user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
-                          ? true
-                          : false
-                      }
-                    />
-                  </div>
-                </div>
-              )}
+
               {(planingEngagementSingleObject?.complete === false ||
                 (planingEngagementSingleObject?.complete === true &&
                   planingEngagementSingleObject?.locked === false &&
@@ -260,6 +115,31 @@ const BusinessObjectiveMapProcess = ({
                     {loading ? "loading..." : "Save"}
                   </button>
                 </div>
+              )}
+              <hr />
+              <div className="row mt-4 mb-4">
+                <label className="form-label">Financially Quantifiable</label>
+                <div className="form-check form-switch ml-12">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    role="switch"
+                    id="flexSwitchCheckDefault"
+                    checked={check}
+                    onChange={(event) => setCheck(event.target.checked)}
+                  />
+                </div>
+              </div>
+              {check ? (
+                <FinanciallyQuantifiableYes
+                  engagementId={engagementId}
+                  planingEngagementSingleObject={planingEngagementSingleObject}
+                />
+              ) : (
+                <FinanciallyQuantifiableNo
+                  engagementId={engagementId}
+                  planingEngagementSingleObject={planingEngagementSingleObject}
+                />
               )}
             </div>
           </div>

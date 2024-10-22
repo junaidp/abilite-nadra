@@ -835,6 +835,7 @@ span[aria-label="Insert Ordered List"] .jodit-toolbar-button__trigger {
   left: -100px !important;
   cursor: default !important;
   width: 338px !important;
+  margin: auto !important;
 }
 
 .w-full {

@@ -10,6 +10,10 @@ import {
   setupSaveIndustryAndCompanyUpdates,
 } from "../../../../../global-redux/reducers/planing/engagement/slice";
 import {
+  setupGetFinancialQuantifiableYesForEngagement,
+  setupGetFinancialQuantifiableNoForEngagement,
+} from "../../../../../global-redux/reducers/settings/business-objective/slice";
+import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
 } from "../../../../../global-redux/reducers/common/slice";
@@ -115,23 +119,6 @@ const BusinessObjectiveRedirect = () => {
         planingEngagementSingleObject?.businessObjectiveAndMapProcessList[0]
           ?.description
       );
-      setValues({
-        enterpriseValue:
-          planingEngagementSingleObject?.businessObjectiveAndMapProcessList[0]
-            ?.enterpriseValue || "",
-        companyProfitability:
-          planingEngagementSingleObject?.businessObjectiveAndMapProcessList[0]
-            ?.companyProfitability || "",
-        companyRevenue:
-          planingEngagementSingleObject?.businessObjectiveAndMapProcessList[0]
-            ?.companyRevenue || "",
-        impactOnBrand:
-          planingEngagementSingleObject?.businessObjectiveAndMapProcessList[0]
-            ?.impactOnBrand || "",
-        impactOnPeople:
-          planingEngagementSingleObject?.businessObjectiveAndMapProcessList[0]
-            ?.impactOnPeople || "",
-      });
     }
   }, [planingEngagementSingleObject]);
 
@@ -160,6 +147,16 @@ const BusinessObjectiveRedirect = () => {
       dispatch(setupGetInitialSingleEngagementObject(engagementId));
       setTimeout(() => {
         dispatch(setupGetIndustryAndCompanyUpdates({ companyId }));
+      }, 900);
+      setTimeout(() => {
+        dispatch(
+          setupGetFinancialQuantifiableYesForEngagement({ engagementId })
+        );
+      }, 900);
+      setTimeout(() => {
+        dispatch(
+          setupGetFinancialQuantifiableNoForEngagement({ engagementId })
+        );
       }, 900);
     }
   }, [dispatch]);
@@ -236,8 +233,7 @@ const BusinessObjectiveRedirect = () => {
                   setDomain={setDomain}
                   setDescription={setDescription}
                   planingEngagementSingleObject={planingEngagementSingleObject}
-                  values={values}
-                  setValues={setValues}
+                  engagementId={engagementId}
                 />
               </div>
 
