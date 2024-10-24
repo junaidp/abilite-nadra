@@ -59,8 +59,27 @@ const StartScheduling = () => {
           event?.target?.name?.toUpperCase()
       );
 
+      let totalHierarchyUsers = allUsers?.filter(
+        (userItem) =>
+          userItem?.employeeid?.skillSet?.toUpperCase() ===
+          event?.target?.name?.toUpperCase()
+      );
+
       if (!ifUsersExists) {
         toast.error("No resource available in Operations");
+        return;
+      }
+
+      if (totalHierarchyUsers && totalHierarchyUsers?.length > 0) {
+        if (Number(event.target.value > Number(totalHierarchyUsers?.length))) {
+          toast.error(
+            `There are only ${
+              Number(event.target.value) - 1
+            } ${event.target.name.toUpperCase()} resource(s) available in the company. You are not allowed to add more.`
+          );
+
+          return;
+        }
       }
 
       if (ifUsersExists) {

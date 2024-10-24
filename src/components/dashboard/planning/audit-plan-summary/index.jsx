@@ -142,6 +142,8 @@ const AuditPlanSummary = () => {
           };
         })
       );
+    } else {
+      setData([]);
     }
   }, [allAuditPlanSummary]);
 

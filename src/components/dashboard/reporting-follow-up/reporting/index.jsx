@@ -103,13 +103,11 @@ const Reporting = () => {
   return (
     <div>
       <div className="mx-3">
-        <div className="row pt-4">
-          <div className="col-lg-7">
-            <h2 className="heading">Reporting</h2>
-          </div>
-        </div>
+        <header className="section-header my-3 text-start d-flex align-items-center justify-content-between">
+          <div className="mb-0 heading">Reporting</div>
+        </header>
 
-        <div className="row py-4">
+        <div className="row">
           <div className="col-lg-12">
             <div className="table-responsive">
               {loading ? (
@@ -135,7 +133,9 @@ const Reporting = () => {
                       return (
                         <tr key={index}>
                           <td>
-                            <label>{(page - 1) * itemsPerPage + index + 1}</label>
+                            <label>
+                              {(page - 1) * itemsPerPage + index + 1}
+                            </label>
                           </td>
                           <td>
                             <a

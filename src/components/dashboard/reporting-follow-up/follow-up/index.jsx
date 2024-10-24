@@ -99,12 +99,10 @@ const FollowUp = () => {
   return (
     <div>
       <div className="mx-3">
-        <div className="row pt-4">
-          <div className="col-lg-7">
-            <h2 className="heading">Follow Up</h2>
-          </div>
-        </div>
-        <div className="row py-4">
+        <header className="section-header my-3 text-start d-flex align-items-center justify-content-between">
+          <div className="mb-0 heading">Follow Up</div>
+        </header>
+        <div className="row">
           <div className="col-lg-12">
             <div className="table-responsive">
               {loading ? (
