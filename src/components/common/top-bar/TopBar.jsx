@@ -22,6 +22,7 @@ import { faIdBadge } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Tooltip from "@mui/material/Tooltip";
 import { CircularProgress } from "@mui/material";
+import moment from "moment";
 
 const TopBar = () => {
   const dispatch = useDispatch();
@@ -255,6 +256,13 @@ const TopBar = () => {
                                 <span className="d-block wrap-text">
                                   {notification?.message}
                                 </span>
+                                <span className="d-block wrap-text">
+                                  {notification?.createdDate
+                                    ? moment
+                                        .utc(notification?.createdDate)
+                                        .format("DD-MM-YYYY HH:mm:ss")
+                                    : "null"}
+                                </span>
                               </div>
                             </a>
                           );
@@ -279,22 +287,6 @@ const TopBar = () => {
                   </div>
                 )}
               </li>
-              {/* System Notifications */}
-
-              {/* {user[0]?.userId?.role[0]?.name === "USER" &&
-                user[0]?.userId?.employeeid?.userHierarchy !==
-                  "Management_Auditee" && (
-                  <a
-                    className="nav-link f-20"
-                    onClick={() => {
-                      navigate("/audit/audit-settings");
-                      dispatch(changeShowSidebar(false));
-                    }}
-                  >
-                    <i className="fa fa-gear f-18"></i>
-                    <div className="notification bg-primary rounded-circle"></div>
-                  </a>
-                )} */}
 
               <li className="nav-item dropdown">
                 <Tooltip
