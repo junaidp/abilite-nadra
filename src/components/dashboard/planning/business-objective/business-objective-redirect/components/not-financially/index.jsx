@@ -74,7 +74,7 @@ const FinanciallyQuantifiableNo = ({
                 <thead className="bg-secondary text-white">
                   <tr>
                     <th className="w-80">Sr No.</th>
-                    <th>Objective</th>
+                    <th>Impact</th>
                     <th>Value</th>
                     {(planingEngagementSingleObject?.complete === false ||
                       (planingEngagementSingleObject?.complete === true &&

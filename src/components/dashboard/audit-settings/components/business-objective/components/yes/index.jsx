@@ -118,7 +118,7 @@ const FinanciallyQuantifiableYes = ({
 
       <div className="mt-3 d-flex flex-wrap gap-4">
         <div className="flex-1 w-100">
-          <label className="w-100">Business Objective</label>
+          <label className="w-100">Impact On</label>
           <input
             className="form-control w-100"
             placeholder="Enter"
@@ -154,9 +154,8 @@ const FinanciallyQuantifiableYes = ({
                 <thead className="bg-secondary text-white">
                   <tr>
                     <th className="w-80">Sr No.</th>
-                    <th>Objective</th>
+                    <th>Impact</th>
                     <th>Amount</th>
-                    <th>Weight</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -190,18 +189,6 @@ const FinanciallyQuantifiableYes = ({
                               className="form-control"
                               name="amount"
                               value={item?.amount || ""}
-                              onChange={(event) =>
-                                handleChangeValue(event, item?.id)
-                              }
-                            ></input>
-                          </td>
-                          <td>
-                            <input
-                              type="number"
-                              id="weight"
-                              className="form-control"
-                              name="weight"
-                              value={item?.weight || ""}
                               onChange={(event) =>
                                 handleChangeValue(event, item?.id)
                               }

@@ -36,6 +36,13 @@ const FinanciallyQuantifiableYes = ({
   }
 
   function handleChangeValue(event, id) {
+    let object = yesList?.find((singleItem) => singleItem?.id === id);
+    if (object && object?.amount) {
+      if (Number(event.target.value) > object?.amount) {
+        toast.error("Impact Amount Cannot Be Greater Than Amount");
+        return;
+      }
+    }
     setYesList((pre) =>
       pre?.map((item) =>
         item?.id === id
@@ -76,9 +83,10 @@ const FinanciallyQuantifiableYes = ({
                 <thead className="bg-secondary text-white">
                   <tr>
                     <th className="w-80">Sr No.</th>
-                    <th>Objective</th>
+                    <th>Impact</th>
                     <th>Amount</th>
-                    <th>Weight</th>
+                    <th>Impact Amount</th>
+                    <th>Percentage Impact</th>
                     {(planingEngagementSingleObject?.complete === false ||
                       (planingEngagementSingleObject?.complete === true &&
                         planingEngagementSingleObject?.locked === false &&
@@ -98,21 +106,7 @@ const FinanciallyQuantifiableYes = ({
                             rows="3"
                             name="name"
                             value={item?.name || ""}
-                            onChange={(event) =>
-                              handleChangeValue(event, item?.id)
-                            }
-                            maxLength="5000"
-                            disabled={
-                              planingEngagementSingleObject?.locked === true ||
-                              (planingEngagementSingleObject?.complete ===
-                                true &&
-                                planingEngagementSingleObject?.locked ===
-                                  false &&
-                                user[0]?.userId?.employeeid?.userHierarchy !==
-                                  "IAH")
-                                ? true
-                                : false
-                            }
+                            disabled
                           ></textarea>
                           <label className="word-limit-info label-text">
                             Maximum 5000 characters
@@ -125,20 +119,7 @@ const FinanciallyQuantifiableYes = ({
                             className="form-control"
                             name="amount"
                             value={item?.amount || ""}
-                            onChange={(event) =>
-                              handleChangeValue(event, item?.id)
-                            }
-                            disabled={
-                              planingEngagementSingleObject?.locked === true ||
-                              (planingEngagementSingleObject?.complete ===
-                                true &&
-                                planingEngagementSingleObject?.locked ===
-                                  false &&
-                                user[0]?.userId?.employeeid?.userHierarchy !==
-                                  "IAH")
-                                ? true
-                                : false
-                            }
+                            disabled
                           ></input>
                         </td>
                         <td>
@@ -163,6 +144,12 @@ const FinanciallyQuantifiableYes = ({
                                 : false
                             }
                           ></input>
+                        </td>
+                        <td>
+                          {Math.floor(
+                            Number(item?.amount) / Number(item?.weight)
+                          )}
+                          %
                         </td>
                         {(planingEngagementSingleObject?.complete === false ||
                           (planingEngagementSingleObject?.complete === true &&
