@@ -43,6 +43,7 @@ import {
   riskControlMatrixFeedBack,
   auditProgramFeedBack,
   auditStepFeedBack,
+  getAllDefaultRCM,
 } from "./thunk";
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
@@ -55,6 +56,7 @@ const initialState = {
   singleAuditEngagementObject: {},
   auditEngagementObservationAddSuccess: false,
   allAuditEngagement: [],
+  defaultRCM: [],
   totalNoOfRecords: 0,
 };
 
@@ -349,6 +351,12 @@ export const setupAuditStepFeedBack = createAsyncThunk(
     return auditStepFeedBack(data, thunkAPI);
   }
 );
+export const setupGetAllDefaultRCM = createAsyncThunk(
+  "auditEngagement/getAllDefaultRCM",
+  async (data, thunkAPI) => {
+    return getAllDefaultRCM(data, thunkAPI);
+  }
+);
 
 export const slice = createSlice({
   name: "auditEngagement",
@@ -365,6 +373,7 @@ export const slice = createSlice({
       state.auditEngagementObservationAddSuccess = false;
       state.singleAuditEngagementObject = {};
       state.allAuditEngagement = [];
+      state.defaultRCM = [];
       state.totalNoOfRecords = 0;
     },
   },
@@ -1177,6 +1186,23 @@ export const slice = createSlice({
         toast.success("Audit Step Feedback Added Successfully");
       })
       .addCase(setupAuditStepFeedBack.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Get All Default RCM
+    builder
+      .addCase(setupGetAllDefaultRCM.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetAllDefaultRCM.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.defaultRCM = payload?.data || [];
+      })
+      .addCase(setupGetAllDefaultRCM.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);

@@ -17,7 +17,9 @@ body {
 .css-9iedg7 {
   font-family: "Poppins", sans-serif !important;
 }
-
+.recharts-surface{
+  width: 500px !important;
+}
 .justify-end {
   justify-content: end;
 }

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { baseUrl } from "../../../constants/index";
+import { setupGetAllDefaultRCM } from "./slice";
 
 export const getAllAuditEngagement = async (data, thunkAPI) => {
   try {
@@ -63,6 +64,17 @@ export const getInitialSingleAuditEngagement = async (data, thunkAPI) => {
         },
       }
     );
+    const { company_id, process_Id, subProcess_Id } = props.data.data;
+
+    // Dispatch the additional action with the response data after successful API call
+    thunkAPI.dispatch(
+      setupGetAllDefaultRCM(
+        `?company_id=${Number(company_id)}&process_id=${Number(
+          process_Id
+        )}&subProcess_id=${Number(subProcess_Id)}`
+      )
+    );
+
     return props.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
@@ -812,6 +824,24 @@ export const auditStepFeedBack = async (data, thunkAPI) => {
       {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
+export const getAllDefaultRCM = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.post(
+      `${baseUrl}/configurations/RCMLibrary/getAll${data}`,
+      null,
+      {
+        headers: {
           Authorization: `Bearer ${user[0]?.token}`,
         },
       }

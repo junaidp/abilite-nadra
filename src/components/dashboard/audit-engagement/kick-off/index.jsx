@@ -27,6 +27,7 @@ import AuditNotifications from "./component/audit-notifications";
 import RiskControlMatrix from "./component/risk-control-matrix";
 import AuditProgram from "./component/audit-program";
 import AuditSteps from "./component/audit-steps";
+import DefaultRCM from "./component/default-rcm/index";
 import ComplianceCheckList from "./component/compliace-checklist";
 import { CircularProgress } from "@mui/material";
 
@@ -279,6 +280,9 @@ const KickOff = () => {
                   currentAuditEngagement={currentAuditEngagement}
                   auditEngagementId={auditEngagementId}
                 />
+                {currentAuditEngagement?.jobType !== "Compliance Checklist" && (
+                  <DefaultRCM auditEngagementId={auditEngagementId} />
+                )}
                 {currentAuditEngagement?.jobType !== "Compliance Checklist" && (
                   <RiskControlMatrix
                     setShowViewLibrary={setShowViewLibrary}
