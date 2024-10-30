@@ -280,9 +280,10 @@ const KickOff = () => {
                   currentAuditEngagement={currentAuditEngagement}
                   auditEngagementId={auditEngagementId}
                 />
-                {currentAuditEngagement?.jobType !== "Compliance Checklist" && (
-                  <DefaultRCM auditEngagementId={auditEngagementId} />
-                )}
+                {currentAuditEngagement?.jobType !== "Compliance Checklist" &&
+                  currentAuditEngagement?.riskControlMatrix === null && (
+                    <DefaultRCM auditEngagementId={auditEngagementId} />
+                  )}
                 {currentAuditEngagement?.jobType !== "Compliance Checklist" && (
                   <RiskControlMatrix
                     setShowViewLibrary={setShowViewLibrary}

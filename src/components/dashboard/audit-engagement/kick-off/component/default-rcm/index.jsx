@@ -4,7 +4,7 @@ import Objective from "./objective/index";
 import Risk from "./risk";
 import Control from "./control";
 import { toast } from "react-toastify";
-import { setupSaveRiskControlMatrixControl } from "../../../../../../global-redux/reducers/audit-engagement/slice";
+import { setupAddObjectiveRiskControl } from "../../../../../../global-redux/reducers/audit-engagement/slice";
 
 const DefaultRCM = ({ auditEngagementId }) => {
   const dispatch = useDispatch();
@@ -28,39 +28,43 @@ const DefaultRCM = ({ auditEngagementId }) => {
     }
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
+    if (loading) {
+      return;
+    }
     if (!selectedRCM || selectedRCM.length === 0) {
       toast.error("No Risk Control Matrix Selected");
       return;
     }
 
-    selectedRCM.forEach((objective) => {
-      const { rcmLibraryRiskRating } = objective;
+    for (const objectiveItem of selectedRCM) {
+      let object = {
+        objective: {
+          auditEngagementId: auditEngagementId,
+          description: objectiveItem?.description,
+          rating: objectiveItem?.rating,
+          rcmLibraryObjectives_id: 0,
+        },
+        risks: objectiveItem?.rcmLibraryRiskRating?.map((riskItem) => ({
+          addNewRiskRatingRequest: {
+            description: riskItem?.description,
+            rating: riskItem?.rating,
+            rcmLibraryRiskRating_id: 0,
+          },
+          controls: riskItem?.rcmLibraryControlRisk?.map((controlItem) => ({
+            description: controlItem?.description,
+            rating: controlItem?.rating,
+            rcmLibraryControlRisk_id: 0,
+            engagement_id: auditEngagementId,
+          })),
+        })),
+      };
 
-      if (!rcmLibraryRiskRating || rcmLibraryRiskRating.length === 0) {
-        return;
-      }
+      dispatch(setupAddObjectiveRiskControl(object));
 
-      rcmLibraryRiskRating.forEach((risk) => {
-        const { rcmLibraryControlRisk } = risk;
-
-        if (!rcmLibraryControlRisk || rcmLibraryControlRisk.length === 0) {
-          return;
-        }
-
-        rcmLibraryControlRisk.forEach((control) => {
-          dispatch(
-            setupSaveRiskControlMatrixControl({
-              riskRating_id: Number(risk.id),
-              description: control.description,
-              rating: Number(control.rating),
-              rcmLibraryObjectives_id: 0,
-              engagement_id: Number(auditEngagementId),
-            })
-          );
-        });
-      });
-    });
+      // Adding a delay of 900 ms before the next dispatch
+      await new Promise((resolve) => setTimeout(resolve, 900));
+    }
   }
 
   return (
@@ -83,7 +87,8 @@ const DefaultRCM = ({ auditEngagementId }) => {
         data-bs-parent="#accordionFlushExample"
       >
         <div className="accordion-body">
-          {!defaultRCM || defaultRCM?.length === 0 ? (
+          {!defaultRCM[0]?.rcmLibraryObjectives ||
+          defaultRCM[0]?.rcmLibraryObjectives?.length === 0 ? (
             <p>No Default Risk Control Matrix Available.</p>
           ) : (
             <div>
@@ -157,17 +162,20 @@ const DefaultRCM = ({ auditEngagementId }) => {
               })}
             </div>
           )}
-          <div onClick={handleSubmit} className="mt-3">
-            <div className="justify-content-end text-end">
-              <div
-                className={`btn btn-labeled btn-primary  shadow ${
-                  loading && "disabled"
-                }`}
-              >
-                {loading ? "Loading..." : "Submit"}
+          {defaultRCM[0]?.rcmLibraryObjectives &&
+            defaultRCM[0]?.rcmLibraryObjectives?.length > 0 && (
+              <div onClick={handleSubmit} className="mt-3">
+                <div className="justify-content-end text-end">
+                  <div
+                    className={`btn btn-labeled btn-primary  shadow ${
+                      loading && "disabled"
+                    }`}
+                  >
+                    {loading ? "Loading..." : "Submit"}
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
+            )}
         </div>
       </div>
     </div>

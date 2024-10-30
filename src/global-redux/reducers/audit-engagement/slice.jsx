@@ -44,6 +44,7 @@ import {
   auditProgramFeedBack,
   auditStepFeedBack,
   getAllDefaultRCM,
+  addObjectiveRiskControl,
 } from "./thunk";
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
@@ -355,6 +356,12 @@ export const setupGetAllDefaultRCM = createAsyncThunk(
   "auditEngagement/getAllDefaultRCM",
   async (data, thunkAPI) => {
     return getAllDefaultRCM(data, thunkAPI);
+  }
+);
+export const setupAddObjectiveRiskControl = createAsyncThunk(
+  "auditEngagement/addObjectiveRiskControl",
+  async (data, thunkAPI) => {
+    return addObjectiveRiskControl(data, thunkAPI);
   }
 );
 
@@ -1203,6 +1210,24 @@ export const slice = createSlice({
         state.defaultRCM = payload?.data || [];
       })
       .addCase(setupGetAllDefaultRCM.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Add Objective Risk And Control
+    builder
+      .addCase(setupAddObjectiveRiskControl.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupAddObjectiveRiskControl.fulfilled, (state) => {
+        state.loading = false;
+        state.auditEngagementAddSuccess = true;
+        toast.success("Default Risk Control Matrix Selected Successfully");
+      })
+      .addCase(setupAddObjectiveRiskControl.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);
