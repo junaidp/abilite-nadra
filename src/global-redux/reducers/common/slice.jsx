@@ -175,31 +175,8 @@ let menuItems = [
     label: "Analytics",
     icon: faChartSimple,
     active: false,
-    open: false,
-    subMenu: [
-      {
-        id: "li-duplicate-enteries",
-        label: "Duplicate Enteries",
-        icon: faCopy,
-        route: "/audit/audit-analytics-duplicate-enteries",
-        active: false,
-      },
-      {
-        id: "li-overdue",
-        label: "Overdue",
-        icon: faCalendar,
-        route: "/audit/audit-analytics-overdue",
-        active: false,
-      },
-    ],
+    route: "/audit/audit-analytics",
   },
-  // {
-  //   id: "li-audit-information-request",
-  //   label: "Information Request",
-  //   icon: faCheck,
-  //   route: "/audit/information-request",
-  //   active: false,
-  // },
   {
     id: "li-audit-tasks-management",
     label: "Tasks Management",
@@ -287,13 +264,6 @@ export const slice = createSlice({
       if (action.payload === "li-reporting-and-followup") {
         state.menuItems = state.menuItems.map((all) => {
           return all?.id === "li-reporting-and-followup"
-            ? { ...all, open: !all?.open }
-            : all;
-        });
-      }
-      if (action.payload === "li-audit-analytics") {
-        state.menuItems = state.menuItems.map((all) => {
-          return all?.id === "li-audit-analytics"
             ? { ...all, open: !all?.open }
             : all;
         });
