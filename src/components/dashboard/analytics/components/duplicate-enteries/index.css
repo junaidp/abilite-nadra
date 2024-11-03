@@ -1,3 +1,9 @@
+.duplicate-entries-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
 .graphBox {
   border: 1px solid lightgrey;
   min-height: 100vh;

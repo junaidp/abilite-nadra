@@ -24,11 +24,12 @@ const OverDue = () => {
   const [chartType, setChartType] = useState("area");
 
   useEffect(() => {
-    const start = async () => {
+    const fetchData = async () => {
       setLoading(true);
       try {
-        let url = "https://abilite-analytics.vercel.app/overdue";
-        const { data } = await axios.get(url);
+        const { data } = await axios.get(
+          "https://abilite-analytics.vercel.app/late-payments"
+        );
         setResponse(data);
       } catch (error) {
         toast.error("An error has occurred. Please try again later.");
@@ -36,21 +37,17 @@ const OverDue = () => {
         setLoading(false);
       }
     };
-    start();
+    fetchData();
   }, []);
 
   const formattedData = response.map((item) => ({
-    id: item._id,
-    customerName: item.Customer_Name,
-    quantitySold: item.Quantity_Sold,
-    transactionAmount: item.Transaction_Amount,
-    salesTaxVat: item.Sales_Tax_Vat,
-    afterVatAmount: item.After_VAT_Amount,
-    balance: item.Balance,
-    paymentMethod: item.Payment_Method,
-    supplier: item.Supplier,
-    perUnitPrice: item.Per_Unit_Price,
-    dueDate: new Date(item.Due_Date).toLocaleDateString(),
+    Customer_ID: item.Customer_ID,
+    Order_ID: item.Order_ID,
+    Customer_Name: item.Customer_Name,
+    Balance: item.Balance,
+    Payment_Method: item.Payment_Method,
+    Due_Date: new Date(item.Due_Date).toLocaleDateString(),
+    overdueDays: item.overdueDays,
   }));
 
   const CustomTooltip = ({ active, payload, label }) => {
@@ -59,13 +56,10 @@ const OverDue = () => {
       return (
         <div className="custom-tooltip">
           <p className="label">{`Due Date: ${label}`}</p>
-          <p>{`Customer Name: ${data.customerName}`}</p>
-          <p>{`Payment Method: ${data.paymentMethod}`}</p>
-          <p>{`Supplier: ${data.supplier}`}</p>
-          <p>{`Per Unit Price: ${data.perUnitPrice}`}</p>
-          <p>{`Quantity Sold: ${data.quantitySold}`}</p>
-          <p>{`Transaction Amount: ${data.transactionAmount}`}</p>
-          <p>{`Balance: ${data.balance}`}</p>
+          <p>{`Customer Name: ${data.Customer_Name}`}</p>
+          <p>{`Payment Method: ${data.Payment_Method}`}</p>
+          <p>{`Balance: ${data.Balance}`}</p>
+          <p>{`Overdue Days: ${data.overdueDays}`}</p>
         </div>
       );
     }
@@ -78,44 +72,32 @@ const OverDue = () => {
         return (
           <BarChart data={formattedData}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="dueDate" />
+            <XAxis dataKey="Due_Date" />
             <YAxis />
             <Tooltip content={<CustomTooltip />} />
             <Legend />
-            <Bar dataKey="quantitySold" fill="#8884d8" name="Quantity Sold" />
-            <Bar
-              dataKey="transactionAmount"
-              fill="#82ca9d"
-              name="Transaction Amount"
-            />
-            <Bar dataKey="balance" fill="#ffc658" name="Balance" />
+            <Bar dataKey="overdueDays" fill="#8884d8" name="Overdue Days" />
+            <Bar dataKey="Balance" fill="#ffc658" name="Balance" />
           </BarChart>
         );
       case "area":
         return (
           <AreaChart data={formattedData}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="dueDate" />
+            <XAxis dataKey="Due_Date" />
             <YAxis />
             <Tooltip content={<CustomTooltip />} />
             <Legend />
             <Area
               type="monotone"
-              dataKey="quantitySold"
+              dataKey="overdueDays"
               stroke="#8884d8"
               fill="#8884d8"
-              name="Quantity Sold"
+              name="Overdue Days"
             />
             <Area
               type="monotone"
-              dataKey="transactionAmount"
-              stroke="#82ca9d"
-              fill="#82ca9d"
-              name="Transaction Amount"
-            />
-            <Area
-              type="monotone"
-              dataKey="balance"
+              dataKey="Balance"
               stroke="#ffc658"
               fill="#ffc658"
               name="Balance"
@@ -123,33 +105,56 @@ const OverDue = () => {
           </AreaChart>
         );
       case "line":
-      default:
         return (
           <LineChart data={formattedData}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="dueDate" />
+            <XAxis dataKey="Due_Date" />
             <YAxis />
             <Tooltip content={<CustomTooltip />} />
             <Legend />
             <Line
               type="monotone"
-              dataKey="quantitySold"
+              dataKey="overdueDays"
               stroke="#8884d8"
-              name="Quantity Sold"
+              name="Overdue Days"
             />
             <Line
               type="monotone"
-              dataKey="transactionAmount"
-              stroke="#82ca9d"
-              name="Transaction Amount"
-            />
-            <Line
-              type="monotone"
-              dataKey="balance"
+              dataKey="Balance"
               stroke="#ffc658"
               name="Balance"
             />
           </LineChart>
+        );
+      case "table":
+      default:
+        return (
+          <table>
+            <thead>
+              <tr>
+                <th>Customer ID</th>
+                <th>Order ID</th>
+                <th>Customer Name</th>
+                <th>Balance</th>
+                <th>Payment Method</th>
+                <th>Due Date</th>
+                <th>Overdue Days</th>
+              </tr>
+            </thead>
+            <tbody>
+              {formattedData.map((item, index) => (
+                <tr key={index}>
+                  <td>{item.Customer_ID}</td>
+                  <td>{item.Order_ID}</td>
+                  <td>{item.Customer_Name}</td>
+                  <td>{item.Balance}</td>
+                  <td>{item.Payment_Method}</td>
+                  <td>{item.Due_Date}</td>
+                  <td>{item.overdueDays}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         );
     }
   };
@@ -161,13 +166,14 @@ const OverDue = () => {
         <select
           id="chartType"
           className="form-select h-40 col-lg-10"
-          aria-label="Default select example"
+          aria-label="Select chart type"
           value={chartType}
           onChange={(e) => setChartType(e.target.value)}
         >
           <option value="area">Area Chart</option>
           <option value="line">Line Chart</option>
           <option value="bar">Bar Chart</option>
+          <option value="table">Table View</option>
         </select>
       </div>
 
