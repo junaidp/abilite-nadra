@@ -94,7 +94,7 @@ const FinanciallyQuantifiableNo = ({
   }, [noAddSuccess]);
 
   React.useEffect(() => {
-    if (noAll && noAll?.length !== 0) {
+    if (noAll) {
       setNoList(noAll);
     }
   }, [noAll]);

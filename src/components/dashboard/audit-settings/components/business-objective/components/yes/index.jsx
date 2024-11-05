@@ -58,11 +58,7 @@ const FinanciallyQuantifiableYes = ({
   function handleUpdate(id) {
     if (!yesLoading) {
       const currentItem = yesList.find((all) => all?.id === id);
-      if (
-        currentItem?.name === "" ||
-        !currentItem?.amount ||
-        !currentItem?.weight
-      ) {
+      if (currentItem?.name === "" || !currentItem?.amount) {
         toast.error("Provide all values");
         return;
       }
@@ -93,7 +89,7 @@ const FinanciallyQuantifiableYes = ({
   }, [yesAddSuccess]);
 
   React.useEffect(() => {
-    if (yesAll && yesAll?.length !== 0) {
+    if (yesAll) {
       setYesList(yesAll);
     }
   }, [yesAll]);

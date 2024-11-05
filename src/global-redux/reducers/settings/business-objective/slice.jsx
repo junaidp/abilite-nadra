@@ -180,10 +180,9 @@ export const slice = createSlice({
         setupGetFinancialQuantifiableYesForCompany.rejected,
         (state, action) => {
           state.yesLoading = false;
+          state.yesAll = [];
           if (action.payload?.response?.data?.message) {
             toast.error(action.payload.response.data.message);
-          } else {
-            toast.error("An Error has occurred");
           }
         }
       );
@@ -283,10 +282,9 @@ export const slice = createSlice({
         setupGetFinancialQuantifiableNoForCompany.rejected,
         (state, action) => {
           state.noLoading = false;
+          state.noAll = [];
           if (action.payload?.response?.data?.message) {
             toast.error(action.payload.response.data.message);
-          } else {
-            toast.error("An Error has occurred");
           }
         }
       );
