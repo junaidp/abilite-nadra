@@ -1,5 +1,5 @@
 import React from "react";
-import RichTextEditor from "./RichText";
+import RichTextEditor from "../../view-internal-audit-consolidation-report/components/RichText";
 import Chip from "@mui/material/Chip";
 import FollowUpItem from "./FollowUpItem";
 

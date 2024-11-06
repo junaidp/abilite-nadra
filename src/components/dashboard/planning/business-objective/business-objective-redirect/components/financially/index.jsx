@@ -146,9 +146,11 @@ const FinanciallyQuantifiableYes = ({
                           ></input>
                         </td>
                         <td>
-                          {Math.floor(
-                            Number(item?.amount) / Number(item?.weight)
-                          )}
+                          {item?.weight && item?.weight > 0
+                            ? Math.floor(
+                                Number(item?.amount) / Number(item?.weight)
+                              )
+                            : 0}
                           %
                         </td>
                         {(planingEngagementSingleObject?.complete === false ||
