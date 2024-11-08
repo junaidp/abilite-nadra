@@ -7,6 +7,7 @@ import {
   addRiskAssessment,
   deleteRiskFactor,
   deleteResidualRisk,
+  getAllRiskFactors,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
@@ -18,6 +19,7 @@ const initialState = {
   riskAssessmentSuccess: false,
   performRiskAssessmentObject: {},
   totalNoOfRecords: 0,
+  riskFactors: [],
 };
 
 export const setupGetAllRiskAssessments = createAsyncThunk(
@@ -76,6 +78,13 @@ export const setupDeleteResidualRisk = createAsyncThunk(
   }
 );
 
+export const setupGetAllRiskFactors = createAsyncThunk(
+  "riskAssessment/getAllRiskFactors",
+  async (data, thunkAPI) => {
+    return getAllRiskFactors(data, thunkAPI);
+  }
+);
+
 export const slice = createSlice({
   name: "riskAssessment",
   initialState,
@@ -89,6 +98,7 @@ export const slice = createSlice({
       state.riskAssessmentSuccess = false;
       state.performRiskAssessmentObject = {};
       state.totalNoOfRecords = 0;
+      state.riskFactors = [];
     },
   },
   extraReducers: (builder) => {
@@ -161,11 +171,7 @@ export const slice = createSlice({
       })
       .addCase(setupPerformRiskAssessment.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.performRiskAssessmentObject = payload?.data || [
-          {
-            error: "Not Found",
-          },
-        ];
+        state.performRiskAssessmentObject = payload?.data || [];
       })
       .addCase(setupPerformRiskAssessment.rejected, (state, { payload }) => {
         state.loading = false;
@@ -184,11 +190,7 @@ export const slice = createSlice({
         setupPerformInitialRiskAssessment.fulfilled,
         (state, { payload }) => {
           state.initialLoading = false;
-          state.performRiskAssessmentObject = payload?.data || [
-            {
-              error: "Not Found",
-            },
-          ];
+          state.performRiskAssessmentObject = payload?.data || [];
         }
       )
       .addCase(
@@ -251,6 +253,23 @@ export const slice = createSlice({
         toast.success("Specific Risk Deleted Successfully");
       })
       .addCase(setupDeleteResidualRisk.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Get All Risk Fcators
+    builder
+      .addCase(setupGetAllRiskFactors.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetAllRiskFactors.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.riskFactors = payload?.data || [];
+      })
+      .addCase(setupGetAllRiskFactors.rejected, (state, { payload }) => {
         state.loading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);

@@ -102,13 +102,18 @@ export const slice = createSlice({
   extraReducers: (builder) => {
     // Add Check List
     builder
+      .addCase(setupAddCheckList.pending, (state) => {
+        state.loading = true;
+      })
       .addCase(setupAddCheckList.fulfilled, (state) => {
+        state.loading = false;
         state.checkListAddSuccess = true;
         state.checkListId = "";
         state.currentSubCheckListItem = {};
         toast.success("Check List Added Successfully");
       })
       .addCase(setupAddCheckList.rejected, (_, { payload }) => {
+        state.loading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
         } else {

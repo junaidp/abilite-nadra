@@ -75,7 +75,9 @@ const TopBar = () => {
       (item) => item?.companyName === company
     )?.id;
     if (companyId) {
-      dispatch(setupGetSystemNotifications({ page, itemsPerPage }));
+      setTimeout(() => {
+        dispatch(setupGetSystemNotifications({ page, itemsPerPage }));
+      }, 900);
     }
   }, [dispatch, page]);
 

@@ -8,11 +8,14 @@ const RiskAssessmentListRows = ({
   performRiskAssessmentObject,
   index,
   data,
-  riskAssessmentId,
+  handleChangeRiskFactorValues,
+  handleCalculateProbability,
+  handleCalculateRiskScore,
 }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state?.auth);
   const { loading } = useSelector((state) => state?.planningRiskAssessment);
+
   return (
     <tr>
       <td>{index + 1}</td>
@@ -37,12 +40,17 @@ const RiskAssessmentListRows = ({
               : false
           }
         >
-          <option value={0}>0</option>
-          <option value={1}>1</option>
-          <option value={2}>2</option>
-          <option value={3}>3</option>
-          <option value={4}>4</option>
-          <option value={5}>5</option>
+          <option>select</option>
+          <option value={10}>10 %</option>
+          <option value={20}>20 %</option>
+          <option value={30}>30 %</option>
+          <option value={40}>40 %</option>
+          <option value={50}>50 %</option>
+          <option value={60}>60 %</option>
+          <option value={70}>70 %</option>
+          <option value={80}>80 %</option>
+          <option value={90}>90 %</option>
+          <option value={100}>100 %</option>
         </select>
       </td>
       <td className="w-80">
@@ -71,34 +79,74 @@ const RiskAssessmentListRows = ({
           <option value={5}>5</option>
         </select>
       </td>
-      <td className="bold width-50">
-        {Number(item?.likelihood) * Number(item?.impact)}
-      </td>
-      <td>
-        <textarea
-          className="form-control"
-          placeholder="Enter Reason"
-          id="exampleFormControlTextarea1"
-          rows="3"
-          name="comments"
-          value={item?.comments || ""}
-          onChange={(event) =>
-            handleChangeSingleRiskAssessmentItem(event, item?.id)
-          }
-          disabled={
-            performRiskAssessmentObject?.riskAssessments?.locked === true ||
-            (performRiskAssessmentObject?.riskAssessments?.complete === true &&
-              performRiskAssessmentObject?.riskAssessments?.locked === false &&
-              user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
-              ? true
-              : false
-          }
-          maxLength="500"
-        ></textarea>
-        <p className="word-limit-info label-text mb-2">
-          Maximum 500 characters
-        </p>
-      </td>
+      {item?.riskFactorValues?.map((riskFactor, index) => {
+        return (
+          <td key={index}>
+            <div className="row">
+              <div className="col-lg-5">
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  name="value1"
+                  disabled={
+                    performRiskAssessmentObject?.riskAssessments?.locked ===
+                      true ||
+                    (performRiskAssessmentObject?.riskAssessments?.complete ===
+                      true &&
+                      performRiskAssessmentObject?.riskAssessments?.locked ===
+                        false &&
+                      user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                      ? true
+                      : false
+                  }
+                  onChange={(event) =>
+                    handleChangeRiskFactorValues(item?.id, riskFactor.id, event)
+                  }
+                  value={riskFactor?.value1}
+                >
+                  <option value={0}>0</option>
+                  <option value={1}>1</option>
+                  <option value={2}>2</option>
+                  <option value={3}>3</option>
+                  <option value={4}>4</option>
+                  <option value={5}>5</option>
+                </select>
+              </div>
+              <div className="col-lg-5">
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  name="value2"
+                  disabled={
+                    performRiskAssessmentObject?.riskAssessments?.locked ===
+                      true ||
+                    (performRiskAssessmentObject?.riskAssessments?.complete ===
+                      true &&
+                      performRiskAssessmentObject?.riskAssessments?.locked ===
+                        false &&
+                      user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                      ? true
+                      : false
+                  }
+                  onChange={(event) =>
+                    handleChangeRiskFactorValues(item?.id, riskFactor.id, event)
+                  }
+                  value={riskFactor?.value2}
+                >
+                  <option value={0}>0</option>
+                  <option value={1}>1</option>
+                  <option value={2}>2</option>
+                  <option value={3}>3</option>
+                  <option value={4}>4</option>
+                  <option value={5}>5</option>
+                </select>
+              </div>
+            </div>
+          </td>
+        );
+      })}
+      <td>{handleCalculateProbability(item)}</td>
+      <td>{handleCalculateRiskScore(item)}</td>
       {performRiskAssessmentObject?.riskAssessments?.complete === false &&
         data?.riskAssessmentList &&
         data?.riskAssessmentList?.length > 1 && (

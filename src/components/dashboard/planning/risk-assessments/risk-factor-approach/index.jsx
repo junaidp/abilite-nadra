@@ -9,6 +9,7 @@ import {
   setupUpdateRiskAssessment,
   handleCleanUp,
   setupPerformInitialRiskAssessment,
+  setupGetAllRiskFactors,
 } from "../../../../../global-redux/reducers/planing/risk-assessment/slice";
 import { useSearchParams } from "react-router-dom";
 import {
@@ -27,13 +28,14 @@ const RiskFactorApproach = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const riskAssessmentId = searchParams.get("riskAssessmentId");
   const { user } = useSelector((state) => state?.auth);
+  const { company } = useSelector((state) => state?.common);
   const {
     performRiskAssessmentObject,
     riskAssessmentSuccess,
     loading,
     initialLoading,
+    riskFactors,
   } = useSelector((state) => state?.planningRiskAssessment);
-  const [scoreSum, setScoreSum] = React.useState(0);
   const [showAddRiskFactorDialog, setShowAddRiskFactorDialog] =
     React.useState(false);
   const [data, setData] = React.useState({
@@ -49,7 +51,7 @@ const RiskFactorApproach = () => {
         ...pre,
         riskAssessmentList: pre?.riskAssessmentList?.map((item) =>
           item?.id === id
-            ? { ...item, [event?.target?.name]: event?.target?.value }
+            ? { ...item, [event?.target?.name]: Number(event?.target?.value) }
             : item
         ),
       };
@@ -92,6 +94,24 @@ const RiskFactorApproach = () => {
     });
   }
 
+  function handleCalculateProbability(item) {
+    let num = 1;
+    item?.riskFactorValues?.forEach((element) => {
+      let internalNumber = Number(element?.value1) + Number(element?.value2);
+      num = num * internalNumber;
+    });
+    return num;
+  }
+
+  function handleCalculateRiskScore(item) {
+    let num = 1;
+    item?.riskFactorValues?.forEach((element) => {
+      let internalNumber = Number(element?.value1) + Number(element?.value2);
+      num = num * internalNumber;
+    });
+    return num * Number(item?.impact);
+  }
+
   function handleSaveRiskAssessment() {
     if (!loading) {
       dispatch(
@@ -100,11 +120,19 @@ const RiskFactorApproach = () => {
           riskAssessmentList: data?.riskAssessmentList.map((singleItem) => {
             return {
               ...singleItem,
-              score:
-                Number(singleItem?.likelihood) * Number(singleItem?.impact),
+              riskFactorValues: singleItem?.riskFactorValues?.map(
+                (riskFactor) => {
+                  return {
+                    name: riskFactor?.name,
+                    value1: riskFactor?.value1,
+                    value2: riskFactor?.value2,
+                  };
+                }
+              ),
+              score: handleCalculateRiskScore(singleItem),
+              comments: handleCalculateProbability(singleItem).toString(),
             };
           }),
-          score: scoreSum,
           riskAssessments: {
             ...performRiskAssessmentObject?.riskAssessments,
             riskAsssessmentCriteriaForRiskManagementCPList:
@@ -113,6 +141,38 @@ const RiskFactorApproach = () => {
         })
       );
     }
+  }
+
+  function handleChangeRiskFactorValues(riskAssessmentId, riskFactorId, event) {
+    setData((pre) => {
+      return {
+        ...pre,
+        riskAssessmentList: pre?.riskAssessmentList?.map((riskAssessment) =>
+          Number(riskAssessment?.id) === Number(riskAssessmentId)
+            ? {
+                ...riskAssessment,
+                riskFactorValues: riskAssessment?.riskFactorValues?.map(
+                  (riskFactor) =>
+                    Number(riskFactor?.id) === Number(riskFactorId)
+                      ? {
+                          ...riskFactor,
+                          [event.target.name]: Number(event.target.value),
+                        }
+                      : riskFactor
+                ),
+              }
+            : riskAssessment
+        ),
+      };
+    });
+  }
+
+  function handlCalculateEnterpriseValue() {
+    let num = 0;
+    data?.riskAssessmentList?.forEach((element) => {
+      num += Number(element?.likelihood);
+    });
+    return num;
   }
 
   React.useEffect(() => {
@@ -126,21 +186,30 @@ const RiskFactorApproach = () => {
           performRiskAssessmentObject?.riskAssessments?.controlEffectiveness ||
           "null",
         riskAssessmentList:
-          performRiskAssessmentObject?.riskAssessmentList || [],
+          performRiskAssessmentObject?.riskAssessmentList?.map(
+            (riskAssessment) => {
+              return {
+                ...riskAssessment,
+                riskFactorValues:
+                  riskAssessment?.riskFactorValues?.length > 0
+                    ? riskAssessment?.riskFactorValues
+                    : riskFactors?.map((item, index) => {
+                        return {
+                          id: index + 1,
+                          name: item?.description,
+                          value1: "",
+                          value2: "",
+                        };
+                      }),
+              };
+            }
+          ) || [],
         riskAsssessmentCriteriaForRiskManagementCPList:
           performRiskAssessmentObject?.riskAssessments
             ?.riskAsssessmentCriteriaForRiskManagementCPList || [],
       };
     });
-  }, [performRiskAssessmentObject]);
-
-  React.useEffect(() => {
-    let value = 0;
-    data?.riskAssessmentList?.forEach((element) => {
-      value = value + Number(element?.likelihood) * Number(element?.impact);
-    });
-    setScoreSum(value);
-  }, [data]);
+  }, [performRiskAssessmentObject, riskFactors]);
 
   React.useEffect(() => {
     if (riskAssessmentSuccess) {
@@ -156,12 +225,18 @@ const RiskFactorApproach = () => {
 
   React.useEffect(() => {
     if (riskAssessmentId && user[0]?.token) {
+      const companyId = user[0]?.company?.find(
+        (item) => item?.companyName === company
+      )?.id;
       dispatch(
         setupPerformInitialRiskAssessment({
           riskAssessmentsid: riskAssessmentId,
           approach: "Risk Factor Approach",
         })
       );
+      setTimeout(() => {
+        dispatch(setupGetAllRiskFactors(`?company_id=${companyId}`));
+      }, 900);
     }
   }, [dispatch]);
 
@@ -195,7 +270,8 @@ const RiskFactorApproach = () => {
         <div className="my-3">
           <CircularProgress />
         </div>
-      ) : performRiskAssessmentObject[0]?.error === "Not Found" ? (
+      ) : performRiskAssessmentObject?.length === 0 ||
+        !performRiskAssessmentObject ? (
         "Risk Assessment Not Found"
       ) : (
         <>
@@ -251,10 +327,15 @@ const RiskFactorApproach = () => {
                         <tr>
                           <th className="sr-col">Sr. #</th>
                           <th>Specific Risk</th>
-                          <th>Likelihood</th>
-                          <th>Impact</th>
-                          <th>Score</th>
-                          <th>Comments</th>
+                          <th>Weight</th>
+                          <th>Impact Score</th>
+                          {riskFactors?.map((riskFactor, index) => {
+                            return (
+                              <th key={index}>{riskFactor?.description}</th>
+                            );
+                          })}
+                          <th>Probability</th>
+                          <th>Risk Score</th>
                           {performRiskAssessmentObject?.riskAssessments
                             ?.complete === false &&
                             data?.riskAssessmentList &&
@@ -267,7 +348,6 @@ const RiskFactorApproach = () => {
                         {data?.riskAssessmentList?.map((item, index) => {
                           return (
                             <RiskAssessmentListRows
-                              riskAssessmentId={riskAssessmentId}
                               key={index}
                               index={index}
                               item={item}
@@ -278,12 +358,23 @@ const RiskFactorApproach = () => {
                                 performRiskAssessmentObject
                               }
                               data={data}
+                              handleChangeRiskFactorValues={
+                                handleChangeRiskFactorValues
+                              }
+                              handleCalculateProbability={
+                                handleCalculateProbability
+                              }
+                              handleCalculateRiskScore={
+                                handleCalculateRiskScore
+                              }
                             />
                           );
                         })}
                         <tr>
-                          <td colSpan="4">Total Score</td>
-                          <td className="bold width-50">{scoreSum}</td>
+                          <td colSpan="2">Enterprise Value</td>
+                          <td className="bold width-50">
+                            {handlCalculateEnterpriseValue()} %
+                          </td>
                         </tr>
                       </tbody>
                     </table>
@@ -422,9 +513,9 @@ const RiskFactorApproach = () => {
                   )}
                   {performRiskAssessmentObject?.riskAssessments?.complete ===
                     false &&
-                    Number(
-                      performRiskAssessmentObject?.riskAssessments?.riskRating
-                    ) > 0 && (
+                    performRiskAssessmentObject?.riskAssessmentList &&
+                    performRiskAssessmentObject?.riskAssessmentList?.length >
+                      0 && (
                       <div
                         className={`btn btn-labeled btn-primary px-3 shadow float-end my-4 mx-4 `}
                         onClick={() => setShowSubmitDialog(true)}
