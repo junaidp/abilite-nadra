@@ -263,14 +263,14 @@ export const slice = createSlice({
     // Get All Risk Fcators
     builder
       .addCase(setupGetAllRiskFactors.pending, (state) => {
-        state.loading = true;
+        state.initialLoading = true;
       })
       .addCase(setupGetAllRiskFactors.fulfilled, (state, { payload }) => {
-        state.loading = false;
+        state.initialLoading = false;
         state.riskFactors = payload?.data || [];
       })
       .addCase(setupGetAllRiskFactors.rejected, (state, { payload }) => {
-        state.loading = false;
+        state.initialLoading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
         } else {
