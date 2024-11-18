@@ -2,7 +2,13 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setupSubmitRiskAssessment } from "../../../../../global-redux/reducers/planing/risk-assessment/slice";
 
-const SubmitDialog = ({ object, setShowSubmitDialog }) => {
+const SubmitDialog = ({
+  object,
+  setShowSubmitDialog,
+  data,
+  handleCalculateRiskScore,
+  handleCalculateProbability,
+}) => {
   const dispatch = useDispatch();
   const { riskAssessmentSuccess, loading } = useSelector(
     (state) => state?.planningRiskAssessment
@@ -13,6 +19,22 @@ const SubmitDialog = ({ object, setShowSubmitDialog }) => {
       dispatch(
         setupSubmitRiskAssessment({
           ...object,
+          riskAssessmentList: data?.riskAssessmentList.map((singleItem) => {
+            return {
+              ...singleItem,
+              riskFactorValues: singleItem?.riskFactorValues?.map(
+                (riskFactor) => {
+                  return {
+                    name: riskFactor?.name,
+                    value1: riskFactor?.value1,
+                    value2: riskFactor?.value2,
+                  };
+                }
+              ),
+              score: handleCalculateRiskScore(singleItem),
+              comments: handleCalculateProbability(singleItem).toString(),
+            };
+          }),
           riskAssessments: {
             ...object?.riskAssessments,
             complete: true,

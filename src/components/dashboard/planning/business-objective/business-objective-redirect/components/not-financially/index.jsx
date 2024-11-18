@@ -151,9 +151,6 @@ const FinanciallyQuantifiableNo = ({
                                 className={`btn btn-labeled btn-primary `}
                                 onClick={() => handleUpdate(item?.id)}
                               >
-                                <span className="btn-label me-2">
-                                  <i className="fa fa-check-circle"></i>
-                                </span>
                                 Save
                               </div>
                             </div>

@@ -16,10 +16,10 @@ import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
 } from "../../../../../global-redux/reducers/common/slice";
-import CPListRows from "./components/cp-list-rows";
 import RiskAssessmentListRows from "./components/risk-assessment-list-rows";
 import { CircularProgress } from "@mui/material";
 import SubmitDialog from "./submit-dialog";
+import { toast } from "react-toastify";
 
 const RiskFactorApproach = () => {
   const dispatch = useDispatch();
@@ -46,70 +46,51 @@ const RiskFactorApproach = () => {
   });
 
   function handleChangeSingleRiskAssessmentItem(event, id) {
-    setData((pre) => {
-      return {
-        ...pre,
-        riskAssessmentList: pre?.riskAssessmentList?.map((item) =>
-          item?.id === id
-            ? { ...item, [event?.target?.name]: Number(event?.target?.value) }
-            : item
-        ),
-      };
-    });
-  }
+    const { name, value } = event.target;
+    const numericValue = Number(value);
 
-  function handleChangeCpList(event, id) {
-    setData((pre) => {
-      return {
-        ...pre,
-        riskAsssessmentCriteriaForRiskManagementCPList:
-          data?.riskAsssessmentCriteriaForRiskManagementCPList?.map((item) =>
-            item?.id === id
-              ? {
-                  ...item,
-                  inadequate: false,
-                  needsImprovement: false,
-                  adequate: false,
-                  [event?.target?.name]: event?.target?.checked,
-                }
-              : item
-          ),
-      };
-    });
-  }
-  function handleChangeCpListComments(event, id) {
-    setData((pre) => {
-      return {
-        ...pre,
-        riskAsssessmentCriteriaForRiskManagementCPList:
-          data?.riskAsssessmentCriteriaForRiskManagementCPList?.map((item) =>
-            item?.id === id
-              ? {
-                  ...item,
-                  [event?.target?.name]: event?.target?.value,
-                }
-              : item
-          ),
-      };
-    });
+    if (isNaN(numericValue)) {
+      toast.error("Please enter a valid number");
+      return;
+    }
+
+    if (name === "likelihood") {
+      const totalWeight = data?.riskAssessmentList?.reduce(
+        (sum, item) =>
+          sum + (item.id === id ? numericValue : Number(item?.likelihood)),
+        0
+      );
+
+      if (totalWeight > 100) {
+        toast.error("Total weight cannot exceed the value of 100");
+        return;
+      }
+    }
+
+    setData((prev) => ({
+      ...prev,
+      riskAssessmentList: prev?.riskAssessmentList?.map((item) =>
+        item?.id === id ? { ...item, [name]: numericValue } : item
+      ),
+    }));
   }
 
   function handleCalculateProbability(item) {
-    let num = 1;
+    let num = 0;
     item?.riskFactorValues?.forEach((element) => {
-      let internalNumber = Number(element?.value1) + Number(element?.value2);
-      num = num * internalNumber;
+      let internalNumber = Number(element?.value1) * Number(element?.value2);
+      num = num + internalNumber;
     });
     return num;
   }
 
   function handleCalculateRiskScore(item) {
-    let num = 1;
+    let num = 0;
     item?.riskFactorValues?.forEach((element) => {
-      let internalNumber = Number(element?.value1) + Number(element?.value2);
-      num = num * internalNumber;
+      let internalNumber = Number(element?.value1) * Number(element?.value2);
+      num = num + internalNumber;
     });
-    return num * Number(item?.impact);
+    return num * (Number(item?.impact) * Number(item?.likelihood));
   }
 
   function handleSaveRiskAssessment() {
@@ -262,6 +243,9 @@ const RiskFactorApproach = () => {
             <SubmitDialog
               object={performRiskAssessmentObject}
               setShowSubmitDialog={setShowSubmitDialog}
+              data={data}
+              handleCalculateRiskScore={handleCalculateRiskScore}
+              handleCalculateProbability={handleCalculateProbability}
             />
           </div>
         </div>
@@ -324,16 +308,29 @@ const RiskFactorApproach = () => {
                   <div className="table-responsive">
                     <table className="table w-100 table-bordered table-hover rounded equal-columns">
                       <thead className="bg-secondary text-white">
+                        {/* Additional Row for Extra Heading */}
+                        <tr>
+                          <th colSpan={4} className="bg-white"></th>{" "}
+                          {/* Empty columns to align with previous columns */}
+                          <th
+                            colSpan={riskFactors?.length || 0}
+                            className="text-center"
+                          >
+                            Controls (1 being the strongest - 5 the weakest)
+                          </th>
+                          <th colSpan={3} className="bg-white"></th>
+                          {/* Empty columns for remaining columns */}
+                        </tr>
+
+                        {/* Original Header Row */}
                         <tr>
                           <th className="sr-col">Sr. #</th>
                           <th>Specific Risk</th>
                           <th>Weight</th>
                           <th>Impact Score</th>
-                          {riskFactors?.map((riskFactor, index) => {
-                            return (
-                              <th key={index}>{riskFactor?.description}</th>
-                            );
-                          })}
+                          {riskFactors?.map((riskFactor, index) => (
+                            <th key={index}>{riskFactor?.description}</th>
+                          ))}
                           <th>Probability</th>
                           <th>Risk Score</th>
                           {performRiskAssessmentObject?.riskAssessments
@@ -344,6 +341,7 @@ const RiskFactorApproach = () => {
                             )}
                         </tr>
                       </thead>
+
                       <tbody>
                         {data?.riskAssessmentList?.map((item, index) => {
                           return (
@@ -380,119 +378,17 @@ const RiskFactorApproach = () => {
                     </table>
                   </div>
                 ) : (
-                  <h4>
+                  <p>
                     No Risk Assessment List To Show Right Now. Please add one
                     from the top
-                  </h4>
+                  </p>
                 )}
 
-                <div className="row my-3">
-                  <div className="col-lg-12">
-                    <h6>Rating of Score Ranges</h6>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-lg-3">
-                    <div className="px-3 py-2 border-0 card shadow bg-success text-white label-text ">
-                      Low(L) = 1 to 4
-                    </div>
-                  </div>
-                  <div className="col-lg-3">
-                    <div className="px-3 py-2 border-0 card shadow text-white label-text  label-text  label-text bg-yellow">
-                      Moderate(M) = 5 to 8
-                    </div>
-                  </div>
-                  <div className="col-lg-3">
-                    <div className="px-3 py-2 border-0 card shadow  text-white label-text bg-orange">
-                      High(H) = 9 to 16
-                    </div>
-                  </div>
-                  <div className="col-lg-3">
-                    <div className="px-3 py-2 border-0 card shadow bg-danger text-white label-text">
-                      Extreme = 17 to 25
-                    </div>
-                  </div>
-                </div>
-                {data?.riskAsssessmentCriteriaForRiskManagementCPList
-                  ?.length !== 0 ? (
-                  <table className="table w-100 table-bordered table-hover rounded equal-columns">
-                    <thead>
-                      <tr>
-                        <th className="sr-col">Sr. #</th>
-                        <th>
-                          Criteria for Risk Management and Control Processes
-                        </th>
-                        <th className="width-100">Inadequate</th>
-                        <th className="width-100">Needs Improvement</th>
-                        <th className="width-100">Adequate</th>
-                        <th className="width-100">Comments</th>
-                        {performRiskAssessmentObject?.riskAssessments
-                          ?.complete === false &&
-                          data?.riskAsssessmentCriteriaForRiskManagementCPList &&
-                          data?.riskAsssessmentCriteriaForRiskManagementCPList
-                            ?.length > 1 && <th>Delete</th>}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {data?.riskAsssessmentCriteriaForRiskManagementCPList?.map(
-                        (cpItem, index) => {
-                          return (
-                            <CPListRows
-                              riskAssessmentId={riskAssessmentId}
-                              cpItem={cpItem}
-                              key={index}
-                              index={index}
-                              handleChangeCpList={handleChangeCpList}
-                              handleChangeCpListComments={
-                                handleChangeCpListComments
-                              }
-                              performRiskAssessmentObject={
-                                performRiskAssessmentObject
-                              }
-                              data={data}
-                            />
-                          );
-                        }
-                      )}
-                    </tbody>
-                  </table>
-                ) : (
-                  <h4>
-                    No Management List to Show Right Now. Please add see one
-                    from the top
-                  </h4>
-                )}
                 <div className="table-responsive overflow-x-hidden">
-                  <div className="row">
-                    <div className="col-lg-6">
-                      <label htmlFor="description" className="w-100">
-                        Residual Level of Risk
-                      </label>
-                      <input
-                        id="description"
-                        type="text"
-                        className="form-control w-100 h-40"
-                        name="residualLevelOfRisk"
-                        readOnly
-                        value={data?.residualLevelOfRisk}
-                      />
-                    </div>
-                    <div className="col-lg-6">
-                      <label htmlFor="description" className="w-100">
-                        Control Effectiveness
-                      </label>
-                      <input
-                        id="description"
-                        type="text"
-                        className="form-control w-100 h-40"
-                        name="controlEffectiveness"
-                        readOnly
-                        value={data?.controlEffectiveness}
-                      />
-                    </div>
-                  </div>
-                  {(performRiskAssessmentObject?.riskAssessments?.complete ===
-                    false ||
+                  {((performRiskAssessmentObject?.riskAssessments?.complete ===
+                    false &&
+                    performRiskAssessmentObject?.riskAssessmentList?.length >
+                      0) ||
                     (performRiskAssessmentObject?.riskAssessments?.complete ===
                       true &&
                       performRiskAssessmentObject?.riskAssessments?.locked ===
@@ -511,6 +407,7 @@ const RiskFactorApproach = () => {
                       {loading ? "Loading.." : "Save"}
                     </div>
                   )}
+
                   {performRiskAssessmentObject?.riskAssessments?.complete ===
                     false &&
                     performRiskAssessmentObject?.riskAssessmentList &&

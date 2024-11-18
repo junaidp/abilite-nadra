@@ -35,6 +35,26 @@ const FinanciallyQuantifiableYes = ({
     }
   }
 
+  function handleCalculatePercantageImpact(item) {
+    let percentage = 0;
+    if (item?.weight && item?.weight > 0) {
+      percentage = Math.floor(
+        (Number(item?.weight) / Number(item?.amount)) * 100
+      );
+    }
+    return percentage;
+  }
+
+  function ifItemSaved(item) {
+    let object = yesAll?.find((singleItem) => singleItem?.id === item?.id);
+    let ifSaved = false;
+
+    if (object?.weight && object?.weight > 0) {
+      ifSaved = true;
+    }
+    return ifSaved;
+  }
+
   function handleChangeValue(event, id) {
     let object = yesList?.find((singleItem) => singleItem?.id === id);
     if (object && object?.amount) {
@@ -145,28 +165,20 @@ const FinanciallyQuantifiableYes = ({
                             }
                           ></input>
                         </td>
-                        <td>
-                          {item?.weight && item?.weight > 0
-                            ? Math.floor(
-                                Number(item?.amount) / Number(item?.weight)
-                              )
-                            : 0}
-                          %
-                        </td>
-                        {(planingEngagementSingleObject?.complete === false ||
+                        <td>{handleCalculatePercantageImpact(item)} %</td>
+                        {((planingEngagementSingleObject?.complete === false &&
+                          !ifItemSaved(item)) ||
                           (planingEngagementSingleObject?.complete === true &&
+                            !ifItemSaved(item) &&
                             planingEngagementSingleObject?.locked === false &&
                             user[0]?.userId?.employeeid?.userHierarchy ===
                               "IAH")) && (
                           <td>
                             <div className="d-flex flex-wrap gap-4">
                               <div
-                                className={`btn btn-labeled btn-primary `}
+                                className="btn btn-labeled btn-primary"
                                 onClick={() => handleUpdate(item?.id)}
                               >
-                                <span className="btn-label me-2">
-                                  <i className="fa fa-check-circle"></i>
-                                </span>
                                 Save
                               </div>
                             </div>

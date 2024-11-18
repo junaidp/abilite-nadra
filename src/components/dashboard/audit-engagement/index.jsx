@@ -6,7 +6,7 @@ import moment from "moment";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { setupGetAllAuditEngagement } from "../../../global-redux/reducers/audit-engagement/slice";
-import { Chip, CircularProgress } from "@mui/material";
+import { Chip, CircularProgress, Box } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -47,6 +47,38 @@ const AuditEngagement = () => {
       );
     }
   }
+
+  const calculateWeeksBetween = (startDate, endDate) => {
+    if (!startDate || !endDate) return 0;
+    const start = moment(startDate);
+    const end = moment(endDate);
+    return end.diff(start, "weeks");
+  };
+
+  const calculateWeeksPassed = (startDate) => {
+    if (!startDate) return 0;
+    const start = moment(startDate);
+    const now = moment();
+    return now.diff(start, "weeks");
+  };
+
+  const ProgressBar = ({ totalWeeks, filledWeeks }) => {
+    return (
+      <Box display="flex" alignItems="center" gap={1}>
+        {Array.from({ length: totalWeeks }).map((_, index) => (
+          <Box
+            key={index}
+            sx={{
+              width: "10px",
+              height: "20px",
+              backgroundColor: index < filledWeeks ? "green" : "lightgray",
+              borderRadius: "4px",
+            }}
+          />
+        ))}
+      </Box>
+    );
+  };
 
   React.useEffect(() => {
     if (kickOffRequest === "Kick-Off") {
@@ -115,6 +147,7 @@ const AuditEngagement = () => {
                         <th>Job Name</th>
                         <th>Planned Start Date </th>
                         <th>Planned End Date </th>
+                        <th>Job Progress</th>
                         <th>Job Type </th>
                         <th>Sub Location </th>
                         <th>Status </th>
@@ -153,6 +186,17 @@ const AuditEngagement = () => {
                                       .utc(item?.plannedEndDate)
                                       .format("DD-MM-YYYY")
                                   : "null"}
+                              </td>
+                              <td>
+                                <ProgressBar
+                                  totalWeeks={calculateWeeksBetween(
+                                    item?.plannedStartDate,
+                                    item?.plannedEndDate
+                                  )}
+                                  filledWeeks={calculateWeeksPassed(
+                                    item?.plannedStartDate
+                                  )}
+                                />
                               </td>
                               <td>{item?.jobType ? item?.jobType : "null"}</td>
                               <td>
