@@ -9,7 +9,6 @@ import {
   setupUpdateRiskAssessment,
   handleCleanUp,
   setupPerformInitialRiskAssessment,
-  setupGetAllRiskFactors,
 } from "../../../../../global-redux/reducers/planing/risk-assessment/slice";
 import { useSearchParams } from "react-router-dom";
 import {
@@ -78,19 +77,23 @@ const RiskFactorApproach = () => {
   function handleCalculateProbability(item) {
     let num = 0;
     item?.riskFactorValues?.forEach((element) => {
-      let internalNumber = Number(element?.value1) * Number(element?.value2);
+      let internalNumber =
+        Number(element?.value1 / 100) * Number(element?.value2);
       num = num + internalNumber;
     });
-    return num;
+    return num.toFixed(2);
   }
 
   function handleCalculateRiskScore(item) {
     let num = 0;
     item?.riskFactorValues?.forEach((element) => {
-      let internalNumber = Number(element?.value1) * Number(element?.value2);
+      let internalNumber =
+        Number(element?.value1 / 100) * Number(element?.value2);
       num = num + internalNumber;
     });
-    return num * (Number(item?.impact) * Number(item?.likelihood));
+    let result =
+      num.toFixed(2) * (Number(item?.impact / 100) * Number(item?.likelihood));
+    return result.toFixed(2);
   }
 
   function handleSaveRiskAssessment() {
@@ -206,18 +209,12 @@ const RiskFactorApproach = () => {
 
   React.useEffect(() => {
     if (riskAssessmentId && user[0]?.token) {
-      const companyId = user[0]?.company?.find(
-        (item) => item?.companyName === company
-      )?.id;
       dispatch(
         setupPerformInitialRiskAssessment({
           riskAssessmentsid: riskAssessmentId,
           approach: "Risk Factor Approach",
         })
       );
-      setTimeout(() => {
-        dispatch(setupGetAllRiskFactors(`?company_id=${companyId}`));
-      }, 900);
     }
   }, [dispatch]);
 

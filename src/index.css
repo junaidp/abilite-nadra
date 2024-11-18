@@ -17,9 +17,7 @@ body {
 .css-9iedg7 {
   font-family: "Poppins", sans-serif !important;
 }
-.recharts-surface{
-  width: 500px !important;
-}
+
 .justify-end {
   justify-content: end;
 }
@@ -240,10 +238,10 @@ body {
 .w-220 {
   width: 220px !important;
 }
-.w-26{
+.w-26 {
   width: 26px !important;
 }
-.h-26{
+.h-26 {
   height: 26px !important;
 }
 .w-250 {
@@ -454,7 +452,7 @@ body {
   width: 46px !important;
 }
 
-.wrap-text{
+.wrap-text {
   text-wrap: wrap;
 }
 

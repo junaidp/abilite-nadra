@@ -45,16 +45,6 @@ const FinanciallyQuantifiableYes = ({
     return percentage;
   }
 
-  function ifItemSaved(item) {
-    let object = yesAll?.find((singleItem) => singleItem?.id === item?.id);
-    let ifSaved = false;
-
-    if (object?.weight && object?.weight > 0) {
-      ifSaved = true;
-    }
-    return ifSaved;
-  }
-
   function handleChangeValue(event, id) {
     let object = yesList?.find((singleItem) => singleItem?.id === id);
     if (object && object?.amount) {
@@ -166,10 +156,8 @@ const FinanciallyQuantifiableYes = ({
                           ></input>
                         </td>
                         <td>{handleCalculatePercantageImpact(item)} %</td>
-                        {((planingEngagementSingleObject?.complete === false &&
-                          !ifItemSaved(item)) ||
+                        {(planingEngagementSingleObject?.complete === false ||
                           (planingEngagementSingleObject?.complete === true &&
-                            !ifItemSaved(item) &&
                             planingEngagementSingleObject?.locked === false &&
                             user[0]?.userId?.employeeid?.userHierarchy ===
                               "IAH")) && (

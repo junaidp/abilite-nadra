@@ -1,5 +1,6 @@
 import axios from "axios";
 import { baseUrl } from "../../../../constants/index";
+import { setupGetAllRiskFactors } from "./slice";
 
 export const getAllRiskAssessments = async (data, thunkAPI) => {
   try {
@@ -50,6 +51,9 @@ export const performInitialRiskAssessment = async (data, thunkAPI) => {
           Authorization: `Bearer ${user[0]?.token}`,
         },
       }
+    );
+    await thunkAPI.dispatch(
+      setupGetAllRiskFactors(`?company_id=${user[0]?.company[0]?.id}`)
     );
     return props.data;
   } catch (error) {
