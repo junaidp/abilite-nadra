@@ -111,32 +111,33 @@ const FinanciallyQuantifiableYes = ({
           </div>
         </div>
       )}
-
-      <div className="mt-3 d-flex flex-wrap gap-4">
-        <div className="flex-1 w-100">
-          <label className="w-100">Impact On</label>
-          <input
-            className="form-control w-100"
-            placeholder="Enter"
-            type="text"
-            value={description}
-            onChange={(event) => setDescription(event?.target?.value)}
-          />
-        </div>
-        <div className="col-lg-6 text-end float-end align-self-end">
-          <div
-            className={`btn btn-labeled btn-primary px-3 shadow ${
-              yesLoading && "disabled"
-            }`}
-            onClick={handleSave}
-          >
-            <span className="btn-label me-2">
-              <i className="fa fa-plus"></i>
-            </span>
-            {yesLoading ? "Loading..." : "Add"}
+      {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+        <div className="mt-3 d-flex flex-wrap gap-4">
+          <div className="flex-1 w-100">
+            <label className="w-100">Impact On</label>
+            <input
+              className="form-control w-100"
+              placeholder="Enter"
+              type="text"
+              value={description}
+              onChange={(event) => setDescription(event?.target?.value)}
+            />
+          </div>
+          <div className="col-lg-6 text-end float-end align-self-end">
+            <div
+              className={`btn btn-labeled btn-primary px-3 shadow ${
+                yesLoading && "disabled"
+              }`}
+              onClick={handleSave}
+            >
+              <span className="btn-label me-2">
+                <i className="fa fa-plus"></i>
+              </span>
+              {yesLoading ? "Loading..." : "Add"}
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       <div className="row mt-3">
         <div className="col-lg-12">
@@ -152,7 +153,9 @@ const FinanciallyQuantifiableYes = ({
                     <th className="w-80">Sr No.</th>
                     <th>Impact</th>
                     <th>Amount</th>
-                    <th>Action</th>
+                    {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+                      <th>Action</th>
+                    )}
                   </tr>
                 </thead>
                 <tbody>
@@ -190,19 +193,20 @@ const FinanciallyQuantifiableYes = ({
                               }
                             ></input>
                           </td>
-                          <td>
-                            <div className="d-flex flex-wrap gap-4">
-                              <div
-                                className={`btn btn-labeled btn-primary `}
-                                onClick={() => handleUpdate(item?.id)}
-                              >
-                                <span className="btn-label me-2">
-                                  <i className="fa fa-check-circle"></i>
-                                </span>
-                                Save
-                              </div>
-                              {(userRole === "ADMIN" ||
-                                userHierarchy === "IAH") && (
+                          {(userRole === "ADMIN" ||
+                            userHierarchy === "IAH") && (
+                            <td>
+                              <div className="d-flex flex-wrap gap-4">
+                                <div
+                                  className={`btn btn-labeled btn-primary `}
+                                  onClick={() => handleUpdate(item?.id)}
+                                >
+                                  <span className="btn-label me-2">
+                                    <i className="fa fa-check-circle"></i>
+                                  </span>
+                                  Save
+                                </div>
+
                                 <div
                                   className={`btn btn-labeled btn-danger`}
                                   onClick={() => {
@@ -215,9 +219,9 @@ const FinanciallyQuantifiableYes = ({
                                   </span>
                                   Delete
                                 </div>
-                              )}
-                            </div>
-                          </td>
+                              </div>
+                            </td>
+                          )}
                         </tr>
                       );
                     })}

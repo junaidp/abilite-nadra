@@ -140,33 +140,34 @@ const Location = ({ userHierarchy, userRole, currentSettingOption }) => {
           </label>
         </div>
       </div>
-
-      <div className="mt-3 d-flex flex-wrap gap-4">
-        <div className="flex-1 w-100">
-          <label className="w-100">Add Location:</label>
-          <input
-            className="form-control w-100"
-            placeholder="Enter"
-            type="text"
-            name="locationDescription"
-            value={locationDescription}
-            onChange={(e) => setLocationDescription(e?.target?.value)}
-          />
-        </div>
-        <div
-          className={`col-lg-6 text-end float-end align-self-end ${
-            loading && "disabled"
-          }`}
-          onClick={handleSaveLocation}
-        >
-          <div className="btn btn-labeled btn-primary px-3 shadow">
-            <span className="btn-label me-2">
-              <i className="fa fa-plus"></i>
-            </span>
-            {loading ? "Loading" : "Add"}
+      {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+        <div className="mt-3 d-flex flex-wrap gap-4">
+          <div className="flex-1 w-100">
+            <label className="w-100">Add Location:</label>
+            <input
+              className="form-control w-100"
+              placeholder="Enter"
+              type="text"
+              name="locationDescription"
+              value={locationDescription}
+              onChange={(e) => setLocationDescription(e?.target?.value)}
+            />
+          </div>
+          <div
+            className={`col-lg-6 text-end float-end align-self-end ${
+              loading && "disabled"
+            }`}
+            onClick={handleSaveLocation}
+          >
+            <div className="btn btn-labeled btn-primary px-3 shadow">
+              <span className="btn-label me-2">
+                <i className="fa fa-plus"></i>
+              </span>
+              {loading ? "Loading" : "Add"}
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       <div className="row mt-3">
         <div className="col-lg-12">

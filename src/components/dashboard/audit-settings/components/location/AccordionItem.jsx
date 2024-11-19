@@ -46,55 +46,59 @@ const AccordionItem = ({
         data-bs-parent="#accordionLocationExample"
       >
         <div className="accordion-body">
-          <div className="row">
-            <div className="float-end mb-2 col-lg-12">
-              <div
-                className={`btn btn-labeled btn-primary px-3 shadow  my-4 `}
-                onClick={() => setShowEditLocationDialog(true)}
-              >
-                <span className="btn-label me-2">
-                  <i className="fa fa-check-circle f-18"></i>
-                </span>
-                Edit
-              </div>
-              {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+          {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+            <div className="row">
+              <div className="float-end mb-2 col-lg-12">
                 <div
-                  className={`btn btn-labeled btn-danger mx-4 px-3 shadow  my-4 `}
-                  onClick={() => setShowDeleteLocationDialog(true)}
+                  className={`btn btn-labeled btn-primary px-3 shadow  my-4 `}
+                  onClick={() => setShowEditLocationDialog(true)}
                 >
                   <span className="btn-label me-2">
                     <i className="fa fa-check-circle f-18"></i>
                   </span>
-                  Delete
+                  Edit
                 </div>
-              )}
-            </div>
-            <div className="d-flex justify-content-between">
-              <div className="col-lg-6">
-                <label>Add Sub Location:</label>
-                <input
-                  className="form-control w-100"
-                  placeholder="Enter"
-                  type="text"
-                  value={subLocationText}
-                  onChange={(event) => setSubLocationText(event?.target?.value)}
-                />
+                {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+                  <div
+                    className={`btn btn-labeled btn-danger mx-4 px-3 shadow  my-4 `}
+                    onClick={() => setShowDeleteLocationDialog(true)}
+                  >
+                    <span className="btn-label me-2">
+                      <i className="fa fa-check-circle f-18"></i>
+                    </span>
+                    Delete
+                  </div>
+                )}
               </div>
-              <div className="col-lg-6 text-end float-end align-self-end p-0 m-0">
-                <div
-                  className={`btn btn-labeled btn-primary  shadow ${
-                    loading && "disabled"
-                  }`}
-                  onClick={handleAddSubLocation}
-                >
-                  <span className="btn-label me-2">
-                    <i className="fa fa-plus"></i>
-                  </span>
-                  {loading ? "Loading.." : "Add"}
+              <div className="d-flex justify-content-between">
+                <div className="col-lg-6">
+                  <label>Add Sub Location:</label>
+                  <input
+                    className="form-control w-100"
+                    placeholder="Enter"
+                    type="text"
+                    value={subLocationText}
+                    onChange={(event) =>
+                      setSubLocationText(event?.target?.value)
+                    }
+                  />
+                </div>
+                <div className="col-lg-6 text-end float-end align-self-end p-0 m-0">
+                  <div
+                    className={`btn btn-labeled btn-primary  shadow ${
+                      loading && "disabled"
+                    }`}
+                    onClick={handleAddSubLocation}
+                  >
+                    <span className="btn-label me-2">
+                      <i className="fa fa-plus"></i>
+                    </span>
+                    {loading ? "Loading.." : "Add"}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
 
           <div className="row mt-3">
             <div className="col-lg-12">
@@ -104,7 +108,9 @@ const AccordionItem = ({
                     <tr>
                       <th className="w-80">Sr No.</th>
                       <th>Sub Location</th>
-                      <th>Actions</th>
+                      {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+                        <th>Actions</th>
+                      )}
                     </tr>
                   </thead>
                   <tbody>
@@ -118,17 +124,17 @@ const AccordionItem = ({
                           <tr key={subIndex}>
                             <td>{subIndex + 1}</td>
                             <td>{subItem?.description}</td>
-                            <td>
-                              <div className="d-flex flex-wrap gap-4">
-                                <i
-                                  className="fa fa-edit f-18 cursor-pointer"
-                                  onClick={() => {
-                                    setSubLocationId(subItem?.id);
-                                    setShowEditSubLocationDialog(true);
-                                  }}
-                                ></i>
-                                {(userRole === "ADMIN" ||
-                                  userHierarchy === "IAH") && (
+                            {(userRole === "ADMIN" ||
+                              userHierarchy === "IAH") && (
+                              <td>
+                                <div className="d-flex flex-wrap gap-4">
+                                  <i
+                                    className="fa fa-edit f-18 cursor-pointer"
+                                    onClick={() => {
+                                      setSubLocationId(subItem?.id);
+                                      setShowEditSubLocationDialog(true);
+                                    }}
+                                  ></i>
                                   <i
                                     className="fa fa-trash text-danger f-18 cusrsor-pointer"
                                     onClick={() => {
@@ -139,9 +145,9 @@ const AccordionItem = ({
                                       );
                                     }}
                                   ></i>
-                                )}
-                              </div>
-                            </td>
+                                </div>
+                              </td>
+                            )}
                           </tr>
                         );
                       })

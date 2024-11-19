@@ -166,9 +166,7 @@ const Process = ({ userHierarchy, userRole, currentSettingOption }) => {
           </label>
         </div>
       </div>
-      {(userRole === "ADMIN" ||
-        userHierarchy === "IAH" ||
-        userHierarchy === "Team_Lead") && (
+      {(userRole === "ADMIN" || userHierarchy === "IAH") && (
         <div className="mt-3 d-flex flex-wrap gap-4">
           <div className="flex-1 w-100">
             <label>Add Process</label>

@@ -49,9 +49,7 @@ const AccordionItem = ({
         data-bs-parent="#accordionProcessExample"
       >
         <div className="accordion-body">
-          {(userRole === "ADMIN" ||
-            userHierarchy === "IAH" ||
-            userHierarchy === "Team_Lead") && (
+          {(userRole === "ADMIN" || userHierarchy === "IAH") && (
             <div className="row">
               <div className="float-end  col-lg-12">
                 <div
@@ -116,9 +114,9 @@ const AccordionItem = ({
                       <tr>
                         <th className="w-80">Sr No.</th>
                         <th>Particulars</th>
-                        {(userRole === "ADMIN" ||
-                          userHierarchy === "IAH" ||
-                          userHierarchy === "Team_Lead") && <th>Actions</th>}
+                        {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+                          <th>Actions</th>
+                        )}
                       </tr>
                     </thead>
                     <tbody>
@@ -133,8 +131,7 @@ const AccordionItem = ({
                               <td>{ind + 1}</td>
                               <td>{subItem?.description}</td>
                               {(userRole === "ADMIN" ||
-                                userHierarchy === "IAH" ||
-                                userHierarchy === "Team_Lead") && (
+                                userHierarchy === "IAH") && (
                                 <td>
                                   <div className="d-flex flex-wrap gap-4">
                                     <i

@@ -109,8 +109,7 @@ const RiskAssessments = () => {
                 <tr>
                   <th className="w-80">Sr. #</th>
                   <th>Business Objective</th>
-                  <th>Risk Approach</th>
-                  <th>Risk Rating</th>
+                  <th>Nature Through</th>
                   <th>Perform Risk Assessment</th>
                 </tr>
               </thead>
@@ -133,12 +132,8 @@ const RiskAssessments = () => {
                         <td>
                           {item?.businessObjectiveMapProcess?.description || ""}
                         </td>
-                        <td>
-                          {item?.riskApproach === "Risk Factor Approach"
-                            ? "Specific Risk Approach"
-                            : item?.riskApproach}
-                        </td>
-                        <td>{item?.riskRating}</td>
+                        <td>{item?.natureThrough}</td>
+
                         <td className="text-center w-200">
                           <div
                             className={`btn btn-outline-light text-primary shadow h-32 w-180 ${
