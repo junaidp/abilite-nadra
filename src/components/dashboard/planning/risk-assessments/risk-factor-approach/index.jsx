@@ -88,12 +88,13 @@ const RiskFactorApproach = () => {
     let num = 0;
     item?.riskFactorValues?.forEach((element) => {
       let internalNumber =
-        Number(element?.value1 / 100) * Number(element?.value2);
-      num = num + internalNumber;
+        (Number(element?.value1) / 100) * Number(element?.value2);
+      num += internalNumber;
     });
-    let result =
-      num.toFixed(2) * (Number(item?.impact / 100) * Number(item?.likelihood));
-    return result.toFixed(2);
+
+    let result = num * (Number(item?.impact) / 100) * Number(item?.likelihood);
+
+    return Number(result.toFixed(2));
   }
 
   function handleSaveRiskAssessment() {
