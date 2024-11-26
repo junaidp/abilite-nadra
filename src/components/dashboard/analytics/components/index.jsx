@@ -16,7 +16,7 @@ import {
 import "./index.css";
 
 const DuplicateEntries = ({ data }) => {
-  const [chartType, setChartType] = useState("area");
+  const [chartType, setChartType] = useState("table");
 
   // If data is empty, return an empty array for the formatted data
   const formattedData = data || [];
@@ -99,8 +99,8 @@ const DuplicateEntries = ({ data }) => {
       case "table":
         return (
           <div>
-            <table className="w-100">
-              <thead>
+            <table className="table table-bordered  table-hover rounded">
+              <thead className="bg-secondary text-white">
                 <tr>
                   {keys.map((key) => (
                     <th key={key}>{key}</th>
