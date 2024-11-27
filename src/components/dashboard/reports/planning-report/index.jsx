@@ -209,18 +209,23 @@ const PlanningReport = () => {
                                   )
                                 }
                               ></i>
-                              {item?.reportStatus === "Draft" && (
-                                <i
-                                  className="fa fa-edit text-secondary f-18 cursor-pointer"
-                                  onClick={() =>
-                                    navigate(
-                                      `/audit/update-planning-report?reportId=${item?.id}`
-                                    )
-                                  }
-                                ></i>
-                              )}
                               {item?.reportStatus === "Draft" &&
-                                item?.createdBy === user[0]?.userId?.id && (
+                                item?.createdBy === user[0]?.userId?.id &&
+                                user[0]?.userId?.employeeid?.userHierarchy ===
+                                  "IAH" && (
+                                  <i
+                                    className="fa fa-edit text-secondary f-18 cursor-pointer"
+                                    onClick={() =>
+                                      navigate(
+                                        `/audit/update-planning-report?reportId=${item?.id}`
+                                      )
+                                    }
+                                  ></i>
+                                )}
+                              {item?.reportStatus === "Draft" &&
+                                item?.createdBy === user[0]?.userId?.id &&
+                                user[0]?.userId?.employeeid?.userHierarchy ===
+                                  "IAH" && (
                                   <i
                                     className="fa fa-trash text-danger f-18 cursor-pointer"
                                     onClick={() => handleDelete(item?.id)}

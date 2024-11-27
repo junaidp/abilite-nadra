@@ -22,7 +22,6 @@ import JobPrioritization from "./pages/dashboard/planning/job-prioritization/Job
 import JobSecheduling from "./pages/dashboard/planning/job-scheduling/JobSeheduling";
 import AuditPlanSummary from "./pages/dashboard/planning/audit-plan-summary/AuditPlanSummary";
 import AuditEngagement from "./pages/dashboard/audit-engagement/AuditEngagement";
-import PreviousObservation from "./pages/dashboard/planning/business-objective/previous-observation/PreviousObservation";
 import PlanningReport from "./pages/dashboard/reports/planning-report/PlanningReport";
 import ViewJobschedule from "./pages/dashboard/planning/job-scheduling/view-job-schedule/ViewJobschedule";
 import GeneratePlanningReport from "./pages/dashboard/reports/planning-report/generate-planning-report/GeneratePlanningReport";
@@ -63,7 +62,7 @@ const App = () => {
   const dispatch = useDispatch();
   const { menuItems } = useSelector((state) => state.common);
   const { user } = useSelector((state) => state.auth);
-
+  
   useEffect(() => {
     const authUser = JSON.parse(localStorage.getItem("user"));
     if (authUser) {
@@ -130,10 +129,6 @@ const App = () => {
             <Route path="job-scheduling" element={<JobSecheduling />} />
             <Route path="audit-plan-summary" element={<AuditPlanSummary />} />
             <Route path="audit-engagement" element={<AuditEngagement />} />
-            <Route
-              path="previous-observation"
-              element={<PreviousObservation />}
-            />
             <Route path="planning-report" element={<PlanningReport />} />
             <Route path="task-management" element={<TaskManagement />} />
             <Route path="view-job-scheduling" element={<ViewJobschedule />} />

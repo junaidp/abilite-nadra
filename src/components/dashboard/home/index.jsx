@@ -74,23 +74,16 @@ const DashboardHome = () => {
             <div className="row mb-3 dashboard-content-wrap">
               <div className="col-lg-9">
                 <section id="minimal-statistics">
-                  <div style={{ width: "100%" }}>
-                    <div
-                      style={{
-                        display: "flex",
-                        gap: "30px",
-                        flexWrap: "wrap",
-                        width: "100%",
-                      }}
-                    >
-                      <div style={{ flex: "1" }}>
+                  <div className="w-100">
+                    <div className="dashboard-wrapper">
+                      <div className="flex-1">
                         <InfoCard
                           name="Jobs By Business Objective"
                           icon={<i className="bi bi-share primary f-40"></i>}
                           value={dataInfo?.jobsByBusinessObjective}
                         />
                       </div>
-                      <div style={{ flex: "1" }}>
+                      <div className="flex-1">
                         <InfoCard
                           name="Jobs By Compliance"
                           icon={
@@ -100,19 +93,8 @@ const DashboardHome = () => {
                         />
                       </div>
                     </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        gap: "30px",
-                        flexWrap: "wrap",
-                        width: "100%",
-                      }}
-                      className="special-audit-wrap"
-                    >
-                      <div
-                        className="col-xl-4 col-sm-6 col-12"
-                        style={{ flex: "1" }}
-                      >
+                    <div className="special-audit-wrap dashboard-wrapper">
+                      <div className="col-xl-4 col-sm-6 col-12 flex-1">
                         <InfoCard
                           name="Jobs By Special Project/Audit"
                           icon={
@@ -122,10 +104,7 @@ const DashboardHome = () => {
                         />
                       </div>
 
-                      <div
-                        className="col-xl-4 col-sm-6 col-12"
-                        style={{ flex: "1" }}
-                      >
+                      <div className="col-xl-4 col-sm-6 col-12 flex-1">
                         <InfoCard
                           name="Jobs In Progress"
                           icon={
@@ -137,18 +116,8 @@ const DashboardHome = () => {
                         />
                       </div>
                     </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        gap: "30px",
-                        flexWrap: "wrap",
-                        width: "100%",
-                      }}
-                    >
-                      <div
-                        className="col-xl-4 col-sm-6 col-12"
-                        style={{ flex: "1" }}
-                      >
+                    <div className="dashboard-wrapper">
+                      <div className="col-xl-4 col-sm-6 col-12 flex-1">
                         <InfoCard
                           name="Jobs Completed"
                           icon={
@@ -158,10 +127,7 @@ const DashboardHome = () => {
                         />
                       </div>
 
-                      <div
-                        className="col-xl-4 col-sm-6 col-12"
-                        style={{ flex: "1" }}
-                      >
+                      <div className="col-xl-4 col-sm-6 col-12 flex-1">
                         <InfoCard
                           name="Exceptions Implemented"
                           icon={

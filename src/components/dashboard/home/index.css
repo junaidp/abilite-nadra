@@ -3,6 +3,14 @@
   grid-template-columns: 1fr 1fr;
   gap: 30px;
 }
+
+.dashboard-wrapper {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
 span {
   font-size: 12px;
 }
