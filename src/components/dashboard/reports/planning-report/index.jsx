@@ -210,9 +210,9 @@ const PlanningReport = () => {
                                 }
                               ></i>
                               {item?.reportStatus === "Draft" &&
-                                item?.createdBy === user[0]?.userId?.id &&
-                                user[0]?.userId?.employeeid?.userHierarchy ===
-                                  "IAH" && (
+                                (item?.createdBy === user[0]?.userId?.id ||
+                                  user[0]?.userId?.employeeid?.userHierarchy ===
+                                    "IAH") && (
                                   <i
                                     className="fa fa-edit text-secondary f-18 cursor-pointer"
                                     onClick={() =>
@@ -223,9 +223,9 @@ const PlanningReport = () => {
                                   ></i>
                                 )}
                               {item?.reportStatus === "Draft" &&
-                                item?.createdBy === user[0]?.userId?.id &&
-                                user[0]?.userId?.employeeid?.userHierarchy ===
-                                  "IAH" && (
+                                (item?.createdBy === user[0]?.userId?.id ||
+                                  user[0]?.userId?.employeeid?.userHierarchy ===
+                                    "IAH") && (
                                   <i
                                     className="fa fa-trash text-danger f-18 cursor-pointer"
                                     onClick={() => handleDelete(item?.id)}
