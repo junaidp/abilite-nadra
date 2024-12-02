@@ -17,11 +17,8 @@ import {
   faFileContract,
   faFileSignature,
   faGear,
-  faCheck,
   faChartBar,
   faChartSimple,
-  faCopy,
-  faCalendar,
 } from "@fortawesome/free-solid-svg-icons";
 let menuItems = [
   {
@@ -170,13 +167,13 @@ let menuItems = [
     route: "/audit/audit-settings",
     active: false,
   },
-  {
-    id: "li-audit-analytics",
-    label: "Analytics",
-    icon: faChartSimple,
-    active: false,
-    route: "/audit/audit-analytics",
-  },
+  // {
+  //   id: "li-audit-analytics",
+  //   label: "Analytics",
+  //   icon: faChartSimple,
+  //   active: false,
+  //   route: "/audit/audit-analytics",
+  // },
   {
     id: "li-audit-tasks-management",
     label: "Tasks Management",
