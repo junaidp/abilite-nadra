@@ -115,9 +115,9 @@ const AuditPlanSummaryReport = () => {
               onChange={(event) => handleChange(event)}
             >
               <option value="">All</option>
-              {locations?.map((location) => {
+              {locations?.map((location,index) => {
                 return (
-                  <option value={location?.description}>
+                  <option value={location?.description} key={index}>
                     {location?.description}
                   </option>
                 );
@@ -137,9 +137,9 @@ const AuditPlanSummaryReport = () => {
               onChange={(event) => handleChange(event)}
             >
               <option value="">select sub-location</option>
-              {subLocations?.map((subLocation) => {
+              {subLocations?.map((subLocation,index) => {
                 return (
-                  <option value={subLocation?.description}>
+                  <option value={subLocation?.description} key={index}>
                     {subLocation?.description}
                   </option>
                 );

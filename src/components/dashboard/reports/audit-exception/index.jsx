@@ -152,9 +152,9 @@ const AuditExceptionReport = () => {
               onChange={(event) => handleChange(event)}
             >
               <option value="">All</option>
-              {locations?.map((location) => {
+              {locations?.map((location, index) => {
                 return (
-                  <option value={location?.description}>
+                  <option value={location?.description} key={index}>
                     {location?.description}
                   </option>
                 );

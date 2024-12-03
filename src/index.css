@@ -156,6 +156,18 @@ body {
   height: 50px !important;
 }
 
+.h-100vh{
+  height: 100vh !important;
+}
+
+.h-60 {
+  height: 60px !important;
+}
+
+.w-60 {
+  width: 60px !important;
+}
+
 .pb-10 {
   padding-bottom: 10px !important;
 }
@@ -892,6 +904,10 @@ span[aria-label="Insert Ordered List"] .jodit-toolbar-button__trigger {
 .justify-center {
   justify-content: center;
 }
+.items-center{
+ align-items: center !important;
+}
+
 .word-break {
   word-break: break-all;
 }

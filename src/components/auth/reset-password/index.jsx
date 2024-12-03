@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   setupResetPassword,
   resetResetPasswordSuccess,
-  changeAuthState
+  changeAuthState,
 } from "../../../global-redux/reducers/auth/slice";
 import { useSearchParams } from "react-router-dom";
 
@@ -88,14 +88,6 @@ const ResetPassword = () => {
                   Login
                 </a>
               </li>
-              {/* <li>
-                <a
-                  type="submit"
-                  className="fxt-switcher-btn active shadow border-start-0 border-0 rounded shadow"
-                >
-                  Register
-                </a>
-              </li> */}
             </ul>
           </div>
           <div className="fxt-main-form">

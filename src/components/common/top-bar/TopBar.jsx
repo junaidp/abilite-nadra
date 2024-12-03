@@ -97,9 +97,8 @@ const TopBar = () => {
         <div>
           <img
             src={logo}
-            className="light-logo"
+            className="light-logo h-60 w-60"
             width="110"
-            style={{ height: "60px", width: "60px" }}
             alt=""
           />
         </div>

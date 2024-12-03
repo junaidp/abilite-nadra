@@ -14,15 +14,7 @@ const Home = () => {
   }, [navigate]);
 
   return (
-    <div
-      className="mx-2 my-3"
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-      }}
-    >
+    <div className="mx-2 my-3 d-flex justify-center items-center h-100vh">
       <CircularProgress />
     </div>
   );
