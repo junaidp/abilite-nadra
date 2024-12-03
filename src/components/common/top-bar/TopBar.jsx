@@ -1,7 +1,7 @@
 import React from "react";
 import "./TopBar.css";
 import user1 from "../../../assets/person.png";
-import logo from "../../../assets/light-logo-.png";
+import logo from "../../../assets/new-logo.png";
 import { Link } from "react-router-dom";
 import { changeShowSidebar } from "../../../global-redux/reducers/common/slice";
 import { useDispatch, useSelector } from "react-redux";
@@ -95,7 +95,13 @@ const TopBar = () => {
     <header className="app-header shadow-sm mb-3 px-0 ">
       <nav className="navbar navbar-expand-lg navbar-light  navbarWrapMain">
         <div>
-          <img src={logo} className="light-logo" width="110" alt="" />
+          <img
+            src={logo}
+            className="light-logo"
+            width="110"
+            style={{ height: "60px", width: "60px" }}
+            alt=""
+          />
         </div>
         {user[0]?.userId?.role[0]?.name === "USER" &&
           user[0]?.userId?.employeeid?.userHierarchy !==

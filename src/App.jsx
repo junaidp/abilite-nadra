@@ -55,14 +55,13 @@ import GenerateInternalAuditConsolidationReport from "./pages/dashboard/reports/
 import ViewInternalAuditConsolidationReport from "./pages/dashboard/reports/internal-audit-consolidation-report/view-internal-audit-consolidation-report/ViewInternalAuditConsolidationReport";
 import UpdateInternalAuditConsolidationReport from "./pages/dashboard/reports/internal-audit-consolidation-report/update-internal-audit-consolidation-report/UpdateInternalAuditConsolidationReport";
 import ProtectedRoute from "./components/common/layout/ProtectedRoute";
-import Analytics from "./pages/dashboard/analytics/Analaytics";
 import NotFound from "./components/common/not-found/index";
 
 const App = () => {
   const dispatch = useDispatch();
   const { menuItems } = useSelector((state) => state.common);
   const { user } = useSelector((state) => state.auth);
-  
+
   useEffect(() => {
     const authUser = JSON.parse(localStorage.getItem("user"));
     if (authUser) {
@@ -179,8 +178,6 @@ const App = () => {
               element={<FollowUpParticulars />}
             />
             <Route path="audit-settings" element={<AuditSettings />} />
-
-            <Route path="audit-analytics" element={<Analytics />} />
             <Route
               path="internal-audit-report"
               element={<InternalAuditReport />}
