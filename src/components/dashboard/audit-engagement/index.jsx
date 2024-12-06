@@ -11,6 +11,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import JobStatusDialog from "../../modals/job-status-dialog";
 
 const AuditEngagement = () => {
   const isInitialRender = React.useRef(true);
@@ -25,6 +26,8 @@ const AuditEngagement = () => {
   const { user } = useSelector((state) => state.auth);
   const [page, setPage] = React.useState(1);
   const [itemsPerPage, setItemsPerPage] = React.useState(10);
+  const [showJobStatusDialog, setShowJobStatusDialog] = React.useState(false);
+  const [selectedJobId, setSelectedJobId] = React.useState({});
 
   const handleChange = (_, value) => {
     setPage(value);
@@ -98,6 +101,16 @@ const AuditEngagement = () => {
 
   return (
     <div>
+      {showJobStatusDialog && (
+        <div className="model-parent">
+          <div className="model-wrap">
+            <JobStatusDialog
+              setShowJobStatusDialog={setShowJobStatusDialog}
+              selectedJobId={selectedJobId}
+            />
+          </div>
+        </div>
+      )}
       <div>
         <section className="faq-section ">
           <div data-aos="fade-up">
@@ -111,13 +124,14 @@ const AuditEngagement = () => {
                   <table className="table table-bordered  table-hover rounded">
                     <thead className="bg-secondary text-white">
                       <tr>
-                        <th className="w-80">Sr No.</th>
+                        <th>Sr No.</th>
                         <th>Job Name</th>
                         <th>Planned Start Date </th>
                         <th>Planned End Date </th>
                         <th>Job Type </th>
                         <th>Sub Location </th>
                         <th>Status </th>
+                        <th>Job Status</th>
                         <th>Action </th>
                       </tr>
                     </thead>
@@ -176,6 +190,15 @@ const AuditEngagement = () => {
                                 >
                                   {item?.status}
                                 </Link>
+                              </td>
+                              <td>
+                                <i
+                                  className="fa-signal fa f-18 cursor-pointer"
+                                  onClick={() => {
+                                    setSelectedJobId(item?.id);
+                                    setShowJobStatusDialog(true);
+                                  }}
+                                ></i>
                               </td>
                               <td>
                                 <i

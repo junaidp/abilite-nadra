@@ -1,7 +1,7 @@
 import React from "react";
 import "./TopBar.css";
 import user1 from "../../../assets/person.png";
-import logo from "../../../assets/new-logo.png";
+import logo from "../../../assets/light-logo-.png";
 import { Link } from "react-router-dom";
 import { changeShowSidebar } from "../../../global-redux/reducers/common/slice";
 import { useDispatch, useSelector } from "react-redux";
@@ -97,7 +97,7 @@ const TopBar = () => {
         <div>
           <img
             src={logo}
-            className="light-logo h-60 w-60"
+            className="light-logo"
             width="110"
             alt=""
           />

@@ -37,7 +37,8 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
                 value={moment
                   .utc(reportObject?.reportDate)
                   .format("YYYY-MM-DD")}
-                onChange={(event) => handleChangeReportObject(event)}
+                disabled
+                readOnly
               />
             </div>
           </div>
@@ -141,9 +142,13 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
                             (item) => item?.locationid?.description
                           )
                         ),
-                      ]?.map((locationItem,index) => {
+                      ]?.map((locationItem, index) => {
                         return (
-                          <Chip label={locationItem} key={index} className="mx-2 mb-2" />
+                          <Chip
+                            label={locationItem}
+                            key={index}
+                            className="mx-2 mb-2"
+                          />
                         );
                       })
                     )}
@@ -159,9 +164,13 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
               reportObject?.subLocationList?.length === 0 ? (
                 <p className="mt-2">No Sub Location To Show</p>
               ) : (
-                reportObject?.subLocationList?.map((item,index) => {
+                reportObject?.subLocationList?.map((item, index) => {
                   return (
-                    <Chip label={item?.description} key={index} className="mx-2 mb-2" />
+                    <Chip
+                      label={item?.description}
+                      key={index}
+                      className="mx-2 mb-2"
+                    />
                   );
                 })
               )}

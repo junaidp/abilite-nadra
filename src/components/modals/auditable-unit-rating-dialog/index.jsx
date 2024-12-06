@@ -1,22 +1,30 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { setupAddAuditableUnit } from "../../../global-redux/reducers/planing/auditable-units/slice";
+import {
+  setupAddAuditableUnit,
+  setupGetRiskAssessment,
+} from "../../../global-redux/reducers/planing/auditable-units/slice";
 import {
   setupGetAllProcess,
   setupGetAllSubProcess,
   resetAllValues,
 } from "../../../global-redux/reducers/settings/process/slice";
 import { CircularProgress } from "@mui/material";
+import RiskAssessment from "./risk-assessment";
 
 const AuditableUnitRatingDialog = ({
   setAuditableUnitRatingDialog,
   selectedAuditableUnitId,
 }) => {
   const dispatch = useDispatch();
-  const { loading, auditableUnitAddSuccess, allAuditableUnits } = useSelector(
-    (state) => state?.planningAuditableUnit
-  );
+  const {
+    loading,
+    auditableUnitAddSuccess,
+    allAuditableUnits,
+    riskAssessments,
+  } = useSelector((state) => state?.planningAuditableUnit);
+
   const {
     allProcess,
     allSubProcess,
@@ -33,6 +41,7 @@ const AuditableUnitRatingDialog = ({
     reason: "",
     jobType: "",
   });
+  const [risks, setRisks] = React.useState([]);
 
   function handleChange(event) {
     setData((pre) => {
@@ -50,9 +59,13 @@ const AuditableUnitRatingDialog = ({
       process === "" ||
       subProcess === "" ||
       processId === "" ||
-      subProcessId === ""
+      subProcessId === "" ||
+      !risks ||
+      !risks.length
     ) {
-      toast.error("Provide all value");
+      toast.error(
+        "Provide all required values and select a risk to create an audit job."
+      );
     } else {
       if (!loading) {
         const selectedProcess = allProcess?.find(
@@ -68,6 +81,7 @@ const AuditableUnitRatingDialog = ({
             processid: selectedProcess,
             subProcessid: selectedSubProcess,
             auditableUnitid: selectedAuditableUnitId,
+            riskAssesmentIds: risks,
           })
         );
       }
@@ -140,6 +154,14 @@ const AuditableUnitRatingDialog = ({
     )?.id;
     if (companyId) {
       dispatch(setupGetAllProcess(companyId));
+      setTimeout(() => {
+        dispatch(
+          setupGetRiskAssessment({
+            approach: "Risk Factor Approach",
+            riskAssessmentsid: selectedItem?.riskAssessmentid,
+          })
+        );
+      }, 900);
     }
   }, []);
 
@@ -179,126 +201,134 @@ const AuditableUnitRatingDialog = ({
               "No Process Availble Right Now"
             ) : (
               <div>
-                <div className="row my-3">
-                  <div className="col-lg-12">
-                    <label>Auditable Unit</label>
-                    <textarea
-                      className="form-control"
-                      placeholder="Enter Reason"
-                      id="exampleFormControlTextarea1"
-                      rows="3"
-                      name="reason"
-                      value={data?.reason}
-                      onChange={handleChange}
-                      maxLength="500"
-                    ></textarea>
-                    <p className="word-limit-info label-text mb-2">
-                      Maximum 500 characters
-                    </p>
-                  </div>
-                </div>
-
-                <div className="row mb-3">
-                  {allAuditableUnits?.find(
-                    (all) => all?.id === selectedAuditableUnitId
-                  )?.natureThrough === "Compliance Checklist" && (
+                <div>
+                  <div className="row my-3">
                     <div className="col-lg-12">
-                      <label>Job Type</label>
-                      <select
-                        className="form-select"
-                        aria-label="Default select example"
-                        name="jobType"
-                        defaultValue={data?.jobType}
-                      >
-                        <option value="Compliance Checklist">
-                          Compliance Checklist
-                        </option>
-                      </select>
-                    </div>
-                  )}
-                  {allAuditableUnits?.find(
-                    (all) => all?.id === selectedAuditableUnitId
-                  )?.natureThrough === "Special Project/Audit" && (
-                    <div className="col-lg-12">
-                      <label>Job Type</label>
-                      <select
-                        className="form-select"
-                        aria-label="Default select example"
-                        name="jobType"
-                        defaultValue={data?.jobType}
-                      >
-                        <option value="Special Audit">Special Audit </option>
-                      </select>
-                    </div>
-                  )}
-                  {allAuditableUnits?.find(
-                    (all) => all?.id === selectedAuditableUnitId
-                  )?.natureThrough === "Business Objective" && (
-                    <div className="col-lg-12">
-                      <label>Job Type</label>
-                      <select
-                        className="form-select"
-                        aria-label="Default select example"
-                        name="jobType"
-                        value={data?.jobType}
+                      <label>Auditable Unit</label>
+                      <textarea
+                        className="form-control"
+                        placeholder="Enter Reason"
+                        id="exampleFormControlTextarea1"
+                        rows="3"
+                        name="reason"
+                        value={data?.reason}
                         onChange={handleChange}
-                      >
-                        <option value="">Select Option</option>
-                        <option value="Review">Review</option>
-                        <option value="Fraud & Investigation">
-                          Fraud & Investigation
-                        </option>
-                        <option value="Assurance and Compiance">
-                          Assurance and Compiance
-                        </option>
-                        <option value="Advisory and consulting">
-                          Advisory and consulting
-                        </option>
-                      </select>
+                        maxLength="500"
+                      ></textarea>
+                      <p className="word-limit-info label-text mb-2">
+                        Maximum 500 characters
+                      </p>
                     </div>
-                  )}
-                </div>
-                <div className="row">
-                  <div className="col-lg-6">
-                    <label>Process</label>
-                    <select
-                      className="form-select"
-                      aria-label="Default select example"
-                      value={process}
-                      onChange={(event) => handleChangeProcess(event)}
-                    >
-                      <option value="">Select Process</option>
-                      {allProcess?.map((item, index) => {
-                        return (
-                          <option value={item?.description} key={index}>
-                            {item?.description}
-                          </option>
-                        );
-                      })}
-                    </select>
                   </div>
 
-                  <div className="col-lg-6">
-                    <label>Sub-Process</label>
-                    <select
-                      className="form-select"
-                      aria-label="Default select example"
-                      value={subProcess}
-                      onChange={(event) => {
-                        setSubProcess(event?.target?.value);
-                      }}
-                    >
-                      <option value="">Select SubProcess</option>
-                      {allSubProcess?.map((item, index) => {
-                        return (
-                          <option key={index} value={item?.description}>
-                            {item?.description}
+                  <div className="row mb-3">
+                    {allAuditableUnits?.find(
+                      (all) => all?.id === selectedAuditableUnitId
+                    )?.natureThrough === "Compliance Checklist" && (
+                      <div className="col-lg-12">
+                        <label>Job Type</label>
+                        <select
+                          className="form-select"
+                          aria-label="Default select example"
+                          name="jobType"
+                          defaultValue={data?.jobType}
+                        >
+                          <option value="Compliance Checklist">
+                            Compliance Checklist
                           </option>
-                        );
-                      })}
-                    </select>
+                        </select>
+                      </div>
+                    )}
+                    {allAuditableUnits?.find(
+                      (all) => all?.id === selectedAuditableUnitId
+                    )?.natureThrough === "Special Project/Audit" && (
+                      <div className="col-lg-12">
+                        <label>Job Type</label>
+                        <select
+                          className="form-select"
+                          aria-label="Default select example"
+                          name="jobType"
+                          defaultValue={data?.jobType}
+                        >
+                          <option value="Special Audit">Special Audit </option>
+                        </select>
+                      </div>
+                    )}
+                    {allAuditableUnits?.find(
+                      (all) => all?.id === selectedAuditableUnitId
+                    )?.natureThrough === "Business Objective" && (
+                      <div className="col-lg-12">
+                        <label>Job Type</label>
+                        <select
+                          className="form-select"
+                          aria-label="Default select example"
+                          name="jobType"
+                          value={data?.jobType}
+                          onChange={handleChange}
+                        >
+                          <option value="">Select Option</option>
+                          <option value="Review">Review</option>
+                          <option value="Fraud & Investigation">
+                            Fraud & Investigation
+                          </option>
+                          <option value="Assurance and Compiance">
+                            Assurance and Compiance
+                          </option>
+                          <option value="Advisory and consulting">
+                            Advisory and consulting
+                          </option>
+                        </select>
+                      </div>
+                    )}
+                  </div>
+                  <div className="row">
+                    <div className="col-lg-6">
+                      <label>Process</label>
+                      <select
+                        className="form-select"
+                        aria-label="Default select example"
+                        value={process}
+                        onChange={(event) => handleChangeProcess(event)}
+                      >
+                        <option value="">Select Process</option>
+                        {allProcess?.map((item, index) => {
+                          return (
+                            <option value={item?.description} key={index}>
+                              {item?.description}
+                            </option>
+                          );
+                        })}
+                      </select>
+                    </div>
+
+                    <div className="col-lg-6">
+                      <label>Sub-Process</label>
+                      <select
+                        className="form-select"
+                        aria-label="Default select example"
+                        value={subProcess}
+                        onChange={(event) => {
+                          setSubProcess(event?.target?.value);
+                        }}
+                      >
+                        <option value="">Select SubProcess</option>
+                        {allSubProcess?.map((item, index) => {
+                          return (
+                            <option key={index} value={item?.description}>
+                              {item?.description}
+                            </option>
+                          );
+                        })}
+                      </select>
+                    </div>
                   </div>
                 </div>
+                <label className="mt-3 mb-1">Select Risks</label>
+                <RiskAssessment
+                  riskAssessments={riskAssessments}
+                  setRisks={setRisks}
+                  risks={risks}
+                />
               </div>
             )}
           </div>

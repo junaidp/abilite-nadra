@@ -3,6 +3,7 @@ import {
   addAuditableUnit,
   EditAuditableUnit,
   SubmitAuditableUnit,
+  GetRiskAssessment,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
@@ -12,6 +13,7 @@ const initialState = {
   allAuditableUnits: [],
   auditableUnitAddSuccess: false,
   totalNoOfRecords: 0,
+  riskAssessments: [],
 };
 
 export const setupGetAllAuditableUnits = createAsyncThunk(
@@ -38,6 +40,12 @@ export const setupSubmitAuditableUnit = createAsyncThunk(
   "auditableUnits/SubmitAuditableUnit",
   async (data, thunkAPI) => {
     return SubmitAuditableUnit(data, thunkAPI);
+  }
+);
+export const setupGetRiskAssessment = createAsyncThunk(
+  "auditableUnits/GetRiskAssessment",
+  async (data, thunkAPI) => {
+    return GetRiskAssessment(data, thunkAPI);
   }
 );
 
@@ -123,6 +131,24 @@ export const slice = createSlice({
         toast.success("Auditable Unit Submitted Successfully");
       })
       .addCase(setupSubmitAuditableUnit.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.auditableUnitAddSuccess = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Edit Auditable Unit
+    builder
+      .addCase(setupGetRiskAssessment.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetRiskAssessment.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.riskAssessments = payload?.data?.riskAssessmentList || [];
+      })
+      .addCase(setupGetRiskAssessment.rejected, (state, { payload }) => {
         state.loading = false;
         state.auditableUnitAddSuccess = false;
         if (payload?.response?.data?.message) {
