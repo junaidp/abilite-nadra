@@ -8,6 +8,7 @@ import {
   resetAllValues,
 } from "../../../global-redux/reducers/settings/process/slice";
 import { CircularProgress } from "@mui/material";
+import RiskAssessment from "./risk-assessment";
 
 const AuditableUnitRatingDialog = ({
   setShowEditAuditableUnit,
@@ -28,6 +29,7 @@ const AuditableUnitRatingDialog = ({
   const [auditableUnitName, setAuditableUnitName] = React.useState("");
   const [processId, setProcessId] = React.useState("");
   const [subProcessId, setSubProcessId] = React.useState("");
+  const [risks, setRisk] = React.useState([]);
   const [data, setData] = React.useState({
     reason: "",
     jobType: "",
@@ -117,6 +119,7 @@ const AuditableUnitRatingDialog = ({
         (all) => all?.id === selectedAuditableUnitId
       );
       setAuditableUnitName(selectedSingleItem?.jobName);
+      setRisk(selectedItem?.riskAssessments);
     }
   }, [allProcess]);
 
@@ -249,7 +252,7 @@ const AuditableUnitRatingDialog = ({
                       </select>
                     </div>
 
-                    <div className="col-lg-6">
+                    <div className="col-lg-6 mb-3">
                       <label>Sub-Process</label>
                       <select
                         className="form-select"
@@ -272,11 +275,14 @@ const AuditableUnitRatingDialog = ({
                       </select>
                     </div>
                   </div>
+                  <label className="mb-1">Selected Risks</label>
+                  <RiskAssessment riskAssessments={risks} />
                 </div>
               )
             )}
           </div>
         </div>
+
         <div className="d-flex justify-content-between">
           <div>
             <button

@@ -43,4 +43,33 @@ function groupObservationsByTitle(array) {
   return result;
 }
 
-export { baseUrl, handleDownload, groupObservationsByTitle };
+function handleCalculateProbability(item) {
+  let num = 0;
+  item?.riskFactorValues?.forEach((element) => {
+    let internalNumber =
+      Number(element?.value1 / 100) * Number(element?.value2);
+    num = num + internalNumber;
+  });
+  return num.toFixed(2);
+}
+
+function handleCalculateRiskScore(item) {
+  let num = 0;
+  item?.riskFactorValues?.forEach((element) => {
+    let internalNumber =
+      (Number(element?.value1) / 100) * Number(element?.value2);
+    num += internalNumber;
+  });
+
+  let result = num * (Number(item?.impact) / 100) * Number(item?.likelihood);
+
+  return Number(result.toFixed(2));
+}
+
+export {
+  baseUrl,
+  handleDownload,
+  groupObservationsByTitle,
+  handleCalculateProbability,
+  handleCalculateRiskScore,
+};

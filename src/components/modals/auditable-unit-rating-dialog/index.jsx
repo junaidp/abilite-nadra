@@ -220,7 +220,6 @@ const AuditableUnitRatingDialog = ({
                       </p>
                     </div>
                   </div>
-
                   <div className="row mb-3">
                     {allAuditableUnits?.find(
                       (all) => all?.id === selectedAuditableUnitId
@@ -281,7 +280,7 @@ const AuditableUnitRatingDialog = ({
                       </div>
                     )}
                   </div>
-                  <div className="row">
+                  <div className="row mb-3">
                     <div className="col-lg-6">
                       <label>Process</label>
                       <select
@@ -323,7 +322,7 @@ const AuditableUnitRatingDialog = ({
                     </div>
                   </div>
                 </div>
-                <label className="mt-3 mb-1">Select Risks</label>
+                <label className="mb-1">Select Risks</label>
                 <RiskAssessment
                   riskAssessments={riskAssessments}
                   setRisks={setRisks}

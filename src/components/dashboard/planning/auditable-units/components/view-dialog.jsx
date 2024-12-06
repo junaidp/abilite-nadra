@@ -6,6 +6,7 @@ import {
   resetAllValues,
 } from "../../../../../global-redux/reducers/settings/process/slice";
 import { CircularProgress } from "@mui/material";
+import RiskAssessment from "./risk-assessment";
 
 const AuditableUnitRatingDialog = ({
   setShowViewDialog,
@@ -26,6 +27,7 @@ const AuditableUnitRatingDialog = ({
   const [auditableUnitName, setAuditableUnitName] = React.useState("");
   const [processId, setProcessId] = React.useState("");
   const [subProcessId, setSubProcessId] = React.useState("");
+  const [risks, setRisks] = React.useState([]);
   const [data, setData] = React.useState({
     reason: "",
     jobType: "",
@@ -49,6 +51,7 @@ const AuditableUnitRatingDialog = ({
         (all) => all?.id === selectedAuditableUnitId
       );
       setAuditableUnitName(selectedSingleItem?.jobName);
+      setRisks(selectedItem?.riskAssessments);
     }
   }, [allProcess]);
 
@@ -146,7 +149,7 @@ const AuditableUnitRatingDialog = ({
                         />
                       </div>
 
-                      <div className="col-lg-6">
+                      <div className="col-lg-6 mb-3">
                         <label>Sub Process</label>
                         <input
                           value={
@@ -161,6 +164,8 @@ const AuditableUnitRatingDialog = ({
                       </div>
                     </div>
                   )}
+                  <label className="mb-1">Selected Risks</label>
+                  <RiskAssessment riskAssessments={risks} />
                 </div>
               )
             )}

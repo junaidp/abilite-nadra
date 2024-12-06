@@ -1,29 +1,10 @@
 import React from "react";
+import {
+  handleCalculateRiskScore,
+  handleCalculateProbability,
+} from "../../../constants/index";
 
 const RiskAssessment = ({ riskAssessments, setRisks, risks }) => {
-  function handleCalculateProbability(item) {
-    let num = 0;
-    item?.riskFactorValues?.forEach((element) => {
-      let internalNumber =
-        Number(element?.value1 / 100) * Number(element?.value2);
-      num = num + internalNumber;
-    });
-    return num.toFixed(2);
-  }
-
-  function handleCalculateRiskScore(item) {
-    let num = 0;
-    item?.riskFactorValues?.forEach((element) => {
-      let internalNumber =
-        (Number(element?.value1) / 100) * Number(element?.value2);
-      num += internalNumber;
-    });
-
-    let result = num * (Number(item?.impact) / 100) * Number(item?.likelihood);
-
-    return Number(result.toFixed(2));
-  }
-
   function handleChange(id) {
     if (risks.includes(id)) {
       setRisks((pre) => pre?.filter((riskId) => riskId !== id));
@@ -31,7 +12,6 @@ const RiskAssessment = ({ riskAssessments, setRisks, risks }) => {
       setRisks([...risks, id]);
     }
   }
-
 
   return (
     <div>
@@ -50,7 +30,7 @@ const RiskAssessment = ({ riskAssessments, setRisks, risks }) => {
         <tbody>
           {riskAssessments?.map((risk, index) => {
             return (
-              <tr>
+              <tr key={index}>
                 <td>{index + 1}</td>
                 <td>
                   <p>{risk?.description || ""}</p>

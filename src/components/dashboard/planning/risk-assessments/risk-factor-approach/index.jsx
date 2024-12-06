@@ -15,6 +15,11 @@ import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
 } from "../../../../../global-redux/reducers/common/slice";
+import {
+  handleCalculateRiskScore,
+  handleCalculateProbability,
+} from "../../../../../constants/index";
+
 import RiskAssessmentListRows from "./components/risk-assessment-list-rows";
 import { CircularProgress } from "@mui/material";
 import SubmitDialog from "./submit-dialog";
@@ -27,7 +32,6 @@ const RiskFactorApproach = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const riskAssessmentId = searchParams.get("riskAssessmentId");
   const { user } = useSelector((state) => state?.auth);
-  const { company } = useSelector((state) => state?.common);
   const {
     performRiskAssessmentObject,
     riskAssessmentSuccess,
@@ -72,29 +76,6 @@ const RiskFactorApproach = () => {
         item?.id === id ? { ...item, [name]: numericValue } : item
       ),
     }));
-  }
-
-  function handleCalculateProbability(item) {
-    let num = 0;
-    item?.riskFactorValues?.forEach((element) => {
-      let internalNumber =
-        Number(element?.value1 / 100) * Number(element?.value2);
-      num = num + internalNumber;
-    });
-    return num.toFixed(2);
-  }
-
-  function handleCalculateRiskScore(item) {
-    let num = 0;
-    item?.riskFactorValues?.forEach((element) => {
-      let internalNumber =
-        (Number(element?.value1) / 100) * Number(element?.value2);
-      num += internalNumber;
-    });
-
-    let result = num * (Number(item?.impact) / 100) * Number(item?.likelihood);
-
-    return Number(result.toFixed(2));
   }
 
   function handleSaveRiskAssessment() {
