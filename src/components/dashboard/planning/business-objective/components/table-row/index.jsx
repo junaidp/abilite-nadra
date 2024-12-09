@@ -18,7 +18,7 @@ const TableRow = ({
         className="cursor-pointer"
       >
         {item?.natureThrough !== "Compliance Checklist"
-          ? item?.name || ""
+          ? item?.name || "Engagement In Progress"
           : item?.engagementName}
       </td>
       <td

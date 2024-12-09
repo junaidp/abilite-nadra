@@ -129,7 +129,7 @@ const AuditableUnits = () => {
       )}
       <>
         <header className="section-header my-3 align-items-center  text-start d-flex ">
-          <div className="mb-0 heading">Audit Jobs</div>
+          <div className="mb-0 heading">Business Objectives</div>
         </header>
         <div className="row">
           <div className="col-md-12">

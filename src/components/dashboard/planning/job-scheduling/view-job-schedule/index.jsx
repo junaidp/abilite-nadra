@@ -108,7 +108,6 @@ const ViewJobSchedule = () => {
                     <th>Year</th>
                     <th>Planned Start Date</th>
                     <th>Planned End Date</th>
-                    <th>Risk Rating</th>
                     <th>Status</th>
                     <th>Actions</th>
                   </tr>
@@ -152,24 +151,6 @@ const ViewJobSchedule = () => {
                             />
                           </td>
 
-                          <td
-                            className={` text-white ${
-                              item?.riskRating?.toUpperCase() ===
-                              "Low"?.toUpperCase()
-                                ? "bg-success"
-                                : item?.riskRating?.toUpperCase() ===
-                                  "Medium"?.toUpperCase()
-                                ? "bg-yellow"
-                                : item?.riskRating?.toUpperCase() ===
-                                    "High"?.toUpperCase() ||
-                                  item?.riskRating?.toUpperCase() ===
-                                    "Extreme"?.toUpperCase()
-                                ? "bg-danger"
-                                : "bg-success"
-                            }`}
-                          >
-                            {item?.riskRating}
-                          </td>
                           <td>
                             {item?.locked === true
                               ? "Completed"

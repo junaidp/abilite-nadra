@@ -348,7 +348,7 @@ const RiskFactorApproach = () => {
                           );
                         })}
                         <tr>
-                          <td colSpan="2">Enterprise Value</td>
+                          <td colSpan="2"></td>
                           <td className="bold width-50">
                             {handlCalculateEnterpriseValue()} %
                           </td>

@@ -115,7 +115,7 @@ const AuditPlanSummaryReport = () => {
               onChange={(event) => handleChange(event)}
             >
               <option value="">All</option>
-              {locations?.map((location,index) => {
+              {locations?.map((location, index) => {
                 return (
                   <option value={location?.description} key={index}>
                     {location?.description}
@@ -137,31 +137,13 @@ const AuditPlanSummaryReport = () => {
               onChange={(event) => handleChange(event)}
             >
               <option value="">select sub-location</option>
-              {subLocations?.map((subLocation,index) => {
+              {subLocations?.map((subLocation, index) => {
                 return (
                   <option value={subLocation?.description} key={index}>
                     {subLocation?.description}
                   </option>
                 );
               })}
-            </select>
-          </div>
-        </div>
-
-        <div className="col-lg-2">
-          <div>
-            <label className="me-2 label-text fw-bold">Risk Rating:</label>
-            <select
-              className="form-select"
-              aria-label="Default select example"
-              value={data?.riskRating}
-              name="riskRating"
-              onChange={(event) => handleChange(event)}
-            >
-              <option value="">select rating</option>
-              <option value="High">High</option>
-              <option value="Medium">Medium</option>
-              <option value="Low">Low</option>
             </select>
           </div>
         </div>
@@ -196,7 +178,6 @@ const AuditPlanSummaryReport = () => {
                 <tr>
                   <th className="min-w-80">Sr No.</th>
                   <th>Auditable Unit</th>
-                  <th>Risk Rating</th>
                   <th>Resource</th>
                   <th>Location</th>
                   <th>Sub Location</th>
@@ -212,7 +193,9 @@ const AuditPlanSummaryReport = () => {
                   </tr>
                 ) : planSummaryReports?.length === 0 ? (
                   <tr>
-                    <td className="w-300">No Audit Plan Summary Reports To Show.</td>
+                    <td className="w-300">
+                      No Audit Plan Summary Reports To Show.
+                    </td>
                   </tr>
                 ) : (
                   planSummaryReports
@@ -222,7 +205,6 @@ const AuditPlanSummaryReport = () => {
                         <tr key={index}>
                           <td>{(page - 1) * 10 + index + 1}</td>
                           <td>{job[1]} </td>
-                          <td>{job[2]}</td>
                           <td>{job[3]}</td>
                           <td>{job[4]}</td>
                           <td>{job[5]}</td>

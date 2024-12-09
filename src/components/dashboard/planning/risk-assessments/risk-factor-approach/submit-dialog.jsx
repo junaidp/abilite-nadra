@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setupSubmitRiskAssessment } from "../../../../../global-redux/reducers/planing/risk-assessment/slice";
+import { toast } from "react-toastify";
 
 const SubmitDialog = ({
   object,
@@ -16,6 +17,16 @@ const SubmitDialog = ({
 
   function handleSubmit() {
     if (!loading) {
+      let weight = 0;
+      data?.riskAssessmentList?.forEach((risk) => {
+        weight = weight + Number(risk?.likelihood);
+      });
+      if (weight !== 100) {
+        toast.error(
+          "Total weight against the specific risks can not be less than 100%."
+        );
+        return;
+      }
       dispatch(
         setupSubmitRiskAssessment({
           ...object,

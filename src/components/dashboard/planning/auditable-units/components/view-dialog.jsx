@@ -71,7 +71,7 @@ const AuditableUnitRatingDialog = ({
           <div className="col-lg-12">
             <div className="row mb-3">
               <div className="col-lg-12">
-                <div className="heading">Audit Job</div>
+                <div className="heading">Business Objective</div>
               </div>
             </div>
 
@@ -85,9 +85,11 @@ const AuditableUnitRatingDialog = ({
               allProcess?.length !== 0 &&
               allSubProcess?.length !== 0 && (
                 <div className="min-h-400">
+                  <label className="mb-1">Selected Risks</label>
+                  <RiskAssessment riskAssessments={risks} />
                   <div className="row my-3">
                     <div className="col-lg-12">
-                      <label>Auditable Unit</label>
+                      <label>Audit Job</label>
                       <textarea
                         className="form-control"
                         placeholder="Enter Reason"
@@ -164,8 +166,6 @@ const AuditableUnitRatingDialog = ({
                       </div>
                     </div>
                   )}
-                  <label className="mb-1">Selected Risks</label>
-                  <RiskAssessment riskAssessments={risks} />
                 </div>
               )
             )}
