@@ -363,7 +363,7 @@ const RiskFactorApproach = () => {
                   </p>
                 )}
 
-                <div className="table-responsive overflow-x-hidden">
+                <div className="overflow-x-hidden">
                   {((performRiskAssessmentObject?.riskAssessments?.complete ===
                     false &&
                     performRiskAssessmentObject?.riskAssessmentList?.length >
@@ -375,7 +375,7 @@ const RiskFactorApproach = () => {
                       user[0]?.userId?.employeeid?.userHierarchy ===
                         "IAH")) && (
                     <div
-                      className={`btn btn-labeled btn-primary px-3 shadow float-end my-4 ${
+                      className={`btn btn-labeled btn-primary px-3 shadow float-end my-2 ${
                         loading && "disabled"
                       }`}
                       onClick={handleSaveRiskAssessment}
@@ -404,6 +404,32 @@ const RiskFactorApproach = () => {
                     )}
                 </div>
               </div>
+              {data?.riskAssessmentList.length !== 0 && (
+                <div>
+                  <div className="row">
+                    <div className="col-lg-12">
+                      <h6>Rating of Score Ranges</h6>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-lg-4">
+                      <div className="px-3 py-2 border-0 card shadow bg-success text-white label-text ">
+                        Low(L) = 1 to 2
+                      </div>
+                    </div>
+                    <div className="col-lg-4">
+                      <div className="px-3 py-2 border-0 card shadow text-white label-text  label-text  label-text bg-yellow">
+                        Moderate(M) = 2 to 3
+                      </div>
+                    </div>
+                    <div className="col-lg-4">
+                      <div className="px-3 py-2 border-0 card shadow  text-white label-text bg-danger">
+                        High(H) = 4 to 5
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </>

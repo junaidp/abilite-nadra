@@ -14,6 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import SubmitDialog from "./submit-dialog";
+import { getNextYears } from "../../../../constants/index";
 
 const JobPrioritization = () => {
   const dispatch = useDispatch();
@@ -233,31 +234,37 @@ const JobPrioritization = () => {
                           </p>
                         </td>
                         <td className="width-100">
-                          <select
-                            className="form-select"
-                            aria-label="Default select example"
-                            value={item?.year || new Date()}
-                            onChange={(event) =>
-                              handleChangeYearValue(event, item?.id)
-                            }
-                            disabled={item?.editable === true ? false : true}
-                            name="year"
-                          >
-                            <option value="">Select Year</option>
-                            <option value={2028}>2028</option>
-                            <option value={2027}>2027</option>
-                            <option value={2026}>2026</option>
-                            <option value={2025}>2025</option>
-                            <option value={2024}>2024</option>
-                            <option value={2023}>2023</option>
-                            <option value={2022}>2022</option>
-                            <option value={2021}>2021</option>
-                            <option value={2020}>2020</option>
-                            <option value={2019}>2019</option>
-                            <option value={2018}>2018</option>
-                            <option value={2017}>2017</option>
-                            <option value={2016}>2016</option>
-                          </select>
+                          {!item?.editable ? (
+                            <input
+                              className="form-control"
+                              value={
+                                item?.year && Number(item?.year) !== 0
+                                  ? item?.year
+                                  : ""
+                              }
+                              disabled
+                            />
+                          ) : (
+                            <select
+                              className="form-select"
+                              aria-label="Default select example"
+                              value={item?.year || new Date()}
+                              onChange={(event) =>
+                                handleChangeYearValue(event, item?.id)
+                              }
+                              disabled={item?.editable === true ? false : true}
+                              name="year"
+                            >
+                              <option value="">Select Year</option>
+                              {getNextYears().map((year, index) => {
+                                return (
+                                  <option value={Number(year)} key={index}>
+                                    {year}
+                                  </option>
+                                );
+                              })}
+                            </select>
+                          )}
                         </td>
                         <td>
                           <div

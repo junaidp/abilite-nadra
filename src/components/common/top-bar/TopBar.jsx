@@ -23,6 +23,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Tooltip from "@mui/material/Tooltip";
 import { CircularProgress } from "@mui/material";
 import moment from "moment";
+import { getYearsRange } from "../../../constants/index";
 
 const TopBar = () => {
   const dispatch = useDispatch();
@@ -95,12 +96,7 @@ const TopBar = () => {
     <header className="app-header shadow-sm mb-3 px-0 ">
       <nav className="navbar navbar-expand-lg navbar-light  navbarWrapMain">
         <div>
-          <img
-            src={logo}
-            className="light-logo"
-            width="110"
-            alt=""
-          />
+          <img src={logo} className="light-logo" width="110" alt="" />
         </div>
         {user[0]?.userId?.role[0]?.name === "USER" &&
           user[0]?.userId?.employeeid?.userHierarchy !==
@@ -177,19 +173,13 @@ const TopBar = () => {
                   }}
                 >
                   <option value="">Select Year</option>
-                  <option value="2028">2028</option>
-                  <option value="2027">2027</option>
-                  <option value="2026">2026</option>
-                  <option value="2025">2025</option>
-                  <option value="2024">2024</option>
-                  <option value="2023">2023</option>
-                  <option value="2022">2022</option>
-                  <option value="2021">2021</option>
-                  <option value="2020">2020</option>
-                  <option value="2019">2019</option>
-                  <option value="2018">2018</option>
-                  <option value="2017">2017</option>
-                  <option value="2016">2016</option>
+                  {getYearsRange().map((year, index) => {
+                    return (
+                      <option value={year} key={index}>
+                        {year}
+                      </option>
+                    );
+                  })}
                 </select>
               )}
 

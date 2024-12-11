@@ -1,3 +1,4 @@
+import moment from "moment";
 const baseUrl = "https://healthy-wolf-certainly.ngrok-free.app";
 
 const handleDownload = ({ base64String, fileName }) => {
@@ -66,10 +67,51 @@ function handleCalculateRiskScore(item) {
   return Number(result.toFixed(2));
 }
 
+function getNextYears() {
+  const currentYear = moment().year();
+  const yearsArray = Array.from({ length: 7 }, (_, i) =>
+    (currentYear + i).toString()
+  );
+  return yearsArray;
+}
+
+function getPreviousYears() {
+  const previousYear = moment().year() - 1;
+  const yearsArray = Array.from({ length: 6 }, (_, i) =>
+    (previousYear - i).toString()
+  );
+  return yearsArray;
+}
+
+function getYearsRange() {
+  const yearsArray = [
+    "2016",
+    "2017",
+    "2018",
+    "2019",
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025",
+    "2026",
+    "2027",
+    "2028",
+    "2029",
+    "2030",
+    "2031",
+  ];
+  return yearsArray;
+}
+
 export {
   baseUrl,
   handleDownload,
   groupObservationsByTitle,
   handleCalculateProbability,
   handleCalculateRiskScore,
+  getNextYears,
+  getPreviousYears,
+  getYearsRange,
 };
