@@ -1,5 +1,5 @@
 import axios from "axios";
-import { baseUrl } from "../../../../constants/index";
+import { baseUrl } from "../../../../config/constants";
 import { setupGetAllRiskFactors } from "./slice";
 
 export const getAllRiskAssessments = async (data, thunkAPI) => {

@@ -20,7 +20,7 @@ import { PDFViewer } from "@react-pdf/renderer";
 import FileUpload from "./components/FileUpload";
 import ConsolidatedObservations from "./components/ConsolidatedObservataion";
 import PDFGenerator from "./components/PDFGenerator";
-import { groupObservationsByTitle } from "../../../../../constants/index";
+import { groupObservationsByTitle } from "../../../../../config/helper"
 
 const ViewInternalAuditConsolidationReport = () => {
   const dispatch = useDispatch();

@@ -1,6 +1,6 @@
 import axios from "axios";
 import React from "react";
-import { baseUrl } from "../../../constants";
+import { baseUrl } from "../../../config/constants";
 import { toast } from "react-toastify";
 import { CircularProgress } from "@mui/material";
 import { useSelector } from "react-redux";

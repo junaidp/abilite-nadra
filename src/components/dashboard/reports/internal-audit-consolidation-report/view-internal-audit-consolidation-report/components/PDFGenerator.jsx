@@ -3,7 +3,7 @@ import moment from "moment";
 import React from "react";
 import font from "../../../../../../font/Poppins-Medium.ttf";
 import Html from "react-pdf-html";
-import { groupObservationsByTitle } from "../../../../../../constants/index";
+import { groupObservationsByTitle } from "../../../../../../config/helper"
 import {
   Document,
   Page,

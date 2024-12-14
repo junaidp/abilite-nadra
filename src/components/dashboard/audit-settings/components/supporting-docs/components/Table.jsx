@@ -2,7 +2,7 @@ import React from "react";
 import { CircularProgress } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import DeleteFileDialog from "./DeleteDailog";
-import { handleDownload } from "../../../../../../constants/index";
+import { handleDownload } from "../../../../../../config/helper";
 
 const Table = ({
   userRole,

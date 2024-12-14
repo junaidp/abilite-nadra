@@ -6,7 +6,7 @@ import {
   setupAuditStepProcedureFileUpdate,
 } from "../../../../global-redux/reducers/audit-engagement/slice";
 import { useSelector, useDispatch } from "react-redux";
-import { handleDownload } from "../../../../constants/index";
+import { handleDownload } from "../../../../config/helper";
 
 const ProcedureFileUpload = ({
   handleChange,

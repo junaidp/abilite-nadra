@@ -6,7 +6,7 @@ import {
   setupConsolidationFileUpdate,
 } from "../../../../../../global-redux/reducers/reports/consolidation-report/slice";
 import { useSelector, useDispatch } from "react-redux";
-import { handleDownload } from "../../../../../../constants/index";
+import { handleDownload } from "../../../../../../config/helper";
 
 const ConsolidationFileUpload = ({ item, setDeleteFileId }) => {
   const dispatch = useDispatch();

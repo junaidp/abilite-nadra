@@ -1,5 +1,5 @@
 import axios from "axios";
-import { baseUrl } from "../../../constants/index";
+import { baseUrl } from "../../../config/constants";
 export const registerUser = async (data, thunkAPI) => {
   try {
     let props = await axios.post(`${baseUrl}/account/registerUser`, data?.data);
@@ -156,12 +156,15 @@ export const updateUser = async (data, thunkAPI) => {
 export const logoutUser = async (_, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
-    let props = await axios.get(`${baseUrl}/account/user/logout`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${user[0]?.token}`,
-      },
-    });
+    let props = await axios.get(
+      `${baseUrl}/account/user/logout?token=${user[0]?.token}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
     return props.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);

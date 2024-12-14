@@ -1,5 +1,5 @@
 import axios from "axios";
-import { baseUrl } from "../../../../constants/index";
+import { baseUrl } from "../../../../config/constants";
 
 export const addProcess = async (data, thunkAPI) => {
   try {

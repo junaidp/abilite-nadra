@@ -2,7 +2,7 @@ import React from "react";
 import {
   handleCalculateRiskScore,
   handleCalculateProbability,
-} from "../../../../../constants/index";
+} from "../../../../../config/helper"
 
 const RiskAssessment = ({ riskAssessments }) => {
   return (

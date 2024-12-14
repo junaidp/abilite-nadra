@@ -21,7 +21,7 @@ import InternalAuditReportBody from "./components/InternalAuditReportBody";
 import Header from "./components/Header";
 import { toast } from "react-toastify";
 import { CircularProgress } from "@mui/material";
-import { groupObservationsByTitle } from "../../../../../constants/index";
+import { groupObservationsByTitle } from "../../../../../config/helper"
 
 const GenerateInternalAuditConsolidationReport = () => {
   const dispatch = useDispatch();

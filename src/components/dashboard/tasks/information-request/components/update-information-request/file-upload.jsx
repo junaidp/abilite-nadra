@@ -5,7 +5,7 @@ import {
   setupTaskFileDelete,
 } from "../../../../../../global-redux/reducers/tasks-management/slice";
 import { useSelector, useDispatch } from "react-redux";
-import { handleDownload } from "../../../../../../constants";
+import { handleDownload } from "../../../../../../config/helper";
 
 const InformationRequestFileUpload = ({ updateTaskId }) => {
   const dispatch = useDispatch();

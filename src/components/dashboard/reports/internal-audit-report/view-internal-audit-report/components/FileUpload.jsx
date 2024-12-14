@@ -1,5 +1,5 @@
 import React from "react";
-import { handleDownload } from "../../../../../../constants/index";
+import { handleDownload } from "../../../../../../config/helper";
 
 const IAHFileUpload = ({ item }) => {
   return (

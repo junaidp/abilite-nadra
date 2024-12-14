@@ -23,7 +23,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Tooltip from "@mui/material/Tooltip";
 import { CircularProgress } from "@mui/material";
 import moment from "moment";
-import { getYearsRange } from "../../../constants/index";
+import { getYearsRange } from "../../../config/helper"
 
 const TopBar = () => {
   const dispatch = useDispatch();

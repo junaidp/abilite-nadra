@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import TableRow from "./components/TableRow";
-import { baseUrl } from "../../../../../../constants/index";
+import { baseUrl } from "../../../../../../config/constants";
 import ApproveDialog from "./components/ApproveDialog";
 import SubmitDialog from "./components/submit-dialog";
 

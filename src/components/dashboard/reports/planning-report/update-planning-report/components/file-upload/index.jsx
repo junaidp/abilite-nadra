@@ -5,7 +5,7 @@ import {
   setupPlanningReportFileDelete,
 } from "../../../../../../../global-redux/reducers/reports/planing-report/slice";
 import { useSelector, useDispatch } from "react-redux";
-import { handleDownload } from "../../../../../../../constants";
+import { handleDownload } from "../../../../../../../config/helper";
 
 const PlanningReportFileUpload = ({ reportId, item }) => {
   const dispatch = useDispatch();

@@ -6,7 +6,7 @@ import {
   setupReportingFileUpdate,
 } from "../../../../../../../global-redux/reducers/reporting/slice";
 import { useSelector, useDispatch } from "react-redux";
-import { handleDownload } from "../../../../../../../constants/index";
+import { handleDownload } from "../../../../../../../config/helper";
 
 const ReportingFileUpload = ({ item, setDeleteFileId }) => {
   const dispatch = useDispatch();

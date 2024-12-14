@@ -7,7 +7,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getYearsRange } from "../../../constants/index";
+import { getYearsRange } from "../../../config/helper"
 import {
   changeActiveLink,
   changeExpanded,

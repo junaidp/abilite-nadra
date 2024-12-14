@@ -1,5 +1,5 @@
 import axios from "axios";
-import { baseUrl } from "../../../constants/index";
+import { baseUrl } from "../../../config/constants";
 import { setupGetAllDefaultRCM } from "./slice";
 
 export const getAllAuditEngagement = async (data, thunkAPI) => {

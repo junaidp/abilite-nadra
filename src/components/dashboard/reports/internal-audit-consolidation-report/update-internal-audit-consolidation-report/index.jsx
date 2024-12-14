@@ -17,7 +17,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import InternalAuditReportBody from "./components/InternalAuditReportBody";
 import Header from "./components/Header";
-import { groupObservationsByTitle } from "../../../../../constants/index";
+import { groupObservationsByTitle } from "../../../../../config/helper"
 
 const UpdateInternalAuditConsolidationReport = () => {
   const dispatch = useDispatch();

@@ -18,7 +18,7 @@ import {
 import {
   handleCalculateRiskScore,
   handleCalculateProbability,
-} from "../../../../../constants/index";
+} from "../../../../../config/helper"
 
 import RiskAssessmentListRows from "./components/risk-assessment-list-rows";
 import { CircularProgress } from "@mui/material";
@@ -393,7 +393,7 @@ const RiskFactorApproach = () => {
                     performRiskAssessmentObject?.riskAssessmentList?.length >
                       0 && (
                       <div
-                        className={`btn btn-labeled btn-primary px-3 shadow float-end my-4 mx-4 `}
+                        className={`btn btn-labeled btn-primary px-3 shadow float-end my-2 mx-4 `}
                         onClick={() => setShowSubmitDialog(true)}
                       >
                         <span className="btn-label me-2">

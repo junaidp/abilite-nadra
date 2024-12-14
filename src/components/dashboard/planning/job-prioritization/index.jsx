@@ -14,7 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import SubmitDialog from "./submit-dialog";
-import { getNextYears } from "../../../../constants/index";
+import { getNextYears } from "../../../../config/helper"
 
 const JobPrioritization = () => {
   const dispatch = useDispatch();

@@ -6,7 +6,7 @@ import {
   setupIahFileUpdate,
 } from "../../../../../../global-redux/reducers/reports/internal-audit-report/slice";
 import { useSelector, useDispatch } from "react-redux";
-import { handleDownload } from "../../../../../../constants/index";
+import { handleDownload } from "../../../../../../config/helper";
 
 const IAHFileUpload = ({ item, setDeleteFileId }) => {
   const dispatch = useDispatch();

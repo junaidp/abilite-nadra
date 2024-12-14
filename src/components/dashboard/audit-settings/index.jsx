@@ -17,7 +17,7 @@ import {
   setupGetFinancialQuantifiableYesForCompany,
   setupGetFinancialQuantifiableNoForCompany,
 } from "../../../global-redux/reducers/settings/business-objective/slice.jsx";
-import { setupGetAllPreviousObservations } from "../../../global-redux/reducers/settings/previous-observation/slice.jsx";
+// import { setupGetAllPreviousObservations } from "../../../global-redux/reducers/settings/previous-observation/slice.jsx";
 import UpdateUserDialog from "../.././modals/update-user-dialog";
 import TFA from "./components/tfa/index.jsx";
 import CheckList from "./components/checklist";
@@ -29,7 +29,7 @@ import RiskFactor from "./components/risk-factor";
 import UserManagement from "./components/user";
 import RCMLibrary from "./components/rcm-library";
 import BusinessObjective from "./components/business-objective/index.jsx";
-import PreviousObservation from "./components/previous-observation/index.jsx";
+// import PreviousObservation from "./components/previous-observation/index.jsx";
 import Process from "./components/process";
 import Notification from "./components/notification";
 const AuditSettings = () => {
@@ -82,9 +82,9 @@ const AuditSettings = () => {
       if (currentSettingOption === "users") {
         dispatch(setupGetAllUsers({ shareWith: true }));
       }
-      if (currentSettingOption === "previousObservations") {
-        dispatch(setupGetAllPreviousObservations({ companyId: companyId }));
-      }
+      // if (currentSettingOption === "previousObservations") {
+      //   dispatch(setupGetAllPreviousObservations({ companyId: companyId }));
+      // }
       if (currentSettingOption === "business-objective") {
         dispatch(setupGetFinancialQuantifiableYesForCompany({ companyId }));
         dispatch(setupGetFinancialQuantifiableNoForCompany({ companyId }));
@@ -289,7 +289,7 @@ const AuditSettings = () => {
                     Notification
                   </button>
                 )}
-                {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+                {/* {(userRole === "ADMIN" || userHierarchy === "IAH") && (
                   <button
                     className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
                     id="previous-observation-tab"
@@ -304,7 +304,7 @@ const AuditSettings = () => {
                   >
                     Previous Observations
                   </button>
-                )}
+                )} */}
                 <button
                   className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
                   id="nav-tfa-tab"
@@ -358,11 +358,11 @@ const AuditSettings = () => {
                 currentSettingOption={currentSettingOption}
               />
               {userRole !== "ADMIN" && <Notification />}
-              {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+              {/* {(userRole === "ADMIN" || userHierarchy === "IAH") && (
                 <PreviousObservation
                   currentSettingOption={currentSettingOption}
                 />
-              )}
+              )} */}
               {userRole === "ADMIN" && (
                 <UserManagement
                   setUserManagementDialog={setUserManagementDialog}
