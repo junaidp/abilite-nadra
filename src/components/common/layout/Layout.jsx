@@ -111,11 +111,11 @@ const Layout = () => {
               <Routes>
                 <Route path="dashboard" element={<ManagementAuditeeView />} />
                 <Route
-                  path="follow-up-particulars"
+                  path="follow-up-particulars/:id"
                   element={<FollowUpRoute />}
                 />
                 <Route
-                  path="reporting-particulars"
+                  path="reporting-particulars/:id"
                   element={<ReportingRoute />}
                 />
               </Routes>
