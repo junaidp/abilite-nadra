@@ -3,7 +3,6 @@ import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
 } from "../../../../../global-redux/reducers/common/slice";
-import { useSearchParams } from "react-router-dom";
 import {
   setupGetSingleInternalAuditReport,
   handleResetData,
@@ -21,12 +20,14 @@ import PDFGenerator from "./components/PDFGenerator";
 import { PDFViewer } from "@react-pdf/renderer";
 import FileUpload from "./components/FileUpload";
 import { Chip } from "@mui/material";
+import { decryptString } from "../../../../../config/helper";
+import { useParams } from "react-router-dom";
 
 const ViewInternalAuditReport = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const reportId = searchParams.get("reportId");
+  const { id } = useParams();
+  const reportId = decryptString(id);
   const { user } = useSelector((state) => state?.auth);
   const { loading, singleInternalAuditReport } = useSelector(
     (state) => state?.internalAuditReport

@@ -10,19 +10,20 @@ import {
   resetFileUploadAddSuccess,
   setupGetSingleInternalAuditReportAfterSave,
 } from "../../../../../global-redux/reducers/reports/consolidation-report/slice";
-import { useSearchParams } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import InternalAuditReportBody from "./components/InternalAuditReportBody";
 import Header from "./components/Header";
-import { groupObservationsByTitle } from "../../../../../config/helper"
+import { groupObservationsByTitle } from "../../../../../config/helper";
+import { decryptString } from "../../../../../config/helper";
+import { useParams } from "react-router-dom";
 
 const UpdateInternalAuditConsolidationReport = () => {
   const dispatch = useDispatch();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const reportId = searchParams.get("reportId");
+  const { id } = useParams();
+  const reportId = decryptString(id);
   const [consolidatedObservations, setConsolidatedObservations] =
     React.useState([]);
   const navigate = useNavigate();

@@ -1,6 +1,5 @@
 import React from "react";
 import Headers from "./components/header/index";
-import { useSearchParams } from "react-router-dom";
 import {
   handleCleanUp,
   setupGetSingleReport,
@@ -17,11 +16,13 @@ import { CircularProgress } from "@mui/material";
 import Editors from "./components/editors/index";
 import HeadingTable from "./components/heading-table";
 import PlanningReportFileUpload from "./components/file-upload";
+import { decryptString } from "../../../../../config/helper";
+import { useParams } from "react-router-dom";
 
 const UpdatePlanningReport = () => {
   const dispatch = useDispatch();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const reportId = searchParams.get("reportId");
+  const { id } = useParams();
+  const reportId = decryptString(id);
   const { user } = useSelector((state) => state?.auth);
   const { loading, updateLoading, singleReportObject, reportAddSuccess } =
     useSelector((state) => state?.planningReport);

@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { decryptString } from "../../../../../config/helper";
 import {
   resetAddEngagementSuccess,
   setupGetSingleEngagementObject,
@@ -18,7 +19,7 @@ import {
   InitialLoadSidebarActiveLink,
 } from "../../../../../global-redux/reducers/common/slice";
 import { useDispatch, useSelector } from "react-redux";
-import { useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import IndustryUpdates from "./components/industry-updates";
 import CompanyUpdates from "./components/company-updates";
 import BusinessObjectiveMapProcess from "./components/business-objective-map-process";
@@ -32,8 +33,8 @@ const BusinessObjectiveRedirect = () => {
   const { company } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
   const [showSubmitDialog, setShowSubmitDialog] = React.useState(false);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const engagementId = searchParams.get("engagementId");
+  const { id } = useParams();
+  const engagementId = decryptString(id);
   const {
     planingEngagementSingleObject,
     engagementAddSuccess,

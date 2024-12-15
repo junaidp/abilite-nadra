@@ -2,7 +2,6 @@ import React from "react";
 import "./index.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useSearchParams } from "react-router-dom";
 import {
   changeKickOffRequest,
   changeActiveLink,
@@ -30,12 +29,14 @@ import AuditSteps from "./component/audit-steps";
 import DefaultRCM from "./component/default-rcm/index";
 import ComplianceCheckList from "./component/compliace-checklist";
 import { CircularProgress } from "@mui/material";
+import { decryptString } from "../../../../config/helper";
+import { useParams } from "react-router-dom";
 
 const KickOff = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const auditEngagementId = searchParams.get("auditEngagementId");
+  const { id } = useParams();
+  const auditEngagementId = decryptString(id);
   const { user } = useSelector((state) => state?.auth);
   const {
     auditEngagementAddSuccess,

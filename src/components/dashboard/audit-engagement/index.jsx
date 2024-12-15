@@ -5,6 +5,7 @@ import Pagination from "@mui/material/Pagination";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { encryptAndEncode } from "../../../config/helper";
 import { setupGetAllAuditEngagement } from "../../../global-redux/reducers/audit-engagement/slice";
 import { Chip, CircularProgress } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
@@ -184,12 +185,17 @@ const AuditEngagement = () => {
                                 </div>
                               </td>
                               <td className="kink-off">
-                                <Link
-                                  to={`/audit/kick-off?auditEngagementId=${item?.id}`}
+                                <div
+                                  onClick={() => {
+                                    const encryptedId = encryptAndEncode(
+                                      item?.id.toString()
+                                    );
+                                    navigate(`/audit/kick-off/${encryptedId}`);
+                                  }}
                                   className="kink-off"
                                 >
                                   {item?.status}
-                                </Link>
+                                </div>
                               </td>
                               <td>
                                 <i
@@ -203,11 +209,12 @@ const AuditEngagement = () => {
                               <td>
                                 <i
                                   className="fa-eye fa f-18 cursor-pointer"
-                                  onClick={() =>
-                                    navigate(
-                                      `/audit/kick-off?auditEngagementId=${item?.id}`
-                                    )
-                                  }
+                                  onClick={() => {
+                                    const encryptedId = encryptAndEncode(
+                                      item?.id.toString()
+                                    );
+                                    navigate(`/audit/kick-off/${encryptedId}`);
+                                  }}
                                 ></i>
                               </td>
                             </tr>

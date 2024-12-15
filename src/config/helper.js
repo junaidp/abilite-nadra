@@ -1,4 +1,7 @@
 import moment from "moment";
+import CryptoJS from "crypto-js";
+import { secretKey } from "./constants";
+import { toast } from "react-toastify";
 
 const handleDownload = ({ base64String, fileName }) => {
   const byteCharacters = atob(base64String);
@@ -96,6 +99,28 @@ function getYearsRange() {
   return yearsArray;
 }
 
+const encryptAndEncode = (id) => {
+  const encrypted = CryptoJS.AES.encrypt(id, secretKey).toString();
+  return encodeURIComponent(encrypted);
+};
+
+const decryptString = (encryptedString) => {
+  if (typeof encryptedString !== "string" || encryptedString.trim() === "") {
+    toast.error("Invalid input for decryption");
+    return;
+  }
+  try {
+    const decoded = decodeURIComponent(encryptedString);
+    const bytes = CryptoJS.AES.decrypt(decoded, secretKey);
+    const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+    if (!decrypted) toast.error("Decryption failed: invalid key");
+    return decrypted;
+  } catch (error) {
+    toast.error("Decryption failed:", error);
+    return;
+  }
+};
+
 export {
   handleDownload,
   groupObservationsByTitle,
@@ -103,4 +128,6 @@ export {
   handleCalculateRiskScore,
   getNextYears,
   getYearsRange,
+  encryptAndEncode,
+  decryptString,
 };

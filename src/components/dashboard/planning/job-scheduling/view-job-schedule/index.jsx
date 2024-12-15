@@ -6,6 +6,7 @@ import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
 } from "../../../../../global-redux/reducers/common/slice";
+import { encryptAndEncode } from "../../../../../config/helper";
 import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
 import moment from "moment/moment";
@@ -160,11 +161,14 @@ const ViewJobSchedule = () => {
                             <span className="btn-label me-2">
                               <i
                                 className="fa fa-edit  px-3 f-18 cursor-pointer"
-                                onClick={() =>
+                                onClick={() => {
+                                  const encryptedId = encryptAndEncode(
+                                    item?.id.toString()
+                                  );
                                   navigate(
-                                    `/audit/start-scheduling?jobScheduling=${item?.id}`
-                                  )
-                                }
+                                    `/audit/start-scheduling/${encryptedId}`
+                                  );
+                                }}
                               ></i>
                             </span>
                           </td>

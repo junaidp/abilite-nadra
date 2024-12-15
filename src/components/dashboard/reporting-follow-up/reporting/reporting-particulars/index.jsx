@@ -25,12 +25,14 @@ import ViewFirstFeedBackDialog from "../../components/FirstFeedBack";
 import ViewSecondFeedBackDialog from "../../components/SecondFeedBack";
 import SubmitDialog from "./component/submit-dialog";
 import { toast } from "react-toastify";
+import { decryptString } from "../../../../../config/helper";
+import { useParams } from "react-router-dom";
 
 const ReportingParticulars = () => {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const reportingId = searchParams.get("reportingId");
+  const { id } = useParams();
+  const reportingId = decryptString(id);
   const { user } = useSelector((state) => state?.auth);
   const { company } = useSelector((state) => state?.common);
   const {

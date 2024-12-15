@@ -16,6 +16,7 @@ import Typography from "@mui/material/Typography";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
+import { encryptAndEncode } from "../../../../config/helper";
 import Select from "@mui/material/Select";
 
 const poppinsStyle = {
@@ -39,15 +40,17 @@ const BusinessObjective = () => {
   const handleChange = (_, value) => {
     setPage(value);
   };
+
   function handleClickEngagement(id, name) {
+    const encryptedId = encryptAndEncode(id.toString());
     if (name === "Business Objective") {
-      navigate(`/audit/business-objectives-redirect?engagementId=${id}`);
+      navigate(`/audit/business-objectives-redirect/${encryptedId}`);
     }
     if (name === "Special Project/Audit") {
-      navigate(`/audit/special-project-audit?engagementId=${id}`);
+      navigate(`/audit/special-project-audit/${encryptedId}`);
     }
     if (name === "Compliance Checklist") {
-      navigate(`/audit/compliance-checklist-card?engagementId=${id}`);
+      navigate(`/audit/compliance-checklist/${encryptedId}`);
     }
   }
 

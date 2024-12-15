@@ -10,7 +10,8 @@ import {
   handleCleanUp,
   setupPerformInitialRiskAssessment,
 } from "../../../../../global-redux/reducers/planing/risk-assessment/slice";
-import { useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { decryptString } from "../../../../../config/helper";
 import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
@@ -18,7 +19,7 @@ import {
 import {
   handleCalculateRiskScore,
   handleCalculateProbability,
-} from "../../../../../config/helper"
+} from "../../../../../config/helper";
 
 import RiskAssessmentListRows from "./components/risk-assessment-list-rows";
 import { CircularProgress } from "@mui/material";
@@ -29,8 +30,8 @@ const RiskFactorApproach = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showSubmitDialog, setShowSubmitDialog] = React.useState(false);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const riskAssessmentId = searchParams.get("riskAssessmentId");
+  const { id } = useParams();
+  const riskAssessmentId = decryptString(id);
   const { user } = useSelector((state) => state?.auth);
   const {
     performRiskAssessmentObject,

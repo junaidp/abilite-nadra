@@ -133,20 +133,22 @@ const UserManagement = ({
                           <td>{userItem?.role[0]?.name || ""}</td>
                           <td>{userItem?.company[0]?.companyName || ""}</td>
                           <td>
-                            <i
-                              className="fa fa-edit   f-18 cursor-pointer"
-                              onClick={() => {
-                                setUpdateUserObject(userItem);
-                                setUpdateUserDialog(true);
-                              }}
-                            ></i>
-                            <i
-                              className="fa fa-trash text-danger mx-2 f-18 cursor-pointer"
-                              onClick={() => {
-                                setCurrentUserId(userItem?.id);
-                                setUserDeleteDialog(true);
-                              }}
-                            ></i>
+                            <div className="d-flex w-100 h-100 gap-2">
+                              <i
+                                className="fa fa-edit   f-18 cursor-pointer"
+                                onClick={() => {
+                                  setUpdateUserObject(userItem);
+                                  setUpdateUserDialog(true);
+                                }}
+                              ></i>
+                              <i
+                                className="fa fa-trash text-danger mx-2 f-18 cursor-pointer"
+                                onClick={() => {
+                                  setCurrentUserId(userItem?.id);
+                                  setUserDeleteDialog(true);
+                                }}
+                              ></i>
+                            </div>
                           </td>
                         </tr>
                       );

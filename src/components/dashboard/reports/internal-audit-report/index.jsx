@@ -19,6 +19,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { encryptAndEncode } from "../../../../config/helper";
 
 const InternalAuditReport = () => {
   const navigate = useNavigate();
@@ -254,11 +255,14 @@ const InternalAuditReport = () => {
                           <div className="d-flex flex-wrap gap-4">
                             <i
                               className="fa-eye fa f-18 cursor-pointer"
-                              onClick={() =>
+                              onClick={() => {
+                                const encryptedId = encryptAndEncode(
+                                  item?.id.toString()
+                                );
                                 navigate(
-                                  `/audit/view-internal-audit-report?reportId=${item?.id}`
-                                )
-                              }
+                                  `/audit/view-internal-audit-report/${encryptedId}`
+                                );
+                              }}
                             ></i>
                             {(Number(item?.createdBy) ===
                               Number(user[0]?.userId?.id) &&
@@ -267,11 +271,14 @@ const InternalAuditReport = () => {
                               "IAH" ? (
                               <i
                                 className="fa fa-edit f-18 cursor-pointer"
-                                onClick={() =>
+                                onClick={() => {
+                                  const encryptedId = encryptAndEncode(
+                                    item?.id.toString()
+                                  );
                                   navigate(
-                                    `/audit/update-internal-audit-report?reportId=${item?.id}`
-                                  )
-                                }
+                                    `/audit/update-internal-audit-report/${encryptedId}`
+                                  );
+                                }}
                               ></i>
                             ) : null}
                             {(Number(item?.createdBy) ===
@@ -347,11 +354,14 @@ const InternalAuditReport = () => {
                               >
                                 <i
                                   className="fa fa-download f-18 cursor-pointer"
-                                  onClick={() =>
+                                  onClick={() => {
+                                    const encryptedId = encryptAndEncode(
+                                      item?.id.toString()
+                                    );
                                     navigate(
-                                      `/audit/view-internal-audit-report?reportId=${item?.id}`
-                                    )
-                                  }
+                                      `/audit/view-internal-audit-report/${encryptedId}`
+                                    );
+                                  }}
                                 ></i>
                               </Tooltip>
                             )}

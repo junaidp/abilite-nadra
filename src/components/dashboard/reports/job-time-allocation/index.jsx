@@ -9,6 +9,7 @@ import { CircularProgress } from "@mui/material";
 import moment from "moment";
 import Pagination from "@mui/material/Pagination";
 import { useNavigate } from "react-router-dom";
+import { encryptAndEncode } from "../../../../config/helper";
 
 const ResourceTimeAllocation = () => {
   const navigate = useNavigate();
@@ -157,7 +158,7 @@ const ResourceTimeAllocation = () => {
               onChange={(event) => handleChange(event)}
             >
               <option value="">All</option>
-              {locations?.map((location,index) => {
+              {locations?.map((location, index) => {
                 return (
                   <option value={location?.description} key={index}>
                     {location?.description}
@@ -238,11 +239,14 @@ const ResourceTimeAllocation = () => {
                           <td>
                             <i
                               className="fa-eye fa f-18 cursor-pointer"
-                              onClick={() =>
+                              onClick={() => {
+                                const encryptedId = encryptAndEncode(
+                                  job[0].toString()
+                                );
                                 navigate(
-                                  `/audit/start-scheduling?jobScheduling=${job[0]}`
-                                )
-                              }
+                                  `/audit/start-scheduling/${encryptedId}`
+                                );
+                              }}
                             ></i>
                           </td>
                         </tr>

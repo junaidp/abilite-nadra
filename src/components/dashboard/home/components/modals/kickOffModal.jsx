@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { encryptAndEncode } from "../../../../../config/helper";
 
 const KickOffModal = ({ setShowKickOffDialog, kickOffId }) => {
   const navigate = useNavigate();
@@ -21,9 +22,10 @@ const KickOffModal = ({ setShowKickOffDialog, kickOffId }) => {
         <div className="col-lg-6 text-end">
           <button
             className={`btn btn-primary float-start ${loading && "disabled"}`}
-            onClick={() =>
-              navigate(`/audit/kick-off?auditEngagementId=${kickOffId}`)
-            }
+            onClick={() => {
+              const encryptedId = encryptAndEncode(kickOffId.toString());
+              navigate(`/audit/kick-off/${encryptedId}`);
+            }}
           >
             Kick Off
           </button>

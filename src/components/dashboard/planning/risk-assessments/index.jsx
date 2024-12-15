@@ -12,6 +12,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { encryptAndEncode } from "../../../../config/helper";
 
 const poppinsStyle = {
   fontFamily: '"Poppins", sans-serif',
@@ -34,7 +35,8 @@ const RiskAssessments = () => {
   };
 
   function handleUpdateRiskAssessment(item) {
-    navigate(`/audit/risk-factor-approach?riskAssessmentId=${item?.id}`);
+    const encryptedId = encryptAndEncode(item?.id.toString());
+    navigate(`/audit/risk-factor-approach/${encryptedId}`);
   }
 
   function handleChangeItemsPerPage(event) {

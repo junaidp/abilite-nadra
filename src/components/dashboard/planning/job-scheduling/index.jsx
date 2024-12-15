@@ -1,6 +1,7 @@
 import React from "react";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
+import { encryptAndEncode } from "../../../../config/helper";
 import Pagination from "@mui/material/Pagination";
 import { setupGetAllJobScheduling } from "../../../../global-redux/reducers/planing/job-scheduling/slice";
 import { useSelector, useDispatch } from "react-redux";
@@ -167,11 +168,14 @@ const JobScheduling = () => {
                           <td>
                             <div
                               className="btn btn-outline-light text-primary  px-3 shadow"
-                              onClick={() =>
+                              onClick={() => {
+                                const encryptedId = encryptAndEncode(
+                                  item?.id.toString()
+                                );
                                 navigate(
-                                  `/audit/start-scheduling?jobScheduling=${item?.id}`
-                                )
-                              }
+                                  `/audit/start-scheduling/${encryptedId}`
+                                );
+                              }}
                             >
                               <span className="btn-label me-2">
                                 <i className="fa fa-play"></i>

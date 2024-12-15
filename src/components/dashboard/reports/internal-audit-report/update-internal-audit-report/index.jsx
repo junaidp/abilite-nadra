@@ -11,17 +11,18 @@ import {
   resetInternalAuditReportAddSuccess,
   resetFileUploadAddSuccess,
 } from "../../../../../global-redux/reducers/reports/internal-audit-report/slice";
-import { useSearchParams } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import InternalAuditReportBody from "./components/InternalAuditReportBody";
 import Header from "./components/Header";
+import { decryptString } from "../../../../../config/helper";
+import { useParams } from "react-router-dom";
 
 const UpdateInternalAuditReport = () => {
   const dispatch = useDispatch();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const reportId = searchParams.get("reportId");
+  const { id } = useParams();
+  const reportId = decryptString(id);
   const navigate = useNavigate();
   const { user } = useSelector((state) => state?.auth);
   const {

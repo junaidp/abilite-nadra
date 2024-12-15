@@ -4,6 +4,7 @@ import { setupGetAllReporting } from "../../../../global-redux/reducers/reportin
 import { useDispatch, useSelector } from "react-redux";
 import { CircularProgress, Chip } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
+import { encryptAndEncode } from "../../../../config/helper";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -140,11 +141,14 @@ const Reporting = () => {
                           <td>
                             <a
                               className=" text-primary  fw-bold f-12"
-                              onClick={() =>
+                              onClick={() => {
+                                const encryptedId = encryptAndEncode(
+                                  item?.id.toString()
+                                );
                                 navigate(
-                                  `/audit/reporting-particulars?reportingId=${item?.id}`
-                                )
-                              }
+                                  `/audit/reporting-particulars/${encryptedId}`
+                                );
+                              }}
                             >
                               {item?.title}
                             </a>
@@ -177,11 +181,14 @@ const Reporting = () => {
                           </td>
                           <td>
                             <i
-                              onClick={() =>
+                              onClick={() => {
+                                const encryptedId = encryptAndEncode(
+                                  item?.id.toString()
+                                );
                                 navigate(
-                                  `/audit/reporting-particulars?reportingId=${item?.id}`
-                                )
-                              }
+                                  `/audit/reporting-particulars/${encryptedId}`
+                                );
+                              }}
                               className="fa fa-eye f-18 cursor-pointer"
                             ></i>
                           </td>

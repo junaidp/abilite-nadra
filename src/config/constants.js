@@ -1,2 +1,4 @@
 const baseUrl = "https://healthy-wolf-certainly.ngrok-free.app";
-export { baseUrl };
+const secretKey = "u&>d_JEw#=v]OU@";
+
+export { baseUrl, secretKey };

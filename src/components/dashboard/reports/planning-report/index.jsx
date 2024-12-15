@@ -15,6 +15,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { encryptAndEncode } from "../../../../config/helper";
 
 const PlanningReport = () => {
   const dispatch = useDispatch();
@@ -203,11 +204,14 @@ const PlanningReport = () => {
                             <div className="d-flex flex-wrap gap-4">
                               <i
                                 className="fa fa-eye text-primary f-18 cursor-pointer"
-                                onClick={() =>
+                                onClick={() => {
+                                  const encryptedId = encryptAndEncode(
+                                    item?.id.toString()
+                                  );
                                   navigate(
-                                    `/audit/view-planning-report?reportId=${item?.id}`
-                                  )
-                                }
+                                    `/audit/view-planning-report/${encryptedId}`
+                                  );
+                                }}
                               ></i>
                               {item?.reportStatus === "Draft" &&
                                 (item?.createdBy === user[0]?.userId?.id ||
@@ -215,11 +219,14 @@ const PlanningReport = () => {
                                     "IAH") && (
                                   <i
                                     className="fa fa-edit text-secondary f-18 cursor-pointer"
-                                    onClick={() =>
+                                    onClick={() => {
+                                      const encryptedId = encryptAndEncode(
+                                        item?.id.toString()
+                                      );
                                       navigate(
-                                        `/audit/update-planning-report?reportId=${item?.id}`
-                                      )
-                                    }
+                                        `/audit/update-planning-report/${encryptedId}`
+                                      );
+                                    }}
                                   ></i>
                                 )}
                               {item?.reportStatus === "Draft" &&

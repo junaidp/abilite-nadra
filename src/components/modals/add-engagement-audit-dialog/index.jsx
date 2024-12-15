@@ -7,10 +7,11 @@ import {
 } from "../../../global-redux/reducers/planing/engagement/slice";
 import { useDispatch, useSelector } from "react-redux";
 import { CircularProgress } from "@mui/material";
+import { encryptAndEncode } from "../../../config/helper";
 
 const AddEngagementAuditDialog = ({ setBusinessObjectiveDialog }) => {
-  let dispatch = useDispatch();
-  let navigate = useNavigate();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [route, setRoute] = React.useState("");
   const { engagementAddSuccess, loading, planingEngagementSingleObject } =
     useSelector((state) => state.planningEngagement);
@@ -38,10 +39,12 @@ const AddEngagementAuditDialog = ({ setBusinessObjectiveDialog }) => {
   React.useEffect(() => {
     if (engagementAddSuccess) {
       dispatch(resetAddEngagementSuccess());
+
       if (planingEngagementSingleObject?.engagement) {
-        navigate(
-          `${route}?engagementId=${planingEngagementSingleObject?.engagement}`
+        const encryptedId = encryptAndEncode(
+          planingEngagementSingleObject?.engagement.toString()
         );
+        navigate(`${route}/${encryptedId}`);
       }
     }
   }, [planingEngagementSingleObject]);
@@ -175,7 +178,7 @@ const AddEngagementAuditDialog = ({ setBusinessObjectiveDialog }) => {
             type="button"
             onClick={() =>
               addEngagement(
-                "/audit/compliance-checklist-card",
+                "/audit/compliance-checklist",
                 "Compliance Checklist"
               )
             }
@@ -183,7 +186,7 @@ const AddEngagementAuditDialog = ({ setBusinessObjectiveDialog }) => {
             <div className="card p-0 border-0">
               <div className="card-content">
                 <div className="card border main-card shadow rounded">
-                  {loading && route === "/audit/compliance-checklist-card" ? (
+                  {loading && route === "/audit/compliance-checklist" ? (
                     <div className="d-flex justify-center min-h-140 align-items-center">
                       <CircularProgress />
                     </div>

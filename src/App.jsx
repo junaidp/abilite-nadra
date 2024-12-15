@@ -138,20 +138,20 @@ const App = () => {
               element={<GeneratePlanningReport />}
             />
             <Route
-              path="update-planning-report"
+              path="update-planning-report/:id"
               element={<UpdatePlanningReport />}
             />
             <Route
-              path="view-planning-report"
+              path="view-planning-report/:id"
               element={<ViewPlanningReport />}
             />
             <Route
               path="information-request"
               element={<InformationRequest />}
             />
-            <Route path="start-scheduling" element={<StartScheduling />} />
+            <Route path="start-scheduling/:id" element={<StartScheduling />} />
             <Route
-              path="business-objectives-redirect"
+              path="business-objectives-redirect/:id"
               element={<BusinessObjectiveRedirect />}
             />
             <Route
@@ -160,27 +160,27 @@ const App = () => {
             />
 
             <Route
-              path="special-project-audit"
+              path="special-project-audit/:id"
               element={<SpecialProjectAudit />}
             />
             <Route
-              path="compliance-checklist-card"
+              path="compliance-checklist/:id"
               element={<ComplianceCheckListCard />}
             />
-            <Route path="kick-off" element={<KickOff />} />
+            <Route path="kick-off/:id" element={<KickOff />} />
 
             <Route
-              path="risk-factor-approach"
+              path="risk-factor-approach/:id"
               element={<RiskFactorApproach />}
             />
             <Route
-              path="reporting-particulars"
+              path="reporting-particulars/:id"
               element={<AuditParticulars />}
             />
             <Route path="follow-up" element={<FollowUp />} />
             <Route path="reportings" element={<Reporting />} />
             <Route
-              path="follow-up-particulars"
+              path="follow-up-particulars/:id"
               element={<FollowUpParticulars />}
             />
             <Route path="audit-settings" element={<AuditSettings />} />
@@ -193,11 +193,11 @@ const App = () => {
               element={<GenerateInternalAuditReport />}
             />
             <Route
-              path="view-internal-audit-report"
+              path="view-internal-audit-report/:id"
               element={<ViewInternalAuditReport />}
             />
             <Route
-              path="update-internal-audit-report"
+              path="update-internal-audit-report/:id"
               element={<UpdateInternalAuditReport />}
             />
             <Route
@@ -209,11 +209,11 @@ const App = () => {
               element={<GenerateInternalAuditConsolidationReport />}
             />
             <Route
-              path="view-internal-audit-consolidation-report"
+              path="view-internal-audit-consolidation-report/:id"
               element={<ViewInternalAuditConsolidationReport />}
             />
             <Route
-              path="update-internal-audit-consolidation-report"
+              path="update-internal-audit-consolidation-report/:id"
               element={<UpdateInternalAuditConsolidationReport />}
             />
             <Route

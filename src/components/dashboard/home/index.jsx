@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import PieChartComponent from "./components/pie-chart/PieChart";
 import AreaChartComponent from "./components/area-chart/AreaChart";
 import KickOffModal from "./components/modals/kickOffModal";
+import { encryptAndEncode } from "../../../config/helper";
 
 const DashboardHome = () => {
   const navigate = useNavigate();
@@ -156,11 +157,14 @@ const DashboardHome = () => {
                                     <h5
                                       className="card-title cursor-pointer mb-4"
                                       key={index}
-                                      onClick={() =>
+                                      onClick={() => {
+                                        const encryptedId = encryptAndEncode(
+                                          job?.id.toString()
+                                        );
                                         navigate(
-                                          `/audit/kick-off?auditEngagementId=${job?.id}`
-                                        )
-                                      }
+                                          `/audit/kick-off/${encryptedId}`
+                                        );
+                                      }}
                                     >
                                       {job?.name}
                                     </h5>
@@ -224,11 +228,14 @@ const DashboardHome = () => {
                                     <h5
                                       className="card-title cursor-pointer mb-4"
                                       key={index}
-                                      onClick={() =>
+                                      onClick={() => {
+                                        const encryptedId = encryptAndEncode(
+                                          job?.id.toString()
+                                        );
                                         navigate(
-                                          `/audit/reporting-particulars?reportingId=${job?.id}`
-                                        )
-                                      }
+                                          `/audit/reporting-particulars/${encryptedId}`
+                                        );
+                                      }}
                                     >
                                       {job?.name}
                                     </h5>
@@ -258,11 +265,14 @@ const DashboardHome = () => {
                                     <h5
                                       className="card-title cursor-pointer mb-4"
                                       key={index}
-                                      onClick={() =>
+                                      onClick={() => {
+                                        const encryptedId = encryptAndEncode(
+                                          job?.id.toString()
+                                        );
                                         navigate(
-                                          `/audit/reporting-particulars?reportingId=${job?.id}`
-                                        )
-                                      }
+                                          `/audit/reporting-particulars/${encryptedId}`
+                                        );
+                                      }}
                                     >
                                       {job?.name}
                                     </h5>

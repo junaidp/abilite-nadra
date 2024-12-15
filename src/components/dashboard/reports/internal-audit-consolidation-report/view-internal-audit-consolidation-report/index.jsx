@@ -3,7 +3,6 @@ import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
 } from "../../../../../global-redux/reducers/common/slice";
-import { useSearchParams } from "react-router-dom";
 import {
   setupGetSingleInternalAuditReport,
   handleResetData,
@@ -20,13 +19,15 @@ import { PDFViewer } from "@react-pdf/renderer";
 import FileUpload from "./components/FileUpload";
 import ConsolidatedObservations from "./components/ConsolidatedObservataion";
 import PDFGenerator from "./components/PDFGenerator";
-import { groupObservationsByTitle } from "../../../../../config/helper"
+import { groupObservationsByTitle } from "../../../../../config/helper";
+import { decryptString } from "../../../../../config/helper";
+import { useParams } from "react-router-dom";
 
 const ViewInternalAuditConsolidationReport = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const reportId = searchParams.get("reportId");
+  const { id } = useParams();
+  const reportId = decryptString(id);
   const [viewPdf, setViewPdf] = React.useState(false);
   const [consolidatedObservations, setConsolidatedObservations] =
     React.useState([]);

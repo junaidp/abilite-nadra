@@ -2,6 +2,7 @@ import React from "react";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { decryptString } from "../../../../../config/helper";
 import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
@@ -14,7 +15,7 @@ import {
   setupUpdateBusinessObjectiveAndMapProcessSpecialProjectOrAudit,
 } from "../../../../../global-redux/reducers/planing/engagement/slice";
 import { useDispatch, useSelector } from "react-redux";
-import { useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import BusinessObjectiveMapProcess from "./components/business-objective-map-process";
 import { CircularProgress } from "@mui/material";
 import SubmitDialog from "./submit-dialog";
@@ -23,8 +24,8 @@ const SpecialProjectAudit = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [showSubmitDialog, setShowSubmitDialog] = React.useState(false);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const engagementId = searchParams.get("engagementId");
+  const { id } = useParams();
+  const engagementId = decryptString(id);
   const {
     planingEngagementSingleObject,
     engagementAddSuccess,

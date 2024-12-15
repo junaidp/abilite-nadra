@@ -2,7 +2,8 @@ import React from "react";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useSearchParams } from "react-router-dom";
+import { decryptString } from "../../../../../config/helper";
+import { useParams } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
 import {
   resetAddEngagementSuccess,
@@ -20,8 +21,8 @@ import {
 const ComplianceCheckListCard = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const engagementId = searchParams.get("engagementId");
+  const { id } = useParams();
+  const engagementId = decryptString(id);
   const {
     planingEngagementSingleObject,
     engagementAddSuccess,

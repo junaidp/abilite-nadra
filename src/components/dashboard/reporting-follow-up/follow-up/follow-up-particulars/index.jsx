@@ -13,7 +13,6 @@ import {
   InitialLoadSidebarActiveLink,
 } from "../../../../../global-redux/reducers/common/slice";
 import { useDispatch, useSelector } from "react-redux";
-import { useSearchParams } from "react-router-dom";
 import "./index.css";
 import { CircularProgress } from "@mui/material";
 import AccordianItem from "./components/AccordianItem";
@@ -21,12 +20,14 @@ import ApproveDialog from "./components/ApproveDialog";
 import FeedBackDialog from "../../components/FeedBackDialog";
 import ViewThirdFeedBackDialog from "../../components/ThirdFeedBack";
 import SubmitDialog from "./components/SubmitDialog";
+import { decryptString } from "../../../../../config/helper";
+import { useParams } from "react-router-dom";
 
 const FollowUpParticulars = () => {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const followUpId = searchParams.get("followUpId");
+  const { id } = useParams();
+  const followUpId = decryptString(id);
   const { user } = useSelector((state) => state?.auth);
   const { company } = useSelector((state) => state?.common);
   const {

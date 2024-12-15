@@ -9,6 +9,7 @@ import {
 import { CircularProgress } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import { useNavigate } from "react-router-dom";
+import { encryptAndEncode } from "../../../../config/helper";
 
 const AuditPlanSummaryReport = () => {
   const navigate = useNavigate();
@@ -211,11 +212,14 @@ const AuditPlanSummaryReport = () => {
                           <td>
                             <i
                               className="fa-eye fa f-18 cursor-pointer"
-                              onClick={() =>
+                              onClick={() => {
+                                const encryptedId = encryptAndEncode(
+                                  job[0].toString()
+                                );
                                 navigate(
-                                  `/audit/start-scheduling?jobScheduling=${job[0]}`
-                                )
-                              }
+                                  `/audit/start-scheduling/${encryptedId}`
+                                );
+                              }}
                             ></i>
                           </td>
                         </tr>

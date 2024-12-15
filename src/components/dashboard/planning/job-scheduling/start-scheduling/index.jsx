@@ -15,7 +15,6 @@ import {
   handleCleanUp,
   setupGetInitialSingleJobScheduling,
 } from "../../../../../global-redux/reducers/planing/job-scheduling/slice";
-import { useSearchParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import ResourcesRequired from "./components/resources-required";
 import TimeAndDateAllocation from "./components/time-date-allocation";
@@ -24,12 +23,14 @@ import ResourceAllocation from "./components/resource-allocation";
 import { CircularProgress } from "@mui/material";
 import { toast } from "react-toastify";
 import SubmitDialog from "./components/submit-dialog";
+import { useParams } from "react-router-dom";
+import { decryptString } from "../../../../../config/helper";
 
 const StartScheduling = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const jobSchedulingId = searchParams.get("jobScheduling");
+  const { id } = useParams();
+  const jobSchedulingId = decryptString(id);
   const {
     loading,
     jobSchedulingAddSuccess,
