@@ -477,7 +477,9 @@ export const slice = createSlice({
       .addCase(setupSaveAuditNotification.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
-          toast.error(action.payload.response.data.message);
+          toast.error(
+            "Please shorten the email message in the detail section and try again."
+          );
         } else {
           toast.error("An Error has occurred");
         }
