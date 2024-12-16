@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  setupUpdateFollowUp,
+  setupUpdateFollowUpByManagement,
   setupSubmitReportingInFollowUp,
 } from "../../../../../../global-redux/reducers/reporting/slice";
 import { toast } from "react-toastify";
@@ -12,42 +12,44 @@ const SubmitDialog = ({ item, setShowSubmitDialog }) => {
     (state) => state?.reporting
   );
 
-  function handleSubmit() {
+  async function handleSubmit() {
     if (loading) {
       return;
     }
+
     if (
       item?.followUp?.recommendationsImplemented.toString() === "true" &&
-      (item?.followUp?.finalComments === null ||
-        item?.followUp?.finalComments === "")
+      (!item?.followUp?.finalComments ||
+        item?.followUp?.finalComments.trim() === "")
     ) {
       toast.error(
         "Final Comments missing. Please provide them first and then submit the observation"
       );
       return;
     }
-    dispatch(
-      setupUpdateFollowUp({
-        ...item?.followUp,
-        recommendationsImplemented:
-          item?.followUp?.recommendationsImplemented.toString() === "true"
-            ? true
-            : false,
-        finalComments:
-          item?.followUp?.recommendationsImplemented.toString() === "true"
-            ? item?.followUp?.finalComments
-            : "",
-      })
-    );
 
-    setTimeout(() => {
-      dispatch(
+    try {
+      await dispatch(
+        setupUpdateFollowUpByManagement({
+          ...item?.followUp,
+          recommendationsImplemented:
+            item?.followUp?.recommendationsImplemented.toString() === "true",
+          finalComments:
+            item?.followUp?.recommendationsImplemented.toString() === "true"
+              ? item?.followUp?.finalComments
+              : "",
+        })
+      ).unwrap();
+
+      await dispatch(
         setupSubmitReportingInFollowUp({
           ...item,
           stepNo: 6,
         })
-      );
-    }, 900);
+      ).unwrap();
+    } catch (error) {
+      toast.error("An error occurred while submitting. Please try again.");
+    }
   }
 
   React.useEffect(() => {

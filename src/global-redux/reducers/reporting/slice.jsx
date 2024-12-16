@@ -8,6 +8,7 @@ import {
   approveReporting,
   getAllFollowUp,
   updateFollowUp,
+  updateFollowUpByManagement,
   updateReportingByManagementAuditee,
   reportingFileUpload,
   reportingFileDelete,
@@ -84,6 +85,14 @@ export const setupUpdateFollowUp = createAsyncThunk(
     return updateFollowUp(data, thunkAPI);
   }
 );
+
+export const setupUpdateFollowUpByManagement = createAsyncThunk(
+  "reporting/updateFollowUpByManagement",
+  async (data, thunkAPI) => {
+    return updateFollowUpByManagement(data, thunkAPI);
+  }
+);
+
 export const setupUpdateReportingByManagementAuditee = createAsyncThunk(
   "reporting/updateReportingByManagementAuditee",
   async (data, thunkAPI) => {
@@ -292,6 +301,25 @@ export const slice = createSlice({
           toast.error("An Error has occurred");
         }
       });
+    // Update Follow Up By Management
+    builder
+      .addCase(setupUpdateFollowUpByManagement.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupUpdateFollowUpByManagement.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(
+        setupUpdateFollowUpByManagement.rejected,
+        (state, { payload }) => {
+          state.loading = false;
+          if (payload?.response?.data?.message) {
+            toast.error(payload?.response?.data?.message);
+          } else {
+            toast.error("An Error has occurred");
+          }
+        }
+      );
     // Update Reporting By Management Auditee
     builder
       .addCase(setupUpdateReportingByManagementAuditee.pending, (state) => {

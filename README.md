@@ -100,6 +100,7 @@ abilite/
 ├── package.json     # Project configuration
 ├── package-lock.json# Dependency lock file
 ├── README.md        # This file
+└── vite.config.js   # Vite configuration
 ```
 
 ---
