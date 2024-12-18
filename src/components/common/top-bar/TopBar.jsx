@@ -23,7 +23,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Tooltip from "@mui/material/Tooltip";
 import { CircularProgress } from "@mui/material";
 import moment from "moment";
-import { getYearsRange } from "../../../config/helper"
+import { getYearsRange } from "../../../config/helper";
 
 const TopBar = () => {
   const dispatch = useDispatch();
@@ -78,7 +78,7 @@ const TopBar = () => {
     if (companyId) {
       setTimeout(() => {
         dispatch(setupGetSystemNotifications({ page, itemsPerPage }));
-      }, 900);
+      }, 2000);
     }
   }, [dispatch, page]);
 

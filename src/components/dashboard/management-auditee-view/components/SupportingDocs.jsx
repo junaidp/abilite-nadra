@@ -2,6 +2,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setupGetAllFiles } from "../../../../global-redux/reducers/settings/supporting-docs/slice";
 import { Pagination } from "@mui/material";
+import { handleDownload } from "../../../../config/helper";
 import { CircularProgress } from "@mui/material";
 
 const SupportingDocs = ({ tab }) => {
@@ -13,13 +14,6 @@ const SupportingDocs = ({ tab }) => {
   const [page, setPage] = React.useState(1);
   const handleChangePage = (_, value) => {
     setPage(value);
-  };
-
-  const openLinkInNewTab = (id) => {
-    window.open(
-      `https://healthy-wolf-certainly.ngrok-free.app/abiliteconfig/supporting/doc/download?id=${id}`,
-      "_blank"
-    );
   };
 
   React.useEffect(() => {
@@ -90,7 +84,12 @@ const SupportingDocs = ({ tab }) => {
                           <td>
                             <i
                               className="fa fa-download f-18 mx-2 cursor-pointer"
-                              onClick={() => openLinkInNewTab(file?.id)}
+                              onClick={() =>
+                                handleDownload({
+                                  base64String: file?.fileBufferblob,
+                                  fileName: file?.fileName,
+                                })
+                              }
                             ></i>
                           </td>
                         </tr>
