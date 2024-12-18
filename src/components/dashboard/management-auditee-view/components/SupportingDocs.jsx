@@ -23,7 +23,7 @@ const SupportingDocs = ({ tab }) => {
       )?.id;
       dispatch(setupGetAllFiles(`?companyId=${companyId}`));
     }
-  }, [user, tab]);
+  }, [tab, dispatch]);
 
   return (
     <div

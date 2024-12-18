@@ -90,7 +90,7 @@ const AuditSettings = () => {
         dispatch(setupGetFinancialQuantifiableNoForCompany({ companyId }));
       }
     }
-  }, [currentSettingOption]);
+  }, [currentSettingOption,dispatch]);
 
   React.useEffect(() => {
     if (user[0]?.token) {

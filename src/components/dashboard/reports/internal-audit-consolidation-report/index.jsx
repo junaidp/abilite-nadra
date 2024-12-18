@@ -6,7 +6,7 @@ import {
   setupGetAllInternalAuditReports,
   resetInternalAuditReportAddSuccess,
 } from "../../../../global-redux/reducers/reports/consolidation-report/slice";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Typography } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import moment from "moment";
 import DeleteInternalAuditConsolidationReportDialog from "../../../modals/delete-internal-audit-consolidation-report-dialog";
@@ -20,6 +20,11 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { encryptAndEncode } from "../../../../config/helper";
+
+const poppinsStyle = {
+  fontFamily: '"Poppins", sans-serif',
+  fontWeight: "normal",
+};
 
 const InternalAuditReport = () => {
   const navigate = useNavigate();
@@ -209,10 +214,33 @@ const InternalAuditReport = () => {
             </span>
             Generate Report
           </div>
-          <i
-            className="fa fa-info-circle ps-3 text-secondary cursor-pointer"
-            title="Info"
-          ></i>
+          <Tooltip
+            title={
+              <React.Fragment>
+                <Typography
+                  color="inherit"
+                  className="mb-2"
+                  style={poppinsStyle}
+                >
+                  Click to create a new consolidated report
+                </Typography>
+                <ul
+                  style={{
+                    ...poppinsStyle,
+                    paddingLeft: "20px",
+                    margin: "0",
+                  }}
+                >
+                  <li>Select the job from the list</li>
+                  <li>Provide all the required fields</li>
+                  <li>Submit or approve the report to generate the PDF</li>
+                </ul>
+              </React.Fragment>
+            }
+            arrow
+          >
+            <i className="fa fa-info-circle ps-3 text-secondary cursor-pointer"></i>
+          </Tooltip>
         </div>
       </header>
 
