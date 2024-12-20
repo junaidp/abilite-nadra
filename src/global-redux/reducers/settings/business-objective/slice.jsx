@@ -176,16 +176,10 @@ export const slice = createSlice({
           state.yesAll = payload || [];
         }
       )
-      .addCase(
-        setupGetFinancialQuantifiableYesForCompany.rejected,
-        (state, action) => {
-          state.yesLoading = false;
-          state.yesAll = [];
-          if (action.payload?.response?.data?.message) {
-            toast.error(action.payload.response.data.message);
-          }
-        }
-      );
+      .addCase(setupGetFinancialQuantifiableYesForCompany.rejected, (state) => {
+        state.yesLoading = false;
+        state.yesAll = [];
+      });
     //   yes for engagement
     builder
       .addCase(
@@ -203,13 +197,8 @@ export const slice = createSlice({
       )
       .addCase(
         setupGetFinancialQuantifiableYesForEngagement.rejected,
-        (state, action) => {
+        (state) => {
           state.yesLoading = false;
-          if (action.payload?.response?.data?.message) {
-            toast.error(action.payload.response.data.message);
-          } else {
-            toast.error("An Error has occurred");
-          }
         }
       );
     //   no add
@@ -222,13 +211,8 @@ export const slice = createSlice({
         state.noAddSuccess = true;
         toast.success("Business Objective Added Successfully");
       })
-      .addCase(setupAddFinancialQuantifiableNo.rejected, (state, action) => {
+      .addCase(setupAddFinancialQuantifiableNo.rejected, (state) => {
         state.noLoading = false;
-        if (action.payload?.response?.data?.message) {
-          toast.error(action.payload.response.data.message);
-        } else {
-          toast.error("An Error has occurred");
-        }
       });
     //   no update
     builder
@@ -278,16 +262,10 @@ export const slice = createSlice({
           state.noAll = payload || [];
         }
       )
-      .addCase(
-        setupGetFinancialQuantifiableNoForCompany.rejected,
-        (state, action) => {
-          state.noLoading = false;
-          state.noAll = [];
-          if (action.payload?.response?.data?.message) {
-            toast.error(action.payload.response.data.message);
-          }
-        }
-      );
+      .addCase(setupGetFinancialQuantifiableNoForCompany.rejected, (state) => {
+        state.noLoading = false;
+        state.noAll = [];
+      });
     //   no for engagement
     builder
       .addCase(
@@ -305,13 +283,8 @@ export const slice = createSlice({
       )
       .addCase(
         setupGetFinancialQuantifiableNoForEngagement.rejected,
-        (state, action) => {
+        (state) => {
           state.noLoading = false;
-          if (action.payload?.response?.data?.message) {
-            toast.error(action.payload.response.data.message);
-          } else {
-            toast.error("An Error has occurred");
-          }
         }
       );
   },
