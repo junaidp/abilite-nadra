@@ -90,19 +90,15 @@ const TimeAndDateAllocation = ({
           aria-expanded="false"
           aria-controls="flush-collapseTwo"
         >
-          {singleJobSchedulingObject?.timeAndDateAllocation?.estimatedWeeks !==
-            0 &&
-            singleJobSchedulingObject?.timeAndDateAllocation
-              ?.fieldWorkManHours !== 0 &&
-            singleJobSchedulingObject?.timeAndDateAllocation
-              ?.internalAuditManagementHours !== 0 &&
-            singleJobSchedulingObject?.timeAndDateAllocation?.totalHours !==
-              0 &&
-            singleJobSchedulingObject?.timeAndDateAllocation
-              ?.totalWorkingManHours !== 0 &&
-            singleJobSchedulingObject?.timeAndDateAllocation?.placeOfWork && (
-              <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
-            )}
+          {singleJobSchedulingObject?.timeAndDateAllocation?.estimatedWeeks ||
+          singleJobSchedulingObject?.timeAndDateAllocation?.fieldWorkManHours ||
+          singleJobSchedulingObject?.timeAndDateAllocation
+            ?.internalAuditManagementHours ||
+          singleJobSchedulingObject?.timeAndDateAllocation?.totalHours ||
+          singleJobSchedulingObject?.timeAndDateAllocation
+            ?.totalWorkingManHours ? (
+            <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
+          ) : null}
           Time and Date Allocation
         </button>
       </h2>

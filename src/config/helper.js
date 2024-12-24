@@ -121,6 +121,11 @@ const decryptString = (encryptedString) => {
   }
 };
 
+function getLastTenYears() {
+  const currentYear = new Date().getFullYear();
+  return Array.from({ length: 10 }, (_, index) => currentYear - index);
+}
+
 export {
   handleDownload,
   groupObservationsByTitle,
@@ -130,4 +135,5 @@ export {
   getYearsRange,
   encryptAndEncode,
   decryptString,
+  getLastTenYears,
 };

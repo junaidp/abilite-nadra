@@ -12,14 +12,14 @@ const ResourcesRequired = ({ handleChangeNumberTextField, values }) => {
           aria-expanded="false"
           aria-controls="flush-collapseOne"
         >
-          {values?.numberOfResourcesRequired?.business !== 0 &&
-            values?.numberOfResourcesRequired?.finance !== 0 &&
-            values?.numberOfResourcesRequired?.fraud !== 0 &&
-            values?.numberOfResourcesRequired?.it !== 0 &&
-            values?.numberOfResourcesRequired?.operations !== 0 &&
-            values?.numberOfResourcesRequired?.other !== 0 && (
-              <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
-            )}
+          {values?.numberOfResourcesRequired?.business ||
+          values?.numberOfResourcesRequired?.finance ||
+          values?.numberOfResourcesRequired?.fraud ||
+          values?.numberOfResourcesRequired?.it ||
+          values?.numberOfResourcesRequired?.operations ||
+          values?.numberOfResourcesRequired?.other ? (
+            <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
+          ) : null}
           Determination of Number of Resources Required
         </button>
       </h2>

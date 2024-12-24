@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import moment from "moment";
+import { getLastTenYears } from "../../../../../config/helper";
 import { useSelector, useDispatch } from "react-redux";
 import Select from "./component/Select";
 import {
@@ -19,6 +19,7 @@ import { toast } from "react-toastify";
 import TimeAndDateAllocation from "./component/time-date-allocation";
 import ResourceAllocation from "./component/resource-allocation";
 import ObservationList from "./component/observation-list";
+import JobSchedule from "./component/job-schedule-list";
 
 const PreviousObservation = () => {
   const dispatch = useDispatch();
@@ -66,6 +67,10 @@ const PreviousObservation = () => {
       proposedJobApprover: "",
     },
     observationsList: [],
+    jobSchedule: {
+      plannedJobStartDate: "",
+      plannedJobEndDate: "",
+    },
   });
 
   function handleCreateJob() {
@@ -74,9 +79,10 @@ const PreviousObservation = () => {
       values?.riskRating === "" ||
       values?.auditee === "" ||
       values?.year === "" ||
-      values?.timeAndDateAllocation?.placeOfWork === "" ||
-      values?.resourceAllocation?.resourcesList.length === 0 ||
-      values?.observationsList?.length === 0
+      !values?.jobSchedule?.plannedJobStartDate ||
+      !values?.jobSchedule?.plannedJobEndDate ||
+      !values?.resourceAllocation?.resourcesList.length ||
+      !values?.observationsList?.length
     ) {
       toast.error("Please provide all fields");
     } else {
@@ -84,6 +90,7 @@ const PreviousObservation = () => {
         dispatch(
           setupCreateNewJob({
             ...values,
+            year: Number(values?.year),
             timeAndDateAllocation: {
               ...values?.timeAndDateAllocation,
               fieldWorkManHours,
@@ -96,10 +103,7 @@ const PreviousObservation = () => {
                 (user) => user?.employeeid?.userHierarchy === "IAH"
               )?.id,
             },
-            jobSchedule: {
-              plannedJobStartDate: moment().toISOString(),
-              plannedJobEndDate: moment().add(1, "minute").toISOString(),
-            },
+            jobSchedule: values.jobSchedule,
           })
         );
       }
@@ -259,27 +263,25 @@ const PreviousObservation = () => {
           <div className="row mb-4">
             <div className="col-lg-6">
               <select
-                className="form-select"
+                className="form-select h-40"
                 aria-label="Default select example"
                 value={values?.year}
                 onChange={(event) => handleChange(event)}
                 name="year"
               >
                 <option value="">Select Year</option>
-                <option value={2024}>2024</option>
-                <option value={2023}>2023</option>
-                <option value={2022}>2022</option>
-                <option value={2021}>2021</option>
-                <option value={2020}>2020</option>
-                <option value={2019}>2019</option>
-                <option value={2018}>2018</option>
-                <option value={2017}>2017</option>
-                <option value={2016}>2016</option>
+                {getLastTenYears()?.map((year) => {
+                  return (
+                    <option value={year} key={year}>
+                      {year}
+                    </option>
+                  );
+                })}
               </select>
             </div>
             <div className="col-lg-6">
               <select
-                className="form-select"
+                className="form-select h-40"
                 aria-label="Default select example"
                 name="riskRating"
                 value={values?.riskRating}
@@ -327,6 +329,9 @@ const PreviousObservation = () => {
                     setTotalWorkingManHours={setTotalWorkingManHours}
                     setTotalHours={setTotalHours}
                   />
+                </div>
+                <div className="col-lg-12 mb-4">
+                  <JobSchedule values={values} setValues={setValues} />
                 </div>
                 <div className="col-lg-12 mb-4">
                   <ResourceAllocation

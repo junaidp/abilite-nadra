@@ -5,7 +5,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { setUpupdateJobSchedulingResourcesAllocation } from "../../../../../../../global-redux/reducers/planing/job-scheduling/slice";
 import TextField from "@mui/material/TextField";
 
-
 const ResourceAllocation = ({
   currentJobSchedulingObject,
   setCurrentJobScheduling,
@@ -82,15 +81,11 @@ const ResourceAllocation = ({
           aria-expanded="false"
           aria-controls="flush-collapseThree"
         >
-          {singleJobSchedulingObject?.resourceAllocation
-            ?.backupHeadOfInternalAudit &&
-            singleJobSchedulingObject?.resourceAllocation
-              ?.proposedJobApprover &&
-            singleJobSchedulingObject?.resourceAllocation?.resourcesList &&
-            singleJobSchedulingObject?.resourceAllocation?.resourcesList
-              ?.length !== 0 && (
-              <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
-            )}
+          {singleJobSchedulingObject?.resourceAllocation?.resourcesList &&
+          singleJobSchedulingObject?.resourceAllocation?.resourcesList
+            ?.length ? (
+            <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
+          ) : null}
           Resource Allocation
         </button>
       </h2>

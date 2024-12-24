@@ -49,12 +49,10 @@ const ResourceAllocation = ({ values, setValues, users }) => {
           aria-expanded="false"
           aria-controls="flush-collapseThree"
         >
-          {values?.resourceAllocation?.backupHeadOfInternalAudit &&
-            values?.resourceAllocation?.proposedJobApprover &&
-            values?.resourceAllocation?.resourcesList &&
-            values?.resourceAllocation?.resourcesList?.length !== 0 && (
-              <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
-            )}
+          {values?.resourceAllocation?.resourcesList &&
+          values?.resourceAllocation?.resourcesList?.length ? (
+            <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
+          ) : null}
           Resource Allocation
         </button>
       </h2>

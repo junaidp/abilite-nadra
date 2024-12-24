@@ -321,59 +321,65 @@ const StartScheduling = () => {
               </div>
             </div>
           ) : (
-            <div className="row ">
-              <div className="col-lg-5 mb-3">
-                <LocationSelect
-                  names={allLocations?.map((all) => all?.description)}
-                  title="Location"
-                  initialPersonalArray={initialLocationList}
-                  name="locationList"
-                  setCurrentJobScheduling={setCurrentJobScheduling}
-                  singleJobSchedulingObject={singleJobSchedulingObject}
-                />
-              </div>
-              <div className="col-lg-5 mb-3">
-                <LocationSelect
-                  title="SubLocation"
-                  names={allSubLocations?.map((all) => all?.description)}
-                  initialPersonalArray={initialSubLocationList}
-                  name="subLocation"
-                  setCurrentJobScheduling={setCurrentJobScheduling}
-                  singleJobSchedulingObject={singleJobSchedulingObject}
-                />
-              </div>
-              <div className="col-lg-2 mb-3">
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="flexCheckDefault"
-                    name="separateJob"
-                    checked={currentJobSchedulingObject?.separateJob}
-                    onChange={(event) =>
-                      handleChangeJobSchedulingCheckFields(event, "seprateJob")
-                    }
-                    disabled={
-                      singleJobSchedulingObject?.locked === true ||
-                      singleJobSchedulingObject?.natureThrough ===
-                        "Compliance Checklist" ||
-                      (singleJobSchedulingObject?.complete === true &&
-                        singleJobSchedulingObject?.locked === false &&
-                        user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
-                        ? true
-                        : false
-                    }
+            singleJobSchedulingObject?.natureThrough !==
+              "Previous Observation" && (
+              <div className="row ">
+                <div className="col-lg-5 mb-3">
+                  <LocationSelect
+                    names={allLocations?.map((all) => all?.description)}
+                    title="Location"
+                    initialPersonalArray={initialLocationList}
+                    name="locationList"
+                    setCurrentJobScheduling={setCurrentJobScheduling}
+                    singleJobSchedulingObject={singleJobSchedulingObject}
                   />
-                  <label
-                    className="form-check-label"
-                    htmlFor="flexCheckDefault"
-                  >
-                    Seprate job
-                  </label>
+                </div>
+                <div className="col-lg-5 mb-3">
+                  <LocationSelect
+                    title="SubLocation"
+                    names={allSubLocations?.map((all) => all?.description)}
+                    initialPersonalArray={initialSubLocationList}
+                    name="subLocation"
+                    setCurrentJobScheduling={setCurrentJobScheduling}
+                    singleJobSchedulingObject={singleJobSchedulingObject}
+                  />
+                </div>
+                <div className="col-lg-2 mb-3">
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value=""
+                      id="flexCheckDefault"
+                      name="separateJob"
+                      checked={currentJobSchedulingObject?.separateJob}
+                      onChange={(event) =>
+                        handleChangeJobSchedulingCheckFields(
+                          event,
+                          "seprateJob"
+                        )
+                      }
+                      disabled={
+                        singleJobSchedulingObject?.locked === true ||
+                        singleJobSchedulingObject?.natureThrough ===
+                          "Compliance Checklist" ||
+                        (singleJobSchedulingObject?.complete === true &&
+                          singleJobSchedulingObject?.locked === false &&
+                          user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                          ? true
+                          : false
+                      }
+                    />
+                    <label
+                      className="form-check-label"
+                      htmlFor="flexCheckDefault"
+                    >
+                      Seprate job
+                    </label>
+                  </div>
                 </div>
               </div>
-            </div>
+            )
           )}
 
           <div className="row">

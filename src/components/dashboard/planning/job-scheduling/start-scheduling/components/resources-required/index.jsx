@@ -35,18 +35,14 @@ const ResourcesRequired = ({
           aria-expanded="false"
           aria-controls="flush-collapseOne"
         >
-          {singleJobSchedulingObject?.numberOfResourcesRequired?.business !==
-            0 &&
-            singleJobSchedulingObject?.numberOfResourcesRequired?.finance !==
-              0 &&
-            singleJobSchedulingObject?.numberOfResourcesRequired?.fraud !== 0 &&
-            singleJobSchedulingObject?.numberOfResourcesRequired?.it !== 0 &&
-            singleJobSchedulingObject?.numberOfResourcesRequired?.operations !==
-              0 &&
-            singleJobSchedulingObject?.numberOfResourcesRequired?.other !==
-              0 && (
-              <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
-            )}
+          {singleJobSchedulingObject?.numberOfResourcesRequired?.business ||
+          singleJobSchedulingObject?.numberOfResourcesRequired?.finance ||
+          singleJobSchedulingObject?.numberOfResourcesRequired?.fraud ||
+          singleJobSchedulingObject?.numberOfResourcesRequired?.it ||
+          singleJobSchedulingObject?.numberOfResourcesRequired?.operations ||
+          singleJobSchedulingObject?.numberOfResourcesRequired?.other ? (
+            <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
+          ) : null}
           Determination of Number of Resources Required
         </button>
       </h2>

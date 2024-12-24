@@ -15,6 +15,18 @@ const JobScheduleList = ({
   const { user } = useSelector((state) => state?.auth);
 
   function handleChangeDate(event, id) {
+    const selectedDate = new Date(event.target.value);
+    const currentDate = new Date();
+
+    currentDate.setHours(0, 0, 0, 0);
+
+    if (selectedDate < currentDate) {
+      toast.error(
+        "The planned start date cannot be a past date. Please select today or a future date."
+      );
+      return;
+    }
+
     if (
       !singleJobSchedulingObject?.timeAndDateAllocation?.estimatedWeeks ||
       singleJobSchedulingObject?.timeAndDateAllocation?.estimatedWeeks === 0
@@ -25,7 +37,6 @@ const JobScheduleList = ({
       return;
     }
 
-    const selectedDate = new Date(event.target.value);
     const weeksToAdd =
       singleJobSchedulingObject?.timeAndDateAllocation?.estimatedWeeks || 0;
 

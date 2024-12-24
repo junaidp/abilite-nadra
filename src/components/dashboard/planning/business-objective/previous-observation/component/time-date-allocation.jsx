@@ -45,14 +45,13 @@ const TimeAndDateAllocation = ({
           aria-expanded="false"
           aria-controls="flush-collapseTwo"
         >
-          {values?.timeAndDateAllocation?.estimatedWeeks !== 0 &&
-            values?.timeAndDateAllocation?.fieldWorkManHours !== 0 &&
-            values?.timeAndDateAllocation?.internalAuditManagementHours !== 0 &&
-            values?.timeAndDateAllocation?.totalHours !== 0 &&
-            values?.timeAndDateAllocation?.totalWorkingManHours !== 0 &&
-            values?.timeAndDateAllocation?.placeOfWork && (
-              <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
-            )}
+          {values?.timeAndDateAllocation?.estimatedWeeks ||
+          values?.timeAndDateAllocation?.fieldWorkManHours ||
+          values?.timeAndDateAllocation?.internalAuditManagementHours ||
+          values?.timeAndDateAllocation?.totalHours ||
+          values?.timeAndDateAllocation?.totalWorkingManHours ? (
+            <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
+          ) : null}
           Time and Date Allocation
         </button>
       </h2>
