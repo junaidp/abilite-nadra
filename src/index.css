@@ -771,6 +771,10 @@ mat-form-field.mat-focused .mat-form-field-ripple {
   font-size: 20px !important;
 }
 
+.file-download-link:hover {
+  color: white !important;
+}
+
 .quill {
   min-height: 80vh !important;
 }

@@ -56,7 +56,7 @@ export const slice = createSlice({
       .addCase(setupUploadFile.fulfilled, (state) => {
         state.loading = false;
         state.previousObservationAddSuccess = true;
-        toast.success("File Uploaded Successfully");
+        toast.success("Previous Observation/s Added Successfully");
       })
       .addCase(setupUploadFile.rejected, (state, action) => {
         state.loading = false;

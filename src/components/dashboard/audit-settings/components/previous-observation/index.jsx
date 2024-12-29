@@ -63,9 +63,20 @@ const PreviousObservation = ({ currentSettingOption }) => {
       role="tabpanel"
       aria-labelledby="previous-observation-tab"
     >
-      <div className="row">
-        <div className="col-lg-12 mx-1">
+      <div className="row mb-3">
+        <div className="col-lg-6">
           <div className="sub-heading mb-4 fw-bold">Previous Observations</div>
+        </div>
+        <div className="col-lg-6 d-flex h-40 flex-end">
+          <button className={`btn btn-labeled btn-primary  shadow`}>
+            <a
+              href="/sample-file.csv"
+              download="sample-file.csv"
+              className="text-white file-download-link"
+            >
+              Download Sample Previous Observation File
+            </a>
+          </button>
         </div>
       </div>
 
@@ -97,7 +108,7 @@ const PreviousObservation = ({ currentSettingOption }) => {
             <span className="btn-label me-2">
               <i className="fa fa-save"></i>
             </span>
-            {loading ? "Loading..." : "Upload"}
+            {loading ? "Loading..." : "Upload File"}
           </button>
         </div>
       </div>
@@ -108,6 +119,7 @@ const PreviousObservation = ({ currentSettingOption }) => {
               <thead className="bg-secondary text-white">
                 <tr>
                   <th className="w-10">Sr No.</th>
+                  <th>User Id</th>
                   <th>Username</th>
                   <th>User Hierarchy</th>
                   <th>Designation</th>
@@ -131,6 +143,7 @@ const PreviousObservation = ({ currentSettingOption }) => {
                     return (
                       <tr key={index}>
                         <td>{index + 1}</td>
+                        <td>{userItem?.id}</td>
                         <td>{userItem?.name || ""}</td>
                         <td>{userItem?.employeeid?.userHierarchy || ""}</td>
                         <td>{userItem?.employeeid?.designation || ""}</td>
