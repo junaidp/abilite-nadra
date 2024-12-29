@@ -1,27 +1,21 @@
 import React from "react";
-import { CircularProgress } from "@mui/material";
-import Pagination from "@mui/material/Pagination";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import {
   setupUploadFile,
   resetPreviousObservationsAddSuccess,
-  setupGetAllPreviousObservations,
 } from "../../../../../global-redux/reducers/settings/previous-observation/slice";
+import { CircularProgress } from "@mui/material";
 
 const PreviousObservation = ({ currentSettingOption }) => {
   const dispatch = useDispatch();
   const fileInputRef = React.useRef(null);
-  const { loading, previousObservations, previousObservationAddSuccess } =
-    useSelector((state) => state.settingsPreviousObservation);
+  const { loading, previousObservationAddSuccess, users } = useSelector(
+    (state) => state.settingsPreviousObservation
+  );
   const { user } = useSelector((state) => state?.auth);
   const { company } = useSelector((state) => state?.common);
   const [selectedFile, setSelectedFile] = React.useState(null);
-  const [page, setPage] = React.useState(1);
-
-  const handleChange = (_, value) => {
-    setPage(value);
-  };
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -52,19 +46,13 @@ const PreviousObservation = ({ currentSettingOption }) => {
 
   React.useEffect(() => {
     if (previousObservationAddSuccess) {
-      const companyId = user[0]?.company?.find(
-        (item) => item?.companyName === company
-      )?.id;
       setSelectedFile(null);
       fileInputRef.current.value = "";
-      setPage(1);
       dispatch(resetPreviousObservationsAddSuccess());
-      dispatch(setupGetAllPreviousObservations({ companyId: companyId }));
     }
   }, [previousObservationAddSuccess]);
 
   React.useEffect(() => {
-    setPage(1);
     setSelectedFile(null);
   }, [currentSettingOption]);
 
@@ -76,82 +64,84 @@ const PreviousObservation = ({ currentSettingOption }) => {
       aria-labelledby="previous-observation-tab"
     >
       <div className="row">
-        <div className="col-lg-12">
+        <div className="col-lg-12 mx-1">
           <div className="sub-heading mb-4 fw-bold">Previous Observations</div>
         </div>
       </div>
 
       <div>
-        <div className="row position-relative">
-          <div className="col-lg-12 ml-4 text-center settings-form">
+        <div className="row position-relative mx-1">
+          <div className="col-lg-12  settings-form">
             <form>
               <input
                 type="file"
                 ref={fileInputRef}
                 onChange={handleFileChange}
               />
-              <p className="mb-0">
-              Click in this area.
-              </p>
+              <p className="mb-0">Click in this area.</p>
             </form>
           </div>
-          <p className="my-2">
-            {selectedFile?.name ? selectedFile?.name : "Select file"}
-          </p>
         </div>
-        <div className="row my-3">
-          <div className="col-lg-12 text-end">
-            <button
-              className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
-                loading && "disabled"
-              }`}
-              onClick={handleFileUpload}
-            >
-              <span className="btn-label me-2">
-                <i className="fa fa-save"></i>
-              </span>
-              {loading ? "Loading..." : "Upload"}
-            </button>
-          </div>
+        <p className="my-2">
+          {selectedFile?.name ? selectedFile?.name : "Select file"}
+        </p>
+      </div>
+      <div className="row mb-4">
+        <div className="col-lg-12 text-end">
+          <button
+            className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
+              loading && "disabled"
+            }`}
+            onClick={handleFileUpload}
+          >
+            <span className="btn-label me-2">
+              <i className="fa fa-save"></i>
+            </span>
+            {loading ? "Loading..." : "Upload"}
+          </button>
         </div>
       </div>
-
-      <div className="row mt-3">
+      <div className="row">
         <div className="col-lg-12">
           <div className="table-responsive">
-            {loading ? (
-              <CircularProgress />
-            ) : previousObservations?.length === 0 || !previousObservations ? (
-              <p>No Observations To Show.</p>
-            ) : (
-              <table className="table table-bordered  table-hover rounded">
-                <thead className="bg-secondary text-white">
+            <table className="table table-bordered  table-hover rounded">
+              <thead className="bg-secondary text-white">
+                <tr>
+                  <th className="w-10">Sr No.</th>
+                  <th>Username</th>
+                  <th>User Hierarchy</th>
+                  <th>Designation</th>
+                  <th>Email ID</th>
+                  <th>Skill Set</th>
+                </tr>
+              </thead>
+              <tbody>
+                {loading ? (
                   <tr>
-                    <th className="w-80">Sr No.</th>
-                    <th>Observations</th>
-                    <th>Management Comments</th>
+                    <td className="w-300">
+                      <CircularProgress />
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {previousObservations
-                    ?.slice((page - 1) * 15, page * 15)
-                    ?.map((item, index) => {
-                      return (
-                        <tr key={index}>
-                          <td>{index + 1}</td>
-                          <td>{item?.observation}</td>
-                          <td>{item?.managementComments}</td>
-                        </tr>
-                      );
-                    })}
-                </tbody>
-              </table>
-            )}
-            <Pagination
-              count={Math.ceil(previousObservations?.length / 15)}
-              page={page}
-              onChange={handleChange}
-            />
+                ) : users?.length === 0 ? (
+                  <tr>
+                    <td className="w-300">No Users To Show.</td>
+                  </tr>
+                ) : (
+                  users?.map((userItem, index) => {
+                    return (
+                      <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td>{userItem?.name || ""}</td>
+                        <td>{userItem?.employeeid?.userHierarchy || ""}</td>
+                        <td>{userItem?.employeeid?.designation || ""}</td>
+                        <td>{userItem?.email || ""}</td>
+                        <td>{userItem?.employeeid?.skillSet || ""}</td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

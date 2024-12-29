@@ -311,25 +311,6 @@ const DashboardHome = () => {
               <div className="col-lg-3">
                 <div className="row exceptions-wrap">
                   <div className="col-xl-12 col-sm-12 col-12">
-                    <div className="card mb-4 application-main-color  glassmorphism-card-">
-                      <div className="card-content">
-                        <div className="card-body">
-                          <div className="media d-flex  justify-content-between">
-                            <div className="align-self-center">
-                              <i className="fa fa-hourglass-end text-white primary fa-2xl f-40"></i>
-                            </div>
-                            <div className="media-body">
-                              <span className="text-white">
-                                Exceptions Overdue
-                              </span>
-                              <h3 className="text-white">
-                                {dataInfo?.exceptionsOverDue}%
-                              </h3>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
                     <div className="card  glassmorphism-card">
                       <div className="card-content">
                         <div className="card-body">

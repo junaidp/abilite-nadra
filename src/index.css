@@ -14,7 +14,17 @@ body {
 .css-1rgmeur {
   font-family: "Poppins", sans-serif !important;
 }
+
 .css-9iedg7 {
+  font-family: "Poppins", sans-serif !important;
+}
+
+.MuiTooltip-popper[data-popper-placement*="bottom"]
+  .css-ja5taz-MuiTooltip-tooltip {
+  font-family: "Poppins", sans-serif !important;
+}
+
+.MuiTooltip-popper[data-popper-placement*="bottom"] .css-1spb1s5 {
   font-family: "Poppins", sans-serif !important;
 }
 
@@ -159,7 +169,7 @@ body {
   height: 50px !important;
 }
 
-.h-100vh{
+.h-100vh {
   height: 100vh !important;
 }
 
@@ -911,8 +921,8 @@ span[aria-label="Insert Ordered List"] .jodit-toolbar-button__trigger {
 .justify-center {
   justify-content: center;
 }
-.items-center{
- align-items: center !important;
+.items-center {
+  align-items: center !important;
 }
 
 .word-break {

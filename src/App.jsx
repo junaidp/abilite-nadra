@@ -39,7 +39,6 @@ import RiskFactorApproach from "./pages/dashboard/planning/risk-assessments/risk
 import Reporting from "./pages/dashboard/reporting-follow-up/reporting/Reporting";
 import FollowUp from "./pages/dashboard/reporting-follow-up/follow-up/FollowUp";
 import ResetPassword from "./pages/auth/reset-password/ResetPassword";
-import PreviousObservation from "./pages/dashboard/planning/business-objective/previous-observation/PreviousObservation";
 import AuditParticulars from "./pages/dashboard/reporting-follow-up/reporting/reporting-particulars/ReportingParticulars";
 import FollowUpParticulars from "./pages/dashboard/reporting-follow-up/follow-up/follow-up-particulars/FollowUpParticulars";
 import AuditSettings from "./pages/dashboard/audit-settings/AuditSettings";
@@ -153,10 +152,6 @@ const App = () => {
             <Route
               path="business-objectives-redirect/:id"
               element={<BusinessObjectiveRedirect />}
-            />
-            <Route
-              path="previous-observation"
-              element={<PreviousObservation />}
             />
 
             <Route

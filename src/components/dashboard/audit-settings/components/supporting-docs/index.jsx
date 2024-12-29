@@ -96,7 +96,7 @@ const SupportingDocs = ({ userHierarchy, userRole, currentSettingOption }) => {
               <div className="sub-heading  fw-bold">Supporting Documents</div>
             </div>
           </div>
-          <div className="row position-relative">
+          <div className="row position-relative mx-1">
             <div className="col-lg-12 text-center settings-form">
               <form>
                 <input
@@ -107,10 +107,10 @@ const SupportingDocs = ({ userHierarchy, userRole, currentSettingOption }) => {
                 <p className="mb-0">Click in this area.</p>
               </form>
             </div>
-            <p className="my-2">
-              {selectedFile?.name ? selectedFile?.name : "Select file"}
-            </p>
           </div>
+          <p className="my-2">
+            {selectedFile?.name ? selectedFile?.name : "Select file"}
+          </p>
           <div className="row my-3">
             <div className="col-lg-12 text-end">
               <button

@@ -35,7 +35,7 @@ const TopBar = () => {
   const [showNotification, setShowNotification] = React.useState(false);
   const [showUserProfile, setShowUserProfile] = React.useState(false);
   const [page, setPage] = React.useState(1);
-  const [itemsPerPage, setItemsPerPage] = React.useState(20);
+  const [itemsPerPage, setItemsPerPage] = React.useState(10);
 
   const notificationRef = useDetectClickOutside({
     onTriggered: closeNotficationDropDown,
@@ -72,15 +72,12 @@ const TopBar = () => {
   }
 
   React.useEffect(() => {
-    const companyId = user[0]?.company?.find(
-      (item) => item?.companyName === company
-    )?.id;
-    if (companyId) {
-      setTimeout(() => {
-        dispatch(setupGetSystemNotifications({ page, itemsPerPage }));
-      }, 2000);
+    if (showNotification) {
+      dispatch(setupGetSystemNotifications({ page, itemsPerPage }));
+    } else {
+      setPage(1);
     }
-  }, [dispatch, page]);
+  }, [showNotification, page]);
 
   React.useEffect(() => {
     localStorage.setItem("company", company);
@@ -184,106 +181,113 @@ const TopBar = () => {
               )}
 
               {/* System Notifications */}
-              <li
-                className="nav-item dropdown"
-                onClick={() => {
-                  setShowNotification(true);
-                  setShowUserProfile(false);
-                }}
-                ref={notificationRef}
-              >
-                <a
-                  className="nav-link nav-icon-hover"
-                  id="drop2"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
+              {user[0]?.userId?.authorities[0].toUpperCase() === "USER" && (
+                <li
+                  className="nav-item dropdown"
+                  onClick={() => {
+                    setShowNotification(true);
+                    setShowUserProfile(false);
+                  }}
+                  ref={notificationRef}
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    className="bi bi-bell-fill"
-                    viewBox="0 0 16 16"
+                  <Tooltip
+                    title={`Click To See System Notifications`}
+                    placement="top"
                   >
-                    <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z" />
-                  </svg>
-                  <div className="notification bg-primary rounded-circle"></div>
-                </a>
-                {showNotification && (
-                  <div className="notification-wrap" aria-labelledby="drop2">
-                    <div className="d-flex align-items-center justify-content-between py-3 px-7">
-                      <h5 className="mb-0 fs-5 fw-semibold">Notifications</h5>
-                      <span className=" bg-primary rounded-4 px-3 py-1">
-                        {notifications?.totalElements} total{" "}
-                      </span>
-                      <i
-                        className="fa fa-refresh text-primary f-18 mx-2 cursor-pointer"
-                        onClick={handleCallNotifications}
-                      ></i>
-                    </div>
-                    <div className="message-body" data-simplebar="">
-                      {notificationLoading ? (
-                        <div className="px-7">
-                          <CircularProgress size={24} />
+                    <a
+                      className="nav-link nav-icon-hover"
+                      id="drop2"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        className="bi bi-bell-fill"
+                        viewBox="0 0 16 16"
+                      >
+                        <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z" />
+                      </svg>
+                      <div className="notification bg-primary rounded-circle"></div>
+                    </a>
+                  </Tooltip>
+                  {showNotification && (
+                    <div className="notification-wrap" aria-labelledby="drop2">
+                      <div className="d-flex align-items-center justify-content-between py-3 px-7">
+                        <h5 className="mb-0 fs-5 fw-semibold">Notifications</h5>
+                        <span className=" bg-primary rounded-4 px-3 py-1">
+                          {notifications?.totalElements} total{" "}
+                        </span>
+                        <i
+                          className="fa fa-refresh text-primary f-18 mx-2 cursor-pointer"
+                          onClick={handleCallNotifications}
+                        ></i>
+                      </div>
+                      <div className="message-body" data-simplebar="">
+                        {notificationLoading ? (
+                          <div className="px-7">
+                            <CircularProgress size={24} />
+                          </div>
+                        ) : notifications?.content?.length === 0 ||
+                          !notifications?.content ? (
+                          <p className="px-7">notifications not found.</p>
+                        ) : (
+                          notifications?.content?.map((notification) => {
+                            return (
+                              <a
+                                className="py-6 px-7 d-flex align-items-center dropdown-item"
+                                key={notification?.id}
+                              >
+                                <span className="me-3">
+                                  <img
+                                    src={user1}
+                                    alt="user"
+                                    className="rounded-circle"
+                                    width="48"
+                                    height="48"
+                                  />
+                                </span>
+                                <div className="w-75 d-inline-block v-middle">
+                                  <h6 className="mb-1 fw-semibold  wrap-text">
+                                    {notification?.header}
+                                  </h6>
+                                  <span className="d-block wrap-text">
+                                    {notification?.message}
+                                  </span>
+                                  <span className="d-block wrap-text">
+                                    {notification?.createdDate
+                                      ? moment
+                                          .utc(notification?.createdDate)
+                                          .format("DD-MM-YYYY HH:mm:ss")
+                                      : "null"}
+                                  </span>
+                                </div>
+                              </a>
+                            );
+                          })
+                        )}
+                      </div>
+                      {notifications?.content?.length > 0 && (
+                        <div className="row px-7 mt-2">
+                          <div className="col-lg-12 mb-4">
+                            <Pagination
+                              count={Math.ceil(
+                                notifications?.totalElements / itemsPerPage
+                              )}
+                              page={page}
+                              onChange={handleChange}
+                              siblingCount={1}
+                              boundaryCount={1}
+                            />
+                          </div>
                         </div>
-                      ) : notifications?.content?.length === 0 ||
-                        !notifications?.content ? (
-                        <p className="px-7">notifications not found.</p>
-                      ) : (
-                        notifications?.content?.map((notification) => {
-                          return (
-                            <a
-                              className="py-6 px-7 d-flex align-items-center dropdown-item"
-                              key={notification?.id}
-                            >
-                              <span className="me-3">
-                                <img
-                                  src={user1}
-                                  alt="user"
-                                  className="rounded-circle"
-                                  width="48"
-                                  height="48"
-                                />
-                              </span>
-                              <div className="w-75 d-inline-block v-middle">
-                                <h6 className="mb-1 fw-semibold  wrap-text">
-                                  {notification?.header}
-                                </h6>
-                                <span className="d-block wrap-text">
-                                  {notification?.message}
-                                </span>
-                                <span className="d-block wrap-text">
-                                  {notification?.createdDate
-                                    ? moment
-                                        .utc(notification?.createdDate)
-                                        .format("DD-MM-YYYY HH:mm:ss")
-                                    : "null"}
-                                </span>
-                              </div>
-                            </a>
-                          );
-                        })
                       )}
                     </div>
-                    {notifications?.content?.length > 0 && (
-                      <div className="row px-7 mt-2">
-                        <div className="col-lg-12 mb-4">
-                          <Pagination
-                            count={Math.ceil(
-                              notifications?.totalElements / itemsPerPage
-                            )}
-                            page={page}
-                            onChange={handleChange}
-                            siblingCount={1}
-                            boundaryCount={1}
-                          />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </li>
+                  )}
+                </li>
+              )}
 
               <li className="nav-item dropdown">
                 <Tooltip

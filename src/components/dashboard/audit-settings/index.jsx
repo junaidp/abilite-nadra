@@ -8,6 +8,7 @@ import { setupGetAllUsers } from "../../../global-redux/reducers/settings/user-m
 import { setupGetNotifications } from "../../../global-redux/reducers/settings/notification/slice.jsx";
 import { setupGetAllCPList } from "../../../global-redux/reducers/settings/cp-list/slice";
 import { setupGetAllRiskFactors } from "../../../global-redux/reducers/settings/risk-factor/slice";
+import { setupGetAllUser } from "../../../global-redux/reducers/settings/previous-observation/slice.jsx";
 import AddCheckListManagementDialog from "../../modals/add-checklist-management-dialog/index";
 import { setupGetAllFiles } from "../../../global-redux/reducers/settings/supporting-docs/slice";
 import { handleReset } from "../../../global-redux/reducers/settings/risk-control-matrix/slice";
@@ -17,7 +18,6 @@ import {
   setupGetFinancialQuantifiableYesForCompany,
   setupGetFinancialQuantifiableNoForCompany,
 } from "../../../global-redux/reducers/settings/business-objective/slice.jsx";
-import { setupGetAllPreviousObservations } from "../../../global-redux/reducers/settings/previous-observation/slice.jsx";
 import UpdateUserDialog from "../.././modals/update-user-dialog";
 import TFA from "./components/tfa/index.jsx";
 import CheckList from "./components/checklist";
@@ -83,7 +83,7 @@ const AuditSettings = () => {
         dispatch(setupGetAllUsers({ shareWith: true }));
       }
       if (currentSettingOption === "previousObservations") {
-        dispatch(setupGetAllPreviousObservations({ companyId: companyId }));
+        dispatch(setupGetAllUser());
       }
       if (currentSettingOption === "business-objective") {
         dispatch(setupGetFinancialQuantifiableYesForCompany({ companyId }));
@@ -289,7 +289,7 @@ const AuditSettings = () => {
                     Notification
                   </button>
                 )}
-                {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+                {userRole === "ADMIN" && (
                   <button
                     className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
                     id="previous-observation-tab"
@@ -358,7 +358,7 @@ const AuditSettings = () => {
                 currentSettingOption={currentSettingOption}
               />
               {userRole !== "ADMIN" && <Notification />}
-              {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+              {userRole === "ADMIN" && (
                 <PreviousObservation
                   currentSettingOption={currentSettingOption}
                 />
