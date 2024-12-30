@@ -44,6 +44,16 @@ const PreviousObservation = ({ currentSettingOption }) => {
     }
   };
 
+  const handleDownload = () => {
+    const fileUrl = "/sample-file.csv";
+    const link = document.createElement("a");
+    link.href = fileUrl;
+    link.download = "sample-file.csv";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   React.useEffect(() => {
     if (previousObservationAddSuccess) {
       setSelectedFile(null);
@@ -68,14 +78,11 @@ const PreviousObservation = ({ currentSettingOption }) => {
           <div className="sub-heading mb-4 fw-bold">Previous Observations</div>
         </div>
         <div className="col-lg-6 d-flex h-40 flex-end">
-          <button className={`btn btn-labeled btn-primary  shadow`}>
-            <a
-              href="/sample-file.csv"
-              download="sample-file.csv"
-              className="text-white file-download-link"
-            >
-              Download Sample Previous Observation File
-            </a>
+          <button
+            className="btn btn-labeled btn-primary shadow"
+            onClick={handleDownload}
+          >
+            Download Sample Previous Observation File
           </button>
         </div>
       </div>
