@@ -1,1 +1,7 @@
-Jobtitle,Observations,Management comments,Year,Risk rating,Auditee,"Resources list(Separated by ""-"" e.g 1-2-22",Head ofi nternal audit,Backup head of internal audit,Proposed job approver,Planned job start date
+Jobtitle,Observations,Management comments,Year,Risk rating,Auditee,"Resources list(Separated by ""-"" e.g 1-2-22",Head ofi nternal audit,Backup head of internal audit,Proposed job approver,Date,isComplete
+1. job-name,1. observation,POLO,2024,High,165,163,163,163,163,01/02/2025,TRUE
+1. job-name,2. observation,POLO,2024,High,165,163,163,163,163,02/02/2025,
+1. job-name,3. observation,POLO,2024,High,165,163,163,163,163,03/02/2025,
+2. job-name,1. observation,POLO,2024,High,165,163,163,163,163,04/02/2025,
+2. job-name,2. observation,POLO,2024,High,165,163,163,163,163,05/02/2025,
+2. job-name,3. observation,POLO,2024,High,165,163,163,163,163,06/02/2025,
