@@ -13,7 +13,6 @@ import {
 } from "./global-redux/reducers/common/slice";
 import Home from "./pages/Home";
 import Login from "./pages/auth/login/Login";
-import ForgetPassword from "./pages/auth/forget-password/ForgetPassword";
 import DashboardHome from "./pages/dashboard/home/DashboardHome";
 import BusinessObjective from "./pages/dashboard/planning/business-objective/BusinessObjective";
 import RiskAssessments from "./pages/dashboard/planning/risk-assessments/RiskAssessments";
@@ -108,7 +107,6 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/forgot-password" element={<ForgetPassword />} />
           <Route
             path="/audit"
             element={

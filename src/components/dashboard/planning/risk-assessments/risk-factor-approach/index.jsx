@@ -142,6 +142,22 @@ const RiskFactorApproach = () => {
     return num;
   }
 
+  function handlCalculateProbabilityTotal() {
+    let num = 0;
+    data?.riskAssessmentList?.forEach((element) => {
+      num = num + Number(handleCalculateProbability(element));
+    });
+    return num.toFixed(2);
+  }
+
+  function handlCalculateRiskScoreTotal() {
+    let num = 0;
+    data?.riskAssessmentList?.forEach((element) => {
+      num = num + Number(handleCalculateRiskScore(element));
+    });
+    return num.toFixed(2);
+  }
+
   React.useEffect(() => {
     setData((pre) => {
       return {
@@ -353,6 +369,9 @@ const RiskFactorApproach = () => {
                           <td className="bold width-50">
                             {handlCalculateEnterpriseValue()} %
                           </td>
+                          <td colSpan="4"></td>
+                          <td>{handlCalculateProbabilityTotal()}</td>
+                          <td>{handlCalculateRiskScoreTotal()}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -409,7 +428,7 @@ const RiskFactorApproach = () => {
                 <div>
                   <div className="row">
                     <div className="col-lg-12">
-                      <h6>Rating of Score Ranges</h6>
+                      <h6>Rating of Risk Score Ranges</h6>
                     </div>
                   </div>
                   <div className="row">
@@ -425,7 +444,7 @@ const RiskFactorApproach = () => {
                     </div>
                     <div className="col-lg-4">
                       <div className="px-3 py-2 border-0 card shadow  text-white label-text bg-danger">
-                        High(H) = 4 to 5
+                        High(H) = Above 4
                       </div>
                     </div>
                   </div>
