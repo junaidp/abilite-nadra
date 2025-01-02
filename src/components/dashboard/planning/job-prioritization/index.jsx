@@ -14,7 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import SubmitDialog from "./submit-dialog";
-import { getNextYears } from "../../../../config/helper"
+import { getNextYears } from "../../../../config/helper";
 
 const JobPrioritization = () => {
   const dispatch = useDispatch();
@@ -217,7 +217,6 @@ const JobPrioritization = () => {
                         </td>
                         <td>
                           <textarea
-                            className="form-control"
                             placeholder="Enter Reason"
                             id="exampleFormControlTextarea1"
                             rows="3"
@@ -227,10 +226,13 @@ const JobPrioritization = () => {
                             }
                             disabled={item?.editable === true ? false : true}
                             name="comments"
-                            maxLength="500"
+                            maxLength="200"
+                            className={`form-control  ${
+                              item?.comments?.length >= 200 && "error-border"
+                            }`}
                           ></textarea>
                           <p className="word-limit-info label-text mb-2">
-                            Maximum 500 characters
+                            Maximum 200 characters
                           </p>
                         </td>
                         <td className="width-100">

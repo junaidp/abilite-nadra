@@ -181,13 +181,15 @@ const AuditStepsDialog = ({
         <div className="row mb-3">
           <div className="col-lg-12">
             <textarea
-              className="form-control"
               placeholder="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
               id="exampleFormControlT"
               rows="3"
               value={description}
               onChange={(event) => setDescription(event?.target?.value)}
               maxLength="500"
+              className={`form-control  ${
+                description?.length >= 500 && "error-border"
+              }`}
             ></textarea>
             <p className="word-limit-info label-text mb-2">
               Maximum 500 characters
@@ -211,7 +213,6 @@ const AuditStepsDialog = ({
                   }`}
                 >
                   <textarea
-                    className="form-control"
                     placeholder="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
                     id="exampleFormControlT"
                     rows="3"
@@ -221,6 +222,9 @@ const AuditStepsDialog = ({
                     disabled={handleAllowEdit() === true ? false : true}
                     value={item?.description}
                     maxLength="500"
+                    className={`form-control  ${
+                      item?.description?.length >= 500 && "error-border"
+                    }`}
                   ></textarea>
                   <p className="word-limit-info label-text mb-2">
                     Maximum 500 characters

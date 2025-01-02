@@ -99,16 +99,18 @@ const AddKickOffControlDialog = ({
             <textarea
               type="text"
               id="fname"
-              className="form-control h-400"
               name="fname"
               placeholder="Add detail here"
               required="required"
               value={description}
               onChange={(event) => setDescription(event?.target?.value)}
-              maxLength="2000"
+              maxLength="500"
+              className={`form-control h-400 ${
+                description?.length >= 500 && "error-border"
+              }`}
             ></textarea>
             <label className="word-limit-info label-text">
-              Maximum 2000 characters
+              Maximum 500 characters
             </label>
           </div>
         </div>

@@ -39,7 +39,6 @@ const CompanyUpdates = ({
             <label className="mb-2">Company Update</label>
           </div>
           <textarea
-            className="form-control w-100 min-height-100"
             placeholder="Enter update"
             type="textarea"
             name="companyUpdates"
@@ -53,10 +52,13 @@ const CompanyUpdates = ({
                 ? true
                 : false
             }
-            maxLength="5000"
+            className={`form-control w-100 min-height-100 ${
+              object?.companyUpdates?.length >= 2000 && "error-border"
+            }`}
+            maxLength="2000"
           ></textarea>
           <p className="word-limit-info label-text mb-2">
-            Maximum 500 characters
+            Maximum 2000 characters
           </p>
           {(planingEngagementSingleObject?.complete === false ||
             (planingEngagementSingleObject?.complete === true &&

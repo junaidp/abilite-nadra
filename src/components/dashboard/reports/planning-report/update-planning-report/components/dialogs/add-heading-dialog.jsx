@@ -67,13 +67,19 @@ const AddHeadingDialog = ({ setShowAddHeadingDialog, reportId }) => {
             <textarea
               type="text"
               id="fname"
-              className="form-control h-400"
               name="fname"
               placeholder="Add detail here"
               required="required"
               value={description}
               onChange={(event) => setDescription(event?.target?.value)}
+              className={`form-control h-400 ${
+                description?.length >= 1500 && "error-border"
+              }`}
+              maxLength="1500"
             ></textarea>
+            <label className="word-limit-info label-text">
+              Maximum 1500 characters
+            </label>
           </div>
         </div>
       </div>

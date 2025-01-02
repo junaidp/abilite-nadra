@@ -106,7 +106,6 @@ const Control = ({
                     </div>
                     <textarea
                       key={controlIndex}
-                      className="form-control "
                       value={control?.description}
                       id="exampleFormCon"
                       rows="3"
@@ -121,6 +120,9 @@ const Control = ({
                       name="description"
                       disabled={control?.editable === false ? true : false}
                       maxLength="500"
+                      className={`form-control ${
+                        control?.description?.length >= 500 && "error-border"
+                      }`}
                     ></textarea>
                     <label className="word-limit-info label-text">
                       Maximum 500 characters

@@ -124,7 +124,6 @@ const Rating = ({
       </div>
 
       <textarea
-        className="form-control"
         placeholder="Enter Reason"
         id="exampleFormControlTextarea222"
         value={risk?.description || ""}
@@ -134,10 +133,11 @@ const Rating = ({
         name="description"
         disabled={risk?.editable ? false : true}
         maxLength="500"
-        ></textarea>
-        <p className="word-limit-info label-text mb-2">
-          Maximum 500 characters
-        </p>
+        className={`form-control ${
+          risk?.description?.length >= 500 && "error-border"
+        }`}
+      ></textarea>
+      <p className="word-limit-info label-text mb-2">Maximum 500 characters</p>
       {handleAllowEdit() === true && (
         <i
           className="fa fa-edit   f-18 cursor-pointer  mt-3"

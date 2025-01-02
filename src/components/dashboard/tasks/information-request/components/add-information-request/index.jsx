@@ -14,9 +14,9 @@ const validationSchema = Yup.object({
     .min(today.toDate(), "Due Date must be today or later"),
   engagementId: Yup.string().required("Job is required"),
   userAssigned: Yup.string().required("Assignee is required"),
-  detailedRequirement: Yup.string()
-    .required("Detailed Requirement is required")
-    .max(400, "Detailed Requirement must be 400 characters or less"),
+  detailedRequirement: Yup.string().required(
+    "Detailed Requirement is required"
+  ),
 });
 
 const AddInformationRequest = ({ setShowAddInformationRequestDialog }) => {
@@ -79,7 +79,7 @@ const AddInformationRequest = ({ setShowAddInformationRequestDialog }) => {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ isSubmitting }) => (
+        {({ isSubmitting, values }) => (
           <Form>
             <div className="row">
               <div className="mb-3 col-lg-12">
@@ -151,18 +151,22 @@ const AddInformationRequest = ({ setShowAddInformationRequestDialog }) => {
                 <Field
                   as="textarea"
                   name="detailedRequirement"
-                  className="form-control"
                   id="exampleFormControlTextarea1"
                   rows="3"
+                  className={`form-control ${
+                    values?.detailedRequirement?.length >= 1500 &&
+                    "error-border"
+                  }`}
+                  maxLength="1500"
                 />
+                <label className="word-limit-info label-text">
+                  Maximum 1500 characters
+                </label>
                 <ErrorMessage
                   name="detailedRequirement"
                   component="div"
                   className="text-danger f-14"
                 />
-                <label className="word-limit-info label-text">
-                  Maximum 400 words
-                </label>
               </div>
             </div>
             <FileUpload uploads={uploads} setUploads={setUploads} />

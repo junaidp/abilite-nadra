@@ -144,7 +144,6 @@ const AccordianItem = ({
 
           <label>Implication:</label>
           <textarea
-            className="form-control "
             placeholder="Enter Reason"
             id="exampleFormControlTextarea1"
             rows="3"
@@ -152,16 +151,18 @@ const AccordianItem = ({
             name="implication"
             onChange={(event) => handleChange(event, item?.id)}
             disabled={handleAllowEditSection1(item) === true ? false : true}
-            maxLength="500"
+            maxLength="1500"
+            className={`form-control  ${
+              item?.implication?.length >= 1500 && "error-border"
+            }`}
           ></textarea>
           <p className="word-limit-info label-text mb-2">
-            Maximum 500 characters
+            Maximum 1500 characters
           </p>
           <br />
 
           <label>Recommended Action Step:</label>
           <textarea
-            className="form-control "
             placeholder="Enter Reason"
             id="exampleFormControlTextarea1"
             rows="3"
@@ -169,10 +170,13 @@ const AccordianItem = ({
             name="recommendedActionStep"
             onChange={(event) => handleChange(event, item?.id)}
             disabled={handleAllowEditSection1(item) === true ? false : true}
-            maxLength="500"
+            maxLength="1500"
+            className={`form-control  ${
+              item?.recommendedActionStep?.length >= 1500 && "error-border"
+            }`}
           ></textarea>
           <p className="word-limit-info label-text mb-2">
-            Maximum 500 characters
+            Maximum 1500 characters
           </p>
           <br />
 
@@ -193,17 +197,19 @@ const AccordianItem = ({
               <div className="mb-4">
                 <label>Management Comments:</label>
                 <textarea
-                  className="form-control "
                   placeholder="Enter Reason"
                   id="exampleFormControlTextarea1"
                   rows="3"
                   value={item?.managementComments || ""}
                   name="managementComments"
                   onChange={(event) => handleChange(event, item?.id)}
-                  maxLength="500"
+                  maxLength="1500"
+                  className={`form-control  ${
+                    item?.managementComments?.length >= 1500 && "error-border"
+                  }`}
                 ></textarea>
                 <p className="word-limit-info label-text mb-2">
-                  Maximum 500 characters
+                  Maximum 1500 characters
                 </p>
                 <br />
                 <label className="py-1">Implementation Date:</label>

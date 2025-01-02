@@ -54,7 +54,6 @@ const BusinessObjectiveMapProcess = ({
                   Business Objective
                 </label>
                 <textarea
-                  className="form-control"
                   placeholder="Enter Here"
                   id="ds"
                   rows="3"
@@ -69,8 +68,14 @@ const BusinessObjectiveMapProcess = ({
                       ? true
                       : false
                   }
+                  className={`form-control ${
+                    description?.length >= 500 && "error-border"
+                  }`}
                   maxLength="500"
                 ></textarea>
+                <p className="word-limit-info label-text mb-2">
+                  Maximum 500 characters
+                </p>
               </div>
 
               <div className="col-lg-12">

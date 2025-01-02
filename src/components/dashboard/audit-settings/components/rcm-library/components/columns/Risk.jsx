@@ -41,7 +41,6 @@ const Risk = ({
                 </select>
               </div>
               <textarea
-                className="form-control"
                 value={risk?.description}
                 id="exampleFormCon"
                 rows="3"
@@ -51,6 +50,9 @@ const Risk = ({
                 name="description"
                 disabled={risk?.editable === false ? true : false}
                 maxLength="500"
+                className={`form-control ${
+                  risk?.description?.length >= 500 && "error-border"
+                }`}
               ></textarea>
               <label className="word-limit-info label-text">
                 Maximum 500 characters

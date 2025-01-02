@@ -104,7 +104,6 @@ const Objective = ({
           </div>
         </div>
         <textarea
-          className="form-control"
           placeholder="Enter Reason"
           id="exampleFormControlTextarea1"
           value={singleAuditEngagement?.description || ""}
@@ -114,6 +113,9 @@ const Objective = ({
           name="description"
           disabled={singleAuditEngagement?.editable ? false : true}
           maxLength="500"
+          className={`form-control ${
+            singleAuditEngagement?.description?.length >= 500 && "error-border"
+          }`}
         ></textarea>
         <p className="word-limit-info label-text mb-2">
           Maximum 500 characters

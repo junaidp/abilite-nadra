@@ -115,15 +115,17 @@ const UpdateTaskManagement = ({ setShowUpdateTaskDailog, updateTaskId }) => {
         <div className="col-lg-12">
           <label>Your Response</label>
           <textarea
-            className="form-control"
             id="exampleFormControlTextarea1"
             rows="3"
             value={response}
             onChange={(event) => setResponse(event?.target?.value)}
-            maxLength="400"
+            maxLength="1500"
+            className={`form-control ${
+              response?.length >= 1500 && "error-border"
+            }`}
           ></textarea>
           <label className="word-limit-info label-text">
-            Maximum 400 words
+            Maximum 1500 characters
           </label>
         </div>
       </div>

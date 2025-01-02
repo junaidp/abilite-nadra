@@ -127,15 +127,23 @@ const AuditNotifications = ({ currentAuditEngagement, auditEngagementId }) => {
                 </div>
                 <div className="d-flex mb-2  align-items-start">
                   <label className="me-3 w-80">Detail</label>
-                  <textarea
-                    className="form-control"
-                    id="exampleFormControlT"
-                    rows="15"
-                    name="body"
-                    value={data?.body}
-                    onChange={(event) => handleChange(event)}
-                    disabled={isDisabled()}
-                  ></textarea>
+                  <div className="w-100">
+                    <textarea
+                      id="exampleFormControlT"
+                      rows="15"
+                      name="body"
+                      value={data?.body}
+                      onChange={(event) => handleChange(event)}
+                      disabled={isDisabled()}
+                      className={`form-control w-100 ${
+                        data?.body?.length >= 1500 && "error-border"
+                      }`}
+                      maxLength="1500"
+                    ></textarea>
+                    <label className="word-limit-info label-text">
+                      Maximum 1500 characters
+                    </label>
+                  </div>
                 </div>
 
                 <div className="d-flex float-end">

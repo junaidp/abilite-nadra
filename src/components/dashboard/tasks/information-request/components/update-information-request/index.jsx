@@ -14,9 +14,9 @@ const validationSchema = Yup.object({
     .min(today.toDate(), "Due Date must be today or later"),
   engagementId: Yup.string().required("Job is required"),
   userAssigned: Yup.string().required("Assignee is required"),
-  detailedRequirement: Yup.string()
-    .required("Detailed Requirement is required")
-    .max(400, "Detailed Requirement must be 400 characters or less"),
+  detailedRequirement: Yup.string().required(
+    "Detailed Requirement is required"
+  ),
 });
 
 const UpdateInformationRequest = ({
@@ -84,7 +84,7 @@ const UpdateInformationRequest = ({
         onSubmit={handleSubmit}
         enableReinitialize
       >
-        {({ isSubmitting }) => (
+        {({ isSubmitting, values }) => (
           <Form>
             <div className="row">
               <div className="mb-3 col-lg-12">
@@ -156,9 +156,13 @@ const UpdateInformationRequest = ({
                 <Field
                   as="textarea"
                   name="detailedRequirement"
-                  className="form-control"
                   id="exampleFormControlTextarea1"
                   rows="3"
+                  className={`form-control ${
+                    values?.detailedRequirement?.length >= 1500 &&
+                    "error-border"
+                  }`}
+                  maxLength="1500"
                 />
                 <ErrorMessage
                   name="detailedRequirement"
@@ -166,7 +170,7 @@ const UpdateInformationRequest = ({
                   className="text-danger f-14"
                 />
                 <label className="word-limit-info label-text">
-                  Maximum 400 words
+                  Maximum 1500 characters
                 </label>
               </div>
             </div>

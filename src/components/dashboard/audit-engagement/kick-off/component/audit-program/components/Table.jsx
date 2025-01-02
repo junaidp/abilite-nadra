@@ -62,7 +62,6 @@ const Table = ({
                   </td>
                   <td>
                     <textarea
-                      className="form-control"
                       id="exampleFormControlT"
                       rows="3"
                       value={item?.description || ""}
@@ -70,6 +69,9 @@ const Table = ({
                       onChange={(event) => handleChange(event, item?.id)}
                       disabled={item?.editable === true ? false : true}
                       maxLength="500"
+                      className={`form-control  ${
+                        item?.description?.length >= 500 && "error-border"
+                      }`}
                     ></textarea>
                     <p className="word-limit-info label-text mb-2">
                       Maximum 500 characters

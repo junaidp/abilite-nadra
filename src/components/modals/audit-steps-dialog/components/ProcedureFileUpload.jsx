@@ -120,7 +120,6 @@ const ProcedureFileUpload = ({
         <div className="col-lg-12">
           <label className="me-3   ">Audit Procedure Performed</label>
           <textarea
-            className="form-control"
             placeholder="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
             rows="3"
             name="procedurePerformed"
@@ -133,6 +132,10 @@ const ProcedureFileUpload = ({
             disabled={handleAllowEdit() === true ? false : true}
             onChange={(event) => handleChange(event)}
             maxLength="500"
+            className={`form-control  ${
+              currentAuditStep?.procedurePerformed?.length >= 500 &&
+              "error-border"
+            }`}
           ></textarea>
           <p className="word-limit-info label-text mb-2">
             Maximum 500 characters

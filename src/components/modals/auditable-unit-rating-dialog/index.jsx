@@ -206,7 +206,6 @@ const AuditableUnitRatingDialog = ({
                     <div className="col-lg-12">
                       <label>Audit Job</label>
                       <textarea
-                        className="form-control"
                         placeholder="Enter Reason"
                         id="exampleFormControlTextarea1"
                         rows="3"
@@ -214,6 +213,9 @@ const AuditableUnitRatingDialog = ({
                         value={data?.reason}
                         onChange={handleChange}
                         maxLength="500"
+                        className={`form-control  ${
+                          data?.reason?.length >= 500 && "error-border"
+                        }`}
                       ></textarea>
                       <p className="word-limit-info label-text mb-2">
                         Maximum 500 characters

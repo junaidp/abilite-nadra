@@ -166,7 +166,6 @@ const CPList = ({ userHierarchy, userRole, currentSettingOption }) => {
                           <td>{(page - 1) * 10 + index + 1}</td>
                           <td>
                             <textarea
-                              className="form-control"
                               placeholder="Enter Reason"
                               id="exampleFormControlTextarea1"
                               rows="3"
@@ -175,6 +174,10 @@ const CPList = ({ userHierarchy, userRole, currentSettingOption }) => {
                                 handleChangeDescription(event, item?.id)
                               }
                               maxLength="500"
+                              className={`form-control ${
+                                item?.description?.length >= 500 &&
+                                "error-border"
+                              }`}
                             ></textarea>
                             <label className="word-limit-info label-text">
                               Maximum 500 characters

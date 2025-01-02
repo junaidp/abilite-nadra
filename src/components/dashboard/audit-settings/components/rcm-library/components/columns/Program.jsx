@@ -169,7 +169,6 @@ const Program = ({
                             </select>
                           </div>
                           <textarea
-                            className="form-control"
                             value={program?.description}
                             disabled={
                               program?.editable === false ? true : false
@@ -187,6 +186,10 @@ const Program = ({
                             name="description"
                             rows="3"
                             maxLength="500"
+                            className={`form-control ${
+                              program?.description?.length >= 500 &&
+                              "error-border"
+                            }`}
                           ></textarea>
                           <label className="word-limit-info label-text">
                             Maximum 500 characters

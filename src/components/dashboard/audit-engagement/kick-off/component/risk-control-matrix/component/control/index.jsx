@@ -153,7 +153,6 @@ const Control = ({
             </div>
 
             <textarea
-              className="form-control"
               placeholder="Enter Reason"
               id="exampleFormControlTextarea222"
               value={control?.description || ""}
@@ -168,6 +167,9 @@ const Control = ({
               disabled={control?.editable ? false : true}
               name="description"
               maxLength="500"
+              className={`form-control ${
+                control?.description?.length >= 500 && "error-border"
+              }`}
             ></textarea>
             <p className="word-limit-info label-text mb-2">
               Maximum 500 characters

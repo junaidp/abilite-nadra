@@ -121,13 +121,15 @@ const AddAuditProgramDialog = ({
             <textarea
               type="text"
               id="fname"
-              className="form-control h-400"
               name="fname"
               placeholder="Add detail here"
               required="required"
               value={description}
               onChange={(event) => setDescription(event?.target?.value)}
               maxLength="2000"
+              className={`form-control h-400  ${
+                description?.length >= 2000 && "error-border"
+              }`}
             ></textarea>
             <label className="word-limit-info label-text">
               Maximum 2000 characters

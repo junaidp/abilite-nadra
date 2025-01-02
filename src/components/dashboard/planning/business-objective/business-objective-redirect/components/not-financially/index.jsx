@@ -90,7 +90,6 @@ const FinanciallyQuantifiableNo = ({
                         <td>{index + 1}</td>
                         <td>
                           <textarea
-                            className="form-control"
                             id="exampleFormControlTextarea1"
                             rows="3"
                             name="name"
@@ -98,7 +97,6 @@ const FinanciallyQuantifiableNo = ({
                             onChange={(event) =>
                               handleChangeInputValue(event, item?.id)
                             }
-                            maxLength="5000"
                             disabled={
                               planingEngagementSingleObject?.locked === true ||
                               (planingEngagementSingleObject?.complete ===
@@ -110,9 +108,13 @@ const FinanciallyQuantifiableNo = ({
                                 ? true
                                 : false
                             }
+                            className={`form-control ${
+                              item?.name?.length >= 500 && "error-border"
+                            }`}
+                            maxLength="500"
                           ></textarea>
                           <label className="word-limit-info label-text">
-                            Maximum 5000 characters
+                            Maximum 500 characters
                           </label>
                         </td>
 
