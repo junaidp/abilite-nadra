@@ -21,6 +21,7 @@ import JobPrioritization from "./pages/dashboard/planning/job-prioritization/Job
 import JobSecheduling from "./pages/dashboard/planning/job-scheduling/JobSeheduling";
 import AuditPlanSummary from "./pages/dashboard/planning/audit-plan-summary/AuditPlanSummary";
 import AuditEngagement from "./pages/dashboard/audit-engagement/AuditEngagement";
+import ForgetPassword from "./pages/auth/forget-password/ForgetPassword";
 import PlanningReport from "./pages/dashboard/reports/planning-report/PlanningReport";
 import ViewJobschedule from "./pages/dashboard/planning/job-scheduling/view-job-schedule/ViewJobschedule";
 import GeneratePlanningReport from "./pages/dashboard/reports/planning-report/generate-planning-report/GeneratePlanningReport";
@@ -107,6 +108,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/forgot-password" element={<ForgetPassword />} />
           <Route
             path="/audit"
             element={

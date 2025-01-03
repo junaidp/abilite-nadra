@@ -131,6 +131,18 @@ const Login = () => {
                   </div>
                   <div className="col-12">
                     <div className="form-group">
+                      <div className="fxt-checkbox-wrap">
+                        <a
+                          className="fxt-switcher-text"
+                          onClick={() => navigate("/forgot-password")}
+                        >
+                          Forgot Password
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-12">
+                    <div className="form-group">
                       <button
                         type="submit"
                         className={`btn fxt-btn-fill ${loading && "disabled"}`}

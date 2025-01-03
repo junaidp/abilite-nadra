@@ -101,9 +101,6 @@ const InternalAuditReportBody = ({
               initialValue={reportObject?.executiveSummary}
               handleChangeExcutiveSummary={handleChangeExcutiveSummary}
             />
-            <label className="word-limit-info label-text">
-              Maximum 5000 words
-            </label>
           </div>
         </div>
 
@@ -114,9 +111,6 @@ const InternalAuditReportBody = ({
               initialValue={reportObject?.auditPurpose}
               handleChangeAuditPurpose={handleChangeAuditPurpose}
             />
-            <label className="word-limit-info label-text">
-              Maximum 5000 words
-            </label>
           </div>
         </div>
       </div>
@@ -170,9 +164,6 @@ const InternalAuditReportBody = ({
             initialValue={reportObject?.annexure}
             handleChangeAnnexure={handleChangeAnnexure}
           />
-          <label className="word-limit-info label-text">
-            Maximum 5000 words
-          </label>
         </div>
       </div>
       <div className="mt-4">

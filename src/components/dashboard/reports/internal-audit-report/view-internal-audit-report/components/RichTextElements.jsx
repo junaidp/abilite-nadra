@@ -10,30 +10,20 @@ const RichTextElements = ({ singleInternalAuditReport }) => {
           <RichTextEditor
             initialValue={singleInternalAuditReport?.executiveSummary}
           />
-          <label className="word-limit-info label-text">
-            Maximum 5000 words
-          </label>
         </div>
       </div>
-
       <div className="row mb-3">
         <div className="col-lg-12">
           <label>Audit Purpose</label>
           <RichTextEditor
             initialValue={singleInternalAuditReport?.auditPurpose}
           />
-          <label className="word-limit-info label-text">
-            Maximum 5000 words
-          </label>
         </div>
       </div>
       <div className="row mb-3">
         <div className="col-lg-12">
           <label>Annexure</label>
           <RichTextEditor initialValue={singleInternalAuditReport?.annexure} />
-          <label className="word-limit-info label-text">
-            Maximum 5000 words
-          </label>
         </div>
       </div>
     </div>

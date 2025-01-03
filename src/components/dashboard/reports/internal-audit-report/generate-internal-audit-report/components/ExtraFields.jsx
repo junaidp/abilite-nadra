@@ -31,7 +31,6 @@ const ExtraFields = ({
                 <div className="col-lg-12">
                   <label>Heading</label>
                   <textarea
-                    className="form-control"
                     placeholder="Enter heading"
                     id="exampleFormControlTextarea1"
                     rows="3"
@@ -40,6 +39,9 @@ const ExtraFields = ({
                     onChange={(event) =>
                       handleChangeExtraFields(event, item?.id)
                     }
+                    className={`form-control ${
+                      item?.heading?.length >= 500 && "error-border"
+                    }`}
                     maxLength="500"
                   ></textarea>
                   <p className="word-limit-info label-text mb-2">
@@ -51,7 +53,6 @@ const ExtraFields = ({
                 <div className="col-lg-12">
                   <label>Data</label>
                   <textarea
-                    className="form-control"
                     placeholder="Enter heading"
                     id="exampleFormControlTextarea1"
                     rows="3"
@@ -60,6 +61,9 @@ const ExtraFields = ({
                     onChange={(event) =>
                       handleChangeExtraFields(event, item?.id)
                     }
+                    className={`form-control ${
+                      item?.data?.length >= 500 && "error-border"
+                    }`}
                     maxLength="500"
                   ></textarea>
                   <p className="word-limit-info label-text mb-2">
@@ -116,7 +120,6 @@ const ExtraFields = ({
                   <div className="col-lg-12">
                     <label>Add heading here</label>
                     <textarea
-                      className="form-control"
                       placeholder="Enter heading"
                       id="exampleFormControlTextarea1"
                       rows="3"
@@ -125,6 +128,9 @@ const ExtraFields = ({
                       onChange={(event) =>
                         handleChangeExtraField(event, singleItem?.id)
                       }
+                      className={`form-control ${
+                        singleItem?.heading?.length >= 500 && "error-border"
+                      }`}
                       maxLength="500"
                     ></textarea>
                     <p className="word-limit-info label-text mb-2">
@@ -136,7 +142,6 @@ const ExtraFields = ({
                   <div className="col-lg-12">
                     <label>Add data here</label>
                     <textarea
-                      className="form-control"
                       placeholder="Enter heading"
                       id="exampleFormControlTextarea1"
                       rows="3"
@@ -145,6 +150,9 @@ const ExtraFields = ({
                       onChange={(event) =>
                         handleChangeExtraField(event, singleItem?.id)
                       }
+                      className={`form-control ${
+                        singleItem?.data?.length >= 500 && "error-border"
+                      }`}
                       maxLength="500"
                     ></textarea>
                     <p className="word-limit-info label-text mb-2">
