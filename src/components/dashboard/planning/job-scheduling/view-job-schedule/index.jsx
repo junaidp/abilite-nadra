@@ -132,24 +132,18 @@ const ViewJobSchedule = () => {
                           <td>{item?.auditableUnitTitle}</td>
                           <td>{item?.year}</td>
                           <td>
-                            <input
-                              type="date"
-                              className="form-control"
-                              disabled
-                              value={moment(
-                                item?.jobScheduleList[0]?.plannedStartDate
+                            <p>
+                              {moment(
+                                item?.jobScheduleList[0]?.plannedJobStartDate
                               ).format("YYYY-MM-DD")}
-                            />
+                            </p>
                           </td>
                           <td>
-                            <input
-                              type="date"
-                              className="form-control"
-                              disabled
-                              value={moment(
+                            <p>
+                              {moment(
                                 item?.jobScheduleList[0]?.plannedJobEndDate
                               ).format("YYYY-MM-DD")}
-                            />
+                            </p>
                           </td>
 
                           <td>

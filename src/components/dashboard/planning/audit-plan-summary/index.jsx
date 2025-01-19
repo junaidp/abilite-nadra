@@ -326,7 +326,7 @@ const AuditPlanSummary = () => {
                     <thead>
                       <tr className="bg-white">
                         <th className="bg-white">Rank</th>
-                        <th className="bg-white">Auditable Unit</th>
+                        <th className="bg-white">Audit Jobs</th>
                         <th className="bg-white ">Residual Risk Rating</th>
                         <th className="bg-white">Priority</th>
                         <th className="bg-white">Three Years Ago</th>
