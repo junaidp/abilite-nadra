@@ -14,6 +14,7 @@ import QRCodeScannerDialog from "../modals/QRCodeScannerDialog";
 import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
+  const [showpassword, setShowPassword] = React.useState(false);
   const [showQRCodeScanner, setShowQRCodeScanner] = React.useState(false);
   const { loginEmail, loginPassword, loading, user } = useSelector(
     (state) => state.auth
@@ -118,7 +119,7 @@ const Login = () => {
                     <div className="form-group relative">
                       <input
                         id="password"
-                        type="password"
+                        type={showpassword ? "password" : "string"}
                         className="form-control"
                         placeholder="********"
                         required="required"
@@ -127,6 +128,30 @@ const Login = () => {
                         value={loginPassword}
                         onChange={handleChange}
                       />
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: "12px",
+                          right: "12px",
+                        }}
+                      >
+                        {!showpassword && (
+                          <div
+                            onClick={() => setShowPassword(true)}
+                            className="cursor-pointer"
+                          >
+                            <i className="bi bi-eye-fill"></i>
+                          </div>
+                        )}
+                        {showpassword && (
+                          <div
+                            onClick={() => setShowPassword(false)}
+                            className="cursor-pointer"
+                          >
+                            <i className="bi bi-eye-slash-fill"></i>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                   <div className="col-12">

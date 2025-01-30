@@ -12,6 +12,10 @@ import { useNavigate } from "react-router-dom";
 const UserProfileDialog = ({ setUpdateUserDialog }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [showCurrentPassword, setShowCurrentPassword] = React.useState(false);
+  const [showNewPassword, setShowNewPassword] = React.useState(false);
+  const [showConfirmNewPassword, setShowConfirmNewPassword] =
+    React.useState(false);
   let { user, internalResetPasswordSuccess, loading } = useSelector(
     (state) => state.auth
   );
@@ -102,15 +106,39 @@ const UserProfileDialog = ({ setUpdateUserDialog }) => {
         <div className="row mb-4 flex items-center">
           <div className="col-lg-2 label-text ">Current Password:</div>
           <div className="col-lg-8">
-            <div className="form-group">
+            <div className="form-group relative">
               <input
-                type="password"
                 id="oldPassword"
                 name="oldPassword"
                 className="form-control"
+                type={showCurrentPassword ? "password" : "string"}
                 value={formData.oldPassword}
                 onChange={handleChange}
               />
+              <div
+                style={{
+                  position: "absolute",
+                  top: "5px",
+                  right: "12px",
+                }}
+              >
+                {!showCurrentPassword && (
+                  <div
+                    onClick={() => setShowCurrentPassword(true)}
+                    className="cursor-pointer"
+                  >
+                    <i className="bi bi-eye-fill"></i>
+                  </div>
+                )}
+                {showCurrentPassword && (
+                  <div
+                    onClick={() => setShowCurrentPassword(false)}
+                    className="cursor-pointer"
+                  >
+                    <i className="bi bi-eye-slash-fill"></i>
+                  </div>
+                )}
+              </div>
               <div className="error">{errors.oldPassword}</div>
             </div>
           </div>
@@ -119,15 +147,39 @@ const UserProfileDialog = ({ setUpdateUserDialog }) => {
         <div className="row mb-4 flex items-center">
           <div className="col-lg-2 label-text ">New Password:</div>
           <div className="col-lg-8">
-            <div className="form-group">
+            <div className="form-group relative">
               <input
-                type="password"
+                type={showNewPassword ? "password" : "string"}
                 id="newPassword"
                 name="newPassword"
                 className="form-control"
                 value={formData.newPassword}
                 onChange={handleChange}
               />
+              <div
+                style={{
+                  position: "absolute",
+                  top: "5px",
+                  right: "12px",
+                }}
+              >
+                {!showNewPassword && (
+                  <div
+                    onClick={() => setShowNewPassword(true)}
+                    className="cursor-pointer"
+                  >
+                    <i className="bi bi-eye-fill"></i>
+                  </div>
+                )}
+                {showNewPassword && (
+                  <div
+                    onClick={() => setShowNewPassword(false)}
+                    className="cursor-pointer"
+                  >
+                    <i className="bi bi-eye-slash-fill"></i>
+                  </div>
+                )}
+              </div>
               <div className="error">{errors.newPassword}</div>
             </div>
           </div>
@@ -136,15 +188,39 @@ const UserProfileDialog = ({ setUpdateUserDialog }) => {
         <div className="row mb-4 flex items-center">
           <div className="col-lg-2 label-text">Confirm New Password:</div>
           <div className="col-lg-8">
-            <div className="form-group">
+            <div className="form-group relative">
               <input
-                type="password"
+                type={showConfirmNewPassword ? "password" : "string"}
                 id="confirmNewPassword"
                 name="confirmNewPassword"
                 className="form-control"
                 value={formData.confirmNewPassword}
                 onChange={handleChange}
               />
+              <div
+                style={{
+                  position: "absolute",
+                  top: "5px",
+                  right: "12px",
+                }}
+              >
+                {!showConfirmNewPassword && (
+                  <div
+                    onClick={() => setShowConfirmNewPassword(true)}
+                    className="cursor-pointer"
+                  >
+                    <i className="bi bi-eye-fill"></i>
+                  </div>
+                )}
+                {showConfirmNewPassword && (
+                  <div
+                    onClick={() => setShowConfirmNewPassword(false)}
+                    className="cursor-pointer"
+                  >
+                    <i className="bi bi-eye-slash-fill"></i>
+                  </div>
+                )}
+              </div>
               <div className="error">{errors.confirmNewPassword}</div>
             </div>
           </div>

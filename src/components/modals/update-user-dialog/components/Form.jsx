@@ -22,7 +22,7 @@ const Form = ({
         <div className="col-lg-6 mb-2">
           <div className="col-lg-12">
             <div className="form-group">
-              <label htmlFor="area">Name:</label>
+              <label htmlFor="area">User Name:</label>
               <TextField
                 id="name"
                 name="name"

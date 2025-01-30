@@ -11,13 +11,16 @@ const Form = ({
   user,
   nullSkillSet,
 }) => {
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
+
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="row">
         <div className="col-lg-6 mb-2">
           <div className="col-lg-12">
             <div className="form-group">
-              <label htmlFor="area">Name:</label>
+              <label htmlFor="area">User Name:</label>
               <TextField
                 id="name"
                 name="name"
@@ -58,17 +61,41 @@ const Form = ({
       <div className="row">
         <div className="col-lg-6 mb-2">
           <div className="col-lg-12">
-            <div className="form-group">
+            <div className="form-group relative">
               <label htmlFor="area">Password:</label>
               <TextField
                 id="password"
                 name="password"
-                type="text"
+                type={showPassword ? "password" : "string"}
                 className="form-control"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.password}
               />
+              <div
+                style={{
+                  position: "absolute",
+                  top: "30px",
+                  right: "12px",
+                }}
+              >
+                {!showPassword && (
+                  <div
+                    onClick={() => setShowPassword(true)}
+                    className="cursor-pointer"
+                  >
+                    <i className="bi bi-eye-fill"></i>
+                  </div>
+                )}
+                {showPassword && (
+                  <div
+                    onClick={() => setShowPassword(false)}
+                    className="cursor-pointer"
+                  >
+                    <i className="bi bi-eye-slash-fill"></i>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
           {formik.touched.password && formik.errors.password && (
@@ -77,17 +104,41 @@ const Form = ({
         </div>
         <div className="mb-2 col-lg-6">
           <div className="col-lg-12">
-            <div className="form-group">
+            <div className="form-group relative">
               <label htmlFor="area">Confirm Password:</label>
               <TextField
                 id="confirmPassword"
                 name="confirmPassword"
-                type="text"
+                type={showConfirmPassword ? "password" : "string"}
                 className="form-control"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.confirmPassword}
               />
+              <div
+                style={{
+                  position: "absolute",
+                  top: "30px",
+                  right: "12px",
+                }}
+              >
+                {!showConfirmPassword && (
+                  <div
+                    onClick={() => setShowConfirmPassword(true)}
+                    className="cursor-pointer"
+                  >
+                    <i className="bi bi-eye-fill"></i>
+                  </div>
+                )}
+                {showConfirmPassword && (
+                  <div
+                    onClick={() => setShowConfirmPassword(false)}
+                    className="cursor-pointer"
+                  >
+                    <i className="bi bi-eye-slash-fill"></i>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
           {formik.touched.confirmPassword && formik.errors.confirmPassword && (
