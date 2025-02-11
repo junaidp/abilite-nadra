@@ -6,7 +6,6 @@ import { setupGetAllLocations } from "../../../global-redux/reducers/settings/lo
 import { setupGetAllProcess } from "../../../global-redux/reducers/settings/process/slice";
 import { setupGetAllUsers } from "../../../global-redux/reducers/settings/user-management/slice";
 import { setupGetNotifications } from "../../../global-redux/reducers/settings/notification/slice.jsx";
-import { setupGetAllCPList } from "../../../global-redux/reducers/settings/cp-list/slice";
 import { setupGetAllRiskFactors } from "../../../global-redux/reducers/settings/risk-factor/slice";
 import { setupGetAllUser } from "../../../global-redux/reducers/settings/previous-observation/slice.jsx";
 import AddCheckListManagementDialog from "../../modals/add-checklist-management-dialog/index";
@@ -21,7 +20,6 @@ import {
 import UpdateUserDialog from "../.././modals/update-user-dialog";
 import TFA from "./components/tfa/index.jsx";
 import CheckList from "./components/checklist";
-import CPList from "./components/cp-list/index";
 import SupportingDocs from "./components/supporting-docs/index";
 import UserInfo from "./components/user-info/UserInfo.jsx";
 import Location from "./components/location";
@@ -60,9 +58,6 @@ const AuditSettings = () => {
       }
       if (currentSettingOption === "location") {
         dispatch(setupGetAllLocations(`?companyId=${companyId}`));
-      }
-      if (currentSettingOption === "cp-list") {
-        dispatch(setupGetAllCPList(companyId));
       }
       if (currentSettingOption === "docs") {
         dispatch(setupGetAllFiles(`?companyId=${companyId}`));
@@ -172,18 +167,7 @@ const AuditSettings = () => {
                 >
                   Location
                 </button>
-                <button
-                  className="nav-link shadow-sm  border-0 mb-3  rounded-0  me-3 "
-                  id="cp-list-tab"
-                  data-bs-toggle="tab"
-                  data-bs-target="#cp-list"
-                  type="button"
-                  role="tab"
-                  aria-controls="cp-list"
-                  onClick={() => setCurrentSettingOption("cp-list")}
-                >
-                  Residual Risk
-                </button>
+              
                 <button
                   className="nav-link shadow-sm border-0 mb-3  rounded-0 me-3 "
                   id="nav-risk-factor-tab"
@@ -332,11 +316,6 @@ const AuditSettings = () => {
                 currentSettingOption={currentSettingOption}
               />
               <Location
-                userHierarchy={userHierarchy}
-                userRole={userRole}
-                currentSettingOption={currentSettingOption}
-              />
-              <CPList
                 userHierarchy={userHierarchy}
                 userRole={userRole}
                 currentSettingOption={currentSettingOption}

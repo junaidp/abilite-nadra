@@ -20,7 +20,6 @@ import internalAuditReportReducer from "../reducers/reports/internal-audit-repor
 import extraReportReducer from "../reducers/reports/extra-report/slice";
 import reportingReducer from "../reducers/reporting/slice";
 import auditEngagementReducer from "../reducers/audit-engagement/slice";
-import settingsCPListReducer from "../reducers/settings/cp-list/slice";
 import settingsRiskFactorReducer from "../reducers/settings/risk-factor/slice";
 import settingsDocsReducer from "../reducers/settings/supporting-docs/slice";
 import consolidationReportReducer from "../reducers/reports/consolidation-report/slice";
@@ -36,7 +35,6 @@ export const store = configureStore({
     settingsProcess: settingsProcessReducer,
     settingsPreviousObservation: settingsPreviousObservationReducer,
     settingsUserManagement: settingsUserManagementReducer,
-    settingsCPList: settingsCPListReducer,
     settingsRiskFactor: settingsRiskFactorReducer,
     settingsDocs: settingsDocsReducer,
     settingsNotification: settingsNotificationReducer,
