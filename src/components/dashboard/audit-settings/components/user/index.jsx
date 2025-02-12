@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import DeleteUserDialog from "./DeleteDialog";
+import ResetUserPasswordDialog from "./UpdatePassword";
 
 const UserManagement = ({
   setUserManagementDialog,
@@ -22,6 +23,9 @@ const UserManagement = ({
   const [page, setPage] = React.useState(1);
   const [currentUserId, setCurrentUserId] = React.useState("");
   const [userDeleteDialog, setUserDeleteDialog] = React.useState(false);
+  const [updatePasswordDialog, setUpdateUserPasswordDialog] =
+    React.useState(false);
+  const [userId, setUserId] = React.useState("");
   const handleChange = (event, value) => {
     setPage(value);
   };
@@ -40,6 +44,21 @@ const UserManagement = ({
     setCurrentUserId("");
   }, [currentSettingOption]);
 
+  const filteredUsers = allUsers?.filter((all) =>
+    all?.name?.toLowerCase().includes(nameVal?.toLowerCase())
+  );
+
+  const reorderedUsers = [
+    ...filteredUsers.filter(
+      (user) => user?.employeeid?.userHierarchy === "IAH"
+    ),
+    ...filteredUsers.filter(
+      (user) => user?.employeeid?.userHierarchy !== "IAH"
+    ),
+  ];
+
+  const paginatedUsers = reorderedUsers.slice((page - 1) * 10, page * 10);
+
   return (
     <div
       className="tab-pane fade"
@@ -48,11 +67,21 @@ const UserManagement = ({
       aria-labelledby="nav-user-tab"
     >
       {userDeleteDialog && (
-        <div className="model-parent">
+        <div className="model-parent d-flex items-center">
           <div className="model-wrap">
             <DeleteUserDialog
               setUserDeleteDialog={setUserDeleteDialog}
               currentUserId={currentUserId}
+            />
+          </div>
+        </div>
+      )}
+      {updatePasswordDialog && (
+        <div className="model-parent d-flex items-center">
+          <div className="model-wrap">
+            <ResetUserPasswordDialog
+              setUpdateUserPasswordDialog={setUpdateUserPasswordDialog}
+              userId={userId}
             />
           </div>
         </div>
@@ -116,43 +145,47 @@ const UserManagement = ({
                     <td className="w-300">No Users To Show.</td>
                   </tr>
                 ) : (
-                  allUsers
-                    ?.filter((all) =>
-                      all?.name?.toLowerCase().includes(nameVal?.toLowerCase())
-                    )
-                    ?.slice((page - 1) * 10, page * 10)
-                    ?.map((userItem, index) => {
-                      return (
-                        <tr key={index}>
-                          <td>{(page - 1) * 10 + index + 1}</td>
-                          <td>{userItem?.name || ""}</td>
-                          <td>{userItem?.employeeid?.userHierarchy || ""}</td>
-                          <td>{userItem?.employeeid?.designation || ""}</td>
-                          <td>{userItem?.email || ""}</td>
-                          <td>{userItem?.employeeid?.skillSet || ""}</td>
-                          <td>{userItem?.role[0]?.name || ""}</td>
-                          <td>{userItem?.company[0]?.companyName || ""}</td>
-                          <td>
-                            <div className="d-flex w-100 h-100 gap-2">
-                              <i
-                                className="fa fa-edit   f-18 cursor-pointer"
-                                onClick={() => {
-                                  setUpdateUserObject(userItem);
-                                  setUpdateUserDialog(true);
-                                }}
-                              ></i>
-                              <i
-                                className="fa fa-trash text-danger mx-2 f-18 cursor-pointer"
-                                onClick={() => {
-                                  setCurrentUserId(userItem?.id);
-                                  setUserDeleteDialog(true);
-                                }}
-                              ></i>
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    })
+                  paginatedUsers?.map((userItem, index) => {
+                    return (
+                      <tr key={index}>
+                        <td>{(page - 1) * 10 + index + 1}</td>
+                        <td>{userItem?.name || ""}</td>
+                        <td>{userItem?.employeeid?.userHierarchy || ""}</td>
+                        <td>{userItem?.employeeid?.designation || ""}</td>
+                        <td>{userItem?.email || ""}</td>
+                        <td>{userItem?.employeeid?.skillSet || ""}</td>
+                        <td>{userItem?.role[0]?.name || ""}</td>
+                        <td>{userItem?.company[0]?.companyName || ""}</td>
+                        <td>
+                          <div className="d-flex w-100 h-100 gap-2 flex-wrap">
+                            <i
+                              className="fa fa-edit   f-18 cursor-pointer"
+                              onClick={() => {
+                                setUpdateUserObject(userItem);
+                                setUpdateUserDialog(true);
+                              }}
+                            ></i>
+                            <i
+                              className="fa fa-trash text-danger mx-2 f-18 cursor-pointer"
+                              onClick={() => {
+                                setCurrentUserId(userItem?.id);
+                                setUserDeleteDialog(true);
+                              }}
+                            ></i>
+                            <button
+                              className="btn btn-primary"
+                              onClick={() => {
+                                setUserId(userItem?.id);
+                                setUpdateUserPasswordDialog(true);
+                              }}
+                            >
+                              Reset Password
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
                 )}
               </tbody>
             </table>

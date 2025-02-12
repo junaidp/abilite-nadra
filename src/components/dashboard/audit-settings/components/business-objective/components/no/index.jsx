@@ -107,7 +107,7 @@ const FinanciallyQuantifiableNo = ({
   return (
     <div>
       {showDeleteObjectiveDialog && (
-        <div className="model-parent">
+        <div className="model-parent d-flex items-center">
           <div className="model-wrap">
             <DeleteDailog
               setShowDeleteObjectiveDialog={setShowDeleteObjectiveDialog}

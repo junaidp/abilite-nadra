@@ -1,10 +1,17 @@
 import { toast } from "react-toastify";
-import { addUser, getAllUsers, updateUser, deleteUser } from "./thunk";
+import {
+  addUser,
+  getAllUsers,
+  updateUser,
+  deleteUser,
+  resetUserPassword,
+} from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
   loading: false,
   addUserSuccess: false,
+  resetPasswordSuccess: false,
   allUsers: [],
 };
 
@@ -32,6 +39,12 @@ export const setupGetAllUsers = createAsyncThunk(
     return getAllUsers(data, thunkAPI);
   }
 );
+export const setupResetUserPassword = createAsyncThunk(
+  "userManagement/resetUserPassword",
+  async (data, thunkAPI) => {
+    return resetUserPassword(data, thunkAPI);
+  }
+);
 
 export const slice = createSlice({
   name: "userManagement",
@@ -39,6 +52,9 @@ export const slice = createSlice({
   reducers: {
     resetAddUserSuccess: (state) => {
       state.addUserSuccess = false;
+    },
+    resetResetPasswordSuccess: (state) => {
+      state.resetPasswordSuccess = false;
     },
   },
   extraReducers: (builder) => {
@@ -123,9 +139,27 @@ export const slice = createSlice({
           toast.error("An Error has occurred");
         }
       });
+    // Reset User Password
+    builder
+      .addCase(setupResetUserPassword.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupResetUserPassword.fulfilled, (state) => {
+        state.loading = false;
+        state.resetPasswordSuccess = true;
+        toast.success("User Password Updated Successfully");
+      })
+      .addCase(setupResetUserPassword.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
   },
 });
 
-export const { resetAddUserSuccess } = slice.actions;
+export const { resetAddUserSuccess, resetResetPasswordSuccess } = slice.actions;
 
 export default slice.reducer;

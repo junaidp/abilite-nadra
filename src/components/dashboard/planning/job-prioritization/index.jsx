@@ -147,7 +147,7 @@ const JobPrioritization = () => {
   return (
     <div>
       {showSubmitDialog && (
-        <div className="model-parent">
+        <div className="model-parent d-flex justidy-content-between items-center">
           <div className="model-wrap">
             <SubmitDialog
               currentItemId={currentId}

@@ -95,7 +95,7 @@ const RiskFactor = ({ userHierarchy, userRole, currentSettingOption }) => {
       aria-labelledby="nav-risk-factor-tab"
     >
       {showDeleteRiskFactorDialog && (
-        <div className="model-parent">
+        <div className="model-parent d-flex items-center">
           <div className="model-wrap">
             <DeleteRiskFactorDialog
               setShowDeleteRiskFactorDialog={setShowDeleteRiskFactorDialog}

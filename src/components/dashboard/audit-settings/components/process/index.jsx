@@ -126,7 +126,7 @@ const Process = ({ userHierarchy, userRole, currentSettingOption }) => {
       aria-labelledby="nav-profile-tab"
     >
       {subProcessDialog && (
-        <div className="model-parent">
+        <div className="model-parent d-flex items-center">
           <div className="model-wrap">
             <EditSubProcessDialog
               setShowSubProcessDialog={setShowSubProcessDialog}
@@ -136,7 +136,7 @@ const Process = ({ userHierarchy, userRole, currentSettingOption }) => {
         </div>
       )}
       {processDeleteDialog && (
-        <div className="model-parent">
+        <div className="model-parent d-flex items-center">
           <div className="model-wrap">
             <ProcessDeleteDialog
               setShowProcessDeleteDialog={setShowProcessDeleteDialog}
@@ -146,7 +146,7 @@ const Process = ({ userHierarchy, userRole, currentSettingOption }) => {
         </div>
       )}
       {editProcessDialog && (
-        <div className="model-parent">
+        <div className="model-parent d-flex items-center">
           <div className="model-wrap">
             <EditProcessDialog
               setEditProcessDialog={setEditProcessDialog}

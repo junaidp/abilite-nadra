@@ -226,16 +226,13 @@ const UserProfileDialog = ({ setUpdateUserDialog }) => {
           </div>
         </div>
 
-        <button
-          type="submit"
-          className={`btn btn-primary ${loading && "disabled"}`}
-        >
-          {loading ? "Loading" : "Change Password"}
-        </button>
-      </form>
-
-      <div className="row py-3">
-        <div className="col-lg-12 text-end">
+        <div className="d-flex justify-content-between items-center">
+          <button
+            type="submit"
+            className={`btn btn-primary ${loading && "disabled"}`}
+          >
+            {loading ? "Loading" : "Change Password"}
+          </button>
           <button
             className="btn btn-danger float-end"
             onClick={() => {
@@ -250,7 +247,7 @@ const UserProfileDialog = ({ setUpdateUserDialog }) => {
             Close
           </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

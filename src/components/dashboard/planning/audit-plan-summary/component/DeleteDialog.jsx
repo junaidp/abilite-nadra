@@ -27,25 +27,21 @@ const DeleteAuditPlanSummarytDialog = ({
       <div>
         <p>Are You Sure You Want To Delete Audit Plan Summary?</p>
       </div>
-      <div className="flex mb-2 flex-end">
-        <div>
-          <button
-            type="submit"
-            className={`btn btn-danger float-start ${loading && "disabled"} `}
-            onClick={handleDeleteAuditPlanSummary}
-          >
-            {loading ? "Loading..." : "Delete"}
-          </button>
-        </div>
-        <div className="mx-2">
-          <button
-            type="button"
-            className="btn btn-primary float-end"
-            onClick={() => setDeletePlanSummaryDialog(false)}
-          >
-            Close
-          </button>
-        </div>
+      <div className="d-flex mb-2 justify-content-between items-center">
+        <button
+          type="submit"
+          className={`btn btn-danger float-start ${loading && "disabled"} `}
+          onClick={handleDeleteAuditPlanSummary}
+        >
+          {loading ? "Loading..." : "Delete"}
+        </button>
+        <button
+          type="button"
+          className="btn btn-primary float-end"
+          onClick={() => setDeletePlanSummaryDialog(false)}
+        >
+          Close
+        </button>
       </div>
     </div>
   );

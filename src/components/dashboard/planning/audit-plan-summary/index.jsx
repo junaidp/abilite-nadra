@@ -244,7 +244,7 @@ const AuditPlanSummary = () => {
       ) : (
         <div>
           {showSubmitDialog && (
-            <div className="model-parent">
+            <div className="model-parent d-flex justify-content-between items-center">
               <div className="model-wrap">
                 <SubmitDialog
                   item={selectedItem}
@@ -254,7 +254,7 @@ const AuditPlanSummary = () => {
             </div>
           )}
           {deletePlanSummaryDialog && (
-            <div className="model-parent">
+            <div className="model-parent  d-flex justify-content-between items-center">
               <div className="model-wrap">
                 <DeletePlanSummaryDialog
                   setDeletePlanSummaryDialog={setDeletePlanSummaryDialog}
@@ -284,7 +284,7 @@ const AuditPlanSummary = () => {
             </div>
           )}
           {showApproveDialog && (
-            <div className="model-parent">
+            <div className="model-parent d-flex justify-content-between items-center">
               <div className="model-wrap">
                 <ApproveAuditPlanSummaryDialog
                   setShowApproveDialog={setShowApproveDialog}

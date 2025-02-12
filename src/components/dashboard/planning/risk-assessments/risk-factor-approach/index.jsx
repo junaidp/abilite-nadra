@@ -234,7 +234,7 @@ const RiskFactorApproach = () => {
   return (
     <div>
       {showSubmitDialog && (
-        <div className="model-parent">
+        <div className="model-parent d-flex justify-content-center items-center">
           <div className="model-wrap">
             <SubmitDialog
               object={performRiskAssessmentObject}
@@ -256,7 +256,7 @@ const RiskFactorApproach = () => {
       ) : (
         <>
           {showAddRiskFactorDialog && (
-            <div className="model-parent">
+            <div className="model-parent d-flex justify-content-center items-center">
               <div className="model-wrap">
                 <AddRiskFactorDialog
                   setShowAddRiskFactorDialog={setShowAddRiskFactorDialog}

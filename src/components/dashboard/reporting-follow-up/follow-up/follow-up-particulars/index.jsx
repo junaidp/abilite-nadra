@@ -200,7 +200,7 @@ const FollowUpParticulars = () => {
   return (
     <div>
       {showSubmitDialog && (
-        <div className="model-parent">
+        <div className="model-parent  d-flex justify-content-between items-center">
           <div className="model-wrap">
             <SubmitDialog
               item={currentSubmittedItem}
@@ -210,7 +210,7 @@ const FollowUpParticulars = () => {
         </div>
       )}
       {approveDialog && (
-        <div className="model-parent">
+        <div className="model-parent  d-flex justify-content-between items-center">
           <div className="model-wrap">
             <ApproveDialog
               setApproveDialog={setApproveDialog}

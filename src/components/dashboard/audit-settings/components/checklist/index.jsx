@@ -134,7 +134,7 @@ const CheckList = ({
       aria-labelledby="nav-check-tab"
     >
       {deleteCheckListDialog && (
-        <div className="model-parent">
+        <div className="model-parent d-flex items-center">
           <div className="model-wrap">
             <DeleteCheckListDialog
               setShowDeleteCheckListDialog={setShowDeleteCheckListDialog}
@@ -143,7 +143,7 @@ const CheckList = ({
         </div>
       )}
       {showEditCheckListDialog && (
-        <div className="model-parent">
+        <div className="model-parent d-flex items-center">
           <div className="model-wrap">
             <EditCheckListDialog
               setShowEditCheckListDialog={setShowEditCheckListDialog}

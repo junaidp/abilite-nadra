@@ -22,7 +22,6 @@ const AddUserDialog = ({ setUserManagementDialog }) => {
     email: "",
     password: "",
     confirmPassword: "",
-    employeeName: "",
     designation: "",
     userHierarchy: "",
     skillSet: "",
@@ -46,7 +45,6 @@ const AddUserDialog = ({ setUserManagementDialog }) => {
       confirmPassword: Yup.string()
         .required("Confirm Password is required")
         .oneOf([Yup.ref("password"), null], "Passwords must match"),
-      employeeName: Yup.string().required("Employee is required"),
       designation: Yup.string().required("Designation is required"),
       userHierarchy: Yup.string().required("User Hierarchy is required"),
       skillSet: Yup.string().required("Skill Set is required"),
@@ -70,7 +68,7 @@ const AddUserDialog = ({ setUserManagementDialog }) => {
             email: values?.email,
             password: values?.password,
             employeeid: {
-              name: values?.employeeName,
+              name: values?.name,
               designation: values?.designation,
               userHierarchy: values?.userHierarchy,
               skillSet: values?.skillSet === "null" ? null : values?.skillSet,
@@ -170,16 +168,9 @@ const AddUserDialog = ({ setUserManagementDialog }) => {
           nullReportingTo={nullReportingTo}
           loading={loading}
           nullSkillSet={nullSkillSet}
+          handleClose={handleClose}
         />
       )}
-
-      <div className="row py-3 ">
-        <div className="col-lg-12 text-end">
-          <button className="btn btn-danger float-end" onClick={handleClose}>
-            Close
-          </button>
-        </div>
-      </div>
     </div>
   );
 };

@@ -160,21 +160,18 @@ const AddCheckListManagementDialog = ({ setCheckListManagementDialog }) => {
           </div>
         </div>
 
-        <button
-          type="submit"
-          className={`btn btn-primary ${editLoading && "disabled"} mt-4`}
-        >
-          {editLoading ? "Loading..." : "Save And Submit"}
-        </button>
-      </form>
-
-      <div className="row py-3">
-        <div className="col-lg-12 text-end">
-          <button className="btn btn-danger float-end" onClick={handleClose}>
+        <div className="d-flex justify-content-between items-center">
+          <button
+            type="submit"
+            className={`btn btn-primary ${editLoading && "disabled"} mt-4`}
+          >
+            {editLoading ? "Loading..." : "Save And Submit"}
+          </button>
+          <button className="btn btn-danger mt-4" onClick={handleClose}>
             Close
           </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

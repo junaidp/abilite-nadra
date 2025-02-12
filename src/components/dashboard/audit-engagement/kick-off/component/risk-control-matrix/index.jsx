@@ -63,7 +63,7 @@ const RiskControlMatrix = ({
   return (
     <div className="accordion-item">
       {showSubmitDialog && (
-        <div className="model-parent">
+        <div className="model-parent d-flex justify-content-between items-center">
           <div className="model-wrap">
             <SubmitDialog
               object={currentAuditEngagement}
@@ -93,7 +93,7 @@ const RiskControlMatrix = ({
         </div>
       )}
       {showApproveDialog && (
-        <div className="model-parent">
+        <div className="model-parent d-flex justify-content-between items-center">
           <div className="model-wrap">
             <ApproveDialog
               setShowApproveDialog={setShowApproveDialog}

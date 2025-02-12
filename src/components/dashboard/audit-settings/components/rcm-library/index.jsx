@@ -232,7 +232,7 @@ const RCMLibraray = ({ userHierarchy, userRole, currentSettingOption }) => {
         </div>
       )}
       {showDeleteRCMDialog && (
-        <div className="model-parent">
+        <div className="model-parent d-flex items-center">
           <div className="model-wrap">
             <DeleteRCMDialog
               setShowDeleteRCMDialog={setShowDeleteRCMDialog}

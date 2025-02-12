@@ -18,7 +18,6 @@ const UpdateUsertDialog = ({ setUpdateUserDialog, updateUserObject }) => {
   const [nullSkillSet, setNullSkillSet] = React.useState(false);
   const initialState = {
     name: updateUserObject?.name,
-    employeeName: updateUserObject?.employeeid?.name,
     designation: updateUserObject?.employeeid?.designation,
     userHierarchy: updateUserObject?.employeeid?.userHierarchy,
     skillSet: updateUserObject?.employeeid?.skillSet
@@ -38,7 +37,6 @@ const UpdateUsertDialog = ({ setUpdateUserDialog, updateUserObject }) => {
     initialValues: initialState,
     validationSchema: Yup.object({
       name: Yup.string().required("Name is required"),
-      employeeName: Yup.string().required("Employee is required"),
       designation: Yup.string().required("Designation is required"),
       userHierarchy: Yup.string().required("User Hierarchy is required"),
       skillSet: Yup.string().required("Skill Set is required"),
@@ -64,7 +62,7 @@ const UpdateUsertDialog = ({ setUpdateUserDialog, updateUserObject }) => {
               },
               employeeid: {
                 ...currentUserObject?.employeeid,
-                name: values?.employeeName,
+                name: values?.name,
                 designation: values?.designation,
                 userHierarchy: values?.userHierarchy,
                 skillSet: values?.skillSet === "null" ? null : values?.skillSet,
@@ -173,15 +171,8 @@ const UpdateUsertDialog = ({ setUpdateUserDialog, updateUserObject }) => {
         nullSkillSet={nullSkillSet}
         user={user}
         email={updateUserObject?.email}
+        handleClose={handleClose}
       />
-
-      <div className="row py-3 ">
-        <div className="col-lg-12 text-end">
-          <button className="btn btn-danger float-end" onClick={handleClose}>
-            Close
-          </button>
-        </div>
-      </div>
     </div>
   );
 };

@@ -108,7 +108,7 @@ const BusinessObjective = () => {
         </div>
       )}
       {deleteEngagementDialog && (
-        <div className="model-parent">
+        <div className="model-parent  d-flex justify-content-between items-center">
           <div className="model-wrap">
             <DeleteEngagementDialog
               setShowDeleteEngagementDialog={setShowDeleteEngagementDialog}

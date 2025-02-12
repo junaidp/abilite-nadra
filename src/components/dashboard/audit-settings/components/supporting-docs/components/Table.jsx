@@ -19,7 +19,7 @@ const Table = ({
   return (
     <div className="row my-3">
       {deleteFileDialog && (
-        <div className="model-parent">
+        <div className="model-parent d-flex justify-content-between items-center">
           <div className="model-wrap">
             <DeleteFileDialog
               setDeleteFileDialog={setDeleteFileDialog}

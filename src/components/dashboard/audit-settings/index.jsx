@@ -30,6 +30,7 @@ import BusinessObjective from "./components/business-objective/index.jsx";
 import PreviousObservation from "./components/previous-observation/index.jsx";
 import Process from "./components/process";
 import Notification from "./components/notification";
+import EmailConfigurations from "./components/email-configuration/index.jsx";
 const AuditSettings = () => {
   const dispatch = useDispatch();
   const [checkListManagementDialog, setCheckListManagementDialog] =
@@ -167,7 +168,7 @@ const AuditSettings = () => {
                 >
                   Location
                 </button>
-              
+
                 <button
                   className="nav-link shadow-sm border-0 mb-3  rounded-0 me-3 "
                   id="nav-risk-factor-tab"
@@ -240,6 +241,22 @@ const AuditSettings = () => {
                     onClick={() => setCurrentSettingOption("users")}
                   >
                     User Management
+                  </button>
+                )}
+                {userRole === "ADMIN" && (
+                  <button
+                    className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
+                    id="nav-email-configuration-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#nav-email-configuration"
+                    type="button"
+                    role="tab"
+                    aria-controls="nav-email-configuration"
+                    onClick={() =>
+                      setCurrentSettingOption("email-configuration")
+                    }
+                  >
+                    Email Configuration
                   </button>
                 )}
 
@@ -358,6 +375,7 @@ const AuditSettings = () => {
               />
 
               {userRole === "ADMIN" && <UserInfo />}
+              {userRole === "ADMIN" && <EmailConfigurations />}
               <TFA />
               <BusinessObjective
                 userHierarchy={userHierarchy}

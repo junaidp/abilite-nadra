@@ -108,7 +108,7 @@ const PlanningReport = () => {
   return (
     <div>
       {showReportPublishDialog && (
-        <div className="model-parent">
+        <div className="model-parent  d-flex justify-content-between items-center">
           <div className="model-wrap">
             <ReportPublishDialog
               setShowReportPublishDialog={setShowReportPublishDialog}
@@ -118,7 +118,7 @@ const PlanningReport = () => {
         </div>
       )}
       {showReportDeleteDialog && (
-        <div className="model-parent">
+        <div className="model-parent  d-flex justify-content-between items-center">
           <div className="model-wrap">
             <ReportDeleteDailog
               setShowReportDeleteDialog={setShowReportDeleteDialog}

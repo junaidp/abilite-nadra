@@ -287,7 +287,7 @@ const ReportingParticulars = () => {
   return (
     <div>
       {showSubmitDialog && (
-        <div className="model-parent">
+        <div className="model-parent  d-flex justify-content-between items-center">
           <div className="model-wrap">
             <SubmitDialog
               setShowSubmitDialog={setShowSubmitDialog}
@@ -297,7 +297,7 @@ const ReportingParticulars = () => {
         </div>
       )}
       {firstApproveDialog && (
-        <div className="model-parent">
+        <div className="model-parent  d-flex justify-content-between items-center">
           <div className="model-wrap">
             <FirstApproveReportingDialog
               setFirstApproveDialog={setFirstApproveDialog}
@@ -307,7 +307,7 @@ const ReportingParticulars = () => {
         </div>
       )}
       {secondApproveDialog && (
-        <div className="model-parent">
+        <div className="model-parent  d-flex justify-content-between items-center">
           <div className="model-wrap">
             <SecondApproveReportingDialog
               setSecondApproveDialog={setSecondApproveDialog}

@@ -99,7 +99,7 @@ const Location = ({ userHierarchy, userRole, currentSettingOption }) => {
       aria-labelledby="nav-profile-tab"
     >
       {deleteLocationDialog && (
-        <div className="model-parent">
+        <div className="model-parent d-flex justify-content-between items-center">
           <div className="model-wrap">
             <DeleteLocationDialog
               setShowDeleteLocationDialog={setShowDeleteLocationDialog}
@@ -109,7 +109,7 @@ const Location = ({ userHierarchy, userRole, currentSettingOption }) => {
         </div>
       )}
       {showEditLocationDialog && (
-        <div className="model-parent">
+        <div className="model-parent d-flex justify-content-between items-center">
           <div className="model-wrap">
             <EditLocationDialog
               setShowEditLocationDialog={setShowEditLocationDialog}
@@ -119,7 +119,7 @@ const Location = ({ userHierarchy, userRole, currentSettingOption }) => {
         </div>
       )}
       {showEditSubLocationDialog && (
-        <div className="model-parent">
+        <div className="model-parent d-flex justify-content-between items-center">
           <div className="model-wrap">
             <EditSubLocationDialog
               setShowEditSubLocationDialog={setShowEditSubLocationDialog}

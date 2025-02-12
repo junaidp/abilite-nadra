@@ -170,30 +170,24 @@ const AuditableUnitRatingDialog = ({
       <div>
         <div className="row mb-4">
           <div className="col-lg-12">
-            <div className="row mb-3">
-              <div className="col-lg-12">
-                <div className="heading">Business Objective</div>
-              </div>
+            <div className="d-flex justify-content-between mb-4 w-100">
+              <div className="heading">Business Objective</div>
+              <button
+                className="btn-close f-18"
+                type="button"
+                onClick={() => {
+                  setAuditableUnitRatingDialog(false);
+                  setData({ jobType: "", reason: "" });
+                  setProcess("");
+                  setSubProcess("");
+                  setProcessId("");
+                  setSubProcessId("");
+                  dispatch(resetAllValues());
+                }}
+              ></button>
             </div>
-
             <div className="row mb-3">
               <div className="col-lg-9 sub-heading">{auditableUnitName}</div>
-              <div className=" col-lg-3 text-end">
-                <div
-                  className="text-white bg-danger float-end  px-2 py-3 rounded shadow risk-rating-btn cursor-pointer"
-                  onClick={() => {
-                    setAuditableUnitRatingDialog(false);
-                    setData({ jobType: "", reason: "" });
-                    setProcess("");
-                    setSubProcess("");
-                    setProcessId("");
-                    setSubProcessId("");
-                    dispatch(resetAllValues());
-                  }}
-                >
-                  Close
-                </div>
-              </div>
             </div>
             {processLoading ? (
               <CircularProgress />

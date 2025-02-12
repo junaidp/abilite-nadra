@@ -10,6 +10,7 @@ const Form = ({
   loading,
   user,
   nullSkillSet,
+  handleClose,
 }) => {
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
@@ -20,7 +21,7 @@ const Form = ({
         <div className="col-lg-6 mb-2">
           <div className="col-lg-12">
             <div className="form-group">
-              <label htmlFor="area">User Name:</label>
+              <label htmlFor="area">Employee Name:</label>
               <TextField
                 id="name"
                 name="name"
@@ -145,7 +146,7 @@ const Form = ({
             <div className="error">{formik.errors.confirmPassword}</div>
           )}
         </div>
-        <div className="col-lg-12 mb-2">
+        {/* <div className="col-lg-12 mb-2">
           <div className="form-group">
             <label htmlFor="area">Employee Name:</label>
             <TextField
@@ -161,7 +162,7 @@ const Form = ({
           {formik.touched.employeeName && formik.errors.employeeName && (
             <div className="error">{formik.errors.employeeName}</div>
           )}
-        </div>
+        </div> */}
       </div>
 
       <div className="row">
@@ -187,7 +188,7 @@ const Form = ({
 
         <div className="col-lg-6">
           <label htmlFor="userHierarchy" className="w-100">
-            User Roles:
+            User Role:
           </label>
           <Select
             id="userHierarchy"
@@ -359,12 +360,17 @@ const Form = ({
         </div>
       </div>
 
-      <button
-        type="submit"
-        className={`btn btn-primary ${loading && "disabled"} mt-4`}
-      >
-        {loading ? "Loading..." : "Add User"}
-      </button>
+      <div className="d-flex justify-content-between items-center">
+        <button
+          type="submit"
+          className={`btn btn-primary ${loading && "disabled"} mt-4`}
+        >
+          {loading ? "Loading..." : "Add User"}
+        </button>
+        <button className="btn btn-danger mt-4" onClick={handleClose}>
+          Close
+        </button>
+      </div>
     </form>
   );
 };

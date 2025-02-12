@@ -179,7 +179,7 @@ const BusinessObjectiveRedirect = () => {
   return (
     <div>
       {showSubmitDialog && (
-        <div className="model-parent">
+        <div className="model-parent d-flex items-center">
           <div className="model-wrap">
             <SubmitDialog
               object={planingEngagementSingleObject}

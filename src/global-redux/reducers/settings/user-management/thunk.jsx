@@ -101,3 +101,22 @@ export const deleteUser = async (data, thunkAPI) => {
     return thunkAPI.rejectWithValue(error);
   }
 };
+
+export const resetUserPassword = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.post(
+      `${baseUrl}/user/account/updateUserPassword?userId=${data?.userId}&companyId=${data?.companyId}&newPassword=${data?.newPassword}`,
+      null,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
