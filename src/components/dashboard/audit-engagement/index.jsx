@@ -171,7 +171,7 @@ const AuditEngagement = () => {
                               </td>
                               <td>{item?.jobType ? item?.jobType : "null"}</td>
                               <td>
-                                <div className="d-flex gap-2">
+                                <div className="d-flex gap-2 flex-wrap">
                                   {item?.subLocationList?.map(
                                     (location, index) => {
                                       return (

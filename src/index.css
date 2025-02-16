@@ -151,9 +151,11 @@ body {
 .h-120 {
   height: 120px !important;
 }
+
 .min-w-400 {
   min-width: 400px;
 }
+
 .min-w-500 {
   min-width: 500px;
 }
@@ -164,6 +166,10 @@ body {
 
 .h-40 {
   height: 40px !important;
+}
+
+.f-22{
+  font-size: 22px !important;
 }
 
 .width-20{

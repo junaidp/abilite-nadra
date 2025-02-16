@@ -15,8 +15,14 @@ const Table = ({
       <thead>
         <tr>
           <th>Sr. #</th>
-          <th>Control</th>
-          <th>Rating</th>
+          {currentAuditEngagement?.riskControlMatrix &&
+            currentAuditEngagement?.riskControlMatrix?.approved && (
+              <th>Control</th>
+            )}
+          {currentAuditEngagement?.riskControlMatrix &&
+            currentAuditEngagement?.riskControlMatrix?.approved && (
+              <th>Rating</th>
+            )}
           <th>Audit Program</th>
           {handleAllowEdit() === true && <th>Actions</th>}
         </tr>
@@ -33,33 +39,39 @@ const Table = ({
               return (
                 <tr key={index}>
                   <td>{index + 1}</td>
-                  <td>
-                    <textarea
-                      className="form-control"
-                      id="exampleFormControlT"
-                      rows="3"
-                      value={getDescription(item?.controlRisk_id) || "null"}
-                      readOnly
-                      disabled
-                    ></textarea>
-                  </td>
-                  <td>
-                    <div className="d-flex align-items-center">
-                      <select
-                        className="form-select"
-                        aria-label="Default select example"
-                        value={item?.rating}
-                        name="rating"
-                        onChange={(event) => handleChange(event, item?.id)}
-                        disabled={item?.editable === true ? false : true}
-                      >
-                        <option value="">Select One</option>
-                        <option value={1}>High</option>
-                        <option value={2}>Medium</option>
-                        <option value={3}>Low</option>
-                      </select>
-                    </div>
-                  </td>
+                  {currentAuditEngagement?.riskControlMatrix &&
+                    currentAuditEngagement?.riskControlMatrix?.approved && (
+                      <td>
+                        <textarea
+                          className="form-control"
+                          id="exampleFormControlT"
+                          rows="3"
+                          value={getDescription(item?.controlRisk_id) || "null"}
+                          readOnly
+                          disabled
+                        ></textarea>
+                      </td>
+                    )}
+                  {currentAuditEngagement?.riskControlMatrix &&
+                    currentAuditEngagement?.riskControlMatrix?.approved && (
+                      <td>
+                        <div className="d-flex align-items-center">
+                          <select
+                            className="form-select"
+                            aria-label="Default select example"
+                            value={item?.rating}
+                            name="rating"
+                            onChange={(event) => handleChange(event, item?.id)}
+                            disabled={item?.editable === true ? false : true}
+                          >
+                            <option value="">Select One</option>
+                            <option value={1}>High</option>
+                            <option value={2}>Medium</option>
+                            <option value={3}>Low</option>
+                          </select>
+                        </div>
+                      </td>
+                    )}
                   <td>
                     <textarea
                       id="exampleFormControlT"

@@ -57,7 +57,7 @@ const AddEngagementAuditDialog = ({ setBusinessObjectiveDialog }) => {
         </div>
         <button
           type="button"
-          className="btn-close"
+          className="btn-close f-22"
           onClick={() => setBusinessObjectiveDialog(false)}
         ></button>
       </div>

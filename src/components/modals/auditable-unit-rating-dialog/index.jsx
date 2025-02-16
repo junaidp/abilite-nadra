@@ -173,7 +173,7 @@ const AuditableUnitRatingDialog = ({
             <div className="d-flex justify-content-between mb-4 w-100">
               <div className="heading">Business Objective</div>
               <button
-                className="btn-close f-18"
+                className="btn-close f-22"
                 type="button"
                 onClick={() => {
                   setAuditableUnitRatingDialog(false);

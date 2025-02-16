@@ -61,8 +61,13 @@ const EditSubCheckListDialog = ({ setShowEditCheckListItemDialog }) => {
   return (
     <div className="px-4 py-4">
       <header className="section-header my-3    text-start d-flex align-items-center justify-content-between">
-        <div className="mb-0 heading d-flex align-items-center">
+        <div className="d-flex justify-content-between w-100">
           <h2 className=" heading">Edit CheckList Item</h2>
+          <button
+            className="btn-close f-22"
+            type="button"
+            onClick={handleClose}
+          ></button>
         </div>
       </header>
       <form onSubmit={formik.handleSubmit}>

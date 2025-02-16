@@ -9,8 +9,7 @@ const Form = ({
   nullReportingTo,
   loading,
   user,
-  nullSkillSet,
-  handleClose,
+  nullSkillSet
 }) => {
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
@@ -367,9 +366,7 @@ const Form = ({
         >
           {loading ? "Loading..." : "Add User"}
         </button>
-        <button className="btn btn-danger mt-4" onClick={handleClose}>
-          Close
-        </button>
+     
       </div>
     </form>
   );

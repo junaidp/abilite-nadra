@@ -256,9 +256,7 @@ const TimeAndDateAllocation = ({
                   <span className="float-end">{totalHours}</span>
                 </p>
               </div>
-            </div>
-            {singleJobSchedulingObject?.natureThrough !==
-              "Compliance Checklist" && (
+            </div>           
               <div className="row mb-3">
                 <div className="col-lg-6">
                   <div className="form-check">
@@ -322,7 +320,6 @@ const TimeAndDateAllocation = ({
                   </div>
                 )}
               </div>
-            )}
             {(singleJobSchedulingObject?.complete === false ||
               (singleJobSchedulingObject?.complete === true &&
                 singleJobSchedulingObject?.locked === false &&

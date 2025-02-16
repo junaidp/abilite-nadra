@@ -155,8 +155,13 @@ const UpdateUsertDialog = ({ setUpdateUserDialog, updateUserObject }) => {
   return (
     <div className="px-4 py-4">
       <header className="section-header my-3    text-start d-flex align-items-center justify-content-between">
-        <div className="mb-0 heading d-flex align-items-center">
+        <div className="mb-0 heading d-flex justify-content-between w-100">
           <h2 className=" heading">Update User</h2>
+          <button
+            className="btn-close f-22"
+            type="button"
+            onClick={handleClose}
+          ></button>
         </div>
       </header>
       <Form
@@ -171,7 +176,6 @@ const UpdateUsertDialog = ({ setUpdateUserDialog, updateUserObject }) => {
         nullSkillSet={nullSkillSet}
         user={user}
         email={updateUserObject?.email}
-        handleClose={handleClose}
       />
     </div>
   );

@@ -11,8 +11,7 @@ const Form = ({
   user,
   loading,
   nullSkillSet,
-  email,
-  handleClose,
+  email
 }) => {
   const { allUsers: users } = useSelector(
     (state) => state.settingsUserManagement
@@ -274,9 +273,6 @@ const Form = ({
           className={`btn btn-primary ${loading && "disabled"} mt-4`}
         >
           {loading ? "Loading..." : "Update User"}
-        </button>
-        <button className="btn btn-danger mt-4" onClick={handleClose}>
-          Close
         </button>
       </div>
     </form>

@@ -70,8 +70,19 @@ const AuditableUnitRatingDialog = ({
         <div className="row mb-4">
           <div className="col-lg-12">
             <div className="row mb-3">
-              <div className="col-lg-12">
+              <div className="d-flex justify-content-between mb-4 w-100">
                 <div className="heading">Business Objective</div>
+                <button
+                  className="btn-close f-22"
+                  type="button"
+                  onClick={() => {
+                    setShowViewDialog(false);
+                    setData({ jobType: "", reason: "" });
+                    setProcessId("");
+                    setSubProcessId("");
+                    dispatch(resetAllValues());
+                  }}
+                ></button>
               </div>
             </div>
 
