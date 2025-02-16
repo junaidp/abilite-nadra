@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Objective from "./objective/index";
 import Risk from "./risk";
 import Control from "./control";
+import Program from "./program";
 import { toast } from "react-toastify";
 import { setupAddObjectiveRiskControl } from "../../../../../../global-redux/reducers/audit-engagement/slice";
 
@@ -43,18 +44,18 @@ const DefaultRCM = ({ auditEngagementId }) => {
           auditEngagementId: auditEngagementId,
           description: objectiveItem?.description,
           rating: objectiveItem?.rating,
-          rcmLibraryObjectives_id: 0,
+          rcmLibraryObjectives_id: objectiveItem?.id,
         },
         risks: objectiveItem?.rcmLibraryRiskRating?.map((riskItem) => ({
           addNewRiskRatingRequest: {
             description: riskItem?.description,
             rating: riskItem?.rating,
-            rcmLibraryRiskRating_id: 0,
+            rcmLibraryRiskRating_id: riskItem?.id,
           },
           controls: riskItem?.rcmLibraryControlRisk?.map((controlItem) => ({
             description: controlItem?.description,
             rating: controlItem?.rating,
-            rcmLibraryControlRisk_id: 0,
+            rcmLibraryControlRisk_id: controlItem?.id,
             engagement_id: auditEngagementId,
           })),
         })),
@@ -98,14 +99,19 @@ const DefaultRCM = ({ auditEngagementId }) => {
                     <span>Objective</span>
                   </p>
                 </div>
-                <div className="col-lg-4">
+                <div className="col-lg-3">
                   <p className="px-3 py-1 bg-secondary d-flex align-items-center rounded justify-content-between text-white">
                     <span>Risk</span>
                   </p>
                 </div>
-                <div className="col-lg-4">
+                <div className="col-lg-3">
                   <p className="px-3 py-1 bg-secondary d-flex align-items-center rounded justify-content-between text-white">
                     <span>Control</span>
+                  </p>
+                </div>
+                <div className="col-lg-2">
+                  <p className="px-3 py-1 bg-secondary d-flex align-items-center rounded justify-content-between text-white">
+                    <span>Program</span>
                   </p>
                 </div>
                 <div className="col-lg-1">
@@ -125,15 +131,28 @@ const DefaultRCM = ({ auditEngagementId }) => {
                         (risk, riskIndex) => {
                           return (
                             <div key={riskIndex} className="row">
-                              <div className="col-lg-6">
+                              <div className="col-lg-5">
                                 <Risk risk={risk} />
                               </div>
-                              <div className="col-lg-6">
+                              <div className="col-lg-7">
                                 {risk?.rcmLibraryControlRisk?.map(
                                   (control, controlIndex) => {
                                     return (
-                                      <div key={controlIndex}>
-                                        <Control control={control} />
+                                      <div key={controlIndex} className="row">
+                                        <div className="col-lg-6">
+                                          <Control control={control} />
+                                        </div>
+                                        <div className="col-lg-6">
+                                          {control?.rcmLibraryAuditProgramsList?.map(
+                                            (program, programIndex) => {
+                                              return (
+                                                <div key={programIndex}>
+                                                  <Program program={program} />
+                                                </div>
+                                              );
+                                            }
+                                          )}
+                                        </div>
                                       </div>
                                     );
                                   }

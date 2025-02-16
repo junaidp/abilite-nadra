@@ -4,8 +4,7 @@ const Rating = ({ risk }) => {
   return (
     <div className="card p-3 mb-3 w-100 shadow-sm border">
       <div className="d-flex mb-2 justify-content-between align-items-center">
-        <span className="fw-bold">Risk</span>
-        <div className="d-flex align-items-center">
+        <div className="d-flex align-items-center w-100">
           <select
             className="form-select"
             aria-label="Default select example"

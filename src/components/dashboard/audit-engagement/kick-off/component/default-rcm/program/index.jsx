@@ -1,15 +1,15 @@
 import React from "react";
 
-const Control = ({ control }) => {
+const Program = ({ program }) => {
   return (
     <div>
       <div className="card p-3 mb-3 w-100 shadow-sm border">
-        <div className="mb-2 justify-content-between align-items-center">
-          <div className="d-flex align-items-center">
+        <div className="d-flex mb-2">
+          <div className="align-items-center w-100">
             <select
               className="form-select"
               aria-label="Default select example"
-              value={control?.rating}
+              value={program?.rating}
               disabled
             >
               <option value="">Select One</option>
@@ -24,7 +24,7 @@ const Control = ({ control }) => {
           className="form-control"
           placeholder="Enter Reason"
           id="exampleFormControlTextarea222"
-          value={control?.description || ""}
+          value={program?.description || ""}
           disabled
         ></textarea>
       </div>
@@ -32,4 +32,4 @@ const Control = ({ control }) => {
   );
 };
 
-export default Control;
+export default Program;
