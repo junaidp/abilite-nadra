@@ -182,7 +182,8 @@ const ResourceAllocation = ({
                 )}
               </div>
             </div>
-            {(singleJobSchedulingObject?.complete === false ||
+            {(user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
+              singleJobSchedulingObject?.complete === false ||
               (singleJobSchedulingObject?.complete === true &&
                 singleJobSchedulingObject?.locked === false &&
                 user[0]?.userId?.employeeid?.userHierarchy === "IAH")) && (

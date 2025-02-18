@@ -37,12 +37,12 @@ const SelectComponent = ({
             value={value}
             onChange={handleChange}
             disabled={
-              singleJobSchedulingObject?.locked === true ||
-              (singleJobSchedulingObject?.complete === true &&
-                singleJobSchedulingObject?.locked === false &&
-                user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
-                ? true
-                : false
+              user[0]?.userId?.employeeid?.userHierarchy === "IAH"
+                ? false
+                : singleJobSchedulingObject?.locked === true ||
+                  (singleJobSchedulingObject?.complete === true &&
+                    singleJobSchedulingObject?.locked === false &&
+                    user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
             }
           >
             <MenuItem value="">Select User</MenuItem>

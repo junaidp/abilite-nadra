@@ -89,12 +89,13 @@ export default function MultipleSelect({
           input={<OutlinedInput label={title} />}
           MenuProps={MenuProps}
           disabled={
-            singleJobSchedulingObject?.locked === true ||
-            (singleJobSchedulingObject?.complete === true &&
-              singleJobSchedulingObject?.locked === false &&
-              user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
-              ? true
-              : false
+            section === "resourceAllocation" &&
+            user[0]?.userId?.employeeid?.userHierarchy === "IAH"
+              ? false
+              : singleJobSchedulingObject?.locked === true ||
+                (singleJobSchedulingObject?.complete === true &&
+                  singleJobSchedulingObject?.locked === false &&
+                  user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
           }
         >
           {names.map((name) => (
