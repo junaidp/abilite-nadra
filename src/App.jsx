@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter as Router } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { changeCompany } from "./global-redux/reducers/common/slice";
 import { changeAuthUser } from "./global-redux/reducers/auth/slice";
@@ -103,7 +104,7 @@ const App = () => {
   return (
     <div className="main-wrap">
       <ToastContainer position="bottom-right" />
-      <BrowserRouter>
+      <Router>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
@@ -223,7 +224,7 @@ const App = () => {
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </BrowserRouter>
+      </Router>
     </div>
   );
 };
