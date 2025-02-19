@@ -319,6 +319,35 @@ const StartScheduling = () => {
                   singleJobSchedulingObject={singleJobSchedulingObject}
                 />
               </div>
+              <div className="col-lg-2 mb-3">
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    value=""
+                    id="flexCheckDefault"
+                    name="separateJob"
+                    checked={currentJobSchedulingObject?.separateJob}
+                    onChange={(event) =>
+                      handleChangeJobSchedulingCheckFields(event, "seprateJob")
+                    }
+                    disabled={
+                      singleJobSchedulingObject?.locked === true ||
+                      (singleJobSchedulingObject?.complete === true &&
+                        singleJobSchedulingObject?.locked === false &&
+                        user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                        ? true
+                        : false
+                    }
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexCheckDefault"
+                  >
+                    Seprate job
+                  </label>
+                </div>
+              </div>
             </div>
           ) : (
             <div className="row ">
@@ -342,34 +371,37 @@ const StartScheduling = () => {
                   singleJobSchedulingObject={singleJobSchedulingObject}
                 />
               </div>
+              <div className="col-lg-2 mb-3">
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    value=""
+                    id="flexCheckDefault"
+                    name="separateJob"
+                    checked={currentJobSchedulingObject?.separateJob}
+                    onChange={(event) =>
+                      handleChangeJobSchedulingCheckFields(event, "seprateJob")
+                    }
+                    disabled={
+                      singleJobSchedulingObject?.locked === true ||
+                      (singleJobSchedulingObject?.complete === true &&
+                        singleJobSchedulingObject?.locked === false &&
+                        user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                        ? true
+                        : false
+                    }
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexCheckDefault"
+                  >
+                    Seprate job
+                  </label>
+                </div>
+              </div>
             </div>
           )}
-          <div className="col-lg-2 mb-3">
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-                name="separateJob"
-                checked={currentJobSchedulingObject?.separateJob}
-                onChange={(event) =>
-                  handleChangeJobSchedulingCheckFields(event, "seprateJob")
-                }
-                disabled={
-                  singleJobSchedulingObject?.locked === true ||
-                  (singleJobSchedulingObject?.complete === true &&
-                    singleJobSchedulingObject?.locked === false &&
-                    user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
-                    ? true
-                    : false
-                }
-              />
-              <label className="form-check-label" htmlFor="flexCheckDefault">
-                Seprate job
-              </label>
-            </div>
-          </div>
 
           <div className="row">
             <div className="col-md-12">
