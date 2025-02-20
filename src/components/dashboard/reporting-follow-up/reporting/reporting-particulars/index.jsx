@@ -247,7 +247,9 @@ const ReportingParticulars = () => {
         setReport({
           ...singleReport,
           reportingList: singleReport?.reportingList?.filter(
-            (all) => Number(all?.stepNo) >= 2
+            (all) =>
+              Number(all?.stepNo) >= 2 &&
+              Number(all?.auditee?.id) === user[0]?.id
           ),
         });
       }

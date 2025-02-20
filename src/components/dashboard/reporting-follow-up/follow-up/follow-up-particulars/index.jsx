@@ -166,7 +166,17 @@ const FollowUpParticulars = () => {
       Object.keys(singleReport).length === 0 &&
       singleReport.constructor === Object;
     if (!isEmptyObject && followUpId) {
-      setReport(singleReport);
+      if (user[0]?.userId?.employeeid?.userHierarchy !== "Management_Auditee") {
+        setReport(singleReport);
+      }
+      if (user[0]?.userId?.employeeid?.userHierarchy === "Management_Auditee") {
+        setReport({
+          ...singleReport,
+          reportingList: singleReport?.reportingList?.filter(
+            (all) => Number(all?.auditee?.id) === user[0]?.id
+          ),
+        });
+      }
     }
   }, [singleReport]);
 
