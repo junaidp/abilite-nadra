@@ -11,7 +11,8 @@ const Form = ({
   user,
   loading,
   nullSkillSet,
-  email
+  email,
+  erp,
 }) => {
   const { allUsers: users } = useSelector(
     (state) => state.settingsUserManagement
@@ -127,68 +128,62 @@ const Form = ({
         </div>
       </div>
 
-      {/* <div>
-        <div className="mb-2">
-          <div className="col-lg-12">
-            <div className="form-group">
-              <label htmlFor="area">Employee Name:</label>
-              <TextField
-                id="employeeName"
-                name="employeeName"
-                type="text"
-                className="form-control w-100"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.employeeName}
-              />
-            </div>
+      <div className="row">
+        {nullSkillSet && (
+          <div className="col-lg-6 mb-2">
+            <label htmlFor="area">Skill Set:</label>
+            <TextField
+              id="designation"
+              name="designation"
+              type="text"
+              className="form-control"
+              defaultValue="null"
+              readOnly
+              disabled
+            />
           </div>
-          {formik.touched.employeeName && formik.errors.employeeName && (
-            <div className="error">{formik.errors.employeeName}</div>
-          )}
+        )}
+        {!nullSkillSet && (
+          <div className="col-lg-6 mb-2">
+            <label htmlFor="skillSet" className="w-100">
+              Skill Set:
+            </label>
+            <Select
+              id="skillSet"
+              name="skillSet"
+              className="w-100 h-40"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.skillSet}
+            >
+              <MenuItem value="">Select Role</MenuItem>
+              <MenuItem value="IT">IT</MenuItem>
+              <MenuItem value="Finance">Finance</MenuItem>
+              <MenuItem value="Business">Business</MenuItem>
+              <MenuItem value="Fraud">Fraud</MenuItem>
+              <MenuItem value="Operations">Operations</MenuItem>
+              <MenuItem value="Other">Other</MenuItem>
+            </Select>
+            {formik.touched.skillSet && formik.errors.skillSet && (
+              <div className="error">{formik.errors.skillSet}</div>
+            )}
+          </div>
+        )}
+        <div className="col-lg-6 mb-2">
+          <div className="form-group">
+            <label htmlFor="area">ERP:</label>
+            <TextField
+              id="erp"
+              name="erp"
+              type="number"
+              className="form-control"
+              value={erp}
+              disabled
+              readOnly
+            />
+          </div>
         </div>
-      </div> */}
-
-      {nullSkillSet && (
-        <div className="col-lg-12 mb-2">
-          <label htmlFor="area">Skill Set:</label>
-          <TextField
-            id="designation"
-            name="designation"
-            type="text"
-            className="form-control"
-            defaultValue="null"
-            readOnly
-            disabled
-          />
-        </div>
-      )}
-      {!nullSkillSet && (
-        <div className="col-lg-12 mb-2">
-          <label htmlFor="skillSet" className="w-100">
-            Skill Set:
-          </label>
-          <Select
-            id="skillSet"
-            name="skillSet"
-            className="w-100 h-40"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.skillSet}
-          >
-            <MenuItem value="">Select Role</MenuItem>
-            <MenuItem value="IT">IT</MenuItem>
-            <MenuItem value="Finance">Finance</MenuItem>
-            <MenuItem value="Business">Business</MenuItem>
-            <MenuItem value="Fraud">Fraud</MenuItem>
-            <MenuItem value="Operations">Operations</MenuItem>
-            <MenuItem value="Other">Other</MenuItem>
-          </Select>
-          {formik.touched.skillSet && formik.errors.skillSet && (
-            <div className="error">{formik.errors.skillSet}</div>
-          )}
-        </div>
-      )}
+      </div>
 
       <div className="row">
         {!nullReportingTo && (

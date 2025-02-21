@@ -59,6 +59,7 @@ const UpdateUsertDialog = ({ setUpdateUserDialog, updateUserObject }) => {
               userDto: {
                 userName: values?.name,
                 companyId: currentUserObject?.company[0]?.id,
+                erp: updateUserObject?.erp,
               },
               employeeid: {
                 ...currentUserObject?.employeeid,
@@ -176,6 +177,7 @@ const UpdateUsertDialog = ({ setUpdateUserDialog, updateUserObject }) => {
         nullSkillSet={nullSkillSet}
         user={user}
         email={updateUserObject?.email}
+        erp={updateUserObject?.erp}
       />
     </div>
   );

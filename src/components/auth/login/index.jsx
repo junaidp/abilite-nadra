@@ -32,12 +32,7 @@ const Login = () => {
       if (loginEmail === "" || loginPassword === "") {
         toast.error("Provide all values");
       }
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const isValid = emailRegex.test(loginEmail);
-      if (!isValid && loginEmail !== "") {
-        toast.error("Email is Incorrect");
-      }
-      if (loginEmail !== "" && loginPassword !== "" && isValid) {
+      if (loginEmail !== "" && loginPassword !== "") {
         dispatch(
           setupLoginUser({
             data: { password: loginPassword, email: loginEmail },
@@ -107,7 +102,7 @@ const Login = () => {
                         type="email"
                         id="email"
                         className="form-control"
-                        placeholder="Email"
+                        placeholder="Email / ERP"
                         required="required"
                         name="loginEmail"
                         value={loginEmail}

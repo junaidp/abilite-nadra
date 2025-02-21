@@ -8,17 +8,21 @@ import { CircularProgress } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import DeleteUserDialog from "./DeleteDialog";
 import ResetUserPasswordDialog from "./UpdatePassword";
+import UserAccountStatusDialog from "./UserStatus";
 
 const UserManagement = ({
   setUserManagementDialog,
   setUpdateUserDialog,
   setUpdateUserObject,
   currentSettingOption,
+  updateUserObject,
 }) => {
   const dispatch = useDispatch();
   const { loading, addUserSuccess, allUsers } = useSelector(
     (state) => state?.settingsUserManagement
   );
+  const [showUserAccounStatus, setShowUserAccounStatus] = React.useState(false);
+  const [text, setText] = React.useState("");
   const [nameVal, setNameVal] = React.useState("");
   const [page, setPage] = React.useState(1);
   const [currentUserId, setCurrentUserId] = React.useState("");
@@ -82,6 +86,17 @@ const UserManagement = ({
             <ResetUserPasswordDialog
               setUpdateUserPasswordDialog={setUpdateUserPasswordDialog}
               userId={userId}
+            />
+          </div>
+        </div>
+      )}
+      {showUserAccounStatus && (
+        <div className="model-parent d-flex items-center">
+          <div className="model-wrap">
+            <UserAccountStatusDialog
+              text={text}
+              setShowUserAccounStatus={setShowUserAccounStatus}
+              updateUserObject={updateUserObject}
             />
           </div>
         </div>
@@ -180,6 +195,22 @@ const UserManagement = ({
                               }}
                             >
                               Reset Password
+                            </button>
+                            <button
+                              className="btn btn-primary"
+                              onClick={() => {
+                                setUpdateUserObject(userItem);
+                                setShowUserAccounStatus(true);
+                                setText(
+                                  userItem?.accountStatus === 1
+                                    ? "Are you sure you want to disable the user?"
+                                    : "Are you sure you want to enable the user?"
+                                );
+                              }}
+                            >
+                              {userItem?.accountStatus === 1
+                                ? "Disable User"
+                                : "Enable User"}
                             </button>
                           </div>
                         </td>

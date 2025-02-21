@@ -7,9 +7,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   changeActiveLink,
   changeExpanded,
+  InitialLoadSidebarActiveLink,
 } from "../../../global-redux/reducers/common/slice";
 import SmallScreenSidebar from "./SmallScreenSidebar";
+import { useLocation } from "react-router-dom";
 const Sidebar = () => {
+  const location = useLocation();
   let navigate = useNavigate();
   let dispatch = useDispatch();
   const [isWidthLessThan1250, setIsWidthLessThan1250] = React.useState(
@@ -40,6 +43,26 @@ const Sidebar = () => {
     navigate(link);
     dispatch(changeActiveLink(id));
   }
+
+  React.useEffect(() => {
+    const mainActiveLink = menuItems?.find(
+      (item) => item?.route === location.pathname
+    );
+    if (mainActiveLink) {
+      dispatch(changeActiveLink(mainActiveLink?.id));
+    }
+    if (!mainActiveLink) {
+      const filteredItems = menuItems?.filter((item) => item?.subMenu);
+      filteredItems.forEach((element) => {
+        element?.subMenu?.forEach((subItem) => {
+          if (subItem.route === location.pathname) {
+            dispatch(changeActiveLink(subItem.id));
+            dispatch(InitialLoadSidebarActiveLink(element?.id));
+          }
+        });
+      });
+    }
+  }, []);
 
   React.useEffect(() => {
     function handleResize() {

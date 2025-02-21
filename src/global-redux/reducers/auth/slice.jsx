@@ -221,10 +221,22 @@ export const slice = createSlice({
         state.loading = true;
       })
       .addCase(setupLoginUser.fulfilled, (state, action) => {
-        if (action.payload.message === "User is already logged in") {
+        if (
+          action.payload.message ===
+          "Account Is Deactivated, Kindly Contact Administration."
+        ) {
+          toast.error("Account Is Deactivated, Kindly Contact Administration.");
+          state.loading = false;
+          return;
+        }
+        if (
+          action.payload.data.userId.company[0].companyName ===
+          "Beaconhouse Trial"
+        ) {
           toast.error(
-            "User is already logged in. Please remove the previous session and then try login in here"
+            "Your account has been deactivated, please contact support team."
           );
+          state.loading = false;
           return;
         }
         state.loading = false;

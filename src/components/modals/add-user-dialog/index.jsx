@@ -20,6 +20,7 @@ const AddUserDialog = ({ setUserManagementDialog }) => {
   const initialState = {
     name: "",
     email: "",
+    erp:"",
     password: "",
     confirmPassword: "",
     designation: "",
@@ -33,6 +34,7 @@ const AddUserDialog = ({ setUserManagementDialog }) => {
     initialValues: initialState,
     validationSchema: Yup.object({
       name: Yup.string().required("Name is required"),
+      erp: Yup.string().required("ERP is required"),
       email: Yup.string()
         .email("Invalid email address")
         .required("Email is required"),
@@ -64,6 +66,7 @@ const AddUserDialog = ({ setUserManagementDialog }) => {
             userDto: {
               userName: values?.name,
               companyId: currentCompany?.id,
+              erp:values?.erp
             },
             email: values?.email,
             password: values?.password,

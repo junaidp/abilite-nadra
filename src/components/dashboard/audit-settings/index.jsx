@@ -365,6 +365,7 @@ const AuditSettings = () => {
                   setUpdateUserDialog={setUpdateUserDialog}
                   setUpdateUserObject={setUpdateUserObject}
                   currentSettingOption={currentSettingOption}
+                  updateUserObject={updateUserObject}
                 />
               )}
 

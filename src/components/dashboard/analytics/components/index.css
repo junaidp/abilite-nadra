@@ -1,0 +1,35 @@
+.duplicate-entries-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.graphBox {
+  border: 1px solid lightgrey;
+  min-height: 100vh;
+}
+.processBox {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  margin-top: 30vh;
+}
+.categoryBox {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  margin-top: 30vh;
+}
+.queryBox {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  margin-top: 42vh;
+}
+
+.queryBoxResult {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  margin-top: 15vh;
+}

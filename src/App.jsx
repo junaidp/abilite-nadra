@@ -8,10 +8,6 @@ import { changeAuthUser } from "./global-redux/reducers/auth/slice";
 import { useDispatch, useSelector } from "react-redux";
 import { changeYear } from "./global-redux/reducers/common/slice";
 import "react-toastify/dist/ReactToastify.css";
-import {
-  changeActiveLink,
-  InitialLoadSidebarActiveLink,
-} from "./global-redux/reducers/common/slice";
 import Home from "./pages/Home";
 import Login from "./pages/auth/login/Login";
 import DashboardHome from "./pages/dashboard/home/DashboardHome";
@@ -56,37 +52,17 @@ import GenerateInternalAuditConsolidationReport from "./pages/dashboard/reports/
 import ViewInternalAuditConsolidationReport from "./pages/dashboard/reports/internal-audit-consolidation-report/view-internal-audit-consolidation-report/ViewInternalAuditConsolidationReport";
 import UpdateInternalAuditConsolidationReport from "./pages/dashboard/reports/internal-audit-consolidation-report/update-internal-audit-consolidation-report/UpdateInternalAuditConsolidationReport";
 import ProtectedRoute from "./components/common/layout/ProtectedRoute";
+import Analytics from "./pages/dashboard/analytics/Analaytics";
 import NotFound from "./components/common/not-found/index";
 
 const App = () => {
   const dispatch = useDispatch();
-  const { menuItems } = useSelector((state) => state.common);
   const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     const authUser = JSON.parse(localStorage.getItem("user"));
     if (authUser) {
       dispatch(changeAuthUser(authUser));
-    }
-  }, [dispatch]);
-
-  useEffect(() => {
-    const mainActiveLink = menuItems?.find(
-      (item) => item?.route === window.location.pathname
-    );
-    if (mainActiveLink) {
-      dispatch(changeActiveLink(mainActiveLink?.id));
-    }
-    if (!mainActiveLink) {
-      const filteredItems = menuItems?.filter((item) => item?.subMenu);
-      filteredItems.forEach((element) => {
-        element?.subMenu?.forEach((subItem) => {
-          if (subItem.route === window.location.pathname) {
-            dispatch(changeActiveLink(subItem.id));
-            dispatch(InitialLoadSidebarActiveLink(element?.id));
-          }
-        });
-      });
     }
   }, [dispatch]);
 
@@ -221,6 +197,7 @@ const App = () => {
               element={<AuditPlaningSummary />}
             />
             <Route path="audit-exception-report" element={<AuditException />} />
+            <Route path="audit-analytics" element={<Analytics />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
