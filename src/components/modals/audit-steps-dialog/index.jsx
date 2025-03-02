@@ -159,6 +159,7 @@ const AuditStepsDialog = ({
         handleChange={handleChange}
         handleAllowEdit={handleAllowEdit}
         setCurrentDeletedFileId={setCurrentDeletedFileId}
+        setShowAuditStepsDialog={setShowAuditStepsDialog}
       />
       {handleAllowEdit() === true && (
         <div className="row mb-3">

@@ -114,10 +114,17 @@ const ComplianceCheckListDialog = ({
           <div className="row mb-3">
             <div className="d-flex items-center justify-content-between">
               <div className="heading">Compliance Checklist</div>
-              <Chip
-                label={complianceItem?.subLocationDescription}
-                className="float-end"
-              />
+              <div className="d-flex items-center gap-4">
+                <Chip
+                  label={complianceItem?.subLocationDescription}
+                  className="float-end"
+                />
+                <button
+                  type="button"
+                  class="btn-close f-22"
+                  onClick={() => setShowComplianceCheckListDialog(false)}
+                ></button>
+              </div>
             </div>
           </div>
 

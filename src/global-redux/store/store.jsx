@@ -4,6 +4,7 @@ import authReducer from "../reducers/auth/slice";
 import settingsCheckListReducer from "../reducers/settings/check-list/slice";
 import settingsRiskControlMatrixReducer from "../reducers/settings/risk-control-matrix/slice";
 import settingsLocationReducer from "../reducers/settings/location/slice";
+import settingsDepartmentReducer from "../reducers/settings/department/slice";
 import settingsUserManagementReducer from "../reducers/settings/user-management/slice";
 import settingsProcessReducer from "../reducers/settings/process/slice";
 import settingsPreviousObservationReducer from "../reducers/settings/previous-observation/slice";
@@ -31,6 +32,7 @@ export const store = configureStore({
     // settings
     settingsCheckList: settingsCheckListReducer,
     settingsLocation: settingsLocationReducer,
+    settingsDepartment: settingsDepartmentReducer,
     settingsRiskControlMatrix: settingsRiskControlMatrixReducer,
     settingsProcess: settingsProcessReducer,
     settingsPreviousObservation: settingsPreviousObservationReducer,

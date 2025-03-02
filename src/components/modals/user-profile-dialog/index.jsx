@@ -45,17 +45,21 @@ const UserProfileDialog = ({ setUpdateUserDialog }) => {
       [name]: "",
     });
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!loading) {
-      // Simple validation
+      const passwordRegex =
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
       const newErrors = {};
+
       if (formData.oldPassword === "") {
         newErrors.oldPassword = "Old Password is required";
       }
       if (formData.newPassword === "") {
         newErrors.newPassword = "New Password is required";
+      } else if (!passwordRegex.test(formData.newPassword)) {
+        newErrors.newPassword =
+          "Password must be at least 8 characters long and include at least one letter, one number, and one special character.";
       }
       if (formData.confirmNewPassword === "") {
         newErrors.confirmNewPassword = "Confirm New Password is required";
@@ -63,13 +67,11 @@ const UserProfileDialog = ({ setUpdateUserDialog }) => {
         newErrors.confirmNewPassword = "Passwords must match";
       }
 
-      // If there are errors, update the state and prevent form submission
       if (Object.keys(newErrors).length > 0) {
         setErrors(newErrors);
         return;
       }
 
-      // Your form submission logic goes here
       dispatch(
         setupInternalResetPassword({
           email: user[0]?.email,
@@ -78,10 +80,9 @@ const UserProfileDialog = ({ setUpdateUserDialog }) => {
           confirmNewPassword: formData.confirmNewPassword,
         })
       );
-
-      // Optionally, you can clear the form state after submission
     }
   };
+
   React.useEffect(() => {
     if (internalResetPasswordSuccess) {
       setTimeout(() => {

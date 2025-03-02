@@ -1,17 +1,15 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
   resetResetPasswordSuccess,
   setupResetUserPassword,
 } from "../../../../../global-redux/reducers/settings/user-management/slice";
-import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 
 const ResetUserPasswordDialog = ({ setUpdateUserPasswordDialog, userId }) => {
   const dispatch = useDispatch();
   const [showNewPassword, setShowNewPassword] = React.useState(false);
   const [password, setPassword] = React.useState("");
-  React.useState(false);
   const { loading, resetPasswordSuccess } = useSelector(
     (state) => state.settingsUserManagement
   );
@@ -21,9 +19,19 @@ const ResetUserPasswordDialog = ({ setUpdateUserPasswordDialog, userId }) => {
   function handleSubmit() {
     if (!loading) {
       if (!password) {
-        toast.error("Please Enter Password");
+        toast.error("Please enter a password");
         return;
       }
+
+      const passwordRegex =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=])(?=\S+$).{8,}$/;
+      if (!passwordRegex.test(password)) {
+        toast.error(
+          "Password must contain at least one uppercase letter, one lowercase letter, one numeric digit, one special character, and must be at least 8 characters long"
+        );
+        return;
+      }
+
       dispatch(
         setupResetUserPassword({
           userId: userId,
@@ -46,11 +54,11 @@ const ResetUserPasswordDialog = ({ setUpdateUserPasswordDialog, userId }) => {
   return (
     <div className="px-4 py-4">
       <div className="row mb-4 flex items-center">
-        <div className="col-lg-2 label-text ">New Password:</div>
+        <div className="col-lg-2 label-text">New Password:</div>
         <div className="col-lg-8">
           <div className="form-group relative">
             <input
-              type={showNewPassword ? "password" : "string"}
+              type={showNewPassword ? "password" : "text"}
               id="newPassword"
               name="newPassword"
               className="form-control"
@@ -64,15 +72,14 @@ const ResetUserPasswordDialog = ({ setUpdateUserPasswordDialog, userId }) => {
                 right: "12px",
               }}
             >
-              {!showNewPassword && (
+              {!showNewPassword ? (
                 <div
                   onClick={() => setShowNewPassword(true)}
                   className="cursor-pointer"
                 >
                   <i className="bi bi-eye-fill"></i>
                 </div>
-              )}
-              {showNewPassword && (
+              ) : (
                 <div
                   onClick={() => setShowNewPassword(false)}
                   className="cursor-pointer"
@@ -90,7 +97,6 @@ const ResetUserPasswordDialog = ({ setUpdateUserPasswordDialog, userId }) => {
       >
         {loading ? "Loading" : "Reset Password"}
       </button>
-
       <button
         className="btn btn-danger float-end"
         onClick={() => setUpdateUserPasswordDialog(false)}

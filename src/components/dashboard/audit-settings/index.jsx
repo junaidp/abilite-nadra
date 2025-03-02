@@ -17,12 +17,14 @@ import {
   setupGetFinancialQuantifiableYesForCompany,
   setupGetFinancialQuantifiableNoForCompany,
 } from "../../../global-redux/reducers/settings/business-objective/slice.jsx";
+import { setupGetAllDepartments } from "../../../global-redux/reducers/settings/department/slice.jsx";
 import UpdateUserDialog from "../.././modals/update-user-dialog";
 import TFA from "./components/tfa/index.jsx";
 import CheckList from "./components/checklist";
 import SupportingDocs from "./components/supporting-docs/index";
 import UserInfo from "./components/user-info/UserInfo.jsx";
 import Location from "./components/location";
+import Department from "./components/department/index.jsx";
 import RiskFactor from "./components/risk-factor";
 import UserManagement from "./components/user";
 import RCMLibrary from "./components/rcm-library";
@@ -59,6 +61,9 @@ const AuditSettings = () => {
       }
       if (currentSettingOption === "location") {
         dispatch(setupGetAllLocations(`?companyId=${companyId}`));
+      }
+      if (currentSettingOption === "department") {
+        dispatch(setupGetAllDepartments(`?companyId=${companyId}`));
       }
       if (currentSettingOption === "docs") {
         dispatch(setupGetAllFiles(`?companyId=${companyId}`));
@@ -167,6 +172,18 @@ const AuditSettings = () => {
                   onClick={() => setCurrentSettingOption("location")}
                 >
                   Location
+                </button>
+                <button
+                  className="nav-link shadow-sm  border-0 mb-3  rounded-0  me-3 "
+                  id="nav-department-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#nav-department"
+                  type="button"
+                  role="tab"
+                  aria-controls="nav-department"
+                  onClick={() => setCurrentSettingOption("department")}
+                >
+                  Department
                 </button>
 
                 <button
@@ -333,6 +350,11 @@ const AuditSettings = () => {
                 currentSettingOption={currentSettingOption}
               />
               <Location
+                userHierarchy={userHierarchy}
+                userRole={userRole}
+                currentSettingOption={currentSettingOption}
+              />
+              <Department
                 userHierarchy={userHierarchy}
                 userRole={userRole}
                 currentSettingOption={currentSettingOption}

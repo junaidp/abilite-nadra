@@ -131,12 +131,9 @@ const Location = ({ userHierarchy, userRole, currentSettingOption }) => {
       )}
       <div className="row">
         <div className="col-lg-12">
-          <div className="sub-heading  fw-bold">
-            Location & Departments Management
-          </div>
+          <div className="sub-heading  fw-bold">Location Management</div>
           <label className="fw-light">
             Create and manage your dropdown list for your organisation Location
-            Division / Department
           </label>
         </div>
       </div>

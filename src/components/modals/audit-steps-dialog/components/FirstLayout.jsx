@@ -7,13 +7,21 @@ const FirstLayout = ({
   handleChange,
   handleAllowEdit,
   setCurrentDeletedFileId,
+  setShowAuditStepsDialog,
 }) => {
   return (
-    <div>
+    <div className="py-3 px-2">
       <div className="row mb-3">
         <div className="col-lg-12">
-          <div className="sub-heading">
-            {currentAuditStep?.program?.description}
+          <div className="sub-heading d-flex items-center justify-content-between">
+            <h1 className="heading">
+              {currentAuditStep?.program?.description}
+            </h1>
+            <button
+              type="button"
+              class="btn-close f-22"
+              onClick={() => setShowAuditStepsDialog(false)}
+            ></button>
           </div>
         </div>
       </div>
