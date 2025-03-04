@@ -7,6 +7,9 @@ const SubmitDialog = ({
   setShowSubmitDialog,
   allLocations,
   allSubLocations,
+  allDepartments,
+  selectedDepartments,
+  selectedSubDepartments,
 }) => {
   const dispatch = useDispatch();
   const { jobSchedulingAddSuccess, loading } = useSelector(
@@ -34,7 +37,41 @@ const SubmitDialog = ({
         subLocation: filteredSubLocationArray,
         complete: true,
       };
-      dispatch(setupSubmitJobScheduling(object));
+
+      // for the department
+      const allDept = allDepartments?.filter((department) =>
+        selectedDepartments.includes(department.id)
+      );
+      const departments = allDept?.map((dept) => {
+        return {
+          id: 0,
+          subDepartment: 0,
+          department: dept?.id,
+        };
+      });
+      const allSubDepartments = allDepartments?.flatMap((dept) =>
+        dept.subDepartments.map((subDept) => ({
+          ...subDept,
+        }))
+      );
+
+      const subDepartments = allSubDepartments.filter((subDept) =>
+        selectedSubDepartments.includes(subDept.id)
+      );
+      const subDepartmentsList = subDepartments?.map((subDept) => {
+        return {
+          id: 0,
+          subDepartment: subDept?.id,
+          department: 0,
+        };
+      });
+      dispatch(
+        setupSubmitJobScheduling({
+          ...object,
+          departmentList: departments,
+          subDepartmentList: subDepartmentsList,
+        })
+      );
     }
   }
 

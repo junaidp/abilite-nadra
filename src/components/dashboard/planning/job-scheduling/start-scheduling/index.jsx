@@ -2,7 +2,7 @@ import React from "react";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
 import MultiSelect from "./components/select/MultiSelect";
-import LocationSelect from "./components/LocationSelect";
+import { setupGetAllDepartments } from "../../../../../global-redux/reducers/settings/department/slice";
 import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
@@ -21,6 +21,7 @@ import ResourcesRequired from "./components/resources-required";
 import TimeAndDateAllocation from "./components/time-date-allocation";
 import JobScheduleList from "./components/job-schedule-list";
 import ResourceAllocation from "./components/resource-allocation";
+import Departments from "./components/department-multiselect";
 import { CircularProgress } from "@mui/material";
 import { toast } from "react-toastify";
 import SubmitDialog from "./components/submit-dialog";
@@ -38,6 +39,8 @@ const StartScheduling = () => {
     singleJobSchedulingObject,
     initialLoading,
   } = useSelector((state) => state?.planningJobScheduling);
+  const { allDepartments } = useSelector((state) => state.settingsDepartment);
+
   const { allUsers } = useSelector((state) => state?.settingsUserManagement);
   const { user } = useSelector((state) => state?.auth);
   const { company } = useSelector((state) => state?.common);
@@ -52,6 +55,13 @@ const StartScheduling = () => {
     {}
   );
   const [allSubLocations, setAllSubLocations] = React.useState([]);
+
+  // For the department
+
+  const [selectedDepartments, setSelectedDepartments] = React.useState([]);
+  const [selectedSubDepartments, setSelectedSubDepartments] = React.useState(
+    []
+  );
 
   function handleChangeNumberTextField(event, section) {
     if (section === "resourcesRequired") {
@@ -168,7 +178,41 @@ const StartScheduling = () => {
         }),
         subLocation: filteredSubLocationArray,
       };
-      dispatch(setupUpdateJobScheduling(object));
+      // for the department
+      const allDept = allDepartments?.filter((department) =>
+        selectedDepartments.includes(department.id)
+      );
+      const departments = allDept?.map((dept) => {
+        return {
+          id: 0,
+          subDepartment: 0,
+          department: dept?.id,
+        };
+      });
+      const allSubDepartments = allDepartments?.flatMap((dept) =>
+        dept.subDepartments.map((subDept) => ({
+          ...subDept,
+        }))
+      );
+
+      const subDepartments = allSubDepartments.filter((subDept) =>
+        selectedSubDepartments.includes(subDept.id)
+      );
+      const subDepartmentsList = subDepartments?.map((subDept) => {
+        return {
+          id: 0,
+          subDepartment: subDept?.id,
+          department: 0,
+        };
+      });
+
+      dispatch(
+        setupUpdateJobScheduling({
+          ...object,
+          departmentList: departments,
+          subDepartmentList: subDepartmentsList,
+        })
+      );
     }
   }
 
@@ -216,6 +260,24 @@ const StartScheduling = () => {
           )
         );
       }
+
+      // for the department
+      const existingData = {
+        departments: singleJobSchedulingObject?.departments || [],
+        subDepartmentList: singleJobSchedulingObject?.subDepartmentList || [],
+      };
+
+      setSelectedDepartments(
+        existingData.departments
+          ? existingData.departments.map((d) => d.id)
+          : []
+      );
+
+      setSelectedSubDepartments(
+        existingData.subDepartmentList
+          ? existingData.subDepartmentList.map((s) => s.id)
+          : []
+      );
     }
   }, [singleJobSchedulingObject]);
 
@@ -244,8 +306,11 @@ const StartScheduling = () => {
       dispatch(setupGetInitialSingleJobScheduling(jobSchedulingId));
       dispatch(setupGetAllLocations(`?companyId=${companyId}`));
       setTimeout(() => {
-        dispatch(setupGetAllUsers({ shareWith: true }));
+        dispatch(setupGetAllDepartments(`?companyId=${companyId}`));
       }, 1200);
+      setTimeout(() => {
+        dispatch(setupGetAllUsers({ shareWith: true }));
+      }, 1800);
     }
   }, [dispatch]);
 
@@ -273,6 +338,9 @@ const StartScheduling = () => {
               setShowSubmitDialog={setShowSubmitDialog}
               allLocations={allLocations}
               allSubLocations={allSubLocations}
+              allDepartments={allDepartments}
+              selectedDepartments={selectedDepartments}
+              selectedSubDepartments={selectedSubDepartments}
             />
           </div>
         </div>
@@ -296,113 +364,62 @@ const StartScheduling = () => {
               </span>
             </div>
           </header>
-          {singleJobSchedulingObject?.natureThrough ===
-          "Compliance Checklist" ? (
-            <div className="row ">
-              <div className="col-lg-5 mb-3">
-                <MultiSelect
-                  names={allLocations?.map((all) => all?.description)}
-                  title="Location"
-                  initialPersonalArray={initialLocationList}
-                  name="locationList"
-                  setCurrentJobScheduling={setCurrentJobScheduling}
-                  singleJobSchedulingObject={singleJobSchedulingObject}
+          <div className="row ">
+            <div className="col-lg-5 mb-3">
+              <MultiSelect
+                names={allLocations?.map((all) => all?.description)}
+                title="Location"
+                initialPersonalArray={initialLocationList}
+                name="locationList"
+                setCurrentJobScheduling={setCurrentJobScheduling}
+                singleJobSchedulingObject={singleJobSchedulingObject}
+              />
+            </div>
+            <div className="col-lg-5 mb-3">
+              <MultiSelect
+                title="SubLocation"
+                names={allSubLocations?.map((all) => all?.description)}
+                initialPersonalArray={initialSubLocationList}
+                name="subLocation"
+                setCurrentJobScheduling={setCurrentJobScheduling}
+                singleJobSchedulingObject={singleJobSchedulingObject}
+              />
+            </div>
+            <div className="col-lg-2 mb-3">
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  value=""
+                  id="flexCheckDefault"
+                  name="separateJob"
+                  checked={currentJobSchedulingObject?.separateJob}
+                  onChange={(event) =>
+                    handleChangeJobSchedulingCheckFields(event, "seprateJob")
+                  }
+                  disabled={
+                    singleJobSchedulingObject?.locked === true ||
+                    (singleJobSchedulingObject?.complete === true &&
+                      singleJobSchedulingObject?.locked === false &&
+                      user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                      ? true
+                      : false
+                  }
                 />
-              </div>
-              <div className="col-lg-5 mb-3">
-                <MultiSelect
-                  title="SubLocation"
-                  names={allSubLocations?.map((all) => all?.description)}
-                  initialPersonalArray={initialSubLocationList}
-                  name="subLocation"
-                  setCurrentJobScheduling={setCurrentJobScheduling}
-                  singleJobSchedulingObject={singleJobSchedulingObject}
-                />
-              </div>
-              <div className="col-lg-2 mb-3">
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="flexCheckDefault"
-                    name="separateJob"
-                    checked={currentJobSchedulingObject?.separateJob}
-                    onChange={(event) =>
-                      handleChangeJobSchedulingCheckFields(event, "seprateJob")
-                    }
-                    disabled={
-                      singleJobSchedulingObject?.locked === true ||
-                      (singleJobSchedulingObject?.complete === true &&
-                        singleJobSchedulingObject?.locked === false &&
-                        user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
-                        ? true
-                        : false
-                    }
-                  />
-                  <label
-                    className="form-check-label"
-                    htmlFor="flexCheckDefault"
-                  >
-                    Seprate job
-                  </label>
-                </div>
+                <label className="form-check-label" htmlFor="flexCheckDefault">
+                  Seprate job
+                </label>
               </div>
             </div>
-          ) : (
-            <div className="row ">
-              <div className="col-lg-5 mb-3">
-                <LocationSelect
-                  names={allLocations?.map((all) => all?.description)}
-                  title="Location"
-                  initialPersonalArray={initialLocationList}
-                  name="locationList"
-                  setCurrentJobScheduling={setCurrentJobScheduling}
-                  singleJobSchedulingObject={singleJobSchedulingObject}
-                />
-              </div>
-              <div className="col-lg-5 mb-3">
-                <LocationSelect
-                  title="SubLocation"
-                  names={allSubLocations?.map((all) => all?.description)}
-                  initialPersonalArray={initialSubLocationList}
-                  name="subLocation"
-                  setCurrentJobScheduling={setCurrentJobScheduling}
-                  singleJobSchedulingObject={singleJobSchedulingObject}
-                />
-              </div>
-              <div className="col-lg-2 mb-3">
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="flexCheckDefault"
-                    name="separateJob"
-                    checked={currentJobSchedulingObject?.separateJob}
-                    onChange={(event) =>
-                      handleChangeJobSchedulingCheckFields(event, "seprateJob")
-                    }
-                    disabled={
-                      singleJobSchedulingObject?.locked === true ||
-                      (singleJobSchedulingObject?.complete === true &&
-                        singleJobSchedulingObject?.locked === false &&
-                        user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
-                        ? true
-                        : false
-                    }
-                  />
-                  <label
-                    className="form-check-label"
-                    htmlFor="flexCheckDefault"
-                  >
-                    Seprate job
-                  </label>
-                </div>
-              </div>
-            </div>
-          )}
-
+          </div>
+          <div className="mb-3">
+            <Departments
+              selectedDepartments={selectedDepartments}
+              setSelectedDepartments={setSelectedDepartments}
+              selectedSubDepartments={selectedSubDepartments}
+              setSelectedSubDepartments={setSelectedSubDepartments}
+            />
+          </div>
           <div className="row">
             <div className="col-md-12">
               <div className="accordion" id="accordionFlushExample">

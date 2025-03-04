@@ -45,10 +45,10 @@ const EditSubDepartmentDialog = ({
   }, [subDepartmentAddSuccess]);
 
   React.useEffect(() => {
-    const subLocationText = subDepartments?.find(
+    const subDepartmentText = subDepartments?.find(
       (all) => all?.id === subDepartmentId
     );
-    setSubDepartmentName(subLocationText?.description);
+    setSubDepartmentName(subDepartmentText?.description);
   }, [departmentId, subDepartmentId]);
 
   return (

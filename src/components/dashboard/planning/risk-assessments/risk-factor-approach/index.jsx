@@ -365,11 +365,16 @@ const RiskFactorApproach = () => {
                           );
                         })}
                         <tr>
-                          <td colSpan="2"></td>
                           <td className="bold width-50">
                             {handlCalculateEnterpriseValue()} %
                           </td>
-                          <td colSpan="4"></td>
+                          <td colSpan="3"></td>
+                          <td
+                            colSpan={
+                              data?.riskAssessmentList[0]?.riskFactorValues
+                                ?.length
+                            }
+                          ></td>
                           <td>{handlCalculateProbabilityTotal()}</td>
                           <td>{handlCalculateRiskScoreTotal()}</td>
                         </tr>

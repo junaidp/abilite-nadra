@@ -119,7 +119,7 @@ export const slice = createSlice({
       .addCase(setupGetAllDepartments.rejected, (state, { payload }) => {
         state.loading = false;
         if (payload?.response?.data?.message) {
-          toast.error(payload?.response?.data?.message);
+          // toast.error(payload?.response?.data?.message);
         } else {
           toast.error("An Error has occurred");
         }

@@ -109,7 +109,7 @@ const Department = ({ userHierarchy, userRole, currentSettingOption }) => {
   React.useEffect(() => {
     if (allSubDepartments && allSubDepartments?.length) {
       const subItems = allSubDepartments?.filter(
-        (item) => item?.departmentId?.id === departmentId
+        (item) => item?.departmentId === departmentId
       );
       setSubDepartments(subItems);
     }
