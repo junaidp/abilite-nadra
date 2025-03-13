@@ -10,6 +10,10 @@ import {
 import { useSelector } from "react-redux";
 
 const MultiSelect = ({ label, options, selectedValues, setSelectedValues }) => {
+  const { singleJobSchedulingObject } = useSelector(
+    (state) => state?.planningJobScheduling
+  );
+  const { user } = useSelector((state) => state?.auth);
   const handleChange = (event) => {
     setSelectedValues(event.target.value);
   };
@@ -33,6 +37,14 @@ const MultiSelect = ({ label, options, selectedValues, setSelectedValues }) => {
         //     ))}
         //   </div>
         // )}
+        disabled={
+          singleJobSchedulingObject?.locked === true ||
+          (singleJobSchedulingObject?.complete === true &&
+            singleJobSchedulingObject?.locked === false &&
+            user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+            ? true
+            : false
+        }
       >
         {options.map((option) => (
           <MenuItem key={option.id} value={option.id}>
