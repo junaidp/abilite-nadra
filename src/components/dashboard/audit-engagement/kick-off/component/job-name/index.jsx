@@ -52,6 +52,7 @@ const JobName = ({ currentAuditEngagement }) => {
             </div>
           </div>
 
+          {/* Location */}
           <div className="row mb-3 f-13">
             <div className="col-lg-12 px-3 d-flex justify-content-between">
               <div className="fw-bold">Location:</div>
@@ -92,6 +93,49 @@ const JobName = ({ currentAuditEngagement }) => {
               </div>
             </div>
           </div>
+          {/* Location */}
+
+          {/* Departments */}
+          <div className="row mb-3 f-13">
+            <div className="col-lg-12 px-3 d-flex justify-content-between">
+              <div className="fw-bold">Department:</div>
+              <div className="">
+                {[
+                  ...new Set(
+                    currentAuditEngagement?.subDepartments?.map(
+                      (item) => item?.department?.description
+                    )
+                  ),
+                ]?.map((departmentItem, index) => {
+                  return (
+                    <Chip
+                      label={departmentItem}
+                      className="mx-2 mb-2"
+                      key={index}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          <div className="row mb-3 f-13">
+            <div className="col-lg-12 px-3 d-flex justify-content-between">
+              <div className="fw-bold mt-2">Sub-Department:</div>
+              <div className="">
+                {currentAuditEngagement?.subDepartments?.map((item, index) => {
+                  return (
+                    <Chip
+                      label={item?.description}
+                      className="mx-2 mb-2"
+                      key={index}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+          {/* Departments */}
 
           <div className="row mb-3 f-13">
             <div className="col-lg-4 px-3 d-flex justify-content-between">
@@ -110,7 +154,7 @@ const JobName = ({ currentAuditEngagement }) => {
               </div>
             </div>
             <div className="col-lg-4 px-3 d-flex justify-content-between">
-              <div className="fw-bold">Proposed Job Approver</div>
+              <div className="fw-bold">Proposed Job Approver:</div>
               <div className="">
                 {currentAuditEngagement?.resourceAllocation?.proposedJobApprover
                   ?.name || "No Proposed Job Approver Assigned "}
@@ -119,7 +163,7 @@ const JobName = ({ currentAuditEngagement }) => {
           </div>
           <div className="row mb-3 mt-3 f-13">
             <div className="col-lg-4 px-3 d-flex gap-4 flex-wrap w-100">
-              <div className="fw-bold">Resource List</div>
+              <div className="fw-bold">Resource List:</div>
 
               {currentAuditEngagement?.resourceAllocation?.resourcesList &&
               currentAuditEngagement?.resourceAllocation?.resourcesList

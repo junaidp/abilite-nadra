@@ -126,6 +126,8 @@ const Reporting = () => {
                       <th>No. of Observations</th>
                       <th>Location</th>
                       <th>Sub Location</th>
+                      <th>Department</th>
+                      <th>Sub Department</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -173,6 +175,30 @@ const Reporting = () => {
                           <td>
                             <div className="d-flex gap-1">
                               {item?.subLocationList?.map((item, index) => {
+                                return (
+                                  <Chip label={item?.description} key={index} />
+                                );
+                              })}
+                            </div>
+                          </td>
+                          <td>
+                            <div className="d-flex gap-1">
+                              {[
+                                ...new Set(
+                                  item?.subDepartments?.map(
+                                    (item) => item?.department?.description
+                                  )
+                                ),
+                              ]?.map((departmentItem, index) => {
+                                return (
+                                  <Chip label={departmentItem} key={index} />
+                                );
+                              })}
+                            </div>
+                          </td>
+                          <td>
+                            <div className="d-flex gap-1">
+                              {item?.subDepartments?.map((item, index) => {
                                 return (
                                   <Chip label={item?.description} key={index} />
                                 );

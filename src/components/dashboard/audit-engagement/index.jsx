@@ -131,6 +131,7 @@ const AuditEngagement = () => {
                         <th>Planned End Date </th>
                         <th>Job Type </th>
                         <th>Sub Location </th>
+                        <th>Sub Department </th>
                         <th>Status </th>
                         <th>Job Status</th>
                         <th>Action </th>
@@ -173,6 +174,20 @@ const AuditEngagement = () => {
                               <td>
                                 <div className="d-flex gap-2 flex-wrap">
                                   {item?.subLocationList?.map(
+                                    (location, index) => {
+                                      return (
+                                        <Chip
+                                          label={location?.description}
+                                          key={index}
+                                        />
+                                      );
+                                    }
+                                  )}
+                                </div>
+                              </td>
+                              <td>
+                                <div className="d-flex gap-2 flex-wrap">
+                                  {item?.subDepartments?.map(
                                     (location, index) => {
                                       return (
                                         <Chip
