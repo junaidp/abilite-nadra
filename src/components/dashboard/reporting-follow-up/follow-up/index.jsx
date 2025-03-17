@@ -153,7 +153,7 @@ const FollowUp = () => {
                           <td>{handleCalculateStatus(item)}</td>
                           <td>{item?.reportingList?.length}</td>
                           <td>
-                            <div className="d-flex gap-1">
+                            <div className="d-flex gap-1 flex-wrap">
                               {[
                                 ...new Set(
                                   item?.subLocationList?.map(
@@ -168,7 +168,7 @@ const FollowUp = () => {
                             </div>
                           </td>
                           <td>
-                            <div className="d-flex gap-1">
+                            <div className="d-flex gap-1 flex-wrap">
                               {item?.subLocationList?.map((item, index) => {
                                 return (
                                   <Chip label={item?.description} key={index} />
@@ -177,7 +177,7 @@ const FollowUp = () => {
                             </div>
                           </td>
                           <td>
-                            <div className="d-flex gap-1">
+                            <div className="d-flex gap-1 flex-wrap">
                               {[
                                 ...new Set(
                                   item?.subDepartments?.map(
@@ -192,7 +192,7 @@ const FollowUp = () => {
                             </div>
                           </td>
                           <td>
-                            <div className="d-flex gap-1">
+                            <div className="d-flex gap-1 flex-wrap">
                               {item?.subDepartments?.map((item, index) => {
                                 return (
                                   <Chip label={item?.description} key={index} />
