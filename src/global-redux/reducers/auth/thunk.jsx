@@ -106,13 +106,11 @@ export const generateQRCode = async (_, thunkAPI) => {
       `${baseUrl}/account/user/generate/${user[0]?.email}`,
       {
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${user[0]?.token}`,
         },
-        responseType: "arraybuffer",
       }
     );
-    return props.data;
+    return props.data.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
   }

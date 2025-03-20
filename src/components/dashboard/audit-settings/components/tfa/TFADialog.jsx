@@ -7,16 +7,6 @@ const TFADialog = ({ setShowDialog }) => {
   const dispatch = useDispatch();
   const { qrCode, user, loading } = useSelector((state) => state?.auth);
 
-  let arrayBufferToBase64 = (buffer) => {
-    var binary = "";
-    var bytes = new Uint8Array(buffer);
-    var len = bytes.byteLength;
-    for (var i = 0; i < len; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-    return window.btoa(binary);
-  };
-
   React.useEffect(() => {
     dispatch(setupGenerateQRCode());
   }, [user]);
@@ -33,10 +23,8 @@ const TFADialog = ({ setShowDialog }) => {
           <CircularProgress />
         ) : (
           <div className="qr-code mb-4">
-            <img
-              src={`data:image/JPEG;base64,${arrayBufferToBase64(qrCode)}`}
-            />
-          </div>
+      {qrCode ? <img src={`data:image/png;base64,${qrCode}`} alt="QR Code" style={{ width: "200px", height: "200px" }} /> : <p>Loading...</p>}
+      </div>
         )}
       </div>
 
