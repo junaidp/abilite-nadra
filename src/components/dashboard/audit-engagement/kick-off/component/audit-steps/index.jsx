@@ -152,7 +152,7 @@ const AditSteps = ({
                                 </td>
                                 <td className="d-flex gap-4">
                                   {item?.auditStepObservationsList?.length !==
-                                  0 ? (
+                                    0 ? (
                                     <i className="fa fa-check-circle text-success f-18"></i>
                                   ) : (
                                     <i className="fa fa-check-circle text-danger  f-18"></i>
@@ -176,14 +176,13 @@ const AditSteps = ({
                   </table>
                 </div>
                 <div className="d-flex gap-4 flex-end">
-                  {currentAuditEngagement?.auditStep?.submitted === false &&
-                    showSubmitButton && (
+                  {currentAuditEngagement?.auditStep?.submitted === false
+                    && (
                       <div onClick={handleSubmit}>
                         <div className="justify-content-end text-end">
                           <div
-                            className={`btn btn-labeled btn-primary  shadow ${
-                              loading && "disabled"
-                            }`}
+                            className={`btn btn-labeled btn-primary  shadow ${loading && "disabled"
+                              }`}
                           >
                             {loading ? "Loading..." : "Submit"}
                           </div>
@@ -194,21 +193,20 @@ const AditSteps = ({
                     currentAuditEngagement?.auditStep?.approved === false &&
                     (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
                       Number(user[0]?.userId?.id) ===
-                        Number(
-                          currentAuditEngagement?.resourceAllocation
-                            ?.backupHeadOfInternalAudit?.id
-                        ) ||
+                      Number(
+                        currentAuditEngagement?.resourceAllocation
+                          ?.backupHeadOfInternalAudit?.id
+                      ) ||
                       Number(user[0]?.userId?.id) ===
-                        Number(
-                          currentAuditEngagement?.resourceAllocation
-                            ?.proposedJobApprover?.id
-                        )) && (
+                      Number(
+                        currentAuditEngagement?.resourceAllocation
+                          ?.proposedJobApprover?.id
+                      )) && (
                       <div onClick={handleApprove}>
                         <div className="justify-content-end text-end">
                           <div
-                            className={`btn btn-labeled btn-primary  shadow ${
-                              loading && "disabled"
-                            }`}
+                            className={`btn btn-labeled btn-primary  shadow ${loading && "disabled"
+                              }`}
                           >
                             {loading ? "Loading..." : "Approve"}
                           </div>
@@ -219,15 +217,15 @@ const AditSteps = ({
                     currentAuditEngagement?.auditStep?.approved === false &&
                     (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
                       Number(user[0]?.userId?.id) ===
-                        Number(
-                          currentAuditEngagement?.resourceAllocation
-                            ?.backupHeadOfInternalAudit?.id
-                        ) ||
+                      Number(
+                        currentAuditEngagement?.resourceAllocation
+                          ?.backupHeadOfInternalAudit?.id
+                      ) ||
                       Number(user[0]?.userId?.id) ===
-                        Number(
-                          currentAuditEngagement?.resourceAllocation
-                            ?.proposedJobApprover?.id
-                        )) && (
+                      Number(
+                        currentAuditEngagement?.resourceAllocation
+                          ?.proposedJobApprover?.id
+                      )) && (
                       <div onClick={() => setFeedBackDialog(true)}>
                         <div className="justify-content-end text-end">
                           <div
