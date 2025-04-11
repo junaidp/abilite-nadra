@@ -84,13 +84,14 @@ const SupportingDocs = ({ userHierarchy, userRole, currentSettingOption }) => {
               <div className="sub-heading  fw-bold">Supporting Documents</div>
             </div>
           </div>
-          <div className="row position-relative mx-1">
+          <div className="row position-relative mx-1 pointer">
             <div className="col-lg-12 text-center settings-form">
               <form>
                 <input
                   type="file"
                   ref={fileInputRef}
                   onChange={handleFileChange}
+                  accept=".xlsx, .xls, .pdf, .txt"
                 />
                 <p className="mb-0">Click in this area.</p>
               </form>

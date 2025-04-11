@@ -56,7 +56,7 @@ const ComplianceCheckList = ({
   return (
     <div className="accordion-item">
       {showSubmitDialog && (
-        <div className="model-parent">
+        <div className="model-parent d-flex justify-content-between items-center">
           <div className="model-wrap">
             <SubmitDialog
               object={currentSubmittedItem}
@@ -66,7 +66,7 @@ const ComplianceCheckList = ({
         </div>
       )}
       {showApproveDialog && (
-        <div className="model-parent">
+        <div className="model-parent d-flex justify-content-between items-center">
           <div className="model-wrap">
             <ApproveDialog
               setShowApproveDialog={setShowApproveDialog}
@@ -89,8 +89,8 @@ const ComplianceCheckList = ({
               {singleAuditEngagementObject?.auditStepChecklistList?.find(
                 (singleItem) => singleItem?.approved === true
               ) && (
-                <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
-              )}
+                  <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
+                )}
               Compliance Checklist
             </div>
           </div>

@@ -22,38 +22,15 @@ const IAHFileUpload = ({ item, setDeleteFileId }) => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const fileType = file.type;
-      const validTypes = [
-        "application/pdf",
-        "application/vnd.ms-excel",
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      ];
-      if (validTypes.includes(fileType)) {
-        setSelectedFile(file);
-      } else {
-        toast.error(
-          "Invalid file type. Only Pdf and Excel files are acceptable"
-        );
-      }
+      setSelectedFile(file);
     }
   };
 
   const handleUpdateFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const fileType = file.type;
-      const validTypes = [
-        "application/pdf",
-        "application/vnd.ms-excel",
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      ];
-      if (validTypes.includes(fileType)) {
-        setSelectedUpdateFile(file);
-      } else {
-        toast.error(
-          "Invalid file type. Only Pdf and Excel files are acceptable"
-        );
-      }
+      setSelectedUpdateFile(file);
+
     }
   };
 
@@ -116,13 +93,13 @@ const IAHFileUpload = ({ item, setDeleteFileId }) => {
                 className="f-10"
                 ref={fileInputRef}
                 onChange={handleFileChange}
+                accept=".xlsx, .xls, .pdf, .txt"
               />
             </div>
             <div className="col-lg-6">
               <button
-                className={`btn btn-labeled btn-primary  shadow ${
-                  addReportLoading && "disabled"
-                }`}
+                className={`btn btn-labeled btn-primary  shadow ${addReportLoading && "disabled"
+                  }`}
                 onClick={handleFileUpload}
               >
                 <span className="btn-label me-2">
@@ -142,6 +119,7 @@ const IAHFileUpload = ({ item, setDeleteFileId }) => {
                 className="f-10"
                 ref={updatedFileInputRef}
                 onChange={handleUpdateFileChange}
+                accept=".xlsx, .xls, .pdf, .txt"
               />
             </div>
           </div>
