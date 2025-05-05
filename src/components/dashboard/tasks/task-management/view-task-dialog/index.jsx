@@ -31,8 +31,15 @@ const ViewTaskManagement = ({ setShowViewTasktDialog, updateTaskId }) => {
   return (
     <div className="px-4 py-4 information-request-dialog-main-wrap">
       <header className="section-header my-3 text-start d-flex align-items-center justify-content-between">
-        <div className="mb-0 heading d-flex align-items-center">
+        <div className="mb-0 heading d-flex align-items-center justify-content-between w-100">
           <h2 className="heading">View Task</h2>
+          <button
+            type="button"
+            className="btn-close f-22"
+            onClick={() => {
+              setShowViewTasktDialog(false);
+            }}
+          ></button>
         </div>
       </header>
       <div className="row">
@@ -50,19 +57,19 @@ const ViewTaskManagement = ({ setShowViewTasktDialog, updateTaskId }) => {
 
       <div className="row mb-3">
         <div className="col-lg-6">
-          <label className="me-3">Selected Job</label>
-          <input
-            className="form-control w-100"
-            disabled
-            value={initialValues?.auditEngagement}
-          />
-        </div>
-        <div className="col-lg-6">
-          <label className="me-3">Selected Assignee</label>
+          <label className="me-3">Selected User</label>
           <input
             className="form-control w-100"
             disabled
             value={initialValues?.userAssigned}
+          />
+        </div>
+        <div className="col-lg-6">
+          <label className="me-3">Selected User Job</label>
+          <input
+            className="form-control w-100"
+            disabled
+            value={initialValues?.auditEngagement}
           />
         </div>
       </div>
@@ -94,19 +101,6 @@ const ViewTaskManagement = ({ setShowViewTasktDialog, updateTaskId }) => {
 
       <FileUpload updateTaskId={updateTaskId} allTasks={allTasks} />
 
-      <div className="row mb-2">
-        <div className="col-lg-12 ">
-          <button
-            type="submit"
-            className="btn btn-danger float-end "
-            onClick={() => {
-              setShowViewTasktDialog(false);
-            }}
-          >
-            Close
-          </button>
-        </div>
-      </div>
     </div>
   );
 };

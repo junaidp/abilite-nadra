@@ -26,6 +26,7 @@ const InformationRequest = () => {
     initialLoading,
     totalNoOfRecords,
     fileUploadSuccess,
+    loading
   } = useSelector((state) => state?.tasksManagement);
   const { company } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
@@ -177,15 +178,15 @@ const InformationRequest = () => {
         <div className="mb-0 heading">Information Request</div>
         <div className="">
           <div
-            className="btn btn-labeled btn-primary px-3 shadow "
+            className={`${loading || initialLoading && "disabled"} btn btn-labeled btn-primary px-3 shadow`}
             onClick={() =>
-              !initialLoading && setShowAddInformationRequestDialog(true)
+              !initialLoading && !loading && setShowAddInformationRequestDialog(true)
             }
           >
             <span className="btn-label me-2">
               <i className="fa fa-plus-circle"></i>
             </span>
-            {initialLoading ? "Loading..." : "Add Information Request"}
+            {initialLoading || loading ? "Loading..." : "Add Information Request"}
           </div>
         </div>
       </header>

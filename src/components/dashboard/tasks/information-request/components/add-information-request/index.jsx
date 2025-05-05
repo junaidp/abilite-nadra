@@ -7,11 +7,17 @@ import FileUpload from "./file-upload";
 import * as Yup from "yup";
 
 // Validation schema
-const today = moment.utc().startOf("day");
+const today = new Date();
+today.setHours(0, 0, 0, 0);
 const validationSchema = Yup.object({
   dueDate: Yup.date()
     .required("Due Date is required")
-    .min(today.toDate(), "Due Date must be today or later"),
+    .test("is-today-or-later", "Due Date must be today or later", function (value) {
+      if (!value) return false;
+      const selectedDate = moment(value).startOf("day");
+      const today = moment().startOf("day");
+      return selectedDate.isSameOrAfter(today);
+    }),
   engagementId: Yup.string().required("Job is required"),
   userAssigned: Yup.string().required("Assignee is required"),
   detailedRequirement: Yup.string().required(
@@ -73,6 +79,14 @@ const AddInformationRequest = ({ setShowAddInformationRequestDialog }) => {
         <div className="mb-0 heading d-flex align-items-center">
           <h2 className="heading">Add Information Request</h2>
         </div>
+        <button
+          type="button"
+          className="btn-close f-22"
+          onClick={() => {
+            setShowAddInformationRequestDialog(false);
+          }}
+
+        ></button>
       </header>
       <Formik
         initialValues={initialValues}
@@ -100,7 +114,28 @@ const AddInformationRequest = ({ setShowAddInformationRequestDialog }) => {
 
             <div className="row mb-3">
               <div className="col-lg-6">
-                <label className="me-3">Selected Job</label>
+                <label className="me-3">Selected Assignee</label>
+                <Field
+                  as="select"
+                  name="userAssigned"
+                  className="form-select"
+                  aria-label="Default select example"
+                >
+                  <option value="">Select User</option>
+                  {users?.map((user, index) => (
+                    <option value={user?.id} key={index}>
+                      {user?.name}
+                    </option>
+                  ))}
+                </Field>
+                <ErrorMessage
+                  name="userAssigned"
+                  component="div"
+                  className="text-danger f-14"
+                />
+              </div>
+              <div className="col-lg-6">
+                <label className="me-3">Selected Assignee Job</label>
                 <Field
                   as="select"
                   name="engagementId"
@@ -122,27 +157,6 @@ const AddInformationRequest = ({ setShowAddInformationRequestDialog }) => {
                   className="text-danger f-14"
                 />
               </div>
-              <div className="col-lg-6">
-                <label className="me-3">Selected Assignee</label>
-                <Field
-                  as="select"
-                  name="userAssigned"
-                  className="form-select"
-                  aria-label="Default select example"
-                >
-                  <option value="">Select User</option>
-                  {users?.map((user, index) => (
-                    <option value={user?.id} key={index}>
-                      {user?.name}
-                    </option>
-                  ))}
-                </Field>
-                <ErrorMessage
-                  name="userAssigned"
-                  component="div"
-                  className="text-danger f-14"
-                />
-              </div>
             </div>
 
             <div className="row mb-3">
@@ -153,10 +167,9 @@ const AddInformationRequest = ({ setShowAddInformationRequestDialog }) => {
                   name="detailedRequirement"
                   id="exampleFormControlTextarea1"
                   rows="3"
-                  className={`form-control ${
-                    values?.detailedRequirement?.length >= 1500 &&
+                  className={`form-control ${values?.detailedRequirement?.length >= 1500 &&
                     "error-border"
-                  }`}
+                    }`}
                   maxLength="1500"
                 />
                 <label className="word-limit-info label-text">
@@ -184,19 +197,6 @@ const AddInformationRequest = ({ setShowAddInformationRequestDialog }) => {
           </Form>
         )}
       </Formik>
-      <div className="row mb-2">
-        <div className="col-lg-12 align-self-end">
-          <button
-            type="submit"
-            className="btn btn-danger float-end"
-            onClick={() => {
-              setShowAddInformationRequestDialog(false);
-            }}
-          >
-            Close
-          </button>
-        </div>
-      </div>
     </div>
   );
 };

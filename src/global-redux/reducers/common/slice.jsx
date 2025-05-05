@@ -250,19 +250,19 @@ export const slice = createSlice({
       state.activeExpandId = action.payload;
       if (action.payload === "li-audit") {
         state.menuItems = state.menuItems.map((all) => {
-          return all?.id === "li-audit" ? { ...all, open: !all?.open } : all;
+          return all?.id === "li-audit" ? { ...all, open: !all?.open } : { ...all, open: false };
         });
       }
       if (action.payload === "li-reports") {
         state.menuItems = state.menuItems.map((all) => {
-          return all?.id === "li-reports" ? { ...all, open: !all?.open } : all;
+          return all?.id === "li-reports" ? { ...all, open: !all?.open } : { ...all, open: false };
         });
       }
       if (action.payload === "li-reporting-and-followup") {
         state.menuItems = state.menuItems.map((all) => {
           return all?.id === "li-reporting-and-followup"
             ? { ...all, open: !all?.open }
-            : all;
+            : { ...all, open: false };
         });
       }
     },
