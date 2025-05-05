@@ -30,7 +30,7 @@ const RiskFactor = ({ userHierarchy, userRole, currentSettingOption }) => {
 
   function handleSave() {
     if (!loading) {
-      if (description === "") {
+      if (description.trim() === "") {
         toast.error("Provide description");
       } else {
         let companyId = user[0]?.company.find(
@@ -50,6 +50,10 @@ const RiskFactor = ({ userHierarchy, userRole, currentSettingOption }) => {
   function handleUpdate(id) {
     if (!loading) {
       const currentRiskFactor = riskFactorList.find((all) => all?.id === id);
+      if (currentRiskFactor.description.trim() === "") {
+        toast.error("Provide description")
+        return
+      }
       dispatch(setupUpdateRiskFactor(currentRiskFactor));
     }
   }
@@ -127,9 +131,8 @@ const RiskFactor = ({ userHierarchy, userRole, currentSettingOption }) => {
           </div>
           <div className="col-lg-6 text-end float-end align-self-end">
             <div
-              className={`btn btn-labeled btn-primary px-3 shadow ${
-                loading && "disabled"
-              }`}
+              className={`btn btn-labeled btn-primary px-3 shadow ${loading && "disabled"
+                }`}
               onClick={handleSave}
             >
               <span className="btn-label me-2">
@@ -176,10 +179,9 @@ const RiskFactor = ({ userHierarchy, userRole, currentSettingOption }) => {
                                 handleChangeDescription(event, item?.id)
                               }
                               maxLength="500"
-                              className={`form-control ${
-                                item?.description?.length >= 500 &&
+                              className={`form-control ${item?.description?.length >= 500 &&
                                 "error-border"
-                              }`}
+                                }`}
                             ></textarea>
                             <label className="word-limit-info label-text">
                               Maximum 500 characters
@@ -187,33 +189,33 @@ const RiskFactor = ({ userHierarchy, userRole, currentSettingOption }) => {
                           </td>
                           {(userRole === "ADMIN" ||
                             userHierarchy === "IAH") && (
-                            <td>
-                              <div className="d-flex flex-wrap gap-4">
-                                <div
-                                  className={`btn btn-labeled btn-primary shadow `}
-                                  onClick={() => handleUpdate(item?.id)}
-                                >
-                                  <span className="btn-label me-2">
-                                    <i className="fa fa-check-circle"></i>
-                                  </span>
-                                  Save
-                                </div>
+                              <td>
+                                <div className="d-flex flex-wrap gap-4">
+                                  <div
+                                    className={`btn btn-labeled btn-primary shadow `}
+                                    onClick={() => handleUpdate(item?.id)}
+                                  >
+                                    <span className="btn-label me-2">
+                                      <i className="fa fa-check-circle"></i>
+                                    </span>
+                                    Save
+                                  </div>
 
-                                <div
-                                  className={`btn btn-labeled btn-danger shadow `}
-                                  onClick={() => {
-                                    setCurrentRiskFactorId(item?.id);
-                                    setShowDeleteRiskFactorDialog(true);
-                                  }}
-                                >
-                                  <span className="btn-label me-2">
-                                    <i className="fa fa-check-circle f-18"></i>
-                                  </span>
-                                  Delete
+                                  <div
+                                    className={`btn btn-labeled btn-danger shadow `}
+                                    onClick={() => {
+                                      setCurrentRiskFactorId(item?.id);
+                                      setShowDeleteRiskFactorDialog(true);
+                                    }}
+                                  >
+                                    <span className="btn-label me-2">
+                                      <i className="fa fa-check-circle f-18"></i>
+                                    </span>
+                                    Delete
+                                  </div>
                                 </div>
-                              </div>
-                            </td>
-                          )}
+                              </td>
+                            )}
                         </tr>
                       );
                     })}

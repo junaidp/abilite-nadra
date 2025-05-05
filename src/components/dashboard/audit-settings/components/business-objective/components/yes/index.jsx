@@ -35,7 +35,7 @@ const FinanciallyQuantifiableYes = ({
 
   function handleSave() {
     if (!yesLoading) {
-      if (description === "") {
+      if (description.trim() === "") {
         toast.error("Provide description");
       } else {
         let companyId = user[0]?.company.find(
@@ -58,7 +58,7 @@ const FinanciallyQuantifiableYes = ({
   function handleUpdate(id) {
     if (!yesLoading) {
       const currentItem = yesList.find((all) => all?.id === id);
-      if (currentItem?.name === "" || !currentItem?.amount) {
+      if (currentItem?.name.trim() === "" || !currentItem?.amount) {
         toast.error("Provide all values");
         return;
       }

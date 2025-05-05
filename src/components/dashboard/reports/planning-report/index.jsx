@@ -6,7 +6,7 @@ import {
   setupGetAllUsers,
 } from "../../../../global-redux/reducers/reports/planing-report/slice";
 import { useSelector, useDispatch } from "react-redux";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Tooltip, Typography } from "@mui/material";
 import moment from "moment";
 import Pagination from "@mui/material/Pagination";
 import ReportDeleteDailog from "./components/report-delete-dialog";
@@ -16,6 +16,11 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { encryptAndEncode } from "../../../../config/helper";
+const poppinsStyle = {
+  fontFamily: '"Poppins", sans-serif',
+  fontWeight: "normal",
+};
+
 
 const PlanningReport = () => {
   const dispatch = useDispatch();
@@ -129,12 +134,33 @@ const PlanningReport = () => {
       )}
       <header className="section-header my-3 text-start d-flex align-items-center justify-content-between">
         <div className="mb-0 heading">Planning Report</div>
-        <button
-          className="btn btn-outline-light text-black"
-          onClick={() => navigate(`/audit/generate-planning-report`)}
-        >
-          Generate Report
-        </button>
+        <div className="">
+          <div
+            className="btn btn-labeled btn-primary px-3 shadow"
+            onClick={() => navigate("/audit/generate-planning-report")}
+          >
+            <span className="btn-label me-2">
+              <i className="fa fa-eye"></i>
+            </span>
+            Generate Report
+          </div>
+          <Tooltip
+            title={
+              <React.Fragment>
+                <Typography
+                  color="inherit"
+                  className="mb-2"
+                  style={poppinsStyle}
+                >
+                  Click to create a new planning report
+                </Typography>
+              </React.Fragment>
+            }
+            arrow
+          >
+            <i className="fa fa-info-circle ps-3 text-secondary cursor-pointer"></i>
+          </Tooltip>
+        </div>
       </header>
 
       <div className="row">
@@ -216,7 +242,7 @@ const PlanningReport = () => {
                               {item?.reportStatus === "Draft" &&
                                 (item?.createdBy === user[0]?.userId?.id ||
                                   user[0]?.userId?.employeeid?.userHierarchy ===
-                                    "IAH") && (
+                                  "IAH") && (
                                   <i
                                     className="fa fa-edit text-secondary f-18 cursor-pointer"
                                     onClick={() => {
@@ -232,7 +258,7 @@ const PlanningReport = () => {
                               {item?.reportStatus === "Draft" &&
                                 (item?.createdBy === user[0]?.userId?.id ||
                                   user[0]?.userId?.employeeid?.userHierarchy ===
-                                    "IAH") && (
+                                  "IAH") && (
                                   <i
                                     className="fa fa-trash text-danger f-18 cursor-pointer"
                                     onClick={() => handleDelete(item?.id)}
@@ -240,7 +266,7 @@ const PlanningReport = () => {
                                 )}
                               {item?.reportStatus === "Draft" &&
                                 user[0]?.userId?.employeeid?.userHierarchy ===
-                                  "IAH" &&
+                                "IAH" &&
                                 item?.summary &&
                                 item?.summary !== "" &&
                                 item?.methodology &&

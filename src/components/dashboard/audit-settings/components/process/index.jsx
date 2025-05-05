@@ -44,10 +44,10 @@ const Process = ({ userHierarchy, userRole, currentSettingOption }) => {
 
   function handleSaveProcess() {
     if (!loading) {
-      if (processText === "") {
+      if (processText.trim() === "") {
         toast.error("Provide the process");
       }
-      if (!loading && processText !== "") {
+      if (!loading && processText.trim() !== "") {
         const selectedCompany = user[0]?.company?.find(
           (item) => item?.companyName === company
         );
@@ -63,10 +63,10 @@ const Process = ({ userHierarchy, userRole, currentSettingOption }) => {
 
   function handleAddSubProcess() {
     if (!subLoading) {
-      if (subProcessText === "") {
+      if (subProcessText.trim() === "") {
         toast.error("Please Add Sub Process");
       }
-      if (!subLoading && subProcessText !== "") {
+      if (!subLoading && subProcessText.trim() !== "") {
         dispatch(
           setupSaveSubProcess({
             description: subProcessText,

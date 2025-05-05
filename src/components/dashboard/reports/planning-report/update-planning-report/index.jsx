@@ -107,13 +107,16 @@ const UpdatePlanningReport = () => {
           />
           <div className="d-flex justify-end">
             <button
-              className={`btn btn-outline-primary  my-4 ${
-                updateLoading && "disabled"
-              }`}
+              className={`btn btn-labeled btn-primary px-3 shadow me-3 fitContent ${updateLoading && "disabled"
+                }`}
               onClick={handleUpdate}
             >
+              <span className="btn-label me-2">
+                <i className="fa fa-check-circle f-18"></i>
+              </span>
               {updateLoading ? "Loading..." : "Save Report"}
             </button>
+
           </div>
           <hr />
           <HeadingTable data={singleReportObject} reportId={reportId} />

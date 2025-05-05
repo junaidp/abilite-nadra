@@ -48,7 +48,7 @@ const Department = ({ userHierarchy, userRole, currentSettingOption }) => {
 
   function handleSaveDepartment() {
     if (!loading) {
-      if (departmentDescription === "") {
+      if (departmentDescription.trim() === "") {
         toast.error("Provide the department");
       } else {
         const selectedCompany = user[0]?.company?.find(
@@ -66,7 +66,7 @@ const Department = ({ userHierarchy, userRole, currentSettingOption }) => {
 
   function handleAddSubDepartment() {
     if (!subLoading) {
-      if (subDepartmentText === "") {
+      if (subDepartmentText.trim() === "") {
         toast.error("Provide Sub Department");
       } else {
         let companyId = user[0]?.company.find(

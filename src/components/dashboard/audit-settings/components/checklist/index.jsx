@@ -53,7 +53,7 @@ const CheckList = ({
 
   function handleSave() {
     if (!loading) {
-      if (description === "") {
+      if (description.trim() === "") {
         toast.error("Provide description");
       } else {
         dispatch(

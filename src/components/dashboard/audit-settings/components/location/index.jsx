@@ -40,7 +40,7 @@ const Location = ({ userHierarchy, userRole, currentSettingOption }) => {
 
   function handleSaveLocation() {
     if (!loading) {
-      if (locationDescription === "") {
+      if (locationDescription.trim() === "") {
         toast.error("Provide the location");
       } else {
         const selectedCompany = user[0]?.company?.find(
@@ -58,7 +58,7 @@ const Location = ({ userHierarchy, userRole, currentSettingOption }) => {
 
   function handleAddSubLocation() {
     if (!loading) {
-      if (subLocationText === "") {
+      if (subLocationText.trim() === "") {
         toast.error("Provide Sub Location");
       } else {
         dispatch(

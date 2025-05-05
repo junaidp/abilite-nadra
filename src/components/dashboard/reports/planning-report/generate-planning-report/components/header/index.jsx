@@ -6,7 +6,6 @@ import {
   resetReportAddSuccess,
 } from "../../../../../../../global-redux/reducers/reports/planing-report/slice";
 import { toast } from "react-toastify";
-import moment from "moment";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -17,8 +16,7 @@ const Header = () => {
     (state) => state?.planningReport
   );
   const [data, setData] = React.useState({
-    startDate: "",
-    endDate: "",
+    year: "",
     reportTitle: "",
   });
 
@@ -38,29 +36,21 @@ const Header = () => {
       )?.id;
 
       if (companyId) {
-        const today = moment.utc().startOf("day");
-        const startDate = moment.utc(data?.startDate).startOf("day");
-        const endDate = moment.utc(data?.endDate).startOf("day");
         if (
-          data?.startDate === "" ||
-          data?.endDate === "" ||
-          data?.reportTitle === ""
+          data?.year === "" ||
+          data?.reportTitle.trim() === ""
         ) {
           toast.error("Provide all values");
-        } else if (startDate.isBefore(today)) {
-          toast.error("Start date cannot be a past date");
-        } else if (!endDate.isAfter(startDate)) {
-          toast.error("End date must be greater than the start date");
-        } else {
-          dispatch(
-            setupSaveReport({
-              companyId: companyId,
-              startDate: data?.startDate,
-              endDate: data?.endDate,
-              reportTitle: data?.reportTitle,
-            })
-          );
+          return
         }
+        dispatch(
+          setupSaveReport({
+            companyId: companyId,
+            year: data?.year,
+            reportTitle: data?.reportTitle,
+          })
+        );
+
       }
     }
   }
@@ -92,29 +82,40 @@ const Header = () => {
         <div className="col-lg-12">
           <div className="row">
             <div className="col-lg-6">
-              <label className="form-label">From</label>
+              <label className="form-label">Year</label>
               <div className="mb-3 d-flex align-items-end">
-                <input
-                  type="date"
+                <select
                   className="form-control"
-                  placeholder="Select Date"
-                  value={data?.startDate}
-                  name="startDate"
+                  name="year"
+                  value={data?.year}
                   onChange={(e) => handleChange(e)}
-                />
+                >
+                  <option value="">Select Year</option>
+                  {Array.from({ length: 6 }, (_, i) => {
+                    const year = new Date().getFullYear() + i;
+                    return (
+                      <option key={year} value={year}>
+                        {year}
+                      </option>
+                    );
+                  })}
+                </select>
+
               </div>
             </div>
             <div className="col-lg-6">
-              <label className="form-label">To</label>
-              <div className="mb-3 d-flex align-items-end">
-                <input
-                  type="date"
-                  className="form-control"
-                  placeholder="Select Date"
-                  value={data?.endDate}
-                  name="endDate"
-                  onChange={(e) => handleChange(e)}
-                />
+              <div className="col-lg-2 label-text w-100 mb-2">Report Name</div>
+              <div className="col-lg-12">
+                <div className="form-group">
+                  <input
+                    type="text"
+                    id="description"
+                    className="form-control h-40"
+                    value={data?.reportTitle}
+                    name="reportTitle"
+                    onChange={(e) => handleChange(e)}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -122,30 +123,18 @@ const Header = () => {
       </div>
 
       <div className="row">
-        <div className="mb-4 col-lg-12">
-          <div className="col-lg-2 label-text w-100 mb-2">Report Name</div>
-          <div className="col-lg-12">
-            <div className="form-group">
-              <input
-                type="text"
-                id="description"
-                className="form-control h-40"
-                value={data?.reportTitle}
-                name="reportTitle"
-                onChange={(e) => handleChange(e)}
-              />
-            </div>
-          </div>
-        </div>
       </div>
 
-      <button
-        type="submit"
-        className={`btn btn-outline-primary    ${loading && "disabled"}`}
+      <div
+        className={`btn btn-labeled btn-primary px-3 shadow  my-4 ${loading && "disabled"
+          }`}
         onClick={handleAdd}
       >
-        {loading ? "Loading..." : "Add Report"}
-      </button>
+        <span className="btn-label me-2">
+          <i className="fa fa-check-circle f-18"></i>
+        </span>
+        {loading ? "Loading.." : "Create Report"}
+      </div>
     </div>
   );
 };
