@@ -173,7 +173,7 @@ const JobPrioritization = () => {
                   <th className="sr-col">Sr. #</th>
                   <th>Auditable Unit</th>
                   <th>Business Objective</th>
-                  <th>Risk Rating</th>
+                  {/* <th>Risk Rating</th> */}
                   <th>Select for Audit</th>
                   <th>Comments</th>
                   <th>Select Year</th>
@@ -195,7 +195,7 @@ const JobPrioritization = () => {
                         <td className="w-200">
                           {item?.businessObjectiveTitle}
                         </td>
-                        <td className="moderate">{item?.riskRating}</td>
+                        {/* <td className="moderate">{item?.riskRating}</td> */}
                         <td>
                           <div className="form-check">
                             <input

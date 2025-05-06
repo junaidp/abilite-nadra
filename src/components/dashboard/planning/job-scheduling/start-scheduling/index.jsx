@@ -42,7 +42,9 @@ const StartScheduling = () => {
   } = useSelector((state) => state?.planningJobScheduling);
   const { allDepartments } = useSelector((state) => state.settingsDepartment);
 
-  const { allUsers } = useSelector((state) => state?.settingsUserManagement);
+  const { allUsers = [] } = useSelector((state) => state?.settingsUserManagement);
+
+  const activeUsers = allUsers.filter(user => user.accountStatus === 1);
   const { user } = useSelector((state) => state?.auth);
   const { company } = useSelector((state) => state?.common);
   const [showSubmitDialog, setShowSubmitDialog] = React.useState(false);
@@ -64,15 +66,16 @@ const StartScheduling = () => {
     []
   );
 
+
   function handleChangeNumberTextField(event, section) {
     if (section === "resourcesRequired") {
-      let ifUsersExists = allUsers?.some(
+      let ifUsersExists = activeUsers?.some(
         (userItem) =>
           userItem?.employeeid?.skillSet?.toUpperCase() ===
           event?.target?.name?.toUpperCase()
       );
 
-      let totalHierarchyUsers = allUsers?.filter(
+      let totalHierarchyUsers = activeUsers?.filter(
         (userItem) =>
           userItem?.employeeid?.skillSet?.toUpperCase() ===
           event?.target?.name?.toUpperCase()
@@ -86,8 +89,7 @@ const StartScheduling = () => {
       if (totalHierarchyUsers && totalHierarchyUsers?.length > 0) {
         if (Number(event.target.value > Number(totalHierarchyUsers?.length))) {
           toast.error(
-            `There are only ${
-              Number(event.target.value) - 1
+            `There are only ${Number(event.target.value) - 1
             } ${event.target.name.toUpperCase()} resource(s) available in the company. You are not allowed to add more.`
           );
 
@@ -366,7 +368,7 @@ const StartScheduling = () => {
             </div>
           </header>
           {singleJobSchedulingObject?.natureThrough ===
-          "Compliance Checklist" ? (
+            "Compliance Checklist" ? (
             <div className="row ">
               <div className="col-lg-5 mb-3">
                 <MultiSelect
@@ -402,9 +404,9 @@ const StartScheduling = () => {
                     }
                     disabled={
                       singleJobSchedulingObject?.locked === true ||
-                      (singleJobSchedulingObject?.complete === true &&
-                        singleJobSchedulingObject?.locked === false &&
-                        user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                        (singleJobSchedulingObject?.complete === true &&
+                          singleJobSchedulingObject?.locked === false &&
+                          user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
                         ? true
                         : false
                     }
@@ -454,9 +456,9 @@ const StartScheduling = () => {
                     }
                     disabled={
                       singleJobSchedulingObject?.locked === true ||
-                      (singleJobSchedulingObject?.complete === true &&
-                        singleJobSchedulingObject?.locked === false &&
-                        user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                        (singleJobSchedulingObject?.complete === true &&
+                          singleJobSchedulingObject?.locked === false &&
+                          user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
                         ? true
                         : false
                     }
@@ -520,13 +522,13 @@ const StartScheduling = () => {
                     singleJobSchedulingObject?.numberOfResourcesRequired
                       ?.other > 0 ||
                     singleJobSchedulingObject?.numberOfResourcesRequired?.it >
-                      0) && (
+                    0) && (
                     <ResourceAllocation
                       currentJobSchedulingObject={currentJobSchedulingObject}
                       setCurrentJobScheduling={setCurrentJobScheduling}
                       initialUserList={initialUserList}
                       handleSaveMainJobScheduling={handleSaveMainJobScheduling}
-                      allUsers={allUsers}
+                      allUsers={activeUsers}
                     />
                   )}
               </div>
@@ -549,9 +551,8 @@ const StartScheduling = () => {
                   <div className=" mt-3">
                     <div className="col-lg-12 justify-content-end text-end">
                       <div
-                        className={`btn btn-labeled btn-primary mright-4 px-3 shadow ${
-                          loading && "disabled"
-                        }`}
+                        className={`btn btn-labeled btn-primary mright-4 px-3 shadow ${loading && "disabled"
+                          }`}
                         onClick={handleSubmitJobScheduling}
                       >
                         {loading ? "Loading..." : "Submit"}
@@ -565,19 +566,18 @@ const StartScheduling = () => {
                 (singleJobSchedulingObject?.complete === true &&
                   singleJobSchedulingObject?.locked === false &&
                   user[0]?.userId?.employeeid?.userHierarchy === "IAH")) && (
-                <div className=" mt-3 ">
-                  <div className="col-lg-12 justify-content-end text-end">
-                    <div
-                      className={`btn btn-labeled btn-primary px-3  shadow ${
-                        loading && "disabled"
-                      }`}
-                      onClick={handleSaveMainJobScheduling}
-                    >
-                      {loading ? "Loading..." : "Save"}
+                  <div className=" mt-3 ">
+                    <div className="col-lg-12 justify-content-end text-end">
+                      <div
+                        className={`btn btn-labeled btn-primary px-3  shadow ${loading && "disabled"
+                          }`}
+                        onClick={handleSaveMainJobScheduling}
+                      >
+                        {loading ? "Loading..." : "Save"}
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
+                )}
             </div>
           </div>
         </form>

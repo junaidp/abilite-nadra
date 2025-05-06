@@ -82,40 +82,39 @@ const Header = () => {
         <div className="col-lg-12">
           <div className="row">
             <div className="col-lg-6">
-              <label className="form-label">Year</label>
-              <div className="mb-3 d-flex align-items-end">
+              <label className="col-lg-2 label-text w-100 mb-2">Year</label>
+              <div className="col-lg-12">
                 <select
-                  className="form-control"
+                  className="form-control h-40"
                   name="year"
                   value={data?.year}
                   onChange={(e) => handleChange(e)}
                 >
                   <option value="">Select Year</option>
-                  {Array.from({ length: 6 }, (_, i) => {
-                    const year = new Date().getFullYear() + i;
+                  {Array.from({ length: 11 }, (_, i) => {
+                    const currentYear = new Date().getFullYear();
+                    const year = currentYear - 5 + i;
                     return (
                       <option key={year} value={year}>
                         {year}
                       </option>
                     );
                   })}
-                </select>
 
+                </select>
               </div>
             </div>
             <div className="col-lg-6">
-              <div className="col-lg-2 label-text w-100 mb-2">Report Name</div>
+              <label className="col-lg-2 label-text w-100 mb-2">Report Name</label>
               <div className="col-lg-12">
-                <div className="form-group">
-                  <input
-                    type="text"
-                    id="description"
-                    className="form-control h-40"
-                    value={data?.reportTitle}
-                    name="reportTitle"
-                    onChange={(e) => handleChange(e)}
-                  />
-                </div>
+                <input
+                  type="text"
+                  id="description"
+                  className="form-control h-40"
+                  value={data?.reportTitle}
+                  name="reportTitle"
+                  onChange={(e) => handleChange(e)}
+                />
               </div>
             </div>
           </div>

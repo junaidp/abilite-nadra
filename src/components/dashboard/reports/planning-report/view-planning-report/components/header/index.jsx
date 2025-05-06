@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import moment from "moment";
 
 const Header = ({ data }) => {
   const navigate = useNavigate();
@@ -20,28 +19,10 @@ const Header = ({ data }) => {
           </div>
         </div>
       </header>
-      <div className="row">
-        <div className="col-lg-12">
-          <div className="row">
-            <div className="col-lg-6">
-              <label className="form-label">From</label>
-              <div className="mb-3 d-flex align-items-end">
-                {moment.utc(data?.startDate).format("DD-MM-YY")}
-              </div>
-            </div>
-            <div className="col-lg-6">
-              <label className="form-label">To</label>
-              <div className="mb-3 d-flex align-items-end">
-                {moment.utc(data?.endDate).format("DD-MM-YY")}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <div className="row">
         <div className="mb-4 col-lg-12">
-          <div className="col-lg-2 label-text w-100 mb-2">Report Name</div>
+          <label className="col-lg-2 label-text w-100 mb-2">Report Name</label>
           <div className="col-lg-12">
             <div className="form-group">
               <input
@@ -55,6 +36,19 @@ const Header = ({ data }) => {
           </div>
         </div>
       </div>
+      <div className="row">
+        <div className="col-lg-12">
+          <div className="row">
+            <div className="col-lg-6">
+              <label className="form-label">Year</label>
+              <div className="mb-3 d-flex align-items-end">
+                {data?.year}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 };

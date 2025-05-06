@@ -39,6 +39,7 @@ const SubmitDialog = ({
                     name: riskFactor?.name,
                     value1: riskFactor?.value1,
                     value2: riskFactor?.value2,
+                    comments:riskFactor?.comments
                   };
                 }
               ),

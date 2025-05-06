@@ -93,6 +93,7 @@ const RiskFactorApproach = () => {
                     name: riskFactor?.name,
                     value1: riskFactor?.value1,
                     value2: riskFactor?.value2,
+                    comments: riskFactor?.comments
                   };
                 }
               ),
@@ -117,22 +118,23 @@ const RiskFactorApproach = () => {
         riskAssessmentList: pre?.riskAssessmentList?.map((riskAssessment) =>
           Number(riskAssessment?.id) === Number(riskAssessmentId)
             ? {
-                ...riskAssessment,
-                riskFactorValues: riskAssessment?.riskFactorValues?.map(
-                  (riskFactor) =>
-                    Number(riskFactor?.id) === Number(riskFactorId)
-                      ? {
-                          ...riskFactor,
-                          [event.target.name]: Number(event.target.value),
-                        }
-                      : riskFactor
-                ),
-              }
+              ...riskAssessment,
+              riskFactorValues: riskAssessment?.riskFactorValues?.map(
+                (riskFactor) =>
+                  Number(riskFactor?.id) === Number(riskFactorId)
+                    ? {
+                      ...riskFactor,
+                      [event.target.name]: event.target.name === "comments" ? event.target.value : Number(event.target.value),
+                    }
+                    : riskFactor
+              ),
+            }
             : riskAssessment
         ),
       };
     });
   }
+
 
   function handlCalculateEnterpriseValue() {
     let num = 0;
@@ -177,13 +179,13 @@ const RiskFactorApproach = () => {
                   riskAssessment?.riskFactorValues?.length > 0
                     ? riskAssessment?.riskFactorValues
                     : riskFactors?.map((item, index) => {
-                        return {
-                          id: index + 1,
-                          name: item?.description,
-                          value1: "",
-                          value2: "",
-                        };
-                      }),
+                      return {
+                        id: index + 1,
+                        name: item?.description,
+                        value1: "",
+                        value2: "",
+                      };
+                    }),
               };
             }
           ) || [],
@@ -282,20 +284,20 @@ const RiskFactorApproach = () => {
               (performRiskAssessmentObject?.riskAssessments?.complete ===
                 true &&
                 performRiskAssessmentObject?.riskAssessments?.locked ===
-                  false &&
+                false &&
                 user[0]?.userId?.employeeid?.userHierarchy === "IAH")) && (
-              <div className="col-lg-2 float-end d-flex justify-content-end align-items-center">
-                <div
-                  className="btn btn-labeled btn-primary px-3 shadow"
-                  onClick={() => setShowAddRiskFactorDialog(true)}
-                >
-                  <span className="btn-label me-2">
-                    <i className="fa fa-plus-circle"></i>
-                  </span>
-                  Specific Risk
+                <div className="col-lg-2 float-end d-flex justify-content-end align-items-center">
+                  <div
+                    className="btn btn-labeled btn-primary px-3 shadow"
+                    onClick={() => setShowAddRiskFactorDialog(true)}
+                  >
+                    <span className="btn-label me-2">
+                      <i className="fa fa-plus-circle"></i>
+                    </span>
+                    Specific Risk
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </div>
           <div>
             <div className="row mb-5">
@@ -392,31 +394,30 @@ const RiskFactorApproach = () => {
                   {((performRiskAssessmentObject?.riskAssessments?.complete ===
                     false &&
                     performRiskAssessmentObject?.riskAssessmentList?.length >
-                      0) ||
+                    0) ||
                     (performRiskAssessmentObject?.riskAssessments?.complete ===
                       true &&
                       performRiskAssessmentObject?.riskAssessments?.locked ===
-                        false &&
+                      false &&
                       user[0]?.userId?.employeeid?.userHierarchy ===
-                        "IAH")) && (
-                    <div
-                      className={`btn btn-labeled btn-primary px-3 shadow float-end my-2 ${
-                        loading && "disabled"
-                      }`}
-                      onClick={handleSaveRiskAssessment}
-                    >
-                      <span className="btn-label me-2">
-                        <i className="fa fa-check-circle f-18"></i>
-                      </span>
-                      {loading ? "Loading.." : "Save"}
-                    </div>
-                  )}
+                      "IAH")) && (
+                      <div
+                        className={`btn btn-labeled btn-primary px-3 shadow float-end my-2 ${loading && "disabled"
+                          }`}
+                        onClick={handleSaveRiskAssessment}
+                      >
+                        <span className="btn-label me-2">
+                          <i className="fa fa-check-circle f-18"></i>
+                        </span>
+                        {loading ? "Loading.." : "Save"}
+                      </div>
+                    )}
 
                   {performRiskAssessmentObject?.riskAssessments?.complete ===
                     false &&
                     performRiskAssessmentObject?.riskAssessmentList &&
                     performRiskAssessmentObject?.riskAssessmentList?.length >
-                      0 && (
+                    0 && (
                       <div
                         className={`btn btn-labeled btn-primary px-3 shadow float-end my-2 mx-4 `}
                         onClick={() => setShowSubmitDialog(true)}

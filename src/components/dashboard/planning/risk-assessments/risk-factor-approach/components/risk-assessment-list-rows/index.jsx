@@ -33,9 +33,9 @@ const RiskAssessmentListRows = ({
           }
           disabled={
             performRiskAssessmentObject?.riskAssessments?.locked === true ||
-            (performRiskAssessmentObject?.riskAssessments?.complete === true &&
-              performRiskAssessmentObject?.riskAssessments?.locked === false &&
-              user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+              (performRiskAssessmentObject?.riskAssessments?.complete === true &&
+                performRiskAssessmentObject?.riskAssessments?.locked === false &&
+                user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
               ? true
               : false
           }
@@ -65,9 +65,9 @@ const RiskAssessmentListRows = ({
           }
           disabled={
             performRiskAssessmentObject?.riskAssessments?.locked === true ||
-            (performRiskAssessmentObject?.riskAssessments?.complete === true &&
-              performRiskAssessmentObject?.riskAssessments?.locked === false &&
-              user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+              (performRiskAssessmentObject?.riskAssessments?.complete === true &&
+                performRiskAssessmentObject?.riskAssessments?.locked === false &&
+                user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
               ? true
               : false
           }
@@ -92,11 +92,11 @@ const RiskAssessmentListRows = ({
                   disabled={
                     performRiskAssessmentObject?.riskAssessments?.locked ===
                       true ||
-                    (performRiskAssessmentObject?.riskAssessments?.complete ===
-                      true &&
-                      performRiskAssessmentObject?.riskAssessments?.locked ===
+                      (performRiskAssessmentObject?.riskAssessments?.complete ===
+                        true &&
+                        performRiskAssessmentObject?.riskAssessments?.locked ===
                         false &&
-                      user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                        user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
                       ? true
                       : false
                   }
@@ -126,11 +126,11 @@ const RiskAssessmentListRows = ({
                   disabled={
                     performRiskAssessmentObject?.riskAssessments?.locked ===
                       true ||
-                    (performRiskAssessmentObject?.riskAssessments?.complete ===
-                      true &&
-                      performRiskAssessmentObject?.riskAssessments?.locked ===
+                      (performRiskAssessmentObject?.riskAssessments?.complete ===
+                        true &&
+                        performRiskAssessmentObject?.riskAssessments?.locked ===
                         false &&
-                      user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                        user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
                       ? true
                       : false
                   }
@@ -146,6 +146,26 @@ const RiskAssessmentListRows = ({
                   <option value={4}>4</option>
                   <option value={5}>5</option>
                 </select>
+              </div>
+              <div>
+                <textarea className="form-control" maxLength="300"
+                  onChange={(event) =>
+                    handleChangeRiskFactorValues(item?.id, riskFactor.id, event)
+                  }
+                  value={riskFactor?.comments}
+                  name="comments"
+                  disabled={
+                    performRiskAssessmentObject?.riskAssessments?.locked ===
+                      true ||
+                      (performRiskAssessmentObject?.riskAssessments?.complete ===
+                        true &&
+                        performRiskAssessmentObject?.riskAssessments?.locked ===
+                        false &&
+                        user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                      ? true
+                      : false
+                  }
+                ></textarea>
               </div>
             </div>
           </td>
