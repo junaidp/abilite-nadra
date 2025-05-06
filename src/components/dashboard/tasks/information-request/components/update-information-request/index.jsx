@@ -39,6 +39,7 @@ const UpdateInformationRequest = ({
     engagementId: "",
     userAssigned: "",
     detailedRequirement: "",
+    response: ""
   };
 
   let [initialValues, setInitialValues] = React.useState(defaultValues);
@@ -73,6 +74,7 @@ const UpdateInformationRequest = ({
       engagementId: task?.auditEngagementId,
       userAssigned: task?.assignee?.id,
       detailedRequirement: task?.detailedRequirement,
+      response: task?.yourResponse
     });
   }, [updateTaskId]);
 
@@ -186,6 +188,18 @@ const UpdateInformationRequest = ({
                 </label>
               </div>
             </div>
+            <div className="row mb-3">
+              <div className="col-lg-12">
+                <label>Assignee Response</label>
+                <textarea
+                  className="form-control min-h-150"
+                  id="exampleFormControlTextarea1"
+                  rows="3"
+                  value={values?.response || ""}
+                  disabled
+                ></textarea>
+              </div>
+            </div>
 
             <div className="d-flex justify-end">
               <button
@@ -198,6 +212,7 @@ const UpdateInformationRequest = ({
           </Form>
         )}
       </Formik>
+
       <FileUpload updateTaskId={updateTaskId} />
     </div>
   );
