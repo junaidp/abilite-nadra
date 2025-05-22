@@ -41,6 +41,17 @@ const Location = ({ userHierarchy, userRole, currentSettingOption }) => {
     setPage(value);
   };
 
+  const handleDownload = () => {
+    const fileUrl = "/sample-file-location.xlsx";
+    const link = document.createElement("a");
+    link.href = fileUrl;
+    link.download = "sample-file-location.xlsx";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -163,9 +174,17 @@ const Location = ({ userHierarchy, userRole, currentSettingOption }) => {
       )}
       {/*  */}
       <div>
-        <div className="row my-3">
-          <div className="col-lg-12">
-            <div className="sub-heading  fw-bold">Bulk Upload</div>
+        <div className="row mb-3">
+          <div className="col-lg-6">
+            <div className="sub-heading mb-4 fw-bold">File Upload</div>
+          </div>
+          <div className="col-lg-6 d-flex h-40 flex-end">
+            <button
+              className="btn btn-labeled btn-primary shadow"
+              onClick={handleDownload}
+            >
+              Download Sample Location/ Sub Location Upload File
+            </button>
           </div>
         </div>
         <div className="row position-relative mx-1 pointer">

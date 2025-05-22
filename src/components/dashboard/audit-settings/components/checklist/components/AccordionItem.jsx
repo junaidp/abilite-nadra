@@ -46,7 +46,7 @@ const AccordionItem = ({
         <div>
           {(userRole === "ADMIN" || userHierarchy === "IAH") && (
             <div className="row">
-              <div className="col-lg-12 mt-4">
+              <div className="col-lg-12 mt-4 pb-4">
                 <div
                   className={`btn btn-labeled btn-primary  mx-4  shadow`}
                   onClick={() => {
@@ -72,26 +72,28 @@ const AccordionItem = ({
                   Delete
                 </div>
               </div>
-              <div className="col-lg-12">
-                <div className="rows mt-4 mb-4 px-4">
-                  <label>
-                    choose you checklist default remark for user display
-                  </label>
-                  <select
-                    className="col-lg-6 form-select px-3"
-                    value={item?.defaultRemarks}
-                    onChange={(e) => {
-                      handleChangeCurrentCheckListId(item?.id);
-                      handleChangeCheckListRemarks(e);
-                    }}
-                  >
-                    <option value="">Select One</option>
-                    <option value={1}>Yes</option>
-                    <option value={2}>Partially Applicable</option>
-                    <option value={3}>No</option>
-                    <option value={4}>Not Applicable</option>
-                  </select>
-                </div>
+            </div>
+          )}
+          {userHierarchy === "IAH" && (
+            <div className="col-lg-12">
+              <div className="rows mt-4 mb-4 px-4">
+                <label>
+                  choose you checklist default remark for user display
+                </label>
+                <select
+                  className="col-lg-6 form-select px-3"
+                  value={item?.defaultRemarks}
+                  onChange={(e) => {
+                    handleChangeCurrentCheckListId(item?.id);
+                    handleChangeCheckListRemarks(e);
+                  }}
+                >
+                  <option value="">Select One</option>
+                  <option value={1}>Yes</option>
+                  <option value={2}>Partially Applicable</option>
+                  <option value={3}>No</option>
+                  <option value={4}>Not Applicable</option>
+                </select>
               </div>
             </div>
           )}
@@ -152,27 +154,27 @@ const AccordionItem = ({
                                   ></i>
                                   {(userRole === "ADMIN" ||
                                     userHierarchy === "IAH") && (
-                                    <i
-                                      className="fa fa-edit f-18"
-                                      onClick={() => {
-                                        setShowEditCheckListItemDialog(true);
-                                        dispatch(
-                                          changeCurrentSubListItem(item)
-                                        );
-                                      }}
-                                    ></i>
-                                  )}
+                                      <i
+                                        className="fa fa-edit f-18"
+                                        onClick={() => {
+                                          setShowEditCheckListItemDialog(true);
+                                          dispatch(
+                                            changeCurrentSubListItem(item)
+                                          );
+                                        }}
+                                      ></i>
+                                    )}
                                   {(userRole === "ADMIN" ||
                                     userHierarchy === "IAH") && (
-                                    <i
-                                      className="fa fa-trash text-danger f-18"
-                                      onClick={() => {
-                                        dispatch(
-                                          setupDeleteSubCheckList(item?.id)
-                                        );
-                                      }}
-                                    ></i>
-                                  )}
+                                      <i
+                                        className="fa fa-trash text-danger f-18"
+                                        onClick={() => {
+                                          dispatch(
+                                            setupDeleteSubCheckList(item?.id)
+                                          );
+                                        }}
+                                      ></i>
+                                    )}
                                 </td>
                               </tr>
                             );
