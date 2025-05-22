@@ -5,6 +5,7 @@ import {
   resetLocationAddSuccess,
   setupSaveSubLocation,
   setupDeleteSubLocation,
+  setupUploadLocation
 } from "../../../../../global-redux/reducers/settings/location/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
@@ -20,11 +21,13 @@ const Location = ({ userHierarchy, userRole, currentSettingOption }) => {
   const { loading, locationAddSuccess, allLocations } = useSelector(
     (state) => state.settingsLocation
   );
+  const fileInputRef = React.useRef(null);
   const { company } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
   const [locationDescription, setLocationDescription] = React.useState("");
   const [deleteLocationDialog, setShowDeleteLocationDialog] =
     React.useState(false);
+  const [selectedFile, setSelectedFile] = React.useState(null);
   const [subLocationText, setSubLocationText] = React.useState("");
   const [LocationId, setLocationId] = React.useState("");
   const [SubLocationId, setSubLocationId] = React.useState("");
@@ -36,6 +39,33 @@ const Location = ({ userHierarchy, userRole, currentSettingOption }) => {
 
   const handleChange = (_, value) => {
     setPage(value);
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+    }
+  };
+
+
+  const onApiCall = async (file) => {
+    if (!loading) {
+      const companyId = user[0]?.company?.find(
+        (item) => item?.companyName === company
+      )?.id;
+      const formData = new FormData();
+      formData.append("file", file);
+      dispatch(setupUploadLocation({ formData, companyId }));
+    }
+  };
+
+  const handleFileUpload = () => {
+    if (selectedFile) {
+      onApiCall(selectedFile);
+    } else {
+      toast.error("No file selected.");
+    }
   };
 
   function handleSaveLocation() {
@@ -80,6 +110,8 @@ const Location = ({ userHierarchy, userRole, currentSettingOption }) => {
       dispatch(setupGetAllLocations(`?companyId=${companyId}`));
       dispatch(resetLocationAddSuccess());
       setPage(1);
+      setSelectedFile(null);
+      fileInputRef.current.value = "";
     }
   }, [locationAddSuccess]);
 
@@ -129,6 +161,46 @@ const Location = ({ userHierarchy, userRole, currentSettingOption }) => {
           </div>
         </div>
       )}
+      {/*  */}
+      <div>
+        <div className="row my-3">
+          <div className="col-lg-12">
+            <div className="sub-heading  fw-bold">Bulk Upload</div>
+          </div>
+        </div>
+        <div className="row position-relative mx-1 pointer">
+          <div className="col-lg-12 text-center settings-form">
+            <form>
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                accept=".xlsx, .xls, .pdf, .txt"
+              />
+              <p className="mb-0">Click in this area.</p>
+            </form>
+          </div>
+        </div>
+        <p className="my-2">
+          {selectedFile?.name ? selectedFile?.name : "Select file"}
+        </p>
+        <div className="row my-3">
+          <div className="col-lg-12 text-end">
+            <button
+              className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${loading && "disabled"
+                }`}
+              onClick={handleFileUpload}
+            >
+              <span className="btn-label me-2">
+                <i className="fa fa-save"></i>
+              </span>
+              {loading ? "Loading..." : "Upload"}
+            </button>
+          </div>
+        </div>
+      </div>
+      <hr />
+      {/*  */}
       <div className="row">
         <div className="col-lg-12">
           <div className="sub-heading  fw-bold">Location Management</div>
@@ -151,9 +223,8 @@ const Location = ({ userHierarchy, userRole, currentSettingOption }) => {
             />
           </div>
           <div
-            className={`col-lg-6 text-end float-end align-self-end ${
-              loading && "disabled"
-            }`}
+            className={`col-lg-6 text-end float-end align-self-end ${loading && "disabled"
+              }`}
             onClick={handleSaveLocation}
           >
             <div className="btn btn-labeled btn-primary px-3 shadow">

@@ -1,6 +1,7 @@
 import { toast } from "react-toastify";
 import {
   addLocation,
+  uploadLocation,
   getAllLocations,
   updateLocation,
   saveSubLocation,
@@ -20,6 +21,13 @@ export const setupAddLocation = createAsyncThunk(
   "location/addLocation",
   async (data, thunkAPI) => {
     return addLocation(data, thunkAPI);
+  }
+);
+
+export const setupUploadLocation = createAsyncThunk(
+  "location/uploadLocation",
+  async (data, thunkAPI) => {
+    return uploadLocation(data, thunkAPI);
   }
 );
 
@@ -83,6 +91,24 @@ export const slice = createSlice({
         toast.success("Location Added Successfully");
       })
       .addCase(setupAddLocation.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Upload Location
+    builder
+      .addCase(setupUploadLocation.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupUploadLocation.fulfilled, (state) => {
+        state.loading = false;
+        state.locationAddSuccess = true;
+        toast.success("File Uploaded Successfully");
+      })
+      .addCase(setupUploadLocation.rejected, (state, { payload }) => {
         state.loading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
