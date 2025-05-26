@@ -1,6 +1,7 @@
 import { toast } from "react-toastify";
 import {
   addDepartment,
+  uploadDepartment,
   getAllDepartments,
   updateDepartment,
   deleteDepartment,
@@ -13,7 +14,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
   loading: false,
-  subLoading:false,
+  subLoading: false,
   departmentAddSuccess: false,
   subDepartmentAddSuccess: false,
   allDepartments: [],
@@ -24,6 +25,13 @@ export const setupAddDepartment = createAsyncThunk(
   "department/addDepartment",
   async (data, thunkAPI) => {
     return addDepartment(data, thunkAPI);
+  }
+);
+
+export const setupUploadDepartment = createAsyncThunk(
+  "department/uploadDepartment",
+  async (data, thunkAPI) => {
+    return uploadDepartment(data, thunkAPI);
   }
 );
 
@@ -99,6 +107,24 @@ export const slice = createSlice({
         toast.success("Department Added Successfully");
       })
       .addCase(setupAddDepartment.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Upload department
+    builder
+      .addCase(setupUploadDepartment.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupUploadDepartment.fulfilled, (state) => {
+        state.loading = false;
+        state.departmentAddSuccess = true;
+        toast.success("Departments Uploaded Successfully");
+      })
+      .addCase(setupUploadDepartment.rejected, (state, { payload }) => {
         state.loading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);

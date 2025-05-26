@@ -74,7 +74,7 @@ const AccordionItem = ({
               </div>
             </div>
           )}
-          {userHierarchy === "IAH" && (
+          {(userRole === "ADMIN" || userHierarchy === "IAH") && (
             <div className="col-lg-12">
               <div className="rows mt-4 mb-4 px-4">
                 <label>
@@ -95,6 +95,25 @@ const AccordionItem = ({
                   <option value={4}>Not Applicable</option>
                 </select>
               </div>
+            </div>
+          )}
+
+          {(userRole !== "ADMIN" && userHierarchy !== "IAH") && (
+            <div className="rows mt-4 mb-4 px-4">
+              <label>
+                checklist default remark for user display
+              </label>
+              <select
+                className="col-lg-6 form-select px-3"
+                value={item?.defaultRemarks}
+                disabled
+              >
+                <option value="">Select One</option>
+                <option value={1}>Yes</option>
+                <option value={2}>Partially Applicable</option>
+                <option value={3}>No</option>
+                <option value={4}>Not Applicable</option>
+              </select>
             </div>
           )}
 

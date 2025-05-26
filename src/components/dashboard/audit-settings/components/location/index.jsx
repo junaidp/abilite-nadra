@@ -21,7 +21,6 @@ const Location = ({ userHierarchy, userRole, currentSettingOption }) => {
   const { loading, locationAddSuccess, allLocations } = useSelector(
     (state) => state.settingsLocation
   );
-  const fileInputRef = React.useRef(null);
   const { company } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
   const [locationDescription, setLocationDescription] = React.useState("");
@@ -36,6 +35,7 @@ const Location = ({ userHierarchy, userRole, currentSettingOption }) => {
     React.useState(false);
   const [showEditSubLocationDialog, setShowEditSubLocationDialog] =
     React.useState(false);
+  const fileInputRef = React.useRef(null);
 
   const handleChange = (_, value) => {
     setPage(value);
@@ -122,7 +122,9 @@ const Location = ({ userHierarchy, userRole, currentSettingOption }) => {
       dispatch(resetLocationAddSuccess());
       setPage(1);
       setSelectedFile(null);
-      fileInputRef.current.value = "";
+      if (fileInputRef.current) {
+        fileInputRef.current.value = null;
+      }
     }
   }, [locationAddSuccess]);
 
@@ -173,52 +175,56 @@ const Location = ({ userHierarchy, userRole, currentSettingOption }) => {
         </div>
       )}
       {/*  */}
-      <div>
-        <div className="row mb-3">
-          <div className="col-lg-6">
-            <div className="sub-heading mb-4 fw-bold">File Upload</div>
+      {(userRole === "ADMIN") && (
+        <div>
+          <div className="row mb-3">
+            <div className="col-lg-6">
+              <div className="sub-heading mb-4 fw-bold">File Upload</div>
+            </div>
+            <div className="col-lg-6 d-flex h-40 flex-end">
+              <button
+                className="btn btn-labeled btn-primary shadow"
+                onClick={handleDownload}
+              >
+                Download Sample Location/Sub-Location Upload File
+              </button>
+            </div>
           </div>
-          <div className="col-lg-6 d-flex h-40 flex-end">
-            <button
-              className="btn btn-labeled btn-primary shadow"
-              onClick={handleDownload}
-            >
-              Download Sample Location/ Sub Location Upload File
-            </button>
+          <div className="row position-relative mx-1 pointer">
+            <div className="col-lg-12 text-center settings-form">
+              <form>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  accept=".xlsx, .xls, .pdf, .txt"
+                />
+                <p className="mb-0">Click in this area.</p>
+              </form>
+            </div>
+          </div>
+          <p className="my-2">
+            {selectedFile?.name ? selectedFile?.name : "Select file"}
+          </p>
+          <div className="row my-3">
+            <div className="col-lg-12 text-end">
+              <button
+                className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${loading && "disabled"
+                  }`}
+                onClick={handleFileUpload}
+              >
+                <span className="btn-label me-2">
+                  <i className="fa fa-save"></i>
+                </span>
+                {loading ? "Loading..." : "Upload"}
+              </button>
+            </div>
           </div>
         </div>
-        <div className="row position-relative mx-1 pointer">
-          <div className="col-lg-12 text-center settings-form">
-            <form>
-              <input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleFileChange}
-                accept=".xlsx, .xls, .pdf, .txt"
-              />
-              <p className="mb-0">Click in this area.</p>
-            </form>
-          </div>
-        </div>
-        <p className="my-2">
-          {selectedFile?.name ? selectedFile?.name : "Select file"}
-        </p>
-        <div className="row my-3">
-          <div className="col-lg-12 text-end">
-            <button
-              className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${loading && "disabled"
-                }`}
-              onClick={handleFileUpload}
-            >
-              <span className="btn-label me-2">
-                <i className="fa fa-save"></i>
-              </span>
-              {loading ? "Loading..." : "Upload"}
-            </button>
-          </div>
-        </div>
-      </div>
-      <hr />
+      )}
+      {(userRole === "ADMIN") && (
+        <hr />
+      )}
       {/*  */}
       <div className="row">
         <div className="col-lg-12">

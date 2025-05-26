@@ -7,6 +7,7 @@ import {
   setupCreateSubDepartment,
   setupDeleteSubDepartment,
   setupGetAllSubDepartments,
+  setupUploadDepartment
 } from "../../../../../global-redux/reducers/settings/department/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
@@ -18,6 +19,7 @@ import EditDepartmentDialog from "./EditDepartmentDialog";
 import EditSubDepartmentDialog from "./EditSubDepartmentDialog";
 
 const Department = ({ userHierarchy, userRole, currentSettingOption }) => {
+  const fileInputRef = React.useRef(null);
   const dispatch = useDispatch();
   const {
     loading,
@@ -29,6 +31,7 @@ const Department = ({ userHierarchy, userRole, currentSettingOption }) => {
   } = useSelector((state) => state.settingsDepartment);
   const { company } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
+  const [selectedFile, setSelectedFile] = React.useState(null);
   const [departmentDescription, setDepartmentDescription] = React.useState("");
   const [deleteDepartmentDialog, setShowDeleteDepartmentDialog] =
     React.useState(false);
@@ -45,6 +48,47 @@ const Department = ({ userHierarchy, userRole, currentSettingOption }) => {
   const handleChange = (_, value) => {
     setPage(value);
   };
+
+  // Upload Starts
+
+  const handleDownload = () => {
+    const fileUrl = "/sample-file-department.xlsx";
+    const link = document.createElement("a");
+    link.href = fileUrl;
+    link.download = "sample-file-location.xlsx";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+    }
+  };
+
+
+  const onApiCall = async (file) => {
+    if (!loading) {
+      const companyId = user[0]?.company?.find(
+        (item) => item?.companyName === company
+      )?.id;
+      const formData = new FormData();
+      formData.append("file", file);
+      dispatch(setupUploadDepartment({ formData, companyId }));
+    }
+  };
+
+  const handleFileUpload = () => {
+    if (selectedFile) {
+      onApiCall(selectedFile);
+    } else {
+      toast.error("No file selected.");
+    }
+  };
+  // Upload Ends
 
   function handleSaveDepartment() {
     if (!loading) {
@@ -92,6 +136,9 @@ const Department = ({ userHierarchy, userRole, currentSettingOption }) => {
       dispatch(setupGetAllDepartments(`?companyId=${companyId}`));
       dispatch(resetDepartmentAddSuccess());
       setPage(1);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = null;
+      }
     }
   }, [departmentAddSuccess]);
 
@@ -171,6 +218,56 @@ const Department = ({ userHierarchy, userRole, currentSettingOption }) => {
           </div>
         </div>
       )}
+      {(userRole === "ADMIN") && (
+        <div>
+          <div className="row mb-3">
+            <div className="col-lg-6">
+              <div className="sub-heading mb-4 fw-bold">File Upload</div>
+            </div>
+            <div className="col-lg-6 d-flex h-40 flex-end">
+              <button
+                className="btn btn-labeled btn-primary shadow"
+                onClick={handleDownload}
+              >
+                Download Sample Department/Sub-Department Upload File
+              </button>
+            </div>
+          </div>
+          <div className="row position-relative mx-1 pointer">
+            <div className="col-lg-12 text-center settings-form">
+              <form>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  accept=".xlsx, .xls, .pdf, .txt"
+                />
+                <p className="mb-0">Click in this area.</p>
+              </form>
+            </div>
+          </div>
+          <p className="my-2">
+            {selectedFile?.name ? selectedFile?.name : "Select file"}
+          </p>
+          <div className="row my-3">
+            <div className="col-lg-12 text-end">
+              <button
+                className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${loading && "disabled"
+                  }`}
+                onClick={handleFileUpload}
+              >
+                <span className="btn-label me-2">
+                  <i className="fa fa-save"></i>
+                </span>
+                {loading ? "Loading..." : "Upload"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {(userRole === "ADMIN") && (
+        <hr />
+      )}
       <div className="row">
         <div className="col-lg-12">
           <div className="sub-heading  fw-bold">Department Management</div>
@@ -194,9 +291,8 @@ const Department = ({ userHierarchy, userRole, currentSettingOption }) => {
             />
           </div>
           <div
-            className={`col-lg-6 text-end float-end align-self-end ${
-              loading && "disabled"
-            }`}
+            className={`col-lg-6 text-end float-end align-self-end ${loading && "disabled"
+              }`}
             onClick={handleSaveDepartment}
           >
             <div className="btn btn-labeled btn-primary px-3 shadow">

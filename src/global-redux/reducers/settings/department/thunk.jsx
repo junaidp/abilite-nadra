@@ -19,6 +19,25 @@ export const addDepartment = async (data, thunkAPI) => {
   }
 };
 
+
+export const uploadDepartment = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.post(
+      `${baseUrl}/configurations/Department/bulkUpload?companyId=${data.companyId}`,
+      data.formData,
+      {
+        headers: {
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
 export const getAllDepartments = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
