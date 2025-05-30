@@ -43,13 +43,13 @@ const Objective = ({
           disabled={objective?.editable === false ? true : false}
           name="description"
           onChange={(event) => handleChangeObjective(event, objective?.id)}
-          maxLength="500"
+          maxLength="5000"
           className={`form-control ${
-            objective?.description?.length >= 500 && "error-border"
+            objective?.description?.length >= 5000 && "error-border"
           }`}
         ></textarea>
         <label className="word-limit-info label-text">
-          Maximum 500 characters
+          Maximum 5000 characters
         </label>{" "}
         {objective?.editable === true ? (
           <div

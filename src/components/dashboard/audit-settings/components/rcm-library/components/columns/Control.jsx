@@ -46,10 +46,10 @@ const Control = ({
                     id="exampleFormCon"
                     rows="3"
                     name="description"
-                    maxLength="500"
+                    maxLength="5000"
                   ></textarea>
                   <label className="word-limit-info label-text">
-                    Maximum 500 characters
+                    Maximum 5000 characters
                   </label>
                   {risk?.editable === true ? (
                     <div className="col-lg-12">
@@ -119,22 +119,20 @@ const Control = ({
                       }
                       name="description"
                       disabled={control?.editable === false ? true : false}
-                      maxLength="500"
-                      className={`form-control ${
-                        control?.description?.length >= 500 && "error-border"
-                      }`}
+                      maxLength="5000"
+                      className={`form-control ${control?.description?.length >= 5000 && "error-border"
+                        }`}
                     ></textarea>
                     <label className="word-limit-info label-text">
-                      Maximum 500 characters
+                      Maximum 5000 characters
                     </label>
                     {control?.editable === true ? (
                       <div className="col-lg-12  ">
                         <div
-                          className={`btn btn-labeled btn-primary  shadow mt-2 float-end mb-4 ${
-                            loading &&
+                          className={`btn btn-labeled btn-primary  shadow mt-2 float-end mb-4 ${loading &&
                             currentButtonControlId === control?.id &&
                             "disabled"
-                          } `}
+                            } `}
                           onClick={() => {
                             setCurrentButtonControlId(control?.id);
                             handleSaveControl(control);
@@ -198,10 +196,10 @@ const Control = ({
                                 id="exampleFormCon"
                                 name="description"
                                 rows="3"
-                                maxLength="500"
+                                maxLength="5000"
                               ></textarea>
                               <label className="word-limit-info label-text">
-                                Maximum 500 characters
+                                Maximum 5000 characters
                               </label>
                               {program?.editable === true ? (
                                 <div className="col-lg-12">
@@ -215,19 +213,19 @@ const Control = ({
                                 <div className="mt-2 mb-4">
                                   {(userRole === "ADMIN" ||
                                     userHierarchy === "IAH") && (
-                                    <div className="float-end">
-                                      <i className="fa fa-edit mb-4  f-18"></i>
-                                    </div>
-                                  )}
+                                      <div className="float-end">
+                                        <i className="fa fa-edit mb-4  f-18"></i>
+                                      </div>
+                                    )}
                                 </div>
                               )}
                               {(userRole === "ADMIN" ||
                                 userHierarchy === "IAH") && (
-                                <div className="float-end w-100">
-                                  <i className="fa fa-trash text-danger f-18 mb-2 cursor-pointer"></i>
-                                  <hr />
-                                </div>
-                              )}
+                                  <div className="float-end w-100">
+                                    <i className="fa fa-trash text-danger f-18 mb-2 cursor-pointer"></i>
+                                    <hr />
+                                  </div>
+                                )}
                             </div>
                           );
                         })}

@@ -46,10 +46,10 @@ const Program = ({
                     id="exampleFormCon"
                     rows="3"
                     name="description"
-                    maxLength="500"
+                    maxLength="5000"
                   ></textarea>
                   <label className="word-limit-info label-text">
-                    Maximum 500 characters
+                    Maximum 5000 characters
                   </label>
                   {risk?.editable === true ? (
                     <div className="col-lg-12">
@@ -105,10 +105,10 @@ const Program = ({
                           id="exampleFormCon"
                           rows="3"
                           name="description"
-                          maxLength="500"
+                          maxLength="5000"
                         ></textarea>
                         <label className="word-limit-info label-text">
-                          Maximum 500 characters
+                          Maximum 5000 characters
                         </label>
                         {control?.editable === true ? (
                           <div className="col-lg-12  ">
@@ -185,14 +185,14 @@ const Program = ({
                             }
                             name="description"
                             rows="3"
-                            maxLength="500"
+                            maxLength="5000"
                             className={`form-control ${
-                              program?.description?.length >= 500 &&
+                              program?.description?.length >= 5000 &&
                               "error-border"
                             }`}
                           ></textarea>
                           <label className="word-limit-info label-text">
-                            Maximum 500 characters
+                            Maximum 5000 characters
                           </label>{" "}
                           {program?.editable === true ? (
                             <div className="col-lg-12">

@@ -5,8 +5,10 @@ import * as Yup from "yup";
 import { baseUrl } from "../../../../../config/constants";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { CircularProgress } from "@mui/material";
 
 const EmailConfigurations = () => {
+  const [loading, setLoading] = React.useState(false)
   const { company } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
   const [emailConfigs, setEmailConfigs] = useState({});
@@ -16,6 +18,7 @@ const EmailConfigurations = () => {
       (all) => all?.companyName === company
     )?.id;
     try {
+      setLoading(true)
       const response = await axios.get(
         `${baseUrl}/email-configurations/company/${companyId}`,
         {
@@ -24,8 +27,10 @@ const EmailConfigurations = () => {
           },
         }
       );
+      setLoading(false)
       setEmailConfigs(response.data);
     } catch (error) {
+      setLoading(false)
       console.error("Error fetching configurations", error);
     }
   };
@@ -53,16 +58,20 @@ const EmailConfigurations = () => {
       smtpAuth: values.smtpAuth,
       companyId: companyId,
     };
+    if (loading) return
     try {
+      setLoading(true)
       await axios.post(`${baseUrl}/email-configurations`, payload, {
         headers: {
           Authorization: `Bearer ${user[0]?.token}`,
         },
       });
+      setLoading(false)
       toast.success("Email Configuration Saved Successfully");
       fetchEmailConfigurations();
       resetForm();
     } catch (error) {
+      setLoading(false)
       console.error("Error adding configuration", error);
     }
   };
@@ -163,7 +172,9 @@ const EmailConfigurations = () => {
             </div>
 
             <button type="submit" className="btn btn-primary mt-3">
-              Save Email Configuration
+              {
+                loading ? "Loading..." : "Save Email Configuration"
+              }
             </button>
           </Form>
         )}
@@ -174,24 +185,27 @@ const EmailConfigurations = () => {
       </h1>
       <p className="fw-light">Saved Email Configuration</p>
 
-      <div>
-        <p className="f-20">
-          <strong>User Name:</strong> {emailConfigs?.data?.userName || "--"}
-        </p>
-        <p className="f-20">
-          <strong>Host:</strong> {emailConfigs?.data?.hostAddress || "--"}
-        </p>
-        <p className="f-20">
-          <strong>Port:</strong> {emailConfigs?.data?.port || "--"}
-        </p>
-        <p className="f-20">
-          <strong>Start TLS:</strong>{" "}
-          {emailConfigs?.data?.starttlsEnable || "--"}
-        </p>
-        <p className="f-20">
-          <strong>SMTP Auth:</strong> {emailConfigs?.data?.smtpAuth || "--"}
-        </p>
-      </div>
+      {
+        loading ? <CircularProgress /> :
+          <div>
+            <p className="f-20">
+              <strong>User Name:</strong> {emailConfigs?.data?.userName || "--"}
+            </p>
+            <p className="f-20">
+              <strong>Host:</strong> {emailConfigs?.data?.hostAddress || "--"}
+            </p>
+            <p className="f-20">
+              <strong>Port:</strong> {emailConfigs?.data?.port || "--"}
+            </p>
+            <p className="f-20">
+              <strong>Start TLS:</strong>{" "}
+              {emailConfigs?.data?.starttlsEnable || "--"}
+            </p>
+            <p className="f-20">
+              <strong>SMTP Auth:</strong> {emailConfigs?.data?.smtpAuth || "--"}
+            </p>
+          </div>
+      }
     </div>
   );
 };

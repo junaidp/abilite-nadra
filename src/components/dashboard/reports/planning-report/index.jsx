@@ -16,6 +16,8 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { encryptAndEncode } from "../../../../config/helper";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import PDFGenerator from "./components/pdf-generator"
 const poppinsStyle = {
   fontFamily: '"Poppins", sans-serif',
   fontWeight: "normal",
@@ -284,6 +286,34 @@ const PlanningReport = () => {
                                     Publish
                                   </div>
                                 )}
+                              {
+                                item?.summary &&
+                                item?.summary !== "" &&
+                                item?.methodology &&
+                                item?.methodology !== "" &&
+                                item?.riskAssessmentSummary &&
+                                item?.riskAssessmentSummary !== "" &&
+                                item?.organizationStrategy &&
+                                item?.organizationStrategy !== "" &&
+                                item?.summaryRisk &&
+                                item?.summaryRisk !== "" && (
+                                  <Tooltip title="Download PDF" placement="top">
+                                    <PDFDownloadLink
+                                      document={<PDFGenerator reportObject={item} />}
+                                      fileName={`${item.reportTitle}_${moment.utc(item.date).format("YYYY-MM-DD")}.pdf`}
+                                      style={{ textDecoration: "none", color: "inherit" }}
+                                    >
+                                      {({ loading }) =>
+                                        loading ? (
+                                          <i className="fa fa-spinner fa-spin f-18 cursor-pointer"></i>
+                                        ) : (
+                                          <i className="fa fa-download f-18 cursor-pointer"></i>
+                                        )
+                                      }
+                                    </PDFDownloadLink>
+                                  </Tooltip>
+                                )
+                              }
                             </div>
                           </td>
                         </tr>
