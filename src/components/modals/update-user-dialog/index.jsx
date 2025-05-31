@@ -25,12 +25,14 @@ const UpdateUsertDialog = ({ setUpdateUserDialog, updateUserObject }) => {
       : "null",
     reportingTo: updateUserObject?.employeeid?.reportingTo
       ? allUsers?.find(
-          (singleUserItem) =>
-            Number(singleUserItem?.id) ===
-            Number(updateUserObject?.employeeid?.reportingTo)
-        )?.name
+        (singleUserItem) =>
+          Number(singleUserItem?.id) ===
+          Number(updateUserObject?.employeeid?.reportingTo)
+      )?.name
       : "null",
     company: updateUserObject?.company[0]?.companyName,
+    email: updateUserObject?.email,
+    erp: updateUserObject?.erp
   };
 
   const formik = useFormik({
@@ -42,6 +44,8 @@ const UpdateUsertDialog = ({ setUpdateUserDialog, updateUserObject }) => {
       skillSet: Yup.string().required("Skill Set is required"),
       reportingTo: Yup.string().required("Reporting To is required"),
       company: Yup.string().required("Company  is required"),
+      email: Yup.string().required("Email  is required"),
+      erp: Yup.string().required("ERP  is required"),
     }),
     onSubmit: (values) => {
       if (!loading) {
@@ -56,10 +60,13 @@ const UpdateUsertDialog = ({ setUpdateUserDialog, updateUserObject }) => {
             setupUpdateUser({
               ...currentUserObject,
               name: values?.name,
+              email: values.email,
+              username: values.email,
+              erp: values?.erp,
               userDto: {
                 userName: values?.name,
                 companyId: currentUserObject?.company[0]?.id,
-                erp: updateUserObject?.erp,
+                erp: values?.erp,
               },
               employeeid: {
                 ...currentUserObject?.employeeid,
@@ -141,10 +148,10 @@ const UpdateUsertDialog = ({ setUpdateUserDialog, updateUserObject }) => {
         ...formik.values,
         reportingTo: updateUserObject?.employeeid?.reportingTo
           ? allUsers?.find(
-              (singleUserItem) =>
-                Number(singleUserItem?.id) ===
-                Number(updateUserObject?.employeeid?.reportingTo)
-            )?.name
+            (singleUserItem) =>
+              Number(singleUserItem?.id) ===
+              Number(updateUserObject?.employeeid?.reportingTo)
+          )?.name
           : "null",
         skillSet: updateUserObject?.employeeid?.skillSet
           ? updateUserObject?.employeeid?.skillSet

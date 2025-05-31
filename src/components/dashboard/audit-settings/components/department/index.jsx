@@ -6,7 +6,6 @@ import {
   resetSubDepartmentAddSuccess,
   setupCreateSubDepartment,
   setupDeleteSubDepartment,
-  setupGetAllSubDepartments,
   setupUploadDepartment
 } from "../../../../../global-redux/reducers/settings/department/slice";
 import { useSelector, useDispatch } from "react-redux";
@@ -27,7 +26,6 @@ const Department = ({ userHierarchy, userRole, currentSettingOption }) => {
     departmentAddSuccess,
     subDepartmentAddSuccess,
     allDepartments,
-    allSubDepartments,
   } = useSelector((state) => state.settingsDepartment);
   const { company } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
@@ -35,7 +33,6 @@ const Department = ({ userHierarchy, userRole, currentSettingOption }) => {
   const [departmentDescription, setDepartmentDescription] = React.useState("");
   const [deleteDepartmentDialog, setShowDeleteDepartmentDialog] =
     React.useState(false);
-  const [subDepartments, setSubDepartments] = React.useState([]);
   const [subDepartmentText, setSubDepartmentText] = React.useState("");
   const [departmentId, setDepartmentId] = React.useState("");
   const [subDepartmentId, setSubDepartmentId] = React.useState("");
@@ -55,7 +52,7 @@ const Department = ({ userHierarchy, userRole, currentSettingOption }) => {
     const fileUrl = "/sample-file-department.xlsx";
     const link = document.createElement("a");
     link.href = fileUrl;
-    link.download = "sample-file-location.xlsx";
+    link.download = "sample-file-department.xlsx";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -148,28 +145,11 @@ const Department = ({ userHierarchy, userRole, currentSettingOption }) => {
     )?.id;
     if (subDepartmentAddSuccess) {
       setSubDepartmentText("");
-      dispatch(setupGetAllSubDepartments(`?companyId=${companyId}`));
+      dispatch(setupGetAllDepartments(`?companyId=${companyId}`));
       dispatch(resetSubDepartmentAddSuccess());
     }
   }, [subDepartmentAddSuccess]);
 
-  React.useEffect(() => {
-    if (allSubDepartments && allSubDepartments?.length) {
-      const subItems = allSubDepartments?.filter(
-        (item) => item?.departmentId === departmentId
-      );
-      setSubDepartments(subItems);
-    }
-  }, [allSubDepartments]);
-
-  React.useEffect(() => {
-    if (departmentId) {
-      let companyId = user[0]?.company.find(
-        (all) => all?.companyName === company
-      )?.id;
-      dispatch(setupGetAllSubDepartments(`?companyId=${companyId}`));
-    }
-  }, [departmentId]);
 
   React.useEffect(() => {
     setPage(1);
@@ -177,7 +157,7 @@ const Department = ({ userHierarchy, userRole, currentSettingOption }) => {
     setSubDepartmentId("");
     setDepartmentId("");
     setSubDepartmentText("");
-  }, [currentSettingOption]);
+  }, [currentSettingOption, departmentAddSuccess, subDepartmentAddSuccess]);
 
   return (
     <div
@@ -213,12 +193,12 @@ const Department = ({ userHierarchy, userRole, currentSettingOption }) => {
               setShowEditSubDepartmentDialog={setShowEditSubDepartmentDialog}
               departmentId={departmentId}
               subDepartmentId={subDepartmentId}
-              subDepartments={subDepartments}
+              allDepartments={allDepartments}
             />
           </div>
         </div>
       )}
-      {(userRole === "ADMIN") && (
+      {(userRole === "ADMIN" || userHierarchy === "IAH") && (
         <div>
           <div className="row mb-3">
             <div className="col-lg-6">
@@ -265,7 +245,7 @@ const Department = ({ userHierarchy, userRole, currentSettingOption }) => {
           </div>
         </div>
       )}
-      {(userRole === "ADMIN") && (
+      {(userRole === "ADMIN" || userHierarchy === "IAH") && (
         <hr />
       )}
       <div className="row">
@@ -314,7 +294,6 @@ const Department = ({ userHierarchy, userRole, currentSettingOption }) => {
                 ?.map((item, index) => {
                   return (
                     <DepartmentAccordionItem
-                      subDepartments={subDepartments}
                       subLoading={subLoading}
                       key={index}
                       index={index}

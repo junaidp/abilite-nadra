@@ -112,13 +112,13 @@ const Objective = ({
           }
           name="description"
           disabled={singleAuditEngagement?.editable ? false : true}
-          maxLength="500"
+          maxLength="5000"
           className={`form-control ${
-            singleAuditEngagement?.description?.length >= 500 && "error-border"
+            singleAuditEngagement?.description?.length >= 5000 && "error-border"
           }`}
         ></textarea>
         <p className="word-limit-info label-text mb-2">
-          Maximum 500 characters
+          Maximum 5000 characters
         </p>
         {handleAllowEdit() === true && (
           <i

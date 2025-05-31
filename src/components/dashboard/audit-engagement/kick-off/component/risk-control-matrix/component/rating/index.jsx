@@ -132,12 +132,12 @@ const Rating = ({
         }
         name="description"
         disabled={risk?.editable ? false : true}
-        maxLength="500"
+        maxLength="5000"
         className={`form-control ${
-          risk?.description?.length >= 500 && "error-border"
+          risk?.description?.length >= 5000 && "error-border"
         }`}
       ></textarea>
-      <p className="word-limit-info label-text mb-2">Maximum 500 characters</p>
+      <p className="word-limit-info label-text mb-2">Maximum 5000 characters</p>
       {handleAllowEdit() === true && (
         <i
           className="fa fa-edit   f-18 cursor-pointer  mt-3"

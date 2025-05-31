@@ -49,12 +49,15 @@ const Form = ({
                 name="email"
                 type="text"
                 className="form-control"
-                value={email}
-                disabled
-                readOnly
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.email}
               />
             </div>
           </div>
+          {formik.touched.email && formik.errors.email && (
+            <div className="error">{formik.errors.email}</div>
+          )}
         </div>
       </div>
 
@@ -93,34 +96,34 @@ const Form = ({
           >
             {!users[0]?.error && users.length === 1
               ? [
-                  <MenuItem key="" value="">
-                    Select Role
-                  </MenuItem>,
-                  <MenuItem key="IAH" value="IAH">
-                    IAH
-                  </MenuItem>,
-                ]
+                <MenuItem key="" value="">
+                  Select Role
+                </MenuItem>,
+                <MenuItem key="IAH" value="IAH">
+                  IAH
+                </MenuItem>,
+              ]
               : users?.length > 1 &&
-                !users[0]?.error && [
-                  <MenuItem key="" value="">
-                    Select Role
-                  </MenuItem>,
-                  <MenuItem key="IAH" value="IAH">
-                    IAH
-                  </MenuItem>,
-                  <MenuItem key="Management_Auditee" value="Management_Auditee">
-                    Management_Auditee
-                  </MenuItem>,
-                  <MenuItem key="Team_Lead" value="Team_Lead">
-                    Team_Lead
-                  </MenuItem>,
-                  <MenuItem key="Audit_Executive_2" value="Audit_Executive_2">
-                    Audit_Executive_2
-                  </MenuItem>,
-                  <MenuItem key="Audit_Executive_1" value="Audit_Executive_1">
-                    Audit_Executive_1
-                  </MenuItem>,
-                ]}
+              !users[0]?.error && [
+                <MenuItem key="" value="">
+                  Select Role
+                </MenuItem>,
+                <MenuItem key="IAH" value="IAH">
+                  IAH
+                </MenuItem>,
+                <MenuItem key="Management_Auditee" value="Management_Auditee">
+                  Management_Auditee
+                </MenuItem>,
+                <MenuItem key="Team_Lead" value="Team_Lead">
+                  Team_Lead
+                </MenuItem>,
+                <MenuItem key="Audit_Executive_2" value="Audit_Executive_2">
+                  Audit_Executive_2
+                </MenuItem>,
+                <MenuItem key="Audit_Executive_1" value="Audit_Executive_1">
+                  Audit_Executive_1
+                </MenuItem>,
+              ]}
           </Select>
           {formik.touched.userHierarchy && formik.errors.userHierarchy && (
             <div className="error">{formik.errors.userHierarchy}</div>
@@ -177,11 +180,14 @@ const Form = ({
               name="erp"
               type="number"
               className="form-control"
-              value={erp}
-              disabled
-              readOnly
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.erp}
             />
           </div>
+          {formik.touched.erp && formik.errors.erp && (
+            <div className="error">{formik.errors.erp}</div>
+          )}
         </div>
       </div>
 

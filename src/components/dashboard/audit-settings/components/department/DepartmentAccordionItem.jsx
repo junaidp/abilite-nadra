@@ -1,5 +1,3 @@
-import { CircularProgress } from "@mui/material";
-import React from "react";
 import { useDispatch } from "react-redux";
 
 const DepartmentAccordionItem = ({
@@ -16,8 +14,7 @@ const DepartmentAccordionItem = ({
   setupDeleteSubDepartment,
   userRole,
   userHierarchy,
-  setShowDeleteDepartmentDialog,
-  subDepartments,
+  setShowDeleteDepartmentDialog
 }) => {
   const dispatch = useDispatch();
   return (
@@ -87,9 +84,8 @@ const DepartmentAccordionItem = ({
                 </div>
                 <div className="col-lg-6 text-end float-end align-self-end p-0 m-0">
                   <div
-                    className={`btn btn-labeled btn-primary  shadow ${
-                      subLoading && "disabled"
-                    }`}
+                    className={`btn btn-labeled btn-primary  shadow ${subLoading && "disabled"
+                      }`}
                     onClick={handleAddSubDepartment}
                   >
                     {subLoading ? "Loading.." : "Add"}
@@ -100,34 +96,31 @@ const DepartmentAccordionItem = ({
           )}
 
           <div className="row mt-3">
-            {subLoading ? (
-              <CircularProgress />
-            ) : (
-              <div className="col-lg-12">
-                <div className="table-responsive">
-                  <table className="table table-bordered  table-hover rounded">
-                    <thead className="bg-secondary text-white">
+            <div className="col-lg-12">
+              <div className="table-responsive">
+                <table className="table table-bordered  table-hover rounded">
+                  <thead className="bg-secondary text-white">
+                    <tr>
+                      <th className="w-80">Sr No.</th>
+                      <th>Sub Department</th>
+                      {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+                        <th>Actions</th>
+                      )}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {!item.subDepartments || !item.subDepartments?.length ? (
                       <tr>
-                        <th className="w-80">Sr No.</th>
-                        <th>Sub Department</th>
-                        {(userRole === "ADMIN" || userHierarchy === "IAH") && (
-                          <th>Actions</th>
-                        )}
+                        <td className="w-300">No Sub Departments To Show.</td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {!subDepartments || !subDepartments?.length ? (
-                        <tr>
-                          <td className="w-300">No Sub Departments To Show.</td>
-                        </tr>
-                      ) : (
-                        subDepartments?.map((subItem, subIndex) => {
-                          return (
-                            <tr key={subIndex}>
-                              <td>{subIndex + 1}</td>
-                              <td>{subItem?.description}</td>
-                              {(userRole === "ADMIN" ||
-                                userHierarchy === "IAH") && (
+                    ) : (
+                      item.subDepartments?.map((subItem, subIndex) => {
+                        return (
+                          <tr key={subIndex}>
+                            <td>{subIndex + 1}</td>
+                            <td>{subItem?.description}</td>
+                            {(userRole === "ADMIN" ||
+                              userHierarchy === "IAH") && (
                                 <td>
                                   <div className="d-flex flex-wrap gap-4">
                                     <i
@@ -152,15 +145,14 @@ const DepartmentAccordionItem = ({
                                   </div>
                                 </td>
                               )}
-                            </tr>
-                          );
-                        })
-                      )}
-                    </tbody>
-                  </table>
-                </div>
+                          </tr>
+                        );
+                      })
+                    )}
+                  </tbody>
+                </table>
               </div>
-            )}
+            </div>
           </div>
         </div>
       </div>

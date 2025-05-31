@@ -7,7 +7,7 @@ const EditSubDepartmentDialog = ({
   setShowEditSubDepartmentDialog,
   departmentId,
   subDepartmentId,
-  subDepartments,
+  allDepartments
 }) => {
   const { subLoading, subDepartmentAddSuccess } = useSelector(
     (state) => state.settingsDepartment
@@ -45,10 +45,9 @@ const EditSubDepartmentDialog = ({
   }, [subDepartmentAddSuccess]);
 
   React.useEffect(() => {
-    const subDepartmentText = subDepartments?.find(
-      (all) => all?.id === subDepartmentId
-    );
-    setSubDepartmentName(subDepartmentText?.description);
+    const selectedDepartment = allDepartments?.find((dep) => dep.id === departmentId)
+    const selectedSubDepartment = selectedDepartment?.subDepartments?.find((subDep) => subDep.id === subDepartmentId)
+    setSubDepartmentName(selectedSubDepartment?.description);
   }, [departmentId, subDepartmentId]);
 
   return (

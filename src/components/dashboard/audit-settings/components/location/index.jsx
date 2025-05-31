@@ -175,7 +175,7 @@ const Location = ({ userHierarchy, userRole, currentSettingOption }) => {
         </div>
       )}
       {/*  */}
-      {(userRole === "ADMIN") && (
+      {(userRole === "ADMIN" || userHierarchy === "IAH") && (
         <div>
           <div className="row mb-3">
             <div className="col-lg-6">
@@ -222,7 +222,7 @@ const Location = ({ userHierarchy, userRole, currentSettingOption }) => {
           </div>
         </div>
       )}
-      {(userRole === "ADMIN") && (
+      {(userRole === "ADMIN" || userHierarchy === "IAH") && (
         <hr />
       )}
       {/*  */}
