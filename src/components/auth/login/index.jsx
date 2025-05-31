@@ -149,7 +149,7 @@ const Login = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-12">
+                  {/* <div className="col-12">
                     <div className="form-group">
                       <div className="fxt-checkbox-wrap">
                         <a
@@ -160,7 +160,7 @@ const Login = () => {
                         </a>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                   <div className="col-12">
                     <div className="form-group">
                       <button
