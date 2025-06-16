@@ -14,7 +14,7 @@ import QRCodeScannerDialog from "../modals/QRCodeScannerDialog";
 import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
-  const [showpassword, setShowPassword] = React.useState(false);
+  const [showpassword, setShowPassword] = React.useState(true);
   const [showQRCodeScanner, setShowQRCodeScanner] = React.useState(false);
   const { loginEmail, loginPassword, loading, user } = useSelector(
     (state) => state.auth

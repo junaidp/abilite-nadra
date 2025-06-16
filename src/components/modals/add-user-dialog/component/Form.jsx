@@ -11,8 +11,8 @@ const Form = ({
   user,
   nullSkillSet,
 }) => {
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
+  const [showPassword, setShowPassword] = React.useState(true);
+  const [showConfirmPassword, setShowConfirmPassword] = React.useState(true);
 
   return (
     <form onSubmit={formik.handleSubmit}>
