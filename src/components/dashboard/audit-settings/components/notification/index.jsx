@@ -370,6 +370,7 @@ const Notifications = () => {
       let newObj = { ...object };
       delete newObj.id;
       delete newObj.userId;
+      delete newObj.companyId;
 
       let valueMap;
       array?.forEach((singleItem) => {

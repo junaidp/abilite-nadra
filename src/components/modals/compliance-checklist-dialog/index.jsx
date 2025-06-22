@@ -169,8 +169,8 @@ const ComplianceCheckListDialog = ({
                                     }
                                   >
                                     <option value="">Select One</option>
-                                    <option value={1}>Yes</option>
-                                    <option value={2}>No</option>
+                                    <option value={1}>complied</option>
+                                    <option value={2}>not complied</option>
                                     <option value={3}>Not Applicable</option>
                                     <option value={4}>
                                       Partially Complied
