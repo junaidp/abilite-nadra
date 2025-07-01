@@ -168,14 +168,14 @@ body {
   height: 40px !important;
 }
 
-.f-22{
+.f-22 {
   font-size: 22px !important;
 }
 
-.width-20{
+.width-20 {
   width: 20px !important;
 }
-.height-20{
+.height-20 {
   height: 20px !important;
 }
 
@@ -1012,6 +1012,10 @@ span[aria-label="Insert Ordered List"] .jodit-toolbar-button__trigger {
   border-radius: 10px;
 }
 
+.page-overflow-wrap {
+  overflow-x: hidden !important;
+}
+
 @media screen and (max-width: 1250px) {
   .model-wrap {
     width: 95%;
@@ -1037,6 +1041,12 @@ span[aria-label="Insert Ordered List"] .jodit-toolbar-button__trigger {
     padding-right: 20px;
     padding-left: 20px;
     margin: 0px !important;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .page-overflow-wrap {
+    overflow-x: auto !important;
   }
 }
 
