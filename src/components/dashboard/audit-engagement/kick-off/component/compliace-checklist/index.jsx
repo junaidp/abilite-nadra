@@ -19,16 +19,21 @@ const ComplianceCheckList = ({
   const [currentApproveItem, setCurrentApproveItem] = React.useState({});
   const [currentSubmittedItem, setCurrentSubmittedItem] = React.useState({});
 
+  const hasContent = (htmlString) => {
+    const div = document.createElement('div');
+    div.innerHTML = htmlString;
+    const text = div.textContent || div.innerText || '';
+    return text.trim().length > 0;
+  };
+
+
   function checkStaus(item) {
     let submit = true;
     item?.checklistObservationsList?.forEach((all) => {
       if (
         all?.remarks === "" ||
         all?.remarks === null ||
-        all?.observation === "" ||
-        all?.observation === null ||
-        all?.remarks === "PARTIALLY_APPLICABLE" ||
-        all?.remarks === "0"
+        ((Number(all?.remarks) === 2 || Number(all?.remarks) === 4) && !hasContent(all?.observation))
       ) {
         submit = false;
       }
