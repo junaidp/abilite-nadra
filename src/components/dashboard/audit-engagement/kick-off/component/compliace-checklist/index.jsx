@@ -32,7 +32,7 @@ const ComplianceCheckList = ({
     item?.checklistObservationsList?.forEach((all) => {
       if (
         all?.remarks === "" ||
-        all?.remarks === null ||
+        !all?.remarks ||
         ((Number(all?.remarks) === 2 || Number(all?.remarks) === 4) && !hasContent(all?.observation))
       ) {
         submit = false;

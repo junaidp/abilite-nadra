@@ -44,10 +44,10 @@ const AccordianItem = ({
               {Number(item?.stepNo) === 5
                 ? "Exception To Be  Implemented"
                 : Number(item?.stepNo) === 6
-                ? "Exceptions Implemented"
-                : Number(item?.stepNo) >= 7
-                ? "Observation Completed"
-                : ""}
+                  ? "Exceptions Implemented"
+                  : Number(item?.stepNo) >= 7
+                    ? "Observation Completed"
+                    : ""}
             </div>
           </div>
         </button>
@@ -131,18 +131,10 @@ const AccordianItem = ({
           {/*  */}
           <div className="mb-3">
             <label>Management Comments:</label>
-            <textarea
-              className="form-control "
-              placeholder="Enter Reason"
-              id="exampleFor"
-              rows="3"
-              value={item?.managementComments}
-              name="managementComments"
-              disabled
-            ></textarea>
-            <label className="word-limit-info label-text">
-              Maximum 1500 words
-            </label>
+            <div
+              className="form-control"
+              dangerouslySetInnerHTML={{ __html: item?.managementComments || "No comments available." }}
+            />
           </div>
           <FollowUpFileUpload item={item} />
           <div className="mb-3">
@@ -220,9 +212,8 @@ const AccordianItem = ({
                 {item?.stepNo === 5 &&
                   Number(user[0]?.userId?.id) === Number(item?.auditee?.id) && (
                     <button
-                      className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
-                        loading && "disabled"
-                      }`}
+                      className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${loading && "disabled"
+                        }`}
                       onClick={() => handleSave(item)}
                     >
                       {loading ? "Loading..." : "Save"}
@@ -231,9 +222,8 @@ const AccordianItem = ({
                 {item?.stepNo === 5 &&
                   Number(user[0]?.userId?.id) === Number(item?.auditee?.id) && (
                     <button
-                      className={`btn btn-labeled btn-primary px-3 mx-2 mt-3 shadow ${
-                        loading && "disabled"
-                      }`}
+                      className={`btn btn-labeled btn-primary px-3 mx-2 mt-3 shadow ${loading && "disabled"
+                        }`}
                       onClick={() => {
                         setShowCurrentSubmittedItem(item);
                         setShowSubmitDialog(true);
@@ -246,24 +236,23 @@ const AccordianItem = ({
                 {item?.stepNo === 6 &&
                   (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
                     Number(user[0]?.userId?.id) ===
-                      Number(
-                        singleReport?.resourceAllocation
-                          ?.backupHeadOfInternalAudit?.id
-                      ) ||
+                    Number(
+                      singleReport?.resourceAllocation
+                        ?.backupHeadOfInternalAudit?.id
+                    ) ||
                     Number(user[0]?.userId?.id) ===
-                      Number(
-                        singleReport?.resourceAllocation?.proposedJobApprover
-                          ?.id
-                      ) ||
+                    Number(
+                      singleReport?.resourceAllocation?.proposedJobApprover
+                        ?.id
+                    ) ||
                     singleReport?.resourceAllocation?.resourcesList?.find(
                       (singleResource) =>
                         Number(singleResource?.id) ===
                         Number(user[0]?.userId?.id)
                     )) && (
                     <button
-                      className={`btn btn-labeled btn-primary px-3 mx-2 mt-3 shadow ${
-                        loading && "disabled"
-                      }`}
+                      className={`btn btn-labeled btn-primary px-3 mx-2 mt-3 shadow ${loading && "disabled"
+                        }`}
                       onClick={() => handleSaveToStep7(item)}
                     >
                       {loading ? "Loading..." : "Approve"}
@@ -272,24 +261,23 @@ const AccordianItem = ({
                 {item?.stepNo === 6 &&
                   (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
                     Number(user[0]?.userId?.id) ===
-                      Number(
-                        singleReport?.resourceAllocation
-                          ?.backupHeadOfInternalAudit?.id
-                      ) ||
+                    Number(
+                      singleReport?.resourceAllocation
+                        ?.backupHeadOfInternalAudit?.id
+                    ) ||
                     Number(user[0]?.userId?.id) ===
-                      Number(
-                        singleReport?.resourceAllocation?.proposedJobApprover
-                          ?.id
-                      ) ||
+                    Number(
+                      singleReport?.resourceAllocation?.proposedJobApprover
+                        ?.id
+                    ) ||
                     singleReport?.resourceAllocation?.resourcesList?.find(
                       (singleResource) =>
                         Number(singleResource?.id) ===
                         Number(user[0]?.userId?.id)
                     )) && (
                     <button
-                      className={`btn btn-labeled btn-primary px-3 mx-2 mt-3 shadow ${
-                        loading && "disabled"
-                      }`}
+                      className={`btn btn-labeled btn-primary px-3 mx-2 mt-3 shadow ${loading && "disabled"
+                        }`}
                       onClick={() => {
                         setCurrentReportingAndFollowUpId(item?.id);
                         setFeedBackDialog(true);
@@ -300,9 +288,8 @@ const AccordianItem = ({
                   )}
                 {item?.thirdFeedback?.description && (
                   <button
-                    className={`btn btn-labeled btn-primary px-3 mx-2 mt-3 shadow ${
-                      loading && "disabled"
-                    }`}
+                    className={`btn btn-labeled btn-primary px-3 mx-2 mt-3 shadow ${loading && "disabled"
+                      }`}
                     onClick={() => {
                       setViewFeedBackItem(item);
                       setViewThirdFeedBackDialog(true);

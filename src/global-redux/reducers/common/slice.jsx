@@ -19,6 +19,7 @@ import {
   faGear,
   faChartBar,
   faChartSimple,
+  faSearch
 } from "@fortawesome/free-solid-svg-icons";
 let menuItems = [
   {
@@ -160,8 +161,15 @@ let menuItems = [
       },
     ],
   },
+  // {
+  //   id: "li-audit-settings",
+  //   label: "Smart Query",
+  //   icon: faSearch,
+  //   route: "/audit/smart-query",
+  //   active: false,
+  // },
   {
-    id: "li-audit-settings",
+    id: "li-ai",
     label: "Settings",
     icon: faGear,
     route: "/audit/audit-settings",

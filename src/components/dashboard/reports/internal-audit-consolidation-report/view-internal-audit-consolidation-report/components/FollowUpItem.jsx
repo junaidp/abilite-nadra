@@ -59,16 +59,10 @@ const FollowUpItem = ({ item, consolidatedObservationsItem }) => {
       {/*  */}
       <div className="mb-3">
         <label>Management Comments:</label>
-        <textarea
-          className="form-control "
-          placeholder="Enter Reason"
-          id="exampleFor"
-          rows="3"
-          value={item?.managementComments}
-          name="managementComments"
-          disabled
-        ></textarea>
-        <label className="word-limit-info label-text">Maximum 1500 words</label>
+        <div
+          className="form-control"
+          dangerouslySetInnerHTML={{ __html: item?.managementComments || "No comments available." }}
+        />
       </div>
       <div className="mb-3">
         <label className="py-1">Implementation Date:</label>

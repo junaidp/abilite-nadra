@@ -10,6 +10,14 @@ const SubmitDialog = ({ item, setShowSubmitDialog }) => {
     (state) => state?.reporting
   );
 
+  const hasContent = (htmlString) => {
+    const div = document.createElement('div');
+    div.innerHTML = htmlString;
+    const text = div.textContent || div.innerText || '';
+    return text.trim().length > 0;
+  };
+
+
   function handleSubmit() {
     if (!loading) {
       const today = moment.utc().startOf("day");
@@ -21,7 +29,8 @@ const SubmitDialog = ({ item, setShowSubmitDialog }) => {
         !item?.managementComments ||
         !item?.implementationDate ||
         item?.managementComments === "" ||
-        item?.implementationDate === ""
+        item?.implementationDate === "" ||
+        !hasContent(item?.managementComments)
       ) {
         toast.error(
           "Fields missing. Please fill them first and then submit the observation"

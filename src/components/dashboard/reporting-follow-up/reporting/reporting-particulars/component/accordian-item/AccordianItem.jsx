@@ -19,6 +19,7 @@ const AccordianItem = ({
   singleReport,
   reportingId,
   handleObservationChange,
+  handleManagementCommentsChange,
   setCurrentReportingAndFollowUpId,
   setFeedBackDialog,
   setCurrentOpenItem,
@@ -65,17 +66,17 @@ const AccordianItem = ({
               {Number(item?.stepNo) === 0
                 ? "Exceptions To Be Sent To Management For Comments"
                 : Number(item?.stepNo) === 1
-                ? "Exceptions To Be Sent To Management For Comments"
-                : Number(item?.stepNo) === 2
-                ? "Awaiting Management Comments"
-                : Number(item?.stepNo) === 3
-                ? user[0]?.userId?.employeeid?.userHierarchy ===
-                  "Management_Auditee"
-                  ? "Management Comments Sent"
-                  : "Management Comments Received"
-                : Number(item?.stepNo) >= 4
-                ? "Exception To Be Implemented"
-                : ""}
+                  ? "Exceptions To Be Sent To Management For Comments"
+                  : Number(item?.stepNo) === 2
+                    ? "Awaiting Management Comments"
+                    : Number(item?.stepNo) === 3
+                      ? user[0]?.userId?.employeeid?.userHierarchy ===
+                        "Management_Auditee"
+                        ? "Management Comments Sent"
+                        : "Management Comments Received"
+                      : Number(item?.stepNo) >= 4
+                        ? "Exception To Be Implemented"
+                        : ""}
             </div>
           </div>
         </button>
@@ -152,9 +153,8 @@ const AccordianItem = ({
             onChange={(event) => handleChange(event, item?.id)}
             disabled={handleAllowEditSection1(item) === true ? false : true}
             maxLength="1500"
-            className={`form-control  ${
-              item?.implication?.length >= 1500 && "error-border"
-            }`}
+            className={`form-control  ${item?.implication?.length >= 1500 && "error-border"
+              }`}
           ></textarea>
           <p className="word-limit-info label-text mb-2">
             Maximum 1500 characters
@@ -171,9 +171,8 @@ const AccordianItem = ({
             onChange={(event) => handleChange(event, item?.id)}
             disabled={handleAllowEditSection1(item) === true ? false : true}
             maxLength="1500"
-            className={`form-control  ${
-              item?.recommendedActionStep?.length >= 1500 && "error-border"
-            }`}
+            className={`form-control  ${item?.recommendedActionStep?.length >= 1500 && "error-border"
+              }`}
           ></textarea>
           <p className="word-limit-info label-text mb-2">
             Maximum 1500 characters
@@ -193,21 +192,19 @@ const AccordianItem = ({
           </div>
           {item?.stepNo === 2 &&
             Number(user[0]?.userId?.id) ===
-              Number(currentItem?.auditee?.id) && (
+            Number(currentItem?.auditee?.id) && (
               <div className="mb-4">
                 <label>Management Comments:</label>
-                <textarea
-                  placeholder="Enter Reason"
-                  id="exampleFormControlTextarea1"
-                  rows="3"
-                  value={item?.managementComments || ""}
-                  name="managementComments"
-                  onChange={(event) => handleChange(event, item?.id)}
-                  maxLength="1500"
-                  className={`form-control  ${
-                    item?.managementComments?.length >= 1500 && "error-border"
-                  }`}
-                ></textarea>
+                <div className="mb-4">
+                  <RichTextEditor
+                    onContentChange={handleManagementCommentsChange}
+                    initialValue={item?.managementComments}
+                    id={item?.id}
+                    editable="true"
+                    singleReport={singleReport}
+                    item={item}
+                  />
+                </div>
                 <p className="word-limit-info label-text mb-2">
                   Maximum 1500 characters
                 </p>
@@ -229,18 +226,10 @@ const AccordianItem = ({
           {item?.stepNo !== 0 && item?.stepNo !== 1 && item?.stepNo !== 2 && (
             <div className="mb-4">
               <label>Management Comments:</label>
-              <textarea
-                className="form-control "
-                placeholder="Enter Reason"
-                id="exampleFormControlTextarea1"
-                rows="3"
-                value={item?.managementComments || ""}
-                name="managementComments"
-                disabled
-              ></textarea>
-              <label className="word-limit-info label-text mb-3">
-                Maximum 1500 words
-              </label>
+              <div
+                className="form-control"
+                dangerouslySetInnerHTML={{ __html: item?.managementComments || "No comments available." }}
+              />
               <br />
               <label className="py-1">Implementation Date:</label>
               <input
@@ -263,9 +252,8 @@ const AccordianItem = ({
               {item?.stepNo === 0 && (
                 <div className="d-flex align-items-center place-end">
                   <button
-                    className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
-                      loading && "disabled"
-                    }`}
+                    className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${loading && "disabled"
+                      }`}
                     onClick={() => handleSaveStep1(item)}
                   >
                     {loading ? "Loading..." : "Save"}
@@ -275,9 +263,8 @@ const AccordianItem = ({
               {item?.stepNo === 0 && (
                 <div className="d-flex align-items-center place-end">
                   <button
-                    className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
-                      loading && "disabled"
-                    }`}
+                    className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${loading && "disabled"
+                      }`}
                     onClick={() => handleSaveToStep1(item)}
                   >
                     {loading ? "Loading..." : "Submit"}
@@ -287,9 +274,8 @@ const AccordianItem = ({
               {handleAllowEditSection1(item) === true && item?.stepNo === 1 && (
                 <div className="d-flex align-items-center place-end">
                   <button
-                    className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
-                      loading && "disabled"
-                    }`}
+                    className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${loading && "disabled"
+                      }`}
                     onClick={() => handleSaveStep2(item)}
                   >
                     {loading ? "Loading..." : "Save"}
@@ -299,19 +285,18 @@ const AccordianItem = ({
               {item?.stepNo === 1 &&
                 (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
                   Number(user[0]?.userId?.id) ===
-                    Number(
-                      singleReport?.resourceAllocation
-                        ?.backupHeadOfInternalAudit?.id
-                    ) ||
+                  Number(
+                    singleReport?.resourceAllocation
+                      ?.backupHeadOfInternalAudit?.id
+                  ) ||
                   Number(user[0]?.userId?.id) ===
-                    Number(
-                      singleReport?.resourceAllocation?.proposedJobApprover?.id
-                    )) && (
+                  Number(
+                    singleReport?.resourceAllocation?.proposedJobApprover?.id
+                  )) && (
                   <div className="d-flex align-items-center place-end">
                     <button
-                      className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
-                        loading && "disabled"
-                      }`}
+                      className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${loading && "disabled"
+                        }`}
                       onClick={() => handleSaveToStep2(item)}
                     >
                       {loading ? "Loading..." : "Approve"}
@@ -321,19 +306,18 @@ const AccordianItem = ({
               {item?.stepNo === 1 &&
                 (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
                   Number(user[0]?.userId?.id) ===
-                    Number(
-                      singleReport?.resourceAllocation
-                        ?.backupHeadOfInternalAudit?.id
-                    ) ||
+                  Number(
+                    singleReport?.resourceAllocation
+                      ?.backupHeadOfInternalAudit?.id
+                  ) ||
                   Number(user[0]?.userId?.id) ===
-                    Number(
-                      singleReport?.resourceAllocation?.proposedJobApprover?.id
-                    )) && (
+                  Number(
+                    singleReport?.resourceAllocation?.proposedJobApprover?.id
+                  )) && (
                   <div className="d-flex align-items-center place-end">
                     <button
-                      className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
-                        loading && "disabled"
-                      }`}
+                      className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${loading && "disabled"
+                        }`}
                       onClick={() => {
                         setCurrentReportingAndFollowUpId(item?.id);
                         setFeedBackDialog(true);
@@ -345,12 +329,11 @@ const AccordianItem = ({
                 )}
               {item?.stepNo === 2 &&
                 Number(user[0]?.userId?.id) ===
-                  Number(currentItem?.auditee?.id) && (
+                Number(currentItem?.auditee?.id) && (
                   <div className="d-flex align-items-center place-end">
                     <button
-                      className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
-                        loading && "disabled"
-                      }`}
+                      className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${loading && "disabled"
+                        }`}
                       onClick={() => handleSaveStep2(item)}
                     >
                       {loading ? "Loading..." : "Save"}
@@ -359,16 +342,15 @@ const AccordianItem = ({
                 )}
               {item?.stepNo === 2 &&
                 Number(user[0]?.userId?.id) ===
-                  Number(currentItem?.auditee?.id) &&
+                Number(currentItem?.auditee?.id) &&
                 currentItem?.managementComments !== "" &&
                 currentItem?.managementComments &&
                 currentItem?.implementationDate !== "" &&
                 currentItem?.implementationDate && (
                   <div className="d-flex align-items-center place-end">
                     <button
-                      className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
-                        loading && "disabled"
-                      }`}
+                      className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${loading && "disabled"
+                        }`}
                       onClick={() => {
                         setShowCurrentSubmittedItem(item);
                         setShowSubmitDialog(true);
@@ -382,23 +364,22 @@ const AccordianItem = ({
               {item?.stepNo === 3 &&
                 (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
                   Number(user[0]?.userId?.id) ===
-                    Number(
-                      singleReport?.resourceAllocation
-                        ?.backupHeadOfInternalAudit?.id
-                    ) ||
+                  Number(
+                    singleReport?.resourceAllocation
+                      ?.backupHeadOfInternalAudit?.id
+                  ) ||
                   Number(user[0]?.userId?.id) ===
-                    Number(
-                      singleReport?.resourceAllocation?.proposedJobApprover?.id
-                    ) ||
+                  Number(
+                    singleReport?.resourceAllocation?.proposedJobApprover?.id
+                  ) ||
                   singleReport?.resourceAllocation?.resourcesList?.find(
                     (singleResource) =>
                       Number(singleResource?.id) === Number(user[0]?.userId?.id)
                   )) && (
                   <div className="d-flex align-items-center place-end">
                     <button
-                      className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
-                        loading && "disabled"
-                      }`}
+                      className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${loading && "disabled"
+                        }`}
                       onClick={() => handleSaveToStep4(item)}
                     >
                       {loading ? "Loading..." : "Approve"}
@@ -408,23 +389,22 @@ const AccordianItem = ({
               {item?.stepNo === 3 &&
                 (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
                   Number(user[0]?.userId?.id) ===
-                    Number(
-                      singleReport?.resourceAllocation
-                        ?.backupHeadOfInternalAudit?.id
-                    ) ||
+                  Number(
+                    singleReport?.resourceAllocation
+                      ?.backupHeadOfInternalAudit?.id
+                  ) ||
                   Number(user[0]?.userId?.id) ===
-                    Number(
-                      singleReport?.resourceAllocation?.proposedJobApprover?.id
-                    ) ||
+                  Number(
+                    singleReport?.resourceAllocation?.proposedJobApprover?.id
+                  ) ||
                   singleReport?.resourceAllocation?.resourcesList?.find(
                     (singleResource) =>
                       Number(singleResource?.id) === Number(user[0]?.userId?.id)
                   )) && (
                   <div className="d-flex align-items-center place-end">
                     <button
-                      className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
-                        loading && "disabled"
-                      }`}
+                      className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${loading && "disabled"
+                        }`}
                       onClick={() => {
                         setCurrentReportingAndFollowUpId(item?.id);
                         setFeedBackDialog(true);
@@ -436,9 +416,8 @@ const AccordianItem = ({
                 )}
               {item?.firstFeedback?.description && (
                 <button
-                  className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
-                    loading && "disabled"
-                  }`}
+                  className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${loading && "disabled"
+                    }`}
                   onClick={() => {
                     setViewFeedBackItem(item);
                     setViewFirstFeedBackDialog(true);
@@ -449,9 +428,8 @@ const AccordianItem = ({
               )}
               {item?.secondFeedback?.description && (
                 <button
-                  className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${
-                    loading && "disabled"
-                  }`}
+                  className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${loading && "disabled"
+                    }`}
                   onClick={() => {
                     setViewFeedBackItem(item);
                     setViewSecondFeedBackDialog(true);

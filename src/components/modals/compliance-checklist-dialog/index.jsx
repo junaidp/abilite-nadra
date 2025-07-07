@@ -41,6 +41,7 @@ const ComplianceCheckListDialog = ({
   }
 
   function handleChange(event, id) {
+    if (!event.target.value) return
     setComplianceItem((pre) => {
       return {
         ...pre,
@@ -91,15 +92,15 @@ const ComplianceCheckListDialog = ({
       complianceItem?.approved === false &&
       (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
         Number(user[0]?.userId?.id) ===
-          Number(
-            singleAuditEngagementObject?.resourceAllocation
-              ?.backupHeadOfInternalAudit?.id
-          ) ||
+        Number(
+          singleAuditEngagementObject?.resourceAllocation
+            ?.backupHeadOfInternalAudit?.id
+        ) ||
         Number(user[0]?.userId?.id) ===
-          Number(
-            singleAuditEngagementObject?.resourceAllocation?.proposedJobApprover
-              ?.id
-          ))
+        Number(
+          singleAuditEngagementObject?.resourceAllocation?.proposedJobApprover
+            ?.id
+        ))
     ) {
       allowEdit = true;
     }
@@ -147,56 +148,56 @@ const ComplianceCheckListDialog = ({
                     {complianceItem?.checklistObservationsList?.length === 0
                       ? "No Observation To Show"
                       : complianceItem?.checklistObservationsList?.map(
-                          (singleItem, index) => {
-                            return (
-                              <tr key={index}>
-                                <td>{singleItem?.id}</td>
-                                <td>{singleItem?.area}</td>
-                                <td>{singleItem?.subject || "null"}</td>
-                                <td>{singleItem?.particulars}</td>
+                        (singleItem, index) => {
+                          return (
+                            <tr key={index}>
+                              <td>{singleItem?.id}</td>
+                              <td>{singleItem?.area}</td>
+                              <td>{singleItem?.subject || "null"}</td>
+                              <td>{singleItem?.particulars}</td>
 
-                                <td>
-                                  <select
-                                    className="form-select mb-2"
-                                    aria-label="Default select example"
-                                    value={singleItem?.remarks}
-                                    name="remarks"
-                                    onChange={(event) =>
-                                      handleChange(event, singleItem?.id)
-                                    }
-                                    disabled={
-                                      handleAllowEdit() === true ? false : true
-                                    }
-                                  >
-                                    <option value="">Select One</option>
-                                    <option value={1}>complied</option>
-                                    <option value={2}>not complied</option>
-                                    <option value={3}>Not Applicable</option>
-                                    <option value={4}>
-                                      Partially Complied
-                                    </option>
-                                  </select>
-                                </td>
-                                <td>
-                                  <RichTextEditor
-                                    initialValue={singleItem?.observation}
-                                    onContentChange={onContentChange}
-                                    singleItem={singleItem}
-                                    complianceItem={complianceItem}
-                                    handleAllowEdit={handleAllowEdit}
-                                  />
-                                </td>
-                                <ObservationFileUpload
-                                  item={singleItem}
-                                  handleAllowEdit={handleAllowEdit}
-                                  setCurrentDeleteFileId={
-                                    setCurrentDeleteFileId
+                              <td>
+                                <select
+                                  className="form-select mb-2"
+                                  aria-label="Default select example"
+                                  value={singleItem?.remarks}
+                                  name="remarks"
+                                  onChange={(event) =>
+                                    handleChange(event, singleItem?.id)
                                   }
+                                  disabled={
+                                    handleAllowEdit() === true ? false : true
+                                  }
+                                >
+                                  <option value="">Select Remark</option>
+                                  <option value={1}>complied</option>
+                                  <option value={2}>not complied</option>
+                                  <option value={3}>Not Applicable</option>
+                                  <option value={4}>
+                                    Partially Complied
+                                  </option>
+                                </select>
+                              </td>
+                              <td>
+                                <RichTextEditor
+                                  initialValue={singleItem?.observation}
+                                  onContentChange={onContentChange}
+                                  singleItem={singleItem}
+                                  complianceItem={complianceItem}
+                                  handleAllowEdit={handleAllowEdit}
                                 />
-                              </tr>
-                            );
-                          }
-                        )}
+                              </td>
+                              <ObservationFileUpload
+                                item={singleItem}
+                                handleAllowEdit={handleAllowEdit}
+                                setCurrentDeleteFileId={
+                                  setCurrentDeleteFileId
+                                }
+                              />
+                            </tr>
+                          );
+                        }
+                      )}
                   </tbody>
                 </table>
               </div>

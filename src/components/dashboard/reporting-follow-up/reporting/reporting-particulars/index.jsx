@@ -89,6 +89,19 @@ const ReportingParticulars = () => {
     });
   }
 
+  function handleManagementCommentsChange(id, content) {
+    setReport((pre) => {
+      return {
+        ...pre,
+        reportingList: pre?.reportingList?.map((report) =>
+          Number(report?.id) === Number(id)
+            ? { ...report, managementComments: content }
+            : report
+        ),
+      };
+    });
+  }
+
   function handleSaveToStep1(item) {
     if (!loading) {
       dispatch(
@@ -286,6 +299,7 @@ const ReportingParticulars = () => {
     };
   }, []);
 
+
   return (
     <div>
       {showSubmitDialog && (
@@ -400,6 +414,7 @@ const ReportingParticulars = () => {
                               handleSaveStep2={handleSaveStep2}
                               handleSaveToStep4={handleSaveToStep4}
                               handleObservationChange={handleObservationChange}
+                              handleManagementCommentsChange={handleManagementCommentsChange}
                               setCurrentReportingAndFollowUpId={
                                 setCurrentReportingAndFollowUpId
                               }

@@ -492,13 +492,13 @@ const PDFGenerator = ({ reportObject }) => {
                     {followUpItem?.implication}
                   </Text>
                 </View>
-                <View style={styles.singleFindSummaryWrap}>
+                <View style={styles.singleFindSummaryWrap} break>
                   <Text style={styles.singleFindSummaryHeader}>
                     Management Comments
                   </Text>
-                  <Text style={styles.singleFindSummaryPara}>
+                  <Html style={styles.singleFindSummaryPara}>
                     {followUpItem?.managementComments}
-                  </Text>
+                  </Html>
                 </View>
                 <View style={styles.singleFindSummaryWrap}>
                   <Text style={styles.singleFindSummaryHeader}>
@@ -508,10 +508,10 @@ const PDFGenerator = ({ reportObject }) => {
                     {followUpItem?.implicationRating === 1
                       ? "High"
                       : followUpItem?.implicationRating === 2
-                      ? "Medium"
-                      : followUpItem?.implicationRating === 3
-                      ? "Low"
-                      : ""}
+                        ? "Medium"
+                        : followUpItem?.implicationRating === 3
+                          ? "Low"
+                          : ""}
                   </Text>
                 </View>
                 <View style={styles.singleFindSummaryWrap}>
