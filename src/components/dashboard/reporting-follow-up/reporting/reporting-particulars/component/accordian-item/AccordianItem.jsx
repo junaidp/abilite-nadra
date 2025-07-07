@@ -110,6 +110,23 @@ const AccordianItem = ({
               />
             </div>
           </div>
+          {
+            singleReport?.riskApproach === "Checklist" &&
+            <div className="d-flex items-center mb-3">
+              <div className="flex-1">
+                <label>Area:</label>
+                <input
+                  className="form-control w-100"
+                  placeholder="Enter Observation Title here"
+                  type="text"
+                  value={item?.area}
+                  name="area"
+                  onChange={(event) => handleChange(event, item?.id)}
+                  disabled={handleAllowEditSection1(item) === true ? false : true}
+                />
+              </div>
+            </div>
+          }
           <label>Observation:</label>
           <div className="mb-4">
             <RichTextEditor

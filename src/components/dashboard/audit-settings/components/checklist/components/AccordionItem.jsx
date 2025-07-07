@@ -1,6 +1,6 @@
 import { CircularProgress } from "@mui/material";
-import React from "react";
 import { setupDeleteSubCheckList } from "../../../../../../global-redux/reducers/settings/check-list/slice";
+import { groupByAreaAndSubject } from "../../../../../../config/helper"
 
 const AccordionItem = ({
   item,
@@ -160,7 +160,7 @@ const AccordionItem = ({
                           </tr>
                         ) : checkListItems &&
                           checkListItems[0]?.error !== "Not Found" ? (
-                          checkListItems?.map((item, i) => {
+                          groupByAreaAndSubject(checkListItems)?.map((group) => group.items.map((item, i) => {
                             return (
                               <tr key={i}>
                                 <td>{i + 1}</td>
@@ -201,14 +201,14 @@ const AccordionItem = ({
                                 </td>
                               </tr>
                             );
-                          })
-                        ) : (
-                          <tr>
-                            <td className="w-300">
-                              No Sub CheckLists To Show.
-                            </td>
-                          </tr>
-                        )}
+                          })))
+                          : (
+                            <tr>
+                              <td className="w-300">
+                                No Sub CheckLists To Show.
+                              </td>
+                            </tr>
+                          )}
                       </tbody>
                     </table>
                   </div>

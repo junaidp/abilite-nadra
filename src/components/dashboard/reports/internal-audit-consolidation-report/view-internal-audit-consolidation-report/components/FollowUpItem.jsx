@@ -13,6 +13,10 @@ const FollowUpItem = ({ item, consolidatedObservationsItem }) => {
         </div>
       )}
       <div className="mb-3">
+        <label>Area:</label>
+        <p>{item?.area}</p>
+      </div>
+      <div className="mb-3">
         <label>Observation:</label>
         <RichTextEditor initialValue={item?.observationName} />
       </div>

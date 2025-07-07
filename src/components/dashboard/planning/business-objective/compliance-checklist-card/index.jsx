@@ -12,6 +12,7 @@ import {
   handleCleanUp,
   setupGetInitialSingleCheckListObjective,
 } from "../../../../../global-redux/reducers/planing/engagement/slice";
+import { groupByAreaAndSubject } from "../../../../../config/helper"
 import Pagination from "@mui/material/Pagination";
 import {
   changeActiveLink,
@@ -105,7 +106,7 @@ const ComplianceCheckListCard = () => {
             </div>
             <div className="accordion" id="accordionCheckListExample">
               {Array.isArray(planingEngagementSingleObject) &&
-              planingEngagementSingleObject?.length !== 0 ? (
+                planingEngagementSingleObject?.length !== 0 ? (
                 <div>
                   {planingEngagementSingleObject
                     ?.slice((page - 1) * 5, page * 5)
@@ -137,9 +138,8 @@ const ComplianceCheckListCard = () => {
                             <div className="accordion-body">
                               <div className="row mt-3">
                                 <div
-                                  className={`btn btn-labeled btn-primary px-3 shadow col-lg-2 mb-4 ${
-                                    loading && "disabled"
-                                  }`}
+                                  className={`btn btn-labeled btn-primary px-3 shadow col-lg-2 mb-4 ${loading && "disabled"
+                                    }`}
                                   onClick={() => handleSelectCheckList(item)}
                                 >
                                   {!loading
@@ -165,20 +165,19 @@ const ComplianceCheckListCard = () => {
                                             </td>
                                           </tr>
                                         ) : selectedCheckListItems ? (
-                                          selectedCheckListItems?.map(
-                                            (checkItem, i) => {
-                                              return (
-                                                <tr key={i}>
-                                                  <td>{i + 1}</td>
-                                                  <td>{checkItem?.area}</td>
-                                                  <td>{checkItem?.subject}</td>
-                                                  <td>
-                                                    {checkItem?.particulars}
-                                                  </td>
-                                                </tr>
-                                              );
-                                            }
-                                          )
+                                          groupByAreaAndSubject(selectedCheckListItems).map((group) => group.items.map((checkItem,i) => {
+                                            return (
+                                              <tr key={i}>
+                                                <td>{i + 1}</td>
+                                                <td>{checkItem?.area}</td>
+                                                <td>{checkItem?.subject}</td>
+                                                <td>
+                                                  {checkItem?.particulars}
+                                                </td>
+                                              </tr>
+                                            );
+                                          }))
+
                                         ) : (
                                           <tr>
                                             <td className="w-300">

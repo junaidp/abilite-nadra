@@ -79,6 +79,21 @@ const AccordianItem = ({
               />
             </div>
           </div>
+          {
+            singleReport?.riskApproach === "Checklist" &&
+            <div className="d-flex items-center mb-3">
+              <div className="flex-1">
+                <label>Area:</label>
+                <input
+                  className="form-control w-100"
+                  placeholder="Enter Observation Title here"
+                  type="text"
+                  value={item?.area}
+                  disabled
+                />
+              </div>
+            </div>
+          }
 
           <div className="mb-3">
             <label>Observation</label>

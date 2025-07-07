@@ -524,6 +524,14 @@ const PDFGenerator = ({ reportObject }) => {
                   </View>
                   <View style={styles.singleFindSummaryWrap}>
                     <Text style={styles.singleFindSummaryHeader}>
+                      Area
+                    </Text>
+                    <Text style={styles.singleFindSummaryPara}>
+                      {followUpItem?.area}
+                    </Text>
+                  </View>
+                  <View style={styles.singleFindSummaryWrap}>
+                    <Text style={styles.singleFindSummaryHeader}>
                       Observation
                     </Text>
                     <Html style={styles.singleFindSummaryPara}>
