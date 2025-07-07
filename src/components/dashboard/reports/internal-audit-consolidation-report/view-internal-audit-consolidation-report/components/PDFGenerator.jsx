@@ -281,7 +281,6 @@ const PDFGenerator = ({ reportObject }) => {
       );
     }
   }, [reportObject]);
-  console.log(reportObject)
 
   return (
     <Document>

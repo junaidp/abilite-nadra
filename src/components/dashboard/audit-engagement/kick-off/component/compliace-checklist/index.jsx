@@ -33,6 +33,7 @@ const ComplianceCheckList = ({
       if (
         all?.remarks === "" ||
         !all?.remarks ||
+        all?.remarks === "0" ||
         ((Number(all?.remarks) === 2 || Number(all?.remarks) === 4) && !hasContent(all?.observation))
       ) {
         submit = false;

@@ -88,11 +88,13 @@ const AccordionItem = ({
                     handleChangeCheckListRemarks(e);
                   }}
                 >
-                  <option value="">Select One</option>
-                  <option value={1}>Yes</option>
-                  <option value={2}>Partially Applicable</option>
-                  <option value={3}>No</option>
-                  <option value={4}>Not Applicable</option>
+                  <option value="">Select Remark</option>
+                  <option value={1}>complied</option>
+                  <option value={2}>not complied</option>
+                  <option value={3}>Not Applicable</option>
+                  <option value={4}>
+                    Partially Complied
+                  </option>
                 </select>
               </div>
             </div>
@@ -108,11 +110,13 @@ const AccordionItem = ({
                 value={item?.defaultRemarks}
                 disabled
               >
-                <option value="">Select One</option>
-                <option value={1}>Yes</option>
-                <option value={2}>Partially Applicable</option>
-                <option value={3}>No</option>
-                <option value={4}>Not Applicable</option>
+                <option value="">No remarks selected</option>
+                <option value={1}>complied</option>
+                <option value={2}>not complied</option>
+                <option value={3}>Not Applicable</option>
+                <option value={4}>
+                  Partially Complied
+                </option>
               </select>
             </div>
           )}
