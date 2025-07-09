@@ -32,6 +32,7 @@ import BusinessObjective from "./components/business-objective/index.jsx";
 import PreviousObservation from "./components/previous-observation/index.jsx";
 import Process from "./components/process";
 import Notification from "./components/notification";
+import FiscalDuration from "./components/fiscal/index.jsx";
 import EmailConfigurations from "./components/email-configuration/index.jsx";
 const AuditSettings = () => {
   const dispatch = useDispatch();
@@ -39,7 +40,7 @@ const AuditSettings = () => {
     React.useState(false);
   const [currentSettingOption, setCurrentSettingOption] =
     React.useState("docs");
-  const { user } = useSelector((state) => state.auth);
+  const { user, userCompany } = useSelector((state) => state.auth);
   const { company } = useSelector((state) => state.common);
   const [userManagementDialog, setUserManagementDialog] = React.useState(false);
   const [updateUserDialog, setUpdateUserDialog] = React.useState(false);
@@ -236,6 +237,17 @@ const AuditSettings = () => {
                 </button>
                 <button
                   className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
+                  id="nav-fiscal-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#nav-fiscal"
+                  type="button"
+                  role="tab"
+                  aria-controls="nav-fiscal"
+                >
+                  Fiscal Duration
+                </button>
+                <button
+                  className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
                   id="nav-business-objective-tab"
                   data-bs-toggle="tab"
                   data-bs-target="#nav-business-objective"
@@ -375,6 +387,8 @@ const AuditSettings = () => {
                 userRole={userRole}
                 currentSettingOption={currentSettingOption}
               />
+              <FiscalDuration userCompany={userCompany}
+                userRole={userRole} />
               {userRole !== "ADMIN" && <Notification />}
               {userRole === "ADMIN" && (
                 <PreviousObservation

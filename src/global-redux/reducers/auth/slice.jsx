@@ -11,6 +11,7 @@ import {
   logoutUser,
   landingCall,
   getSystemNotifications,
+  saveCompany
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
@@ -50,6 +51,7 @@ const initialState = {
   // system notifications
   notificationLoading: false,
   notifications: [],
+  userCompany: JSON.parse(localStorage.getItem("userCompany")) || {}
 };
 
 export const setupRegisterUser = createAsyncThunk(
@@ -131,12 +133,26 @@ export const setupGetSystemNotifications = createAsyncThunk(
   }
 );
 
+export const setupSaveCompany = createAsyncThunk(
+  "auth/saveCompany",
+  async (data, thunkAPI) => {
+    return saveCompany(data, thunkAPI);
+  }
+);
+
+
 export const slice = createSlice({
   name: "auth",
   initialState,
   reducers: {
     changeAuthUser: (state, action) => {
       state.user = action.payload;
+    },
+    handleChangeUserCompany: (state, action) => {
+      state.userCompany = {
+        ...state.userCompany,
+        [action.payload.target.name]: action.payload.target.value
+      }
     },
     changeAuthState: (state, action) => {
       state[action.payload.name] = action.payload.value;
@@ -242,6 +258,8 @@ export const slice = createSlice({
         state.loading = false;
         state.loginEmail = "";
         state.loginPassword = "";
+        state.userCompany = action.payload?.data?.userId?.company[0] || {}
+        localStorage.setItem("userCompany", JSON.stringify(action.payload?.data?.userId?.company[0]))
         state.user = [
           {
             tfa: action?.payload?.data?.userId?.tfa,
@@ -451,6 +469,24 @@ export const slice = createSlice({
           toast.error("An Error has occurred");
         }
       });
+    builder
+      .addCase(setupSaveCompany.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupSaveCompany.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.userCompany = payload?.data
+        localStorage.setItem("userCompany", JSON.stringify(payload?.data))
+
+      })
+      .addCase(setupSaveCompany.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
   },
 });
 
@@ -466,6 +502,7 @@ export const {
   resetVerifyCode,
   resetTfaDisableAddSucess,
   updateUserTfa,
+  handleChangeUserCompany
 } = slice.actions;
 
 export default slice.reducer;
