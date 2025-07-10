@@ -74,12 +74,12 @@ const AuditPlanSummary = () => {
       pre.map((item) =>
         Number(item?.id) === Number(id)
           ? {
-              ...item,
-              threeYearsAgo: false,
-              twoYearsAgo: false,
-              lastYear: false,
-              [event?.target?.name]: event?.target?.checked,
-            }
+            ...item,
+            threeYearsAgo: false,
+            twoYearsAgo: false,
+            lastYear: false,
+            [event?.target?.name]: event?.target?.checked,
+          }
           : item
       )
     );
@@ -136,8 +136,46 @@ const AuditPlanSummary = () => {
     if (allAuditPlanSummary?.length !== 0) {
       setData(
         allAuditPlanSummary?.map((item) => {
+          let updatedItem;
+
+          if (item.q1) {
+            updatedItem = {
+              ...item,
+              q1: 0,
+              q2: 0,
+              q3: item.q1,
+              q4: 0,
+            }
+          }
+          if (item.q2) {
+            updatedItem = {
+              ...item,
+              q1: 0,
+              q2: 0,
+              q3: 0,
+              q4: item.q2,
+            }
+          }
+          if (item.q3) {
+            updatedItem = {
+              ...item,
+              q1: item.q3,
+              q2: 0,
+              q3: 0,
+              q4: 0,
+            }
+          }
+          if (item.q4) {
+            updatedItem = {
+              ...item,
+              q1: 0,
+              q2: item.q4,
+              q3: 0,
+              q4: 0,
+            }
+          }
           return {
-            ...item,
+            ...updatedItem,
             editable: false,
           };
         })
@@ -159,15 +197,53 @@ const AuditPlanSummary = () => {
         q4: 0,
       };
       allAuditPlanSummary?.forEach((element) => {
+        let updatedItem;
+
+        if (element.q1) {
+          updatedItem = {
+            ...element,
+            q1: 0,
+            q2: 0,
+            q3: element.q1,
+            q4: 0,
+          }
+        }
+        if (element.q2) {
+          updatedItem = {
+            ...element,
+            q1: 0,
+            q2: 0,
+            q3: 0,
+            q4: element.q2,
+          }
+        }
+        if (element.q3) {
+          updatedItem = {
+            ...element,
+            q1: element.q3,
+            q2: 0,
+            q3: 0,
+            q4: 0,
+          }
+        }
+        if (element.q4) {
+          updatedItem = {
+            ...element,
+            q1: 0,
+            q2: element.q4,
+            q3: 0,
+            q4: 0,
+          }
+        }
         dummyData = {
           serviceProvider:
-            Number(dummyData.serviceProvider) + Number(element.serviceProvider),
-          iaa: Number(dummyData.iaa) + Number(element.iaa),
-          total: Number(dummyData.total) + Number(element.total),
-          q1: Number(dummyData.q1) + Number(element.q1),
-          q2: Number(dummyData.q2) + Number(element.q2),
-          q3: Number(dummyData.q3) + Number(element.q3),
-          q4: Number(dummyData.q4) + Number(element.q4),
+            Number(dummyData.serviceProvider) + Number(updatedItem.serviceProvider),
+          iaa: Number(dummyData.iaa) + Number(updatedItem.iaa),
+          total: Number(dummyData.total) + Number(updatedItem.total),
+          q1: Number(dummyData.q1) + Number(updatedItem.q1),
+          q2: Number(dummyData.q2) + Number(updatedItem.q2),
+          q3: Number(dummyData.q3) + Number(updatedItem.q3),
+          q4: Number(dummyData.q4) + Number(updatedItem.q4),
         };
       });
       setTotals(dummyData);
