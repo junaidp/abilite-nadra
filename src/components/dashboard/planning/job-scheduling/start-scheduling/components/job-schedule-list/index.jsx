@@ -16,16 +16,16 @@ const JobScheduleList = ({
 
   function handleChangeDate(event, id) {
     const selectedDate = new Date(event.target.value);
-    // const currentDate = new Date();
+    const currentDate = new Date();
 
-    // currentDate.setHours(0, 0, 0, 0);
+    currentDate.setHours(0, 0, 0, 0);
 
-    // if (selectedDate < currentDate) {
-    //   toast.error(
-    //     "The planned start date cannot be a past date. Please select today or a future date."
-    //   );
-    //   return;
-    // }
+    if (selectedDate < currentDate) {
+      toast.error(
+        "The planned start date cannot be a past date. Please select today or a future date."
+      );
+      return;
+    }
 
     if (
       !singleJobSchedulingObject?.timeAndDateAllocation?.estimatedWeeks ||
@@ -138,8 +138,8 @@ const JobScheduleList = ({
                             : false
                         }
                         onChange={(event) => handleChangeDate(event, list?.id)}
-                        min={moment(userCompany.fiscalYearForm).format("YYYY-MM-DD")}
-                        max={moment(userCompany.fiscalYearTo).format("YYYY-MM-DD")}
+                      // min={moment(userCompany.fiscalYearForm).format("YYYY-MM-DD")}
+                      // max={moment(userCompany.fiscalYearTo).format("YYYY-MM-DD")}
 
                       />
                       {list?.plannedJobStartDate === null && (
