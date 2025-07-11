@@ -3,6 +3,7 @@ import moment from "moment";
 import React from "react";
 import font from "../../../../../../font/Poppins-Medium.ttf";
 import Html from "react-pdf-html";
+import { cleanHtml } from "../../../../../../config/helper"
 import { groupObservationsByTitle } from "../../../../../../config/helper"
 import {
   Document,
@@ -456,14 +457,14 @@ const PDFGenerator = ({ reportObject }) => {
         <View style={styles.page2} break>
           <Text style={styles.contents}>EXECUTIVE SUMMARY </Text>
           <Html style={styles.singleFindSummaryPara}>
-            {reportObject?.executiveSummary}
+            {cleanHtml(reportObject?.executiveSummary)}
           </Html>
         </View>
         {/* Page 4 */}
         <View style={styles.page2} break>
           <Text style={styles.contents}>AUDIT PURPOSE </Text>
           <Html style={styles.singleFindSummaryPara}>
-            {reportObject?.auditPurpose}
+            {cleanHtml(reportObject?.auditPurpose)}
           </Html>
         </View>
         {/* Page 5 */}
@@ -483,7 +484,7 @@ const PDFGenerator = ({ reportObject }) => {
                   <View key={index}>
                     <Text style={styles.indexNumber}> Finding {index + 1}</Text>
                     <Html style={styles.singleFindSummaryPara}>
-                      {list?.observationName}
+                      {cleanHtml(list?.observationName)}
                     </Html>
                   </View>
                 );
@@ -535,7 +536,7 @@ const PDFGenerator = ({ reportObject }) => {
                       Observation
                     </Text>
                     <Html style={styles.singleFindSummaryPara}>
-                      {followUpItem?.observationName}
+                      {cleanHtml(followUpItem?.observationName)}
                     </Html>
                   </View>
                   <View style={styles.singleFindSummaryWrap}>
@@ -551,7 +552,7 @@ const PDFGenerator = ({ reportObject }) => {
                       Management Comments
                     </Text>
                     <Html style={styles.singleFindSummaryPara}>
-                      {followUpItem?.managementComments}
+                      {cleanHtml(followUpItem?.managementComments)}
                     </Html>
                   </View>
                   <View style={styles.singleFindSummaryWrap}>
@@ -631,7 +632,7 @@ const PDFGenerator = ({ reportObject }) => {
                               Observation
                             </Text>
                             <Html style={styles.singleFindSummaryPara}>
-                              {followUpItem?.observationName}
+                              {cleanHtml(followUpItem?.observationName)}
                             </Html>
                           </View>
                           <View style={styles.singleFindSummaryWrap}>
@@ -647,7 +648,7 @@ const PDFGenerator = ({ reportObject }) => {
                               Management Comments
                             </Text>
                             <Html style={styles.singleFindSummaryPara}>
-                              {followUpItem?.managementComments}
+                              {cleanHtml(followUpItem?.managementComments)}
                             </Html>
                           </View>
                           <View style={styles.singleFindSummaryWrap}>
@@ -726,7 +727,7 @@ const PDFGenerator = ({ reportObject }) => {
           <View style={styles.page2} break>
             <Text style={styles.contents}>ANNEXURE </Text>
             <Html style={styles.singleFindSummaryPara}>
-              {reportObject?.annexure}
+              {cleanHtml(reportObject?.annexure)}
             </Html>
           </View>
         )}

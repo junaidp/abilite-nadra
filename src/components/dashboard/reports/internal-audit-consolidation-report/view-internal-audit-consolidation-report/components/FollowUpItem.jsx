@@ -63,10 +63,7 @@ const FollowUpItem = ({ item, consolidatedObservationsItem }) => {
       {/*  */}
       <div className="mb-3">
         <label>Management Comments:</label>
-        <div
-          className="form-control"
-          dangerouslySetInnerHTML={{ __html: item?.managementComments || "No comments available." }}
-        />
+        <RichTextEditor initialValue={item?.managementComments} />
       </div>
       <div className="mb-3">
         <label className="py-1">Implementation Date:</label>

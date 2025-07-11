@@ -148,6 +148,11 @@ function groupByAreaAndSubject(data) {
   return Array.from(groupedMap.values());
 }
 
+const cleanHtml = (htmlString) => {
+  if (!htmlString) return "";
+  return htmlString.replace(/font-family:[^;"'}]+[;"'}]/gi, "");
+};
+
 export {
   handleDownload,
   groupObservationsByTitle,
@@ -159,4 +164,5 @@ export {
   decryptString,
   getLastTenYears,
   groupByAreaAndSubject,
+  cleanHtml,
 };

@@ -243,9 +243,9 @@ const AccordianItem = ({
           {item?.stepNo !== 0 && item?.stepNo !== 1 && item?.stepNo !== 2 && (
             <div className="mb-4">
               <label>Management Comments:</label>
-              <div
-                className="form-control"
-                dangerouslySetInnerHTML={{ __html: item?.managementComments || "No comments available." }}
+              <RichTextEditor
+                initialValue={item?.managementComments}
+                editable="false"
               />
               <br />
               <label className="py-1">Implementation Date:</label>

@@ -146,9 +146,9 @@ const AccordianItem = ({
           {/*  */}
           <div className="mb-3">
             <label>Management Comments:</label>
-            <div
-              className="form-control"
-              dangerouslySetInnerHTML={{ __html: item?.managementComments || "No comments available." }}
+            <RichTextEditor
+              initialValue={item?.managementComments}
+              editable="false"
             />
           </div>
           <FollowUpFileUpload item={item} />
