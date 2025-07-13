@@ -20,7 +20,7 @@ import Select from "@mui/material/Select";
 import InternalAuditReportBody from "./components/InternalAuditReportBody";
 import Header from "./components/Header";
 import { toast } from "react-toastify";
-import { CircularProgress } from "@mui/material";
+import { Chip, CircularProgress } from "@mui/material";
 import { groupObservationsByTitle } from "../../../../../config/helper"
 
 const GenerateInternalAuditConsolidationReport = () => {
@@ -229,7 +229,7 @@ const GenerateInternalAuditConsolidationReport = () => {
                   {jobsForInternalAuditReports?.map((item, index) => {
                     return (
                       <MenuItem value={item?.id} key={index}>
-                        {item?.title}
+                        {item?.title} {item.subLocationList.map((location, index) => <Chip key={index} label={location.description} sx={{ marginLeft: "20px" }} />)}
                       </MenuItem>
                     );
                   })}
@@ -238,9 +238,8 @@ const GenerateInternalAuditConsolidationReport = () => {
             </div>
             <div className="col-lg-2">
               <div
-                className={`btn btn-labeled btn-primary px-3 shadow  my-4 ${
-                  loading && "disabled"
-                }`}
+                className={`btn btn-labeled btn-primary px-3 shadow  my-4 ${loading && "disabled"
+                  }`}
                 onClick={handleGetInternalAuditReportObject}
               >
                 <span className="btn-label me-2">

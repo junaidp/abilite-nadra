@@ -19,6 +19,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import SubmitDialog from "./component/submit-dialog";
+import moment from "moment";
 
 const AuditPlanSummary = () => {
   const dispatch = useDispatch();
@@ -34,7 +35,7 @@ const AuditPlanSummary = () => {
   const [feedBackDialog, setFeedBackDialog] = React.useState(false);
   const [showSubmitDialog, setShowSubmitDialog] = React.useState(false);
   const [viewFeedBackDialog, setViewFeedBackDialog] = React.useState(false);
-  const { user } = useSelector((state) => state?.auth);
+  const { user,userCompany } = useSelector((state) => state?.auth);
   const [currentId, setCurrentId] = React.useState("");
   const { company, year } = useSelector((state) => state?.common);
   const [showApproveDialog, setShowApproveDialog] = React.useState(false);
@@ -135,52 +136,45 @@ const AuditPlanSummary = () => {
   React.useEffect(() => {
     if (allAuditPlanSummary?.length !== 0) {
       setData(
-        allAuditPlanSummary?.map((item) => {
-          let updatedItem;
+        allAuditPlanSummary.map((item) => {
+          const startDateStr = item.jobScheduleList?.[0]?.plannedJobStartDate;
 
-          if (item.q1) {
-            updatedItem = {
-              ...item,
-              q1: 0,
-              q2: 0,
-              q3: item.q1,
-              q4: 0,
-            }
+          // Getting the original value and clear others
+          let originalValue = 0;
+          if (item.q1) originalValue = item.q1;
+          else if (item.q2) originalValue = item.q2;
+          else if (item.q3) originalValue = item.q3;
+          else if (item.q4) originalValue = item.q4;
+
+          // all quarters 0
+          let q1 = 0, q2 = 0, q3 = 0, q4 = 0;
+
+          if (startDateStr) {
+            const selectedMonth = moment(startDateStr).month() + 1; // 1–12
+            const fiscalStartMonth = moment(userCompany.fiscalYearForm).month() + 1;
+
+            const offset = (selectedMonth - fiscalStartMonth + 12) % 12;
+            const quarterIndex = Math.floor(offset / 3); // 0 = Q1, ..., 3 = Q4
+
+            // Assign the original value to the correct quarter
+            if (quarterIndex === 0) q1 = originalValue;
+            else if (quarterIndex === 1) q2 = originalValue;
+            else if (quarterIndex === 2) q3 = originalValue;
+            else if (quarterIndex === 3) q4 = originalValue;
           }
-          if (item.q2) {
-            updatedItem = {
-              ...item,
-              q1: 0,
-              q2: 0,
-              q3: 0,
-              q4: item.q2,
-            }
-          }
-          if (item.q3) {
-            updatedItem = {
-              ...item,
-              q1: item.q3,
-              q2: 0,
-              q3: 0,
-              q4: 0,
-            }
-          }
-          if (item.q4) {
-            updatedItem = {
-              ...item,
-              q1: 0,
-              q2: item.q4,
-              q3: 0,
-              q4: 0,
-            }
-          }
+
           return {
-            ...updatedItem,
+            ...item,
+            q1,
+            q2,
+            q3,
+            q4,
             editable: false,
           };
         })
       );
-    } else {
+    }
+    else {
       setData([]);
     }
   }, [allAuditPlanSummary]);
@@ -197,53 +191,42 @@ const AuditPlanSummary = () => {
         q4: 0,
       };
       allAuditPlanSummary?.forEach((element) => {
-        let updatedItem;
+        const startDateStr = element.jobScheduleList?.[0]?.plannedJobStartDate;
 
-        if (element.q1) {
-          updatedItem = {
-            ...element,
-            q1: 0,
-            q2: 0,
-            q3: element.q1,
-            q4: 0,
-          }
+        // Getting the original value and clear others
+        let originalValue = 0;
+        if (element.q1) originalValue = element.q1;
+        else if (element.q2) originalValue = element.q2;
+        else if (element.q3) originalValue = element.q3;
+        else if (element.q4) originalValue = element.q4;
+
+        // all quarters 0
+        let q1 = 0, q2 = 0, q3 = 0, q4 = 0;
+
+        if (startDateStr) {
+          const selectedMonth = moment(startDateStr).month() + 1; // 1–12
+          const fiscalStartMonth = moment(userCompany.fiscalYearForm).month() + 1;
+
+          const offset = (selectedMonth - fiscalStartMonth + 12) % 12;
+          const quarterIndex = Math.floor(offset / 3); // 0 = Q1, ..., 3 = Q4
+
+          // Assign the original value to the correct quarter
+          if (quarterIndex === 0) q1 = originalValue;
+          else if (quarterIndex === 1) q2 = originalValue;
+          else if (quarterIndex === 2) q3 = originalValue;
+          else if (quarterIndex === 3) q4 = originalValue;
         }
-        if (element.q2) {
-          updatedItem = {
-            ...element,
-            q1: 0,
-            q2: 0,
-            q3: 0,
-            q4: element.q2,
-          }
-        }
-        if (element.q3) {
-          updatedItem = {
-            ...element,
-            q1: element.q3,
-            q2: 0,
-            q3: 0,
-            q4: 0,
-          }
-        }
-        if (element.q4) {
-          updatedItem = {
-            ...element,
-            q1: 0,
-            q2: element.q4,
-            q3: 0,
-            q4: 0,
-          }
-        }
+
+
         dummyData = {
           serviceProvider:
-            Number(dummyData.serviceProvider) + Number(updatedItem.serviceProvider),
-          iaa: Number(dummyData.iaa) + Number(updatedItem.iaa),
-          total: Number(dummyData.total) + Number(updatedItem.total),
-          q1: Number(dummyData.q1) + Number(updatedItem.q1),
-          q2: Number(dummyData.q2) + Number(updatedItem.q2),
-          q3: Number(dummyData.q3) + Number(updatedItem.q3),
-          q4: Number(dummyData.q4) + Number(updatedItem.q4),
+            Number(dummyData.serviceProvider) + Number(element.serviceProvider),
+          iaa: Number(dummyData.iaa) + Number(element.iaa),
+          total: Number(dummyData.total) + Number(element.total),
+          q1: Number(dummyData.q1) + Number(q1),
+          q2: Number(dummyData.q2) + Number(q2),
+          q3: Number(dummyData.q3) + Number(q3),
+          q4: Number(dummyData.q4) + Number(q4),
         };
       });
       setTotals(dummyData);
@@ -382,7 +365,7 @@ const AuditPlanSummary = () => {
                   <table className="table table-bordered table-hover rounded equal-columns">
                     <thead>
                       <tr>
-                        <th className="text-center" colSpan="4">
+                        <th className="text-center" colSpan="3">
                           Current Risk Assessment
                         </th>
                         <th className="text-center" colSpan="3">
@@ -403,7 +386,7 @@ const AuditPlanSummary = () => {
                       <tr className="bg-white">
                         <th className="bg-white">Rank</th>
                         <th className="bg-white">Audit Jobs</th>
-                        <th className="bg-white ">Residual Risk Rating</th>
+                        {/* <th className="bg-white ">Residual Risk Rating</th> */}
                         <th className="bg-white">Priority</th>
                         <th className="bg-white">Three Years Ago</th>
                         <th className="bg-white">Two Years Ago</th>
@@ -445,7 +428,7 @@ const AuditPlanSummary = () => {
                     })}
                     <tbody>
                       <tr>
-                        <td colSpan="7"></td>
+                        <td colSpan="6"></td>
                         <td className="fw-bold">{totals?.serviceProvider}</td>
                         <td className="fw-bold">{totals?.iaa}</td>
                         <td className="fw-bold">{totals?.total}</td>

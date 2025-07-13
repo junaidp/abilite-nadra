@@ -23,7 +23,7 @@ const Table = ({
       <tr>
         <td>{item?.id}</td>
         <td className="min-w-300">{item?.title}</td>
-        <td className="normal-text">Low</td>
+        {/* <td className="normal-text">Low</td> */}
         <td>
           <select
             className="form-select w-80"
