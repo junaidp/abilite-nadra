@@ -35,6 +35,9 @@ const ComplianceCheckListCard = () => {
   const [page, setPage] = React.useState(1);
   const [checkListId, setCheckListId] = React.useState("");
 
+  const allItems = groupByAreaAndSubject(selectedCheckListItems).flatMap(group => group.items);
+
+
   const handleChange = (_, value) => {
     setPage(value);
   };
@@ -165,18 +168,17 @@ const ComplianceCheckListCard = () => {
                                             </td>
                                           </tr>
                                         ) : selectedCheckListItems ? (
-                                          groupByAreaAndSubject(selectedCheckListItems).map((group) => group.items.map((checkItem,i) => {
-                                            return (
-                                              <tr key={i}>
-                                                <td>{i + 1}</td>
-                                                <td>{checkItem?.area}</td>
-                                                <td>{checkItem?.subject}</td>
-                                                <td>
-                                                  {checkItem?.particulars}
-                                                </td>
-                                              </tr>
-                                            );
-                                          }))
+                                          allItems.map((checkItem, index) => (
+                                            <tr key={index}>
+                                              <td>{index + 1}</td>
+                                              <td>{checkItem?.area}</td>
+                                              <td>{checkItem?.subject}</td>
+                                              <td>
+                                                {checkItem?.particulars}
+                                              </td>
+                                            </tr>
+                                          )
+                                          )
 
                                         ) : (
                                           <tr>

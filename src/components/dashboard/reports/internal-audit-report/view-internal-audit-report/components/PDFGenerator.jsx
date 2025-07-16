@@ -418,6 +418,36 @@ const PDFGenerator = ({ reportObject }) => {
                 })}
               </View>
             </View>
+            <View style={styles.reportInfoViewItem}>
+              <Text style={styles.reportInfoTitle}>Department:</Text>
+              <View style={styles.locationWrap}>
+                {[
+                  ...new Set(
+                    reportObject?.subDepartmentList?.map(
+                      (item) => item?.department?.description
+                    )
+                  ),
+                ]?.map((departmentItem, index) => {
+                  return (
+                    <Text style={styles.reportInfoSubTitle} key={index}>
+                      {departmentItem}
+                    </Text>
+                  );
+                })}
+              </View>
+            </View>
+            <View style={styles.reportInfoViewItem}>
+              <Text style={styles.reportInfoTitle}>Sub Department:</Text>
+              <View style={styles.locationWrap}>
+                {reportObject?.subDepartmentList?.map((item, index) => {
+                  return (
+                    <Text style={styles.reportInfoSubTitle} key={index}>
+                      {item?.description}
+                    </Text>
+                  );
+                })}
+              </View>
+            </View>
           </View>
         </View>
         {/* Page 3 */}

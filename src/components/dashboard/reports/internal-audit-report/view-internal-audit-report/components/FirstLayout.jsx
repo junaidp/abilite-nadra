@@ -130,7 +130,7 @@ const ReportFirstLayout = ({ singleInternalAuditReport }) => {
                   <label className="mt-2">Location:</label>
                   <div>
                     {!singleInternalAuditReport?.subLocationList ||
-                    singleInternalAuditReport?.subLocationList?.length === 0 ? (
+                      singleInternalAuditReport?.subLocationList?.length === 0 ? (
                       <p className="mt-2">No Location To Show</p>
                     ) : (
                       [
@@ -158,10 +158,65 @@ const ReportFirstLayout = ({ singleInternalAuditReport }) => {
             <label className="mt-2">Sub-Location:</label>
             <div className="">
               {!singleInternalAuditReport?.subLocationList ||
-              singleInternalAuditReport?.subLocationList?.length === 0 ? (
+                singleInternalAuditReport?.subLocationList?.length === 0 ? (
                 <p className="mt-2">No Sub Location To Show</p>
               ) : (
                 singleInternalAuditReport?.subLocationList?.map(
+                  (item, index) => {
+                    return (
+                      <Chip
+                        label={item?.description}
+                        className="mx-2 mb-2"
+                        key={index}
+                      />
+                    );
+                  }
+                )
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="row mb-3">
+          <div className="col-lg-6">
+            <div>
+              <div className="row mb-3 f-13">
+                <div className="col-lg-6 px-3 d-flex justify-content-between">
+                  <label className="mt-2">Department:</label>
+                  <div>
+                    {!singleInternalAuditReport?.subDepartmentList ||
+                      singleInternalAuditReport?.subDepartmentList?.length === 0 ? (
+                      <p className="mt-2">No Department To Show</p>
+                    ) : (
+                      [
+                        ...new Set(
+                          singleInternalAuditReport?.subDepartmentList?.map(
+                            (item) => item?.department?.description
+                          )
+                        ),
+                      ]?.map((departmentItem, index) => {
+                        return (
+                          <Chip
+                            label={departmentItem}
+                            key={index}
+                            className="mx-2 mb-2"
+                          />
+                        );
+                      })
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-lg-6 px-3 d-flex justify-content-between">
+            <label className="mt-2">Sub-Department:</label>
+            <div className="">
+              {!singleInternalAuditReport?.subDepartmentList ||
+                singleInternalAuditReport?.subDepartmentList?.length === 0 ? (
+                <p className="mt-2">No Sub Department To Show</p>
+              ) : (
+                singleInternalAuditReport?.subDepartmentList?.map(
                   (item, index) => {
                     return (
                       <Chip

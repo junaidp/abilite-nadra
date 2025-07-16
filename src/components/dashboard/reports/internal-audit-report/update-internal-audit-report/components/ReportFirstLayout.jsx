@@ -133,7 +133,7 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
                   <label className="mt-2">Location:</label>
                   <div>
                     {!reportObject?.subLocationList ||
-                    reportObject?.subLocationList?.length === 0 ? (
+                      reportObject?.subLocationList?.length === 0 ? (
                       <p className="mt-2">No Location To Show</p>
                     ) : (
                       [
@@ -161,7 +161,7 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
             <label className="mt-2">Sub-Location:</label>
             <div className="">
               {!reportObject?.subLocationList ||
-              reportObject?.subLocationList?.length == 0 ? (
+                reportObject?.subLocationList?.length == 0 ? (
                 <p className="mt-2">No Sub Location To Show</p>
               ) : (
                 reportObject?.subLocationList?.map((item, index) => {
@@ -173,6 +173,60 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
                     />
                   );
                 })
+              )}
+            </div>
+          </div>
+        </div>
+        <div className="row mb-3">
+          <div className="col-lg-6">
+            <div>
+              <div className="row mb-3 f-13">
+                <div className="col-lg-6 px-3 d-flex justify-content-between">
+                  <label className="mt-2">Department:</label>
+                  <div>
+                    {!reportObject?.subDepartmentList ||
+                      reportObject?.subDepartmentList?.length === 0 ? (
+                      <p className="mt-2">No Department To Show</p>
+                    ) : (
+                      [
+                        ...new Set(
+                          reportObject?.subDepartmentList?.map(
+                            (item) => item?.department?.description
+                          )
+                        ),
+                      ]?.map((departmentItem, index) => {
+                        return (
+                          <Chip
+                            label={departmentItem}
+                            key={index}
+                            className="mx-2 mb-2"
+                          />
+                        );
+                      })
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-lg-6 px-3 d-flex justify-content-between">
+            <label className="mt-2">Sub-Department:</label>
+            <div className="">
+              {!reportObject?.subDepartmentList ||
+                reportObject?.subDepartmentList?.length === 0 ? (
+                <p className="mt-2">No Sub Department To Show</p>
+              ) : (
+                reportObject?.subDepartmentList?.map(
+                  (item, index) => {
+                    return (
+                      <Chip
+                        label={item?.description}
+                        className="mx-2 mb-2"
+                        key={index}
+                      />
+                    );
+                  }
+                )
               )}
             </div>
           </div>
