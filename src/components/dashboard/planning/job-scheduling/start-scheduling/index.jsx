@@ -48,6 +48,7 @@ const StartScheduling = () => {
   const { user } = useSelector((state) => state?.auth);
   const { company } = useSelector((state) => state?.common);
   const [showSubmitDialog, setShowSubmitDialog] = React.useState(false);
+  const [mountLoading, setMountLoading] = React.useState(true);
   const [initialLocationList, setInitialLocationList] = React.useState([]);
   const [initialSubLocationList, setInitialSubLocationList] = React.useState(
     []
@@ -302,20 +303,23 @@ const StartScheduling = () => {
   }, [jobSchedulingAddSuccess]);
 
   React.useEffect(() => {
-    if (user[0]?.token && jobSchedulingId) {
-      let companyId = user[0]?.company.find(
-        (all) => all?.companyName === company
-      )?.id;
-      dispatch(setupGetInitialSingleJobScheduling(jobSchedulingId));
-      dispatch(setupGetAllLocations(`?companyId=${companyId}`));
-      setTimeout(() => {
-        dispatch(setupGetAllDepartments(`?companyId=${companyId}`));
-      }, 1200);
-      setTimeout(() => {
-        dispatch(setupGetAllUsers({ shareWith: true }));
-      }, 1800);
-    }
+    const fetchDataSequentially = async () => {
+      setMountLoading(true);
+      if (user[0]?.token && jobSchedulingId) {
+        const companyId = user[0]?.company.find(
+          (all) => all?.companyName === company
+        )?.id;
+        await dispatch(setupGetAllDepartments(`?companyId=${companyId}`));
+        await dispatch(setupGetAllUsers({ shareWith: true }));
+        await dispatch(setupGetAllLocations(`?companyId=${companyId}`));
+        await dispatch(setupGetInitialSingleJobScheduling(jobSchedulingId));
+        setMountLoading(false);
+      }
+    };
+
+    fetchDataSequentially();
   }, [dispatch]);
+
 
   React.useEffect(() => {
     if (!jobSchedulingId) {
@@ -348,7 +352,7 @@ const StartScheduling = () => {
           </div>
         </div>
       )}
-      {initialLoading ? (
+      {initialLoading || mountLoading ? (
         <div className="my-3">
           <CircularProgress />
         </div>
@@ -373,7 +377,7 @@ const StartScheduling = () => {
               <div className="col-lg-5 mb-3">
                 <MultiSelect
                   names={allLocations?.map((all) => all?.description)}
-                  title="Location"
+                  title="Locations"
                   initialPersonalArray={initialLocationList}
                   name="locationList"
                   setCurrentJobScheduling={setCurrentJobScheduling}
@@ -382,7 +386,7 @@ const StartScheduling = () => {
               </div>
               <div className="col-lg-5 mb-3">
                 <MultiSelect
-                  title="SubLocation"
+                  title="Sub Locations"
                   names={allSubLocations?.map((all) => all?.description)}
                   initialPersonalArray={initialSubLocationList}
                   name="subLocation"
@@ -425,7 +429,7 @@ const StartScheduling = () => {
               <div className="col-lg-5 mb-3">
                 <LocationSelect
                   names={allLocations?.map((all) => all?.description)}
-                  title="Location"
+                  title="Locations"
                   initialPersonalArray={initialLocationList}
                   name="locationList"
                   setCurrentJobScheduling={setCurrentJobScheduling}
@@ -434,7 +438,7 @@ const StartScheduling = () => {
               </div>
               <div className="col-lg-5 mb-3">
                 <LocationSelect
-                  title="SubLocation"
+                  title="Sub Locations"
                   names={allSubLocations?.map((all) => all?.description)}
                   initialPersonalArray={initialSubLocationList}
                   name="subLocation"

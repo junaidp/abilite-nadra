@@ -6,6 +6,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { useSelector } from "react-redux";
+import { Chip } from "@mui/material";
 
 const MenuProps = {
   PaperProps: {
@@ -90,13 +91,24 @@ export default function MultipleSelect({
           MenuProps={MenuProps}
           disabled={
             section === "resourceAllocation" &&
-            user[0]?.userId?.employeeid?.userHierarchy === "IAH"
+              user[0]?.userId?.employeeid?.userHierarchy === "IAH"
               ? false
               : singleJobSchedulingObject?.locked === true ||
-                (singleJobSchedulingObject?.complete === true &&
-                  singleJobSchedulingObject?.locked === false &&
-                  user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+              (singleJobSchedulingObject?.complete === true &&
+                singleJobSchedulingObject?.locked === false &&
+                user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
           }
+          renderValue={(selected) => (
+            <div style={{ display: "flex", flexWrap: "wrap" }}>
+              {selected.map((value) => (
+                <Chip
+                  key={value}
+                  label={names.find((name) => name === value)}
+                  style={{ margin: 2 }}
+                />
+              ))}
+            </div>
+          )}
         >
           {names.map((name) => (
             <MenuItem

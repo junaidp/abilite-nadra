@@ -81,8 +81,7 @@ const styles = StyleSheet.create({
   reportInfoViewItem: {
     display: "flex",
     flexDirection: "row",
-    alignItems: "center",
-    gap: "10px",
+    gap: 25
   },
   reportNameView: {
     display: "flex",
@@ -100,6 +99,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     gap: 15,
+    flexWrap: "wrap"
   },
   paragraph: {
     fontSize: 12,

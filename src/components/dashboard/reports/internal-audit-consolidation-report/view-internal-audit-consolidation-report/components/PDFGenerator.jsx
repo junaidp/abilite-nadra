@@ -99,6 +99,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: "10px",
   },
+  reportItemsWrap: {
+    display: "flex",
+    flexDirection: "row",
+    gap: 25,
+  },
   reportNameView: {
     display: "flex",
     flexDirection: "column",
@@ -115,8 +120,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 10,
-    justifyContent: "flex-start"
+    gap: 10
   },
   paragraph: {
     fontSize: 12,
@@ -423,7 +427,7 @@ const PDFGenerator = ({ reportObject }) => {
                 {reportObject?.riskApproach}
               </Text>
             </View>
-            <View style={styles.reportInfoViewItem}>
+            <View style={styles.reportItemsWrap}>
               <Text style={styles.reportInfoTitle}>Location:</Text>
               <View style={styles.locationWrap}>
                 {[
@@ -441,7 +445,7 @@ const PDFGenerator = ({ reportObject }) => {
                 })}
               </View>
             </View>
-            <View style={styles.reportInfoViewItem}>
+            <View style={styles.reportItemsWrap}>
               <Text style={styles.reportInfoTitle}>Sub Location:</Text>
               <View style={styles.locationWrap}>
                 {reportObject?.subLocationList?.map((item, index) => {
@@ -453,7 +457,7 @@ const PDFGenerator = ({ reportObject }) => {
                 })}
               </View>
             </View>
-            <View style={styles.reportInfoViewItem}>
+            <View style={styles.reportItemsWrap}>
               <Text style={styles.reportInfoTitle}>Department:</Text>
               <View style={styles.locationWrap}>
                 {[
@@ -471,7 +475,7 @@ const PDFGenerator = ({ reportObject }) => {
                 })}
               </View>
             </View>
-            <View style={styles.reportInfoViewItem}>
+            <View style={styles.reportItemsWrap}>
               <Text style={styles.reportInfoTitle}>Sub Department:</Text>
               <View style={styles.locationWrap}>
                 {reportObject?.subDepartmentDTOList?.map((item, index) => {

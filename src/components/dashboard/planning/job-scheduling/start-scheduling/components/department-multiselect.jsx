@@ -6,6 +6,7 @@ import {
   InputLabel,
   //   Chip,
   OutlinedInput,
+  Chip,
 } from "@mui/material";
 import { useSelector } from "react-redux";
 
@@ -26,17 +27,17 @@ const MultiSelect = ({ label, options, selectedValues, setSelectedValues }) => {
         value={selectedValues}
         onChange={handleChange}
         input={<OutlinedInput label={label} />}
-        // renderValue={(selected) => (
-        //   <div style={{ display: "flex", flexWrap: "wrap" }}>
-        //     {selected.map((value) => (
-        //       <Chip
-        //         key={value}
-        //         label={options.find((opt) => opt.id === value)?.description}
-        //         style={{ margin: 2 }}
-        //       />
-        //     ))}
-        //   </div>
-        // )}
+        renderValue={(selected) => (
+          <div style={{ display: "flex", flexWrap: "wrap" }}>
+            {selected.map((value) => (
+              <Chip
+                key={value}
+                label={options.find((opt) => opt.id === value)?.description}
+                style={{ margin: 2 }}
+              />
+            ))}
+          </div>
+        )}
         disabled={
           singleJobSchedulingObject?.locked === true ||
           (singleJobSchedulingObject?.complete === true &&
@@ -81,7 +82,7 @@ const DepartmentSelector = ({
     <div className="row">
       <div className="col-lg-6">
         <MultiSelect
-          label="Select Departments"
+          label="Departments"
           options={apiData}
           selectedValues={selectedDepartments}
           setSelectedValues={setSelectedDepartments}
@@ -89,7 +90,7 @@ const DepartmentSelector = ({
       </div>
       <div className="col-lg-6">
         <MultiSelect
-          label="Select SubDepartments"
+          label="Sub Departments"
           options={apiData
             .filter((dept) => selectedDepartments.includes(dept.id))
             .flatMap((dept) => dept.subDepartments)}

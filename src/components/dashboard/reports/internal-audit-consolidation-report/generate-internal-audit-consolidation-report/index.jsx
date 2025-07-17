@@ -228,7 +228,7 @@ const GenerateInternalAuditConsolidationReport = () => {
                   <MenuItem value="">Select One</MenuItem>
                   {jobsForInternalAuditReports?.map((item, index) => {
                     return (
-                      <MenuItem value={item?.id} key={index}>
+                      <MenuItem value={item?.id} key={index} sx={{ display: "flex", flexWrap: "wrap",gap:"10px" }}>
                         {item?.title} {item.subLocationList.map((location, index) => <Chip key={index} label={location.description} sx={{ marginLeft: "20px" }} />)}
                       </MenuItem>
                     );
