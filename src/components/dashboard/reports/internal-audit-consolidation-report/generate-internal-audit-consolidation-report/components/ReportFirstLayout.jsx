@@ -81,20 +81,7 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
           </div>
         </div>
 
-        <div className="row mb-3">
-          <div className="col-lg-12">
-            <div>
-              <label className="me-3">Planned Hours:</label>
-              <input
-                className="form-control w-100"
-                placeholder="Enter planned Hours"
-                type="text"
-                disabled
-                value={reportObject?.plannedHours}
-              />
-            </div>
-          </div>
-        </div>
+
 
         <div className="row mb-3">
           <div className="col-lg-6">
@@ -113,13 +100,13 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
           </div>
           <div className="col-lg-6">
             <div>
-              <label className="me-3">Risk Rating:</label>
+              <label className="me-3">Planned Hours:</label>
               <input
                 className="form-control w-100"
-                placeholder="Enter Risk Rating"
+                placeholder="Enter planned Hours"
                 type="text"
                 disabled
-                value={reportObject?.riskRating || "No Rating"}
+                value={reportObject?.plannedHours}
               />
             </div>
           </div>
@@ -133,7 +120,7 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
                   <label className="mt-2">Location:</label>
                   <div>
                     {!reportObject?.subLocationList ||
-                    reportObject?.subLocationList?.length === 0 ? (
+                      reportObject?.subLocationList?.length === 0 ? (
                       <p className="mt-2">No Location To Show</p>
                     ) : (
                       [
@@ -161,7 +148,7 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
             <label className="mt-2">Sub-Location:</label>
             <div className="">
               {!reportObject?.subLocationList ||
-              reportObject?.subLocationList?.length === 0 ? (
+                reportObject?.subLocationList?.length === 0 ? (
                 <p className="mt-2">No Sub Location To Show</p>
               ) : (
                 reportObject?.subLocationList?.map((item, index) => {
@@ -171,6 +158,51 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
                       key={index}
                       className="mx-2 mb-2"
                     />
+                  );
+                })
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="row mb-3">
+          <div className="col-lg-6">
+            <div>
+              <div className="row mb-3 f-13">
+                <div className="col-lg-6 px-3 d-flex justify-content-between">
+                  <label className="mt-2">Department:</label>
+                  <div>
+                    {!reportObject?.subDepartmentDTOList ||
+                      reportObject?.subDepartmentDTOList?.length === 0 ? (
+                      <p className="mt-2">No Department To Show</p>
+                    ) : (
+                      [
+                        ...new Set(
+                          reportObject?.subDepartmentDTOList?.map(
+                            (item) => item?.department?.description
+                          )
+                        ),
+                      ]?.map((departmentItem, index) => {
+                        return (
+                          <Chip label={departmentItem} key={index} className="mx-2 mb-2" />
+                        );
+                      })
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-lg-6 px-3 d-flex justify-content-between">
+            <label className="mt-2">Sub-Department:</label>
+            <div className="">
+              {!reportObject?.subDepartmentDTOList ||
+                reportObject?.subDepartmentDTOList?.length === 0 ? (
+                <p className="mt-2">No Sub Department To Show</p>
+              ) : (
+                reportObject?.subDepartmentDTOList?.map((item, index) => {
+                  return (
+                    <Chip label={item?.description} className="mx-2 mb-2" key={index} />
                   );
                 })
               )}

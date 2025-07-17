@@ -76,20 +76,6 @@ const ReportFirstLayout = ({ singleInternalAuditReport }) => {
           </div>
         </div>
 
-        <div className="row mb-3">
-          <div className="col-lg-12">
-            <div>
-              <label className="me-3">Planned Hours:</label>
-              <input
-                className="form-control w-100"
-                placeholder="Enter planned Hours"
-                type="text"
-                disabled
-                value={singleInternalAuditReport?.plannedHours}
-              />
-            </div>
-          </div>
-        </div>
 
         <div className="row mb-3">
           <div className="col-lg-6">
@@ -109,13 +95,13 @@ const ReportFirstLayout = ({ singleInternalAuditReport }) => {
           </div>
           <div className="col-lg-6">
             <div>
-              <label className="me-3">Risk Rating:</label>
+              <label className="me-3">Planned Hours:</label>
               <input
                 className="form-control w-100"
-                placeholder="Enter Risk Rating"
+                placeholder="Enter planned Hours"
                 type="text"
                 disabled
-                value={singleInternalAuditReport?.riskRating || "No Rating"}
+                value={singleInternalAuditReport?.plannedHours}
               />
             </div>
           </div>
@@ -129,7 +115,7 @@ const ReportFirstLayout = ({ singleInternalAuditReport }) => {
                   <label className="mt-2">Location:</label>
                   <div>
                     {!singleInternalAuditReport?.subLocationList ||
-                    singleInternalAuditReport?.subLocationList?.length === 0 ? (
+                      singleInternalAuditReport?.subLocationList?.length === 0 ? (
                       <p className="mt-2">No Location To Show</p>
                     ) : (
                       [
@@ -138,7 +124,7 @@ const ReportFirstLayout = ({ singleInternalAuditReport }) => {
                             (item) => item?.locationid?.description
                           )
                         ),
-                      ]?.map((locationItem,index) => {
+                      ]?.map((locationItem, index) => {
                         return (
                           <Chip label={locationItem} key={index} className="mx-2 mb-2" />
                         );
@@ -153,10 +139,54 @@ const ReportFirstLayout = ({ singleInternalAuditReport }) => {
             <label className="mt-2">Sub-Location:</label>
             <div className="">
               {!singleInternalAuditReport?.subLocationList ||
-              singleInternalAuditReport?.subLocationList?.length === 0 ? (
+                singleInternalAuditReport?.subLocationList?.length === 0 ? (
                 <p className="mt-2">No Sub Location To Show</p>
               ) : (
-                singleInternalAuditReport?.subLocationList?.map((item,index) => {
+                singleInternalAuditReport?.subLocationList?.map((item, index) => {
+                  return (
+                    <Chip label={item?.description} className="mx-2 mb-2" key={index} />
+                  );
+                })
+              )}
+            </div>
+          </div>
+        </div>
+        <div className="row mb-3">
+          <div className="col-lg-6">
+            <div>
+              <div className="row mb-3 f-13">
+                <div className="col-lg-6 px-3 d-flex justify-content-between">
+                  <label className="mt-2">Department:</label>
+                  <div>
+                    {!singleInternalAuditReport?.subDepartmentDTOList ||
+                      singleInternalAuditReport?.subDepartmentDTOList?.length === 0 ? (
+                      <p className="mt-2">No Department To Show</p>
+                    ) : (
+                      [
+                        ...new Set(
+                          singleInternalAuditReport?.subDepartmentDTOList?.map(
+                            (item) => item?.department?.description
+                          )
+                        ),
+                      ]?.map((departmentItem, index) => {
+                        return (
+                          <Chip label={departmentItem} key={index} className="mx-2 mb-2" />
+                        );
+                      })
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-lg-6 px-3 d-flex justify-content-between">
+            <label className="mt-2">Sub-Department:</label>
+            <div className="">
+              {!singleInternalAuditReport?.subDepartmentDTOList ||
+                singleInternalAuditReport?.subDepartmentDTOList?.length === 0 ? (
+                <p className="mt-2">No Sub Department To Show</p>
+              ) : (
+                singleInternalAuditReport?.subDepartmentDTOList?.map((item, index) => {
                   return (
                     <Chip label={item?.description} className="mx-2 mb-2" key={index} />
                   );

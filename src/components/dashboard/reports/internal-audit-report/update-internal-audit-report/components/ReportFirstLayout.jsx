@@ -75,26 +75,7 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
           </div>
         </div>
 
-        <div className="row mb-3">
-          <div className="col-lg-12">
-            <div></div>
-          </div>
-        </div>
 
-        <div className="row mb-3">
-          <div className="col-lg-12">
-            <div>
-              <label className="me-3">Planned Hours:</label>
-              <input
-                className="form-control w-100"
-                placeholder="Enter planned Hours"
-                type="text"
-                disabled
-                value={reportObject?.plannedHours}
-              />
-            </div>
-          </div>
-        </div>
 
         <div className="row mb-3">
           <div className="col-lg-6">
@@ -113,13 +94,13 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
           </div>
           <div className="col-lg-6">
             <div>
-              <label className="me-3">Risk Rating:</label>
+              <label className="me-3">Planned Hours:</label>
               <input
                 className="form-control w-100"
-                placeholder="Enter Risk Rating"
+                placeholder="Enter planned Hours"
                 type="text"
                 disabled
-                value={reportObject?.riskRating || "No Rating"}
+                value={reportObject?.plannedHours}
               />
             </div>
           </div>

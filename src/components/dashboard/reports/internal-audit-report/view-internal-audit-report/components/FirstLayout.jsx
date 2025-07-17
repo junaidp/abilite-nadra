@@ -78,21 +78,6 @@ const ReportFirstLayout = ({ singleInternalAuditReport }) => {
         </div>
 
         <div className="row mb-3">
-          <div className="col-lg-12">
-            <div>
-              <label className="me-3">Planned Hours:</label>
-              <input
-                className="form-control w-100"
-                placeholder="Enter planned Hours"
-                type="text"
-                disabled
-                value={singleInternalAuditReport?.plannedHours}
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="row mb-3">
           <div className="col-lg-6">
             <div>
               <label className="me-3   ">Risk Approach:</label>
@@ -110,13 +95,13 @@ const ReportFirstLayout = ({ singleInternalAuditReport }) => {
           </div>
           <div className="col-lg-6">
             <div>
-              <label className="me-3">Risk Rating:</label>
+              <label className="me-3">Planned Hours:</label>
               <input
                 className="form-control w-100"
-                placeholder="Enter Risk Rating"
+                placeholder="Enter planned Hours"
                 type="text"
                 disabled
-                value={singleInternalAuditReport?.riskRating || "No Rating"}
+                value={singleInternalAuditReport?.plannedHours}
               />
             </div>
           </div>

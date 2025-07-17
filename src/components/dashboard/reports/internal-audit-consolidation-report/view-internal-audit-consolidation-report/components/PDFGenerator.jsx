@@ -114,7 +114,9 @@ const styles = StyleSheet.create({
   locationWrap: {
     display: "flex",
     flexDirection: "row",
-    gap: 15,
+    flexWrap: "wrap",
+    gap: 10,
+    justifyContent: "flex-start"
   },
   paragraph: {
     fontSize: 12,
@@ -443,6 +445,36 @@ const PDFGenerator = ({ reportObject }) => {
               <Text style={styles.reportInfoTitle}>Sub Location:</Text>
               <View style={styles.locationWrap}>
                 {reportObject?.subLocationList?.map((item, index) => {
+                  return (
+                    <Text style={styles.reportInfoSubTitle} key={index}>
+                      {item?.description}
+                    </Text>
+                  );
+                })}
+              </View>
+            </View>
+            <View style={styles.reportInfoViewItem}>
+              <Text style={styles.reportInfoTitle}>Department:</Text>
+              <View style={styles.locationWrap}>
+                {[
+                  ...new Set(
+                    reportObject?.subDepartmentDTOList?.map(
+                      (item) => item?.department?.description
+                    )
+                  ),
+                ]?.map((departmentItem, index) => {
+                  return (
+                    <Text style={styles.reportInfoSubTitle} key={index}>
+                      {departmentItem}
+                    </Text>
+                  );
+                })}
+              </View>
+            </View>
+            <View style={styles.reportInfoViewItem}>
+              <Text style={styles.reportInfoTitle}>Sub Department:</Text>
+              <View style={styles.locationWrap}>
+                {reportObject?.subDepartmentDTOList?.map((item, index) => {
                   return (
                     <Text style={styles.reportInfoSubTitle} key={index}>
                       {item?.description}
