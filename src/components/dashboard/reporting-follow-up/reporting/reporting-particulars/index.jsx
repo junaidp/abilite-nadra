@@ -109,18 +109,20 @@ const ReportingParticulars = () => {
           ...item,
           stepNo:
             item?.observationTitle !== "" &&
-            item?.observationTitle &&
-            item?.observationName !== "" &&
-            item?.observationName &&
-            item?.implicationRating !== "" &&
-            item?.implicationRating &&
-            Number(item?.implicationRating) !== 0 &&
-            item?.implication &&
-            item?.implication !== "" &&
-            item?.recommendedActionStep !== "" &&
-            item?.recommendedActionStep &&
-            item?.auditee &&
-            item?.auditee?.name
+              item?.observationTitle &&
+              item?.area !== "" &&
+              item?.area &&
+              item?.observationName !== "" &&
+              item?.observationName &&
+              item?.implicationRating !== "" &&
+              item?.implicationRating &&
+              Number(item?.implicationRating) !== 0 &&
+              item?.implication &&
+              item?.implication !== "" &&
+              item?.recommendedActionStep !== "" &&
+              item?.recommendedActionStep &&
+              item?.auditee &&
+              item?.auditee?.name
               ? 1
               : 0,
         })
@@ -179,11 +181,11 @@ const ReportingParticulars = () => {
       Number(item?.stepNo) === 1 &&
       (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
         Number(user[0]?.userId?.id) ===
-          Number(
-            singleReport?.resourceAllocation?.backupHeadOfInternalAudit?.id
-          ) ||
+        Number(
+          singleReport?.resourceAllocation?.backupHeadOfInternalAudit?.id
+        ) ||
         Number(user[0]?.userId?.id) ===
-          Number(singleReport?.resourceAllocation?.proposedJobApprover?.id))
+        Number(singleReport?.resourceAllocation?.proposedJobApprover?.id))
     ) {
       allowEdit = true;
     }
@@ -375,7 +377,7 @@ const ReportingParticulars = () => {
               className="text-primary"
               onClick={() =>
                 user[0]?.userId?.employeeid?.userHierarchy ===
-                "Management_Auditee"
+                  "Management_Auditee"
                   ? navigate("/audit/dashboard")
                   : navigate("/audit/reportings")
               }
@@ -395,48 +397,48 @@ const ReportingParticulars = () => {
                     {report?.reportingList?.length === 0
                       ? "No Reporting List Found"
                       : report?.reportingList?.map((item, index) => {
-                          return (
-                            <AccordianItem
-                              key={index}
-                              item={item}
-                              handleChange={handleChange}
-                              loading={loading}
-                              allUsers={allUsers?.filter(
-                                (singleUser) =>
-                                  singleUser?.employeeid?.userHierarchy ===
-                                  "Management_Auditee"
-                              )}
-                              singleReport={singleReport}
-                              reportingId={reportingId}
-                              setReport={setReport}
-                              handleSaveToStep1={handleSaveToStep1}
-                              handleSaveToStep2={handleSaveToStep2}
-                              handleSaveStep2={handleSaveStep2}
-                              handleSaveToStep4={handleSaveToStep4}
-                              handleObservationChange={handleObservationChange}
-                              handleManagementCommentsChange={handleManagementCommentsChange}
-                              setCurrentReportingAndFollowUpId={
-                                setCurrentReportingAndFollowUpId
-                              }
-                              setFeedBackDialog={setFeedBackDialog}
-                              setCurrentOpenItem={setCurrentOpenItem}
-                              handleAllowEditSection1={handleAllowEditSection1}
-                              setViewFirstFeedBackDialog={
-                                setViewFirstFeedBackDialog
-                              }
-                              setViewSecondFeedBackDialog={
-                                setViewSecondFeedBackDialog
-                              }
-                              setViewFeedBackItem={setViewFeedBackItem}
-                              handleSaveStep1={handleSaveStep1}
-                              setDeleteFileId={setDeleteFileId}
-                              setShowSubmitDialog={setShowSubmitDialog}
-                              setShowCurrentSubmittedItem={
-                                setShowCurrentSubmittedItem
-                              }
-                            />
-                          );
-                        })}
+                        return (
+                          <AccordianItem
+                            key={index}
+                            item={item}
+                            handleChange={handleChange}
+                            loading={loading}
+                            allUsers={allUsers?.filter(
+                              (singleUser) =>
+                                singleUser?.employeeid?.userHierarchy ===
+                                "Management_Auditee"
+                            )}
+                            singleReport={singleReport}
+                            reportingId={reportingId}
+                            setReport={setReport}
+                            handleSaveToStep1={handleSaveToStep1}
+                            handleSaveToStep2={handleSaveToStep2}
+                            handleSaveStep2={handleSaveStep2}
+                            handleSaveToStep4={handleSaveToStep4}
+                            handleObservationChange={handleObservationChange}
+                            handleManagementCommentsChange={handleManagementCommentsChange}
+                            setCurrentReportingAndFollowUpId={
+                              setCurrentReportingAndFollowUpId
+                            }
+                            setFeedBackDialog={setFeedBackDialog}
+                            setCurrentOpenItem={setCurrentOpenItem}
+                            handleAllowEditSection1={handleAllowEditSection1}
+                            setViewFirstFeedBackDialog={
+                              setViewFirstFeedBackDialog
+                            }
+                            setViewSecondFeedBackDialog={
+                              setViewSecondFeedBackDialog
+                            }
+                            setViewFeedBackItem={setViewFeedBackItem}
+                            handleSaveStep1={handleSaveStep1}
+                            setDeleteFileId={setDeleteFileId}
+                            setShowSubmitDialog={setShowSubmitDialog}
+                            setShowCurrentSubmittedItem={
+                              setShowCurrentSubmittedItem
+                            }
+                          />
+                        );
+                      })}
                   </div>
                 </div>
               </div>

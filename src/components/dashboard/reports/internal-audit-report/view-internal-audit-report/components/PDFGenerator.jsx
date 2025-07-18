@@ -418,7 +418,7 @@ const PDFGenerator = ({ reportObject }) => {
                 })}
               </View>
             </View>
-            <View style={styles.reportInfoViewItem}>
+            {/* <View style={styles.reportInfoViewItem}>
               <Text style={styles.reportInfoTitle}>Department:</Text>
               <View style={styles.locationWrap}>
                 {[
@@ -447,7 +447,7 @@ const PDFGenerator = ({ reportObject }) => {
                   );
                 })}
               </View>
-            </View>
+            </View> */}
           </View>
         </View>
         {/* Page 3 */}
@@ -508,6 +508,14 @@ const PDFGenerator = ({ reportObject }) => {
                 </View>
                 <View style={styles.singleFindSummaryWrap}>
                   <Text style={styles.singleFindSummaryHeader}>
+                    Area
+                  </Text>
+                  <Text style={styles.singleFindSummaryPara}>
+                    {followUpItem?.area}
+                  </Text>
+                </View>
+                <View style={styles.singleFindSummaryWrap}>
+                  <Text style={styles.singleFindSummaryHeader}>
                     Observation
                   </Text>
                   <Html style={styles.singleFindSummaryPara}>
@@ -522,7 +530,7 @@ const PDFGenerator = ({ reportObject }) => {
                     {followUpItem?.implication}
                   </Text>
                 </View>
-                <View style={styles.singleFindSummaryWrap} break>
+                <View style={styles.singleFindSummaryWrap}>
                   <Text style={styles.singleFindSummaryHeader}>
                     Management Comments
                   </Text>

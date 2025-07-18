@@ -9,16 +9,16 @@ const FollowUpItem = ({ item, consolidatedObservationsItem }) => {
         <div className="row mb-3">
           <div className="col-lg-12">
             <label>Observation Title:</label>
-            <input
-              className="form-control w-100"
-              placeholder="Enter Observation Title here"
-              type="text"
-              value={item?.observationTitle}
-              disabled
-            />
+            <p>{item.observationTitle}</p>
           </div>
         </div>
       )}
+      <div className="row mb-3">
+        <div className="col-lg-12">
+          <label>Area:</label>
+          <p>{item.area}</p>
+        </div>
+      </div>
       <div className="mb-3">
         <label>Observation:</label>
         <RichTextEditor initialValue={item?.observationName} />
