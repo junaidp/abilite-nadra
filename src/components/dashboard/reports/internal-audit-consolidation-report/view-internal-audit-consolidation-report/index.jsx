@@ -15,10 +15,8 @@ import RichTextFields from "./components/RichTextElements";
 import KeyFindings from "./components/KeyFindings";
 import AuditExtraFields from "./components/AuditExtraFields";
 import Header from "./components/Header";
-import { PDFViewer } from "@react-pdf/renderer";
 import FileUpload from "./components/FileUpload";
 import ConsolidatedObservations from "./components/ConsolidatedObservataion";
-import PDFGenerator from "./components/PDFGenerator";
 import { groupObservationsByTitle } from "../../../../../config/helper";
 import { decryptString } from "../../../../../config/helper";
 import { useParams } from "react-router-dom";
@@ -28,7 +26,6 @@ const ViewInternalAuditConsolidationReport = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const reportId = decryptString(id);
-  const [viewPdf, setViewPdf] = React.useState(false);
   const [consolidatedObservations, setConsolidatedObservations] =
     React.useState([]);
   const { user } = useSelector((state) => state?.auth);
@@ -94,7 +91,7 @@ const ViewInternalAuditConsolidationReport = () => {
             )}
           {singleInternalAuditReport?.intAuditExtraFieldsList &&
             singleInternalAuditReport?.intAuditExtraFieldsList?.length !==
-              0 && (
+            0 && (
               <AuditExtraFields
                 singleInternalAuditReport={singleInternalAuditReport}
               />
@@ -102,21 +99,6 @@ const ViewInternalAuditConsolidationReport = () => {
           <div className="mt-4">
             <FileUpload item={singleInternalAuditReport} />
           </div>
-          {singleInternalAuditReport?.approved === true && (
-            <div className="row my-3">
-              <div
-                className="btn btn-labeled btn-primary px-3 shadow fitContent"
-                onClick={() => setViewPdf((pre) => !pre)}
-              >
-                {viewPdf ? "Remove Pdf View" : "View Pdf"}
-              </div>
-            </div>
-          )}
-          {viewPdf && singleInternalAuditReport?.approved === true && (
-            <PDFViewer style={{ width: "100%", height: "500px" }}>
-              <PDFGenerator reportObject={singleInternalAuditReport} />
-            </PDFViewer>
-          )}
         </div>
       )}
     </div>

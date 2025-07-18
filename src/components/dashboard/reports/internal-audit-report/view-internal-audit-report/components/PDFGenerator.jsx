@@ -453,14 +453,14 @@ const PDFGenerator = ({ reportObject }) => {
         {/* Page 3 */}
         <View style={styles.page2} break>
           <Text style={styles.contents}>EXECUTIVE SUMMARY </Text>
-          <Html style={styles.singleFindSummaryPara}>
+          <Html style={{ transform: 'scale(0.5)', transformOrigin: 'top left' }}>
             {cleanHtml(reportObject?.executiveSummary)}
           </Html>
         </View>
         {/* Page 4 */}
         <View style={styles.page2} break>
           <Text style={styles.contents}>AUDIT PURPOSE </Text>
-          <Html style={styles.singleFindSummaryPara}>
+          <Html style={{ transform: 'scale(0.5)', transformOrigin: 'top left' }}>
             {cleanHtml(reportObject?.auditPurpose)}
           </Html>
         </View>
@@ -480,7 +480,7 @@ const PDFGenerator = ({ reportObject }) => {
                 return (
                   <View style={styles.findingsSummary} key={index}>
                     <Text style={styles.indexNumber}>Finding {index + 1}</Text>
-                    <Html style={styles.singleFindSummaryPara}>
+                    <Html style={{ transform: 'scale(0.5)', transformOrigin: 'top left' }}>
                       {cleanHtml(item?.observationName)}
                     </Html>
                   </View>
@@ -518,7 +518,7 @@ const PDFGenerator = ({ reportObject }) => {
                   <Text style={styles.singleFindSummaryHeader}>
                     Observation
                   </Text>
-                  <Html style={styles.singleFindSummaryPara}>
+                  <Html style={{ transform: 'scale(0.5)', transformOrigin: 'top left' }}>
                     {cleanHtml(followUpItem?.observationName)}
                   </Html>
                 </View>
@@ -534,7 +534,7 @@ const PDFGenerator = ({ reportObject }) => {
                   <Text style={styles.singleFindSummaryHeader}>
                     Management Comments
                   </Text>
-                  <Html style={styles.singleFindSummaryPara}>
+                  <Html style={{ transform: 'scale(0.5)', transformOrigin: 'top left' }}>
                     {cleanHtml(followUpItem?.managementComments)}
                   </Html>
                 </View>
@@ -606,7 +606,7 @@ const PDFGenerator = ({ reportObject }) => {
         {reportObject?.annexure && reportObject?.annexure !== "" && (
           <View style={styles.page2} break>
             <Text style={styles.contents}>ANNEXURE </Text>
-            <Html style={styles.singleFindSummaryPara}>
+            <Html style={{ transform: 'scale(0.5)', transformOrigin: 'top left' }}>
               {cleanHtml(reportObject?.annexure)}
             </Html>
           </View>
