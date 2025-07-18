@@ -20,6 +20,7 @@ import FileUpload from "./components/FileUpload";
 import { Chip } from "@mui/material";
 import { decryptString } from "../../../../../config/helper";
 import { useParams } from "react-router-dom";
+import LazyLoad from "react-lazyload";
 
 const ViewInternalAuditReport = () => {
   const dispatch = useDispatch();
@@ -78,22 +79,24 @@ const ViewInternalAuditReport = () => {
             </div>
             {singleInternalAuditReport?.reportingList?.map((item, index) => {
               return (
-                <div className="border px-3 py-2  mt-3 rounded" key={index}>
-                  <div className="d-flex items-center justify-content-between">
-                    <div></div>
-                    <Chip
-                      label={
-                        singleInternalAuditReport?.subLocationList?.find(
-                          (subLocation) => subLocation?.id === item?.subLocation
-                        )?.description
-                      }
+                <LazyLoad key={index} height={window.innerHeight * 2} offset={300}>
+                  <div className="border px-3 py-2  mt-3 rounded" key={index}>
+                    <div className="d-flex items-center justify-content-between">
+                      <div></div>
+                      <Chip
+                        label={
+                          singleInternalAuditReport?.subLocationList?.find(
+                            (subLocation) => subLocation?.id === item?.subLocation
+                          )?.description
+                        }
+                      />
+                    </div>
+                    <FollowUpItem
+                      item={item}
+                      consolidatedObservationsItem={false}
                     />
                   </div>
-                  <FollowUpItem
-                    item={item}
-                    consolidatedObservationsItem={false}
-                  />
-                </div>
+                </LazyLoad>
               );
             })}
           </div>

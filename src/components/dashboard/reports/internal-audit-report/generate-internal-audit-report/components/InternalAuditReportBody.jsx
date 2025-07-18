@@ -14,6 +14,7 @@ import KeyKindings from "./KeyFindings";
 import ExtraFields from "./ExtraFields";
 import FileUpload from "./FileUpload";
 import Chip from "@mui/material/Chip";
+import LazyLoad from "react-lazyload";
 
 const InternalAuditReportBody = ({
   reportObject,
@@ -128,19 +129,21 @@ const InternalAuditReportBody = ({
       </div>
       {reportObject?.reportingList?.map((item, index) => {
         return (
-          <div className="border px-3 py-2  mt-3 rounded" key={index}>
-            <div className="d-flex items-center justify-content-between">
-              <div></div>
-              <Chip
-                label={
-                  reportObject?.subLocationList?.find(
-                    (subLocation) => subLocation?.id === item?.subLocation
-                  )?.description
-                }
-              />
+          <LazyLoad key={index} height={window.innerHeight * 2} offset={300}>
+            <div className="border px-3 py-2  mt-3 rounded" key={index}>
+              <div className="d-flex items-center justify-content-between">
+                <div></div>
+                <Chip
+                  label={
+                    reportObject?.subLocationList?.find(
+                      (subLocation) => subLocation?.id === item?.subLocation
+                    )?.description
+                  }
+                />
+              </div>
+              <FollowUpItem item={item} consolidatedObservationsItem={false} />
             </div>
-            <FollowUpItem item={item} consolidatedObservationsItem={false} />
-          </div>
+          </LazyLoad>
         );
       })}
 
@@ -177,9 +180,8 @@ const InternalAuditReportBody = ({
       <div className="row my-3">
         <div className="col-lg-12 d-flex justify-content-between">
           <div
-            className={`btn btn-labeled btn-primary px-3 shadow me-3 fitContent ${
-              addReportLoading && "disabled"
-            }`}
+            className={`btn btn-labeled btn-primary px-3 shadow me-3 fitContent ${addReportLoading && "disabled"
+              }`}
             onClick={handleSaveInternalAuditReport}
           >
             <span className="btn-label me-2">

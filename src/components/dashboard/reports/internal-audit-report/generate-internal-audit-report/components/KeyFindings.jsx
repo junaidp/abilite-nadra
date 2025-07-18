@@ -1,5 +1,5 @@
-import React from "react";
 import RichTextEditor from "../../view-internal-audit-report/components/RichText";
+import LazyLoad from "react-lazyload";
 
 const KeyFindings = ({ reportObject }) => {
   return (
@@ -20,12 +20,14 @@ const KeyFindings = ({ reportObject }) => {
             ?.filter((reportItem) => reportItem?.implicationRating === 1)
             ?.map((item, index) => {
               return (
-                <div className="row mb-3" key={index}>
-                  <div className="col-lg-12">
-                    <label>Finding {index + 1}</label>
-                    <RichTextEditor initialValue={item?.observationName} />
+                <LazyLoad key={index} height={window.innerHeight * 2} offset={300}>
+                  <div className="row mb-3" key={index}>
+                    <div className="col-lg-12">
+                      <label>Finding {index + 1}</label>
+                      <RichTextEditor initialValue={item?.observationName} />
+                    </div>
                   </div>
-                </div>
+                </LazyLoad>
               );
             })
         )}
