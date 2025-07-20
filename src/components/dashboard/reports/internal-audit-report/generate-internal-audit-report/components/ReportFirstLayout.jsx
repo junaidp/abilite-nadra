@@ -163,7 +163,7 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
           </div>
         </div>
 
-        {/* <div className="row mb-3">
+        <div className="row mb-3">
           <div className="col-lg-6">
             <div>
               <div className="row mb-3 f-13">
@@ -216,7 +216,7 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
               )}
             </div>
           </div>
-        </div> */}
+        </div>
       </div>
     </div>
   );

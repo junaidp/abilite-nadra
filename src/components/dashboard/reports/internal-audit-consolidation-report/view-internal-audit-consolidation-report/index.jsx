@@ -33,6 +33,7 @@ const ViewInternalAuditConsolidationReport = () => {
     (state) => state?.consolidationReport
   );
 
+
   React.useEffect(() => {
     if (!reportId) {
       navigate("/audit/internal-audit-consolidation-report");

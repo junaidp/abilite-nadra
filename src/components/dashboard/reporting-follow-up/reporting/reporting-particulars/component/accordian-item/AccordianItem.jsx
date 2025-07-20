@@ -115,7 +115,7 @@ const AccordianItem = ({
               <label>Area:</label>
               <input
                 className="form-control w-100"
-                placeholder="Enter Observation Title here"
+                placeholder="Enter Observation Area here"
                 type="text"
                 value={item?.area}
                 name="area"

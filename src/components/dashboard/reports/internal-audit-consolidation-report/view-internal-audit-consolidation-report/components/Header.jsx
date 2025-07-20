@@ -28,7 +28,17 @@ const Header = ({ singleInternalAuditReport }) => {
                 .utc(singleInternalAuditReport?.reportDate)
                 .format("YYYY-MM-DD")}.pdf`}
             >
-              {() => "Download pdf!"}
+              {({ loading }) =>
+                loading ? (
+                  <button className="btn btn-labeled btn-primary px-3 shadow me-3 fitContent" disabled>
+                    Generating PDF...
+                  </button>
+                ) : (
+                  <button className="btn btn-labeled btn-primary px-3 shadow me-3 fitContent cursor-pointer">
+                    Download PDF
+                  </button>
+                )
+              }
             </PDFDownloadLink>
           </div>
         )}

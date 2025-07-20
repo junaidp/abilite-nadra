@@ -21,6 +21,7 @@ import { Chip } from "@mui/material";
 import { decryptString } from "../../../../../config/helper";
 import { useParams } from "react-router-dom";
 import LazyLoad from "react-lazyload";
+import { groupByArea } from "../../../../../config/helper";
 
 const ViewInternalAuditReport = () => {
   const dispatch = useDispatch();
@@ -31,6 +32,8 @@ const ViewInternalAuditReport = () => {
   const { loading, singleInternalAuditReport } = useSelector(
     (state) => state?.internalAuditReport
   );
+
+  const sortedObservations = groupByArea(singleInternalAuditReport?.reportingList || []).flatMap((observations) => observations.items.flatMap((observation) => observation));
 
   React.useEffect(() => {
     if (!reportId) {
@@ -77,7 +80,7 @@ const ViewInternalAuditReport = () => {
             <div className="col-lg-12 mt-4">
               <div className="heading  fw-bold">All Findings</div>
             </div>
-            {singleInternalAuditReport?.reportingList?.map((item, index) => {
+            {sortedObservations?.map((item, index) => {
               return (
                 <LazyLoad key={index} height={window.innerHeight * 2} offset={300}>
                   <div className="border px-3 py-2  mt-3 rounded" key={index}>

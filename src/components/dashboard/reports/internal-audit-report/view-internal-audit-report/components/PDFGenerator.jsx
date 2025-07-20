@@ -3,6 +3,7 @@ import moment from "moment";
 import { cleanHtml } from "../../../../../../config/helper"
 import font from "../../../../../../font/Poppins-Medium.ttf";
 import Html from "react-pdf-html";
+import { groupByArea } from "../../../../../../config/helper";
 import {
   Document,
   Page,
@@ -253,6 +254,8 @@ const styles = StyleSheet.create({
 });
 
 const PDFGenerator = ({ reportObject }) => {
+  const sortedObservations = groupByArea(reportObject?.reportingList || []).flatMap((observations) => observations.items.flatMap((observation) => observation));
+
   return (
     <Document>
       <Page style={styles.firstPage} size="A4">
@@ -318,7 +321,7 @@ const PDFGenerator = ({ reportObject }) => {
               ALL FINDINGS -----------------------------------------------------
             </Text>
             <View style={styles.overviewFields}>
-              {reportObject?.reportingList?.map((singleItem, index) => {
+              {sortedObservations?.map((singleItem, index) => {
                 return (
                   <Text style={styles.h4} key={index}>
                     {singleItem?.observationTitle.slice(0, 40)}...
@@ -418,7 +421,7 @@ const PDFGenerator = ({ reportObject }) => {
                 })}
               </View>
             </View>
-            {/* <View style={styles.reportInfoViewItem}>
+            <View style={styles.reportInfoViewItem}>
               <Text style={styles.reportInfoTitle}>Department:</Text>
               <View style={styles.locationWrap}>
                 {[
@@ -447,7 +450,7 @@ const PDFGenerator = ({ reportObject }) => {
                   );
                 })}
               </View>
-            </View> */}
+            </View>
           </View>
         </View>
         {/* Page 3 */}
@@ -494,7 +497,7 @@ const PDFGenerator = ({ reportObject }) => {
         </View>
         {/* Page 7 */}
         <View style={styles.page2} break>
-          {reportObject?.reportingList?.map((followUpItem, index) => {
+          {sortedObservations?.map((followUpItem, index) => {
             return (
               <View style={styles.findings} key={index}>
                 <Text style={styles.indexNumber}>Finding {index + 1}</Text>

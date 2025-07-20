@@ -21,17 +21,26 @@ const Header = ({ singleInternalAuditReport }) => {
         {singleInternalAuditReport?.submitted === true && (
           <div>
             <PDFDownloadLink
-              document={
-                <PDFGenerator reportObject={singleInternalAuditReport} />
-              }
+              document={<PDFGenerator reportObject={singleInternalAuditReport} />}
               fileName={`${singleInternalAuditReport?.reportName}_${moment
                 .utc(singleInternalAuditReport?.reportDate)
                 .format("YYYY-MM-DD")}.pdf`}
             >
-              {() => "Download pdf!"}
+              {({ loading }) =>
+                loading ? (
+                  <button className="btn btn-labeled btn-primary px-3 shadow me-3 fitContent" disabled>
+                    Generating PDF...
+                  </button>
+                ) : (
+                  <button className="btn btn-labeled btn-primary px-3 shadow me-3 fitContent cursor-pointer">
+                    Download PDF
+                  </button>
+                )
+              }
             </PDFDownloadLink>
           </div>
         )}
+
       </div>
     </header>
   );

@@ -4,7 +4,7 @@ import React from "react";
 import font from "../../../../../../font/Poppins-Medium.ttf";
 import Html from "react-pdf-html";
 import { cleanHtml } from "../../../../../../config/helper"
-import { groupObservationsByTitle } from "../../../../../../config/helper"
+import { groupObservationsByTitle, groupBySubLocationAndArea } from "../../../../../../config/helper"
 import {
   Document,
   Page,
@@ -278,8 +278,14 @@ const styles = StyleSheet.create({
 });
 
 const PDFGenerator = ({ reportObject }) => {
+
   const [consolidatedObservations, setConsolidatedObservations] =
     React.useState([]);
+
+  const sortedObservations = groupBySubLocationAndArea(reportObject?.reportingsList || []).flatMap(
+    (subLocationGroup) =>
+      subLocationGroup.areas.flatMap((areaGroup) => areaGroup.items)
+  );
 
   React.useEffect(() => {
     if (reportObject?.reportingsList) {
@@ -357,7 +363,7 @@ const PDFGenerator = ({ reportObject }) => {
               ALL FINDINGS -----------------------------------------------------
             </Text>
             <View style={styles.overviewFields}>
-              {reportObject?.reportingsList?.map((singleItem, index) => {
+              {sortedObservations?.map((singleItem, index) => {
                 return (
                   <Text style={styles.h4} key={index}>
                     {singleItem?.observationTitle.slice(0, 40)}...
@@ -533,7 +539,7 @@ const PDFGenerator = ({ reportObject }) => {
         </View>
         {/* Page 7 */}
         <View style={styles.page2} break>
-          {reportObject?.reportingsList?.map((followUpItem, index) => {
+          {sortedObservations?.map((followUpItem, index) => {
             return (
               <View style={styles.findings} key={index}>
                 <Text style={styles.findingTitle}>Finding {index + 1}</Text>

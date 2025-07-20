@@ -161,7 +161,6 @@ const ReportFirstLayout = ({ singleInternalAuditReport }) => {
             </div>
           </div>
         </div>
-        {/* 
         <div className="row mb-3">
           <div className="col-lg-6">
             <div>
@@ -215,7 +214,7 @@ const ReportFirstLayout = ({ singleInternalAuditReport }) => {
               )}
             </div>
           </div>
-        </div> */}
+        </div>
       </div>
     </div>
   );

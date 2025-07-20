@@ -153,6 +153,63 @@ const cleanHtml = (htmlString) => {
   return htmlString.replace(/font-family:[^;"'}]+[;"'}]/gi, "");
 };
 
+const groupBySubLocationAndArea = (list) => {
+  const grouped = list.reduce((acc, item) => {
+    const subLocation = item.subLocation ?? "__MISSING_SUBLOCATION__";
+    const originalArea = item.area?.trim() || "__MISSING_AREA__";
+    const normalizedArea = originalArea.toLowerCase();
+
+    if (!acc[subLocation]) {
+      acc[subLocation] = {};
+    }
+
+    if (!acc[subLocation][normalizedArea]) {
+      acc[subLocation][normalizedArea] = {
+        originalArea,
+        items: [],
+      };
+    }
+
+    acc[subLocation][normalizedArea].items.push(item);
+    return acc;
+  }, {});
+
+  const result = Object.entries(grouped).map(([subLocation, areas]) => ({
+    subLocation:
+      subLocation === "__MISSING_SUBLOCATION__" ? null : Number(subLocation),
+    areas: Object.values(areas).map(({ originalArea, items }) => ({
+      area: originalArea === "__MISSING_AREA__" ? null : originalArea,
+      items,
+    })),
+  }));
+
+  return result;
+};
+
+const groupByArea = (list) => {
+  const grouped = list.reduce((acc, item) => {
+    const originalArea = item.area?.trim() || "__MISSING_AREA__";
+    const normalizedArea = originalArea.toLowerCase();
+
+    if (!acc[normalizedArea]) {
+      acc[normalizedArea] = {
+        originalArea,
+        items: [],
+      };
+    }
+
+    acc[normalizedArea].items.push(item);
+    return acc;
+  }, {});
+
+  const result = Object.values(grouped).map(({ originalArea, items }) => ({
+    area: originalArea === "__MISSING_AREA__" ? null : originalArea,
+    items,
+  }));
+
+  return result;
+};
+
 export {
   handleDownload,
   groupObservationsByTitle,
@@ -165,4 +222,6 @@ export {
   getLastTenYears,
   groupByAreaAndSubject,
   cleanHtml,
+  groupBySubLocationAndArea,
+  groupByArea,
 };

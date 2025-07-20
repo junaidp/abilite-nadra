@@ -15,6 +15,7 @@ import ExtraFields from "./ExtraFields";
 import FileUpload from "./FileUpload";
 import Chip from "@mui/material/Chip";
 import LazyLoad from "react-lazyload";
+import { groupByArea } from "../../../../../../config/helper"
 
 const InternalAuditReportBody = ({
   reportObject,
@@ -31,6 +32,7 @@ const InternalAuditReportBody = ({
   const [extraFieldsArray, setExtraFieldsArray] = React.useState([]);
   const { createExtraFieldsLoading, internalAuditReportExtraFieldsAddSuccess } =
     useSelector((state) => state?.internalAuditReport);
+  const sortedObservations = groupByArea(reportObject?.reportingList || []).flatMap((observations) => observations.items.flatMap((observation) => observation));
 
   function handleUpdateExtraField(item) {
     if (!createExtraFieldsLoading) {
@@ -127,7 +129,7 @@ const InternalAuditReportBody = ({
           <div className="heading  fw-bold">All Findings</div>
         </div>
       </div>
-      {reportObject?.reportingList?.map((item, index) => {
+      {sortedObservations?.map((item, index) => {
         return (
           <LazyLoad key={index} height={window.innerHeight * 2} offset={300}>
             <div className="border px-3 py-2  mt-3 rounded" key={index}>

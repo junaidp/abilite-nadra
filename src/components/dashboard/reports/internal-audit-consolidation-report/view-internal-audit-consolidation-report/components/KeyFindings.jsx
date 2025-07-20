@@ -2,8 +2,14 @@ import RichTextEditor from "./RichText";
 import Chip from "@mui/material/Chip";
 import FollowUpItem from "./FollowUpItem";
 import LazyLoad from 'react-lazyload';
+import { groupBySubLocationAndArea } from "../../../../../../config/helper"
 
 const KeyFindings = ({ reportObject }) => {
+  const sortedObservations = groupBySubLocationAndArea(reportObject?.reportingsList || []).flatMap(
+    (subLocationGroup) =>
+      subLocationGroup.areas.flatMap((areaGroup) => areaGroup.items)
+  );
+
   return (
     <div>
       <div className="col-lg-12 mt-4">
@@ -42,26 +48,28 @@ const KeyFindings = ({ reportObject }) => {
         <div className="heading  fw-bold">All Findings</div>
       </div>
       <div className="mt-3">
-        {reportObject?.reportingsList?.map((singleMainItem, index) => {
-          return (
-            <LazyLoad key={index} height={window.innerHeight * 2} offset={300}>
-              <div key={index} className="border rounded px-3 py-2 mb-3">
-                <div className="d-flex items-center justify-content-between">
-                  <div></div>
-                  <Chip
-                    label={
-                      reportObject?.subLocationList?.find(
-                        (subLocation) =>
-                          subLocation?.id === singleMainItem?.subLocation
-                      )?.description
-                    }
-                  />
+        {
+          sortedObservations?.map((singleMainItem, index) => {
+            return (
+              <LazyLoad key={index} height={window.innerHeight * 2} offset={300}>
+                <div className="border rounded px-3 py-2 mb-3">
+                  <div className="d-flex items-center justify-content-between">
+                    <div></div>
+                    <Chip
+                      label={
+                        reportObject?.subLocationList?.find(
+                          (subLocation) =>
+                            subLocation?.id === singleMainItem?.subLocation
+                        )?.description
+                      }
+                    />
+                  </div>
+                  <FollowUpItem item={singleMainItem} consolidatedObservationsItem={true} />
                 </div>
-                <FollowUpItem item={singleMainItem} consolidatedObservationsItem={false} />
-              </div>
-            </LazyLoad>
-          );
-        })}
+              </LazyLoad>
+            );
+          })
+        }
       </div>
     </div>
   );

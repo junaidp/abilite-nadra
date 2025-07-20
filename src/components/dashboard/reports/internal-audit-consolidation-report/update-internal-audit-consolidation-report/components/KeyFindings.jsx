@@ -2,8 +2,13 @@ import RichTextEditor from "../../view-internal-audit-consolidation-report/compo
 import Chip from "@mui/material/Chip";
 import FollowUpItem from "./FollowUpItem";
 import LazyLoad from 'react-lazyload';
+import { groupBySubLocationAndArea } from "../../../../../../config/helper";
 
 const KeyFindings = ({ reportObject }) => {
+  const sortedObservations = groupBySubLocationAndArea(reportObject?.reportingsList || []).flatMap(
+    (subLocationGroup) =>
+      subLocationGroup.areas.flatMap((areaGroup) => areaGroup.items)
+  );
   return (
     <div>
       <div className="col-lg-12 mt-4">
@@ -42,7 +47,7 @@ const KeyFindings = ({ reportObject }) => {
         <div className="heading  fw-bold">All Findings</div>
       </div>
       <div className="mt-3">
-        {reportObject?.reportingsList?.map((singleMainItem, index) => {
+        {sortedObservations?.map((singleMainItem, index) => {
           return (
             <LazyLoad key={index} height={window.innerHeight * 2} offset={300}>
               <div
