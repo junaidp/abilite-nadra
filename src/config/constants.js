@@ -1,4 +1,4 @@
-const baseUrl = "https://healthy-wolf-certainly.ngrok-free.app";
+const baseUrl = "https://abiliteserver.xyz";
 const secretKey = "u&>d_JEw#=v]OU@";
 
 export { baseUrl, secretKey };

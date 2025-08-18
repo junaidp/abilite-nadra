@@ -109,29 +109,28 @@ const Table = ({
                 (Number(item?.initiatorTLEB) ===
                   Number(user[0]?.userId?.employeeid?.id) ||
                   user[0]?.userId?.employeeid?.userHierarchy === "IAH"))) && (
-              <div>
-                {item?.editable === false && (
-                  <i
-                    className="fa fa-edit f-18 cursor-pointer"
-                    onClick={() => handleEditEditable(item)}
-                  ></i>
-                )}
-                {item?.editable === true && (
-                  <div
-                    className={`btn btn-labeled btn-primary shadow ${
-                      loading &&
-                      Number(currentId) === Number(item?.id) &&
-                      "disabled"
-                    }`}
-                    onClick={() => handleEdit(item)}
-                  >
-                    {loading && Number(currentId) === Number(item?.id)
-                      ? "Loading..."
-                      : "Save"}
-                  </div>
-                )}
-              </div>
-            )}
+                <div>
+                  {item?.editable === false && (
+                    <i
+                      className="fa fa-edit f-18 cursor-pointer"
+                      onClick={() => handleEditEditable(item)}
+                    ></i>
+                  )}
+                  {item?.editable === true && (
+                    <div
+                      className={`btn btn-labeled btn-primary shadow ${loading &&
+                        Number(currentId) === Number(item?.id) &&
+                        "disabled"
+                        }`}
+                      onClick={() => handleEdit(item)}
+                    >
+                      {loading && Number(currentId) === Number(item?.id)
+                        ? "Loading..."
+                        : "Save"}
+                    </div>
+                  )}
+                </div>
+              )}
             {item?.approved === false && (
               <i
                 className="fa fa-trash text-danger f-18 cursor-pointer"
@@ -144,16 +143,12 @@ const Table = ({
             {(allAuditPlanSummary[index]?.submitted === false ||
               allAuditPlanSummary[index]?.completed === false) &&
               allAuditPlanSummary[index]?.priority &&
-              allAuditPlanSummary[index]?.priority !== "" &&
-              allAuditPlanSummary[index]?.threeYearsAgo !== null &&
-              allAuditPlanSummary[index]?.twoYearsAgo !== null &&
-              allAuditPlanSummary[index]?.lastYear !== null && (
+              allAuditPlanSummary[index]?.priority !== "" && (
                 <div
-                  className={`btn btn-labeled btn-primary shadow ${
-                    loading &&
+                  className={`btn btn-labeled btn-primary shadow ${loading &&
                     Number(currentId) === Number(item?.id) &&
                     "disabled"
-                  }`}
+                    }`}
                   onClick={() => handleSubmit(item)}
                 >
                   {loading && Number(currentId) === Number(item?.id)
@@ -167,18 +162,14 @@ const Table = ({
               allAuditPlanSummary[index]?.locked === false &&
               allAuditPlanSummary[index]?.priority &&
               allAuditPlanSummary[index]?.priority !== "" &&
-              allAuditPlanSummary[index]?.threeYearsAgo !== null &&
-              allAuditPlanSummary[index]?.twoYearsAgo !== null &&
-              allAuditPlanSummary[index]?.lastYear !== null &&
               (Number(item?.initiatorTLEB) ===
                 Number(user[0]?.userId?.employeeid?.id) ||
                 user[0]?.userId?.employeeid?.userHierarchy === "IAH") && (
                 <div
-                  className={`btn btn-labeled btn-primary shadow ${
-                    loading &&
+                  className={`btn btn-labeled btn-primary shadow ${loading &&
                     Number(currentId) === Number(item?.id) &&
                     "disabled"
-                  }`}
+                    }`}
                   onClick={() => handleApprove(item)}
                 >
                   {loading && Number(currentId) === Number(item?.id)
@@ -193,9 +184,6 @@ const Table = ({
               allAuditPlanSummary[index]?.locked === false &&
               allAuditPlanSummary[index]?.priority &&
               allAuditPlanSummary[index]?.priority !== "" &&
-              allAuditPlanSummary[index]?.threeYearsAgo !== null &&
-              allAuditPlanSummary[index]?.twoYearsAgo !== null &&
-              allAuditPlanSummary[index]?.lastYear !== null &&
               (Number(item?.initiatorTLEB) ===
                 Number(user[0]?.userId?.employeeid?.id) ||
                 user[0]?.userId?.employeeid?.userHierarchy === "IAH") && (

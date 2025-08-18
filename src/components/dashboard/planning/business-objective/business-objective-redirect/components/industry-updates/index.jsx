@@ -47,36 +47,34 @@ const CompanyUpdates = ({
               onChange={handleChange}
               disabled={
                 planingEngagementSingleObject?.locked === true ||
-                (planingEngagementSingleObject?.complete === true &&
-                  planingEngagementSingleObject?.locked === false &&
-                  user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
+                  (planingEngagementSingleObject?.complete === true &&
+                    planingEngagementSingleObject?.locked === false &&
+                    user[0]?.userId?.employeeid?.userHierarchy !== "IAH")
                   ? true
                   : false
               }
-              className={`form-control w-100 min-height-100 ${
-                object?.industryUpdates?.length >= 2000 && "error-border"
-              }`}
-              maxLength="2000"
+              className={`form-control w-100 min-height-100 ${object?.industryUpdates?.length >= 5000 && "error-border"
+                }`}
+              maxLength="5000"
             ></textarea>
             <p className="word-limit-info label-text">
-              Maximum 2000 characters
+              Maximum 5000 characters
             </p>
             {(planingEngagementSingleObject?.complete === false ||
               (planingEngagementSingleObject?.complete === true &&
                 planingEngagementSingleObject?.locked === false &&
                 user[0]?.userId?.employeeid?.userHierarchy === "IAH")) && (
-              <button
-                className={`btn btn-labeled btn-primary px-3 mb-2  shadow float-start ${
-                  loading && "disabled"
-                }`}
-                onClick={handleUpdateBusinessObjective}
-              >
-                <span className="btn-label me-2">
-                  <i className="fa fa-check-circle"></i>
-                </span>
-                {loading ? "loading..." : "Save"}
-              </button>
-            )}
+                <button
+                  className={`btn btn-labeled btn-primary px-3 mb-2  shadow float-start ${loading && "disabled"
+                    }`}
+                  onClick={handleUpdateBusinessObjective}
+                >
+                  <span className="btn-label me-2">
+                    <i className="fa fa-check-circle"></i>
+                  </span>
+                  {loading ? "loading..." : "Save"}
+                </button>
+              )}
           </div>
         </div>
       </div>

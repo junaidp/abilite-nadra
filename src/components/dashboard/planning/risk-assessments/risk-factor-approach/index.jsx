@@ -266,7 +266,6 @@ const RiskFactorApproach = () => {
               </div>
             </div>
           )}
-
           <div className="section-header my-3 row">
             <div className="align-items-center col-lg-10 text-start d-flex">
               <a
@@ -286,17 +285,17 @@ const RiskFactorApproach = () => {
                 performRiskAssessmentObject?.riskAssessments?.locked ===
                 false &&
                 user[0]?.userId?.employeeid?.userHierarchy === "IAH")) && (
-                <div className="col-lg-2 float-end d-flex justify-content-end align-items-center">
-                  <div
-                    className="btn btn-labeled btn-primary px-3 shadow"
-                    onClick={() => setShowAddRiskFactorDialog(true)}
-                  >
-                    <span className="btn-label me-2">
-                      <i className="fa fa-plus-circle"></i>
-                    </span>
-                    Specific Risk
+                  <div className="col-lg-2 float-end d-flex justify-content-end align-items-center">
+                    <div
+                      className="btn btn-labeled btn-primary px-3 shadow"
+                      onClick={() => setShowAddRiskFactorDialog(true)}
+                    >
+                      <span className="btn-label me-2">
+                        <i className="fa fa-plus-circle"></i>
+                      </span>
+                      Specific Risk
+                    </div>
                   </div>
-                </div>
               )}
           </div>
           <div>
@@ -311,7 +310,9 @@ const RiskFactorApproach = () => {
                           <th colSpan={4} className="bg-white"></th>{" "}
                           {/* Empty columns to align with previous columns */}
                           <th
-                            colSpan={riskFactors?.length || 0}
+                            colSpan={data?.riskAssessmentList[0]?.
+                              riskFactorValues
+                              ?.length || 0}
                             className="text-center"
                           >
                             Controls (1 being the strongest - 5 the weakest)
@@ -326,9 +327,10 @@ const RiskFactorApproach = () => {
                           <th>Specific Risk</th>
                           <th>Weight</th>
                           <th>Impact Score</th>
-                          {riskFactors?.map((riskFactor, index) => (
-                            <th key={index}>{riskFactor?.description}</th>
-                          ))}
+                          {data?.riskAssessmentList[0]?.
+                            riskFactorValues?.map((riskFactor, index) => (
+                              <th key={index}>{riskFactor?.name}</th>
+                            ))}
                           <th>Probability</th>
                           <th>Risk Score</th>
                           {performRiskAssessmentObject?.riskAssessments
