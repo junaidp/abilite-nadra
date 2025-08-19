@@ -27,8 +27,8 @@ const RichTextEditor = ({
       toolbarAdaptive: false,
       readonly:
         singleItem?.remarks === "1" ||
-        singleItem?.remarks === "3" ||
-        handleAllowEdit() === false
+          singleItem?.remarks === "3" ||
+          handleAllowEdit() === false
           ? true
           : false,
       spellCheck: true,
@@ -40,52 +40,52 @@ const RichTextEditor = ({
         },
       ]),
       askBeforePasteHTML: true,
-      buttons: [
-        "bold",
-        "|",
-        "strikethrough",
-        "|",
-        "underline",
-        "|",
-        "italic",
-        "|",
-        "ul",
-        "|",
-        "ol",
-        "|",
-        "table",
-        "|",
-        "font",
-        "|",
-        "fontsize",
-        "|",
-        "paragraph",
-        "|",
-      ],
+      // buttons: [
+      //   "bold",
+      //   "|",
+      //   "strikethrough",
+      //   "|",
+      //   "underline",
+      //   "|",
+      //   "italic",
+      //   "|",
+      //   "ul",
+      //   "|",
+      //   "ol",
+      //   "|",
+      //   "table",
+      //   "|",
+      //   "font",
+      //   "|",
+      //   "fontsize",
+      //   "|",
+      //   "paragraph",
+      //   "|",
+      // ],
 
-      buttonsXS: [
-        "bold",
-        "|",
-        "strikethrough",
-        "|",
-        "underline",
-        "|",
-        "italic",
-        "|",
-        "ul",
-        "|",
-        "ol",
-        "|",
-        "table",
-        "|",
-        "font",
-        "|",
-        "fontsize",
-        "|",
-        "paragraph",
-        "|",
-      ],
-
+      // buttonsXS: [
+      //   "bold",
+      //   "|",
+      //   "strikethrough",
+      //   "|",
+      //   "underline",
+      //   "|",
+      //   "italic",
+      //   "|",
+      //   "ul",
+      //   "|",
+      //   "ol",
+      //   "|",
+      //   "table",
+      //   "|",
+      //   "font",
+      //   "|",
+      //   "fontsize",
+      //   "|",
+      //   "paragraph",
+      //   "|",
+      // ],
+      removeButtons: ['about'],
       events: {},
       textIcons: false,
     }),
@@ -107,7 +107,7 @@ const RichTextEditor = ({
       config={config}
       tabIndex={1}
       value={content}
-      onChange={(newContent) => {}}
+      onChange={(newContent) => { }}
       onBlur={handleEditorChange}
     />
   );
