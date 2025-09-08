@@ -47,7 +47,7 @@ const Editors = ({ data }) => {
           <label htmlFor="exampleFormControlTextarea1" className="form-label">
             Summary of risks.
           </label>
-          <Editor initialValue={data?.summaryRisk} editable="editable" />
+          <Editor initialValue={data?.summaryRisk} editable="false" />
           <p className="word-limit-info mb-0">Maximum 1500 words</p>
         </div>
       </div>

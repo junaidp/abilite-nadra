@@ -183,7 +183,7 @@ const PlanningReport = () => {
               <thead className="bg-secondary text-white">
                 <tr>
                   <th className="w-80">Sr. #</th>
-                  <th className="w-80">Id</th>
+                  <th className="w-80">Year</th>
                   <th>Report Name</th>
                   <th>Report Date</th>
                   <th>Created By</th>
@@ -215,7 +215,7 @@ const PlanningReport = () => {
                       return (
                         <tr className="h-40" key={index}>
                           <td>{(page - 1) * itemsPerPage + index + 1}</td>
-                          <td>{item?.id}</td>
+                          <td>{item?.year}</td>
                           <td>{item?.reportTitle}</td>
                           <td>
                             {moment.utc(item?.createdTime).format("DD-MM-YY")}

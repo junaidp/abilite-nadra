@@ -374,7 +374,7 @@ const StartScheduling = () => {
           {singleJobSchedulingObject?.natureThrough ===
             "Compliance Checklist" ? (
             <div className="row ">
-              <div className="col-lg-5 mb-3">
+              <div className="col-lg-6 mb-3">
                 <MultiSelect
                   names={allLocations?.map((all) => all?.description)}
                   title="Locations"
@@ -384,7 +384,7 @@ const StartScheduling = () => {
                   singleJobSchedulingObject={singleJobSchedulingObject}
                 />
               </div>
-              <div className="col-lg-5 mb-3">
+              <div className="col-lg-6 mb-3">
                 <MultiSelect
                   title="Sub Locations"
                   names={allSubLocations?.map((all) => all?.description)}
@@ -394,7 +394,7 @@ const StartScheduling = () => {
                   singleJobSchedulingObject={singleJobSchedulingObject}
                 />
               </div>
-              <div className="col-lg-2 mb-3">
+              {/* <div className="col-lg-2 mb-3">
                 <div className="form-check">
                   <input
                     className="form-check-input"
@@ -422,11 +422,11 @@ const StartScheduling = () => {
                     Seprate job
                   </label>
                 </div>
-              </div>
+              </div> */}
             </div>
           ) : (
             <div className="row ">
-              <div className="col-lg-5 mb-3">
+              <div className="col-lg-6 mb-3">
                 <LocationSelect
                   names={allLocations?.map((all) => all?.description)}
                   title="Locations"
@@ -436,7 +436,7 @@ const StartScheduling = () => {
                   singleJobSchedulingObject={singleJobSchedulingObject}
                 />
               </div>
-              <div className="col-lg-5 mb-3">
+              <div className="col-lg-6 mb-3">
                 <LocationSelect
                   title="Sub Locations"
                   names={allSubLocations?.map((all) => all?.description)}
@@ -446,7 +446,7 @@ const StartScheduling = () => {
                   singleJobSchedulingObject={singleJobSchedulingObject}
                 />
               </div>
-              <div className="col-lg-2 mb-3">
+              {/* <div className="col-lg-2 mb-3">
                 <div className="form-check">
                   <input
                     className="form-check-input"
@@ -474,7 +474,7 @@ const StartScheduling = () => {
                     Seprate job
                   </label>
                 </div>
-              </div>
+              </div> */}
             </div>
           )}
           <div className="mb-3">

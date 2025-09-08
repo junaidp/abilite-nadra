@@ -94,30 +94,7 @@ const DashboardHome = () => {
                         />
                       </div>
                     </div>
-                    <div className="special-audit-wrap dashboard-wrapper">
-                      <div className="col-xl-4 col-sm-6 col-12 flex-1">
-                        <InfoCard
-                          name="Jobs By Special Project/Audit"
-                          icon={
-                            <i className="fa fa-calculator primary fa-2xl f-40"></i>
-                          }
-                          value={dataInfo?.jobsBySpecialAudit}
-                        />
-                      </div>
-
-                      <div className="col-xl-4 col-sm-6 col-12 flex-1">
-                        <InfoCard
-                          name="Jobs In Progress"
-                          icon={
-                            <i className="fa fa-tasks primary fa-2xl f-40"></i>
-                          }
-                          value={
-                            dataInfo?.jobsInProgress + "/" + dataInfo?.totalJobs
-                          }
-                        />
-                      </div>
-                    </div>
-                    <div className="dashboard-wrapper">
+                     <div className="dashboard-wrapper">
                       <div className="col-xl-4 col-sm-6 col-12 flex-1">
                         <InfoCard
                           name="Jobs Completed"
@@ -135,6 +112,29 @@ const DashboardHome = () => {
                             <i className="fa fa-exclamation-triangle primary fa-2xl f-40"></i>
                           }
                           value={dataInfo?.exceptionsImplemented}
+                        />
+                      </div>
+                    </div>
+                    <div className="special-audit-wrap dashboard-wrapper">
+                      {/* <div className="col-xl-4 col-sm-6 col-12 flex-1">
+                        <InfoCard
+                          name="Jobs By Special Project/Audit"
+                          icon={
+                            <i className="fa fa-calculator primary fa-2xl f-40"></i>
+                          }
+                          value={dataInfo?.jobsBySpecialAudit}
+                        />
+                      </div> */}
+
+                      <div className="col-xl-4 col-sm-6 col-12 flex-1">
+                        <InfoCard
+                          name="Jobs In Progress"
+                          icon={
+                            <i className="fa fa-tasks primary fa-2xl f-40"></i>
+                          }
+                          value={
+                            dataInfo?.jobsInProgress + "/" + dataInfo?.totalJobs
+                          }
                         />
                       </div>
                     </div>

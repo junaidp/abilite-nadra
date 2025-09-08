@@ -1,13 +1,15 @@
 import React from "react";
 import AddSettingsRCMDialog from "../../../../modals/add-settings-rcm-dialog";
 import UpdateSettinsRCMDialog from "../../../../modals/update-settings-rcm-dialog";
-import { setupGetAllSubProcess } from "../../../../../global-redux/reducers/settings/process/slice";
+import { setupGetAllSubProcess, setupGetAllProcess } from "../../../../../global-redux/reducers/settings/process/slice";
 import { useSelector, useDispatch } from "react-redux";
 import GetRCM from "./components/GetRCM";
 import {
   setupGetInitialAllRiskControlMatrix,
   resetRCMAddSuccess,
   setupGetAllRiskControlMatrix,
+  setupUploadRCM,
+  resetRCMUploadAddSuccess
 } from "../../../../../global-redux/reducers/settings/risk-control-matrix/slice";
 import { toast } from "react-toastify";
 import { CircularProgress } from "@mui/material";
@@ -24,9 +26,11 @@ const RCMLibraray = ({ userHierarchy, userRole, currentSettingOption }) => {
   let { allProcess, allSubProcess } = useSelector(
     (state) => state?.settingsProcess
   );
+  const fileInputRef = React.useRef(null);
+
   const { company } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
-  const { rcmAddSuccess, loading, initialLoading, allRCM } = useSelector(
+  const { rcmAddSuccess, loading, initialLoading, allRCM, rcmUploadAddSuccess } = useSelector(
     (state) => state?.settingsRiskControlMatrix
   );
   const [processId, setProcessId] = React.useState("");
@@ -41,6 +45,49 @@ const RCMLibraray = ({ userHierarchy, userRole, currentSettingOption }) => {
   const [showRCMControlDialog, setShowRCMControlDialog] = React.useState(false);
   const [showRCMProgramDialog, setShowRCMProgramDialog] = React.useState(false);
   const [updatedRCMId, setUpdatedRCMId] = React.useState("");
+  const [selectedFile, setSelectedFile] = React.useState(null);
+
+
+  // Upload Starts
+
+  const handleDownload = () => {
+    const fileUrl = "/sample-file-rcm.xlsx";
+    const link = document.createElement("a");
+    link.href = fileUrl;
+    link.download = "sample-file-rcm.xlsx";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+    }
+  };
+
+
+  const onApiCall = async (file) => {
+    if (!loading) {
+      const companyId = user[0]?.company?.find(
+        (item) => item?.companyName === company
+      )?.id;
+      const formData = new FormData();
+      formData.append("file", file);
+      dispatch(setupUploadRCM({ formData, companyId }));
+    }
+  };
+
+  const handleFileUpload = () => {
+    if (selectedFile) {
+      onApiCall(selectedFile);
+    } else {
+      toast.error("No file selected.");
+    }
+  };
+  // Upload Ends
 
   function handleShowObjective() {
     if (allRCM?.length === 0 || riskControlMatrix?.length === 0) {
@@ -156,6 +203,25 @@ const RCMLibraray = ({ userHierarchy, userRole, currentSettingOption }) => {
   }, [rcmAddSuccess]);
 
   React.useEffect(() => {
+    if (rcmUploadAddSuccess) {
+      const companyId = user[0]?.company?.find(
+        (item) => item?.companyName === company
+      )?.id;
+      setProcessId("");
+      setSubProcessId("");
+      setUpdatedRCMId("");
+      setRiskControlMatrix([]);
+      setSelectedFile(null);
+      dispatch(setupGetAllProcess(companyId))
+      if (fileInputRef.current) {
+        fileInputRef.current.value = null;
+      }
+      dispatch(resetRCMUploadAddSuccess());
+
+    }
+  }, [rcmUploadAddSuccess]);
+
+  React.useEffect(() => {
     if (processId && processId !== "") {
       setSubProcessId("");
       dispatch(setupGetAllSubProcess(`?processId=${Number(processId)}`));
@@ -241,6 +307,59 @@ const RCMLibraray = ({ userHierarchy, userRole, currentSettingOption }) => {
           </div>
         </div>
       )}
+
+      {/*  */}
+      {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+        <div>
+          <div className="row mb-3">
+            <div className="col-lg-6">
+              <div className="sub-heading mb-4 fw-bold">File Upload</div>
+            </div>
+            <div className="col-lg-6 d-flex h-40 flex-end">
+              <button
+                className="btn btn-labeled btn-primary shadow"
+                onClick={handleDownload}
+              >
+                Download Sample Risk Control Matrix Upload File
+              </button>
+            </div>
+          </div>
+          <div className="row position-relative mx-1 pointer">
+            <div className="col-lg-12 text-center settings-form">
+              <form>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  accept=".xlsx, .xls, .pdf, .txt"
+                />
+                <p className="mb-0">Click in this area.</p>
+              </form>
+            </div>
+          </div>
+          <p className="my-2">
+            {selectedFile?.name ? selectedFile?.name : "Select file"}
+          </p>
+          <div className="row my-3">
+            <div className="col-lg-12 text-end">
+              <button
+                className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${loading && "disabled"
+                  }`}
+                onClick={handleFileUpload}
+              >
+                <span className="btn-label me-2">
+                  <i className="fa fa-save"></i>
+                </span>
+                {loading ? "Loading..." : "Upload"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {(userRole === "ADMIN" || userHierarchy === "IAH") && (
+        <hr />
+      )}
+      {/*  */}
       <div className="row">
         <div className="col-lg-12">
           <div className="sub-heading  fw-bold">RCM Library</div>

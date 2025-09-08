@@ -259,3 +259,21 @@ export const planningReportFileDownload = async (data, thunkAPI) => {
     return thunkAPI.rejectWithValue(error);
   }
 };
+
+export const getResourceDetails = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.get(
+      `${baseUrl}/planningreport/report/detailResources?reportId=${data?.reportId}`,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};

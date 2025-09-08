@@ -20,7 +20,7 @@ import ApproveDialog from "./components/ApproveDialog";
 import FeedBackDialog from "../../components/FeedBackDialog";
 import ViewThirdFeedBackDialog from "../../components/ThirdFeedBack";
 import SubmitDialog from "./components/SubmitDialog";
-import { decryptString } from "../../../../../config/helper";
+import { decryptString, convertToBase64 } from "../../../../../config/helper";
 import { useParams } from "react-router-dom";
 
 const FollowUpParticulars = () => {
@@ -57,12 +57,31 @@ const FollowUpParticulars = () => {
         reportingList: pre?.reportingList?.map((singleItem) =>
           Number(singleItem?.id) === Number(id)
             ? {
-                ...singleItem,
-                followUp: {
-                  ...singleItem?.followUp,
-                  [event?.target?.name]: event?.target?.value,
-                },
-              }
+              ...singleItem,
+              followUp: {
+                ...singleItem?.followUp,
+                [event?.target?.name]: event?.target?.value,
+              },
+            }
+            : singleItem
+        ),
+      };
+    });
+  }
+
+  function handleFinalCommentsChange(id, content) {
+    setReport((pre) => {
+      return {
+        ...pre,
+        reportingList: pre?.reportingList?.map((singleItem) =>
+          Number(singleItem?.id) === Number(id)
+            ? {
+              ...singleItem,
+              followUp: {
+                ...singleItem?.followUp,
+                finalComments: content,
+              },
+            }
             : singleItem
         ),
       };
@@ -80,7 +99,7 @@ const FollowUpParticulars = () => {
               : false,
           finalComments:
             item?.followUp?.recommendationsImplemented.toString() === "true"
-              ? item?.followUp?.finalComments
+              ? convertToBase64(item?.followUp?.finalComments)
               : "",
         })
       );
@@ -92,6 +111,7 @@ const FollowUpParticulars = () => {
       dispatch(
         setupUpdateFollowUp({
           ...item?.followUp,
+          finalComments: convertToBase64(item?.followUp?.finalComments),
           testInNextYear:
             item?.followUp?.testInNextYear.toString() === "true" ? true : false,
         })
@@ -125,11 +145,11 @@ const FollowUpParticulars = () => {
       item?.stepNo === 6 &&
       (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
         Number(user[0]?.userId?.id) ===
-          Number(
-            singleReport?.resourceAllocation?.backupHeadOfInternalAudit?.id
-          ) ||
+        Number(
+          singleReport?.resourceAllocation?.backupHeadOfInternalAudit?.id
+        ) ||
         Number(user[0]?.userId?.id) ===
-          Number(singleReport?.resourceAllocation?.proposedJobApprover?.id) ||
+        Number(singleReport?.resourceAllocation?.proposedJobApprover?.id) ||
         singleReport?.resourceAllocation?.resourcesList?.find(
           (singleResource) =>
             Number(singleResource?.id) === Number(user[0]?.userId?.id)
@@ -262,7 +282,7 @@ const FollowUpParticulars = () => {
               className="text-primary"
               onClick={() =>
                 user[0]?.userId?.employeeid?.userHierarchy ===
-                "Management_Auditee"
+                  "Management_Auditee"
                   ? navigate("/audit/dashboard")
                   : navigate("/audit/follow-up")
               }
@@ -287,40 +307,41 @@ const FollowUpParticulars = () => {
                     )?.length === 0
                       ? "No Reporting List Found"
                       : report?.reportingList
-                          ?.filter((singleItem) => singleItem?.stepNo >= 5)
-                          ?.map((item, index) => {
-                            return (
-                              <AccordianItem
-                                key={index}
-                                index={index}
-                                item={item}
-                                handleChange={handleChange}
-                                handleSave={handleSave}
-                                handleSaveToStep7={handleSaveToStep7}
-                                loading={loading}
-                                singleReport={singleReport}
-                                followUpId={followUpId}
-                                setCurrentReportingAndFollowUpId={
-                                  setCurrentReportingAndFollowUpId
-                                }
-                                setFeedBackDialog={setFeedBackDialog}
-                                handleAllowEditLastSection={
-                                  handleAllowEditLastSection
-                                }
-                                setViewThirdFeedBackDialog={
-                                  setViewThirdFeedBackDialog
-                                }
-                                setViewFeedBackItem={setViewFeedBackItem}
-                                handleShowTestInNextYear={
-                                  handleShowTestInNextYear
-                                }
-                                setShowSubmitDialog={setShowSubmitDialog}
-                                setShowCurrentSubmittedItem={
-                                  setShowCurrentSubmittedItem
-                                }
-                              />
-                            );
-                          })}
+                        ?.filter((singleItem) => singleItem?.stepNo >= 5)
+                        ?.map((item, index) => {
+                          return (
+                            <AccordianItem
+                              key={index}
+                              index={index}
+                              handleFinalCommentsChange={handleFinalCommentsChange}
+                              item={item}
+                              handleChange={handleChange}
+                              handleSave={handleSave}
+                              handleSaveToStep7={handleSaveToStep7}
+                              loading={loading}
+                              singleReport={singleReport}
+                              followUpId={followUpId}
+                              setCurrentReportingAndFollowUpId={
+                                setCurrentReportingAndFollowUpId
+                              }
+                              setFeedBackDialog={setFeedBackDialog}
+                              handleAllowEditLastSection={
+                                handleAllowEditLastSection
+                              }
+                              setViewThirdFeedBackDialog={
+                                setViewThirdFeedBackDialog
+                              }
+                              setViewFeedBackItem={setViewFeedBackItem}
+                              handleShowTestInNextYear={
+                                handleShowTestInNextYear
+                              }
+                              setShowSubmitDialog={setShowSubmitDialog}
+                              setShowCurrentSubmittedItem={
+                                setShowCurrentSubmittedItem
+                              }
+                            />
+                          );
+                        })}
                   </div>
                 </div>
               </div>

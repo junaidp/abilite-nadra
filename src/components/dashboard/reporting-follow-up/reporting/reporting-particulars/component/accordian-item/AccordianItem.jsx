@@ -357,10 +357,11 @@ const AccordianItem = ({
               {item?.stepNo === 2 &&
                 Number(user[0]?.userId?.id) ===
                 Number(currentItem?.auditee?.id) &&
-                currentItem?.managementComments !== "" &&
-                currentItem?.managementComments &&
-                currentItem?.implementationDate !== "" &&
-                currentItem?.implementationDate && (
+                // currentItem?.managementComments !== "" &&
+                // currentItem?.managementComments &&
+                // currentItem?.implementationDate !== "" &&
+                // currentItem?.implementationDate && (
+                (
                   <div className="d-flex align-items-center place-end">
                     <button
                       className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${loading && "disabled"

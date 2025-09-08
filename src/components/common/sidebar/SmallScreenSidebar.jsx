@@ -57,6 +57,7 @@ export default function SmallScreenSidebar() {
     dispatch(setupLogoutUser());
     localStorage.removeItem("user");
     localStorage.removeItem("company");
+    localStorage.removeItem("userCompany");
     localStorage.removeItem("year");
     dispatch(changeAuthUser([]));
     navigate("/login");

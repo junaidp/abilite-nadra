@@ -2,6 +2,7 @@ import React from "react";
 import moment from "moment";
 import RichTextEditor from "./RichText";
 import FileAttachement from "./Attachments";
+import { convertFromBase64 } from "../../../../../../config/helper";
 
 const FollowUpItem = ({ item, consolidatedObservationsItem }) => {
   return (
@@ -93,18 +94,7 @@ const FollowUpItem = ({ item, consolidatedObservationsItem }) => {
       {item?.followUp?.recommendationsImplemented.toString() === "true" && (
         <div className="mb-3">
           <label>Final Comments:</label>
-          <textarea
-            className="form-control "
-            placeholder="Enter Reason"
-            id="exampleFor"
-            rows="3"
-            value={item?.followUp?.finalComments || ""}
-            name="finalComments"
-            disabled
-          ></textarea>
-          <label className="word-limit-info label-text">
-            Maximum 1500 words
-          </label>
+          <RichTextEditor initialValue={convertFromBase64(item?.followUp?.finalComments)} />
         </div>
       )}
 

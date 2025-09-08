@@ -13,6 +13,7 @@ import { setupGetAllFiles } from "../../../global-redux/reducers/settings/suppor
 import { handleReset } from "../../../global-redux/reducers/settings/risk-control-matrix/slice";
 import { resetAuthValues } from "../../../global-redux/reducers/auth/slice";
 import UserManagementDialog from "../../modals/add-user-dialog/index";
+import CompanyLogo from "./components/company-logo/index.jsx";
 import {
   setupGetFinancialQuantifiableYesForCompany,
   setupGetFinancialQuantifiableNoForCompany,
@@ -235,6 +236,19 @@ const AuditSettings = () => {
                 >
                   Checklist Management
                 </button>
+                {userRole === "ADMIN" && (
+                  <button
+                    className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
+                    id="nav-logo-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#nav-logo"
+                    type="button"
+                    role="tab"
+                    aria-controls="nav-logo"
+                  >
+                    Company Logo
+                  </button>
+                )}
                 <button
                   className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
                   id="nav-fiscal-tab"
@@ -351,7 +365,7 @@ const AuditSettings = () => {
             </nav>
           </div>
 
-          <div className="col-lg-10 min-h-120 min-w-500">
+          <div className="col-lg-10 min-h-160 min-w-500">
             <div
               className="tab-content p-3 mt-4 border bg-light"
               id="nav-tabContent"
@@ -402,6 +416,10 @@ const AuditSettings = () => {
                   setUpdateUserObject={setUpdateUserObject}
                   currentSettingOption={currentSettingOption}
                   updateUserObject={updateUserObject}
+                />
+              )}
+              {userRole === "ADMIN" && (
+                <CompanyLogo                 
                 />
               )}
 

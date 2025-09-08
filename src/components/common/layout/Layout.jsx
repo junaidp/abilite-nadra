@@ -39,6 +39,7 @@ const Layout = () => {
     dispatch(setupLogoutUser());
     localStorage.removeItem("user");
     localStorage.removeItem("company");
+    localStorage.removeItem("userCompany");
     localStorage.removeItem("year");
     dispatch(changeAuthUser([]));
     navigate("/login");
@@ -58,6 +59,7 @@ const Layout = () => {
     dispatch(setupLogoutUser());
     localStorage.removeItem("user");
     localStorage.removeItem("company");
+    localStorage.removeItem("userCompany");
     localStorage.removeItem("year");
     dispatch(changeAuthUser([]));
     navigate("/login");
@@ -65,9 +67,10 @@ const Layout = () => {
 
   useIdleTimer({
     onIdle,
-    timeout: 240000, // 4 minutes in milliseconds
+    timeout: 900000, // 15 minutes in milliseconds
     throttle: 500,
   });
+
 
   React.useEffect(() => {
     const checkTokenExpiration = () => {
@@ -97,7 +100,7 @@ const Layout = () => {
       <div className="flex">
         {user[0]?.userId?.role[0]?.name === "USER" &&
           user[0]?.userId?.employeeid?.userHierarchy !==
-            "Management_Auditee" && <Sidebar />}
+          "Management_Auditee" && <Sidebar />}
         {user[0]?.userId?.role[0]?.name === "ADMIN" && (
           <div className="p-4 w-100">
             <h2 className="text-center main-color">Welcome {user[0]?.name}</h2>
@@ -106,7 +109,7 @@ const Layout = () => {
         )}
         {user[0]?.userId?.role[0]?.name === "USER" &&
           user[0]?.userId?.employeeid?.userHierarchy ==
-            "Management_Auditee" && (
+          "Management_Auditee" && (
             <div className="p-4 w-100">
               <Routes>
                 <Route path="dashboard" element={<ManagementAuditeeView />} />
@@ -123,7 +126,7 @@ const Layout = () => {
           )}
         {user[0]?.userId?.role[0]?.name === "USER" &&
           user[0]?.userId?.employeeid?.userHierarchy !==
-            "Management_Auditee" && (
+          "Management_Auditee" && (
             <div
               className="row"
               id={showSidebar ? "SideComponents" : "SideComponentsFullWidth"}

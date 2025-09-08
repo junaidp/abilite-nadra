@@ -6,6 +6,7 @@ import {
   resetReportAddSuccess,
   setupUpdateSingleReport,
   setupGetSingleUpdatedReport,
+  setupGetResourceDetails
 } from "../../../../../global-redux/reducers/reports/planing-report/slice";
 import {
   changeActiveLink,
@@ -15,6 +16,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
 import Editors from "./components/editors/index";
 import HeadingTable from "./components/heading-table";
+import ResourcesTables from "../components/resources";
 import PlanningReportFileUpload from "./components/file-upload";
 import { decryptString } from "../../../../../config/helper";
 import { useParams } from "react-router-dom";
@@ -24,7 +26,7 @@ const UpdatePlanningReport = () => {
   const { id } = useParams();
   const reportId = decryptString(id);
   const { user } = useSelector((state) => state?.auth);
-  const { loading, updateLoading, singleReportObject, reportAddSuccess } =
+  const { loading, updateLoading, singleReportObject, reportAddSuccess, resources } =
     useSelector((state) => state?.planningReport);
 
   const [values, setValues] = React.useState({
@@ -82,7 +84,11 @@ const UpdatePlanningReport = () => {
 
   React.useEffect(() => {
     if (user[0]?.token && reportId) {
-      dispatch(setupGetSingleReport(Number(reportId)));
+      const fetchDataSequentially = async () => {
+        await dispatch(setupGetSingleReport(Number(reportId)));
+        await dispatch(setupGetResourceDetails({ reportId: Number(reportId) }));
+      };
+      fetchDataSequentially();
     }
   }, [dispatch]);
 
@@ -116,10 +122,15 @@ const UpdatePlanningReport = () => {
               </span>
               {updateLoading ? "Loading..." : "Save Report"}
             </button>
-
           </div>
           <hr />
-          <HeadingTable data={singleReportObject} reportId={reportId} />
+          {resources && resources.length > 0 &&
+            <>
+              <ResourcesTables resources={resources} />
+              <hr />
+            </>
+          }
+          {/* <HeadingTable data={singleReportObject} reportId={reportId} /> */}
           <PlanningReportFileUpload
             reportId={reportId}
             item={singleReportObject}

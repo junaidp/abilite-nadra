@@ -332,3 +332,21 @@ export const getAllSubProcess = async (data, thunkAPI) => {
     return thunkAPI.rejectWithValue(error);
   }
 };
+
+export const uploadRCM = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.post(
+      `${baseUrl}/configurations/RCMLibrary/bulkUpload?companyId=${data.companyId}`,
+      data.formData,
+      {
+        headers: {
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};

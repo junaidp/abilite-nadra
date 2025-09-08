@@ -248,6 +248,9 @@ body {
 .min-h-120 {
   min-height: 120vh !important;
 }
+.min-h-160 {
+  min-height: 130vh !important;
+}
 
 .pb-55 {
   padding-bottom: 55px !important;

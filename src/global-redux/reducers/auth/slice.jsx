@@ -11,7 +11,10 @@ import {
   logoutUser,
   landingCall,
   getSystemNotifications,
-  saveCompany
+  saveCompany,
+  getCurrentUser,
+  saveCompanyLogo,
+  saveUserLogo
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
@@ -65,6 +68,13 @@ export const setupLoginUser = createAsyncThunk(
   "auth/loginUser",
   async (data, thunkAPI) => {
     return loginUser(data, thunkAPI);
+  }
+);
+
+export const setupGetCurrentUser = createAsyncThunk(
+  "auth/getCurrentUser",
+  async (data, thunkAPI) => {
+    return getCurrentUser(data, thunkAPI);
   }
 );
 
@@ -137,6 +147,20 @@ export const setupSaveCompany = createAsyncThunk(
   "auth/saveCompany",
   async (data, thunkAPI) => {
     return saveCompany(data, thunkAPI);
+  }
+);
+
+export const setupSaveCompanyLogo = createAsyncThunk(
+  "auth/saveCompanyLogo",
+  async (data, thunkAPI) => {
+    return saveCompanyLogo(data, thunkAPI);
+  }
+);
+
+export const setupSaveUserLogo = createAsyncThunk(
+  "auth/saveUserLogo",
+  async (data, thunkAPI) => {
+    return saveUserLogo(data, thunkAPI);
   }
 );
 
@@ -288,6 +312,50 @@ export const slice = createSlice({
         state.authSuccess = true;
       })
       .addCase(setupLoginUser.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Get Current User
+    builder
+      .addCase(setupGetCurrentUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetCurrentUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userCompany = action.payload?.data?.userId?.company[0] || {}
+        localStorage.setItem("userCompany", JSON.stringify(action.payload?.data?.userId?.company[0]))
+        state.user = [
+          {
+            tfa: action?.payload?.data?.userId?.tfa,
+            name: action.payload?.data?.userId?.name,
+            token: action.payload?.data?.jwt,
+            email: action.payload?.data?.email,
+            company: action.payload?.data?.userId?.company,
+            id: action.payload?.data?.userId?.id,
+            userId: action.payload?.data?.userId,
+          },
+        ];
+        localStorage.setItem(
+          "user",
+          JSON.stringify([
+            {
+              tfa: action?.payload?.data?.userId?.tfa,
+              name: action.payload?.data?.userId?.name,
+              token: action.payload?.data?.jwt,
+              email: action.payload?.data?.email,
+              company: action.payload?.data?.userId?.company,
+              id: action.payload?.data?.userId?.id,
+              userId: action.payload?.data?.userId,
+            },
+          ])
+        );
+        state.authSuccess = true;
+      })
+      .addCase(setupGetCurrentUser.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);
@@ -480,6 +548,38 @@ export const slice = createSlice({
 
       })
       .addCase(setupSaveCompany.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    builder
+      .addCase(setupSaveCompanyLogo.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupSaveCompanyLogo.fulfilled, (state) => {
+        state.loading = false;
+        toast.success("Company Logo Updated Successfully")
+      })
+      .addCase(setupSaveCompanyLogo.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    builder
+      .addCase(setupSaveUserLogo.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupSaveUserLogo.fulfilled, (state) => {
+        state.loading = false;
+        toast.success("User Logo Updated Successfully")
+      })
+      .addCase(setupSaveUserLogo.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);

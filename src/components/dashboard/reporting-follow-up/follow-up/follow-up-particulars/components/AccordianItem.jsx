@@ -1,8 +1,7 @@
-import React from "react";
 import moment from "moment";
 import { useSelector } from "react-redux";
-import RichTextEditor from "../../../../../../components/common/rich-text";
 import FollowUpFileUpload from "./FileUpload";
+import RichTextEditor from "./RichText";
 import { Chip } from "@mui/material";
 
 const AccordianItem = ({
@@ -21,6 +20,7 @@ const AccordianItem = ({
   handleShowTestInNextYear,
   setShowSubmitDialog,
   setShowCurrentSubmittedItem,
+  handleFinalCommentsChange
 }) => {
   const { user } = useSelector((state) => state?.auth);
 
@@ -183,22 +183,14 @@ const AccordianItem = ({
           {item?.followUp?.recommendationsImplemented.toString() === "true" && (
             <div className="mb-3">
               <label>Final Comments:</label>
-              <textarea
-                className="form-control "
-                placeholder="Enter Reason"
-                id="exampleFor"
-                rows="3"
-                value={item?.followUp?.finalComments || ""}
-                name="finalComments"
-                onChange={(event) => handleChange(event, item?.id)}
-                disabled={
-                  handleAllowEditLastSection(item) === true ? false : true
-                }
-                maxLength="500"
-              ></textarea>
-              <p className="word-limit-info label-text mb-2">
-                Maximum 500 characters
-              </p>
+              <RichTextEditor
+                onContentChange={handleFinalCommentsChange}
+                initialValue={item?.followUp?.finalComments}
+                id={item?.id}
+                editable={handleAllowEditLastSection(item) === true ? "true" : "false"}
+                singleReport={singleReport}
+                item={item}
+              />
             </div>
           )}
           {item?.stepNo >= 6 && (

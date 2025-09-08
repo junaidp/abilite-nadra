@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setupApproveReporting } from "../../../../../../global-redux/reducers/reporting/slice";
+import { convertToBase64 } from "../../../../../../config/helper";
 
 const ApproveDialog = ({ setApproveDialog, currentApproveItem }) => {
   const dispatch = useDispatch();
@@ -10,7 +11,12 @@ const ApproveDialog = ({ setApproveDialog, currentApproveItem }) => {
 
   function handleApproveFollowUp() {
     if (!loading) {
-      dispatch(setupApproveReporting({ ...currentApproveItem, stepNo: 7 }));
+      dispatch(setupApproveReporting({
+        ...currentApproveItem, stepNo: 7, followUp: {
+          ...currentApproveItem?.followUp,
+          finalComments: convertToBase64(currentApproveItem?.followUp?.finalComments)
+        },
+      }));
     }
   }
 

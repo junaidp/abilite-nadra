@@ -1,5 +1,6 @@
 import axios from "axios";
 import { baseUrl } from "../../../config/constants";
+import { setupGetCurrentUser } from "./slice"
 export const registerUser = async (data, thunkAPI) => {
   try {
     let props = await axios.post(`${baseUrl}/account/registerUser`, data?.data);
@@ -215,6 +216,63 @@ export const saveCompany = async (data, thunkAPI) => {
         },
       }
     );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
+export const getCurrentUser = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.post(
+      `${baseUrl}/account/user/validate`,
+      null,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
+export const saveCompanyLogo = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.post(
+      `${baseUrl}/account/company/uploadLogo?companyId=${data?.companyId}`,
+      data.body,
+      {
+        headers: {
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    thunkAPI.dispatch(setupGetCurrentUser());
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
+export const saveUserLogo = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.post(
+      `${baseUrl}/account/user/profileImg/upload?userId=${data?.userId}`,
+      data.body,
+      {
+        headers: {
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    thunkAPI.dispatch(setupGetCurrentUser());
     return props.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);

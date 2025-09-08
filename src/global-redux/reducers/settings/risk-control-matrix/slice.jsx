@@ -19,6 +19,7 @@ import {
   deleteRCMProgram,
   getAllProcess,
   getAllSubProcess,
+  uploadRCM
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -27,6 +28,7 @@ const initialState = {
   initialLoading: false,
   allRCM: [],
   rcmAddSuccess: false,
+  rcmUploadAddSuccess: false,
   allProcess: [],
   allSubProcess: [],
 };
@@ -152,12 +154,22 @@ export const setupGetAllSubProcess = createAsyncThunk(
   }
 );
 
+export const setupUploadRCM = createAsyncThunk(
+  "rcm/uploadRCM",
+  async (data, thunkAPI) => {
+    return uploadRCM(data, thunkAPI);
+  }
+);
+
 export const slice = createSlice({
   name: "rcm",
   initialState,
   reducers: {
     resetRCMAddSuccess: (state) => {
       state.rcmAddSuccess = false;
+    },
+    resetRCMUploadAddSuccess: (state) => {
+      state.rcmUploadAddSuccess = false;
     },
     handleReset: (state) => {
       state.allRCM = [];
@@ -525,10 +537,28 @@ export const slice = createSlice({
           toast.error("An Error has occurred");
         }
       });
+
+    builder
+      .addCase(setupUploadRCM.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupUploadRCM.fulfilled, (state) => {
+        state.loading = false;
+        state.rcmUploadAddSuccess = true;
+        toast.success("File Uploaded Successfully");
+      })
+      .addCase(setupUploadRCM.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
   },
 });
 
-export const { resetRCMAddSuccess, handleReset, handleResetProcessData } =
+export const { resetRCMAddSuccess, handleReset, handleResetProcessData, resetRCMUploadAddSuccess } =
   slice.actions;
 
 export default slice.reducer;

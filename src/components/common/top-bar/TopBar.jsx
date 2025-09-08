@@ -13,7 +13,6 @@ import {
   setupLogoutUser,
   setupGetSystemNotifications,
 } from "../../../global-redux/reducers/auth/slice";
-import nadraLogo from "../../../assets/hyphen.jpeg";
 import {
   changeCompany,
   changeYear,
@@ -31,6 +30,13 @@ const TopBar = () => {
   let { user, notifications, notificationLoading } = useSelector(
     (state) => state.auth
   );
+  const defaultProfilePic = user?.[0]?.userId?.
+    imgFileData
+  const profilePicturePreview =
+    `data:image/jpeg;base64,${defaultProfilePic}` || ""
+  const defaultLogoBase64 = user?.[0]?.company?.[0]?.logo?.fileData || "";
+  const logoPreview =
+    `data:image/jpeg;base64,${defaultLogoBase64}` || ""
   const { showSidebar, company, year } = useSelector((state) => state.common);
   const [showNotification, setShowNotification] = React.useState(false);
   const [showUserProfile, setShowUserProfile] = React.useState(false);
@@ -66,6 +72,7 @@ const TopBar = () => {
     dispatch(setupLogoutUser());
     localStorage.removeItem("user");
     localStorage.removeItem("company");
+    localStorage.removeItem("userCompany");
     localStorage.removeItem("year");
     dispatch(changeAuthUser([]));
     navigate("/login");
@@ -97,7 +104,7 @@ const TopBar = () => {
         </div>
         {user[0]?.userId?.role[0]?.name === "USER" &&
           user[0]?.userId?.employeeid?.userHierarchy !==
-            "Management_Auditee" && (
+          "Management_Auditee" && (
             <button
               className="btn  ml-100"
               onClick={() => dispatch(changeShowSidebar(!showSidebar))}
@@ -116,14 +123,14 @@ const TopBar = () => {
           )}
         {(user[0]?.userId?.role[0]?.name === "ADMIN" ||
           user[0]?.userId?.employeeid?.userHierarchy ===
-            "Management_Auditee") && (
-          <button
-            className="btn btn-outline-primary   my-3 logoutOut-btn-dashboard"
-            onClick={handleLogout}
-          >
-            Logout
-          </button>
-        )}
+          "Management_Auditee") && (
+            <button
+              className="btn btn-outline-primary   my-3 logoutOut-btn-dashboard"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
+          )}
 
         <div
           className="collapse navbar-collapse justify-content-end"
@@ -138,7 +145,10 @@ const TopBar = () => {
               aria-controls="offcanvasWithBothOptions"
             ></a>
             <ul className="navbar-nav flex-row ms-auto align-items-center justify-content-center">
-              <img src={nadraLogo} className="h-60 w-60 py-1 px-2" />
+              {
+                defaultLogoBase64 &&
+                <img src={logoPreview} className="py-1 px-2 object-fit-contain" style={{ height: "80px", width: "100px" }} />
+              }
               <select
                 className="form-select me-4 h-40 w-200"
                 aria-label="Default select example"
@@ -259,8 +269,8 @@ const TopBar = () => {
                                   <span className="d-block wrap-text">
                                     {notification?.createdDate
                                       ? moment
-                                          .utc(notification?.createdDate)
-                                          .format("DD-MM-YYYY HH:mm:ss")
+                                        .utc(notification?.createdDate)
+                                        .format("DD-MM-YYYY HH:mm:ss")
                                       : "null"}
                                   </span>
                                 </div>
@@ -307,7 +317,7 @@ const TopBar = () => {
                     <div className="d-flex align-items-center">
                       <div className="user-profile-img w-32">
                         <img
-                          src={user1}
+                          src={defaultProfilePic ? profilePicturePreview : user1}
                           className="rounded-circle"
                           width="35"
                           height="35"
@@ -328,7 +338,7 @@ const TopBar = () => {
                       </div>
                       <div className="d-flex align-items-center py-9 border-bottom">
                         <img
-                          src={user1}
+                          src={defaultProfilePic ? profilePicturePreview : user1}
                           className="rounded-circle"
                           width="80"
                           height="80"
@@ -352,7 +362,7 @@ const TopBar = () => {
                       <div className="message-body d-grid hidden">
                         {user[0]?.userId?.role[0]?.name === "USER" &&
                           user[0]?.userId?.employeeid?.userHierarchy !==
-                            "Management_Auditee" && (
+                          "Management_Auditee" && (
                             <Link
                               to="/audit/user/profile"
                               className="py-8  mt-8 d-flex align-items-center"

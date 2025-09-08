@@ -115,22 +115,31 @@ const RiskFactorApproach = () => {
     setData((pre) => {
       return {
         ...pre,
-        riskAssessmentList: pre?.riskAssessmentList?.map((riskAssessment) =>
-          Number(riskAssessment?.id) === Number(riskAssessmentId)
-            ? {
-              ...riskAssessment,
-              riskFactorValues: riskAssessment?.riskFactorValues?.map(
-                (riskFactor) =>
-                  Number(riskFactor?.id) === Number(riskFactorId)
-                    ? {
-                      ...riskFactor,
-                      [event.target.name]: event.target.name === "comments" ? event.target.value : Number(event.target.value),
-                    }
-                    : riskFactor
-              ),
-            }
-            : riskAssessment
-        ),
+        riskAssessmentList: pre?.riskAssessmentList?.map((riskAssessment) => {
+          if (Number(riskAssessment?.id) !== Number(riskAssessmentId)) {
+            return riskAssessment;
+          }
+
+          // calculate total sum once (replace current value with new one for the selected riskFactor)
+          const newValues = riskAssessment?.riskFactorValues?.map((rf) =>
+            Number(rf?.id) === Number(riskFactorId)
+              ? { ...rf, [event.target.name]: event.target.name === "comments" ? event.target.value : Number(event.target.value) }
+              : rf
+          );
+
+          // sum only value1 fields
+          const sum = newValues.reduce((acc, rf) => acc + Number(rf?.value1 || 0), 0);
+
+          if (event.target.name === "value1" && sum > 100) {
+            toast.error("Total control weight cannot exceed the value of 100");
+            return riskAssessment; // keep old state, don't update
+          }
+
+          return {
+            ...riskAssessment,
+            riskFactorValues: newValues,
+          };
+        }),
       };
     });
   }
@@ -285,17 +294,17 @@ const RiskFactorApproach = () => {
                 performRiskAssessmentObject?.riskAssessments?.locked ===
                 false &&
                 user[0]?.userId?.employeeid?.userHierarchy === "IAH")) && (
-                  <div className="col-lg-2 float-end d-flex justify-content-end align-items-center">
-                    <div
-                      className="btn btn-labeled btn-primary px-3 shadow"
-                      onClick={() => setShowAddRiskFactorDialog(true)}
-                    >
-                      <span className="btn-label me-2">
-                        <i className="fa fa-plus-circle"></i>
-                      </span>
-                      Specific Risk
-                    </div>
+                <div className="col-lg-2 float-end d-flex justify-content-end align-items-center">
+                  <div
+                    className="btn btn-labeled btn-primary px-3 shadow"
+                    onClick={() => setShowAddRiskFactorDialog(true)}
+                  >
+                    <span className="btn-label me-2">
+                      <i className="fa fa-plus-circle"></i>
+                    </span>
+                    Specific Risk
                   </div>
+                </div>
               )}
           </div>
           <div>

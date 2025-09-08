@@ -14,6 +14,7 @@ import {
   planningReportFileUpload,
   planningReportFileDelete,
   planningReportFileDownload,
+  getResourceDetails
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -25,6 +26,7 @@ const initialState = {
   users: [],
   updateLoading: false,
   totalNoOfRecords: 0,
+  resources: []
 };
 
 export const setupSaveReport = createAsyncThunk(
@@ -117,6 +119,13 @@ export const setupPlanningReportFileDownload = createAsyncThunk(
   "planningReport/planningReportFileDownload",
   async (data, thunkAPI) => {
     return planningReportFileDownload(data, thunkAPI);
+  }
+);
+
+export const setupGetResourceDetails = createAsyncThunk(
+  "planningReport/getResourceDetails",
+  async (data, thunkAPI) => {
+    return getResourceDetails(data, thunkAPI);
   }
 );
 
@@ -383,6 +392,25 @@ export const slice = createSlice({
       )
       .addCase(setupPlanningReportFileDownload.rejected, (state, action) => {
         state.updateLoading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    builder
+      .addCase(setupGetResourceDetails.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(
+        setupGetResourceDetails.fulfilled,
+        (state, { payload }) => {
+          state.loading = false;
+          state.resources = payload?.data?.resources || [];
+        }
+      )
+      .addCase(setupGetResourceDetails.rejected, (state, action) => {
+        state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);
         } else {

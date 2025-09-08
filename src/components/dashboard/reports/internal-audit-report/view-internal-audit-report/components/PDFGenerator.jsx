@@ -1,4 +1,3 @@
-import logo from "../../../../../../assets/hyphen.jpeg";
 import moment from "moment";
 import { cleanHtml } from "../../../../../../config/helper"
 import font from "../../../../../../font/Poppins-Medium.ttf";
@@ -253,14 +252,14 @@ const styles = StyleSheet.create({
   },
 });
 
-const PDFGenerator = ({ reportObject }) => {
+const PDFGenerator = ({ reportObject, logoPreview }) => {
   const sortedObservations = groupByArea(reportObject?.reportingList || []).flatMap((observations) => observations.items.flatMap((observation) => observation));
 
   return (
     <Document>
       <Page style={styles.firstPage} size="A4">
         <View style={styles.header}>
-          <Image src={logo} style={styles.logo} />
+          <Image src={logoPreview} style={styles.logo} />
         </View>
         <View style={styles.pdfHeaderWrap}>
           <Text style={styles.title}>Internal Audit Report</Text>
@@ -279,7 +278,7 @@ const PDFGenerator = ({ reportObject }) => {
       <Page size="A4" wrap style={{ paddingBottom: "10%" }}>
         <View style={styles.pageStarter} fixed wrap>
           <Text style={styles.h7}>{reportObject?.reportName}</Text>
-          <Image src={logo} style={styles.pageStarterLogo} />
+          <Image src={logoPreview} style={styles.pageStarterLogo} />
         </View>
 
         {/* Page 1 */}

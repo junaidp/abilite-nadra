@@ -5,6 +5,7 @@ import {
   setupSubmitReportingInFollowUp,
 } from "../../../../../../global-redux/reducers/reporting/slice";
 import { toast } from "react-toastify";
+import { convertToBase64 } from "../../../../../../config/helper";
 
 const SubmitDialog = ({ item, setShowSubmitDialog }) => {
   const dispatch = useDispatch();
@@ -36,7 +37,7 @@ const SubmitDialog = ({ item, setShowSubmitDialog }) => {
             item?.followUp?.recommendationsImplemented.toString() === "true",
           finalComments:
             item?.followUp?.recommendationsImplemented.toString() === "true"
-              ? item?.followUp?.finalComments
+              ? convertToBase64(item?.followUp?.finalComments)
               : "",
         })
       ).unwrap();
@@ -45,6 +46,10 @@ const SubmitDialog = ({ item, setShowSubmitDialog }) => {
         setupSubmitReportingInFollowUp({
           ...item,
           stepNo: 6,
+          followUp: {
+            ...item?.followUp,
+            finalComments: convertToBase64(item?.followUp?.finalComments)
+          },
         })
       ).unwrap();
     } catch (error) {
