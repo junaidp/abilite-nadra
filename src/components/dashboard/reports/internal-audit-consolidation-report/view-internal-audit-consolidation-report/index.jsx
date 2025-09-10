@@ -12,12 +12,11 @@ import { CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import ReportFirstLayout from "./components/FirstLayout";
 import RichTextFields from "./components/RichTextElements";
-import KeyFindings from "./components/KeyFindings";
 import AuditExtraFields from "./components/AuditExtraFields";
 import Header from "./components/Header";
 import FileUpload from "./components/FileUpload";
 import ConsolidatedObservations from "./components/ConsolidatedObservataion";
-import { groupObservationsByTitle } from "../../../../../config/helper";
+import { groupObservationsBySubLocationAndArea } from "../../../../../config/helper";
 import { decryptString } from "../../../../../config/helper";
 import { useParams } from "react-router-dom";
 
@@ -59,7 +58,7 @@ const ViewInternalAuditConsolidationReport = () => {
   React.useEffect(() => {
     if (singleInternalAuditReport?.reportingsList) {
       setConsolidatedObservations(
-        groupObservationsByTitle(singleInternalAuditReport?.reportingsList)
+        groupObservationsBySubLocationAndArea(singleInternalAuditReport?.reportingsList)
       );
     }
   }, [singleInternalAuditReport]);
@@ -82,7 +81,6 @@ const ViewInternalAuditConsolidationReport = () => {
           <RichTextFields
             singleInternalAuditReport={singleInternalAuditReport}
           />
-          <KeyFindings reportObject={singleInternalAuditReport} />
           {consolidatedObservations &&
             consolidatedObservations?.length !== 0 && (
               <ConsolidatedObservations

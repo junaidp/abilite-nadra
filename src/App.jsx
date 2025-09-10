@@ -51,6 +51,7 @@ import InternalAuditConsolidationReport from "./pages/dashboard/reports/internal
 import GenerateInternalAuditConsolidationReport from "./pages/dashboard/reports/internal-audit-consolidation-report/generate-internal-audit-consolidation-report/GenerateInternalAuditConsolidationReport";
 import ViewInternalAuditConsolidationReport from "./pages/dashboard/reports/internal-audit-consolidation-report/view-internal-audit-consolidation-report/ViewInternalAuditConsolidationReport";
 import UpdateInternalAuditConsolidationReport from "./pages/dashboard/reports/internal-audit-consolidation-report/update-internal-audit-consolidation-report/UpdateInternalAuditConsolidationReport";
+import DownloadDetailedAuditReport from "./components/dashboard/reports/internal-audit-consolidation-report/download-report/index"
 import ProtectedRoute from "./components/common/layout/ProtectedRoute";
 import Analytics from "./pages/dashboard/analytics/Analaytics";
 import NotFound from "./components/common/not-found/index";
@@ -65,6 +66,7 @@ const App = () => {
       dispatch(changeAuthUser(authUser));
     }
   }, [dispatch]);
+
 
   useEffect(() => {
     if (user[0]?.token && user[0]?.company[0]?.companyName) {
@@ -198,6 +200,7 @@ const App = () => {
             />
             <Route path="audit-exception-report" element={<AuditException />} />
             <Route path="audit-analytics" element={<Analytics />} />
+            <Route path="download-detailed-audit-report" element={<DownloadDetailedAuditReport />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

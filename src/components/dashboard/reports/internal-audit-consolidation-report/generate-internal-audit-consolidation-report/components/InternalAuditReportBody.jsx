@@ -9,7 +9,6 @@ import {
   setupUpdateExtraField,
 } from "../../../../../../global-redux/reducers/reports/consolidation-report/slice";
 import { v4 as uuidv4 } from "uuid";
-import KeyKindings from "./KeyFindings";
 import ExtraFields from "./ExtraFields";
 import FileUpload from "./FileUpload";
 import ConsolidatedObservations from "../components/ConsolidatedObservataion";
@@ -116,10 +115,6 @@ const InternalAuditReportBody = ({
       </div>
       {/* Editors Ends */}
 
-      {/* Findings Start */}
-      <KeyKindings reportObject={reportObject} />
-
-      {/* Extra Fields Starts */}
       {consolidatedObservations && consolidatedObservations?.length !== 0 && (
         <ConsolidatedObservations
           consolidatedObservations={consolidatedObservations}
@@ -156,9 +151,8 @@ const InternalAuditReportBody = ({
       <div className="row my-3">
         <div className="col-lg-12 d-flex justify-content-between">
           <div
-            className={`btn btn-labeled btn-primary px-3 shadow me-3 fitContent ${
-              addReportLoading && "disabled"
-            }`}
+            className={`btn btn-labeled btn-primary px-3 shadow me-3 fitContent ${addReportLoading && "disabled"
+              }`}
             onClick={handleSaveInternalAuditReport}
           >
             <span className="btn-label me-2">

@@ -16,7 +16,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import InternalAuditReportBody from "./components/InternalAuditReportBody";
 import Header from "./components/Header";
-import { groupObservationsByTitle } from "../../../../../config/helper";
+import { groupObservationsBySubLocationAndArea } from "../../../../../config/helper";
 import { decryptString } from "../../../../../config/helper";
 import { useParams } from "react-router-dom";
 
@@ -175,7 +175,7 @@ const UpdateInternalAuditConsolidationReport = () => {
   React.useEffect(() => {
     if (singleInternalAuditReport?.reportingsList) {
       setConsolidatedObservations(
-        groupObservationsByTitle(singleInternalAuditReport?.reportingsList)
+        groupObservationsBySubLocationAndArea(singleInternalAuditReport?.reportingsList)
       );
     }
   }, [singleInternalAuditReport]);

@@ -119,7 +119,7 @@ let menuItems = [
     subMenu: [
       {
         id: "li-consolidation-report",
-        label: "Consolidation Report",
+        label: "Detailed Audit Report",
         icon: faFileZipper,
         route: "/audit/internal-audit-consolidation-report",
         active: false,

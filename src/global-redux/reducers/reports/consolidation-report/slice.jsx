@@ -33,6 +33,7 @@ const initialState = {
   createExtraFieldsLoading: false,
   internalAuditReportExtraFieldsObject: {},
   totalNoOfRecords: 0,
+  selectedReport: JSON.parse(sessionStorage.getItem("selectedReport")) || {}
 };
 
 export const setupGetAllInternalAuditReports = createAsyncThunk(
@@ -153,6 +154,10 @@ export const slice = createSlice({
     resetFileUploadAddSuccess: (state) => {
       state.consolidationFileUploadAddSuccess = false;
     },
+    changeSelectedReport: (state, { payload }) => {
+      state.selectedReport = payload
+      sessionStorage.setItem("selectedReport", JSON.stringify(payload))
+    },
     handleResetData: (state) => {
       state.loading = false;
       state.allInternalAuditReports = [];
@@ -165,6 +170,8 @@ export const slice = createSlice({
       state.createExtraFieldsLoading = false;
       state.internalAuditReportExtraFieldsObject = {};
       state.totalNoOfRecords = 0;
+      state.selectedReport = {}
+      sessionStorage.removeItem("selectedReport")
     },
   },
   extraReducers: (builder) => {
@@ -495,6 +502,7 @@ export const {
   handleResetData,
   resetInternalAuditReportExtraFieldsAddSuccess,
   resetFileUploadAddSuccess,
+  changeSelectedReport
 } = slice.actions;
 
 export default slice.reducer;

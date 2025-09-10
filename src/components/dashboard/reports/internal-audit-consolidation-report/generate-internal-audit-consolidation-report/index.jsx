@@ -21,7 +21,7 @@ import InternalAuditReportBody from "./components/InternalAuditReportBody";
 import Header from "./components/Header";
 import { toast } from "react-toastify";
 import { Chip, CircularProgress } from "@mui/material";
-import { groupObservationsByTitle } from "../../../../../config/helper"
+import { groupObservationsBySubLocationAndArea } from "../../../../../config/helper"
 
 const GenerateInternalAuditConsolidationReport = () => {
   const dispatch = useDispatch();
@@ -194,7 +194,7 @@ const GenerateInternalAuditConsolidationReport = () => {
   React.useEffect(() => {
     if (internalAuditReportObject?.reportingsList) {
       setConsolidatedObservations(
-        groupObservationsByTitle(internalAuditReportObject?.reportingsList)
+        groupObservationsBySubLocationAndArea(internalAuditReportObject?.reportingsList)
       );
     }
   }, [internalAuditReportObject]);

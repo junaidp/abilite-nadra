@@ -2,9 +2,15 @@ import React from "react";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+
+// import { PDFViewer, Document, Page, Text, StyleSheet } from "@react-pdf/renderer";
+// import MyDocument from "./view-internal-audit-consolidation-report/components/PDFGenerator"
+// import { data } from "./view-internal-audit-consolidation-report/components/data"
+
 import {
   setupGetAllInternalAuditReports,
   resetInternalAuditReportAddSuccess,
+  changeSelectedReport
 } from "../../../../global-redux/reducers/reports/consolidation-report/slice";
 import { CircularProgress, Typography } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
@@ -201,7 +207,7 @@ const InternalAuditReport = () => {
         </div>
       )}
       <header className="section-header my-3 text-start d-flex align-items-center justify-content-between">
-        <div className="mb-0 heading">Internal Audit Consolidation Report</div>
+        <div className="mb-0 heading">Detailed Audit Report</div>
         <div className="">
           <div
             className="btn btn-labeled btn-primary px-3 shadow"
@@ -209,9 +215,6 @@ const InternalAuditReport = () => {
               navigate("/audit/generate-internal-audit-consolidation-report")
             }
           >
-            <span className="btn-label me-2">
-              <i className="fa fa-eye"></i>
-            </span>
             Generate Report
           </div>
           <Tooltip
@@ -299,7 +302,7 @@ const InternalAuditReport = () => {
                             {(Number(item?.createdBy) ===
                               Number(user[0]?.userId?.id) &&
                               item?.submitted === false) ||
-                            user[0]?.userId?.employeeid?.userHierarchy ===
+                              user[0]?.userId?.employeeid?.userHierarchy ===
                               "IAH" ? (
                               <i
                                 className="fa fa-edit f-18 cursor-pointer"
@@ -316,7 +319,7 @@ const InternalAuditReport = () => {
                             {(Number(item?.createdBy) ===
                               Number(user[0]?.userId?.id) &&
                               item?.submitted === false) ||
-                            user[0]?.userId?.employeeid?.userHierarchy ===
+                              user[0]?.userId?.employeeid?.userHierarchy ===
                               "IAH" ? (
                               <i
                                 className={`fa fa-trash text-danger cursor-pointer f-18`}
@@ -334,7 +337,7 @@ const InternalAuditReport = () => {
                               item?.auditPurpose !== "" &&
                               item?.submitted === false &&
                               Number(item?.createdBy) ===
-                                Number(user[0]?.userId?.id) && (
+                              Number(user[0]?.userId?.id) && (
                                 <div
                                   className={`btn btn-labeled btn-primary  shadow h-40`}
                                   onClick={() => handleSubmitReport(item)}
@@ -345,7 +348,7 @@ const InternalAuditReport = () => {
                             {item?.submitted === true &&
                               item?.approved === false &&
                               user[0]?.userId?.employeeid?.userHierarchy ===
-                                "IAH" && (
+                              "IAH" && (
                                 <div
                                   className={`btn btn-labeled btn-primary shadow h-35`}
                                   onClick={() => handleApproveReport(item)}
@@ -357,7 +360,7 @@ const InternalAuditReport = () => {
                             {item?.submitted === true &&
                               item?.approved === false &&
                               user[0]?.userId?.employeeid?.userHierarchy ===
-                                "IAH" && (
+                              "IAH" && (
                                 <div
                                   className={`btn btn-labeled btn-primary shadow  h-35`}
                                   onClick={() => {
@@ -376,11 +379,9 @@ const InternalAuditReport = () => {
                                 <i
                                   className="fa fa-download  f-18  cursor-pointer"
                                   onClick={() => {
-                                    const encryptedId = encryptAndEncode(
-                                      item?.id.toString()
-                                    );
+                                    dispatch(changeSelectedReport(item))
                                     navigate(
-                                      `/audit/view-internal-audit-consolidation-report/${encryptedId}`
+                                      `/audit/download-detailed-audit-report`
                                     );
                                   }}
                                 ></i>
@@ -439,6 +440,13 @@ const InternalAuditReport = () => {
           )}
         </div>
       </div>
+      {/* {
+        <div style={{ height: "100vh" }}>
+          <PDFViewer width="100%" height="100%">
+            <MyDocument reportObject={data[0]} logoPreview="" />
+          </PDFViewer>
+        </div>
+      }  */}
     </div>
   );
 };

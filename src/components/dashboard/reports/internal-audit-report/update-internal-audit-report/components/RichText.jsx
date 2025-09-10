@@ -28,12 +28,12 @@ const RichTextEditor = ({
       },
       toolbarAdaptive: false,
       spellCheck: true,
-      pasteHTMLActionList: Jodit.atom([
-        {
-          value: Jodit.constants.INSERT_ONLY_TEXT,
-          text: "Insert this content as text",
-        },
-      ]),
+      // pasteHTMLActionList: Jodit.atom([
+      //   {
+      //     value: Jodit.constants.INSERT_ONLY_TEXT,
+      //     text: "Insert this content as text",
+      //   },
+      // ]),
       askBeforePasteHTML: true,
       // buttons: [
       //   "bold",

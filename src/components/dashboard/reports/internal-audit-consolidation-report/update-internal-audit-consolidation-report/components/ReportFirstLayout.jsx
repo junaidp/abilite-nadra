@@ -36,9 +36,8 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
                 name="reportDate"
                 value={moment
                   .utc(reportObject?.reportDate)
-                  .format("YYYY-MM-DD")}
-                disabled
-                readOnly
+                  .format("YYYY-MM-DD") || ""}
+                onChange={(event) => handleChangeReportObject(event)}
               />
             </div>
           </div>

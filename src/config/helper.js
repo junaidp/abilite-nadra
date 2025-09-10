@@ -46,6 +46,48 @@ function groupObservationsByTitle(array) {
   return result;
 }
 
+function groupObservationsBySubLocationAndArea(array) {
+  // Helper to normalize area (ignore case & underscores)
+  const normalizeArea = (area) => area?.toLowerCase().replace(/_/g, "") || "";
+
+  // First, group by subLocation
+  const groupedBySubLocation = array.reduce((acc, item) => {
+    const subLoc = item.subLocation;
+
+    if (!acc[subLoc]) {
+      acc[subLoc] = {
+        subLocation: subLoc,
+        areas: {},
+      };
+    }
+
+    // Normalize area
+    const areaKey = normalizeArea(item.area);
+
+    if (!acc[subLoc].areas[areaKey]) {
+      acc[subLoc].areas[areaKey] = {
+        area: item.area,
+        observations: [],
+      };
+    }
+
+    // Push the observation
+    acc[subLoc].areas[areaKey].observations.push(item);
+    return acc;
+  }, {});
+
+  // Convert nested objects into arrays & filter
+  const result = Object.values(groupedBySubLocation).map((subLocGroup) => ({
+    subLocation: subLocGroup.subLocation,
+    areas: Object.values(subLocGroup.areas).filter(
+      (group) => group.observations.length > 1 // Keep only if more than one observation
+    ),
+  }));
+
+  return result.filter((subLocGroup) => subLocGroup.areas.length > 0);
+}
+
+
 function handleCalculateProbability(item) {
   let num = 0;
   item?.riskFactorValues?.forEach((element) => {
@@ -150,7 +192,42 @@ function groupByAreaAndSubject(data) {
 
 const cleanHtml = (htmlString) => {
   if (!htmlString) return "";
-  return htmlString.replace(/font-family:[^;"'}]+[;"'}]/gi, "");
+
+  let cleaned = htmlString;
+
+  // Remove ALL font-family definitions (including quotes and !important)
+  cleaned = cleaned.replace(/font-family\s*:\s*[^;"'}]+[;"'}]?/gi, "");
+
+  // Remove ALL font-weight definitions
+  cleaned = cleaned.replace(/font-weight\s*:\s*[^;"'}]+[;"'}]?/gi, "");
+
+  // Remove inline border colors that might be white
+  cleaned = cleaned.replace(/border[^:]*:\s*[^;"]*white[^;"]*;?/gi, "");
+
+  // Force tables to have clear black borders and consistent size
+  cleaned = cleaned.replace(
+    /<table/gi,
+    '<table style="border: 1px solid black; border-collapse: collapse; width: 100%; font-size: 10px;"'
+  );
+  cleaned = cleaned.replace(
+    /<td/gi,
+    '<td style="border: 1px solid black; padding: 4px; font-size: 10px;"'
+  );
+  cleaned = cleaned.replace(
+    /<th/gi,
+    '<th style="border: 1px solid black; padding: 4px; font-size: 10px;"'
+  );
+
+  // Force images to scale properly
+  cleaned = cleaned.replace(
+    /<img/gi,
+    '<img style="max-width: 100%; height: auto;"'
+  );
+
+  // Wrap entire content with consistent font size and line height
+  cleaned = `<div style="font-size: 10px; line-height: 1.4;">${cleaned}</div>`;
+
+  return cleaned.trim();
 };
 
 const groupBySubLocationAndArea = (list) => {
@@ -245,5 +322,6 @@ export {
   groupBySubLocationAndArea,
   groupByArea,
   convertToBase64,
-  convertFromBase64
+  convertFromBase64,
+  groupObservationsBySubLocationAndArea
 };
