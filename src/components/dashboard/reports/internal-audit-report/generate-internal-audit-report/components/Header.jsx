@@ -12,7 +12,7 @@ const Header = () => {
         >
           <i className="fa fa-arrow-left text-primary fs-5 pe-3"></i>
         </a>
-        Generated Internal Audit Report
+        Internal Audit Report
       </div>
     </header>
   );

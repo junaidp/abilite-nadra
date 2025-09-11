@@ -37,8 +37,8 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
                 value={moment
                   .utc(reportObject?.reportDate)
                   .format("YYYY-MM-DD")}
-                disabled
-                readOnly
+                onChange={(event) => handleChangeReportObject(event)}
+
               />
             </div>
           </div>
@@ -211,6 +211,52 @@ const ReportFirstLayout = ({ reportObject, handleChangeReportObject }) => {
               )}
             </div>
           </div>
+
+          {/* Resources */}
+          <div className="row mb-3 f-13">
+            <div className="col-lg-4 px-3 d-flex justify-content-between">
+              <div className="fw-bold">Head Of Internal Audit:</div>
+              <div className="">
+                {reportObject?.resourceAllocations?.headOfInternalAudit
+                  ?.name || "No Head Of Internal Audit"}
+              </div>
+            </div>
+            <div className="col-lg-4 px-3 d-flex justify-content-between">
+              <div className="fw-bold">Backup Head Of InternalAudit:</div>
+              <div className="">
+                {reportObject?.resourceAllocations
+                  ?.backupHeadOfInternalAudit?.name ||
+                  "No Backup Head Of InternalAudit Assigned "}
+              </div>
+            </div>
+            <div className="col-lg-4 px-3 d-flex justify-content-between">
+              <div className="fw-bold">Proposed Job Approver:</div>
+              <div className="">
+                {reportObject?.resourceAllocations?.proposedJobApprover
+                  ?.name || "No Proposed Job Approver Assigned "}
+              </div>
+            </div>
+          </div>
+          <div className="row mb-3 mt-3 f-13">
+            <div className="col-lg-4 px-3 d-flex gap-4 flex-wrap w-100">
+              <div className="fw-bold">Resource List:</div>
+
+              {reportObject?.resourceAllocations?.resourcesList &&
+                reportObject?.resourceAllocations?.resourcesList
+                  .length ? (
+                <div className="d-flex gap-4 flex-wrap">
+                  {reportObject?.resourceAllocations?.resourcesList?.map(
+                    (user) => {
+                      return <div>{user?.name}</div>;
+                    }
+                  )}
+                </div>
+              ) : (
+                <p>Resource List Not Found</p>
+              )}
+            </div>
+          </div>
+          {/* Resources */}
         </div>
       </div>
     </div>

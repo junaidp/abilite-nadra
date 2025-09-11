@@ -32,6 +32,7 @@ const initialState = {
   iahFileUploadSuccess: false,
   internalAuditReportExtraFieldsObject: {},
   totalNoOfRecords: 0,
+  selectedInternalAuditReport: JSON.parse(sessionStorage.getItem("selectedInternalAuditReport")) || {}
 };
 
 export const setupGetAllInternalAuditReports = createAsyncThunk(
@@ -152,6 +153,10 @@ export const slice = createSlice({
     resetFileUploadAddSuccess: (state) => {
       state.iahFileUploadSuccess = false;
     },
+    changeSelectedInternalAuditReport: (state, { payload }) => {
+      state.selectedInternalAuditReport = payload
+      sessionStorage.setItem("selectedInternalAuditReport", JSON.stringify(payload))
+    },
     resetInternalAuditReportExtraFieldsAddSuccess: (state) => {
       state.internalAuditReportExtraFieldsAddSuccess = false;
     },
@@ -168,6 +173,8 @@ export const slice = createSlice({
       state.iahFileUploadSuccess = false;
       state.internalAuditReportExtraFieldsObject = {};
       state.totalNoOfRecords = 0;
+      state.selectedInternalAuditReport = {}
+      sessionStorage.removeItem("selectedInternalAuditReport")
     },
   },
   extraReducers: (builder) => {
@@ -500,6 +507,7 @@ export const {
   resetIahReportAddSuccess,
   resetInternalAuditReportExtraFieldsAddSuccess,
   resetFileUploadAddSuccess,
+  changeSelectedInternalAuditReport
 } = slice.actions;
 
 export default slice.reducer;

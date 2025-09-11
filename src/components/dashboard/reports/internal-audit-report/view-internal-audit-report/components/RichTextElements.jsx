@@ -22,6 +22,14 @@ const RichTextElements = ({ singleInternalAuditReport }) => {
       </div>
       <div className="row mb-3">
         <div className="col-lg-12">
+          <label>Key Findings</label>
+          <RichTextEditor
+            initialValue={singleInternalAuditReport?.keyFindings}
+          />
+        </div>
+      </div>
+      <div className="row mb-3">
+        <div className="col-lg-12">
           <label>Annexure</label>
           <RichTextEditor initialValue={singleInternalAuditReport?.annexure} />
         </div>

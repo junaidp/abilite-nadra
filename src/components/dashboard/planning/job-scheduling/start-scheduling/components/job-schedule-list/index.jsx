@@ -20,12 +20,12 @@ const JobScheduleList = ({
 
     currentDate.setHours(0, 0, 0, 0);
 
-    if (selectedDate < currentDate) {
-      toast.error(
-        "The planned start date cannot be a past date. Please select today or a future date."
-      );
-      return;
-    }
+    // if (selectedDate < currentDate) {
+    //   toast.error(
+    //     "The planned start date cannot be a past date. Please select today or a future date."
+    //   );
+    //   return;
+    // }
 
     if (
       !singleJobSchedulingObject?.timeAndDateAllocation?.estimatedWeeks ||

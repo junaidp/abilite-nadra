@@ -12,7 +12,6 @@ import { CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import ReportFirstLayout from "./components/FirstLayout";
 import RichTextFields from "./components/RichTextElements";
-import KeyFindings from "./components/KeyFindings";
 import AuditExtraFields from "./components/AuditExtraFields";
 import Header from "./components/Header";
 import FollowUpItem from "./components/FollowUpItem";
@@ -33,7 +32,8 @@ const ViewInternalAuditReport = () => {
     (state) => state?.internalAuditReport
   );
 
-  const sortedObservations = groupByArea(singleInternalAuditReport?.reportingList || []).flatMap((observations) => observations.items.flatMap((observation) => observation));
+  const sortedObservations = groupByArea(singleInternalAuditReport?.reportingList || [])
+
 
   React.useEffect(() => {
     if (!reportId) {
@@ -75,33 +75,46 @@ const ViewInternalAuditReport = () => {
           <RichTextFields
             singleInternalAuditReport={singleInternalAuditReport}
           />
-          <KeyFindings singleInternalAuditReport={singleInternalAuditReport} />
           <div>
             <div className="col-lg-12 mt-4">
-              <div className="heading  fw-bold">All Findings</div>
+              <div className="heading  fw-bold">Main Findings And Recommendations</div>
             </div>
-            {sortedObservations?.map((item, index) => {
-              return (
-                <LazyLoad key={index} height={window.innerHeight * 2} offset={300}>
-                  <div className="border px-3 py-2  mt-3 rounded" key={index}>
-                    <div className="d-flex items-center justify-content-between">
-                      <div></div>
-                      <Chip
-                        label={
-                          singleInternalAuditReport?.subLocationList?.find(
-                            (subLocation) => subLocation?.id === item?.subLocation
-                          )?.description
-                        }
-                      />
+            <div className="mt-3 mb-3">
+              {sortedObservations.map((areaGroup, idx) => (
+                <div key={idx}>
+                  <div>
+                    <div>
+                      <p className="mb-3 consolidatedTitle">
+                        {areaGroup.area}
+                      </p>
                     </div>
-                    <FollowUpItem
-                      item={item}
-                      consolidatedObservationsItem={false}
-                    />
+                    <div className="border rounded px-3 py-2 mb-3">
+                      {areaGroup.items.map((observation, oIdx) => (
+                        <LazyLoad key={oIdx} height={window.innerHeight * 2} offset={300}>
+                          <div>
+                            <div className="d-flex items-end justify-content-end">
+                              <Chip
+                                label={
+                                  singleInternalAuditReport?.subLocationList?.find(
+                                    (subLocation) => subLocation?.id === observation?.subLocation
+                                  )?.description
+                                }
+                              />
+                            </div>
+                            <FollowUpItem
+                              item={observation}
+                              consolidatedObservationsItem={true}
+                            />
+                            <hr />
+                          </div>
+                        </LazyLoad>
+                      ))}
+                    </div>
+
                   </div>
-                </LazyLoad>
-              );
-            })}
+                </div>
+              ))}
+            </div>
           </div>
           {singleInternalAuditReport?.intAuditExtraFieldsList &&
             singleInternalAuditReport?.intAuditExtraFieldsList?.length > 0 && (

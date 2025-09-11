@@ -6,6 +6,7 @@ const RichTextEditor = ({
   handleChangeExcutiveSummary,
   initialValue,
   handleChangeAuditPurpose,
+  handleChangeKeyFindings,
   handleChangeAnnexure,
   handleChangeSummaryOfKeyFinding,
   keyFindingId,
@@ -101,6 +102,9 @@ const RichTextEditor = ({
     }
     if (handleChangeAuditPurpose) {
       handleChangeAuditPurpose(newContent);
+    }
+    if (handleChangeKeyFindings) {
+      handleChangeKeyFindings(newContent);
     }
     if (handleChangeAnnexure) {
       handleChangeAnnexure(newContent);

@@ -10,7 +10,6 @@ import {
   setupUpdateExtraField,
 } from "../../../../../../global-redux/reducers/reports/internal-audit-report/slice";
 import { v4 as uuidv4 } from "uuid";
-import KeyKindings from "./KeyFindings";
 import ExtraFields from "./ExtraFields";
 import FileUpload from "./FileUpload";
 import Chip from "@mui/material/Chip";
@@ -21,6 +20,7 @@ const InternalAuditReportBody = ({
   reportObject,
   handleChangeReportObject,
   handleChangeAuditPurpose,
+  handleChangeKeyFindings,
   handleSaveInternalAuditReport,
   addReportLoading,
   handleChangeExtraFields,
@@ -32,7 +32,7 @@ const InternalAuditReportBody = ({
   const [extraFieldsArray, setExtraFieldsArray] = React.useState([]);
   const { createExtraFieldsLoading, internalAuditReportExtraFieldsAddSuccess } =
     useSelector((state) => state?.internalAuditReport);
-  const sortedObservations = groupByArea(reportObject?.reportingList || []).flatMap((observations) => observations.items.flatMap((observation) => observation));
+  const sortedObservations = groupByArea(reportObject?.reportingList || [])
 
   function handleUpdateExtraField(item) {
     if (!createExtraFieldsLoading) {
@@ -116,38 +116,58 @@ const InternalAuditReportBody = ({
             />
           </div>
         </div>
-      </div>
-      {/* Editors Ends */}
-
-      {/* Findings Start */}
-      <KeyKindings reportObject={reportObject} />
-
-      {/* Findings Ends */}
-      {/* Reporting And Follow Up Starts */}
-      <div className="row my-3">
-        <div className="col-lg-12">
-          <div className="heading  fw-bold">All Findings</div>
+        <div className="row mb-3">
+          <div className="col-lg-12">
+            <label>Key Findings</label>
+            <RichTextEditor
+              initialValue={reportObject?.keyFindings}
+              handleChangeKeyFindings={handleChangeKeyFindings}
+            />
+          </div>
         </div>
       </div>
-      {sortedObservations?.map((item, index) => {
-        return (
-          <LazyLoad key={index} height={window.innerHeight * 2} offset={300}>
-            <div className="border px-3 py-2  mt-3 rounded" key={index}>
-              <div className="d-flex items-center justify-content-between">
-                <div></div>
-                <Chip
-                  label={
-                    reportObject?.subLocationList?.find(
-                      (subLocation) => subLocation?.id === item?.subLocation
-                    )?.description
-                  }
-                />
+      {/* Editors Ends */}
+      {/* Reporting And Follow Up Starts */}
+      <div>
+        <div className="col-lg-12 mt-4">
+          <div className="heading  fw-bold">Main Findings And Recommendations</div>
+        </div>
+        <div className="mt-3 mb-3">
+          {sortedObservations.map((areaGroup, idx) => (
+            <div key={idx}>
+              <div>
+                <div>
+                  <p className="mb-3 consolidatedTitle">
+                    {areaGroup.area}
+                  </p>
+                </div>
+                <div className="border rounded px-3 py-2 mb-3">
+                  {areaGroup.items.map((observation, oIdx) => (
+                    <LazyLoad key={oIdx} height={window.innerHeight * 2} offset={300}>
+                      <div>
+                        <div className="d-flex items-end justify-content-end">
+                          <Chip
+                            label={
+                              reportObject?.subLocationList?.find(
+                                (subLocation) => subLocation?.id === observation?.subLocation
+                              )?.description
+                            }
+                          />
+                        </div>
+                        <FollowUpItem
+                          item={observation}
+                          consolidatedObservationsItem={true}
+                        />
+                        <hr />
+                      </div>
+                    </LazyLoad>
+                  ))}
+                </div>
               </div>
-              <FollowUpItem item={item} consolidatedObservationsItem={false} />
             </div>
-          </LazyLoad>
-        );
-      })}
+          ))}
+        </div>
+      </div>
 
       {/* Reporting And Follow Up Ends */}
 

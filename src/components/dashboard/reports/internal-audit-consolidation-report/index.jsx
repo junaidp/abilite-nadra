@@ -2,11 +2,6 @@ import React from "react";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-
-// import { PDFViewer, Document, Page, Text, StyleSheet } from "@react-pdf/renderer";
-// import MyDocument from "./view-internal-audit-consolidation-report/components/PDFGenerator"
-// import { data } from "./view-internal-audit-consolidation-report/components/data"
-
 import {
   setupGetAllInternalAuditReports,
   resetInternalAuditReportAddSuccess,
@@ -225,7 +220,7 @@ const InternalAuditReport = () => {
                   className="mb-2"
                   style={poppinsStyle}
                 >
-                  Click to create a new consolidated report
+                  Click to create a new detailed audit report
                 </Typography>
                 <ul
                   style={{
@@ -440,13 +435,6 @@ const InternalAuditReport = () => {
           )}
         </div>
       </div>
-      {/* {
-        <div style={{ height: "100vh" }}>
-          <PDFViewer width="100%" height="100%">
-            <MyDocument reportObject={data[0]} logoPreview="" />
-          </PDFViewer>
-        </div>
-      }  */}
     </div>
   );
 };

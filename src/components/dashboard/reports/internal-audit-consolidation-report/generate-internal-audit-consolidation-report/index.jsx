@@ -216,7 +216,7 @@ const GenerateInternalAuditConsolidationReport = () => {
             <div className="col-lg-10">
               <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">
-                  Consolidation Report
+                  Detailed Audit Report
                 </InputLabel>
                 <Select
                   labelId="demo-simple-select-label"
@@ -242,9 +242,6 @@ const GenerateInternalAuditConsolidationReport = () => {
                   }`}
                 onClick={handleGetInternalAuditReportObject}
               >
-                <span className="btn-label me-2">
-                  <i className="fa fa-check-circle f-18"></i>
-                </span>
                 {loading ? "Loading.." : "Create Report"}
               </div>
             </div>

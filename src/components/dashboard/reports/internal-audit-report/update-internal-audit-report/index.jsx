@@ -76,6 +76,16 @@ const UpdateInternalAuditReport = () => {
       };
     });
   }
+
+  function handleChangeKeyFindings(value) {
+    setReportObject((pre) => {
+      return {
+        ...pre,
+        keyFindings: value,
+      };
+    });
+  }
+
   function handleChangeAnnexure(value) {
     setReportObject((pre) => {
       return {
@@ -140,6 +150,7 @@ const UpdateInternalAuditReport = () => {
           reportDate: pre?.reportDate,
           executiveSummary: pre?.executiveSummary,
           auditPurpose: pre?.auditPurpose,
+          keyFindings: pre?.keyFindings,
           annexure: pre?.annexure,
           keyFindingsList: pre?.keyFindingsList,
           reportingAndFollowUp: pre?.reportingAndFollowUp,
@@ -187,6 +198,7 @@ const UpdateInternalAuditReport = () => {
             handleChangeReportObject={handleChangeReportObject}
             handleChangeExcutiveSummary={handleChangeExcutiveSummary}
             handleChangeAuditPurpose={handleChangeAuditPurpose}
+            handleChangeKeyFindings={handleChangeKeyFindings}
             handleSaveInternalAuditReport={handleSaveInternalAuditReport}
             addReportLoading={addReportLoading}
             handleChangeExtraFields={handleChangeExtraFields}

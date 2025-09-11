@@ -1,8 +1,9 @@
-import moment from "moment";
-import { cleanHtml } from "../../../../../../config/helper"
+import React from "react";
 import font from "../../../../../../font/Poppins-Medium.ttf";
 import Html from "react-pdf-html";
+import { cleanHtml } from "../../../../../../config/helper";
 import { groupByArea } from "../../../../../../config/helper";
+import moment from "moment";
 import {
   Document,
   Page,
@@ -12,226 +13,163 @@ import {
   Image,
   Font,
 } from "@react-pdf/renderer";
+
 Font.register({
   family: "Poppins",
   src: font,
 });
+
+// central layout & typography constants for consistent look across all pages
+const PAGE_PADDING = 35;
+const FONT_FAMILY = "Poppins";
+const TYPOGRAPHY = {
+  title: 22,
+  section: 16,
+  subsection: 18,
+  smallHeader: 10,
+  body: 10,
+  small: 9,
+};
+
 const styles = StyleSheet.create({
-  page: {
+  // Base page used for most pages so padding/width stays consistent
+  pageBase: {
     flexDirection: "column",
     backgroundColor: "#FFFFFF",
-    fontFamily: "Poppins",
-    paddingTop: 20,
-    paddingBottom: 20,
-    paddingLeft: 35,
-    paddingRight: 35,
+    fontFamily: FONT_FAMILY,
+    paddingTop: PAGE_PADDING,
+    paddingBottom: PAGE_PADDING,
+    paddingLeft: PAGE_PADDING,
+    paddingRight: PAGE_PADDING,
   },
-  globalFont: {
-    fontFamily: "Poppins",
-  },
-  page2: {
+
+  // A slightly different layout for the first cover page
+  coverPage: {
     flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
     backgroundColor: "#FFFFFF",
-    fontFamily: "Poppins",
-    paddingTop: 25,
-    paddingHorizontal: 35,
+    fontFamily: FONT_FAMILY,
+    paddingTop: PAGE_PADDING,
+    paddingBottom: PAGE_PADDING,
+    paddingLeft: PAGE_PADDING,
+    paddingRight: PAGE_PADDING,
   },
-  header: {
+
+  headerContainer: {
     flexDirection: "column",
     alignItems: "center",
     marginBottom: 20,
     width: "100%",
   },
-  line: {
-    marginTop: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "black",
-    borderBottomStyle: "solid",
+
+  pageStarter: {
+    display: "flex",
+    justifyContent: "space-between",
+    flexDirection: "row",
+    alignItems: "center",
+    paddingBottom: 5,
   },
+  // Logo sizing — keep small and consistent
   logo: {
     width: 100,
     marginBottom: 10,
-    alignItems: "center",
   },
-  title: {
-    fontSize: 24,
+
+  // Primary title with background color (keeps your previous look)
+  reportBanner: {
+    fontSize: TYPOGRAPHY.title,
     fontWeight: "bold",
     color: "#FFFFFF",
     backgroundColor: "#0a7386",
     padding: 10,
     textAlign: "center",
   },
+
   reportName: {
     textAlign: "center",
+    marginTop: 6,
+    fontSize: TYPOGRAPHY.section,
+    fontFamily: FONT_FAMILY,
   },
 
-  h4: {
-    fontSize: 12,
-  },
-  contents: {
-    marginBottom: 15,
-    color: "#0a7386",
-    fontSize: 14,
-  },
-  overviewWrap: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 10,
-  },
-  reportInfoViewItem: {
-    display: "flex",
-    flexDirection: "row",
-    gap: 25
-  },
-  reportNameView: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 10,
-  },
-  reportInfoTitle: {
-    fontSize: 12,
-    color: "#0a7386",
-  },
-  reportInfoSubTitle: {
-    fontSize: 12,
-  },
-  locationWrap: {
-    display: "flex",
-    flexDirection: "row",
-    gap: 15,
-    flexWrap: "wrap"
-  },
-  paragraph: {
-    fontSize: 12,
-  },
-  summary: {
-    flexDirection: "column",
-    marginTop: 8,
-  },
-  annexureSummary: {
-    flexDirection: "column",
-    marginTop: 8,
-    marginBottom: 10,
-  },
-  reportingView: {
-    marginTop: 8,
+  // Contents / small headings
+  contentsHeading: {
     marginBottom: 12,
-  },
-  extraFieldsHeader: {
-    fontSize: 18,
-    marginBottom: 7,
     color: "#0a7386",
+    fontSize: TYPOGRAPHY.section,
+    fontWeight: "bold",
+  },
+
+  // Section title (e.g., Executive Summary, Audit Purpose)
+  sectionTitle: {
+    fontSize: TYPOGRAPHY.section,
+    color: "#0a7386",
+    marginBottom: 8,
+  },
+
+  // Sub-location label (bold so user can quickly scan)
+  subLocationLabel: {
+    fontSize: TYPOGRAPHY.subsection,
+    color: "#0a7386",
+    fontWeight: "bold",
+  },
+
+  // Area label (bold to visually separate groups)
+  areaLabel: {
+    fontSize: TYPOGRAPHY.subsection,
+    color: "#0a7386",
+    fontWeight: "bold",
+    marginTop: 6,
+    marginBottom: 4,
+  },
+
+  // Small header inside summary blocks
+  smallHeader: {
+    fontSize: TYPOGRAPHY.smallHeader,
+    fontWeight: "bold",
+  },
+
+  // Body paragraph styling
+  bodyText: {
+    fontSize: TYPOGRAPHY.body,
+    lineHeight: 1.3,
+  },
+
+  // smaller paragraph
+  smallText: {
+    fontSize: TYPOGRAPHY.small,
+  },
+
+  // general wrapper for blocks of content
+  contentBlock: {
+    flexDirection: "column",
+    gap: 6,
+    marginBottom: 8,
+  },
+
+  // thin divider line
+  divider: {
+    marginTop: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "black",
+    borderBottomStyle: "solid",
+  },
+
+  // find-list wrapper
+  findingsList: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 12,
     marginTop: 12,
   },
-  findingView: {
-    marginTop: 8,
-    marginBottom: 12,
+
+  // small meta text used at the top of pages
+  smallMeta: {
+    fontSize: TYPOGRAPHY.small,
   },
-  summaryHeader: {
-    fontSize: 14,
-    marginBottom: 7,
-    color: "#0a7386",
-  },
-  summaryPara: {
-    fontSize: 13,
-  },
-  horizontalLine: {
-    height: 2,
-    width: "100%",
-    backgroundColor: "#0a7386",
-  },
-  findHeader: {
-    fontSize: 20,
-    marginTop: 10,
-    marginBottom: 10,
-  },
-  summaryInfoWrapSummary: {
-    marginTop: 0,
-    display: "flex",
-    flexDirection: "column",
-    gap: 20,
-  },
-  indexNumber: {
-    fontSize: 14,
-    color: "#0a7386",
-    textDecoration: "underline",
-  },
-  findingsHeaderInfo: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 10,
-  },
-  singleFindingsHeaderInfo: {
-    flexDirection: "row",
-    gap: 2,
-    alignItems: "center",
-  },
-  pdfHeaderWrap: {
-    color: "#0a7386",
-    fontSize: 15,
-    marginBottom: 10,
-  },
-  singleFindingsHeaderInfoHeader: {
-    fontSize: 12,
-    color: "#0a7386",
-  },
-  singleFindingsHeaderInfoPara: {
-    fontSize: 10,
-  },
-  singleFindSummaryWrap: {
-    flexDirection: "column",
-    gap: 5,
-    marginTop: 10,
-  },
-  singleFindSummaryHeader: {
-    fontSize: 12,
-    color: "#0a7386",
-  },
-  singleFindSummaryPara: {
-    fontSize: 10,
-  },
-  findings: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 20,
-    marginTop: 20,
-  },
-  findingsSummary: {
-    marginTop: 15,
-    display: "flex",
-    flexDirection: "column",
-    gap: 20,
-    marginBottom: 20,
-  },
-  firstPage: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    fontFamily: "Poppins",
-    justifyContent: "center",
-  },
-  overviewFields: {
-    display: "flex",
-    flexDirection: "column",
-    marginLeft: "50px",
-  },
-  pageStarter: {
-    display: "flex",
-    justifyContent: "space-between",
-    flexDirection: "row",
-    alignItems: "center",
-    paddingTop: 50,
-    paddingBottom: 20,
-    paddingLeft: 35,
-    paddingRight: 35,
-  },
-  h7: {
-    fontSize: 8,
-    fontFamily: "Poppins",
-  },
-  pageStarterLogo: {
-    width: 40,
-  },
+
+  // page numbering (keeps number centered at the bottom)
   pageNumber: {
     position: "absolute",
     bottom: 30,
@@ -239,385 +177,257 @@ const styles = StyleSheet.create({
     right: 0,
     textAlign: "center",
     fontSize: 10,
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
     padding: 30,
   },
-  allFindingMianHeadingWrap: {
+
+  // utility for location wrap (keeps sub-location and any chips in row)
+  locationRow: {
     display: "flex",
-    justifyContent: "center",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
     alignItems: "center",
-    height: "80%",
+  },
+
+  // used for blocks that repeat inside each observation
+  observationBlock: {
+    flexDirection: "column",
+    gap: 6,
+    marginBottom: 6,
   },
 });
 
 const PDFGenerator = ({ reportObject, logoPreview }) => {
-  const sortedObservations = groupByArea(reportObject?.reportingList || []).flatMap((observations) => observations.items.flatMap((observation) => observation));
+  // groupedObservations holds the nested structure returned by the helper
+  const [groupedObservations, setGroupedObservations] = React.useState([]);
+
+  // call the grouping helper and update state.
+  React.useEffect(() => {
+    if (reportObject?.reportingList) {
+      setGroupedObservations(
+        groupByArea(reportObject?.reportingList)
+      );
+    }
+  }, [reportObject]);
 
   return (
     <Document>
-      <Page style={styles.firstPage} size="A4">
-        <View style={styles.header}>
+      {/* Cover / First Page */}
+      <Page style={styles.coverPage} size="A4">
+        <View style={styles.headerContainer}>
           <Image src={logoPreview} style={styles.logo} />
         </View>
-        <View style={styles.pdfHeaderWrap}>
-          <Text style={styles.title}>Internal Audit Report</Text>
-        </View>
+
         <View>
+          <Text style={styles.reportBanner}>Internal Audit Report</Text>
+        </View>
+
+        <View style={{ marginTop: 8 }}>
           <Text style={styles.reportName}>{reportObject?.reportName}</Text>
         </View>
+
         <Text
           style={styles.pageNumber}
-          render={({ pageNumber, totalPages }) =>
-            `${pageNumber} / ${totalPages}`
-          }
+          render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`}
           fixed
         />
       </Page>
-      <Page size="A4" wrap style={{ paddingBottom: "10%" }}>
+
+      {/* Main content pages*/}
+      <Page size="A4" style={styles.pageBase} wrap>
+        {/* Top small header / meta info */}
         <View style={styles.pageStarter} fixed wrap>
-          <Text style={styles.h7}>{reportObject?.reportName}</Text>
-          <Image src={logoPreview} style={styles.pageStarterLogo} />
+          <Text style={styles.smallMeta}>{reportObject?.reportName}</Text>
+          <Image src={logoPreview} style={{ width: 40 }} />
         </View>
 
-        {/* Page 1 */}
-        <View style={styles.page2}>
-          <Text style={styles.contents}>Contents </Text>
-          <View style={styles.overviewWrap}>
-            <Text style={styles.h4}>
-              OVERVIEW -------------------------------------------------------
-            </Text>
-            <Text style={styles.h4}>
-              EXECUTIVE SUMMARY ----------------------------------------------
-            </Text>
-            <Text style={styles.h4}>
-              AUDIT PURPOSE ---------------------------------------------------
-            </Text>
-            <Text style={styles.h4}>
-              SUMMARY OF KEY FINDINGS -----------------------------------------
-            </Text>
-            <View style={styles.overviewFields}>
-              {reportObject?.reportingList?.filter(
-                (singleItem) => singleItem?.implicationRating === 1
-              )?.length === 0 ? (
-                <Text style={styles.h4}>
-                  No summary of key findings in this job!
-                </Text>
-              ) : (
-                reportObject?.reportingList
-                  ?.filter((singleItem) => singleItem?.implicationRating === 1)
-                  ?.map((singleItem, index) => {
-                    return (
-                      <Text style={styles.h4} key={index}>
-                        {singleItem?.observationTitle.slice(0, 40)}...
-                      </Text>
-                    );
-                  })
+        {/* Contents / Table of contents */}
+        <View style={{ marginBottom: 8 }}>
+          <Text style={styles.contentsHeading}>Contents</Text>
+          <View style={styles.contentBlock}>
+            <Text style={styles.smallHeader}>Executive Summary</Text>
+            <Text style={styles.smallHeader}>Audit Purpose</Text>
+            <Text style={styles.smallHeader}>Overview</Text>
+            <Text style={styles.smallHeader}>Summary of Key Findings</Text>
+            <Text style={styles.smallHeader}>Main Findings and Recommendations</Text>
+            {reportObject?.intAuditExtraFieldsList &&
+              reportObject?.intAuditExtraFieldsList.length > 0 && (
+                <Text style={styles.smallHeader}>Audit Extra Fields</Text>
               )}
-            </View>
-            <Text style={styles.h4}>
-              ALL FINDINGS -----------------------------------------------------
-            </Text>
-            <View style={styles.overviewFields}>
-              {sortedObservations?.map((singleItem, index) => {
-                return (
-                  <Text style={styles.h4} key={index}>
-                    {singleItem?.observationTitle.slice(0, 40)}...
-                  </Text>
-                );
-              })}
-            </View>
-            <Text style={styles.h4}>
-              Audit Extra Fields
-              -------------------------------------------------
-            </Text>
-            <View style={styles.overviewFields}>
-              {reportObject?.intAuditExtraFieldsList?.map(
-                (singleItem, index) => {
-                  return (
-                    <Text style={styles.h4} key={index}>
-                      {singleItem?.heading.slice(0, 40)}...
-                    </Text>
-                  );
-                }
-              )}
-            </View>
-            <Text style={styles.h4}>
-              ANNEXURE -------------------------------------------------------
-            </Text>
+            {
+              reportObject.annexure && <Text style={styles.smallHeader}>Annexure</Text>
+            }
           </View>
         </View>
-        {/* Page 2 */}
-        <View style={styles.page2} break>
-          <Text style={styles.contents}>OVERVIEW </Text>
-          <View style={styles.reportNameView}>
-            <View style={styles.reportInfoViewItem}>
-              <Text style={styles.reportInfoTitle}>Report Name:</Text>
-              <Text style={styles.reportInfoSubTitle}>
-                {reportObject?.reportName}
-              </Text>
-            </View>
-            <View style={styles.reportInfoViewItem}>
-              <Text style={styles.reportInfoTitle}>Report Date:</Text>
-              <Text style={styles.reportInfoSubTitle}>
-                {moment.utc(reportObject?.reportDate).format("DD-MM-YYYY")}
-              </Text>
-            </View>
-            <View style={styles.reportInfoViewItem}>
-              <Text style={styles.reportInfoTitle}>Planned Start Date:</Text>
-              <Text style={styles.reportInfoSubTitle}>
-                {moment
-                  .utc(reportObject?.plannedStartDate)
-                  .format("DD-MM-YYYY")}
-              </Text>
-            </View>
-            <View style={styles.reportInfoViewItem}>
-              <Text style={styles.reportInfoTitle}>Planned End Date:</Text>
-              <Text style={styles.reportInfoSubTitle}>
-                {moment.utc(reportObject?.plannedEndDate).format("DD-MM-YYYY")}
-              </Text>
-            </View>
-            <View style={styles.reportInfoViewItem}>
-              <Text style={styles.reportInfoTitle}>Planned Hours:</Text>
-              <Text style={styles.reportInfoSubTitle}>
-                {reportObject?.plannedHours}
-              </Text>
-            </View>
-            <View style={styles.reportInfoViewItem}>
-              <Text style={styles.reportInfoTitle}>Job Through:</Text>
-              <Text style={styles.reportInfoSubTitle}>
-                {reportObject?.riskApproach}
-              </Text>
-            </View>
-            <View style={styles.reportInfoViewItem}>
-              <Text style={styles.reportInfoTitle}>Location:</Text>
-              <View style={styles.locationWrap}>
-                {[
-                  ...new Set(
-                    reportObject?.subLocationList?.map(
-                      (item) => item?.locationid?.description
-                    )
-                  ),
-                ]?.map((locationItem, index) => {
-                  return (
-                    <Text style={styles.reportInfoSubTitle} key={index}>
-                      {locationItem}
-                    </Text>
-                  );
-                })}
-              </View>
-            </View>
-            <View style={styles.reportInfoViewItem}>
-              <Text style={styles.reportInfoTitle}>Sub Location:</Text>
-              <View style={styles.locationWrap}>
-                {reportObject?.subLocationList?.map((item, index) => {
-                  return (
-                    <Text style={styles.reportInfoSubTitle} key={index}>
-                      {item?.description}
-                    </Text>
-                  );
-                })}
-              </View>
-            </View>
-            <View style={styles.reportInfoViewItem}>
-              <Text style={styles.reportInfoTitle}>Department:</Text>
-              <View style={styles.locationWrap}>
-                {[
-                  ...new Set(
-                    reportObject?.subDepartmentList?.map(
-                      (item) => item?.department?.description
-                    )
-                  ),
-                ]?.map((departmentItem, index) => {
-                  return (
-                    <Text style={styles.reportInfoSubTitle} key={index}>
-                      {departmentItem}
-                    </Text>
-                  );
-                })}
-              </View>
-            </View>
-            <View style={styles.reportInfoViewItem}>
-              <Text style={styles.reportInfoTitle}>Sub Department:</Text>
-              <View style={styles.locationWrap}>
-                {reportObject?.subDepartmentList?.map((item, index) => {
-                  return (
-                    <Text style={styles.reportInfoSubTitle} key={index}>
-                      {item?.description}
-                    </Text>
-                  );
-                })}
-              </View>
-            </View>
-          </View>
-        </View>
-        {/* Page 3 */}
-        <View style={styles.page2} break>
-          <Text style={styles.contents}>EXECUTIVE SUMMARY </Text>
-          <Html style={{ transform: 'scale(0.5)', transformOrigin: 'top left' }}>
+
+        {/* Executive Summary */}
+        <View style={{ marginTop: 6 }} break>
+          <Text style={styles.sectionTitle}>Executive Summary</Text>
+          <Html style={{ width: "100%", fontSize: 10 }}>
             {cleanHtml(reportObject?.executiveSummary)}
           </Html>
         </View>
-        {/* Page 4 */}
-        <View style={styles.page2} break>
-          <Text style={styles.contents}>AUDIT PURPOSE </Text>
-          <Html style={{ transform: 'scale(0.5)', transformOrigin: 'top left' }}>
+
+        {/* Audit Purpose */}
+        <View style={{ marginTop: 6 }} break>
+          <Text style={styles.sectionTitle}>Audit Purpose</Text>
+          <Html style={{ width: "100%", fontSize: 10 }}>
             {cleanHtml(reportObject?.auditPurpose)}
           </Html>
         </View>
-        {/* Page 5 */}
-        <View style={styles.page2} break>
-          <Text style={styles.contents}>SUMMARY OF KEY FINDINGS </Text>
-          {reportObject?.reportingList?.filter(
-            (singleItem) => singleItem?.implicationRating === 1
-          )?.length == 0 ? (
-            <Text style={styles.h4}>
-              No summary of key findings in this job!
+
+        {/* Overview */}
+        <View style={{ marginBottom: 8 }} break>
+          <Text style={styles.contentsHeading}>Overview</Text>
+
+          <View style={styles.contentBlock}>
+            <Text style={styles.smallHeader}>Location</Text>
+            <Text style={[styles.smallHeader, { marginLeft: 20 }]}>
+              {reportObject?.subLocationList[0].description}
             </Text>
-          ) : (
-            reportObject?.reportingList
-              ?.filter((singleItem) => singleItem?.implicationRating === 1)
-              ?.map((item, index) => {
-                return (
-                  <View style={styles.findingsSummary} key={index}>
-                    <Text style={styles.indexNumber}>Finding {index + 1}</Text>
-                    <Html style={{ transform: 'scale(0.5)', transformOrigin: 'top left' }}>
-                      {cleanHtml(item?.observationName)}
-                    </Html>
-                  </View>
-                );
-              })
-          )}
-        </View>
-        {/* Page 6 */}
-        <View style={styles.allFindingMianHeadingWrap} break>
-          <Text style={styles.globalFont}>ALL FINDINGS</Text>
-        </View>
-        {/* Page 7 */}
-        <View style={styles.page2} break>
-          {sortedObservations?.map((followUpItem, index) => {
-            return (
-              <View style={styles.findings} key={index}>
-                <Text style={styles.indexNumber}>Finding {index + 1}</Text>
-                <View style={styles.singleFindSummaryWrap}>
-                  <Text style={styles.singleFindSummaryHeader}>
-                    Observation Title
-                  </Text>
-                  <Text style={styles.singleFindSummaryPara}>
-                    {followUpItem?.observationTitle}
-                  </Text>
+            <Text style={styles.smallHeader}>Report Date</Text>
+            <Text style={[styles.smallHeader, { marginLeft: 20 }]}>
+              {moment
+                .utc(reportObject?.reportDate)
+                .format("YYYY-MM-DD")}
+            </Text>
+            <Text style={styles.smallHeader}>Planned Start Date</Text>
+            <Text style={[styles.smallHeader, { marginLeft: 20 }]}>
+              {moment
+                .utc(reportObject?.plannedStartDate)
+                .format("YYYY-MM-DD")}
+            </Text>
+            {/* <Text style={styles.smallHeader}>Head of Internal Audit</Text>
+            <View style={{ marginLeft: 20 }}>
+              {reportObject?.resourceAllocations?.headOfInternalAudit
+                ?.name || "No Head Of Internal Audit"}
+            </View>
+            <Text style={styles.smallHeader}>Backup Head Of InternalAudit</Text>
+            <View style={{ marginLeft: 20 }}>
+              {reportObject?.resourceAllocations
+                ?.backupHeadOfInternalAudit?.name ||
+                "No Backup Head Of InternalAudit Assigned "}
+            </View>
+            <Text style={styles.smallHeader}>Proposed Job Approver</Text>
+            <View style={{ marginLeft: 20 }}>
+              {reportObject?.resourceAllocations?.proposedJobApprover
+                ?.name || "No Proposed Job Approver Assigned "}
+            </View>
+            <Text style={styles.smallHeader}>Report Prepared By</Text>
+            <View style={{ marginLeft: 20 }}>
+              {reportObject?.resourceAllocations?.createdBy.name
+                ?.name}
+            </View>
+            <Text style={styles.smallHeader}>Resources</Text>
+            <View style={{ marginLeft: 20 }}>
+              {reportObject?.resourceAllocations?.resourcesList &&
+                reportObject?.resourceAllocations?.resourcesList
+                  .length ? (
+                <View>
+                  {reportObject?.resourceAllocations?.resourcesList?.map(
+                    (user) => {
+                      return <Text style={styles.bodyText} key={idx}>
+                        {idx + 1}. {user?.name}
+                      </Text>;
+                    }
+                  )}
                 </View>
-                <View style={styles.singleFindSummaryWrap}>
-                  <Text style={styles.singleFindSummaryHeader}>
-                    Area
-                  </Text>
-                  <Text style={styles.singleFindSummaryPara}>
-                    {followUpItem?.area}
-                  </Text>
-                </View>
-                <View style={styles.singleFindSummaryWrap}>
-                  <Text style={styles.singleFindSummaryHeader}>
-                    Observation
-                  </Text>
-                  <Html style={{ transform: 'scale(0.5)', transformOrigin: 'top left' }}>
-                    {cleanHtml(followUpItem?.observationName)}
-                  </Html>
-                </View>
-                <View style={styles.singleFindSummaryWrap}>
-                  <Text style={styles.singleFindSummaryHeader}>
-                    Implication
-                  </Text>
-                  <Text style={styles.singleFindSummaryPara}>
-                    {followUpItem?.implication}
-                  </Text>
-                </View>
-                <View style={styles.singleFindSummaryWrap}>
-                  <Text style={styles.singleFindSummaryHeader}>
-                    Management Comments
-                  </Text>
-                  <Html style={{ transform: 'scale(0.5)', transformOrigin: 'top left' }}>
-                    {cleanHtml(followUpItem?.managementComments)}
-                  </Html>
-                </View>
-                <View style={styles.singleFindSummaryWrap}>
-                  <Text style={styles.singleFindSummaryHeader}>
-                    Implication Rating
-                  </Text>
-                  <Text style={styles.singleFindSummaryPara}>
-                    {followUpItem?.implicationRating === 1
-                      ? "High"
-                      : followUpItem?.implicationRating === 2
-                        ? "Medium"
-                        : followUpItem?.implicationRating === 3
-                          ? "Low"
-                          : ""}
-                  </Text>
-                </View>
-                <View style={styles.singleFindSummaryWrap}>
-                  <Text style={styles.singleFindSummaryHeader}>Auditee</Text>
-                  <Text style={styles.singleFindSummaryPara}>
-                    {followUpItem?.auditee?.name}
-                  </Text>
-                </View>
-                <View style={styles.singleFindSummaryWrap}>
-                  <Text style={styles.singleFindingsHeaderInfoHeader}>
-                    Implementation Date
-                  </Text>
-                  <Text style={styles.singleFindSummaryPara}>
-                    {moment(followUpItem?.implementationDate).format(
-                      "YYYY-MM-DD"
-                    )}
-                  </Text>
-                </View>
-                <View style={styles.line} />
-              </View>
-            );
-          })}
+              ) : (
+                <Text style={styles.smallHeader}>Resource List Not Found</Text>
+              )}
+            </View> */}
+          </View>
         </View>
 
-        {/* Page 8 */}
-        {reportObject?.intAuditExtraFieldsList &&
-          reportObject?.intAuditExtraFieldsList?.length !== 0 && (
-            <View style={styles.page2} break>
-              {reportObject?.intAuditExtraFieldsList?.map((item, index) => {
-                return (
-                  <View style={styles.findings} key={index}>
-                    <View style={styles.summaryInfoWrap}>
-                      <View style={styles.singleFindSummaryWrap}>
-                        <Text style={styles.singleFindSummaryHeader}>
-                          Heading
-                        </Text>
-                        <Text style={styles.singleFindSummaryPara}>
-                          {item?.heading.trim()}
-                        </Text>
+        {/* Audit Purpose */}
+        <View style={{ marginTop: 6 }} break>
+          <Text style={styles.sectionTitle}>Summary Of Key Findings</Text>
+          <Html style={{ width: "100%", fontSize: 10 }}>
+            {cleanHtml(reportObject?.keyFindings)}
+          </Html>
+        </View>
+
+
+        {/* Observations grouped by sub-location and area */}
+        {groupedObservations && groupedObservations.length > 0 && (
+          <View style={{ marginTop: 10 }} break>
+            <Text style={styles.reportBanner}>Main Findings and Recommendations</Text>
+            {/* You originally sliced to the first four groups — kept that behavior */}
+            {groupedObservations.map((areaGroup, idx) => (
+              <View style={styles.findingsList} key={idx}>
+                <View>
+                  {/* Sub-location (bold and easy to scan) */}
+                  <View style={styles.locationRow}>
+                    <Text style={styles.subLocationLabel} key={idx}>
+                      {areaGroup.area}
+                    </Text>
+                  </View>
+
+                  {areaGroup.items.map((observation, oIdx) => (
+                    <View key={oIdx} style={styles.observationBlock}>
+                      <View>
+                        <Text style={[styles.smallHeader, { color: "#0a7386" }]}>
+                          Observation Title</Text>
+                        <Text style={styles.smallHeader}>{observation.observationTitle}</Text>
                       </View>
-                      <View style={styles.singleFindSummaryWrap}>
-                        <Text style={styles.singleFindSummaryHeader}>Data</Text>
-                        <Text style={styles.singleFindSummaryPara}>
-                          {item?.data.trim()}
-                        </Text>
+
+                      <View>
+                        <Html style={{ width: "100%", fontSize: 10 }}>
+                          {cleanHtml(observation?.observationName)}
+                        </Html>
+                      </View>
+
+                      <View>
+                        <Text style={[styles.smallHeader, { color: "#0a7386" }]}>Audit Recommendation</Text>
+                        <Text style={styles.bodyText}>{observation?.recommendedActionStep}</Text>
+                      </View>
+
+                      <View>
+                        <Text style={[styles.smallHeader, { color: "#0a7386" }]}>Management Comments</Text>
+                        <Html style={{ width: "100%", fontSize: 10 }}>
+                          {cleanHtml(observation?.managementComments)}
+                        </Html>
                       </View>
                     </View>
-                  </View>
-                );
-              })}
-            </View>
-          )}
-        {/* Page 9 */}
+                  ))}
+                </View>
+              </View>
+            ))}
+          </View>
+        )}
+
+        {/* Extra fields */}
+        {reportObject?.intAuditExtraFieldsList && reportObject?.intAuditExtraFieldsList.length !== 0 && (
+          <View style={{ marginTop: 12 }} break>
+            <Text style={[styles.sectionTitle, { color: "#0a7386", fontSize: 18 }]}>Audit Extra Fields</Text>
+            {reportObject?.intAuditExtraFieldsList?.map((item, index) => (
+              <View style={{ marginTop: 4 }} key={index}>
+                <View style={styles.observationBlock}>
+                  <Text style={[styles.smallHeader, { color: "#0a7386" }]}>Heading</Text>
+                  <Text style={styles.bodyText}>{item?.heading?.trim()}</Text>
+                </View>
+                <View style={styles.observationBlock}>
+                  <Text style={[styles.smallHeader, { color: "#0a7386" }]}>Data</Text>
+                  <Text style={styles.bodyText}>{item?.data?.trim()}</Text>
+                </View>
+              </View>
+            ))}
+          </View>
+        )}
+
+        {/* Annexure */}
         {reportObject?.annexure && reportObject?.annexure !== "" && (
-          <View style={styles.page2} break>
-            <Text style={styles.contents}>ANNEXURE </Text>
-            <Html style={{ transform: 'scale(0.5)', transformOrigin: 'top left' }}>
+          <View style={{ marginTop: 12 }} break>
+            <Text style={styles.sectionTitle}>Annexure</Text>
+            <Html style={{ width: "100%", fontSize: 10 }}>
               {cleanHtml(reportObject?.annexure)}
             </Html>
           </View>
         )}
+
         <Text
           style={styles.pageNumber}
-          render={({ pageNumber, totalPages }) =>
-            `${pageNumber} / ${totalPages}`
-          }
+          render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`}
           fixed
         />
       </Page>
@@ -626,3 +436,5 @@ const PDFGenerator = ({ reportObject, logoPreview }) => {
 };
 
 export default PDFGenerator;
+
+

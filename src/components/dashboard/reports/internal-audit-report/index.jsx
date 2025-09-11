@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   setupGetAllInternalAuditReports,
   resetInternalAuditReportAddSuccess,
+  changeSelectedInternalAuditReport
 } from "../../../../global-redux/reducers/reports/internal-audit-report/slice";
 import { CircularProgress, Typography } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
@@ -205,9 +206,6 @@ const InternalAuditReport = () => {
             className="btn btn-labeled btn-primary px-3 shadow"
             onClick={() => navigate("/audit/generate-internal-audit-report")}
           >
-            <span className="btn-label me-2">
-              <i className="fa fa-eye"></i>
-            </span>
             Generate Report
           </div>
           <Tooltip
@@ -295,7 +293,7 @@ const InternalAuditReport = () => {
                             {(Number(item?.createdBy) ===
                               Number(user[0]?.userId?.id) &&
                               item?.submitted === false) ||
-                            user[0]?.userId?.employeeid?.userHierarchy ===
+                              user[0]?.userId?.employeeid?.userHierarchy ===
                               "IAH" ? (
                               <i
                                 className="fa fa-edit f-18 cursor-pointer"
@@ -312,7 +310,7 @@ const InternalAuditReport = () => {
                             {(Number(item?.createdBy) ===
                               Number(user[0]?.userId?.id) &&
                               item?.submitted === false) ||
-                            user[0]?.userId?.employeeid?.userHierarchy ===
+                              user[0]?.userId?.employeeid?.userHierarchy ===
                               "IAH" ? (
                               <i
                                 className={`fa fa-trash text-danger cursor-pointer f-18`}
@@ -330,7 +328,7 @@ const InternalAuditReport = () => {
                               item?.auditPurpose !== "" &&
                               item?.submitted === false &&
                               Number(item?.createdBy) ===
-                                Number(user[0]?.userId?.id) && (
+                              Number(user[0]?.userId?.id) && (
                                 <div
                                   className={`btn btn-labeled btn-primary shadow h-35`}
                                   onClick={() => handleSubmitReport(item)}
@@ -341,7 +339,7 @@ const InternalAuditReport = () => {
                             {item?.submitted === true &&
                               item?.approved === false &&
                               user[0]?.userId?.employeeid?.userHierarchy ===
-                                "IAH" && (
+                              "IAH" && (
                                 <div
                                   className={`btn btn-labeled btn-primary shadow h-35`}
                                   onClick={() => handleApproveReport(item)}
@@ -353,7 +351,7 @@ const InternalAuditReport = () => {
                             {item?.submitted === true &&
                               item?.approved === false &&
                               user[0]?.userId?.employeeid?.userHierarchy ===
-                                "IAH" && (
+                              "IAH" && (
                                 <div
                                   className={`btn btn-labeled btn-primary shadow h-35`}
                                   onClick={() => {
@@ -383,11 +381,9 @@ const InternalAuditReport = () => {
                                 <i
                                   className="fa fa-download f-18 cursor-pointer"
                                   onClick={() => {
-                                    const encryptedId = encryptAndEncode(
-                                      item?.id.toString()
-                                    );
+                                    dispatch(changeSelectedInternalAuditReport(item))
                                     navigate(
-                                      `/audit/view-internal-audit-report/${encryptedId}`
+                                      `/audit/download-internal-audit-report`
                                     );
                                   }}
                                 ></i>

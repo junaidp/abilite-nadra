@@ -62,9 +62,6 @@ const SelectJob = ({
                 }`}
                 onClick={handleGetInternalAuditReportObject}
               >
-                <span className="btn-label me-2">
-                  <i className="fa fa-check-circle f-18"></i>
-                </span>
                 {loading ? "Loading.." : "Create Report"}
               </div>
             </div>
