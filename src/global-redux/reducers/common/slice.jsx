@@ -161,13 +161,6 @@ let menuItems = [
       },
     ],
   },
-  // {
-  //   id: "li-audit-settings",
-  //   label: "Smart Query",
-  //   icon: faSearch,
-  //   route: "/audit/smart-query",
-  //   active: false,
-  // },
   {
     id: "li-ai",
     label: "Settings",
@@ -175,13 +168,6 @@ let menuItems = [
     route: "/audit/audit-settings",
     active: false,
   },
-  // {
-  //   id: "li-audit-analytics",
-  //   label: "Analytics",
-  //   icon: faChartSimple,
-  //   active: false,
-  //   route: "/audit/audit-analytics",
-  // },
   {
     id: "li-audit-tasks-management",
     label: "Tasks Management",

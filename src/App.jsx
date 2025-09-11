@@ -18,7 +18,6 @@ import JobPrioritization from "./pages/dashboard/planning/job-prioritization/Job
 import JobSecheduling from "./pages/dashboard/planning/job-scheduling/JobSeheduling";
 import AuditPlanSummary from "./pages/dashboard/planning/audit-plan-summary/AuditPlanSummary";
 import AuditEngagement from "./pages/dashboard/audit-engagement/AuditEngagement";
-import ForgetPassword from "./pages/auth/forget-password/ForgetPassword";
 import PlanningReport from "./pages/dashboard/reports/planning-report/PlanningReport";
 import ViewJobschedule from "./pages/dashboard/planning/job-scheduling/view-job-schedule/ViewJobschedule";
 import GeneratePlanningReport from "./pages/dashboard/reports/planning-report/generate-planning-report/GeneratePlanningReport";
@@ -35,7 +34,6 @@ import KickOff from "./pages/dashboard/audit-engagement/kick-off/KickOff";
 import RiskFactorApproach from "./pages/dashboard/planning/risk-assessments/risk-factor-approach/RiskFactorApproach";
 import Reporting from "./pages/dashboard/reporting-follow-up/reporting/Reporting";
 import FollowUp from "./pages/dashboard/reporting-follow-up/follow-up/FollowUp";
-import ResetPassword from "./pages/auth/reset-password/ResetPassword";
 import AuditParticulars from "./pages/dashboard/reporting-follow-up/reporting/reporting-particulars/ReportingParticulars";
 import FollowUpParticulars from "./pages/dashboard/reporting-follow-up/follow-up/follow-up-particulars/FollowUpParticulars";
 import AuditSettings from "./pages/dashboard/audit-settings/AuditSettings";
@@ -54,7 +52,6 @@ import UpdateInternalAuditConsolidationReport from "./pages/dashboard/reports/in
 import DownloadDetailedAuditReport from "./components/dashboard/reports/internal-audit-consolidation-report/download-report/index"
 import DownloadInternalAuditReport from "./components/dashboard/reports/internal-audit-report/download-report/index"
 import ProtectedRoute from "./components/common/layout/ProtectedRoute";
-import Analytics from "./pages/dashboard/analytics/Analaytics";
 import NotFound from "./components/common/not-found/index";
 
 const App = () => {
@@ -86,8 +83,6 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/forgot-password" element={<ForgetPassword />} />
           <Route
             path="/audit"
             element={
@@ -199,7 +194,6 @@ const App = () => {
               element={<AuditPlaningSummary />}
             />
             <Route path="audit-exception-report" element={<AuditException />} />
-            <Route path="audit-analytics" element={<Analytics />} />
             <Route path="download-detailed-audit-report" element={<DownloadDetailedAuditReport />} />
             <Route path="download-internal-audit-report" element={<DownloadInternalAuditReport />} />
           </Route>

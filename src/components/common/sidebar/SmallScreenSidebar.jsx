@@ -48,9 +48,6 @@ export default function SmallScreenSidebar() {
     if (id === "li-reporting-and-followup") {
       dispatch(changeExpanded("li-reporting-and-followup"));
     }
-    if (id === "li-audit-analytics") {
-      dispatch(changeExpanded("li-audit-analytics"));
-    }
   }
 
   function handleLogout() {
