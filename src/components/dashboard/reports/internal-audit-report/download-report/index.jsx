@@ -51,9 +51,20 @@ const DownloadDetailedAuditReport = () => {
             >
                 {({ loading }) =>
                     loading ? (
-                        <button className="btn btn-labeled btn-primary px-3 shadow me-3 fitContent" disabled>
-                            Generating PDF...
-                        </button>
+                        <div className="d-flex flex-column align-items-start">
+                            <button className="btn btn-labeled btn-primary px-3 shadow me-3 fitContent" disabled>
+                                Generating PDF...
+                            </button>
+                            <small className="text-muted mt-2">
+                                If the observations are large, the PDF file may take up to 3 minutes to generate.
+                                During this time, your screen may appear frozen — please do not refresh the page.
+                                Once the <strong>Download PDF</strong> button becomes active
+                                (visible on hover), you will be able to download your PDF.
+                                <br />
+                                <strong>Note:</strong> The company logo must be added by an admin
+                                in order to generate the PDF correctly.
+                            </small>
+                        </div>
                     ) : (
                         <button className="btn btn-labeled btn-primary px-3 shadow me-3 fitContent cursor-pointer">
                             Download PDF
