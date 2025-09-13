@@ -148,6 +148,8 @@ const KickOff = () => {
       dispatch(
         setupUpdateSingleAuditEngagement({
           ...singleAuditEngagementObject,
+          processIds: singleAuditEngagementObject?.processList?.map((item) => item.id),
+          subProcessIds: singleAuditEngagementObject?.subProcessList?.map((item) => item.id),
           status: "In Progress",
         })
       );

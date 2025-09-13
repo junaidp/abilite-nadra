@@ -64,16 +64,20 @@ export const getInitialSingleAuditEngagement = async (data, thunkAPI) => {
         },
       }
     );
-    const { company_id, process_Id, subProcess_Id } = props.data.data;
+    const { company_id, processList, subProcessList } = props.data.data;
 
     // Dispatch the additional action with the response data after successful API call
-    thunkAPI.dispatch(
-      setupGetAllDefaultRCM(
-        `?company_id=${Number(company_id)}&process_id=${Number(
-          process_Id
-        )}&subProcess_id=${Number(subProcess_Id)}`
-      )
-    );
+    if (processList && subProcessList) {
+      thunkAPI.dispatch(
+        setupGetAllDefaultRCM(
+          {
+            companyId: company_id,
+            processIds: processList?.map((process) => process.id) || [],
+            subProcessIds: subProcessList?.map((subProcess) => subProcess.id) || []
+          }
+        )
+      );
+    }
 
     return props.data;
   } catch (error) {
@@ -834,12 +838,13 @@ export const auditStepFeedBack = async (data, thunkAPI) => {
   }
 };
 
+
 export const getAllDefaultRCM = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
-      `${baseUrl}/configurations/RCMLibrary/getAll${data}`,
-      null,
+      `${baseUrl}/configurations/RCMLibrary/getAllByProcessIds`,
+      data,
       {
         headers: {
           Authorization: `Bearer ${user[0]?.token}`,
@@ -851,6 +856,7 @@ export const getAllDefaultRCM = async (data, thunkAPI) => {
     return thunkAPI.rejectWithValue(error);
   }
 };
+
 
 export const addObjectiveRiskControl = async (data, thunkAPI) => {
   try {

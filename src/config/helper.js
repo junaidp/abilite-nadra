@@ -221,8 +221,9 @@ const cleanHtml = (htmlString) => {
   // Force images to scale properly
   cleaned = cleaned.replace(
     /<img/gi,
-    '<img style="max-width: 100%; height: auto;"'
+    '<img style="max-width: 300px; max-height: 200px; height: auto; width: auto; display: block; margin: 0 auto;"'
   );
+
 
   // Wrap entire content with consistent font size and line height
   cleaned = `<div style="font-size: 10px; line-height: 1.4;">${cleaned}</div>`;

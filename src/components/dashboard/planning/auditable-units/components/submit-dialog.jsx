@@ -4,18 +4,25 @@ import { setupSubmitAuditableUnit } from "../../../../../global-redux/reducers/p
 
 const SubmitDialog = ({ object, setShowSubmitDialog }) => {
   const dispatch = useDispatch();
-  const { auditableUnitAddSuccess, loading } = useSelector(
+  const { auditableUnitAddSuccess, loading, processess } = useSelector(
     (state) => state?.planningAuditableUnit
   );
 
   function handleSubmit() {
+    const subProcessess = processess.flatMap((proc) => proc.subProcesses || []);
     if (!loading) {
       dispatch(
         setupSubmitAuditableUnit({
           ...object,
+          unitList: object.unitList.map((list) => {
+            return {
+              ...list,
+              processes: processess.filter((process) => list.processids.includes(process.id)),
+              subProcesses: subProcessess.filter((subProcess) => list.subProcessids.includes(subProcess.id)),
+            }
+          }),
           completed: true,
-        })
-      );
+        }))
     }
   }
 

@@ -1,39 +1,74 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { setupEditAuditableUnit } from "../../../global-redux/reducers/planing/auditable-units/slice";
 import {
-  setupGetAllProcess,
-  setupGetAllSubProcess,
-  resetAllValues,
-} from "../../../global-redux/reducers/settings/process/slice";
-import { CircularProgress } from "@mui/material";
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Checkbox,
+  ListItemText,
+  OutlinedInput,
+} from '@mui/material';
+import { setupEditAuditableUnit } from "../../../global-redux/reducers/planing/auditable-units/slice";
 import RiskAssessment from "./risk-assessment";
 
-const AuditableUnitRatingDialog = ({
+const EditAuditJobDialog = ({
   setShowEditAuditableUnit,
   selectedAuditableUnitId,
   selectedAuditableSubUnitId,
 }) => {
   const dispatch = useDispatch();
-  const { loading, auditableUnitAddSuccess, allAuditableUnits } = useSelector(
+  const { loading, auditableUnitAddSuccess, allAuditableUnits, processess } = useSelector(
     (state) => state?.planningAuditableUnit
   );
-  const {
-    allProcess,
-    allSubProcess,
-    loading: processLoading,
-  } = useSelector((state) => state?.settingsProcess);
-  const { company } = useSelector((state) => state?.common);
-  const { user } = useSelector((state) => state?.auth);
+  const [selectedProcessess, setSelectedProcessess] = React.useState([])
+  const [selectedSubProcessess, setSelectedSubProcessess] = React.useState([])
   const [auditableUnitName, setAuditableUnitName] = React.useState("");
-  const [processId, setProcessId] = React.useState("");
-  const [subProcessId, setSubProcessId] = React.useState("");
   const [risks, setRisk] = React.useState([]);
   const [data, setData] = React.useState({
     reason: "",
     jobType: "",
   });
+
+  const allowedSubProcesses = selectedProcessess.flatMap((proc) => proc.subProcesses || []);
+
+  // Handles process selection
+  const handleProcessChange = (event) => {
+    const selectedIds = event.target.value.map((id) => Number(id));
+
+    const newSelectedProcesses = processess.filter((p) =>
+      selectedIds.includes(p.id)
+    );
+
+    // Identify deselected processes
+    const removedProcesses = selectedProcessess.filter(
+      (prev) => !selectedIds.includes(prev.id)
+    );
+
+    const removedSubProcessIds = removedProcesses
+      .flatMap((p) => p.subProcesses?.map((sp) => sp.id) || []);
+
+    // Filter out only subProcesses that belong to the removed process(es)
+    const updatedSubProcesses = selectedSubProcessess.filter(
+      (sp) => !removedSubProcessIds.includes(sp.id)
+    );
+
+    setSelectedProcessess(newSelectedProcesses);
+    setSelectedSubProcessess(updatedSubProcesses);
+  };
+
+  // Handles sub-process selection
+  const handleSubProcessChange = (event) => {
+    const selectedIds = event.target.value.map((id) => Number(id));
+    const allSubProcesses = allowedSubProcesses;
+
+    const updated = allSubProcesses.filter((sp) =>
+      selectedIds.includes(sp.id)
+    );
+
+    setSelectedSubProcessess(updated);
+  };
 
   function handleChange(event) {
     setData((pre) => {
@@ -48,8 +83,8 @@ const AuditableUnitRatingDialog = ({
     if (
       data?.jobType === "" ||
       data?.reason === "" ||
-      processId === "" ||
-      subProcessId === ""
+      !selectedProcessess.length ||
+      !selectedSubProcessess.length
     ) {
       toast.error("Provide all value");
     } else {
@@ -66,8 +101,16 @@ const AuditableUnitRatingDialog = ({
             id: selectedAuditableSubUnitId,
             reason: data?.reason,
             jobType: data?.jobType,
-            processid: processId,
-            subProcessid: subProcessId,
+            processes: selectedProcessess.map((process) => {
+              return {
+                "id": process.id,
+                "description": process.description,
+                "companyid": process.companyid,
+                "archived": process.archived
+              }
+            }),
+            subProcesses: selectedSubProcessess,
+            riskAssessments: data?.riskAssessments
           },
         ];
 
@@ -81,13 +124,6 @@ const AuditableUnitRatingDialog = ({
     }
   }
 
-  function handleChangeProcess(event) {
-    if (event?.target?.value) {
-      setProcessId(event?.target?.value);
-      setSubProcessId("");
-    }
-  }
-
   React.useEffect(() => {
     if (auditableUnitAddSuccess) {
       setData({
@@ -95,41 +131,25 @@ const AuditableUnitRatingDialog = ({
         reason: "",
       });
       setShowEditAuditableUnit(false);
-      setProcessId("");
-      setSubProcessId("");
-      dispatch(resetAllValues());
     }
   }, [auditableUnitAddSuccess]);
 
-  React.useEffect(() => {
-    if (processId !== "") {
-      dispatch(setupGetAllSubProcess(`?processId=${Number(processId)}`));
-    }
-  }, [processId]);
 
   React.useEffect(() => {
-    if (allProcess?.length !== 0) {
-      const selectedItem = allAuditableUnits
-        ?.find((all) => all?.id === selectedAuditableUnitId)
-        ?.unitList.filter((unit) => unit.id === selectedAuditableSubUnitId)[0];
-      setData({ reason: selectedItem?.reason, jobType: selectedItem?.jobType });
-      setProcessId(selectedItem?.processid);
-      setSubProcessId(selectedItem?.subProcessid);
-      const selectedSingleItem = allAuditableUnits?.find(
-        (all) => all?.id === selectedAuditableUnitId
-      );
-      setAuditableUnitName(selectedSingleItem?.jobName);
-      setRisk(selectedItem?.riskAssessments);
-    }
-  }, [allProcess]);
-
-  React.useEffect(() => {
-    const companyId = user[0]?.company?.find(
-      (item) => item?.companyName === company
-    )?.id;
-    if (companyId) {
-      dispatch(setupGetAllProcess(companyId));
-    }
+    const selectedItem = allAuditableUnits
+      ?.find((all) => all?.id === selectedAuditableUnitId)
+      ?.unitList.filter((unit) => unit.id === selectedAuditableSubUnitId)[0];
+    const SubProcesses = processess.flatMap(
+      (proc) => proc.subProcesses || []
+    );
+    setData({ reason: selectedItem?.reason, jobType: selectedItem?.jobType });
+    setSelectedProcessess(processess.filter((process) => selectedItem.processids.includes(process.id)));
+    setSelectedSubProcessess(SubProcesses.filter((subProcess) => selectedItem.subProcessids.includes(subProcess.id)));
+    const selectedSingleItem = allAuditableUnits?.find(
+      (all) => all?.id === selectedAuditableUnitId
+    );
+    setAuditableUnitName(selectedSingleItem?.jobName);
+    setRisk(selectedItem?.riskAssessments);
   }, []);
 
   return (
@@ -146,9 +166,6 @@ const AuditableUnitRatingDialog = ({
                   onClick={() => {
                     setShowEditAuditableUnit(false);
                     setData({ jobType: "", reason: "" });
-                    setProcessId("");
-                    setSubProcessId("");
-                    dispatch(resetAllValues());
                   }}
                 ></button>
               </div>
@@ -157,152 +174,153 @@ const AuditableUnitRatingDialog = ({
             <div className="row mb-3">
               <div className="col-lg-9 sub-heading">{auditableUnitName}</div>
             </div>
-
-            {processLoading ? (
-              <CircularProgress />
-            ) : (
-              allProcess?.length !== 0 &&
-              allSubProcess?.length !== 0 && (
-                <div className="min-h-400">
-                  <div className="row my-3">
+            <div className="min-h-400">
+              <div className="row mb-3">
+                {allAuditableUnits?.find(
+                  (all) => all?.id === selectedAuditableUnitId
+                )?.natureThrough === "Compliance Checklist" && (
                     <div className="col-lg-12">
-                      <label>Audit Job</label>
-                      <textarea
-                        placeholder="Enter Reason"
-                        id="exampleFormControlTextarea1"
-                        rows="3"
-                        name="reason"
-                        value={data?.reason}
+                      <label>Job Type</label>
+                      <select
+                        className="form-select"
+                        aria-label="Default select example"
+                        name="jobType"
+                        defaultValue={data?.jobType}
+                      >
+                        <option value="Compliance Checklist">
+                          Compliance Checklist
+                        </option>
+                      </select>
+                    </div>
+                  )}
+                {allAuditableUnits?.find(
+                  (all) => all?.id === selectedAuditableUnitId
+                )?.natureThrough === "Special Project/Audit" && (
+                    <div className="col-lg-12">
+                      <label>Job Type</label>
+                      <select
+                        className="form-select"
+                        aria-label="Default select example"
+                        name="jobType"
+                        defaultValue={data?.jobType}
+                      >
+                        <option value="Special Audit">Special Audit </option>
+                      </select>
+                    </div>
+                  )}
+                {allAuditableUnits?.find(
+                  (all) => all?.id === selectedAuditableUnitId
+                )?.natureThrough === "Business Objective" && (
+                    <div className="col-lg-12">
+                      <label>Job Type</label>
+                      <select
+                        className="form-select"
+                        aria-label="Default select example"
+                        name="jobType"
+                        value={data?.jobType}
                         onChange={handleChange}
-                        maxLength="500"
-                        className={`form-control  ${
-                          data?.reason?.length >= 500 && "error-border"
-                        }`}
-                      ></textarea>
-                      <p className="word-limit-info label-text mb-2">
-                        Maximum 500 characters
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="row mb-3">
-                    {allAuditableUnits?.find(
-                      (all) => all?.id === selectedAuditableUnitId
-                    )?.natureThrough === "Compliance Checklist" && (
-                      <div className="col-lg-12">
-                        <label>Job Type</label>
-                        <select
-                          className="form-select"
-                          aria-label="Default select example"
-                          name="jobType"
-                          defaultValue={data?.jobType}
-                        >
-                          <option value="Compliance Checklist">
-                            Compliance Checklist
-                          </option>
-                        </select>
-                      </div>
-                    )}
-                    {allAuditableUnits?.find(
-                      (all) => all?.id === selectedAuditableUnitId
-                    )?.natureThrough === "Special Project/Audit" && (
-                      <div className="col-lg-12">
-                        <label>Job Type</label>
-                        <select
-                          className="form-select"
-                          aria-label="Default select example"
-                          name="jobType"
-                          defaultValue={data?.jobType}
-                        >
-                          <option value="Special Audit">Special Audit </option>
-                        </select>
-                      </div>
-                    )}
-                    {allAuditableUnits?.find(
-                      (all) => all?.id === selectedAuditableUnitId
-                    )?.natureThrough === "Business Objective" && (
-                      <div className="col-lg-12">
-                        <label>Job Type</label>
-                        <select
-                          className="form-select"
-                          aria-label="Default select example"
-                          name="jobType"
-                          value={data?.jobType}
-                          onChange={handleChange}
-                        >
-                          <option value="">Select Option</option>
-                          <option value="Review">Review</option>
-                          <option value="Fraud & Investigation">
-                            Fraud & Investigation
-                          </option>
-                          <option value="Assurance and Compiance">
-                            Assurance and Compiance
-                          </option>
-                          <option value="Advisory and consulting">
-                            Advisory and consulting
-                          </option>
-                        </select>
-                      </div>
-                    )}
-                  </div>
-                  <div className="row">
-                    <div className="col-lg-6">
-                      <label>Process</label>
-                      <select
-                        className="form-select"
-                        aria-label="Default select example"
-                        value={processId}
-                        onChange={(event) => handleChangeProcess(event)}
                       >
-                        <option value="">Select Process</option>
-                        {allProcess?.map((item, index) => {
-                          return (
-                            <option value={item?.id} key={index}>
-                              {item?.description}
-                            </option>
-                          );
-                        })}
+                        <option value="">Select Option</option>
+                        <option value="Review">Review</option>
+                        <option value="Fraud & Investigation">
+                          Fraud & Investigation
+                        </option>
+                        <option value="Assurance and Compiance">
+                          Assurance and Compiance
+                        </option>
+                        <option value="Advisory and consulting">
+                          Advisory and consulting
+                        </option>
                       </select>
                     </div>
-
-                    <div className="col-lg-6 mb-3">
-                      <label>Sub-Process</label>
-                      <select
-                        className="form-select"
-                        aria-label="Default select example"
-                        value={subProcessId}
-                        onChange={(event) => {
-                          if (event?.target?.value) {
-                            setSubProcessId(event?.target?.value);
-                          }
-                        }}
-                      >
-                        <option value="">Select SubProcess</option>
-                        {allSubProcess?.map((item, index) => {
-                          return (
-                            <option key={index} value={item?.id}>
-                              {item?.description}
-                            </option>
-                          );
-                        })}
-                      </select>
-                    </div>
-                  </div>
-                  <label className="mb-1">Selected Risks</label>
-                  <RiskAssessment riskAssessments={risks} />
+                  )}
+              </div>
+              <div className="row my-2">
+                <div className="col-lg-12">
+                  <label>Audit Job</label>
+                  <textarea
+                    placeholder="Enter Reason"
+                    id="exampleFormControlTextarea1"
+                    rows="3"
+                    name="reason"
+                    value={data?.reason}
+                    onChange={handleChange}
+                    maxLength="500"
+                    className={`form-control  ${data?.reason?.length >= 500 && "error-border"
+                      }`}
+                  ></textarea>
+                  <p className="word-limit-info label-text">
+                    Maximum 500 characters
+                  </p>
                 </div>
-              )
-            )}
+              </div>
+              <div className="row mb-3">
+                <div className="col-lg-6">
+                  <FormControl fullWidth>
+                    <InputLabel>Process</InputLabel>
+                    <Select
+                      multiple
+                      value={selectedProcessess.map((p) => p.id)}
+                      onChange={handleProcessChange}
+                      input={<OutlinedInput label="Process" />}
+                      renderValue={(selected) =>
+                        selected.map((id) => {
+                          const match = processess.find((p) => p.id === id);
+                          return match?.description;
+                        }).join(', ')
+                      }
+                    >
+                      {processess.map((proc) => (
+                        <MenuItem key={proc.id} value={proc.id}>
+                          <Checkbox
+                            checked={selectedProcessess.some((p) => p.id === proc.id)}
+                          />
+                          <ListItemText primary={proc.description} />
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </div>
+
+                <div className="col-lg-6">
+                  <FormControl fullWidth>
+                    <InputLabel>Sub-Process</InputLabel>
+                    <Select
+                      multiple
+                      value={selectedSubProcessess.map((sp) => sp.id)}
+                      onChange={handleSubProcessChange}
+                      input={<OutlinedInput label="Sub-Process" />}
+                      renderValue={(selected) =>
+                        selected.map((id) => {
+                          const match = allowedSubProcesses.find((sp) => sp.id === id);
+                          return match?.description;
+                        }).join(', ')
+                      }
+                    >
+                      {allowedSubProcesses.map((sub) => (
+                        <MenuItem key={sub.id} value={sub.id}>
+                          <Checkbox
+                            checked={selectedSubProcessess.some((sp) => sp.id === sub.id)}
+                          />
+                          <ListItemText primary={sub.description} />
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </div>
+              </div>
+              <label className="mb-1">Selected Risks</label>
+              <RiskAssessment riskAssessments={risks} />
+            </div>
           </div>
         </div>
-
         <div className="d-flex justify-content-between">
           <div>
             <button
               className={`btn btn-primary   float-end ${loading && "disabled"}`}
               onClick={handleEdit}
             >
-              {loading ? "Loading..." : "Edit"}
+              {loading ? "Loading..." : "Save"}
             </button>
           </div>
           <div>
@@ -311,9 +329,6 @@ const AuditableUnitRatingDialog = ({
               onClick={() => {
                 setShowEditAuditableUnit(false);
                 setData({ jobType: "", reason: "" });
-                setProcessId("");
-                setSubProcessId("");
-                dispatch(resetAllValues());
               }}
             >
               Close
@@ -325,4 +340,4 @@ const AuditableUnitRatingDialog = ({
   );
 };
 
-export default AuditableUnitRatingDialog;
+export default EditAuditJobDialog;

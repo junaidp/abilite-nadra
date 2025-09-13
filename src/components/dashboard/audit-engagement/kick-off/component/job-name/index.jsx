@@ -18,8 +18,12 @@ const JobName = ({ currentAuditEngagement }) => {
             {currentAuditEngagement?.jobType !== "Compliance Checklist" && (
               <div className="col-lg-6 px-3 d-flex justify-content-between">
                 <div className="fw-bold">Process:</div>
-                <div className="">
-                  {currentAuditEngagement?.process?.description}
+                <div className="d-flex gap-2 flex-wrap">
+                  {
+                    currentAuditEngagement?.processList?.map((process, index) => {
+                      return <Chip key={index} className="mx-2" label={process?.description} />
+                    })
+                  }
                 </div>
               </div>
             )}
@@ -36,8 +40,12 @@ const JobName = ({ currentAuditEngagement }) => {
             {currentAuditEngagement?.jobType !== "Compliance Checklist" && (
               <div className="col-lg-6 px-3 d-flex justify-content-between">
                 <div className="fw-bold">Sub Process:</div>
-                <div className="">
-                  {currentAuditEngagement?.subProcess?.description}
+                <div className="d-flex gap-2 flex-wrap">
+                  {
+                    currentAuditEngagement?.subProcessList?.map((subProcess, index) => {
+                      return <Chip key={index} className="mx-2" label={subProcess?.description} />
+                    })
+                  }
                 </div>
               </div>
             )}
@@ -166,8 +174,8 @@ const JobName = ({ currentAuditEngagement }) => {
               <div className="fw-bold">Resource List:</div>
 
               {currentAuditEngagement?.resourceAllocation?.resourcesList &&
-              currentAuditEngagement?.resourceAllocation?.resourcesList
-                .length ? (
+                currentAuditEngagement?.resourceAllocation?.resourcesList
+                  .length ? (
                 <div className="d-flex gap-4 flex-wrap">
                   {currentAuditEngagement?.resourceAllocation?.resourcesList?.map(
                     (user) => {

@@ -5,6 +5,7 @@ import AuditableUnitRatingDialog from "../../../modals/auditable-unit-rating-dia
 import {
   setupGetAllAuditableUnits,
   resetAuditableUnitSuccess,
+  setupGetAllProcessess
 } from "../../../../global-redux/reducers/planing/auditable-units/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
@@ -75,12 +76,16 @@ const AuditableUnits = () => {
   }, [auditableUnitAddSuccess]);
 
   React.useEffect(() => {
-    const companyId = user[0]?.company?.find(
-      (item) => item?.companyName === company
-    )?.id;
-    if (companyId) {
-      dispatch(setupGetAllAuditableUnits({ companyId, page, itemsPerPage }));
+    const start = async () => {
+      const companyId = user[0]?.company?.find(
+        (item) => item?.companyName === company
+      )?.id;
+      if (companyId) {
+        await dispatch(setupGetAllAuditableUnits({ companyId, page, itemsPerPage }));
+        await dispatch(setupGetAllProcessess({ companyId }));
+      }
     }
+    start()
   }, [dispatch, page]);
 
   return (

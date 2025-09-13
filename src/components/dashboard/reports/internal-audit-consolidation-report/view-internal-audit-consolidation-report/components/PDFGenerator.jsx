@@ -22,12 +22,12 @@ Font.register({
 const PAGE_PADDING = 35;
 const FONT_FAMILY = "Poppins";
 const TYPOGRAPHY = {
-  title: 22,
-  section: 16,
-  subsection: 18,
-  smallHeader: 10,
-  body: 10,
-  small: 9,
+  title: 16,
+  section: 12,
+  subsection: 14,
+  smallHeader: 6,
+  body: 6,
+  small: 5,
 };
 
 const styles = StyleSheet.create({

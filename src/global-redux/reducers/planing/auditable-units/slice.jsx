@@ -4,6 +4,7 @@ import {
   EditAuditableUnit,
   SubmitAuditableUnit,
   GetRiskAssessment,
+  GetAllProcessess
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
@@ -14,6 +15,7 @@ const initialState = {
   auditableUnitAddSuccess: false,
   totalNoOfRecords: 0,
   riskAssessments: [],
+  processess: []
 };
 
 export const setupGetAllAuditableUnits = createAsyncThunk(
@@ -46,6 +48,14 @@ export const setupGetRiskAssessment = createAsyncThunk(
   "auditableUnits/GetRiskAssessment",
   async (data, thunkAPI) => {
     return GetRiskAssessment(data, thunkAPI);
+  }
+);
+
+
+export const setupGetAllProcessess = createAsyncThunk(
+  "auditableUnits/GetAllProcessess",
+  async (data, thunkAPI) => {
+    return GetAllProcessess(data, thunkAPI);
   }
 );
 
@@ -151,6 +161,24 @@ export const slice = createSlice({
       .addCase(setupGetRiskAssessment.rejected, (state, { payload }) => {
         state.loading = false;
         state.auditableUnitAddSuccess = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+
+    // Get All Processess
+    builder
+      .addCase(setupGetAllProcessess.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetAllProcessess.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.processess = payload?.data || [];
+      })
+      .addCase(setupGetAllProcessess.rejected, (state, { payload }) => {
+        state.loading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
         } else {
