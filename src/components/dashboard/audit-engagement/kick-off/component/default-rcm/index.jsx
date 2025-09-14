@@ -89,7 +89,7 @@ const DefaultRCM = ({ auditEngagementId }) => {
       >
         <div className="accordion-body">
           {!defaultRCM[0]?.rcmLibraryObjectives ||
-          defaultRCM[0]?.rcmLibraryObjectives?.length === 0 ? (
+            defaultRCM[0]?.rcmLibraryObjectives?.length === 0 ? (
             <p>No Default Risk Control Matrix Available.</p>
           ) : (
             <div>
@@ -120,7 +120,7 @@ const DefaultRCM = ({ auditEngagementId }) => {
                   </p>
                 </div>
               </div>
-              {defaultRCM[0]?.rcmLibraryObjectives?.map((singleRCM, index) => {
+              {defaultRCM?.map((item) => item.rcmLibraryObjectives.map((singleRCM, index) => {
                 return (
                   <div key={index} className="row">
                     <div className="col-lg-3">
@@ -177,8 +177,9 @@ const DefaultRCM = ({ auditEngagementId }) => {
                       ></input>
                     </div>
                   </div>
-                );
-              })}
+                )
+              }))
+              }
             </div>
           )}
           {defaultRCM[0]?.rcmLibraryObjectives &&
@@ -186,9 +187,8 @@ const DefaultRCM = ({ auditEngagementId }) => {
               <div onClick={handleSubmit} className="mt-3">
                 <div className="justify-content-end text-end">
                   <div
-                    className={`btn btn-labeled btn-primary  shadow ${
-                      loading && "disabled"
-                    }`}
+                    className={`btn btn-labeled btn-primary  shadow ${loading && "disabled"
+                      }`}
                   >
                     {loading ? "Loading..." : "Submit"}
                   </div>
