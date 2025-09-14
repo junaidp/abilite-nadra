@@ -241,7 +241,7 @@ const ReportingParticulars = () => {
       )?.id;
       if (companyId) {
         dispatch(
-          setupGetInitialSingleReport(
+          setupGetSingleReport(
             `?reportingAndFollowUpId=${Number(reportingId)}`
           )
         );
