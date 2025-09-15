@@ -282,17 +282,17 @@ const PDFGenerator = ({ reportObject, logoPreview }) => {
 
           <View style={styles.contentBlock}>
             <Text style={styles.smallHeader}>Location</Text>
-            <Text style={[styles.smallHeader, { marginLeft: 20 }]}>
+            <Text style={{ marginLeft: 20, fontSize: 8 }}>
               {reportObject?.subLocationList[0].description}
             </Text>
             <Text style={styles.smallHeader}>Report Date</Text>
-            <Text style={[styles.smallHeader, { marginLeft: 20 }]}>
+            <Text style={{ marginLeft: 20, fontSize: 8 }}>
               {moment
                 .utc(reportObject?.reportDate)
                 .format("YYYY-MM-DD")}
             </Text>
             <Text style={styles.smallHeader}>Planned Start Date</Text>
-            <Text style={[styles.smallHeader, { marginLeft: 20 }]}>
+            <Text style={{ marginLeft: 20, fontSize: 8 }}>
               {moment
                 .utc(reportObject?.plannedStartDate)
                 .format("YYYY-MM-DD")}
@@ -313,10 +313,10 @@ const PDFGenerator = ({ reportObject, logoPreview }) => {
               {reportObject?.resourceAllocations?.proposedJobApprover?.name || "No Proposed Job Approver Assigned "}
             </Text>
             <Text style={styles.smallHeader}>Report Prepared By</Text>
-            <View style={{ marginLeft: 20, fontSize: 8 }}>
+            <Text style={{ marginLeft: 20, fontSize: 8 }}>
               {reportObject?.resourceAllocations?.createdBy.name
-                ?.name}
-            </View>
+                }
+            </Text>
             <Text style={styles.smallHeader}>Resources</Text>
             <View style={{ marginLeft: 20 }}>
               {reportObject?.resourceAllocations?.resourcesList &&
@@ -325,7 +325,7 @@ const PDFGenerator = ({ reportObject, logoPreview }) => {
                 <View>
                   {reportObject?.resourceAllocations?.resourcesList?.map(
                     (user, idx) => {
-                      return <Text style={styles.bodyText} key={idx}>
+                      return <Text style={{ marginLeft: 20, fontSize: 8 }} key={idx}>
                         {idx + 1}. {user?.name}
                       </Text>;
                     }

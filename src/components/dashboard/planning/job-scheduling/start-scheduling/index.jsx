@@ -268,7 +268,7 @@ const StartScheduling = () => {
       // for the department
       const existingData = {
         departments: singleJobSchedulingObject?.departments || [],
-        subDepartmentList: singleJobSchedulingObject?.subDepartmentList || [],
+        subDepartmentList: singleJobSchedulingObject?.subDepartments || [],
       };
 
       setSelectedDepartments(
