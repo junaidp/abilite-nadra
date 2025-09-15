@@ -16,7 +16,6 @@ import {
   reportingFeedBack,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { convertFromBase64 } from "../../../config/helper"
 
 const initialState = {
   loading: false,
@@ -177,21 +176,7 @@ export const slice = createSlice({
       })
       .addCase(setupGetSingleReport.fulfilled, (state, { payload }) => {
         state.loading = false;
-        if (payload?.data) {
-          state.singleReport = {
-            ...payload.data,
-            reportingList: payload.data.reportingList?.map((observation) => ({
-              ...observation,
-              followUp: observation.followUp ? {
-                ...observation.followUp,
-                finalComments: convertFromBase64(observation?.followUp?.finalComments || ""),
-              } : observation.followUp,
-            })),
-          };
-        } else {
-          state.singleReport = { error: "Not Found" };
-        }
-
+        state.singleReport = payload?.data || [{ error: "Not Found" }];
       })
 
       .addCase(setupGetSingleReport.rejected, (state, { payload }) => {
@@ -209,21 +194,7 @@ export const slice = createSlice({
       })
       .addCase(setupGetInitialSingleReport.fulfilled, (state, { payload }) => {
         state.initialLoading = false;
-
-        if (payload?.data) {
-          state.singleReport = {
-            ...payload.data,
-            reportingList: payload.data.reportingList?.map((observation) => ({
-              ...observation,
-              followUp: observation.followUp ? {
-                ...observation.followUp,
-                finalComments: convertFromBase64(observation?.followUp?.finalComments || ""),
-              } : observation.followUp,
-            })),
-          };
-        } else {
-          state.singleReport = { error: "Not Found" };
-        }
+        state.singleReport = payload?.data || [{ error: "Not Found" }];
 
       })
       .addCase(setupGetInitialSingleReport.rejected, (state, { payload }) => {

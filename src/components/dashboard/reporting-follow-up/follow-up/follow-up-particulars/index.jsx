@@ -20,7 +20,7 @@ import ApproveDialog from "./components/ApproveDialog";
 import FeedBackDialog from "../../components/FeedBackDialog";
 import ViewThirdFeedBackDialog from "../../components/ThirdFeedBack";
 import SubmitDialog from "./components/SubmitDialog";
-import { decryptString, convertToBase64 } from "../../../../../config/helper";
+import { decryptString } from "../../../../../config/helper";
 import { useParams } from "react-router-dom";
 
 const FollowUpParticulars = () => {
@@ -99,7 +99,7 @@ const FollowUpParticulars = () => {
               : false,
           finalComments:
             item?.followUp?.recommendationsImplemented.toString() === "true"
-              ? convertToBase64(item?.followUp?.finalComments)
+              ? item?.followUp?.finalComments
               : "",
         })
       );
@@ -111,7 +111,6 @@ const FollowUpParticulars = () => {
       dispatch(
         setupUpdateFollowUp({
           ...item?.followUp,
-          finalComments: convertToBase64(item?.followUp?.finalComments),
           testInNextYear:
             item?.followUp?.testInNextYear.toString() === "true" ? true : false,
         })

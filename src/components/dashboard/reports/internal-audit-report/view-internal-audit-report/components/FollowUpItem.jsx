@@ -1,7 +1,5 @@
-import React from "react";
 import moment from "moment";
 import RichTextEditor from "./RichText";
-import { convertFromBase64 } from "../../../../../../config/helper";
 
 const FollowUpItem = ({ item, consolidatedObservationsItem }) => {
   return (
@@ -91,7 +89,7 @@ const FollowUpItem = ({ item, consolidatedObservationsItem }) => {
       {item?.followUp?.recommendationsImplemented.toString() === "true" && (
         <div className="mb-3">
           <label>Final Comments:</label>
-          <RichTextEditor initialValue={convertFromBase64(item?.followUp?.finalComments)} />
+          <RichTextEditor initialValue={item?.followUp?.finalComments} />
         </div>
       )}
 

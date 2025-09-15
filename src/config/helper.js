@@ -287,25 +287,6 @@ const groupByArea = (list) => {
   return result;
 };
 
-const convertToBase64 = (text) => {
-  return btoa(unescape(encodeURIComponent(text)));
-};
-
-const convertFromBase64 = (value) => {
-  try {
-    if (
-      typeof value === "string" &&
-      /^[A-Za-z0-9+/=]+$/.test(value) &&
-      value.length % 4 === 0
-    ) {
-      return decodeURIComponent(escape(atob(value)));
-    }
-    return value;
-  } catch {
-    return value
-  }
-};
-
 
 export {
   handleDownload,
@@ -321,7 +302,5 @@ export {
   cleanHtml,
   groupBySubLocationAndArea,
   groupByArea,
-  convertToBase64,
-  convertFromBase64,
   groupObservationsBySubLocationAndArea
 };
