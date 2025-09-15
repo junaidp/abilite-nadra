@@ -76,16 +76,15 @@ function groupObservationsBySubLocationAndArea(array) {
     return acc;
   }, {});
 
-  // Convert nested objects into arrays & filter
+  // Convert nested objects into arrays
   const result = Object.values(groupedBySubLocation).map((subLocGroup) => ({
     subLocation: subLocGroup.subLocation,
-    areas: Object.values(subLocGroup.areas).filter(
-      (group) => group.observations.length > 1 // Keep only if more than one observation
-    ),
+    areas: Object.values(subLocGroup.areas),
   }));
 
-  return result.filter((subLocGroup) => subLocGroup.areas.length > 0);
+  return result;
 }
+
 
 
 function handleCalculateProbability(item) {

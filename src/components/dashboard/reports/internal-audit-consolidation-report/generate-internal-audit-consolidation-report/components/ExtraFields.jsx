@@ -39,13 +39,12 @@ const ExtraFields = ({
                     onChange={(event) =>
                       handleChangeExtraFields(event, item?.id)
                     }
-                    maxLength="500"
-                    className={`form-control ${
-                      item?.heading?.length >= 500 && "error-border"
-                    }`}
+                    maxLength="3000"
+                    className={`form-control ${item?.heading?.length >= 3000 && "error-border"
+                      }`}
                   ></textarea>
                   <p className="word-limit-info label-text mb-2">
-                    Maximum 500 characters
+                    Maximum 3000 characters
                   </p>{" "}
                 </div>
               </div>
@@ -61,21 +60,19 @@ const ExtraFields = ({
                     onChange={(event) =>
                       handleChangeExtraFields(event, item?.id)
                     }
-                    maxLength="500"
-                    className={`form-control ${
-                      item?.data?.length >= 500 && "error-border"
-                    }`}
+                    maxLength="3000"
+                    className={`form-control ${item?.data?.length >= 3000 && "error-border"
+                      }`}
                   ></textarea>
                   <p className="word-limit-info label-text mb-2">
-                    Maximum 500 characters
+                    Maximum 3000 characters
                   </p>
                 </div>
               </div>
               <div className="col-lg-4">
                 <div
-                  className={`btn btn-labeled btn-primary px-3 shadow  my-4 ${
-                    createExtraFieldsLoading && "disabled"
-                  }`}
+                  className={`btn btn-labeled btn-primary px-3 shadow  my-4 ${createExtraFieldsLoading && "disabled"
+                    }`}
                   onClick={() => handleUpdateExtraField(item)}
                 >
                   <span className="btn-label me-2">
@@ -128,13 +125,12 @@ const ExtraFields = ({
                       onChange={(event) =>
                         handleChangeExtraField(event, singleItem?.id)
                       }
-                      maxLength="500"
-                      className={`form-control ${
-                        singleItem?.heading?.length >= 500 && "error-border"
-                      }`}
+                      maxLength="3000"
+                      className={`form-control ${singleItem?.heading?.length >= 3000 && "error-border"
+                        }`}
                     ></textarea>
                     <p className="word-limit-info label-text mb-2">
-                      Maximum 500 characters
+                      Maximum 3000 characters
                     </p>
                   </div>
                 </div>
@@ -150,13 +146,12 @@ const ExtraFields = ({
                       onChange={(event) =>
                         handleChangeExtraField(event, singleItem?.id)
                       }
-                      maxLength="500"
-                      className={`form-control ${
-                        singleItem?.data?.length >= 500 && "error-border"
-                      }`}
+                      maxLength="3000"
+                      className={`form-control ${singleItem?.data?.length >= 3000 && "error-border"
+                        }`}
                     ></textarea>
                     <p className="word-limit-info label-text mb-2">
-                      Maximum 500 characters
+                      Maximum 3000 characters
                     </p>
                   </div>
                 </div>
@@ -168,9 +163,8 @@ const ExtraFields = ({
         {extraFieldsArray?.length !== 0 && (
           <div className="col-lg-2 px-3 py-2">
             <div
-              className={`btn btn-labeled btn-primary px-3 shadow  my-4 ${
-                createExtraFieldsLoading && "disabled"
-              }`}
+              className={`btn btn-labeled btn-primary px-3 shadow  my-4 ${createExtraFieldsLoading && "disabled"
+                }`}
               onClick={handleAddExtraField}
             >
               <span className="btn-label me-2">

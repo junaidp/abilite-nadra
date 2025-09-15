@@ -40,12 +40,12 @@ const ExtraFields = ({
                       handleChangeExtraFields(event, item?.id)
                     }
                     className={`form-control ${
-                      item?.heading?.length >= 500 && "error-border"
+                      item?.heading?.length >= 3000 && "error-border"
                     }`}
-                    maxLength="500"
+                    maxLength="3000"
                   ></textarea>
                   <p className="word-limit-info label-text mb-2">
-                    Maximum 500 characters
+                    Maximum 3000 characters
                   </p>{" "}
                 </div>
               </div>
@@ -62,12 +62,12 @@ const ExtraFields = ({
                       handleChangeExtraFields(event, item?.id)
                     }
                     className={`form-control ${
-                      item?.data?.length >= 500 && "error-border"
+                      item?.data?.length >= 3000 && "error-border"
                     }`}
-                    maxLength="500"
+                    maxLength="3000"
                   ></textarea>
                   <p className="word-limit-info label-text mb-2">
-                    Maximum 500 characters
+                    Maximum 3000 characters
                   </p>{" "}
                 </div>
               </div>
@@ -129,12 +129,12 @@ const ExtraFields = ({
                         handleChangeExtraField(event, singleItem?.id)
                       }
                       className={`form-control ${
-                        singleItem?.heading?.length >= 500 && "error-border"
+                        singleItem?.heading?.length >= 3000 && "error-border"
                       }`}
-                      maxLength="500"
+                      maxLength="3000"
                     ></textarea>
                     <p className="word-limit-info label-text mb-2">
-                      Maximum 500 characters
+                      Maximum 3000 characters
                     </p>
                   </div>
                 </div>
@@ -151,12 +151,12 @@ const ExtraFields = ({
                         handleChangeExtraField(event, singleItem?.id)
                       }
                       className={`form-control ${
-                        singleItem?.data?.length >= 500 && "error-border"
+                        singleItem?.data?.length >= 3000 && "error-border"
                       }`}
-                      maxLength="500"
+                      maxLength="3000"
                     ></textarea>
                     <p className="word-limit-info label-text mb-2">
-                      Maximum 500 characters
+                      Maximum 3000 characters
                     </p>
                   </div>
                 </div>

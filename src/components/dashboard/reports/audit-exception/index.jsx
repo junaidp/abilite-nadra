@@ -225,7 +225,7 @@ const AuditExceptionReport = () => {
                 <tr>
                   <th className="min-w-80">Sr No.</th>
                   <th>Job Name</th>
-                  <th>Reporting Name</th>
+                  <th>Observation</th>
                   <th>Nature</th>
                   <th>Location</th>
                   <th>Sub-Location</th>

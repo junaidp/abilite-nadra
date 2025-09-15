@@ -25,11 +25,10 @@ const TYPOGRAPHY = {
   title: 16,
   section: 12,
   subsection: 14,
-  smallHeader: 6,
-  body: 6,
-  small: 5,
+  smallHeader: 10,
+  body: 10,
+  small: 8,
 };
-
 const styles = StyleSheet.create({
   // Base page used for most pages so padding/width stays consistent
   pageBase: {
@@ -312,12 +311,6 @@ const PDFGenerator = ({ reportObject, logoPreview }) => {
                         {/* Each observation under the area */}
                         {areaGroup.observations.map((observation, oIdx) => (
                           <View key={oIdx} style={styles.observationBlock}>
-                            <View>
-                              <Text style={[styles.smallHeader, { color: "#0a7386" }]}>
-                                Observation Title</Text>
-                              <Text style={styles.smallHeader}>{observation.observationTitle}</Text>
-                            </View>
-
                             <View>
                               <Html style={{ width: "100%", fontSize: 10 }}>
                                 {cleanHtml(observation?.observationName)}
