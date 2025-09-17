@@ -151,7 +151,7 @@ const ComplianceCheckListDialog = ({
                         (singleItem, index) => {
                           return (
                             <tr key={index}>
-                              <td>{singleItem?.id}</td>
+                              <td>{index + 1}</td>
                               <td>{singleItem?.area}</td>
                               <td>{singleItem?.subject || "null"}</td>
                               <td>{singleItem?.particulars}</td>

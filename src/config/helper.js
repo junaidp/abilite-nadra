@@ -170,15 +170,15 @@ function getLastTenYears() {
 function groupByAreaAndSubject(data) {
   const groupedMap = new Map();
 
-  data.forEach((item) => {
-    const areaKey = item.area.trim().toLowerCase();
-    const subjectKey = item.subject.trim().toLowerCase();
+  data?.forEach((item) => {
+    const areaKey = item?.area.trim().toLowerCase();
+    const subjectKey = item?.subject.trim().toLowerCase();
     const key = `${areaKey}||${subjectKey}`;
 
     if (!groupedMap.has(key)) {
       groupedMap.set(key, {
-        area: item.area,
-        subject: item.subject,
+        area: item?.area,
+        subject: item?.subject,
         items: [],
       });
     }
