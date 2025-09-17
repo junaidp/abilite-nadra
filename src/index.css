@@ -15,8 +15,20 @@ body {
   font-family: "Poppins", sans-serif !important;
 }
 
-.css-9iedg7 {
+.css-9iedg7,.css-6hp17o-MuiList-root-MuiMenu-list {
   font-family: "Poppins", sans-serif !important;
+}
+
+.css-10hburv-MuiTypography-root{
+  font-family: "Poppins", sans-serif !important;
+}
+.css-10hburv-MuiTypography-root{
+  font-size: 12px !important;
+}
+
+.css-yb0lig {
+  font-family: "Poppins", sans-serif !important;
+  font-size: 12px !important;
 }
 
 .MuiTooltip-popper[data-popper-placement*="bottom"]
