@@ -255,7 +255,7 @@ const AuditExceptionReport = () => {
                       <tr key={index}>
                         <td>{(page - 1) * 10 + index + 1}</td>
                         <td>
-                          {job[5] === "Compliance Checklist" ? job[1] : job[2]}
+                          {job[5] === "Compliance Checklist" ? job[1] : job[5] === "Previous Observation" ? job[1] : job[2]}
                         </td>
                         <td>{job[4]}</td>
                         <td>{job[5]}</td>
@@ -283,4 +283,3 @@ const AuditExceptionReport = () => {
 };
 
 export default AuditExceptionReport;
-
