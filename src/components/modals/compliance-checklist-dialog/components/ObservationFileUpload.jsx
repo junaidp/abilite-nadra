@@ -11,7 +11,7 @@ import "./index.css";
 
 const ObservationFileUpload = ({
   item,
-  handleAllowEdit,
+  allowEdit,
   setCurrentDeleteFileId,
 }) => {
   const dispatch = useDispatch();
@@ -96,7 +96,7 @@ const ObservationFileUpload = ({
       <div className="row mb-3 fileSubObservationColItem">
         <div className="col-lg-12">
           <label className="form-label me-3 mb-3">Attach files</label>
-          {handleAllowEdit() === true && (
+          {allowEdit === true && (
             <div className="row mb-3">
               <div className="col-lg-4 row">
                 <div className="col-lg-12">
@@ -171,7 +171,7 @@ const ObservationFileUpload = ({
                                 })
                               }
                             ></i>
-                            {handleAllowEdit() === true && (
+                            {allowEdit === true && (
                               <i
                                 className="fa fa-trash text-danger f-18 cursor-pointer px-2"
                                 onClick={() => {

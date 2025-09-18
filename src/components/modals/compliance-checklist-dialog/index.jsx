@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 import { setupUpdateComplianceCheckList } from "../../../global-redux/reducers/audit-engagement/slice";
 import { useDispatch, useSelector } from "react-redux";
-import RichTextEditor from "./components/TextEditor";
-import ObservationFileUpload from "./components/ObservationFileUpload";
 import { Chip } from "@mui/material";
+import ComplianceRow from "./components/compliance-row";
+
 
 const ComplianceCheckListDialog = ({
   setShowComplianceCheckListDialog,
@@ -20,7 +20,8 @@ const ComplianceCheckListDialog = ({
   const [complianceItem, setComplianceItem] = React.useState({});
   const [currentDeleteFileId, setCurrentDeleteFileId] = React.useState("");
 
-  function handleUpdate() {
+  // ✅ memoized handleUpdate so it doesn’t re-create on every render
+  const handleUpdate = React.useCallback(() => {
     if (!loading) {
       dispatch(
         setupUpdateComplianceCheckList({
@@ -38,10 +39,12 @@ const ComplianceCheckListDialog = ({
         })
       );
     }
-  }
+  }, [loading, dispatch, complianceItem, currentDeleteFileId]);
 
-  function handleChange(event, id) {
-    if (!event.target.value) return
+
+  // ✅ memoized handleChange
+  const handleChange = React.useCallback((event, id) => {
+    if (!event.target.value) return;
     setComplianceItem((pre) => {
       return {
         ...pre,
@@ -52,9 +55,11 @@ const ComplianceCheckListDialog = ({
         ),
       };
     });
-  }
+  }, []);
 
-  function onContentChange(id, value) {
+
+  // ✅ memoized onContentChange
+  const onContentChange = React.useCallback((id, value) => {
     setComplianceItem((pre) => {
       return {
         ...pre,
@@ -65,7 +70,7 @@ const ComplianceCheckListDialog = ({
         ),
       };
     });
-  }
+  }, []);
 
   React.useEffect(() => {
     if (auditEngagementObservationAddSuccess) {
@@ -81,7 +86,8 @@ const ComplianceCheckListDialog = ({
     setComplianceItem(singleComplianceMainItem);
   }, [currentAuditEngagement]);
 
-  function handleAllowEdit() {
+  // ✅ memoized allowEdit calculation
+  const allowEdit = React.useMemo(() => {
     let allowEdit = false;
     if (complianceItem?.submitted === false) {
       allowEdit = true;
@@ -106,7 +112,7 @@ const ComplianceCheckListDialog = ({
     }
 
     return allowEdit;
-  }
+  }, [complianceItem, user, singleAuditEngagementObject]);
 
   return (
     <div className="p-3">
@@ -141,63 +147,27 @@ const ComplianceCheckListDialog = ({
                       <th className="w-150">Particulars</th>
                       <th className="w-150">Remarks</th>
                       <th>Observation</th>
-                      <th>File attachment</th>
+                      <th className="w-150">File attachment</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {complianceItem?.checklistObservationsList?.length === 0
-                      ? "No Observation To Show"
-                      : complianceItem?.checklistObservationsList?.map(
-                        (singleItem, index) => {
-                          return (
-                            <tr key={index}>
-                              <td>{index + 1}</td>
-                              <td>{singleItem?.area}</td>
-                              <td>{singleItem?.subject || "null"}</td>
-                              <td>{singleItem?.particulars}</td>
-
-                              <td>
-                                <select
-                                  className="form-select mb-2"
-                                  aria-label="Default select example"
-                                  value={singleItem?.remarks}
-                                  name="remarks"
-                                  onChange={(event) =>
-                                    handleChange(event, singleItem?.id)
-                                  }
-                                  disabled={
-                                    handleAllowEdit() === true ? false : true
-                                  }
-                                >
-                                  <option value="">Select Remark</option>
-                                  <option value={1}>complied</option>
-                                  <option value={2}>not complied</option>
-                                  <option value={3}>Not Applicable</option>
-                                  <option value={4}>
-                                    Partially Complied
-                                  </option>
-                                </select>
-                              </td>
-                              <td>
-                                <RichTextEditor
-                                  initialValue={singleItem?.observation}
-                                  onContentChange={onContentChange}
-                                  singleItem={singleItem}
-                                  complianceItem={complianceItem}
-                                  handleAllowEdit={handleAllowEdit}
-                                />
-                              </td>
-                              <ObservationFileUpload
-                                item={singleItem}
-                                handleAllowEdit={handleAllowEdit}
-                                setCurrentDeleteFileId={
-                                  setCurrentDeleteFileId
-                                }
-                              />
-                            </tr>
-                          );
-                        }
-                      )}
+                    {complianceItem?.checklistObservationsList?.length === 0 ? (
+                      <tr>
+                        <td colSpan="7">No Observation To Show</td>
+                      </tr>
+                    ) : (
+                      complianceItem?.checklistObservationsList?.map((singleItem, index) => (
+                        <ComplianceRow
+                          key={singleItem?.id || index}
+                          index={index}
+                          singleItem={singleItem}
+                          handleChange={handleChange}
+                          onContentChange={onContentChange}
+                          allowEdit={allowEdit}
+                          setCurrentDeleteFileId={setCurrentDeleteFileId}
+                        />
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -207,7 +177,7 @@ const ComplianceCheckListDialog = ({
       </div>
 
       <div className="d-flex justify-content-between">
-        {handleAllowEdit() === true && (
+        {allowEdit === true && (
           <button
             className={`btn btn-primary ${loading && "disabled"}`}
             onClick={handleUpdate}

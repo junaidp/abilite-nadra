@@ -1,12 +1,11 @@
-import React, { useState, useRef, useMemo } from "react";
-import { Jodit } from "jodit";
+import React, { useRef, useMemo } from "react";
 import JoditEditor from "jodit-react";
 
 const RichTextEditor = ({
   onContentChange,
   initialValue,
   singleItem,
-  handleAllowEdit,
+  allowEdit,
 }) => {
   const editor = useRef(null);
   const [content, setContent] = React.useState(initialValue || "");
@@ -28,66 +27,62 @@ const RichTextEditor = ({
       readonly:
         singleItem?.remarks === "1" ||
           singleItem?.remarks === "3" ||
-          handleAllowEdit() === false
+          allowEdit === false
           ? true
           : false,
       spellCheck: true,
-
-      // pasteHTMLActionList: Jodit.atom([
-      //   {
-      //     value: Jodit.constants.INSERT_ONLY_TEXT,
-      //     text: "Insert this content as text",
-      //   },
-      // ]),
       askBeforePasteHTML: true,
-      // buttons: [
-      //   "bold",
-      //   "|",
-      //   "strikethrough",
-      //   "|",
-      //   "underline",
-      //   "|",
-      //   "italic",
-      //   "|",
-      //   "ul",
-      //   "|",
-      //   "ol",
-      //   "|",
-      //   "table",
-      //   "|",
-      //   "font",
-      //   "|",
-      //   "fontsize",
-      //   "|",
-      //   "paragraph",
-      //   "|",
-      // ],
-
-      // buttonsXS: [
-      //   "bold",
-      //   "|",
-      //   "strikethrough",
-      //   "|",
-      //   "underline",
-      //   "|",
-      //   "italic",
-      //   "|",
-      //   "ul",
-      //   "|",
-      //   "ol",
-      //   "|",
-      //   "table",
-      //   "|",
-      //   "font",
-      //   "|",
-      //   "fontsize",
-      //   "|",
-      //   "paragraph",
-      //   "|",
-      // ],
       removeButtons: ['about'],
       events: {},
       textIcons: false,
+
+      buttons: [
+        "bold",
+        "|",
+        "strikethrough",
+        "|",
+        "underline",
+        "|",
+        "italic",
+        "|",
+        "ul",
+        "|",
+        "ol",
+        "|",
+        "table",
+        "|",
+        "font",
+        "|",
+        "fontsize",
+        "|",
+        "paragraph",
+        "|",
+        "image"
+      ],
+
+      buttonsXS: [
+        "bold",
+        "|",
+        "strikethrough",
+        "|",
+        "underline",
+        "|",
+        "italic",
+        "|",
+        "ul",
+        "|",
+        "ol",
+        "|",
+        "table",
+        "|",
+        "font",
+        "|",
+        "fontsize",
+        "|",
+        "paragraph",
+        "|",
+        "image"
+      ],
     }),
     [singleItem?.remarks]
   );

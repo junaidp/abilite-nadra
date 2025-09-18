@@ -163,7 +163,7 @@ const AuditExceptionReport = () => {
     const worksheet = XLSX.utils.json_to_sheet(
       filteredData.map((job, index) => ({
         "Sr No.": index + 1,
-        "Job Name": job[5] === "Compliance Checklist" ? job[1] : job[2],
+        "Job Name": job[5] === "Compliance Checklist" ? job[1] : job[5] === "Previous Observation" ? job[1] : job[2],
         Observation: job[4],
         Nature: job[5],
         Location: job[7],
