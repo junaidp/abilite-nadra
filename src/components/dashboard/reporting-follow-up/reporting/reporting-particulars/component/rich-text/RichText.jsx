@@ -1,4 +1,3 @@
-import { Jodit } from "jodit";
 import React, { useRef, useMemo } from "react";
 import JoditEditor from "jodit-react";
 
