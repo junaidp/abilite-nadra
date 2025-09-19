@@ -1,5 +1,6 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import {
   resetReportingAddSuccess,
   setupGetInitialSingleReport,
@@ -12,22 +13,28 @@ import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
 } from "../../../../../global-redux/reducers/common/slice";
-import { useDispatch, useSelector } from "react-redux";
-import "./index.css";
 import { CircularProgress } from "@mui/material";
+
 import AccordianItem from "./components/AccordianItem";
 import ApproveDialog from "./components/ApproveDialog";
 import FeedBackDialog from "../../components/FeedBackDialog";
 import ViewThirdFeedBackDialog from "../../components/ThirdFeedBack";
 import SubmitDialog from "./components/SubmitDialog";
+
+import ModalWrapper from "../../../../../components/common/model-wrap/index"
+
 import { decryptString } from "../../../../../config/helper";
-import { useParams } from "react-router-dom";
+import "./index.css";
 
 const FollowUpParticulars = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
+
+  // 🔐 Decrypt route param
   const followUpId = decryptString(id);
+
+  // Redux State
   const { user } = useSelector((state) => state?.auth);
   const { company } = useSelector((state) => state?.common);
   const {
@@ -37,130 +44,138 @@ const FollowUpParticulars = () => {
     initialLoading,
     followUpSubmittedAddSuccess,
   } = useSelector((state) => state?.reporting);
-  const [report, setReport] = React.useState([]);
-  const [currentApproveItem, setCurrentApproveItem] = React.useState({});
-  const [approveDialog, setApproveDialog] = React.useState(false);
-  const [feedBackDialog, setFeedBackDialog] = React.useState(false);
+
+  // Local State
+  const [report, setReport] = useState([]);
+  const [currentApproveItem, setCurrentApproveItem] = useState({});
+  const [approveDialog, setApproveDialog] = useState(false);
+  const [feedBackDialog, setFeedBackDialog] = useState(false);
   const [currentReportingAndFollowUpId, setCurrentReportingAndFollowUpId] =
-    React.useState("");
-  const [viewFeedBackItem, setViewFeedBackItem] = React.useState({});
-  const [viewThirdFeedBackDialog, setViewThirdFeedBackDialog] =
-    React.useState(false);
-  const [showSubmitDialog, setShowSubmitDialog] = React.useState(false);
-  const [currentSubmittedItem, setShowCurrentSubmittedItem] = React.useState(
-    {}
+    useState("");
+  const [viewFeedBackItem, setViewFeedBackItem] = useState({});
+  const [viewThirdFeedBackDialog, setViewThirdFeedBackDialog] = useState(false);
+  const [showSubmitDialog, setShowSubmitDialog] = useState(false);
+  const [currentSubmittedItem, setShowCurrentSubmittedItem] = useState({});
+
+  /** ===============================
+   * Handlers
+   * =============================== */
+
+  // Generic input handler
+  const handleChange = useCallback((event, id) => {
+    setReport((prev) => ({
+      ...prev,
+      reportingList: prev?.reportingList?.map((singleItem) =>
+        Number(singleItem?.id) === Number(id)
+          ? {
+            ...singleItem,
+            followUp: {
+              ...singleItem?.followUp,
+              [event?.target?.name]: event?.target?.value,
+            },
+          }
+          : singleItem
+      ),
+    }));
+  }, []);
+
+  // RichText final comments handler
+  const handleFinalCommentsChange = useCallback((id, content) => {
+    setReport((prev) => ({
+      ...prev,
+      reportingList: prev?.reportingList?.map((singleItem) =>
+        Number(singleItem?.id) === Number(id)
+          ? {
+            ...singleItem,
+            followUp: {
+              ...singleItem?.followUp,
+              finalComments: content,
+            },
+          }
+          : singleItem
+      ),
+    }));
+  }, []);
+
+  // Save follow-up
+  const handleSave = useCallback(
+    (item) => {
+      if (!loading) {
+        dispatch(
+          setupUpdateFollowUp({
+            ...item?.followUp,
+            recommendationsImplemented:
+              item?.followUp?.recommendationsImplemented.toString() === "true",
+            finalComments:
+              item?.followUp?.recommendationsImplemented.toString() === "true"
+                ? item?.followUp?.finalComments
+                : "",
+          })
+        );
+      }
+    },
+    [dispatch, loading]
   );
-  function handleChange(event, id) {
-    setReport((pre) => {
-      return {
-        ...pre,
-        reportingList: pre?.reportingList?.map((singleItem) =>
-          Number(singleItem?.id) === Number(id)
-            ? {
-              ...singleItem,
-              followUp: {
-                ...singleItem?.followUp,
-                [event?.target?.name]: event?.target?.value,
-              },
-            }
-            : singleItem
-        ),
-      };
-    });
-  }
 
-  function handleFinalCommentsChange(id, content) {
-    setReport((pre) => {
-      return {
-        ...pre,
-        reportingList: pre?.reportingList?.map((singleItem) =>
-          Number(singleItem?.id) === Number(id)
-            ? {
-              ...singleItem,
-              followUp: {
-                ...singleItem?.followUp,
-                finalComments: content,
-              },
-            }
-            : singleItem
-        ),
-      };
-    });
-  }
+  // Save and proceed to Step 7
+  const handleSaveToStep7 = useCallback(
+    (item) => {
+      if (!loading) {
+        dispatch(
+          setupUpdateFollowUp({
+            ...item?.followUp,
+            testInNextYear:
+              item?.followUp?.testInNextYear.toString() === "true",
+          })
+        );
+      }
 
-  function handleSave(item) {
-    if (!loading) {
-      dispatch(
-        setupUpdateFollowUp({
-          ...item?.followUp,
-          recommendationsImplemented:
-            item?.followUp?.recommendationsImplemented.toString() === "true"
-              ? true
-              : false,
-          finalComments:
-            item?.followUp?.recommendationsImplemented.toString() === "true"
-              ? item?.followUp?.finalComments
-              : "",
-        })
-      );
-    }
-  }
+      setTimeout(() => {
+        setCurrentApproveItem(item);
+        setApproveDialog(true);
+      }, 1200);
+    },
+    [dispatch, loading]
+  );
 
-  function handleSaveToStep7(item) {
-    if (!loading) {
-      dispatch(
-        setupUpdateFollowUp({
-          ...item?.followUp,
-          testInNextYear:
-            item?.followUp?.testInNextYear.toString() === "true" ? true : false,
-        })
-      );
-    }
+  /** ===============================
+   * Permissions / Conditions
+   * =============================== */
 
-    setTimeout(() => {
-      setCurrentApproveItem(item);
-      setApproveDialog(true);
-    }, 1200);
-  }
-
-  // Editibility OF Last Section Starts
-  function handleAllowEditLastSection(item) {
-    let allowEdit = false;
-    if (
+  // Allow edit of last section
+  const handleAllowEditLastSection = useCallback(
+    (item) =>
       Number(item?.stepNo) === 5 &&
-      Number(user[0]?.userId?.id) === Number(item?.auditee?.id)
-    ) {
-      allowEdit = true;
-    }
+      Number(user[0]?.userId?.id) === Number(item?.auditee?.id),
+    [user]
+  );
 
-    return allowEdit;
-  }
-  // Editibility OF Last Section Ends
+  // Show "Test in Next Year"
+  const handleShowTestInNextYear = useCallback(
+    (item) => {
+      if (item?.stepNo !== 6) return false;
 
-  // Test In Next Year
-  function handleShowTestInNextYear(item) {
-    let allowEdit = false;
-    if (
-      item?.stepNo === 6 &&
-      (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
-        Number(user[0]?.userId?.id) ===
-        Number(
-          singleReport?.resourceAllocation?.backupHeadOfInternalAudit?.id
-        ) ||
-        Number(user[0]?.userId?.id) ===
-        Number(singleReport?.resourceAllocation?.proposedJobApprover?.id) ||
-        singleReport?.resourceAllocation?.resourcesList?.find(
-          (singleResource) =>
-            Number(singleResource?.id) === Number(user[0]?.userId?.id)
-        ))
-    ) {
-      allowEdit = true;
-    }
-    return allowEdit;
-  }
-  // Test In Next Year
+      const userId = Number(user[0]?.userId?.id);
+      const hierarchy = user[0]?.userId?.employeeid?.userHierarchy;
 
-  React.useEffect(() => {
+      return (
+        hierarchy === "IAH" ||
+        userId === Number(singleReport?.resourceAllocation?.backupHeadOfInternalAudit?.id) ||
+        userId === Number(singleReport?.resourceAllocation?.proposedJobApprover?.id) ||
+        singleReport?.resourceAllocation?.resourcesList?.some(
+          (res) => Number(res?.id) === userId
+        )
+      );
+    },
+    [user, singleReport]
+  );
+
+  /** ===============================
+   * Effects
+   * =============================== */
+
+  // When follow-up report is updated
+  useEffect(() => {
     if (reportingAddSuccess) {
       const companyId = user[0]?.company?.find(
         (item) => item?.companyName === company
@@ -172,34 +187,35 @@ const FollowUpParticulars = () => {
       }
       dispatch(resetReportingAddSuccess());
     }
-  }, [reportingAddSuccess]);
+  }, [reportingAddSuccess, dispatch, company, followUpId, user]);
 
-  React.useEffect(() => {
+  // Reset success flag
+  useEffect(() => {
     if (followUpSubmittedAddSuccess) {
       dispatch(resetFollowUpSubmittedAddSuccess());
     }
-  }, [followUpSubmittedAddSuccess]);
+  }, [followUpSubmittedAddSuccess, dispatch]);
 
-  React.useEffect(() => {
-    const isEmptyObject =
-      Object.keys(singleReport).length === 0 &&
-      singleReport.constructor === Object;
-    if (!isEmptyObject && followUpId) {
-      if (user[0]?.userId?.employeeid?.userHierarchy !== "Management_Auditee") {
-        setReport(singleReport);
-      }
-      if (user[0]?.userId?.employeeid?.userHierarchy === "Management_Auditee") {
-        setReport({
-          ...singleReport,
-          reportingList: singleReport?.reportingList?.filter(
-            (all) => Number(all?.auditee?.id) === user[0]?.id
-          ),
-        });
-      }
+  // Set report data from store
+  useEffect(() => {
+    if (Object.keys(singleReport).length && followUpId) {
+      const isAuditee =
+        user[0]?.userId?.employeeid?.userHierarchy === "Management_Auditee";
+      setReport(
+        isAuditee
+          ? {
+            ...singleReport,
+            reportingList: singleReport?.reportingList?.filter(
+              (all) => Number(all?.auditee?.id) === user[0]?.id
+            ),
+          }
+          : singleReport
+      );
     }
-  }, [singleReport]);
+  }, [singleReport, followUpId, user]);
 
-  React.useEffect(() => {
+  // Initial fetch
+  useEffect(() => {
     const companyId = user[0]?.company?.find(
       (item) => item?.companyName === company
     )?.id;
@@ -210,43 +226,46 @@ const FollowUpParticulars = () => {
         )
       );
     }
-  }, [dispatch]);
+  }, [dispatch, company, followUpId, user]);
 
-  React.useEffect(() => {
-    if (!followUpId) {
-      navigate("/audit/follow-up");
-    }
-  }, [followUpId]);
+  // Redirect if no follow-up id
+  useEffect(() => {
+    if (!followUpId) navigate("/audit/follow-up");
+  }, [followUpId, navigate]);
 
-  React.useEffect(() => {
+  // Sidebar active link
+  useEffect(() => {
     dispatch(changeActiveLink("li-followup"));
     dispatch(InitialLoadSidebarActiveLink("li-reporting-and-followup"));
+
     return () => {
       dispatch(resetReports());
     };
-  }, []);
+  }, [dispatch]);
+
+  /** ===============================
+   * Render
+   * =============================== */
+
 
   return (
     <div>
       {showSubmitDialog && (
-        <div className="model-parent  d-flex justify-content-between items-center">
-          <div className="model-wrap">
-            <SubmitDialog
-              item={currentSubmittedItem}
-              setShowSubmitDialog={setShowSubmitDialog}
-            />
-          </div>
-        </div>
+        <ModalWrapper>
+          <SubmitDialog
+            item={currentSubmittedItem}
+            setShowSubmitDialog={setShowSubmitDialog}
+          />
+        </ModalWrapper>
       )}
+
       {approveDialog && (
-        <div className="model-parent  d-flex justify-content-between items-center">
-          <div className="model-wrap">
-            <ApproveDialog
-              setApproveDialog={setApproveDialog}
-              currentApproveItem={currentApproveItem}
-            />
-          </div>
-        </div>
+        <ModalWrapper>
+          <ApproveDialog
+            setApproveDialog={setApproveDialog}
+            currentApproveItem={currentApproveItem}
+          />
+        </ModalWrapper>
       )}
       {feedBackDialog && (
         <div className="model-parent">
@@ -272,7 +291,7 @@ const FollowUpParticulars = () => {
         <div className="my-3">
           <CircularProgress />
         </div>
-      ) : singleReport[0]?.error === "Not Found" ? (
+      ) : !Object.keys(singleReport).length ? (
         "Follow Up Not Found"
       ) : (
         <>
