@@ -1,60 +1,81 @@
-import React from "react";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
+import React, { useCallback, useMemo } from "react";
+import {
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Select,
+} from "@mui/material";
 
+/**
+ * SelectComponent
+ * A wrapper around MUI Select for choosing an auditee user.
+ *
+ * @param {Array<string>} list - Options to render in dropdown.
+ * @param {Function} setReport - State updater for reports.
+ * @param {string} value - Currently selected value.
+ * @param {string} label - Label text for the select.
+ * @param {string|number} id - Reporting item id.
+ * @param {Array<Object>} allUsers - Full users list for mapping selected user.
+ * @param {boolean} disabled - Whether select is disabled.
+ */
 const SelectComponent = ({
-  list,
+  list = [],
   setReport,
   value,
   label,
   id,
-  allUsers,
-  disabled,
+  allUsers = [],
+  disabled = false,
 }) => {
-  function handleChange(event) {
-    setReport((pre) => {
-      return {
-        ...pre,
-        reportingList: pre?.reportingList?.map((report) =>
+  /**
+   * Handles selection change and updates the report state immutably.
+   */
+  const handleChange = useCallback(
+    (event) => {
+      const selectedUser =
+        allUsers.find((user) => user?.name === event.target.value) || null;
+
+      setReport((prev) => ({
+        ...prev,
+        reportingList: prev?.reportingList?.map((report) =>
           Number(report?.id) === Number(id)
-            ? {
-                ...report,
-                auditee:
-                  allUsers?.find(
-                    (user) => user?.name === event?.target?.value
-                  ) || null,
-              }
+            ? { ...report, auditee: selectedUser }
             : report
         ),
-      };
-    });
-  }
+      }));
+    },
+    [allUsers, id, setReport]
+  );
+
+  /**
+   * Memoize menu items so they don’t re-render unnecessarily.
+   */
+  const menuItems = useMemo(
+    () =>
+      list.map((item, index) => (
+        <MenuItem value={item} key={index}>
+          {item}
+        </MenuItem>
+      )),
+    [list]
+  );
+
+  if (!list.length) return null;
+
   return (
-    <>
-      {list?.length !== 0 && (
-        <FormControl variant="filled" sx={{ width: "100%" }}>
-          <InputLabel id="demo-simple-select-label">{label}</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={value || ""}
-            onChange={handleChange}
-            disabled={disabled}
-          >
-            <MenuItem value="">Select User</MenuItem>
-            {list?.map((item, index) => {
-              return (
-                <MenuItem value={item} key={index}>
-                  {item}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </FormControl>
-      )}
-    </>
+    <FormControl variant="filled" sx={{ width: "100%" }}>
+      <InputLabel id={`select-label-${id}`}>{label}</InputLabel>
+      <Select
+        labelId={`select-label-${id}`}
+        id={`select-${id}`}
+        value={value || ""}
+        onChange={handleChange}
+        disabled={disabled}
+      >
+        <MenuItem value="">Select User</MenuItem>
+        {menuItems}
+      </Select>
+    </FormControl>
   );
 };
 

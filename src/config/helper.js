@@ -287,6 +287,19 @@ const groupByArea = (list) => {
   return result;
 };
 
+const getStepStatusLabel = (stepNo, user) => {
+  if (stepNo === 0 || stepNo === 1) return "Exceptions To Be Sent To Management For Comments";
+  if (stepNo === 2) return "Awaiting Management Comments";
+  if (stepNo === 3) {
+    return user?.userId?.employeeid?.userHierarchy === "Management_Auditee"
+      ? "Management Comments Sent"
+      : "Management Comments Received";
+  }
+  if (stepNo >= 4) return "Exception To Be Implemented";
+  return "";
+};
+
+
 
 export {
   handleDownload,
@@ -302,5 +315,6 @@ export {
   cleanHtml,
   groupBySubLocationAndArea,
   groupByArea,
-  groupObservationsBySubLocationAndArea
+  groupObservationsBySubLocationAndArea,
+  getStepStatusLabel
 };

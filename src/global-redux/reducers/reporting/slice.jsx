@@ -176,7 +176,7 @@ export const slice = createSlice({
       })
       .addCase(setupGetSingleReport.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.singleReport = payload?.data || [{ error: "Not Found" }];
+        state.singleReport = payload?.data || {};
       })
 
       .addCase(setupGetSingleReport.rejected, (state, { payload }) => {
@@ -194,7 +194,7 @@ export const slice = createSlice({
       })
       .addCase(setupGetInitialSingleReport.fulfilled, (state, { payload }) => {
         state.initialLoading = false;
-        state.singleReport = payload?.data || [{ error: "Not Found" }];
+        state.singleReport = payload?.data || {};
 
       })
       .addCase(setupGetInitialSingleReport.rejected, (state, { payload }) => {
