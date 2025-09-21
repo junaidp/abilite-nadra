@@ -15,6 +15,7 @@ import {
   Checkbox,
   ListItemText,
   OutlinedInput,
+  Button,
 } from "@mui/material";
 import * as XLSX from "xlsx";
 
@@ -23,21 +24,25 @@ const poppinsStyle = {
   fontWeight: "normal",
 };
 
+// Known job natures that backend may return
+const KNOWN_NATURES = new Set([
+  "Previous Observation",
+  "Compliance Checklist",
+  "Business Objective",
+]);
+
 const AuditExceptionReport = () => {
   const dispatch = useDispatch();
-  const { auditExceptionJobs, loading } = useSelector(
-    (state) => state?.extraReport
-  );
-  const { user } = useSelector((state) => state?.auth);
-  const { company } = useSelector((state) => state?.common);
 
+  // redux state
+  const { auditExceptionJobs = [], loading } = useSelector(
+    (state) => state?.extraReport || {}
+  );
+  const { user } = useSelector((state) => state?.auth || {});
+  const { company } = useSelector((state) => state?.common || {});
+
+  // local UI state
   const [page, setPage] = React.useState(1);
-  const data = {
-    natureThrough: "Both",
-    location: "",
-    subLocation: "",
-    stepNo: -1,
-  }
   const [filters, setFilters] = React.useState({
     natureThrough: [],
     location: [],
@@ -47,168 +52,221 @@ const AuditExceptionReport = () => {
     exceptionStatus: [],
   });
 
-  const [filteredData, setFilteredData] = React.useState([]);
-
-  const handleChangePage = (_, value) => {
-    setPage(value);
-  };
-
+  // helper: determine exception status label from step number
   function handleCalculateStatus(step) {
     if (Number(step) === 0 || Number(step) === 1) {
       return "Exceptions To Be Sent To Management For Comments";
     }
-    if (Number(step) === 2) {
-      return "Awaiting Management Comments";
-    }
-    if (Number(step) === 3) {
-      return "Management Comments Received";
-    }
-    if (Number(step) === 4) {
+    if (Number(step) === 2) return "Awaiting Management Comments";
+    if (Number(step) === 3) return "Management Comments Received";
+    if (Number(step) === 4 || Number(step) === 5)
       return "Exception To Be Implemented";
-    }
-    if (Number(step) === 5) {
-      return "Exception To Be Implemented";
-    }
-    if (Number(step) === 6) {
-      return "Exceptions Implemented";
-    }
+    if (Number(step) === 6) return "Exceptions Implemented";
     return "Observation Completed";
   }
 
-  // Call backend ONCE to get all audit exceptions
+  // fetch all audit exceptions once (on mount or when user/company become available)
   React.useEffect(() => {
-    let companyId = user[0]?.company.find(
-      (all) => all?.companyName === company
-    )?.id;
+    const companyId = user?.[0]?.company?.find((c) => c?.companyName === company)
+      ?.id;
 
     dispatch(
       setupGetAllAuditExceptions({
         companyId: companyId,
-        natureThrough:
-          data?.natureThrough !== "" && data?.natureThrough !== "Both"
-            ? data?.natureThrough
-            : null,
-        location: data?.location !== "" ? data?.location : null,
-        subLocation: data?.subLocation !== "" ? data?.subLocation : null,
-        stepNo: data?.stepNo !== "" ? data?.stepNo : -1,
+        // keep previous semantics: send null when "Both"/empty
+        natureThrough: null,
+        location: null,
+        subLocation: null,
+        stepNo: -1,
       })
     );
+
     return () => {
       dispatch(handleReset());
     };
-  }, [dispatch]);
+    // include user/company so fetch can run when they become available
+  }, [dispatch, user, company]);
 
-  // When jobs change → reset filters + set filtered data
-  React.useEffect(() => {
-    setFilteredData(auditExceptionJobs || []);
-  }, [auditExceptionJobs]);
+  // ---------- parsing logic ----------
+  // backend sometimes shifts fields by inserting a "long" observation string
+  // before the nature, so nature can appear at job[5] OR job[6].
+  // This function normalizes the array into a friendly object.
+  const parseJob = React.useCallback((jobArr) => {
+    // default safe values
+    const job = jobArr || [];
+    // decide where the 'nature' lives: index 5 or 6
+    const natAt5 = job[5] && KNOWN_NATURES.has(job[5]);
+    const natAt6 = job[6] && KNOWN_NATURES.has(job[6]);
 
-  // Apply filters whenever filters state changes
-  React.useEffect(() => {
-    if (!auditExceptionJobs) return;
+    // prefer explicit detection; fallback to index 5 if neither matches
+    const natureIndex = natAt5 ? 5 : natAt6 ? 6 : 5;
+    const nature = job[natureIndex] || "";
 
-    let data = [...auditExceptionJobs];
+    // if the nature was found at index 6, then job[5] is the inserted long text (may be null)
+    // when natureIndex===6 we treat job[5] as the "longObservation" for Previous Observation
+    const longObservation =
+      natureIndex === 6 && typeof job[5] === "string" ? job[5] : "";
 
-    data = data.filter((job) => {
-      const jobNature = job[5];
-      const jobLocation = job[7];
-      const jobSubLocation = job[8];
-      const jobYear = job[6];
-      const jobAuditee = job[10];
-      const jobStatus = handleCalculateStatus(job[9]);
+    // job name tends to be at index 1 (fallback to index 2 if missing)
+    const jobName = job[1] || job[2] || "";
 
+    // the short/truncated observation remains at index 4 in both shapes
+    const shortObservation = job[4] || "";
+
+    // compute following fields relative to the nature index:
+    // year = job[natureIndex + 1]
+    // location = job[natureIndex + 2]
+    // subLocation = job[natureIndex + 3]
+    // stepNo = job[natureIndex + 4]
+    // auditee = job[natureIndex + 5]
+    const year = job[natureIndex + 1] ?? "";
+    const location = job[natureIndex + 2] ?? "";
+    const subLocation = job[natureIndex + 3] ?? "";
+    const stepNo = job[natureIndex + 4] ?? "";
+    const auditee = job[natureIndex + 5] ?? "";
+
+    return {
+      raw: job,
+      jobName,
+      shortObservation,
+      longObservation, // may be empty string
+      nature,
+      year,
+      location,
+      subLocation,
+      stepNo,
+      auditee,
+    };
+  }, []);
+
+  // parsed jobs memoized
+  const parsedJobs = React.useMemo(() => {
+    if (!Array.isArray(auditExceptionJobs)) return [];
+    return auditExceptionJobs.map(parseJob);
+  }, [auditExceptionJobs, parseJob]);
+
+  // helper to remove falsy/empty values and keep unique items
+  const uniq = (arr = []) =>
+    Array.from(new Set(arr.filter((v) => v !== null && v !== undefined && v !== "")));
+
+  // unique values used to populate multi-select options (derived from parsed jobs)
+  const uniqueValues = React.useMemo(() => {
+    return {
+      natureThrough: uniq(parsedJobs.map((p) => p.nature)),
+      location: uniq(parsedJobs.map((p) => p.location)),
+      subLocation: uniq(parsedJobs.map((p) => p.subLocation)),
+      year: uniq(parsedJobs.map((p) => p.year)),
+      auditee: uniq(parsedJobs.map((p) => p.auditee)),
+      exceptionStatus: uniq(parsedJobs.map((p) => handleCalculateStatus(p.stepNo))),
+    };
+  }, [parsedJobs]);
+
+  // ---------- filtering ----------
+  // compute filtered data from parsedJobs & filters (frontend-only filtering)
+  const filteredData = React.useMemo(() => {
+    if (!parsedJobs) return [];
+
+    const result = parsedJobs.filter((p) => {
       return (
         (filters.natureThrough.length === 0 ||
-          filters.natureThrough.includes(jobNature)) &&
+          filters.natureThrough.includes(p.nature)) &&
         (filters.location.length === 0 ||
-          filters.location.includes(jobLocation)) &&
+          filters.location.includes(p.location)) &&
         (filters.subLocation.length === 0 ||
-          filters.subLocation.includes(jobSubLocation)) &&
-        (filters.year.length === 0 || filters.year.includes(jobYear)) &&
+          filters.subLocation.includes(p.subLocation)) &&
+        (filters.year.length === 0 || filters.year.includes(p.year)) &&
         (filters.auditee.length === 0 ||
-          filters.auditee.includes(jobAuditee)) &&
+          filters.auditee.includes(p.auditee)) &&
         (filters.exceptionStatus.length === 0 ||
-          filters.exceptionStatus.includes(jobStatus))
+          filters.exceptionStatus.includes(handleCalculateStatus(p.stepNo)))
       );
     });
 
-    setFilteredData(data);
+    return result;
+  }, [parsedJobs, filters]);
+
+  // keep page reset to 1 whenever filteredData changes (UX convenience)
+  React.useEffect(() => {
     setPage(1);
-  }, [filters, auditExceptionJobs]);
+  }, [filteredData]);
 
-  // Extract unique values for filter dropdowns
-  const uniqueValues = React.useMemo(() => {
-    if (!auditExceptionJobs) return {};
-
-    return {
-      natureThrough: [...new Set(auditExceptionJobs.map((job) => job[5]))],
-      location: [...new Set(auditExceptionJobs.map((job) => job[7]))],
-      subLocation: [...new Set(auditExceptionJobs.map((job) => job[8]))],
-      year: [...new Set(auditExceptionJobs.map((job) => job[6]))],
-      auditee: [...new Set(auditExceptionJobs.map((job) => job[10]))],
-      exceptionStatus: [
-        ...new Set(auditExceptionJobs.map((job) => handleCalculateStatus(job[9]))),
-      ],
-    };
-  }, [auditExceptionJobs]);
-
-  // Handle filter selection
+  // handle multi-select value changes
   const handleFilterChange = (event) => {
     const { name, value } = event.target;
     setFilters((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Export filtered data to Excel
+  // Export current filtered data to Excel
+  // IMPORTANT: For "Previous Observation" we export the LONG string if present,
+  // otherwise an empty string (per your requirement). For other job types we export the short observation.
   const handleExportExcel = () => {
-    const worksheet = XLSX.utils.json_to_sheet(
-      filteredData.map((job, index) => ({
-        "Sr No.": index + 1,
-        "Job Name": job[5] === "Compliance Checklist" ? job[1] : job[5] === "Previous Observation" ? job[1] : job[2],
-        Observation: job[4],
-        Nature: job[5],
-        Location: job[7],
-        "Sub-Location": job[8],
-        Year: job[6],
-        Auditee: job[10],
-        "Exception Status": handleCalculateStatus(job[9]),
-      }))
-    );
+    const rows = filteredData.map((p, idx) => {
+      const observationForExcel =
+        p.nature === "Previous Observation" ? p.longObservation || "" : p.shortObservation || "";
 
+      return {
+        "Sr No.": idx + 1,
+        "Job Name": p.jobName,
+        Observation: observationForExcel,
+        Nature: p.nature,
+        Location: p.location,
+        "Sub-Location": p.subLocation,
+        Year: p.year,
+        Auditee: p.auditee,
+        "Exception Status": handleCalculateStatus(p.stepNo),
+      };
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(rows);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Audit Exceptions");
-    XLSX.writeFile(workbook, "Audit_Exception_Report.xlsx");
+    XLSX.writeFile(workbook, `Audit_Exception_Report.xlsx`);
+  };
+
+  // pagination handler
+  const handleChangePage = (_, value) => {
+    setPage(value);
   };
 
   return (
     <div>
+      {/* Header + export button */}
       <header className="section-header my-3 text-start d-flex align-items-center justify-content-between">
         <div className="mb-0 heading">Audit Exception Report</div>
-        <button className="btn btn-labeled btn-primary px-3 shadow"
-          onClick={handleExportExcel}>
+        <Button variant="contained" onClick={handleExportExcel}>
           Export to Excel
-        </button>
+        </Button>
       </header>
 
-      {/* Filters */}
+      {/* Filters (Material UI multi-selects) */}
       <div className="row mb-3">
-        {Object.keys(uniqueValues).map((key) => (
+        {/* Render filters in a fixed order */}
+        {[
+          { key: "natureThrough", label: "Nature Through" },
+          { key: "location", label: "Location" },
+          { key: "subLocation", label: "Sub-Location" },
+          { key: "year", label: "Year" },
+          { key: "auditee", label: "Auditee" },
+          { key: "exceptionStatus", label: "Exception Status" },
+        ].map(({ key, label }) => (
           <div className="col-lg-2" key={key}>
             <FormControl fullWidth>
-              <InputLabel sx={{ fontSize: 12 }} style={poppinsStyle}
-              >{key}</InputLabel>
+              <InputLabel sx={{ fontSize: 12 }} style={poppinsStyle}>
+                {label}
+              </InputLabel>
               <Select
                 multiple
                 name={key}
                 value={filters[key]}
                 onChange={handleFilterChange}
-                input={<OutlinedInput label={key} />}
-                renderValue={(selected) => selected.join(", ")}
+                input={<OutlinedInput label={label} />}
+                renderValue={(selected) => (Array.isArray(selected) ? selected.join(", ") : "")}
                 sx={{ height: 45 }}
               >
-                {uniqueValues[key].map((val) => (
-                  <MenuItem key={val} value={val}>
-                    <Checkbox checked={filters[key].indexOf(val) > -1} style={poppinsStyle} sx={{ fontSize: 12 }} />
-                    <ListItemText primary={val} style={poppinsStyle} sx={{ fontSize: 12 }} />
+                {(uniqueValues[key] || []).map((val) => (
+                  <MenuItem key={String(val)} value={val}>
+                    <Checkbox checked={filters[key].indexOf(val) > -1} style={poppinsStyle} />
+                    <ListItemText primary={val} style={poppinsStyle} />
                   </MenuItem>
                 ))}
               </Select>
@@ -221,7 +279,7 @@ const AuditExceptionReport = () => {
       <div className="row">
         <div className="col-lg-12">
           <div className="table-responsive">
-            <table className="table table-bordered  table-hover rounded">
+            <table className="table table-bordered table-hover rounded">
               <thead className="bg-secondary text-white">
                 <tr>
                   <th>Sr No.</th>
@@ -235,43 +293,45 @@ const AuditExceptionReport = () => {
                   <th>Exception Status</th>
                 </tr>
               </thead>
+
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan="9" className="text-center">
+                    <td colSpan={9} className="text-center">
                       <CircularProgress />
                     </td>
                   </tr>
                 ) : filteredData.length === 0 ? (
                   <tr>
-                    <td colSpan="9" className="text-center">
+                    <td colSpan={9} className="text-center">
                       No Audit Exceptions To Show.
                     </td>
                   </tr>
                 ) : (
                   filteredData
                     .slice((page - 1) * 10, page * 10)
-                    .map((job, index) => (
-                      <tr key={index}>
-                        <td>{(page - 1) * 10 + index + 1}</td>
-                        <td>
-                          {job[5] === "Compliance Checklist" ? job[1] : job[5] === "Previous Observation" ? job[1] : job[2]}
-                        </td>
-                        <td>{job[4]}</td>
-                        <td>{job[5]}</td>
-                        <td>{job[7]}</td>
-                        <td>{job[8]}</td>
-                        <td>{job[6]}</td>
-                        <td>{job[10]}</td>
-                        <td>{handleCalculateStatus(job[9])}</td>
+                    .map((p, idx) => (
+                      <tr key={idx}>
+                        <td>{(page - 1) * 10 + idx + 1}</td>
+                        <td>{p.jobName}</td>
+                        {/* For table view we show the short/truncated observation (keeps table compact).
+                            Full/long observation is exported to Excel for Previous Observation rows. */}
+                        <td>{p.shortObservation}</td>
+                        <td>{p.nature}</td>
+                        <td>{p.location}</td>
+                        <td>{p.subLocation}</td>
+                        <td>{p.year}</td>
+                        <td>{p.auditee}</td>
+                        <td>{handleCalculateStatus(p.stepNo)}</td>
                       </tr>
                     ))
                 )}
               </tbody>
             </table>
 
+            {/* Pagination */}
             <Pagination
-              count={Math.ceil(filteredData.length / 10)}
+              count={Math.ceil(filteredData.length / 10) || 1}
               page={page}
               onChange={handleChangePage}
             />

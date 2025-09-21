@@ -43,6 +43,7 @@ const FollowUpParticulars = () => {
     reportingAddSuccess,
     initialLoading,
     followUpSubmittedAddSuccess,
+    approveAddSuccess
   } = useSelector((state) => state?.reporting);
 
   // Local State
@@ -232,6 +233,12 @@ const FollowUpParticulars = () => {
   useEffect(() => {
     if (!followUpId) navigate("/audit/follow-up");
   }, [followUpId, navigate]);
+
+  React.useEffect(() => {
+    if (approveAddSuccess) {
+      dispatch(resetReportingAddSuccess());
+    }
+  }, [approveAddSuccess, dispatch]);
 
   // Sidebar active link
   useEffect(() => {

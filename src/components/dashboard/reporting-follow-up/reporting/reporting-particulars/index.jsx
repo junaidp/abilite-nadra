@@ -10,7 +10,6 @@ import {
   setupUpdateReporting,
   setupGetInitialSingleReport,
   resetReports,
-  resetManagementAuditeeReportingAddSuccess,
   resetReportingFileUploadAddSuccess,
 } from "../../../../../global-redux/reducers/reporting/slice";
 
@@ -50,8 +49,8 @@ const ReportingParticulars = () => {
     loading,
     reportingAddSuccess,
     initialLoading,
-    managementAuditeeReportingAddSuccess,
     reportingFileUploadSuccess,
+    approveAddSuccess
   } = useSelector((state) => state?.reporting);
   const { allUsers } = useSelector((state) => state?.settingsUserManagement);
 
@@ -241,6 +240,12 @@ const ReportingParticulars = () => {
     }
   }, [reportingAddSuccess, company, dispatch, reportingId, user]);
 
+  React.useEffect(() => {
+    if (approveAddSuccess) {
+      dispatch(resetReportingAddSuccess());
+    }
+  }, [approveAddSuccess, company, dispatch, reportingId, user]);
+
   // Handle file upload success -> update reporting list
   React.useEffect(() => {
     if (reportingFileUploadSuccess === true) {
@@ -273,32 +278,6 @@ const ReportingParticulars = () => {
     report?.reportingList,
   ]);
 
-  // Refresh report for Management Auditee users
-  React.useEffect(() => {
-    if (
-      managementAuditeeReportingAddSuccess === true &&
-      user[0]?.userId?.employeeid?.userHierarchy === "Management_Auditee"
-    ) {
-      const companyId = user[0]?.company?.find(
-        (item) => item?.companyName === company
-      )?.id;
-
-      if (companyId) {
-        dispatch(
-          setupGetSingleReport(
-            `?reportingAndFollowUpId=${Number(reportingId)}`
-          )
-        );
-      }
-      dispatch(resetManagementAuditeeReportingAddSuccess());
-    }
-  }, [
-    managementAuditeeReportingAddSuccess,
-    company,
-    dispatch,
-    reportingId,
-    user,
-  ]);
 
   // Sync local state when report data changes
   React.useEffect(() => {

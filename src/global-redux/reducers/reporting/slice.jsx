@@ -25,9 +25,9 @@ const initialState = {
   allReporting: [],
   allFollowUp: [],
   singleReport: {},
-  managementAuditeeReportingAddSuccess: false,
   reportingFileUploadSuccess: false,
   totalNoOfRecords: 0,
+  approveAddSuccess: false,
 };
 
 export const setupGetAllReporting = createAsyncThunk(
@@ -130,6 +130,7 @@ export const slice = createSlice({
   reducers: {
     resetReportingAddSuccess: (state) => {
       state.reportingAddSuccess = false;
+      state.approveAddSuccess = false;
     },
     resetFollowUpSubmittedAddSuccess: (state) => {
       state.followUpSubmittedAddSuccess = false;
@@ -137,13 +138,11 @@ export const slice = createSlice({
     resetReportingFileUploadAddSuccess: (state) => {
       state.reportingFileUploadSuccess = false;
     },
-    resetManagementAuditeeReportingAddSuccess: (state) => {
-      state.managementAuditeeReportingAddSuccess = false;
-    },
     resetReports: (state) => {
       state.loading = false;
       state.initialLoading = false;
       state.reportingAddSuccess = false;
+      state.approveAddSuccess = false;
       state.allReporting = [];
       state.allFollowUp = [];
       state.singleReport = {};
@@ -211,9 +210,9 @@ export const slice = createSlice({
       .addCase(setupUpdateReporting.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupUpdateReporting.fulfilled, (state) => {
+      .addCase(setupUpdateReporting.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.reportingAddSuccess = true;
+        state.singleReport = { ...state.singleReport, reportingList: state.singleReport?.reportingList?.map((item) => (item.id === payload?.data?.id ? payload?.data : item)) }
         toast.success("Reporting updated successfully");
       })
       .addCase(setupUpdateReporting.rejected, (state, { payload }) => {
@@ -230,9 +229,9 @@ export const slice = createSlice({
       .addCase(setupSubmitReportingInFollowUp.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupSubmitReportingInFollowUp.fulfilled, (state) => {
+      .addCase(setupSubmitReportingInFollowUp.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.reportingAddSuccess = true;
+        state.singleReport = { ...state.singleReport, reportingList: state.singleReport?.reportingList?.map((item) => (item.id === payload?.data?.id ? payload?.data : item)) }
         state.followUpSubmittedAddSuccess = true;
         toast.success("Follow Up Submitted Successfully");
       })
@@ -252,9 +251,10 @@ export const slice = createSlice({
       .addCase(setupApproveReporting.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupApproveReporting.fulfilled, (state) => {
+      .addCase(setupApproveReporting.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.reportingAddSuccess = true;
+        state.approveAddSuccess = true;
+        state.singleReport = { ...state.singleReport, reportingList: state.singleReport?.reportingList?.map((item) => (item.id === payload?.data?.id ? payload?.data : item)) }
         toast.success("Reporting Approved Successfully");
       })
       .addCase(setupApproveReporting.rejected, (state, { payload }) => {
@@ -290,9 +290,9 @@ export const slice = createSlice({
       .addCase(setupUpdateFollowUp.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupUpdateFollowUp.fulfilled, (state) => {
+      .addCase(setupUpdateFollowUp.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.reportingAddSuccess = true;
+        state.singleReport = { ...state.singleReport, reportingList: state.singleReport?.reportingList?.map((item) => (item.followUp.id === payload?.data?.id ? { ...item, followUp: payload.data } : item)) }
         toast.success("Follow-up updated successfully");
       })
       .addCase(setupUpdateFollowUp.rejected, (state, { payload }) => {
@@ -308,8 +308,9 @@ export const slice = createSlice({
       .addCase(setupUpdateFollowUpByManagement.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupUpdateFollowUpByManagement.fulfilled, (state) => {
+      .addCase(setupUpdateFollowUpByManagement.fulfilled, (state, { payload }) => {
         state.loading = false;
+        state.singleReport = { ...state.singleReport, reportingList: state.singleReport?.reportingList?.map((item) => (item.followUp.id === payload?.data?.id ? { ...item, followUp: payload.data } : item)) }
       })
       .addCase(
         setupUpdateFollowUpByManagement.rejected,
@@ -327,9 +328,10 @@ export const slice = createSlice({
       .addCase(setupUpdateReportingByManagementAuditee.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupUpdateReportingByManagementAuditee.fulfilled, (state) => {
+      .addCase(setupUpdateReportingByManagementAuditee.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.managementAuditeeReportingAddSuccess = true;
+        state.approveAddSuccess = true;
+        state.singleReport = { ...state.singleReport, reportingList: state.singleReport?.reportingList?.map((item) => (item.id === payload?.data?.id ? payload?.data : item)) }
         toast.success("Reporting submitted successfully");
       })
       .addCase(
@@ -421,7 +423,6 @@ export const slice = createSlice({
 export const {
   resetReportingAddSuccess,
   resetReports,
-  resetManagementAuditeeReportingAddSuccess,
   resetReportingFileUploadAddSuccess,
   resetFollowUpSubmittedAddSuccess,
 } = slice.actions;

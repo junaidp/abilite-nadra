@@ -7,7 +7,7 @@ const FirstApproveReportingDialog = ({
   currentApproveItem,
 }) => {
   const dispatch = useDispatch();
-  const { loading, reportingAddSuccess } = useSelector(
+  const { loading, approveAddSuccess } = useSelector(
     (state) => state?.reporting
   );
 
@@ -23,10 +23,10 @@ const FirstApproveReportingDialog = ({
   }
 
   React.useEffect(() => {
-    if (reportingAddSuccess) {
+    if (approveAddSuccess) {
       setFirstApproveDialog(false);
     }
-  }, [reportingAddSuccess]);
+  }, [approveAddSuccess]);
   return (
     <div className="px-4 py-4">
       <div>

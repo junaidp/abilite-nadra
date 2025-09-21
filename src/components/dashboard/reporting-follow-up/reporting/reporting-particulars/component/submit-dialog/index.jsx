@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 
 const SubmitDialog = ({ item, setShowSubmitDialog }) => {
   const dispatch = useDispatch();
-  const { loading, managementAuditeeReportingAddSuccess } = useSelector(
+  const { loading, approveAddSuccess } = useSelector(
     (state) => state?.reporting
   );
 
@@ -53,10 +53,10 @@ const SubmitDialog = ({ item, setShowSubmitDialog }) => {
   }
 
   React.useEffect(() => {
-    if (managementAuditeeReportingAddSuccess) {
+    if (approveAddSuccess) {
       setShowSubmitDialog(false);
     }
-  }, [managementAuditeeReportingAddSuccess]);
+  }, [approveAddSuccess]);
 
   return (
     <div className="p-4">
