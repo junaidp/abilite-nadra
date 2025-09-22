@@ -4,8 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setupGetAllInternalAuditReports,
-  resetInternalAuditReportAddSuccess,
-  changeSelectedReport
+  resetInternalAuditReportAddSuccess
 } from "../../../../global-redux/reducers/reports/consolidation-report/slice";
 import { CircularProgress, Typography } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
@@ -374,9 +373,11 @@ const InternalAuditReport = () => {
                                 <i
                                   className="fa fa-download  f-18  cursor-pointer"
                                   onClick={() => {
-                                    dispatch(changeSelectedReport(item))
+                                    const encryptedId = encryptAndEncode(
+                                      item?.id.toString()
+                                    );
                                     navigate(
-                                      `/audit/download-detailed-audit-report`
+                                      `/audit/download-detailed-audit-report/${encryptedId}`
                                     );
                                   }}
                                 ></i>

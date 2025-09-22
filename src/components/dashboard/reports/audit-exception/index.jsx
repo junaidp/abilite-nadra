@@ -199,10 +199,16 @@ const AuditExceptionReport = () => {
   // Export current filtered data to Excel
   // IMPORTANT: For "Previous Observation" we export the LONG string if present,
   // otherwise an empty string (per your requirement). For other job types we export the short observation.
+  const stripHtml = (html) => {
+  if (!html) return "";
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  return doc.body.textContent || "";
+};
+
   const handleExportExcel = () => {
     const rows = filteredData.map((p, idx) => {
       const observationForExcel =
-        p.nature === "Previous Observation" ? p.longObservation || "" : p.shortObservation || "";
+        p.nature === "Previous Observation" ? stripHtml(p.longObservation) || "" : p.shortObservation || "";
 
       return {
         "Sr No.": idx + 1,

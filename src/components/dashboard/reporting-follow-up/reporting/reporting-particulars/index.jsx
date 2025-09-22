@@ -74,6 +74,13 @@ const ReportingParticulars = () => {
     {}
   );
 
+
+  const managementAuditees = React.useMemo(
+    () => allUsers?.filter(u => u?.employeeid?.userHierarchy === "Management_Auditee"),
+    [allUsers]
+  );
+
+
   /**
    * -----------------------------
    * State Update Handlers
@@ -456,11 +463,7 @@ const ReportingParticulars = () => {
                           item={item}
                           handleChange={handleChange}
                           loading={loading}
-                          allUsers={allUsers?.filter(
-                            (singleUser) =>
-                              singleUser?.employeeid?.userHierarchy ===
-                              "Management_Auditee"
-                          )}
+                          allUsers={managementAuditees}
                           singleReport={singleReport}
                           reportingId={reportingId}
                           setReport={setReport}

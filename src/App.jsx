@@ -194,8 +194,8 @@ const App = () => {
               element={<AuditPlaningSummary />}
             />
             <Route path="audit-exception-report" element={<AuditException />} />
-            <Route path="download-detailed-audit-report" element={<DownloadDetailedAuditReport />} />
-            <Route path="download-internal-audit-report" element={<DownloadInternalAuditReport />} />
+            <Route path="download-detailed-audit-report/:id" element={<DownloadDetailedAuditReport />} />
+            <Route path="download-internal-audit-report/:id" element={<DownloadInternalAuditReport />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

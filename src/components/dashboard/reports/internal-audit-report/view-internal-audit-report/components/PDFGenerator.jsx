@@ -1,5 +1,4 @@
 import React from "react";
-import font from "../../../../../../font/Poppins-Medium.ttf";
 import Html from "react-pdf-html";
 import { cleanHtml } from "../../../../../../config/helper";
 import { groupByArea } from "../../../../../../config/helper";
@@ -11,24 +10,17 @@ import {
   StyleSheet,
   View,
   Image,
-  Font,
 } from "@react-pdf/renderer";
-
-Font.register({
-  family: "Poppins",
-  src: font,
-});
 
 // central layout & typography constants for consistent look across all pages
 const PAGE_PADDING = 35;
-const FONT_FAMILY = "Poppins";
 const TYPOGRAPHY = {
   title: 16,
   section: 12,
   subsection: 14,
-  smallHeader: 10,
-  body: 10,
-  small: 8,
+  smallHeader: 8,
+  body: 8,
+  small: 7,
 };
 
 const styles = StyleSheet.create({
@@ -36,7 +28,6 @@ const styles = StyleSheet.create({
   pageBase: {
     flexDirection: "column",
     backgroundColor: "#FFFFFF",
-    fontFamily: FONT_FAMILY,
     paddingTop: PAGE_PADDING,
     paddingBottom: PAGE_PADDING,
     paddingLeft: PAGE_PADDING,
@@ -49,7 +40,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#FFFFFF",
-    fontFamily: FONT_FAMILY,
     paddingTop: PAGE_PADDING,
     paddingBottom: PAGE_PADDING,
     paddingLeft: PAGE_PADDING,
@@ -90,7 +80,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 6,
     fontSize: TYPOGRAPHY.section,
-    fontFamily: FONT_FAMILY,
   },
 
   // Contents / small headings
@@ -263,7 +252,7 @@ const PDFGenerator = ({ reportObject, logoPreview }) => {
         {/* Executive Summary */}
         <View style={{ marginTop: 6 }} break>
           <Text style={styles.sectionTitle}>Executive Summary</Text>
-          <Html style={{ width: "100%", fontSize: 10 }}>
+          <Html style={{ width: "100%", fontSize: 8 }}>
             {cleanHtml(reportObject?.executiveSummary)}
           </Html>
         </View>
@@ -271,7 +260,7 @@ const PDFGenerator = ({ reportObject, logoPreview }) => {
         {/* Audit Purpose */}
         <View style={{ marginTop: 6 }} break>
           <Text style={styles.sectionTitle}>Audit Purpose</Text>
-          <Html style={{ width: "100%", fontSize: 10 }}>
+          <Html style={{ width: "100%", fontSize: 8 }}>
             {cleanHtml(reportObject?.auditPurpose)}
           </Html>
         </View>
@@ -283,7 +272,7 @@ const PDFGenerator = ({ reportObject, logoPreview }) => {
           <View style={styles.contentBlock}>
             <Text style={styles.smallHeader}>Location</Text>
             <Text style={{ marginLeft: 20, fontSize: 8 }}>
-              {reportObject?.subLocationList[0].description}
+              {reportObject?.subLocationList?.[0]?.description || ""}
             </Text>
             <Text style={styles.smallHeader}>Report Date</Text>
             <Text style={{ marginLeft: 20, fontSize: 8 }}>
@@ -315,7 +304,7 @@ const PDFGenerator = ({ reportObject, logoPreview }) => {
             <Text style={styles.smallHeader}>Report Prepared By</Text>
             <Text style={{ marginLeft: 20, fontSize: 8 }}>
               {reportObject?.resourceAllocations?.createdBy.name
-                }
+              }
             </Text>
             <Text style={styles.smallHeader}>Resources</Text>
             <View style={{ marginLeft: 20 }}>
@@ -341,7 +330,7 @@ const PDFGenerator = ({ reportObject, logoPreview }) => {
         {/* Audit Purpose */}
         <View style={{ marginTop: 6 }} break>
           <Text style={styles.sectionTitle}>Summary Of Key Findings</Text>
-          <Html style={{ width: "100%", fontSize: 10 }}>
+          <Html style={{ width: "100%", fontSize: 8 }}>
             {cleanHtml(reportObject?.keyFindings)}
           </Html>
         </View>
@@ -365,7 +354,7 @@ const PDFGenerator = ({ reportObject, logoPreview }) => {
                   {areaGroup.items.map((observation, oIdx) => (
                     <View key={oIdx} style={styles.observationBlock}>
                       <View>
-                        <Html style={{ width: "100%", fontSize: 10 }}>
+                        <Html style={{ width: "100%", fontSize: 8 }}>
                           {cleanHtml(observation?.observationName)}
                         </Html>
                       </View>
@@ -377,7 +366,7 @@ const PDFGenerator = ({ reportObject, logoPreview }) => {
 
                       <View>
                         <Text style={[styles.smallHeader, { color: "#0a7386" }]}>Management Comments</Text>
-                        <Html style={{ width: "100%", fontSize: 10 }}>
+                        <Html style={{ width: "100%", fontSize: 8 }}>
                           {cleanHtml(observation?.managementComments)}
                         </Html>
                       </View>
@@ -412,7 +401,7 @@ const PDFGenerator = ({ reportObject, logoPreview }) => {
         {reportObject?.annexure && reportObject?.annexure !== "" && (
           <View style={{ marginTop: 12 }} break>
             <Text style={styles.sectionTitle}>Annexure</Text>
-            <Html style={{ width: "100%", fontSize: 10 }}>
+            <Html style={{ width: "100%", fontSize: 8 }}>
               {cleanHtml(reportObject?.annexure)}
             </Html>
           </View>

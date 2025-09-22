@@ -129,4 +129,4 @@ const AccordianItem = ({
   );
 };
 
-export default AccordianItem;
+export default React.memo(AccordianItem);
