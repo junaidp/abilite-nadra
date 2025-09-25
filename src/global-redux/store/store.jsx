@@ -18,6 +18,7 @@ import planningJobPrioritizationReducer from "../reducers/planing/job-prioritiza
 import planningJobSchedulingReducer from "../reducers/planing/job-scheduling/slice";
 import planningReportReducer from "../reducers/reports/planing-report/slice";
 import internalAuditReportReducer from "../reducers/reports/internal-audit-report/slice";
+import summarizedReportReducer from "../reducers/reports/summarized-report/slice"
 import extraReportReducer from "../reducers/reports/extra-report/slice";
 import reportingReducer from "../reducers/reporting/slice";
 import auditEngagementReducer from "../reducers/audit-engagement/slice";
@@ -52,6 +53,7 @@ export const store = configureStore({
     planningReport: planningReportReducer,
     internalAuditReport: internalAuditReportReducer,
     consolidationReport: consolidationReportReducer,
+    summarizedReport: summarizedReportReducer,
     reporting: reportingReducer,
     extraReport: extraReportReducer,
     // Audit Enagagement

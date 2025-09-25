@@ -49,6 +49,11 @@ import InternalAuditConsolidationReport from "./pages/dashboard/reports/internal
 import GenerateInternalAuditConsolidationReport from "./pages/dashboard/reports/internal-audit-consolidation-report/generate-internal-audit-consolidation-report/GenerateInternalAuditConsolidationReport";
 import ViewInternalAuditConsolidationReport from "./pages/dashboard/reports/internal-audit-consolidation-report/view-internal-audit-consolidation-report/ViewInternalAuditConsolidationReport";
 import UpdateInternalAuditConsolidationReport from "./pages/dashboard/reports/internal-audit-consolidation-report/update-internal-audit-consolidation-report/UpdateInternalAuditConsolidationReport";
+import SummarizedReport from "./pages/dashboard/reports/summarized-report/SummarizedReport"
+import ViewSummarizedReport from "./pages/dashboard/reports/summarized-report/view-summarized-report/ViewSummarizedReport"
+import DownloadSummarizedReport from "./components/dashboard/reports/summarized-report/download-report";
+import GenerateSummarizedReport from "./pages/dashboard/reports/summarized-report/generate-summarized-report/GenerateSummarizedReport"
+import UpdateSummarizedReport from "./pages/dashboard/reports/summarized-report/update-summarized-report/UpdateSummarized"
 import DownloadDetailedAuditReport from "./components/dashboard/reports/internal-audit-consolidation-report/download-report/index"
 import DownloadInternalAuditReport from "./components/dashboard/reports/internal-audit-report/download-report/index"
 import ProtectedRoute from "./components/common/layout/ProtectedRoute";
@@ -184,6 +189,26 @@ const App = () => {
             <Route
               path="update-internal-audit-consolidation-report/:id"
               element={<UpdateInternalAuditConsolidationReport />}
+            />
+            <Route
+              path="summarized-report"
+              element={<SummarizedReport />}
+            />
+            <Route
+              path="generate-summarized-report"
+              element={<GenerateSummarizedReport />}
+            />
+            <Route
+              path="update-summarized-report/:id"
+              element={<UpdateSummarizedReport />}
+            />
+            <Route
+              path="view-summarized-report/:id"
+              element={<ViewSummarizedReport />}
+            />
+            <Route
+              path="download-summarized-report/:id"
+              element={<DownloadSummarizedReport />}
             />
             <Route
               path="job-time-allocation-report"

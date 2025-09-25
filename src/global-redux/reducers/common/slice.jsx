@@ -132,6 +132,13 @@ let menuItems = [
         active: false,
       },
       {
+        id: "li-summarized-report",
+        label: "Summarized Report",
+        icon: faFileSignature,
+        route: "/audit/summarized-report",
+        active: false,
+      },
+      {
         id: "li-internal-audit-planing-report",
         label: "Planning Report",
         icon: faFileContract,
