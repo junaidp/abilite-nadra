@@ -1,6 +1,6 @@
 import React from "react";
 import Html from "react-pdf-html";
-import { cleanHtml, isHtmlEmpty } from "../../../../../config/helper";
+import { groupObservationsBySubLocationAndArea, cleanHtml, isHtmlEmpty } from "../../../../../config/helper";
 import {
     Document,
     Page,
@@ -182,57 +182,26 @@ const styles = StyleSheet.create({
         gap: 6,
         marginBottom: 6,
     },
-
-    // 
-    table: {
-        display: "table",
-        width: "100%",
-        borderStyle: "solid",
-        borderWidth: 1,
-        borderColor: "#000",
-        borderRightWidth: 0,
-        borderBottomWidth: 0,
-        fontSize: TYPOGRAPHY.body,
-    },
-    tableRow: {
-        flexDirection: "row",
-        fontSize: TYPOGRAPHY.body,
-    },
-    tableHeader: {
-        flexDirection: "row",
-        backgroundColor: "#f0f0f0",
-        fontSize: TYPOGRAPHY.body,
-    },
-    tableCol: {
-        borderStyle: "solid",
-        borderColor: "#000",
-        borderBottomWidth: 1,
-        borderRightWidth: 1,
-        padding: 4,
-        fontSize: TYPOGRAPHY.body,
-    },
-    colObs: { width: "5%" },
-    colDesc: { width: "75%" },
-    colDau: { width: "20%" },
-    textBold: {
-        fontWeight: "bold",
-    },
 });
 
-const PDFGenerator = ({ reportObject, logoPreview, allLocations }) => {
-    const subLocationMap = React.useMemo(() => {
-        const map = {};
-        allLocations.forEach(loc => {
-            (loc.subLocations || []).forEach(subLoc => {
-                map[subLoc.id] = subLoc.description;
-            });
-        });
-        return map;
-    }, [allLocations]);
+const PDFGenerator = ({ reportObject, logoPreview }) => {
+    // groupedObservations holds the nested structure returned by the helper
+    const [groupedObservations, setGroupedObservations] = React.useState([]);
 
+    // call the grouping helper and update state.
+    React.useEffect(() => {
+        if (reportObject?.reportingsList) {
+            setGroupedObservations(
+                groupObservationsBySubLocationAndArea(reportObject?.reportingsList)
+            );
+        }
+    }, [reportObject]);
 
-    const findSubLocationDescription = (id) =>
-        subLocationMap[id] || "Unknown Sub-location";
+    // small helper so JSX is a bit cleaner when resolving sub-location description
+    const getSubLocationDescription = (subLocationId) =>
+        reportObject?.subLocationList?.find(
+            (s) => s?.id === subLocationId
+        )?.description || "Unknown Sub-Location";
 
     return (
         <Document>
@@ -243,7 +212,7 @@ const PDFGenerator = ({ reportObject, logoPreview, allLocations }) => {
                 </View>
 
                 <View>
-                    <Text style={styles.reportBanner}>Auditor's Report</Text>
+                    <Text style={styles.reportBanner}>Detailed Audit Report</Text>
                 </View>
 
                 <View style={{ marginTop: 8 }}>
@@ -270,110 +239,86 @@ const PDFGenerator = ({ reportObject, logoPreview, allLocations }) => {
                     <Text style={styles.contentsHeading}>Contents</Text>
 
                     <View style={styles.contentBlock}>
-                        <Text style={styles.smallHeader}>01 - Identification</Text>
-                        <Text style={styles.smallHeader}>02 - Executive Summary</Text>
-                        <Text style={styles.smallHeader}>03 - Audit Purpose</Text>
-                        <Text style={styles.smallHeader}>04 - Previous Audit Follow Up</Text>
-                        <Text style={styles.smallHeader}>05 - Operational Highlights</Text>
-                        <Text style={styles.smallHeader}>06 - Main Findings and Recommendations</Text>
+                        <Text style={styles.smallHeader}>01 - Sub-Locations</Text>
 
                         <View style={{ marginLeft: 20 }}>
-                            {reportObject?.consolidationItemsList?.map((consolidatedItem, idx) => (
+                            {reportObject?.subLocationList?.map((subLocation, idx) => (
                                 <Text style={styles.bodyText} key={idx}>
-                                    {idx + 1}. {consolidatedItem?.area}
+                                    {idx + 1}. {subLocation?.description}
                                 </Text>
                             ))}
                         </View>
+
+                        {reportObject?.intAuditExtraFieldsList &&
+                            reportObject?.intAuditExtraFieldsList.length > 0 && (
+                                <Text style={styles.smallHeader}>02 - Audit Extra Fields</Text>
+                            )}
                         {
                             !isHtmlEmpty(reportObject.annexure) &&
-                            <Text style={styles.smallHeader}>07 - Annexure</Text>
+                            <Text style={styles.smallHeader}>03 - Annexure</Text>
                         }
                     </View>
                 </View>
-
-                {/* Overview */}
-                <View style={{ marginTop: 6 }} break>
-                    <Text style={styles.sectionTitle}>Identification</Text>
-                    <Html style={{ fontSize: 8 }}>
-                        {cleanHtml(reportObject?.overView)}
-                    </Html>
-                </View>
-
-                {/* Executive Summary */}
-                <View style={{ marginTop: 6 }} break>
-                    <Text style={styles.sectionTitle}>Executive Summary</Text>
-                    <Html style={{ fontSize: 8 }}>
-                        {cleanHtml(reportObject?.executiveSummary)}
-                    </Html>
-                </View>
-
-                {/* Audit Purpose */}
-                <View style={{ marginTop: 6 }} break>
-                    <Text style={styles.sectionTitle}>Audit Purpose</Text>
-                    <Html style={{ fontSize: 8 }}>
-                        {cleanHtml(reportObject?.auditPurpose)}
-                    </Html>
-                </View>
-
-                {/* Previous Audit Follow Up */}
-                <View style={{ marginTop: 6 }} break>
-                    <Text style={styles.sectionTitle}>Previous Audit Follow Up</Text>
-                    <Html style={{ fontSize: 8 }}>
-                        {cleanHtml(reportObject?.previousAuditFollowUp)}
-                    </Html>
-                </View>
-
-                {/* Previous Audit Follow Up */}
-                <View style={{ marginTop: 6 }} break>
-                    <Text style={styles.sectionTitle}>Operational Highlights</Text>
-                    <Html style={{ fontSize: 8 }}>
-                        {cleanHtml(reportObject?.operationalHighlight)}
-                    </Html>
-                </View>
-
-                {/* Observations grouped by sub-location and area */}
-                <View style={{ marginTop: 10 }} break>
-                    {/* You originally sliced to the first four groups — kept that behavior */}
-                    {reportObject.consolidationItemsList.map((consolidatedItem, idx) => (
-                        <View key={idx} style={{ marginBottom: 5 }}>
-                            {/* Section Title */}
-                            <Text style={styles.sectionTitle}>{consolidatedItem.area}</Text>
-
-                            {/* Table */}
-                            <View style={styles.table}>
-                                {/* Header Row */}
-                                <View style={[styles.tableRow, styles.tableHeader]}>
-                                    <Text style={[styles.tableCol, styles.colObs, styles.textBold]}>
-                                        Obs #
-                                    </Text>
-                                    <Text style={[styles.tableCol, styles.colDesc, styles.textBold]}>
-                                        Description
-                                    </Text>
-                                    <Text style={[styles.tableCol, styles.colDau, styles.textBold]}>
-                                        sub location
-                                    </Text>
-                                </View>
-
-                                {/* Data Rows */}
-                                {consolidatedItem.consolidatedObservations.map((obs, i) => (
-                                    <View style={styles.tableRow} key={i}>
-                                        <Text style={[styles.tableCol, styles.colObs]}>{i + 1}</Text>
-                                        <View style={[styles.tableCol, styles.colDesc]}>
-                                            <Html style={{ fontSize: 8 }}>
-                                                {cleanHtml(obs.summaryOfKeyFinding)}
-                                            </Html>
+                <View break>
+                    <Text style={styles.reportBanner}>Main Findings and Recommendations</Text>
+                    {/* Observations grouped by sub-location and area */}
+                    {groupedObservations && groupedObservations.length > 0 && (
+                        <View style={{ marginTop: 10 }}>
+                            {/* You originally sliced to the first four groups — kept that behavior */}
+                            {groupedObservations.map((subLocationGroup, idx) => (
+                                <View style={styles.findingsList} key={idx}>
+                                    <View>
+                                        {/* Sub-location (bold and easy to scan) */}
+                                        <View style={styles.locationRow}>
+                                            <Text style={styles.subLocationLabel} key={idx}>
+                                                {getSubLocationDescription(subLocationGroup.subLocation)}
+                                            </Text>
                                         </View>
-                                        <View style={[styles.tableCol, styles.colDau]}>
-                                            {obs.reportingList.map((loc, idx) => (
-                                                <Text key={idx}>{findSubLocationDescription(loc?.subLocation)}</Text>
-                                            ))}
-                                        </View>
+
+                                        {/* Areas inside this sub-location */}
+                                        {subLocationGroup?.areas?.map((areaGroup, aIdx) => (
+                                            <View key={aIdx} style={{ marginTop: 6 }}>
+                                                <View style={styles.contentBlock}>
+                                                    {/* Area label (bold) */}
+                                                    <Text style={styles.areaLabel}>{areaGroup?.area}</Text>
+
+                                                    {/* Each observation under the area */}
+                                                    {areaGroup.observations.map((observation, oIdx) => (
+                                                        <View key={oIdx} style={styles.observationBlock}>
+                                                            <Html style={{ fontSize: 8 }}>
+                                                                {cleanHtml(observation?.observationName)}
+                                                            </Html>
+                                                        </View>
+                                                    ))}
+                                                </View>
+                                                <View style={styles.divider} />
+                                            </View>
+                                        ))}
                                     </View>
-                                ))}
-                            </View>
+                                </View>
+                            ))}
                         </View>
-                    ))}
+                    )}
                 </View>
+
+
+                {/* Extra fields */}
+                {reportObject?.intAuditExtraFieldsList && reportObject?.intAuditExtraFieldsList.length !== 0 && (
+                    <View style={{ marginTop: 12 }} break>
+                        <Text style={[styles.sectionTitle, { color: "#0a7386", fontSize: 18 }]}>Audit Extra Fields</Text>
+                        {reportObject?.intAuditExtraFieldsList?.map((item, index) => (
+                            <View style={{ marginTop: 4 }} key={index}>
+                                <View style={styles.observationBlock}>
+                                    <Text style={[styles.smallHeader, { color: "#0a7386" }]}>{item?.heading?.trim()}</Text>
+                                </View>
+                                <View style={styles.observationBlock}>
+                                    <Text style={styles.bodyText}>{item?.data?.trim()}</Text>
+                                </View>
+                                <View style={styles.divider} />
+                            </View>
+                        ))}
+                    </View>
+                )}
 
                 {/* Annexure */}
                 {!isHtmlEmpty(reportObject.annexure) && (

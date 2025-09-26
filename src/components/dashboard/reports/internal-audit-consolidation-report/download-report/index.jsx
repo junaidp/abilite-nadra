@@ -1,6 +1,6 @@
 import React from "react";
 import { PDFDownloadLink } from "@react-pdf/renderer";
-import MyDocument from "../view-internal-audit-consolidation-report/components/PDFGenerator";
+import MyDocument from "./pdf";
 import {
     changeActiveLink,
     InitialLoadSidebarActiveLink

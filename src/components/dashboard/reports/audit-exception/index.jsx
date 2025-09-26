@@ -108,7 +108,7 @@ const AuditExceptionReport = () => {
       natureIndex === 6 && typeof job[5] === "string" ? job[5] : "";
 
     // job name tends to be at index 1 (fallback to index 2 if missing)
-    const jobName = job[1] || job[2] || "";
+    const jobName = (job[5] === "Compliance Checklist" || job[6] === "Previous Observation" || job[5] === "Previous Observation") ? job[1] : job[2] || "";
 
     // the short/truncated observation remains at index 4 in both shapes
     const shortObservation = job[4] || "";
@@ -200,10 +200,10 @@ const AuditExceptionReport = () => {
   // IMPORTANT: For "Previous Observation" we export the LONG string if present,
   // otherwise an empty string (per your requirement). For other job types we export the short observation.
   const stripHtml = (html) => {
-  if (!html) return "";
-  const doc = new DOMParser().parseFromString(html, "text/html");
-  return doc.body.textContent || "";
-};
+    if (!html) return "";
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    return doc.body.textContent || "";
+  };
 
   const handleExportExcel = () => {
     const rows = filteredData.map((p, idx) => {

@@ -3,7 +3,6 @@ import "./index.css";
 import { useSelector, useDispatch } from "react-redux";
 import Pagination from "@mui/material/Pagination";
 import moment from "moment";
-import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { encryptAndEncode } from "../../../config/helper";
 import { setupGetAllAuditEngagement } from "../../../global-redux/reducers/audit-engagement/slice";
@@ -26,7 +25,7 @@ const AuditEngagement = () => {
   );
   const { user } = useSelector((state) => state.auth);
   const [page, setPage] = React.useState(1);
-  const [itemsPerPage, setItemsPerPage] = React.useState(10);
+  const [itemsPerPage, setItemsPerPage] = React.useState(5);
   const [showJobStatusDialog, setShowJobStatusDialog] = React.useState(false);
   const [selectedJobId, setSelectedJobId] = React.useState({});
 
@@ -88,12 +87,12 @@ const AuditEngagement = () => {
 
     if (companyId) {
       setPage(1);
-      setItemsPerPage(10);
+      setItemsPerPage(5);
       dispatch(
         setupGetAllAuditEngagement({
           companyId,
           page: 1,
-          itemsPerPage: 10,
+          itemsPerPage: 5,
           year,
         })
       );
@@ -265,6 +264,7 @@ const AuditEngagement = () => {
                     value={itemsPerPage}
                     onChange={(event) => handleChangeItemsPerPage(event)}
                   >
+                    <MenuItem value={5}>5</MenuItem>
                     <MenuItem value={10}>10</MenuItem>
                     <MenuItem value={20}>20</MenuItem>
                     <MenuItem value={30}>30</MenuItem>

@@ -20,7 +20,7 @@ const FollowUp = () => {
     (state) => state?.reporting
   );
   const [page, setPage] = React.useState(1);
-  const [itemsPerPage, setItemsPerPage] = React.useState(10);
+  const [itemsPerPage, setItemsPerPage] = React.useState(5);
 
   const handleChange = (_, value) => {
     setPage(value);
@@ -90,9 +90,9 @@ const FollowUp = () => {
 
     if (companyId) {
       setPage(1);
-      setItemsPerPage(10);
+      setItemsPerPage(5);
       dispatch(
-        setupGetAllFollowUp({ companyId, page: 1, itemsPerPage: 10, year })
+        setupGetAllFollowUp({ companyId, page: 1, itemsPerPage: 5, year })
       );
     }
   }, [year]);
@@ -242,6 +242,7 @@ const FollowUp = () => {
                         value={itemsPerPage}
                         onChange={(event) => handleChangeItemsPerPage(event)}
                       >
+                        <MenuItem value={5}>5</MenuItem>
                         <MenuItem value={10}>10</MenuItem>
                         <MenuItem value={20}>20</MenuItem>
                         <MenuItem value={30}>30</MenuItem>

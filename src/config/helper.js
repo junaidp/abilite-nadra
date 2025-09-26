@@ -197,25 +197,43 @@ const cleanHtml = (htmlString) => {
   // Remove ALL font-family definitions (including quotes and !important)
   cleaned = cleaned.replace(/font-family\s*:\s*[^;"'}]+[;"'}]?/gi, "");
 
-  // Remove ALL font-weight definitions
-  cleaned = cleaned.replace(/font-weight\s*:\s*[^;"'}]+[;"'}]?/gi, "");
-
-  // Remove inline border colors that might be white
-  cleaned = cleaned.replace(/border[^:]*:\s*[^;"]*white[^;"]*;?/gi, "");
-
   // Force tables to have clear black borders and consistent size
-  cleaned = cleaned.replace(
-    /<table/gi,
-    '<table style="border: 1px solid black; border-collapse: collapse; width: 100%; font-size: 10px;"'
-  );
-  cleaned = cleaned.replace(
-    /<td/gi,
-    '<td style="border: 1px solid black; padding: 4px; font-size: 10px;"'
-  );
-  cleaned = cleaned.replace(
-    /<th/gi,
-    '<th style="border: 1px solid black; padding: 4px; font-size: 10px;"'
-  );
+  // For <td>
+  cleaned = cleaned.replace(/<td(.*?)>/gi, (match, group1) => {
+    if (/style=/i.test(group1)) {
+      return `<td${group1.replace(
+        /style=["']([^"']*)["']/i,
+        (m, styles) =>
+          ` style="${styles}; border:1px solid black"`
+      )}>`;
+    }
+    return `<td${group1} style="border:1px solid black;">`;
+  });
+
+  // For <th>
+  cleaned = cleaned.replace(/<th(.*?)>/gi, (match, group1) => {
+    if (/style=/i.test(group1)) {
+      return `<th${group1.replace(
+        /style=["']([^"']*)["']/i,
+        (m, styles) =>
+          ` style="${styles}; border:1px solid black"`
+      )}>`;
+    }
+    return `<th${group1} style="border:1px solid black">`;
+  });
+
+  // For <table>
+  cleaned = cleaned.replace(/<table(.*?)>/gi, (match, group1) => {
+    if (/style=/i.test(group1)) {
+      return `<table${group1.replace(
+        /style=["']([^"']*)["']/i,
+        (m, styles) =>
+          ` style="${styles}; border:1px solid black"`
+      )}>`;
+    }
+    return `<table${group1} style="border:1px solid black">`;
+  });
+
 
   // Force images to scale properly
   cleaned = cleaned.replace(
@@ -224,11 +242,28 @@ const cleanHtml = (htmlString) => {
   );
 
 
-  // Wrap entire content with consistent font size and line height
-  cleaned = `<div style="font-size: 10px; line-height: 1.4;">${cleaned}</div>`;
-
   return cleaned.trim();
 };
+
+const isHtmlEmpty = (html) => {
+  if (!html || typeof html !== "string") return true;
+
+  // Remove spaces, line breaks, & non-breaking spaces
+  let cleaned = html.replace(/&nbsp;/gi, " ").trim();
+
+  // Remove all <br> tags
+  cleaned = cleaned.replace(/<br\s*\/?>/gi, "");
+
+  // Remove empty <p> tags (like <p></p> or <p>   </p>)
+  cleaned = cleaned.replace(/<p>\s*<\/p>/gi, "");
+
+  // Strip all remaining tags
+  const textOnly = cleaned.replace(/<[^>]*>/g, "").trim();
+
+  // If after stripping everything, nothing is left → it's empty
+  return textOnly.length === 0;
+};
+
 
 const groupBySubLocationAndArea = (list) => {
   const grouped = list.reduce((acc, item) => {
@@ -316,5 +351,6 @@ export {
   groupBySubLocationAndArea,
   groupByArea,
   groupObservationsBySubLocationAndArea,
-  getStepStatusLabel
+  getStepStatusLabel,
+  isHtmlEmpty
 };

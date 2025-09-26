@@ -39,7 +39,7 @@ const InternalAuditReport = () => {
     totalNoOfRecords,
   } = useSelector((state) => state?.consolidationReport);
   const [page, setPage] = React.useState(1);
-  const [itemsPerPage, setItemsPerPage] = React.useState(10);
+  const [itemsPerPage, setItemsPerPage] = React.useState(5);
   const [currentReportItem, setCurrentReportItem] = React.useState({});
   const [showSubmitReportDialog, setShowSubmitReportDialog] =
     React.useState(false);
@@ -92,12 +92,12 @@ const InternalAuditReport = () => {
       )?.id;
       if (companyId) {
         setPage(1);
-        setItemsPerPage(10);
+        setItemsPerPage(5);
         dispatch(
           setupGetAllInternalAuditReports({
             companyId,
             page: 1,
-            itemsPerPage: 10,
+            itemsPerPage: 5,
             year,
           })
         );
@@ -134,12 +134,12 @@ const InternalAuditReport = () => {
 
     if (companyId) {
       setPage(1);
-      setItemsPerPage(10);
+      setItemsPerPage(5);
       dispatch(
         setupGetAllInternalAuditReports({
           companyId,
           page: 1,
-          itemsPerPage: 10,
+          itemsPerPage: 5,
           year,
         })
       );
@@ -425,6 +425,7 @@ const InternalAuditReport = () => {
                       value={itemsPerPage}
                       onChange={(event) => handleChangeItemsPerPage(event)}
                     >
+                      <MenuItem value={5}>5</MenuItem>
                       <MenuItem value={10}>10</MenuItem>
                       <MenuItem value={20}>20</MenuItem>
                       <MenuItem value={30}>30</MenuItem>

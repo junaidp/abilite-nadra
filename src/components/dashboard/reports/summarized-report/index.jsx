@@ -39,7 +39,7 @@ const SummarizedReport = () => {
         totalNoOfRecords,
     } = useSelector((state) => state?.summarizedReport);
     const [page, setPage] = React.useState(1);
-    const [itemsPerPage, setItemsPerPage] = React.useState(10);
+    const [itemsPerPage, setItemsPerPage] = React.useState(5);
     const [currentReportItem, setCurrentReportItem] = React.useState({});
     const [showSubmitReportDialog, setShowSubmitReportDialog] =
         React.useState(false);
@@ -90,12 +90,12 @@ const SummarizedReport = () => {
             )?.id;
             if (companyId) {
                 setPage(1);
-                setItemsPerPage(10);
+                setItemsPerPage(5);
                 dispatch(
                     setupGetAllSummarizedReports({
                         companyId,
                         page: 1,
-                        itemsPerPage: 10,
+                        itemsPerPage: 5,
                         year,
                     })
                 );
@@ -141,12 +141,12 @@ const SummarizedReport = () => {
 
         if (companyId) {
             setPage(1);
-            setItemsPerPage(10);
+            setItemsPerPage(5);
             dispatch(
                 setupGetAllSummarizedReports({
                     companyId,
                     page: 1,
-                    itemsPerPage: 10,
+                    itemsPerPage: 5,
                     year,
                 })
             );
@@ -427,6 +427,7 @@ const SummarizedReport = () => {
                                             value={itemsPerPage}
                                             onChange={(event) => handleChangeItemsPerPage(event)}
                                         >
+                                            <MenuItem value={5}>5</MenuItem>
                                             <MenuItem value={10}>10</MenuItem>
                                             <MenuItem value={20}>20</MenuItem>
                                             <MenuItem value={30}>30</MenuItem>
