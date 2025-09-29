@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
     },
 });
 
-const PDFGenerator = ({ reportObject, logoPreview, allLocations }) => {
+const SummarizedReportPDF = ({ reportObject, logoPreview, allLocations }) => {
     const subLocationMap = React.useMemo(() => {
         const map = {};
         allLocations.forEach(loc => {
@@ -395,5 +395,5 @@ const PDFGenerator = ({ reportObject, logoPreview, allLocations }) => {
     );
 };
 
-export default PDFGenerator;
+export default SummarizedReportPDF;
 

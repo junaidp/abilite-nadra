@@ -16,7 +16,7 @@ import { useParams } from "react-router-dom";
 import moment from "moment";
 import { CircularProgress } from "@mui/material";
 
-const DownloadDetailedAuditReport = () => {
+const DownloadInternalAuditReport = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const { user } = useSelector((state) => state.auth);
@@ -93,4 +93,4 @@ const DownloadDetailedAuditReport = () => {
     );
 };
 
-export default DownloadDetailedAuditReport;
+export default DownloadInternalAuditReport;

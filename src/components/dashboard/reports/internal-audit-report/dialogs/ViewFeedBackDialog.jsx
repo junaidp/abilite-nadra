@@ -1,7 +1,6 @@
-import React from "react";
 import moment from "moment";
 
-const ViewFeedBackDialog = ({ setViewFeedBackDialog, currentReportItem }) => {
+const ViewInternalAuditReportDialog = ({ setViewFeedBackDialog, currentReportItem }) => {
   function handleClose() {
     setViewFeedBackDialog(false);
   }
@@ -47,4 +46,4 @@ const ViewFeedBackDialog = ({ setViewFeedBackDialog, currentReportItem }) => {
   );
 };
 
-export default ViewFeedBackDialog;
+export default ViewInternalAuditReportDialog;

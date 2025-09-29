@@ -19,7 +19,7 @@ import PlanningReportFileUpload from "./components/file-upload";
 import { decryptString } from "../../../../../config/helper";
 import { useParams } from "react-router-dom";
 
-const UpdatePlanningReport = () => {
+const ViewPlanningReport = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -72,4 +72,4 @@ const UpdatePlanningReport = () => {
   );
 };
 
-export default UpdatePlanningReport;
+export default ViewPlanningReport;

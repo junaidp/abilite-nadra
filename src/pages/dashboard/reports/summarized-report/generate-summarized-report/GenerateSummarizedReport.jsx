@@ -1,4 +1,3 @@
-import React from "react";
 import GenerateSummarizedReport from "../../../../../components/dashboard/reports/summarized-report/generate-summarized-report/index";
 
 const GenerateSummarizedReportPage = () => {

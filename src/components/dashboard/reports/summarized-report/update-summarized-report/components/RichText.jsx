@@ -8,7 +8,7 @@ const RichTextEditor = ({
     keyFindings,
     consolidatedItemId,
     consolidatedObservationId,
-    onKeyFindingChangeChange, // ✅ missing in original props
+    onKeyFindingChangeChange,
 }) => {
     const editor = useRef(null);
     const [content, setContent] = useState("");

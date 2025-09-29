@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { setupReportFeedBack } from "../../../../../global-redux/reducers/reports/internal-audit-report/slice";
 import { useDispatch, useSelector } from "react-redux";
 
-const FeedBackDialog = ({ setFeedBackDialog, Id }) => {
+const InternalAuditReportFeedbackDialog = ({ setFeedBackDialog, Id }) => {
   const dispatch = useDispatch();
   const { loading, internalAuditReportAddSuccess } = useSelector(
     (state) => state?.internalAuditReport
@@ -79,4 +79,4 @@ const FeedBackDialog = ({ setFeedBackDialog, Id }) => {
   );
 };
 
-export default FeedBackDialog;
+export default InternalAuditReportFeedbackDialog;

@@ -158,4 +158,5 @@ The application uses the following dependencies:
 24. **recharts**: A chart library built with React and D3.
 25. **uuid**: Generates unique IDs for use in the application.
 26. **yup**: Schema validation library for form inputs.
+27. **xlsx**: A library for parsing, writing, and working with Excel spreadsheets.
 ```

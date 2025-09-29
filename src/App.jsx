@@ -42,19 +42,25 @@ import ViewInternalAuditReport from "./pages/dashboard/reports/internal-audit-re
 import UpdateInternalAuditReport from "./pages/dashboard/reports/internal-audit-report/update-internal-audit-report/UpdateInternalAuditReport";
 import Layout from "./components/common/layout/Layout";
 import GenerateInternalAuditReport from "./pages/dashboard/reports/internal-audit-report/generate-internal-audit-report/GenerateInternalAuditReport";
-import JobTimeAllocation from "./pages/dashboard/reports/job-time-allocation/JobTimeAllocation";
-import AuditPlaningSummary from "./pages/dashboard/reports/audit-planing-summary/AuditPlaningSummary";
-import AuditException from "./pages/dashboard/reports/audit-exception/AuditException";
-import InternalAuditConsolidationReport from "./pages/dashboard/reports/internal-audit-consolidation-report/InternalAuditConsolidationReport";
-import GenerateInternalAuditConsolidationReport from "./pages/dashboard/reports/internal-audit-consolidation-report/generate-internal-audit-consolidation-report/GenerateInternalAuditConsolidationReport";
-import ViewInternalAuditConsolidationReport from "./pages/dashboard/reports/internal-audit-consolidation-report/view-internal-audit-consolidation-report/ViewInternalAuditConsolidationReport";
-import UpdateInternalAuditConsolidationReport from "./pages/dashboard/reports/internal-audit-consolidation-report/update-internal-audit-consolidation-report/UpdateInternalAuditConsolidationReport";
+
+
+import JobTimeAllocationReport from "./pages/dashboard/reports/job-time-allocation-report/JobTimeAllocationReport";
+import AuditPlanSummaryReport from "./pages/dashboard/reports/audit-plan-summary-report/AuditPlanSummaryReport";
+import AuditExceptionReport from "./pages/dashboard/reports/audit-exception-report/AuditExceptionReport";
+
+
+import DetailedAuditReport from "./pages/dashboard/reports/detailed-audit-report/DetailedAuditReport";
+import GenerateDetailedAuditReport from "./pages/dashboard/reports/detailed-audit-report/generate-detailed-audit-report/GenerateDetailedAuditReport";
+import ViewDetailedAuditReport from "./pages/dashboard/reports/detailed-audit-report/view-detailed-audit-report/ViewDetailedAuditReport";
+import UpdateDetailedAuditReport from "./pages/dashboard/reports/detailed-audit-report/update-detailed-audit-report/UpdateDetailedAuditReport";
+
+
 import SummarizedReport from "./pages/dashboard/reports/summarized-report/SummarizedReport"
 import ViewSummarizedReport from "./pages/dashboard/reports/summarized-report/view-summarized-report/ViewSummarizedReport"
 import DownloadSummarizedReport from "./components/dashboard/reports/summarized-report/download-report";
 import GenerateSummarizedReport from "./pages/dashboard/reports/summarized-report/generate-summarized-report/GenerateSummarizedReport"
-import UpdateSummarizedReport from "./pages/dashboard/reports/summarized-report/update-summarized-report/UpdateSummarized"
-import DownloadDetailedAuditReport from "./components/dashboard/reports/internal-audit-consolidation-report/download-report/index"
+import UpdateSummarizedReport from "./pages/dashboard/reports/summarized-report/update-summarized-report/UpdateSummarizedRReport"
+import DownloadDetailedAuditReport from "./components/dashboard/reports/detailed-audit-report/download-report/index"
 import DownloadInternalAuditReport from "./components/dashboard/reports/internal-audit-report/download-report/index"
 import ProtectedRoute from "./components/common/layout/ProtectedRoute";
 import NotFound from "./components/common/not-found/index";
@@ -174,22 +180,24 @@ const App = () => {
               path="update-internal-audit-report/:id"
               element={<UpdateInternalAuditReport />}
             />
+            {/*  */}
             <Route
               path="internal-audit-consolidation-report"
-              element={<InternalAuditConsolidationReport />}
+              element={<DetailedAuditReport />}
             />
             <Route
               path="generate-internal-audit-consolidation-report"
-              element={<GenerateInternalAuditConsolidationReport />}
+              element={<GenerateDetailedAuditReport />}
             />
             <Route
               path="view-internal-audit-consolidation-report/:id"
-              element={<ViewInternalAuditConsolidationReport />}
+              element={<ViewDetailedAuditReport />}
             />
             <Route
               path="update-internal-audit-consolidation-report/:id"
-              element={<UpdateInternalAuditConsolidationReport />}
+              element={<UpdateDetailedAuditReport />}
             />
+            {/*  */}
             <Route
               path="summarized-report"
               element={<SummarizedReport />}
@@ -210,15 +218,17 @@ const App = () => {
               path="download-summarized-report/:id"
               element={<DownloadSummarizedReport />}
             />
+            {/*  */}
             <Route
               path="job-time-allocation-report"
-              element={<JobTimeAllocation />}
+              element={<JobTimeAllocationReport />}
             />
+            <Route path="audit-exception-report" element={<AuditExceptionReport />} />
             <Route
               path="audit-planning-summary-report"
-              element={<AuditPlaningSummary />}
+              element={<AuditPlanSummaryReport />}
             />
-            <Route path="audit-exception-report" element={<AuditException />} />
+            {/*  */}
             <Route path="download-detailed-audit-report/:id" element={<DownloadDetailedAuditReport />} />
             <Route path="download-internal-audit-report/:id" element={<DownloadInternalAuditReport />} />
           </Route>

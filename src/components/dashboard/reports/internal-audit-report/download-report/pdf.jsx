@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
     },
 });
 
-const PDFGenerator = ({ reportObject, logoPreview }) => {
+const InternalAuditReportPDF = ({ reportObject, logoPreview }) => {
     // groupedObservations holds the nested structure returned by the helper
     const [groupedObservations, setGroupedObservations] = React.useState([]);
 
@@ -430,6 +430,6 @@ const PDFGenerator = ({ reportObject, logoPreview }) => {
     );
 };
 
-export default PDFGenerator;
+export default InternalAuditReportPDF;
 
 
