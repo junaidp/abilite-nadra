@@ -273,12 +273,12 @@ const AddAuditJobDialog = ({
                         name="reason"
                         value={data?.reason}
                         onChange={handleChange}
-                        maxLength="500"
-                        className={`form-control  ${data?.reason?.length >= 500 && "error-border"
+                        maxLength="200"
+                        className={`form-control  ${data?.reason?.length >= 200 && "error-border"
                           }`}
                       ></textarea>
                       <p className="word-limit-info label-text">
-                        Maximum 500 characters
+                        Maximum 200 characters
                       </p>
                     </div>
                   </div>

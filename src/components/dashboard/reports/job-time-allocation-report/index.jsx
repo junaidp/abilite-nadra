@@ -60,12 +60,12 @@ const JobTimeAllocationReport = () => {
     if (!Array.isArray(job)) return "";
 
     const categories = [
-      { idx: 3, label: "Business" },
-      { idx: 4, label: "Fraud" },
-      { idx: 5, label: "Finance" },
-      { idx: 6, label: "IT" },
-      { idx: 7, label: "Operations" },
-      { idx: 8, label: "Others" },
+      { idx: 4, label: "Business" },
+      { idx: 5, label: "Fraud" },
+      { idx: 6, label: "Finance" },
+      { idx: 7, label: "IT" },
+      { idx: 8, label: "Operations" },
+      { idx: 9, label: "Others" },
     ];
 
     // total as the sum of those indices (keeps original numeric addition semantics)
@@ -296,15 +296,15 @@ const JobTimeAllocationReport = () => {
                     return (
                       <tr key={index}>
                         <td>{(page - 1) * PAGE_SIZE + index + 1}</td>
-                        <td>{job[1]}</td>
-                        <td>{job[2]}</td>
+                        <td>{job[3] === "Compliance Checklist" ? job[1] : job[2]}</td>
+                        <td>{job[3]}</td>
                         <td>{getUserString(job)}</td>
                         <td>
-                          {job[9]}
+                          {job[10]}
                           {` (`}
-                          {job[10] ? moment.utc(job[10]).format("DD-MM-YYYY") : "--"}
-                          {`--`}
                           {job[11] ? moment.utc(job[11]).format("DD-MM-YYYY") : "--"}
+                          {`--`}
+                          {job[12] ? moment.utc(job[12]).format("DD-MM-YYYY") : "--"}
                           {`)`}
                         </td>
                         <td>

@@ -148,7 +148,10 @@ const RiskAssessmentListRows = ({
                 </select>
               </div>
               <div>
-                <textarea className="form-control" maxLength="300"
+                <textarea
+                  maxLength="150"
+                  className={`form-control  ${riskFactor?.comments?.length >= 150 && "error-border"
+                    }`}
                   onChange={(event) =>
                     handleChangeRiskFactorValues(item?.id, riskFactor.id, event)
                   }

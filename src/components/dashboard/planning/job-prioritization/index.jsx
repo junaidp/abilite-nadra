@@ -226,13 +226,13 @@ const JobPrioritization = () => {
                             }
                             disabled={item?.editable === true ? false : true}
                             name="comments"
-                            maxLength="200"
+                            maxLength="100"
                             className={`form-control  ${
-                              item?.comments?.length >= 200 && "error-border"
+                              item?.comments?.length >= 100 && "error-border"
                             }`}
                           ></textarea>
                           <p className="word-limit-info label-text mb-2">
-                            Maximum 200 characters
+                            Maximum 100 characters
                           </p>
                         </td>
                         <td className="width-100">

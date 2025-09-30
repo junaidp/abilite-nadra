@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 const AddRiskFactorDialog = ({ setShowAddRiskFactorDialog }) => {
   const dispatch = useDispatch();
   const [description, setDescription] = React.useState("");
-  const { performRiskAssessmentObject, loading,riskAssessmentSuccess } = useSelector(
+  const { performRiskAssessmentObject, loading, riskAssessmentSuccess } = useSelector(
     (state) => state?.planningRiskAssessment
   );
 
@@ -51,11 +51,13 @@ const AddRiskFactorDialog = ({ setShowAddRiskFactorDialog }) => {
         <div className="d-flex">
           <input
             type="email"
-            className="form-control"
             id="labeltext"
             placeholder="Enter Risk Factor"
             value={description}
             onChange={(e) => setDescription(e?.target?.value)}
+            maxLength="100"
+            className={`form-control  ${description?.length >= 100 && "error-border"
+              }`}
           />
           <button
             className={`btn btn-primary ms-2 ${loading && "disabled"}`}
