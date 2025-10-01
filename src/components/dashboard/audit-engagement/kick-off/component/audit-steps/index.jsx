@@ -5,6 +5,16 @@ import ViewFeedBackDialog from "./ViewFeedBackDialog";
 import ApproveDialog from "./ApproveDialog";
 import SubmitDialog from "./submit-dialog";
 
+/**
+ * AditSteps Component
+ * -------------------
+ * Displays audit steps for a given engagement along with actions
+ * (Submit, Approve, Feedback, View Feedback).
+ *
+ * - Uses conditional rendering for dialogs.
+ * - Handles permission-based actions (Submit, Approve, Feedback).
+ * - Validates step completion before allowing submission.
+ */
 const AditSteps = ({
   setShowAuditStepsDialog,
   currentAuditEngagement,
@@ -13,39 +23,56 @@ const AditSteps = ({
   loading,
 }) => {
   const { user } = useSelector((state) => state?.auth);
+
+  // Local states for modal dialogs
   const [showSubmitDialog, setShowSubmitDialog] = React.useState(false);
   const [showSubmitButton, setShowSubmitButton] = React.useState(false);
   const [feedBackDialog, setFeedBackDialog] = React.useState(false);
   const [viewFeedBackDialog, setViewFeedBackDialog] = React.useState(false);
   const [showApproveDialog, setShowApproveDialog] = React.useState(false);
 
+  /** Handle opening Submit dialog */
   function handleSubmit() {
     setShowSubmitDialog(true);
   }
 
+  /** Handle opening Approve dialog */
   function handleApprove() {
     setShowApproveDialog(true);
   }
 
+  /**
+   * Check if all audit steps have observations.
+   * Only then show the "Submit" button.
+   */
   React.useEffect(() => {
     if (
-      singleAuditEngagementObject?.auditStep !== null &&
-      singleAuditEngagementObject?.auditStep?.stepList?.length !== 0
+      singleAuditEngagementObject?.auditStep?.stepList &&
+      singleAuditEngagementObject?.auditStep?.stepList?.length > 0
     ) {
-      let submit = true;
-      singleAuditEngagementObject?.auditStep?.stepList?.forEach(
-        (singleStep) => {
-          if (singleStep?.auditStepObservationsList?.length === 0) {
-            submit = false;
-          }
+      let submitAllowed = false;
+      singleAuditEngagementObject.auditStep.stepList.forEach((singleStep) => {
+        if (singleStep?.auditStepObservationsList?.length > 0) {
+          submitAllowed = true;
         }
-      );
-      setShowSubmitButton(submit);
+      });
+      setShowSubmitButton(submitAllowed);
     }
   }, [singleAuditEngagementObject]);
 
+  /** Permission check for Approve/Feedback actions */
+  const canApproveOrFeedback =
+    user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
+    Number(user[0]?.userId?.id) ===
+    Number(
+      currentAuditEngagement?.resourceAllocation?.backupHeadOfInternalAudit?.id
+    ) ||
+    Number(user[0]?.userId?.id) ===
+    Number(currentAuditEngagement?.resourceAllocation?.proposedJobApprover?.id);
+
   return (
     <div className="accordion-item">
+      {/* Dialogs */}
       {showSubmitDialog && (
         <div className="model-parent d-flex justify-content-between items-center">
           <div className="model-wrap">
@@ -86,6 +113,8 @@ const AditSteps = ({
           </div>
         </div>
       )}
+
+      {/* Accordion Header */}
       <h2 className="accordion-header">
         <button
           className="accordion-button collapsed"
@@ -97,10 +126,9 @@ const AditSteps = ({
         >
           <div className="d-flex w-100 me-3 align-items-center justify-content-between">
             <div className=" d-flex align-items-center">
-              {currentAuditEngagement?.auditStep !== null &&
-                currentAuditEngagement?.auditStep?.stepList?.length !== 0 &&
+              {currentAuditEngagement?.auditStep?.stepList?.length > 0 &&
                 showSubmitButton &&
-                currentAuditEngagement?.auditStep?.approved === true && (
+                currentAuditEngagement?.auditStep?.approved && (
                   <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
                 )}
               Audit Steps
@@ -108,6 +136,8 @@ const AditSteps = ({
           </div>
         </button>
       </h2>
+
+      {/* Accordion Body */}
       <div
         id="flush-collapseSix"
         className="accordion-collapse collapse"
@@ -117,8 +147,9 @@ const AditSteps = ({
           <div className="container">
             <div className="row">
               <div className="col-lg-12">
+                {/* Audit Steps Table */}
                 <div className="table-responsive">
-                  <table className="table table-bordered  table-hover rounded">
+                  <table className="table table-bordered table-hover rounded">
                     <thead className="bg-secondary text-white">
                       <tr>
                         <th className="f-80">Sr No.</th>
@@ -128,84 +159,74 @@ const AditSteps = ({
                       </tr>
                     </thead>
                     <tbody>
-                      {currentAuditEngagement?.auditStep?.stepList?.length ===
-                        0 || currentAuditEngagement?.auditStep == null ? (
+                      {!currentAuditEngagement?.auditStep?.stepList?.length ? (
                         <tr>
                           <td className="w-300">No Steps to show</td>
                         </tr>
                       ) : (
-                        currentAuditEngagement?.auditStep?.stepList?.map(
-                          (item, index) => {
-                            return (
-                              <tr key={index}>
-                                <td>{item?.id}</td>
-                                <td>
-                                  <a
-                                    onClick={() => {
-                                      setAuditStepId(item?.id);
-                                      setShowAuditStepsDialog(true);
-                                    }}
-                                    className="fw-bold  text-primary  px-3 py-1 f-10"
-                                  >
-                                    {item?.program?.description}
-                                  </a>
-                                </td>
-                                <td className="d-flex gap-4">
-                                  {item?.auditStepObservationsList?.length !==
-                                    0 ? (
-                                    <i className="fa fa-check-circle text-success f-18"></i>
-                                  ) : (
-                                    <i className="fa fa-check-circle text-danger  f-18"></i>
-                                  )}
-                                </td>
-                                <td>
-                                  <i
-                                    className="fa-eye fa f-18 cursor-pointer"
-                                    onClick={() => {
-                                      setAuditStepId(item?.id);
-                                      setShowAuditStepsDialog(true);
-                                    }}
-                                  ></i>
-                                </td>
-                              </tr>
-                            );
-                          }
+                        currentAuditEngagement.auditStep.stepList.map(
+                          (item, index) => (
+                            <tr key={index}>
+                              <td>{item?.id}</td>
+                              <td>
+                                <div
+                                  onClick={() => {
+                                    setAuditStepId(item?.id);
+                                    setShowAuditStepsDialog(true);
+                                  }}
+                                  className="fw-bold text-primary  py-1 f-10 cursor-pointer"
+                                >
+                                  {item?.program?.description}
+                                </div>
+                              </td>
+                              <td>
+                                {item?.auditStepObservationsList?.length ? (
+                                  <i className="fa fa-check-circle text-success f-18"></i>
+                                ) : (
+                                  <i className="fa fa-check-circle text-danger f-18"></i>
+                                )}
+                              </td>
+                              <td>
+                                <i
+                                  className="fa-eye fa f-18 cursor-pointer"
+                                  onClick={() => {
+                                    setAuditStepId(item?.id);
+                                    setShowAuditStepsDialog(true);
+                                  }}
+                                ></i>
+                              </td>
+                            </tr>
+                          )
                         )
                       )}
                     </tbody>
                   </table>
                 </div>
+
+                {/* Action Buttons */}
                 <div className="d-flex gap-4 flex-end">
-                  {currentAuditEngagement?.auditStep?.submitted === false
-                    && (
-                      <div onClick={handleSubmit}>
-                        <div className="justify-content-end text-end">
-                          <div
-                            className={`btn btn-labeled btn-primary  shadow ${loading && "disabled"
-                              }`}
-                          >
-                            {loading ? "Loading..." : "Submit"}
-                          </div>
+                  {/* Submit button (if not submitted) */}
+                  {currentAuditEngagement?.auditStep?.submitted === false && showSubmitButton && (
+                    <div onClick={handleSubmit}>
+                      <div className="justify-content-end text-end">
+                        <div
+                          className={`btn btn-labeled btn-primary shadow ${loading && "disabled"
+                            }`}
+                        >
+                          {loading ? "Loading..." : "Submit"}
                         </div>
                       </div>
-                    )}
+                    </div>
+                  )}
+
+                  {/* Approve button (for IAH or specific roles) */}
                   {currentAuditEngagement?.auditStep?.submitted === true &&
                     currentAuditEngagement?.auditStep?.approved === false &&
-                    (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
-                      Number(user[0]?.userId?.id) ===
-                      Number(
-                        currentAuditEngagement?.resourceAllocation
-                          ?.backupHeadOfInternalAudit?.id
-                      ) ||
-                      Number(user[0]?.userId?.id) ===
-                      Number(
-                        currentAuditEngagement?.resourceAllocation
-                          ?.proposedJobApprover?.id
-                      )) && (
+                    canApproveOrFeedback && (
                       <div onClick={handleApprove}>
                         <div className="justify-content-end text-end">
                           <div
-                            className={`btn btn-labeled btn-primary  shadow ${loading && "disabled"
+                            className={`btn btn-labeled btn-primary shadow ${loading && "disabled"
                               }`}
                           >
                             {loading ? "Loading..." : "Approve"}
@@ -213,45 +234,35 @@ const AditSteps = ({
                         </div>
                       </div>
                     )}
+
+                  {/* Feedback button (for IAH or specific roles) */}
                   {currentAuditEngagement?.auditStep?.submitted === true &&
                     currentAuditEngagement?.auditStep?.approved === false &&
-                    (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
-                      Number(user[0]?.userId?.id) ===
-                      Number(
-                        currentAuditEngagement?.resourceAllocation
-                          ?.backupHeadOfInternalAudit?.id
-                      ) ||
-                      Number(user[0]?.userId?.id) ===
-                      Number(
-                        currentAuditEngagement?.resourceAllocation
-                          ?.proposedJobApprover?.id
-                      )) && (
+                    canApproveOrFeedback && (
                       <div onClick={() => setFeedBackDialog(true)}>
                         <div className="justify-content-end text-end">
-                          <div
-                            className={`btn btn-labeled btn-primary  shadow `}
-                          >
+                          <div className="btn btn-labeled btn-primary shadow">
                             FeedBack
                           </div>
                         </div>
                       </div>
                     )}
-                  {currentAuditEngagement?.auditStep?.feedback &&
-                    currentAuditEngagement?.auditStep?.feedback?.id && (
-                      <div>
-                        <div className="justify-content-end text-end">
-                          <div
-                            className={`btn btn-labeled btn-primary  shadow `}
-                            onClick={() => {
-                              setViewFeedBackDialog(true);
-                            }}
-                          >
-                            View FeedBack
-                          </div>
+
+                  {/* View Feedback button */}
+                  {currentAuditEngagement?.auditStep?.feedback?.id && (
+                    <div>
+                      <div className="justify-content-end text-end">
+                        <div
+                          className="btn btn-labeled btn-primary shadow"
+                          onClick={() => setViewFeedBackDialog(true)}
+                        >
+                          View FeedBack
                         </div>
                       </div>
-                    )}
+                    </div>
+                  )}
                 </div>
+                {/* End Action Buttons */}
               </div>
             </div>
           </div>
