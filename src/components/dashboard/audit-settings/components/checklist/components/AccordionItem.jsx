@@ -162,7 +162,7 @@ const AccordionItem = ({
                           </tr>
                         ) : checkListItems &&
                           checkListItems[0]?.error !== "Not Found" ? (
-                          groupByAreaAndSubject(checkListItems)?.map((group, groupIndex) =>
+                          groupByAreaAndSubject(checkListItems)?.map((group) =>
                             group.items.map((item) => {
                               return (
                                 <tr key={item.id}>
@@ -170,37 +170,39 @@ const AccordionItem = ({
                                   <td>{item?.area}</td>
                                   <td>{item?.subject}</td>
                                   <td>{item?.particulars}</td>
-                                  <td className="d-flex flex-wrap gap-4">
-                                    <i
-                                      className="fa-eye fa f-18 cursor-pointer"
-                                      onClick={() => {
-                                        dispatch(changeCurrentSubListItem(item));
-                                        setShowViewCheckListDialog(true);
-                                      }}
-                                    ></i>
-                                    {(userRole === "ADMIN" ||
-                                      userHierarchy === "IAH") && (
-                                        <i
-                                          className="fa fa-edit f-18"
-                                          onClick={() => {
-                                            setShowEditCheckListItemDialog(true);
-                                            dispatch(
-                                              changeCurrentSubListItem(item)
-                                            );
-                                          }}
-                                        ></i>
-                                      )}
-                                    {(userRole === "ADMIN" ||
-                                      userHierarchy === "IAH") && (
-                                        <i
-                                          className="fa fa-trash text-danger f-18"
-                                          onClick={() => {
-                                            dispatch(
-                                              setupDeleteSubCheckList(item?.id)
-                                            );
-                                          }}
-                                        ></i>
-                                      )}
+                                  <td>
+                                    <div className="d-flex flex-wrap gap-4">
+                                      <i
+                                        className="fa-eye fa f-18 cursor-pointer"
+                                        onClick={() => {
+                                          dispatch(changeCurrentSubListItem(item));
+                                          setShowViewCheckListDialog(true);
+                                        }}
+                                      ></i>
+                                      {(userRole === "ADMIN" ||
+                                        userHierarchy === "IAH") && (
+                                          <i
+                                            className="fa fa-edit f-18"
+                                            onClick={() => {
+                                              setShowEditCheckListItemDialog(true);
+                                              dispatch(
+                                                changeCurrentSubListItem(item)
+                                              );
+                                            }}
+                                          ></i>
+                                        )}
+                                      {(userRole === "ADMIN" ||
+                                        userHierarchy === "IAH") && (
+                                          <i
+                                            className="fa fa-trash text-danger f-18"
+                                            onClick={() => {
+                                              dispatch(
+                                                setupDeleteSubCheckList(item?.id)
+                                              );
+                                            }}
+                                          ></i>
+                                        )}
+                                    </div>
                                   </td>
                                 </tr>
                               );

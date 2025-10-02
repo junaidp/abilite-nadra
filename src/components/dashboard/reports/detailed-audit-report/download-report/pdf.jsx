@@ -1,6 +1,4 @@
-import React from "react";
-import Html from "react-pdf-html";
-import { groupObservationsBySubLocationAndArea, cleanHtml, isHtmlEmpty } from "../../../../../config/helper";
+import { isHtmlEmpty } from "../../../../../config/helper";
 import {
     Document,
     Page,
@@ -8,18 +6,24 @@ import {
     StyleSheet,
     View,
     Image,
+    Font
 } from "@react-pdf/renderer";
+import font from "../../../../../font/Poppins-Medium.ttf";
 
+Font.register({
+    family: "Poppins",
+    src: font,
+});
 
 // central layout & typography constants for consistent look across all pages
 const PAGE_PADDING = 35;
 const TYPOGRAPHY = {
-    title: 16,
-    section: 12,
-    subsection: 14,
-    smallHeader: 8,
-    body: 8,
-    small: 7,
+    title: 18,
+    section: 14,
+    subsection: 16,
+    smallHeader: 10,
+    body: 10,
+    small: 8,
 };
 const styles = StyleSheet.create({
     // Base page used for most pages so padding/width stays consistent
@@ -30,6 +34,7 @@ const styles = StyleSheet.create({
         paddingBottom: PAGE_PADDING,
         paddingLeft: PAGE_PADDING,
         paddingRight: PAGE_PADDING,
+        fontFamily: "Poppins",
     },
 
     // A slightly different layout for the first cover page
@@ -58,6 +63,19 @@ const styles = StyleSheet.create({
         alignItems: "center",
         paddingBottom: 5,
     },
+
+    pageFooter: {
+        display: "flex",
+        justifyContent: "space-between",
+        flexDirection: "row",
+        alignItems: "center",
+        paddingTop: 5,
+        position: "absolute",
+        bottom: 5, // distance from bottom
+        left: 20,
+        right: 20,
+    },
+
     // Logo sizing — keep small and consistent
     logo: {
         width: 100,
@@ -184,18 +202,8 @@ const styles = StyleSheet.create({
     },
 });
 
-const DetailedAuditReportPDF = ({ reportObject, logoPreview }) => {
-    // groupedObservations holds the nested structure returned by the helper
-    const [groupedObservations, setGroupedObservations] = React.useState([]);
+const DetailedAuditReportPDF = ({ reportObject, logoPreview, groupedObservations, annexure }) => {
 
-    // call the grouping helper and update state.
-    React.useEffect(() => {
-        if (reportObject?.reportingsList) {
-            setGroupedObservations(
-                groupObservationsBySubLocationAndArea(reportObject?.reportingsList)
-            );
-        }
-    }, [reportObject]);
 
     // small helper so JSX is a bit cleaner when resolving sub-location description
     const getSubLocationDescription = (subLocationId) =>
@@ -228,8 +236,14 @@ const DetailedAuditReportPDF = ({ reportObject, logoPreview }) => {
 
             {/* Main content pages*/}
             <Page size="A4" style={styles.pageBase} wrap>
-                {/* Top small header / meta info */}
-                <View style={styles.pageStarter} fixed wrap>
+                {/* Top header */}
+                <View style={styles.pageStarter} fixed>
+                    <Text style={styles.smallMeta}>{reportObject?.reportName}</Text>
+                    <Image src={logoPreview} style={{ width: 40 }} />
+                </View>
+
+                {/* Bottom footer */}
+                <View style={styles.pageFooter} fixed>
                     <Text style={styles.smallMeta}>{reportObject?.reportName}</Text>
                     <Image src={logoPreview} style={{ width: 40 }} />
                 </View>
@@ -283,12 +297,8 @@ const DetailedAuditReportPDF = ({ reportObject, logoPreview }) => {
                                                     <Text style={styles.areaLabel}>{areaGroup?.area}</Text>
 
                                                     {/* Each observation under the area */}
-                                                    {areaGroup.observations.map((observation, oIdx) => (
-                                                        <View key={oIdx} style={styles.observationBlock}>
-                                                            <Html style={{ fontSize: 8 }}>
-                                                                {cleanHtml(observation?.observationName)}
-                                                            </Html>
-                                                        </View>
+                                                    {areaGroup.observations.map((observation, idxx) => (
+                                                        <Image src={observation.observationImage} style={{ width: "100%" }} key={idxx} />
                                                     ))}
                                                 </View>
                                                 <View style={styles.divider} />
@@ -324,9 +334,7 @@ const DetailedAuditReportPDF = ({ reportObject, logoPreview }) => {
                 {!isHtmlEmpty(reportObject.annexure) && (
                     <View style={{ marginTop: 12 }} break>
                         <Text style={styles.sectionTitle}>Annexure</Text>
-                        <Html style={{ fontSize: 8 }}>
-                            {cleanHtml(reportObject?.annexure)}
-                        </Html>
+                        <Image src={annexure} style={{ width: "100%" }} />
                     </View>
                 )}
 

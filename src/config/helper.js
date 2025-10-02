@@ -2,6 +2,8 @@ import moment from "moment";
 import CryptoJS from "crypto-js";
 import { secretKey } from "./constants";
 import { toast } from "react-toastify";
+import html2canvas from "html2canvas-pro";
+
 
 const handleDownload = ({ base64String, fileName }) => {
   const byteCharacters = atob(base64String);
@@ -84,6 +86,94 @@ function groupObservationsBySubLocationAndArea(array) {
 
   return result;
 }
+
+const htmlToImage = async (html, width = 800) => {
+  if (!html) return null;
+
+  const div = document.createElement("div");
+  div.className = "pdf-render-wrapper";
+  div.style.position = "absolute";
+  div.style.left = "-9999px";
+  div.style.top = "0";
+  div.style.width = `${width}px`;
+  div.innerHTML = html;
+
+  // force table borders
+  // After injecting HTML into the div
+  div.querySelectorAll("table, th, td").forEach((el) => {
+    el.style.border = "1px solid black";
+    el.style.borderCollapse = "collapse"; // make it look tight
+    el.style.color = "black"; // in case text got styled as white
+  });
+
+  // optional: background
+  div.querySelectorAll("th").forEach((el) => {
+    if (!el.style.backgroundColor) {
+      el.style.backgroundColor = "#f0f0f0"; // light gray header
+    }
+  });
+
+
+  document.body.appendChild(div);
+
+  const canvas = await html2canvas(div, { scale: 1 });
+  document.body.removeChild(div);
+
+  return canvas.toDataURL("image/png");
+};
+
+// Walk grouped observations and replace HTML with base64 images
+const convertObservationsToImages = async (grouped) => {
+  const result = [];
+
+  for (const subLoc of grouped) {
+    const areas = [];
+
+    for (const area of subLoc.areas) {
+      const observations = [];
+
+      for (const obs of area.observations) {
+        const imgData = await htmlToImage(obs.observationName);
+        observations.push({
+          ...obs,
+          observationImage: imgData, // new field
+        });
+      }
+
+      areas.push({ ...area, observations });
+    }
+
+    result.push({ ...subLoc, areas });
+  }
+
+  return result;
+};
+
+const convertObservationsToImagesForInternalAuditReport = async (grouped) => {
+  const result = [];
+
+  for (const areaGroup of grouped) {
+    const items = [];
+
+    for (const obs of areaGroup.items) {
+      const observationImg = await htmlToImage(obs.observationName);
+      const managementCommentsImg = await htmlToImage(obs.managementComments);
+
+      items.push({
+        ...obs,
+        observationImage: observationImg,
+        managementCommentsImage: managementCommentsImg,
+      });
+    }
+
+    result.push({
+      ...areaGroup,
+      items,
+    });
+  }
+
+  return result;
+};
 
 
 
@@ -352,5 +442,8 @@ export {
   groupByArea,
   groupObservationsBySubLocationAndArea,
   getStepStatusLabel,
-  isHtmlEmpty
+  isHtmlEmpty,
+  convertObservationsToImages,
+  htmlToImage,
+  convertObservationsToImagesForInternalAuditReport
 };

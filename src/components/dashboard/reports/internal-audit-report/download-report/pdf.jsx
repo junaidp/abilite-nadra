@@ -1,6 +1,4 @@
-import React from "react";
-import Html from "react-pdf-html";
-import { groupByArea, cleanHtml, isHtmlEmpty } from "../../../../../config/helper";
+import { isHtmlEmpty } from "../../../../../config/helper";
 import moment from "moment";
 import {
     Document,
@@ -9,17 +7,26 @@ import {
     StyleSheet,
     View,
     Image,
+    Font
 } from "@react-pdf/renderer";
+import font from "../../../../../font/Poppins-Medium.ttf";
+
+
+Font.register({
+    family: "Poppins",
+    src: font,
+});
+
 
 // central layout & typography constants for consistent look across all pages
 const PAGE_PADDING = 35;
 const TYPOGRAPHY = {
-    title: 16,
-    section: 12,
-    subsection: 14,
-    smallHeader: 8,
-    body: 8,
-    small: 7,
+    title: 18,
+    section: 14,
+    subsection: 16,
+    smallHeader: 10,
+    body: 10,
+    small: 8,
 };
 
 const styles = StyleSheet.create({
@@ -31,6 +38,7 @@ const styles = StyleSheet.create({
         paddingBottom: PAGE_PADDING,
         paddingLeft: PAGE_PADDING,
         paddingRight: PAGE_PADDING,
+        fontFamily: "Poppins",
     },
 
     // A slightly different layout for the first cover page
@@ -58,6 +66,18 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         paddingBottom: 5,
+    },
+
+    pageFooter: {
+        display: "flex",
+        justifyContent: "space-between",
+        flexDirection: "row",
+        alignItems: "center",
+        paddingTop: 5,
+        position: "absolute",
+        bottom: 5, // distance from bottom
+        left: 20,
+        right: 20,
     },
 
     flexWrapper: {
@@ -201,18 +221,7 @@ const styles = StyleSheet.create({
     },
 });
 
-const InternalAuditReportPDF = ({ reportObject, logoPreview }) => {
-    // groupedObservations holds the nested structure returned by the helper
-    const [groupedObservations, setGroupedObservations] = React.useState([]);
-
-    // call the grouping helper and update state.
-    React.useEffect(() => {
-        if (reportObject?.reportingList) {
-            setGroupedObservations(
-                groupByArea(reportObject?.reportingList)
-            );
-        }
-    }, [reportObject]);
+const InternalAuditReportPDF = ({ reportObject, logoPreview, groupedObservations, data }) => {
 
     return (
         <Document>
@@ -239,8 +248,14 @@ const InternalAuditReportPDF = ({ reportObject, logoPreview }) => {
 
             {/* Main content pages*/}
             <Page size="A4" style={styles.pageBase} wrap>
-                {/* Top small header / meta info */}
-                <View style={styles.pageStarter} fixed wrap>
+                {/* Top header */}
+                <View style={styles.pageStarter} fixed>
+                    <Text style={styles.smallMeta}>{reportObject?.reportName}</Text>
+                    <Image src={logoPreview} style={{ width: 40 }} />
+                </View>
+
+                {/* Bottom footer */}
+                <View style={styles.pageFooter} fixed>
                     <Text style={styles.smallMeta}>{reportObject?.reportName}</Text>
                     <Image src={logoPreview} style={{ width: 40 }} />
                 </View>
@@ -267,9 +282,7 @@ const InternalAuditReportPDF = ({ reportObject, logoPreview }) => {
                 {/* Executive Summary */}
                 <View style={{ marginTop: 6 }} break>
                     <Text style={styles.sectionTitle}>Executive Summary</Text>
-                    <Html style={{ fontSize: 8 }}>
-                        {cleanHtml(reportObject?.executiveSummary)}
-                    </Html>
+                    <Image src={data.executiveSummary} style={{ width: "100%" }} />
                 </View>
 
                 {/* Overview */}
@@ -338,18 +351,14 @@ const InternalAuditReportPDF = ({ reportObject, logoPreview }) => {
                 {/* Audit Purpose */}
                 <View style={{ marginTop: 6 }} break>
                     <Text style={styles.sectionTitle}>Financial & Operational Key Figures</Text>
-                    <Html style={{ fontSize: 8 }}>
-                        {cleanHtml(reportObject?.auditPurpose)}
-                    </Html>
+                    <Image src={data.auditPurpose} style={{ width: "100%" }} />
                 </View>
 
 
                 {/* Audit Purpose */}
                 <View style={{ marginTop: 6 }} break>
                     <Text style={styles.sectionTitle}>Summary Of Main Findings</Text>
-                    <Html style={{ fontSize: 8 }}>
-                        {cleanHtml(reportObject?.keyFindings)}
-                    </Html>
+                    <Image src={data.keyFindings} style={{ width: "100%" }} />
                 </View>
 
 
@@ -370,10 +379,7 @@ const InternalAuditReportPDF = ({ reportObject, logoPreview }) => {
 
                                     {areaGroup.items.map((observation, oIdx) => (
                                         <View key={oIdx} style={styles.observationBlock}>
-                                            <Html style={{ fontSize: 8 }}>
-                                                {cleanHtml(observation?.observationName)}
-                                            </Html>
-
+                                            <Image src={observation.observationImage} style={{ width: "100%" }} />
                                             <View>
                                                 <Text style={[styles.smallHeader, { color: "#0a7386" }]}>Audit Recommendation</Text>
                                                 <Text style={styles.bodyText}>{observation?.recommendedActionStep}</Text>
@@ -381,9 +387,8 @@ const InternalAuditReportPDF = ({ reportObject, logoPreview }) => {
 
                                             <View>
                                                 <Text style={[styles.smallHeader, { color: "#0a7386" }]}>Management Comments</Text>
-                                                <Html style={{ fontSize: 8 }}>
-                                                    {cleanHtml(observation?.managementComments)}
-                                                </Html>
+                                                <Image src={observation.managementCommentsImage} style={{ width: "100%" }} />
+
                                             </View>
                                         </View>
                                     ))}
@@ -414,9 +419,7 @@ const InternalAuditReportPDF = ({ reportObject, logoPreview }) => {
                 {!isHtmlEmpty(reportObject.annexure) && (
                     <View style={{ marginTop: 12 }} break>
                         <Text style={styles.sectionTitle}>Annexure</Text>
-                        <Html style={{ fontSize: 8 }}>
-                            {cleanHtml(reportObject?.annexure)}
-                        </Html>
+                        <Image src={data.annexure} style={{ width: "100%" }} />
                     </View>
                 )}
 

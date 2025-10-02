@@ -5,7 +5,7 @@ import {
     changeActiveLink,
     InitialLoadSidebarActiveLink,
 } from "../../../../../global-redux/reducers/common/slice";
-import { decryptString } from "../../../../../config/helper";
+import { decryptString, convertObservationsToImages, groupObservationsBySubLocationAndArea, htmlToImage } from "../../../../../config/helper";
 import {
     handleResetData,
     setupGetSingleInternalAuditReport,
@@ -15,7 +15,13 @@ import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
 import { CircularProgress } from "@mui/material";
 
+
 const DownloadDetailedAuditReport = () => {
+    const [groupedObservations, setGroupedObservations] = React.useState([]);
+    const [loadingImages, setLoadingImages] = React.useState(true);
+    const [annexure, setAnnexure] = React.useState(null)
+
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { id } = useParams();
@@ -39,6 +45,20 @@ const DownloadDetailedAuditReport = () => {
         }
     }, [dispatch, user, reportId]);
 
+    React.useEffect(() => {
+        const run = async () => {
+            if (singleInternalAuditReport?.reportingsList) {
+                const grouped = groupObservationsBySubLocationAndArea(singleInternalAuditReport?.reportingsList);
+                const withImages = await convertObservationsToImages(grouped);
+                const annexureImage = await htmlToImage(singleInternalAuditReport.annexure);
+                setAnnexure(annexureImage)
+                setGroupedObservations(withImages);
+                setLoadingImages(false);
+            }
+        };
+        run();
+    }, [singleInternalAuditReport]);
+
     // Sidebar active state management + cleanup on unmount
     React.useEffect(() => {
         dispatch(changeActiveLink("li-consolidation-report"));
@@ -50,7 +70,7 @@ const DownloadDetailedAuditReport = () => {
 
     return (
         <div>
-            {reportLoading ? (
+            {loadingImages || reportLoading ? (
                 <CircularProgress />
             ) : (
                 <>
@@ -75,6 +95,8 @@ const DownloadDetailedAuditReport = () => {
                             <MyDocument
                                 reportObject={singleInternalAuditReport}
                                 logoPreview={logoPreview}
+                                annexure={annexure}
+                                groupedObservations={groupedObservations}
                             />
                         }
                         fileName={`${singleInternalAuditReport?.reportName}_${moment

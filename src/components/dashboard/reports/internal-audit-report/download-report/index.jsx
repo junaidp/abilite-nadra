@@ -11,7 +11,7 @@ import {
 } from "../../../../../global-redux/reducers/reports/internal-audit-report/slice"
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { decryptString } from "../../../../../config/helper";
+import { decryptString, groupByArea, htmlToImage, convertObservationsToImagesForInternalAuditReport } from "../../../../../config/helper";
 import { useParams } from "react-router-dom";
 import moment from "moment";
 import { CircularProgress } from "@mui/material";
@@ -19,6 +19,16 @@ import { CircularProgress } from "@mui/material";
 const DownloadInternalAuditReport = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
+
+    const [groupedObservations, setGroupedObservations] = React.useState([]);
+    const [loadingImages, setLoadingImages] = React.useState(true);
+    const [data, setData] = React.useState({
+        executiveSummary: "",
+        auditPurpose: "",
+        keyFindings: "",
+        annexure: ""
+    })
+
     const { user } = useSelector((state) => state.auth);
     const { id } = useParams();
     const reportId = decryptString(id);
@@ -27,6 +37,10 @@ const DownloadInternalAuditReport = () => {
     const logoPreview =
         `data:image/jpeg;base64,${defaultLogoBase64}` || ""
 
+
+
+
+
     React.useEffect(() => {
         if (user[0]?.token && reportId) {
             dispatch(
@@ -34,6 +48,35 @@ const DownloadInternalAuditReport = () => {
             );
         }
     }, [dispatch]);
+
+    React.useEffect(() => {
+        const run = async () => {
+            if (singleInternalAuditReport?.reportingList) {
+                const grouped = groupByArea(singleInternalAuditReport?.reportingList);
+
+                // convert observations into images
+                const withImages = await convertObservationsToImagesForInternalAuditReport(grouped);
+
+                // convert executiveSummary etc. into images
+                const executiveSummaryImage = await htmlToImage(singleInternalAuditReport.executiveSummary);
+                const auditPurposeImage = await htmlToImage(singleInternalAuditReport.auditPurpose);
+                const keyFindingsImage = await htmlToImage(singleInternalAuditReport.keyFindings);
+                const annexureImage = await htmlToImage(singleInternalAuditReport.annexure);
+
+                setData({
+                    executiveSummary: executiveSummaryImage,
+                    auditPurpose: auditPurposeImage,
+                    keyFindings: keyFindingsImage,
+                    annexure: annexureImage,
+                });
+
+                setGroupedObservations(withImages);
+                setLoadingImages(false);
+            }
+        };
+        run();
+    }, [singleInternalAuditReport]);
+
 
     React.useEffect(() => {
         dispatch(changeActiveLink("li-internal-audit-report"));
@@ -46,7 +89,7 @@ const DownloadInternalAuditReport = () => {
     return (
         <div>
             {
-                reportLoading ? <CircularProgress /> : <>
+                reportLoading || loadingImages ? <CircularProgress /> : <>
                     <header className="section-header my-3 text-start d-flex align-items-center justify-content-between mb-4">
                         <div className="mb-0 heading">
                             <a
@@ -59,7 +102,7 @@ const DownloadInternalAuditReport = () => {
                         </div>
                     </header>
                     <PDFDownloadLink
-                        document={<MyDocument reportObject={singleInternalAuditReport} logoPreview={logoPreview} />}
+                        document={<MyDocument reportObject={singleInternalAuditReport} logoPreview={logoPreview} groupedObservations={groupedObservations} data={data} />}
                         fileName={`${singleInternalAuditReport?.reportName}_${moment
                             .utc(singleInternalAuditReport?.reportDate)
                             .format("YYYY-MM-DD")}.pdf`}
