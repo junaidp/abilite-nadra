@@ -176,6 +176,31 @@ const convertObservationsToImagesForInternalAuditReport = async (grouped) => {
 };
 
 
+const convertObservationsToImagesForSummarizedReport = async (grouped) => {
+  const result = [];
+
+  for (const consolidatedItem of grouped) {
+    const consolidatedObservations = [];
+
+    for (const obs of consolidatedItem.consolidatedObservations) {
+      const summaryOfKeyFindingImage = await htmlToImage(obs.summaryOfKeyFinding);
+
+      consolidatedObservations.push({
+        ...obs,
+        summaryOfKeyFindingImage: summaryOfKeyFindingImage,
+      });
+    }
+
+    result.push({
+      ...consolidatedItem,
+      consolidatedObservations,
+    });
+  }
+
+  return result;
+};
+
+
 
 function handleCalculateProbability(item) {
   let num = 0;
@@ -445,5 +470,6 @@ export {
   isHtmlEmpty,
   convertObservationsToImages,
   htmlToImage,
-  convertObservationsToImagesForInternalAuditReport
+  convertObservationsToImagesForInternalAuditReport,
+  convertObservationsToImagesForSummarizedReport
 };

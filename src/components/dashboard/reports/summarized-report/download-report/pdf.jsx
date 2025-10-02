@@ -1,6 +1,5 @@
 import React from "react";
-import Html from "react-pdf-html";
-import { cleanHtml, isHtmlEmpty } from "../../../../../config/helper";
+import { isHtmlEmpty } from "../../../../../config/helper";
 import {
     Document,
     Page,
@@ -8,19 +7,28 @@ import {
     StyleSheet,
     View,
     Image,
+    Font
 } from "@react-pdf/renderer";
+import font from "../../../../../font/Poppins-Medium.ttf";
+
+Font.register({
+    family: "Poppins",
+    src: font,
+});
+
 
 
 // central layout & typography constants for consistent look across all pages
 const PAGE_PADDING = 35;
 const TYPOGRAPHY = {
-    title: 16,
-    section: 12,
-    subsection: 14,
-    smallHeader: 8,
-    body: 8,
-    small: 7,
+    title: 18,
+    section: 14,
+    subsection: 16,
+    smallHeader: 10,
+    body: 10,
+    small: 8,
 };
+
 const styles = StyleSheet.create({
     // Base page used for most pages so padding/width stays consistent
     pageBase: {
@@ -30,6 +38,7 @@ const styles = StyleSheet.create({
         paddingBottom: PAGE_PADDING,
         paddingLeft: PAGE_PADDING,
         paddingRight: PAGE_PADDING,
+        fontFamily: "Poppins",
     },
 
     // A slightly different layout for the first cover page
@@ -58,6 +67,19 @@ const styles = StyleSheet.create({
         alignItems: "center",
         paddingBottom: 5,
     },
+
+    pageFooter: {
+        display: "flex",
+        justifyContent: "space-between",
+        flexDirection: "row",
+        alignItems: "center",
+        paddingTop: 5,
+        position: "absolute",
+        bottom: 5, // distance from bottom
+        left: 20,
+        right: 20,
+    },
+
     // Logo sizing — keep small and consistent
     logo: {
         width: 100,
@@ -219,7 +241,7 @@ const styles = StyleSheet.create({
     },
 });
 
-const SummarizedReportPDF = ({ reportObject, logoPreview, allLocations }) => {
+const SummarizedReportPDF = ({ reportObject, logoPreview, allLocations, data, groupedObservations }) => {
     const subLocationMap = React.useMemo(() => {
         const map = {};
         allLocations.forEach(loc => {
@@ -259,8 +281,14 @@ const SummarizedReportPDF = ({ reportObject, logoPreview, allLocations }) => {
 
             {/* Main content pages*/}
             <Page size="A4" style={styles.pageBase} wrap>
-                {/* Top small header / meta info */}
-                <View style={styles.pageStarter} fixed wrap>
+                {/* Top header */}
+                <View style={styles.pageStarter} fixed>
+                    <Text style={styles.smallMeta}>{reportObject?.reportName}</Text>
+                    <Image src={logoPreview} style={{ width: 40 }} />
+                </View>
+
+                {/* Bottom footer */}
+                <View style={styles.pageFooter} fixed>
                     <Text style={styles.smallMeta}>{reportObject?.reportName}</Text>
                     <Image src={logoPreview} style={{ width: 40 }} />
                 </View>
@@ -294,47 +322,37 @@ const SummarizedReportPDF = ({ reportObject, logoPreview, allLocations }) => {
                 {/* Overview */}
                 <View style={{ marginTop: 6 }} break>
                     <Text style={styles.sectionTitle}>Identification</Text>
-                    <Html style={{ fontSize: 8 }}>
-                        {cleanHtml(reportObject?.overView)}
-                    </Html>
+                    <Image src={data.overView} style={{ width: "100%" }} />
                 </View>
 
                 {/* Executive Summary */}
                 <View style={{ marginTop: 6 }} break>
                     <Text style={styles.sectionTitle}>Executive Summary</Text>
-                    <Html style={{ fontSize: 8 }}>
-                        {cleanHtml(reportObject?.executiveSummary)}
-                    </Html>
+                    <Image src={data.executiveSummary} style={{ width: "100%" }} />
                 </View>
 
                 {/* Audit Purpose */}
                 <View style={{ marginTop: 6 }} break>
                     <Text style={styles.sectionTitle}>Audit Purpose</Text>
-                    <Html style={{ fontSize: 8 }}>
-                        {cleanHtml(reportObject?.auditPurpose)}
-                    </Html>
+                    <Image src={data.auditPurpose} style={{ width: "100%" }} />
                 </View>
 
                 {/* Previous Audit Follow Up */}
                 <View style={{ marginTop: 6 }} break>
                     <Text style={styles.sectionTitle}>Previous Audit Follow Up</Text>
-                    <Html style={{ fontSize: 8 }}>
-                        {cleanHtml(reportObject?.previousAuditFollowUp)}
-                    </Html>
+                    <Image src={data.previousAuditFollowUp} style={{ width: "100%" }} />
                 </View>
 
                 {/* Previous Audit Follow Up */}
                 <View style={{ marginTop: 6 }} break>
                     <Text style={styles.sectionTitle}>Operational Highlights</Text>
-                    <Html style={{ fontSize: 8 }}>
-                        {cleanHtml(reportObject?.operationalHighlight)}
-                    </Html>
+                    <Image src={data.operationalHighlight} style={{ width: "100%" }} />
                 </View>
 
                 {/* Observations grouped by sub-location and area */}
                 <View style={{ marginTop: 10 }} break>
                     {/* You originally sliced to the first four groups — kept that behavior */}
-                    {reportObject.consolidationItemsList.map((consolidatedItem, idx) => (
+                    {groupedObservations.map((consolidatedItem, idx) => (
                         <View key={idx} style={{ marginBottom: 5 }}>
                             {/* Section Title */}
                             <Text style={styles.sectionTitle}>{consolidatedItem.area}</Text>
@@ -359,9 +377,7 @@ const SummarizedReportPDF = ({ reportObject, logoPreview, allLocations }) => {
                                     <View style={styles.tableRow} key={i}>
                                         <Text style={[styles.tableCol, styles.colObs]}>{i + 1}</Text>
                                         <View style={[styles.tableCol, styles.colDesc]}>
-                                            <Html style={{ fontSize: 8 }}>
-                                                {cleanHtml(obs.summaryOfKeyFinding)}
-                                            </Html>
+                                            <Image src={obs.summaryOfKeyFindingImage} style={{ width: "100%" }} />
                                         </View>
                                         <View style={[styles.tableCol, styles.colDau]}>
                                             {obs.reportingList.map((loc, idx) => (
@@ -379,9 +395,7 @@ const SummarizedReportPDF = ({ reportObject, logoPreview, allLocations }) => {
                 {!isHtmlEmpty(reportObject.annexure) && (
                     <View style={{ marginTop: 12 }} break>
                         <Text style={styles.sectionTitle}>Annexure</Text>
-                        <Html style={{ fontSize: 8 }}>
-                            {cleanHtml(reportObject?.annexure)}
-                        </Html>
+                        <Image src={data.annexure} style={{ width: "100%" }} />
                     </View>
                 )}
 

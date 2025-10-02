@@ -15,6 +15,7 @@ import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
 import { useParams } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
+import { convertObservationsToImagesForSummarizedReport, htmlToImage } from "../../../../../config/helper"
 
 const DownloadSummarizedReport = () => {
     const dispatch = useDispatch()
@@ -26,6 +27,49 @@ const DownloadSummarizedReport = () => {
     const defaultLogoBase64 = user?.[0]?.company?.[0]?.logo?.fileData || "";
     const logoPreview =
         `data:image/jpeg;base64,${defaultLogoBase64}` || ""
+
+    const [groupedObservations, setGroupedObservations] = React.useState([]);
+    const [loadingImages, setLoadingImages] = React.useState(true);
+    const [data, setData] = React.useState({
+        overView: "",
+        executiveSummary: "",
+        auditPurpose: "",
+        previousAuditFollowUp: "",
+        operationalHighlight: "",
+        annexure: "",
+    })
+
+
+    React.useEffect(() => {
+        const run = async () => {
+            if (singleSummarizedReport?.consolidationItemsList) {
+
+                // convert observations into images
+                const withImages = await convertObservationsToImagesForSummarizedReport(singleSummarizedReport?.consolidationItemsList);
+
+                // convert executiveSummary etc. into images
+                const overViewImage = await htmlToImage(singleSummarizedReport.overView);
+                const executiveSummaryImage = await htmlToImage(singleSummarizedReport.executiveSummary);
+                const auditPurposeImage = await htmlToImage(singleSummarizedReport.auditPurpose);
+                const previousAuditFollowUpImage = await htmlToImage(singleSummarizedReport.previousAuditFollowUp);
+                const operationalHighlightImage = await htmlToImage(singleSummarizedReport.operationalHighlight);
+                const annexureImage = await htmlToImage(singleSummarizedReport.annexure);
+
+                setData({
+                    overView: overViewImage,
+                    executiveSummary: executiveSummaryImage,
+                    auditPurpose: auditPurposeImage,
+                    previousAuditFollowUp: previousAuditFollowUpImage,
+                    operationalHighlight: operationalHighlightImage,
+                    annexure: annexureImage,
+                });
+
+                setGroupedObservations(withImages);
+                setLoadingImages(false);
+            }
+        };
+        run();
+    }, [singleSummarizedReport]);
 
 
     React.useEffect(() => {
@@ -47,7 +91,7 @@ const DownloadSummarizedReport = () => {
     return (
         <div>
             {
-                reportLoading ? <CircularProgress /> :
+                loadingImages || reportLoading ? <CircularProgress /> :
                     <>
                         <header className="section-header my-3 text-start d-flex align-items-center justify-content-between mb-4">
                             <div className="mb-0 heading">
@@ -64,7 +108,7 @@ const DownloadSummarizedReport = () => {
                         {
                             Object.keys(singleSummarizedReport).length &&
                             <PDFDownloadLink
-                                document={<MyDocument reportObject={singleSummarizedReport} logoPreview={logoPreview} allLocations={allLocations} />}
+                                document={<MyDocument reportObject={singleSummarizedReport} logoPreview={logoPreview} allLocations={allLocations} data={data} groupedObservations={groupedObservations} />}
                                 fileName={`${singleSummarizedReport?.reportName}_${moment
                                     .utc(singleSummarizedReport?.reportDate)
                                     .format("YYYY-MM-DD")}.pdf`}
