@@ -4,6 +4,7 @@ import {
   getAllLocations,
   getAllTimeAllocation,
   getAllPlanSummaryReport,
+  getRiskAssessementReport,
   getAllUsers,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
@@ -15,6 +16,7 @@ const initialState = {
   resourceTimeAllocationJobs: [],
   locations: [],
   planSummaryReports: [],
+  riskAssessmentReport: [],
   users: [],
 };
 
@@ -43,6 +45,13 @@ export const setupGetAllPlanSummaryReport = createAsyncThunk(
   "extraReport/getAllPlanSummaryReport",
   async (data, thunkAPI) => {
     return getAllPlanSummaryReport(data, thunkAPI);
+  }
+);
+
+export const setupGetRiskAssessementReport = createAsyncThunk(
+  "extraReport/getRiskAssessementReport",
+  async (data, thunkAPI) => {
+    return getRiskAssessementReport(data, thunkAPI);
   }
 );
 
@@ -129,6 +138,23 @@ export const slice = createSlice({
         state.planSummaryReports = payload?.data || [];
       })
       .addCase(setupGetAllPlanSummaryReport.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Get All Plan Summary Report
+    builder
+      .addCase(setupGetRiskAssessementReport.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetRiskAssessementReport.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.riskAssessmentReport = payload?.data || [];
+      })
+      .addCase(setupGetRiskAssessementReport.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);

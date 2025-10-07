@@ -47,6 +47,7 @@ import GenerateInternalAuditReport from "./pages/dashboard/reports/internal-audi
 import JobTimeAllocationReport from "./pages/dashboard/reports/job-time-allocation-report/JobTimeAllocationReport";
 import AuditPlanSummaryReport from "./pages/dashboard/reports/audit-plan-summary-report/AuditPlanSummaryReport";
 import AuditExceptionReport from "./pages/dashboard/reports/audit-exception-report/AuditExceptionReport";
+import RiskAssessmentReport from "./pages/dashboard/reports/risk-assessment-report/RiskAssessmentReport"
 
 
 import DetailedAuditReport from "./pages/dashboard/reports/detailed-audit-report/DetailedAuditReport";
@@ -224,6 +225,7 @@ const App = () => {
               element={<JobTimeAllocationReport />}
             />
             <Route path="audit-exception-report" element={<AuditExceptionReport />} />
+            <Route path="risk-assessment-report" element={<RiskAssessmentReport />} />
             <Route
               path="audit-planning-summary-report"
               element={<AuditPlanSummaryReport />}

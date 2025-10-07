@@ -166,6 +166,13 @@ let menuItems = [
         route: "/audit/audit-planning-summary-report",
         active: false,
       },
+      {
+        id: "li-audit-risk-assessment-report",
+        label: "Risk Assessment Report",
+        icon: faFileContract,
+        route: "/audit/risk-assessment-report",
+        active: false,
+      },
     ],
   },
   {

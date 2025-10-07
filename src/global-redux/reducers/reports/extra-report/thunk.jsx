@@ -69,6 +69,23 @@ export const getAllPlanSummaryReport = async (data, thunkAPI) => {
   }
 };
 
+export const getRiskAssessementReport = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.get(
+      `${baseUrl}/riskAssessmentReport/report/get?companyId=${data.companyId}&Year=${data.year}`,
+      {
+        headers: {
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
 export const getAllUsers = async (_, thunkAPI) => {
   const { user } = thunkAPI.getState().auth;
   let { company } = thunkAPI.getState().common;
