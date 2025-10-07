@@ -122,6 +122,63 @@ const htmlToImage = async (html, width = 800) => {
   return canvas.toDataURL("image/png");
 };
 
+const htmlToPagedImages = async (
+  html,
+  widthPx = 794,
+  pageHeightPx = 2500
+) => {
+  if (!html) return [];
+
+  // Create hidden container
+  const div = document.createElement("div");
+  div.className = "pdf-render-wrapper";
+  div.style.position = "absolute";
+  div.style.left = "-9999px";
+  div.style.width = `${widthPx}px`;
+  div.innerHTML = html;
+
+  // Force table styling
+  div.querySelectorAll("table, th, td").forEach((el) => {
+    el.style.border = "1px solid black";
+    el.style.borderCollapse = "collapse";
+    el.style.color = "black";
+  });
+  div.querySelectorAll("th").forEach((el) => {
+    if (!el.style.backgroundColor) {
+      el.style.backgroundColor = "#f0f0f0";
+    }
+  });
+
+  document.body.appendChild(div);
+
+  // Render to canvas at fixed width
+  const canvas = await html2canvas(div, { scale: 2, width: widthPx });
+  document.body.removeChild(div);
+
+  const totalHeight = canvas.height;
+  const images = [];
+
+  for (let y = 0; y < totalHeight; y += pageHeightPx) {
+    const slice = document.createElement("canvas");
+    slice.width = canvas.width;
+    slice.height = Math.min(pageHeightPx, totalHeight - y);
+    const ctx = slice.getContext("2d");
+
+    // Copy only the chunk we need
+    ctx.drawImage(
+      canvas,
+      0, y, canvas.width, slice.height,  // source rect
+      0, 0, canvas.width, slice.height   // destination rect
+    );
+
+    // Convert slice directly to base64 (React-PDF supports this)
+    const base64Url = slice.toDataURL("image/jpeg", 0.85);
+    images.push(base64Url);
+  }
+
+  return images;
+};
+
 // Walk grouped observations and replace HTML with base64 images
 const convertObservationsToImages = async (grouped) => {
   const result = [];
@@ -133,7 +190,7 @@ const convertObservationsToImages = async (grouped) => {
       const observations = [];
 
       for (const obs of area.observations) {
-        const imgData = await htmlToImage(obs.observationName);
+        const imgData = await htmlToPagedImages(obs.observationName);
         observations.push({
           ...obs,
           observationImage: imgData, // new field
@@ -156,8 +213,8 @@ const convertObservationsToImagesForInternalAuditReport = async (grouped) => {
     const items = [];
 
     for (const obs of areaGroup.items) {
-      const observationImg = await htmlToImage(obs.observationName);
-      const managementCommentsImg = await htmlToImage(obs.managementComments);
+      const observationImg = await htmlToPagedImages(obs.observationName);
+      const managementCommentsImg = await htmlToPagedImages(obs.managementComments);
 
       items.push({
         ...obs,
@@ -471,5 +528,6 @@ export {
   convertObservationsToImages,
   htmlToImage,
   convertObservationsToImagesForInternalAuditReport,
-  convertObservationsToImagesForSummarizedReport
+  convertObservationsToImagesForSummarizedReport,
+  htmlToPagedImages
 };

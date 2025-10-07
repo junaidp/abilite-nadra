@@ -5,7 +5,7 @@ import {
     changeActiveLink,
     InitialLoadSidebarActiveLink,
 } from "../../../../../global-redux/reducers/common/slice";
-import { decryptString, convertObservationsToImages, groupObservationsBySubLocationAndArea, htmlToImage } from "../../../../../config/helper";
+import { decryptString, convertObservationsToImages, groupObservationsBySubLocationAndArea, htmlToPagedImages } from "../../../../../config/helper";
 import {
     handleResetData,
     setupGetSingleInternalAuditReport,
@@ -19,7 +19,7 @@ import { CircularProgress } from "@mui/material";
 const DownloadDetailedAuditReport = () => {
     const [groupedObservations, setGroupedObservations] = React.useState([]);
     const [loadingImages, setLoadingImages] = React.useState(true);
-    const [annexure, setAnnexure] = React.useState(null)
+    const [annexure, setAnnexure] = React.useState([])
 
 
     const dispatch = useDispatch();
@@ -50,7 +50,7 @@ const DownloadDetailedAuditReport = () => {
             if (singleInternalAuditReport?.reportingsList) {
                 const grouped = groupObservationsBySubLocationAndArea(singleInternalAuditReport?.reportingsList);
                 const withImages = await convertObservationsToImages(grouped);
-                const annexureImage = await htmlToImage(singleInternalAuditReport.annexure);
+                const annexureImage = await htmlToPagedImages(singleInternalAuditReport.annexure);
                 setAnnexure(annexureImage)
                 setGroupedObservations(withImages);
                 setLoadingImages(false);

@@ -109,7 +109,7 @@ const InternalAuditReportBody = ({
 
         <div className="row mb-3">
           <div className="col-lg-12">
-            <label>Audit Purpose</label>
+            <label>Financial & Operational Key Figures</label>
             <RichTextEditor
               initialValue={reportObject?.auditPurpose}
               handleChangeAuditPurpose={handleChangeAuditPurpose}
@@ -118,7 +118,7 @@ const InternalAuditReportBody = ({
         </div>
         <div className="row mb-3">
           <div className="col-lg-12">
-            <label>Key Findings</label>
+            <label>Summary Of Main Findings</label>
             <RichTextEditor
               initialValue={reportObject?.keyFindings}
               handleChangeKeyFindings={handleChangeKeyFindings}

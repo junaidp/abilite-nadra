@@ -16,7 +16,7 @@ const RichTextElements = ({ singleInternalAuditReport }) => {
       {/* Audit Purpose Section */}
       <div className="row mb-3">
         <div className="col-lg-12">
-          <label>Audit Purpose</label>
+          <label>Financial & Operational Key Figures</label>
           <RichTextEditor
             initialValue={singleInternalAuditReport?.auditPurpose}
           />

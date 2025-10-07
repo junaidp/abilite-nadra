@@ -19,7 +19,7 @@ Font.register({
 
 
 // central layout & typography constants for consistent look across all pages
-const PAGE_PADDING = 35;
+const PAGE_PADDING = 25;
 const TYPOGRAPHY = {
     title: 18,
     section: 14,
@@ -65,7 +65,6 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         flexDirection: "row",
         alignItems: "center",
-        paddingBottom: 5,
     },
 
     pageFooter: {
@@ -196,12 +195,12 @@ const styles = StyleSheet.create({
     // page numbering (keeps number centered at the bottom)
     pageNumber: {
         position: "absolute",
-        bottom: 5,
+        bottom: 3,
         left: 0,
         right: 0,
         textAlign: "center",
         fontSize: 10,
-        padding: 5,
+        padding: 3,
     },
 
     // utility for location wrap (keeps sub-location and any chips in row)
@@ -254,12 +253,6 @@ const InternalAuditReportPDF = ({ reportObject, logoPreview, groupedObservations
                     <Image src={logoPreview} style={{ width: 40 }} />
                 </View>
 
-                {/* Bottom footer */}
-                <View style={styles.pageFooter} fixed>
-                    <Text style={styles.smallMeta}>{reportObject?.reportName}</Text>
-                    <Image src={logoPreview} style={{ width: 40 }} />
-                </View>
-
                 {/* Contents / Table of contents */}
                 <View style={{ marginBottom: 8 }}>
                     <Text style={styles.contentsHeading}>Contents</Text>
@@ -282,7 +275,10 @@ const InternalAuditReportPDF = ({ reportObject, logoPreview, groupedObservations
                 {/* Executive Summary */}
                 <View style={{ marginTop: 6 }} break>
                     <Text style={styles.sectionTitle}>Executive Summary</Text>
-                    <Image src={data.executiveSummary} style={{ width: "100%" }} />
+
+                    {data.executiveSummary.map((img, idx) => (
+                        <Image src={img} key={idx} />
+                    ))}
                 </View>
 
                 {/* Overview */}
@@ -351,16 +347,22 @@ const InternalAuditReportPDF = ({ reportObject, logoPreview, groupedObservations
                 {/* Audit Purpose */}
                 <View style={{ marginTop: 6 }} break>
                     <Text style={styles.sectionTitle}>Financial & Operational Key Figures</Text>
-                    <Image src={data.auditPurpose} style={{ width: "100%" }} />
+                    {data.auditPurpose.map((img, idx) => (
+                        <Image src={img} key={idx} />
+                    ))}
+
                 </View>
 
 
                 {/* Audit Purpose */}
                 <View style={{ marginTop: 6 }} break>
                     <Text style={styles.sectionTitle}>Summary Of Main Findings</Text>
-                    <Image src={data.keyFindings} style={{ width: "100%" }} />
+                    {data.keyFindings.map((img, idx) => (
+                        <Image src={img} key={idx} />
+                    ))}
                 </View>
 
+                {/* Observations grouped by sub-location and area */}
 
                 {/* Observations grouped by sub-location and area */}
                 {groupedObservations && groupedObservations.length > 0 && (
@@ -368,31 +370,32 @@ const InternalAuditReportPDF = ({ reportObject, logoPreview, groupedObservations
                         <Text style={styles.reportBanner}>Main Findings & Recommendation</Text>
                         {/* You originally sliced to the first four groups — kept that behavior */}
                         {groupedObservations.map((areaGroup, idx) => (
-                            <View style={styles.findingsList} key={idx}>
-                                <View>
-                                    {/* Sub-location (bold and easy to scan) */}
-                                    <View style={styles.locationRow}>
-                                        <Text style={styles.subLocationLabel} key={idx}>
-                                            {areaGroup.area}
-                                        </Text>
-                                    </View>
-
-                                    {areaGroup.items.map((observation, oIdx) => (
-                                        <View key={oIdx} style={styles.observationBlock}>
-                                            <Image src={observation.observationImage} style={{ width: "100%" }} />
-                                            <View>
-                                                <Text style={[styles.smallHeader, { color: "#0a7386" }]}>Audit Recommendation</Text>
-                                                <Text style={styles.bodyText}>{observation?.recommendedActionStep}</Text>
-                                            </View>
-
-                                            <View>
-                                                <Text style={[styles.smallHeader, { color: "#0a7386" }]}>Management Comments</Text>
-                                                <Image src={observation.managementCommentsImage} style={{ width: "100%" }} />
-
-                                            </View>
-                                        </View>
-                                    ))}
+                            <View style={[styles.findingsList, { marginTop: 5 }]} key={idx} break={idx !== 0}>
+                                {/* Sub-location (bold and easy to scan) */}
+                                <View style={styles.locationRow}>
+                                    <Text style={styles.subLocationLabel} key={idx}>
+                                        {areaGroup.area}
+                                    </Text>
                                 </View>
+
+                                {areaGroup.items.map((observation, oIdx) => (
+                                    <View key={oIdx} style={styles.observationBlock}>
+                                        {observation.observationImage.map((img, idx) => (
+                                            <Image src={img} key={idx} />
+                                        ))}
+                                        <View>
+                                            <Text style={[styles.smallHeader, { color: "#0a7386" }]}>Audit Recommendation</Text>
+                                            <Text style={styles.bodyText}>{observation?.recommendedActionStep}</Text>
+                                        </View>
+
+                                        <View>
+                                            <Text style={[styles.smallHeader, { color: "#0a7386" }]}>Management Comments</Text>
+                                            {observation.managementCommentsImage.map((img, idx) => (
+                                                <Image src={img} key={idx} />
+                                            ))}
+                                        </View>
+                                    </View>
+                                ))}
                             </View>
                         ))}
                     </View>
@@ -419,7 +422,9 @@ const InternalAuditReportPDF = ({ reportObject, logoPreview, groupedObservations
                 {!isHtmlEmpty(reportObject.annexure) && (
                     <View style={{ marginTop: 12 }} break>
                         <Text style={styles.sectionTitle}>Annexure</Text>
-                        <Image src={data.annexure} style={{ width: "100%" }} />
+                        {data.annexure.map((img, idx) => (
+                            <Image src={img} key={idx} />
+                        ))}
                     </View>
                 )}
 

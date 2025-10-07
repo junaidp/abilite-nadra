@@ -177,12 +177,12 @@ const styles = StyleSheet.create({
     // page numbering (keeps number centered at the bottom)
     pageNumber: {
         position: "absolute",
-        bottom: 5,
+        bottom: 3,
         left: 0,
         right: 0,
         textAlign: "center",
         fontSize: 10,
-        padding: 5,
+        padding: 3,
     },
 
     // utility for location wrap (keeps sub-location and any chips in row)
@@ -196,6 +196,7 @@ const styles = StyleSheet.create({
 
     // used for blocks that repeat inside each observation
     observationBlock: {
+        display: "flex",
         flexDirection: "column",
         gap: 6,
         marginBottom: 6,
@@ -242,12 +243,6 @@ const DetailedAuditReportPDF = ({ reportObject, logoPreview, groupedObservations
                     <Image src={logoPreview} style={{ width: 40 }} />
                 </View>
 
-                {/* Bottom footer */}
-                <View style={styles.pageFooter} fixed>
-                    <Text style={styles.smallMeta}>{reportObject?.reportName}</Text>
-                    <Image src={logoPreview} style={{ width: 40 }} />
-                </View>
-
                 {/* Contents / Table of contents */}
                 <View style={{ marginBottom: 8 }}>
                     <Text style={styles.contentsHeading}>Contents</Text>
@@ -257,7 +252,7 @@ const DetailedAuditReportPDF = ({ reportObject, logoPreview, groupedObservations
 
                         <View style={{ marginLeft: 20 }}>
                             {reportObject?.subLocationList?.map((subLocation, idx) => (
-                                <Text style={styles.bodyText} key={idx}>
+                                <Text key={idx} style={[styles.bodyText, { marginBottom: 3 }]}>
                                     {idx + 1}. {subLocation?.description}
                                 </Text>
                             ))}
@@ -274,37 +269,38 @@ const DetailedAuditReportPDF = ({ reportObject, logoPreview, groupedObservations
                     </View>
                 </View>
                 <View break>
-                    <Text style={styles.reportBanner}>Main Findings and Recommendations</Text>
+                    {/* <Text style={styles.reportBanner}>Main Findings and Recommendations</Text> */}
                     {/* Observations grouped by sub-location and area */}
                     {groupedObservations && groupedObservations.length > 0 && (
                         <View style={{ marginTop: 10 }}>
                             {/* You originally sliced to the first four groups — kept that behavior */}
                             {groupedObservations.map((subLocationGroup, idx) => (
                                 <View style={styles.findingsList} key={idx}>
-                                    <View>
-                                        {/* Sub-location (bold and easy to scan) */}
-                                        <View style={styles.locationRow}>
-                                            <Text style={styles.subLocationLabel} key={idx}>
-                                                {getSubLocationDescription(subLocationGroup.subLocation)}
-                                            </Text>
-                                        </View>
-
-                                        {/* Areas inside this sub-location */}
-                                        {subLocationGroup?.areas?.map((areaGroup, aIdx) => (
-                                            <View key={aIdx} style={{ marginTop: 6 }}>
-                                                <View style={styles.contentBlock}>
-                                                    {/* Area label (bold) */}
-                                                    <Text style={styles.areaLabel}>{areaGroup?.area}</Text>
-
-                                                    {/* Each observation under the area */}
-                                                    {areaGroup.observations.map((observation, idxx) => (
-                                                        <Image src={observation.observationImage} style={{ width: "100%" }} key={idxx} />
-                                                    ))}
-                                                </View>
-                                                <View style={styles.divider} />
-                                            </View>
-                                        ))}
+                                    {/* Sub-location (bold and easy to scan) */}
+                                    <View style={styles.locationRow}>
+                                        <Text style={styles.subLocationLabel} key={idx}>
+                                            {getSubLocationDescription(subLocationGroup.subLocation)}
+                                        </Text>
                                     </View>
+
+                                    {/* Areas inside this sub-location */}
+                                    {subLocationGroup?.areas?.map((areaGroup, aIdx) => (
+                                        <View key={aIdx} style={{ marginTop: 6 }}>
+                                            <View style={styles.contentBlock}>
+                                                {/* Area label (bold) */}
+                                                <Text style={styles.areaLabel}>{areaGroup?.area}</Text>
+                                                {/* Each observation under the area */}
+                                                {areaGroup.observations.map((observation, idxx) => (
+                                                    <View key={idxx} style={styles.observationBlock}>
+                                                        {observation.observationImage.map((img, idx) => (
+                                                            <Image src={img} key={idx} />
+                                                        ))}
+                                                    </View>
+                                                ))}
+                                            </View>
+                                            <View style={styles.divider} />
+                                        </View>
+                                    ))}
                                 </View>
                             ))}
                         </View>
@@ -334,7 +330,9 @@ const DetailedAuditReportPDF = ({ reportObject, logoPreview, groupedObservations
                 {!isHtmlEmpty(reportObject.annexure) && (
                     <View style={{ marginTop: 12 }} break>
                         <Text style={styles.sectionTitle}>Annexure</Text>
-                        <Image src={annexure} style={{ width: "100%" }} />
+                        {annexure.map((img, idx) => (
+                            <Image src={img} key={idx} />
+                        ))}
                     </View>
                 )}
 

@@ -11,7 +11,7 @@ import {
 } from "../../../../../global-redux/reducers/reports/internal-audit-report/slice"
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { decryptString, groupByArea, htmlToImage, convertObservationsToImagesForInternalAuditReport } from "../../../../../config/helper";
+import { decryptString, groupByArea, convertObservationsToImagesForInternalAuditReport, htmlToPagedImages } from "../../../../../config/helper";
 import { useParams } from "react-router-dom";
 import moment from "moment";
 import { CircularProgress } from "@mui/material";
@@ -58,10 +58,10 @@ const DownloadInternalAuditReport = () => {
                 const withImages = await convertObservationsToImagesForInternalAuditReport(grouped);
 
                 // convert executiveSummary etc. into images
-                const executiveSummaryImage = await htmlToImage(singleInternalAuditReport.executiveSummary);
-                const auditPurposeImage = await htmlToImage(singleInternalAuditReport.auditPurpose);
-                const keyFindingsImage = await htmlToImage(singleInternalAuditReport.keyFindings);
-                const annexureImage = await htmlToImage(singleInternalAuditReport.annexure);
+                const executiveSummaryImage = await htmlToPagedImages(singleInternalAuditReport.executiveSummary);
+                const auditPurposeImage = await htmlToPagedImages(singleInternalAuditReport.auditPurpose);
+                const keyFindingsImage = await htmlToPagedImages(singleInternalAuditReport.keyFindings);
+                const annexureImage = await htmlToPagedImages(singleInternalAuditReport.annexure);
 
                 setData({
                     executiveSummary: executiveSummaryImage,
