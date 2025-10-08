@@ -19,7 +19,7 @@ Font.register({
 
 
 // central layout & typography constants for consistent look across all pages
-const PAGE_PADDING = 25;
+const PAGE_PADDING = 35;
 const TYPOGRAPHY = {
     title: 18,
     section: 14,
@@ -31,15 +31,16 @@ const TYPOGRAPHY = {
 
 const styles = StyleSheet.create({
     // Base page used for most pages so padding/width stays consistent
-    pageBase: {
+      pageBase: {
         flexDirection: "column",
         backgroundColor: "#FFFFFF",
-        paddingTop: PAGE_PADDING,
+        paddingTop: 50,
         paddingBottom: PAGE_PADDING,
         paddingLeft: PAGE_PADDING,
         paddingRight: PAGE_PADDING,
         fontFamily: "Poppins",
     },
+
 
     // A slightly different layout for the first cover page
     coverPage: {
@@ -62,9 +63,16 @@ const styles = StyleSheet.create({
 
     pageStarter: {
         display: "flex",
-        justifyContent: "space-between",
         flexDirection: "row",
+        justifyContent: "space-between",
         alignItems: "center",
+        paddingBottom: 5,
+        position: "absolute",
+        width: "100%",
+        top: 10,
+        left: PAGE_PADDING,
+        right: PAGE_PADDING,
+        marginBottom: 15
     },
 
     pageFooter: {
@@ -100,6 +108,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#0a7386",
         padding: 10,
         textAlign: "center",
+        marginTop: 5
     },
 
     reportName: {
@@ -254,7 +263,7 @@ const InternalAuditReportPDF = ({ reportObject, logoPreview, groupedObservations
                 </View>
 
                 {/* Contents / Table of contents */}
-                <View style={{ marginBottom: 8 }}>
+                <View >
                     <Text style={styles.contentsHeading}>Contents</Text>
                     <View style={styles.contentBlock}>
                         <Text style={styles.smallHeader}>01 - Executive Summary</Text>
@@ -262,18 +271,21 @@ const InternalAuditReportPDF = ({ reportObject, logoPreview, groupedObservations
                         <Text style={styles.smallHeader}>03 - Financial & Operational Key Figures</Text>
                         <Text style={styles.smallHeader}>04 - Summary of Main Findings</Text>
                         <Text style={styles.smallHeader}>05 - Main Findings & Recommendation</Text>
-                        {reportObject?.intAuditExtraFieldsList &&
-                            reportObject?.intAuditExtraFieldsList.length > 0 && (
-                                <Text style={styles.smallHeader}>06 - Audit Extra Fields</Text>
-                            )}
-                        {
-                            !isHtmlEmpty(reportObject.annexure) && <Text style={styles.smallHeader}>07 - Annexure</Text>
-                        }
+                        {reportObject?.intAuditExtraFieldsList?.length > 0 && (
+                            <Text style={styles.smallHeader}>06 - Audit Extra Fields</Text>
+                        )}
+
+                        {!isHtmlEmpty(reportObject.annexure) && (
+                            <Text style={styles.smallHeader}>
+                                {reportObject?.intAuditExtraFieldsList?.length > 0 ? "07" : "06"} - Annexure
+                            </Text>
+                        )}
+
                     </View>
                 </View>
 
                 {/* Executive Summary */}
-                <View style={{ marginTop: 6 }} break>
+                <View break>
                     <Text style={styles.sectionTitle}>Executive Summary</Text>
 
                     {data.executiveSummary.map((img, idx) => (
@@ -282,7 +294,7 @@ const InternalAuditReportPDF = ({ reportObject, logoPreview, groupedObservations
                 </View>
 
                 {/* Overview */}
-                <View style={{ marginBottom: 8 }} break>
+                <View break>
                     <Text style={styles.contentsHeading}>Identification</Text>
 
                     <View style={styles.contentBlock}>
@@ -345,7 +357,7 @@ const InternalAuditReportPDF = ({ reportObject, logoPreview, groupedObservations
                 </View>
 
                 {/* Audit Purpose */}
-                <View style={{ marginTop: 6 }} break>
+                <View break>
                     <Text style={styles.sectionTitle}>Financial & Operational Key Figures</Text>
                     {data.auditPurpose.map((img, idx) => (
                         <Image src={img} key={idx} />
@@ -355,7 +367,7 @@ const InternalAuditReportPDF = ({ reportObject, logoPreview, groupedObservations
 
 
                 {/* Audit Purpose */}
-                <View style={{ marginTop: 6 }} break>
+                <View break>
                     <Text style={styles.sectionTitle}>Summary Of Main Findings</Text>
                     {data.keyFindings.map((img, idx) => (
                         <Image src={img} key={idx} />
@@ -366,7 +378,7 @@ const InternalAuditReportPDF = ({ reportObject, logoPreview, groupedObservations
 
                 {/* Observations grouped by sub-location and area */}
                 {groupedObservations && groupedObservations.length > 0 && (
-                    <View style={{ marginTop: 10 }} break>
+                    <View break>
                         <Text style={styles.reportBanner}>Main Findings & Recommendation</Text>
                         {/* You originally sliced to the first four groups — kept that behavior */}
                         {groupedObservations.map((areaGroup, idx) => (
@@ -403,7 +415,7 @@ const InternalAuditReportPDF = ({ reportObject, logoPreview, groupedObservations
 
                 {/* Extra fields */}
                 {reportObject?.intAuditExtraFieldsList && reportObject?.intAuditExtraFieldsList.length !== 0 && (
-                    <View style={{ marginTop: 12 }} break>
+                    <View break>
                         <Text style={[styles.sectionTitle, { color: "#0a7386", fontSize: 18 }]}>Audit Extra Fields</Text>
                         {reportObject?.intAuditExtraFieldsList?.map((item, index) => (
                             <View style={{ marginTop: 4 }} key={index}>
@@ -420,7 +432,7 @@ const InternalAuditReportPDF = ({ reportObject, logoPreview, groupedObservations
 
                 {/* Annexure */}
                 {!isHtmlEmpty(reportObject.annexure) && (
-                    <View style={{ marginTop: 12 }} break>
+                    <View break>
                         <Text style={styles.sectionTitle}>Annexure</Text>
                         {data.annexure.map((img, idx) => (
                             <Image src={img} key={idx} />

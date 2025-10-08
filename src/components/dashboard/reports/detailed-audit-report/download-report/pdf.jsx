@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     pageBase: {
         flexDirection: "column",
         backgroundColor: "#FFFFFF",
-        paddingTop: PAGE_PADDING,
+        paddingTop: 50,
         paddingBottom: PAGE_PADDING,
         paddingLeft: PAGE_PADDING,
         paddingRight: PAGE_PADDING,
@@ -58,10 +58,16 @@ const styles = StyleSheet.create({
 
     pageStarter: {
         display: "flex",
-        justifyContent: "space-between",
         flexDirection: "row",
+        justifyContent: "space-between",
         alignItems: "center",
         paddingBottom: 5,
+        position: "absolute",
+        width: "100%",
+        top: 10,
+        left: PAGE_PADDING,
+        right: PAGE_PADDING,
+        marginBottom: 15
     },
 
     pageFooter: {
@@ -90,6 +96,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#0a7386",
         padding: 10,
         textAlign: "center",
+        marginTop: 5
     },
 
     reportName: {
@@ -212,6 +219,10 @@ const DetailedAuditReportPDF = ({ reportObject, logoPreview, groupedObservations
             (s) => s?.id === subLocationId
         )?.description || "Unknown Sub-Location";
 
+    const annexureNumber =
+        reportObject?.intAuditExtraFieldsList?.length > 0 ? "03" : "02";
+
+
     return (
         <Document>
             {/* Cover / First Page */}
@@ -244,7 +255,7 @@ const DetailedAuditReportPDF = ({ reportObject, logoPreview, groupedObservations
                 </View>
 
                 {/* Contents / Table of contents */}
-                <View style={{ marginBottom: 8 }}>
+                <View>
                     <Text style={styles.contentsHeading}>Contents</Text>
 
                     <View style={styles.contentBlock}>
@@ -252,30 +263,31 @@ const DetailedAuditReportPDF = ({ reportObject, logoPreview, groupedObservations
 
                         <View style={{ marginLeft: 20 }}>
                             {reportObject?.subLocationList?.map((subLocation, idx) => (
-                                <Text key={idx} style={[styles.bodyText, { marginBottom: 3 }]}>
+                                <Text key={idx} style={[styles.bodyText, { marginBottom: 10 }]}>
                                     {idx + 1}. {subLocation?.description}
                                 </Text>
                             ))}
                         </View>
 
-                        {reportObject?.intAuditExtraFieldsList &&
-                            reportObject?.intAuditExtraFieldsList.length > 0 && (
-                                <Text style={styles.smallHeader}>02 - Audit Extra Fields</Text>
-                            )}
-                        {
-                            !isHtmlEmpty(reportObject.annexure) &&
-                            <Text style={styles.smallHeader}>03 - Annexure</Text>
-                        }
+
+                        {reportObject?.intAuditExtraFieldsList?.length > 0 && (
+                            <Text style={styles.smallHeader}>02 - Audit Extra Fields</Text>
+                        )}
+
+                        {!isHtmlEmpty(reportObject.annexure) && (
+                            <Text style={styles.smallHeader}>{annexureNumber} - Annexure</Text>
+                        )}
+
                     </View>
                 </View>
                 <View break>
-                    {/* <Text style={styles.reportBanner}>Main Findings and Recommendations</Text> */}
+                    <Text style={styles.reportBanner}>Main Findings and Recommendations</Text>
                     {/* Observations grouped by sub-location and area */}
                     {groupedObservations && groupedObservations.length > 0 && (
-                        <View style={{ marginTop: 10 }}>
+                        <View style={{ marginTop: 5 }}>
                             {/* You originally sliced to the first four groups — kept that behavior */}
                             {groupedObservations.map((subLocationGroup, idx) => (
-                                <View style={styles.findingsList} key={idx}>
+                                <View style={styles.findingsList} key={idx} break={idx !== 0}>
                                     {/* Sub-location (bold and easy to scan) */}
                                     <View style={styles.locationRow}>
                                         <Text style={styles.subLocationLabel} key={idx}>
@@ -285,7 +297,7 @@ const DetailedAuditReportPDF = ({ reportObject, logoPreview, groupedObservations
 
                                     {/* Areas inside this sub-location */}
                                     {subLocationGroup?.areas?.map((areaGroup, aIdx) => (
-                                        <View key={aIdx} style={{ marginTop: 6 }}>
+                                        <View key={aIdx} style={{ marginTop: 2 }}>
                                             <View style={styles.contentBlock}>
                                                 {/* Area label (bold) */}
                                                 <Text style={styles.areaLabel}>{areaGroup?.area}</Text>
@@ -310,7 +322,7 @@ const DetailedAuditReportPDF = ({ reportObject, logoPreview, groupedObservations
 
                 {/* Extra fields */}
                 {reportObject?.intAuditExtraFieldsList && reportObject?.intAuditExtraFieldsList.length !== 0 && (
-                    <View style={{ marginTop: 12 }} break>
+                    <View break>
                         <Text style={[styles.sectionTitle, { color: "#0a7386", fontSize: 18 }]}>Audit Extra Fields</Text>
                         {reportObject?.intAuditExtraFieldsList?.map((item, index) => (
                             <View style={{ marginTop: 4 }} key={index}>
@@ -328,7 +340,7 @@ const DetailedAuditReportPDF = ({ reportObject, logoPreview, groupedObservations
 
                 {/* Annexure */}
                 {!isHtmlEmpty(reportObject.annexure) && (
-                    <View style={{ marginTop: 12 }} break>
+                    <View break>
                         <Text style={styles.sectionTitle}>Annexure</Text>
                         {annexure.map((img, idx) => (
                             <Image src={img} key={idx} />
