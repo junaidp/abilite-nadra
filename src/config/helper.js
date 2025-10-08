@@ -240,7 +240,7 @@ const convertObservationsToImagesForSummarizedReport = async (grouped) => {
     const consolidatedObservations = [];
 
     for (const obs of consolidatedItem.consolidatedObservations) {
-      const summaryOfKeyFindingImage = await htmlToImage(obs.summaryOfKeyFinding);
+      const summaryOfKeyFindingImage = await htmlToPagedImages(obs.summaryOfKeyFinding);
 
       consolidatedObservations.push({
         ...obs,

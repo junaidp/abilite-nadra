@@ -1,4 +1,3 @@
-import React from "react";
 import RichTextEditor from "./RichText";
 
 const RichTextElements = ({ singleSummarizedReport }) => {
@@ -6,7 +5,7 @@ const RichTextElements = ({ singleSummarizedReport }) => {
         <div className="border px-3 py-2  mt-3 rounded">
             <div className="row mb-3">
                 <div className="col-lg-12">
-                    <label>Overview</label>
+                    <label>Identification</label>
                     <RichTextEditor
                         initialValue={singleSummarizedReport?.overView}
                     />
@@ -24,7 +23,7 @@ const RichTextElements = ({ singleSummarizedReport }) => {
 
             <div className="row mb-3">
                 <div className="col-lg-12">
-                    <label>Audit Purpose</label>
+                    <label>Financial & Operational Key Figures</label>
                     <RichTextEditor
                         initialValue={singleSummarizedReport?.auditPurpose}
                     />

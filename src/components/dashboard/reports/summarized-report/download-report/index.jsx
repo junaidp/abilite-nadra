@@ -15,7 +15,7 @@ import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
 import { useParams } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
-import { convertObservationsToImagesForSummarizedReport, htmlToImage } from "../../../../../config/helper"
+import { convertObservationsToImagesForSummarizedReport, htmlToPagedImages } from "../../../../../config/helper"
 
 const DownloadSummarizedReport = () => {
     const dispatch = useDispatch()
@@ -48,12 +48,12 @@ const DownloadSummarizedReport = () => {
                 const withImages = await convertObservationsToImagesForSummarizedReport(singleSummarizedReport?.consolidationItemsList);
 
                 // convert executiveSummary etc. into images
-                const overViewImage = await htmlToImage(singleSummarizedReport.overView);
-                const executiveSummaryImage = await htmlToImage(singleSummarizedReport.executiveSummary);
-                const auditPurposeImage = await htmlToImage(singleSummarizedReport.auditPurpose);
-                const previousAuditFollowUpImage = await htmlToImage(singleSummarizedReport.previousAuditFollowUp);
-                const operationalHighlightImage = await htmlToImage(singleSummarizedReport.operationalHighlight);
-                const annexureImage = await htmlToImage(singleSummarizedReport.annexure);
+                const overViewImage = await htmlToPagedImages(singleSummarizedReport.overView);
+                const executiveSummaryImage = await htmlToPagedImages(singleSummarizedReport.executiveSummary);
+                const auditPurposeImage = await htmlToPagedImages(singleSummarizedReport.auditPurpose);
+                const previousAuditFollowUpImage = await htmlToPagedImages(singleSummarizedReport.previousAuditFollowUp);
+                const operationalHighlightImage = await htmlToPagedImages(singleSummarizedReport.operationalHighlight);
+                const annexureImage = await htmlToPagedImages(singleSummarizedReport.annexure);
 
                 setData({
                     overView: overViewImage,

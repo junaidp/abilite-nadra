@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     pageBase: {
         flexDirection: "column",
         backgroundColor: "#FFFFFF",
-        paddingTop: PAGE_PADDING,
+        paddingTop: 50,
         paddingBottom: PAGE_PADDING,
         paddingLeft: PAGE_PADDING,
         paddingRight: PAGE_PADDING,
@@ -62,10 +62,16 @@ const styles = StyleSheet.create({
 
     pageStarter: {
         display: "flex",
-        justifyContent: "space-between",
         flexDirection: "row",
+        justifyContent: "space-between",
         alignItems: "center",
         paddingBottom: 5,
+        position: "absolute",
+        width: "100%",
+        top: 10,
+        left: PAGE_PADDING,
+        right: PAGE_PADDING,
+        marginBottom: 15
     },
 
     pageFooter: {
@@ -181,12 +187,12 @@ const styles = StyleSheet.create({
     // page numbering (keeps number centered at the bottom)
     pageNumber: {
         position: "absolute",
-        bottom: 5,
+        bottom: 3,
         left: 0,
         right: 0,
         textAlign: "center",
         fontSize: 10,
-        padding: 5,
+        padding: 3,
     },
 
     // utility for location wrap (keeps sub-location and any chips in row)
@@ -287,27 +293,21 @@ const SummarizedReportPDF = ({ reportObject, logoPreview, allLocations, data, gr
                     <Image src={logoPreview} style={{ width: 40 }} />
                 </View>
 
-                {/* Bottom footer */}
-                <View style={styles.pageFooter} fixed>
-                    <Text style={styles.smallMeta}>{reportObject?.reportName}</Text>
-                    <Image src={logoPreview} style={{ width: 40 }} />
-                </View>
-
                 {/* Contents / Table of contents */}
-                <View style={{ marginBottom: 8 }}>
+                <View>
                     <Text style={styles.contentsHeading}>Contents</Text>
 
                     <View style={styles.contentBlock}>
                         <Text style={styles.smallHeader}>01 - Identification</Text>
                         <Text style={styles.smallHeader}>02 - Executive Summary</Text>
-                        <Text style={styles.smallHeader}>03 - Audit Purpose</Text>
+                        <Text style={styles.smallHeader}>03 - Financial & Operational Key Figures</Text>
                         <Text style={styles.smallHeader}>04 - Previous Audit Follow Up</Text>
                         <Text style={styles.smallHeader}>05 - Operational Highlights</Text>
                         <Text style={styles.smallHeader}>06 - Main Findings and Recommendations</Text>
 
                         <View style={{ marginLeft: 20 }}>
                             {reportObject?.consolidationItemsList?.map((consolidatedItem, idx) => (
-                                <Text style={styles.bodyText} key={idx}>
+                                <Text style={[styles.bodyText, { marginBottom: 10 }]} key={idx}>
                                     {idx + 1}. {consolidatedItem?.area}
                                 </Text>
                             ))}
@@ -320,40 +320,50 @@ const SummarizedReportPDF = ({ reportObject, logoPreview, allLocations, data, gr
                 </View>
 
                 {/* Overview */}
-                <View style={{ marginTop: 6 }} break>
+                <View break>
                     <Text style={styles.sectionTitle}>Identification</Text>
-                    <Image src={data.overView} style={{ width: "100%" }} />
+                    {data.overView.map((img, idx) => (
+                        <Image src={img} key={idx} />
+                    ))}
                 </View>
 
                 {/* Executive Summary */}
-                <View style={{ marginTop: 6 }} break>
+                <View break>
                     <Text style={styles.sectionTitle}>Executive Summary</Text>
-                    <Image src={data.executiveSummary} style={{ width: "100%" }} />
+                    {data.executiveSummary.map((img, idx) => (
+                        <Image src={img} key={idx} />
+                    ))}
                 </View>
 
                 {/* Audit Purpose */}
-                <View style={{ marginTop: 6 }} break>
-                    <Text style={styles.sectionTitle}>Audit Purpose</Text>
-                    <Image src={data.auditPurpose} style={{ width: "100%" }} />
+                <View break>
+                    <Text style={styles.sectionTitle}>Financial & Operational Key Figures</Text>
+                    {data.auditPurpose.map((img, idx) => (
+                        <Image src={img} key={idx} />
+                    ))}
                 </View>
 
                 {/* Previous Audit Follow Up */}
-                <View style={{ marginTop: 6 }} break>
+                <View break>
                     <Text style={styles.sectionTitle}>Previous Audit Follow Up</Text>
-                    <Image src={data.previousAuditFollowUp} style={{ width: "100%" }} />
+                    {data.previousAuditFollowUp.map((img, idx) => (
+                        <Image src={img} key={idx} />
+                    ))}
                 </View>
 
                 {/* Previous Audit Follow Up */}
-                <View style={{ marginTop: 6 }} break>
+                <View break>
                     <Text style={styles.sectionTitle}>Operational Highlights</Text>
-                    <Image src={data.operationalHighlight} style={{ width: "100%" }} />
+                    {data.operationalHighlight.map((img, idx) => (
+                        <Image src={img} key={idx} />
+                    ))}
                 </View>
 
                 {/* Observations grouped by sub-location and area */}
-                <View style={{ marginTop: 10 }} break>
+                <View break>
                     {/* You originally sliced to the first four groups — kept that behavior */}
                     {groupedObservations.map((consolidatedItem, idx) => (
-                        <View key={idx} style={{ marginBottom: 5 }}>
+                        <View key={idx} style={{ marginBottom: 10 }}>
                             {/* Section Title */}
                             <Text style={styles.sectionTitle}>{consolidatedItem.area}</Text>
 
@@ -377,7 +387,9 @@ const SummarizedReportPDF = ({ reportObject, logoPreview, allLocations, data, gr
                                     <View style={styles.tableRow} key={i}>
                                         <Text style={[styles.tableCol, styles.colObs]}>{i + 1}</Text>
                                         <View style={[styles.tableCol, styles.colDesc]}>
-                                            <Image src={obs.summaryOfKeyFindingImage} style={{ width: "100%" }} />
+                                            {obs.summaryOfKeyFindingImage.map((img, idx) => (
+                                                <Image src={img} key={idx} />
+                                            ))}
                                         </View>
                                         <View style={[styles.tableCol, styles.colDau]}>
                                             {obs.reportingList.map((loc, idx) => (
@@ -393,9 +405,11 @@ const SummarizedReportPDF = ({ reportObject, logoPreview, allLocations, data, gr
 
                 {/* Annexure */}
                 {!isHtmlEmpty(reportObject.annexure) && (
-                    <View style={{ marginTop: 12 }} break>
+                    <View break>
                         <Text style={styles.sectionTitle}>Annexure</Text>
-                        <Image src={data.annexure} style={{ width: "100%" }} />
+                        {data.annexure.map((img, idx) => (
+                            <Image src={img} key={idx} />
+                        ))}
                     </View>
                 )}
 
