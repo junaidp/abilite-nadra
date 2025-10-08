@@ -202,12 +202,10 @@ const ObservationFileUpload = ({
                                 }}
                               ></i>
                             )}
-                            {handleAllowEdit() === true && (
-                              <i
-                                className="fa fa-edit px-2 f-18 cursor-pointer"
-                                onClick={() => handleFileUpdate(fileItem?.id)}
-                              ></i>
-                            )}
+                            <i
+                              className="fa fa-edit px-2 f-18 cursor-pointer"
+                              onClick={() => handleFileUpdate(fileItem?.id)}
+                            ></i>
                           </td>
                         </tr>
                       );

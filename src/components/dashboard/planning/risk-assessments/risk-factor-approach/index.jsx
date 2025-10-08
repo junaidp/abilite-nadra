@@ -456,7 +456,7 @@ const RiskFactorApproach = () => {
                     </div>
                     <div className="col-lg-4">
                       <div className="px-3 py-2 border-0 card shadow text-white label-text  label-text  label-text bg-yellow">
-                        Moderate(M) = 2 to 3
+                        Moderate(M) = 3 to 4
                       </div>
                     </div>
                     <div className="col-lg-4">
