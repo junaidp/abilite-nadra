@@ -108,7 +108,7 @@ const AuditExceptionReport = () => {
       natureIndex === 6 && typeof job[5] === "string" ? job[5] : "";
 
     // job name tends to be at index 1 (fallback to index 2 if missing)
-    const jobName = (job[5] === "Compliance Checklist" || job[6] === "Previous Observation" || job[5] === "Previous Observation") ? job[1] : job[2] || "";
+    const jobName = (job[5] === "Compliance Checklist" || job[6] === "Compliance Checklist"  || job[6] === "Previous Observation" || job[5] === "Previous Observation") ? job[1] : job[2] || "";
 
     // the short/truncated observation remains at index 4 in both shapes
     const shortObservation = job[4] || "";
