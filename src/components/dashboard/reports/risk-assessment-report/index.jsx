@@ -26,6 +26,8 @@ const poppinsStyle = {
 
 const RiskAssessmentReport = () => {
     const dispatch = useDispatch();
+    const mountedRef = React.useRef(false);
+
 
     // ---- Redux state (adjust the property name if your slice differs) ----
     const { riskAssessmentReport, loading } = useSelector(
@@ -61,35 +63,31 @@ const RiskAssessmentReport = () => {
 
     // ---- Initial fetch + cleanup ----
     React.useEffect(() => {
-        if (!companyId) return;
+        if (!companyId || !selectedYear) return;
+
         dispatch(
             setupGetRiskAssessementReport({
                 companyId,
                 year: selectedYear,
             })
         );
+
+        // Reset filters only when year changes (not on mount)
+        if (mountedRef.current) {
+            setFilters({
+                location: [],
+                subLocation: [],
+                department: [],
+                subDepartment: [],
+            });
+            setPage(1);
+        } else {
+            mountedRef.current = true; // first mount
+        }
+
         return () => {
             dispatch(handleReset());
         };
-    }, [dispatch, companyId]); // initial mount
-
-    // ---- Re-fetch when Year changes (and reset other filters) ----
-    React.useEffect(() => {
-        if (!companyId) return;
-        dispatch(
-            setupGetRiskAssessementReport({
-                companyId,
-                year: selectedYear,
-            })
-        );
-        // reset all local filters & page on year change
-        setFilters({
-            location: [],
-            subLocation: [],
-            department: [],
-            subDepartment: [],
-        });
-        setPage(1);
     }, [dispatch, companyId, selectedYear]);
 
     // ---- Flatten API response into table rows ----

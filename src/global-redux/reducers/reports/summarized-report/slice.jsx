@@ -10,8 +10,8 @@ import {
     createSummarizedReportExtraFields,
     updateSummarizedReportExtraField,
     summarizedReportFeedBack,
-    getAllLocations
-
+    getAllLocations,
+    downloadSummarizedReport
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -101,6 +101,13 @@ export const setupGetAllLocations = createAsyncThunk(
     "summarizedReport/getAllLocations",
     async (data, thunkAPI) => {
         return getAllLocations(data, thunkAPI);
+    }
+);
+
+export const setupDownloadSummarizedReport = createAsyncThunk(
+    "summarizedReport/downloadSummarizedReport",
+    async (data, thunkAPI) => {
+        return downloadSummarizedReport(data, thunkAPI);
     }
 );
 
@@ -330,6 +337,23 @@ export const slice = createSlice({
                 state.loading = false;
                 if (action.payload?.response?.data?.message) {
                     toast.error(action.payload.response.data.message);
+                } else {
+                    toast.error("An Error has occurred");
+                }
+            });
+
+        // Download Summarized Report
+        builder
+            .addCase(setupDownloadSummarizedReport.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(setupDownloadSummarizedReport.fulfilled, (state) => {
+                state.loading = false;
+            })
+            .addCase(setupDownloadSummarizedReport.rejected, (state, { payload }) => {
+                state.loading = false;
+                if (payload?.response?.data?.message) {
+                    toast.error(payload?.response?.data?.message);
                 } else {
                     toast.error("An Error has occurred");
                 }

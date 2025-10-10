@@ -2,23 +2,28 @@ import React from "react";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import moment from "moment";
+import {
+  CircularProgress,
+  Typography,
+  Tooltip,
+  Pagination,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@mui/material";
+
 import {
   setupGetAllInternalAuditReports,
-  resetInternalAuditReportAddSuccess
+  resetInternalAuditReportAddSuccess,
 } from "../../../../global-redux/reducers/reports/internal-audit-report/slice";
-import { CircularProgress, Typography } from "@mui/material";
-import Pagination from "@mui/material/Pagination";
-import moment from "moment";
+
 import DeleteDialog from "./dialogs/DeleteDialog";
 import SubmitDialog from "./dialogs/SubmitDialog";
 import ApproveDialog from "./dialogs/ApproveDialog";
 import FeedBackDialog from "./dialogs/FeedBackDialog";
 import ViewFeedBackDialog from "./dialogs/ViewFeedBackDialog";
-import Tooltip from "@mui/material/Tooltip";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
 import { encryptAndEncode } from "../../../../config/helper";
 
 const poppinsStyle = {
@@ -26,10 +31,17 @@ const poppinsStyle = {
   fontWeight: "normal",
 };
 
+/**
+ * InternalAuditReport
+ * Displays the list of internal audit reports, allowing view, edit, submit,
+ * approve, delete, feedback, and PDF download actions.
+ */
 const InternalAuditReport = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isInitialRender = React.useRef(true);
+
+  // Redux states
   const { company, year } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
   const {
@@ -38,56 +50,55 @@ const InternalAuditReport = () => {
     internalAuditReportAddSuccess,
     totalNoOfRecords,
   } = useSelector((state) => state?.internalAuditReport);
+
+  // Local states
   const [page, setPage] = React.useState(1);
   const [itemsPerPage, setItemsPerPage] = React.useState(5);
   const [currentReportItem, setCurrentReportItem] = React.useState({});
-  const [showSubmitReportDialog, setShowSubmitReportDialog] =
-    React.useState(false);
+  const [showSubmitReportDialog, setShowSubmitReportDialog] = React.useState(false);
   const [showApproveDialog, setShowApproveDialog] = React.useState(false);
   const [showFeedBackDialog, setFeedBackDialog] = React.useState(false);
   const [viewFeedBackDialog, setViewFeedBackDialog] = React.useState(false);
-  const [
-    showDeleteInternalAuditReportDialog,
-    setShowDeleteInternalAuditReportDialog,
-  ] = React.useState(false);
-  const [deleteInternalAuditReportId, setDeleteInternalAuditReportId] =
-    React.useState("");
+  const [showDeleteInternalAuditReportDialog, setShowDeleteInternalAuditReportDialog] =
+    React.useState(false);
+  const [deleteInternalAuditReportId, setDeleteInternalAuditReportId] = React.useState("");
 
-  const handleChange = (_, value) => {
-    setPage(value);
-  };
-  function handleSubmitReport(item) {
+  // ---- Pagination ----
+  const handleChange = (_, value) => setPage(value);
+
+  // ---- Handlers for submit and approve ----
+  const handleSubmitReport = (item) => {
     setCurrentReportItem(item);
     setShowSubmitReportDialog(true);
-  }
-  function handleApproveReport(item) {
+  };
+
+  const handleApproveReport = (item) => {
     setCurrentReportItem(item);
     setShowApproveDialog(true);
-  }
+  };
 
-  function handleChangeItemsPerPage(event) {
-    const companyId = user[0]?.company?.find(
-      (item) => item?.companyName === company
-    )?.id;
+  // ---- Handle change in items per page ----
+  const handleChangeItemsPerPage = (event) => {
+    const companyId = user[0]?.company?.find((c) => c?.companyName === company)?.id;
     if (companyId) {
+      const newLimit = Number(event.target.value);
       setPage(1);
-      setItemsPerPage(Number(event.target.value));
+      setItemsPerPage(newLimit);
       dispatch(
         setupGetAllInternalAuditReports({
           companyId,
           page: 1,
-          itemsPerPage: Number(event.target.value),
+          itemsPerPage: newLimit,
           year,
         })
       );
     }
-  }
+  };
 
+  // ---- Re-fetch after successful add/delete/update ----
   React.useEffect(() => {
     if (internalAuditReportAddSuccess) {
-      const companyId = user[0]?.company?.find(
-        (item) => item?.companyName === company
-      )?.id;
+      const companyId = user[0]?.company?.find((c) => c?.companyName === company)?.id;
       if (companyId) {
         setPage(1);
         setItemsPerPage(5);
@@ -102,12 +113,11 @@ const InternalAuditReport = () => {
         dispatch(resetInternalAuditReportAddSuccess());
       }
     }
-  }, [internalAuditReportAddSuccess]);
+  }, [internalAuditReportAddSuccess, dispatch, user, company, year]);
 
+  // ---- Fetch data on mount or page change ----
   React.useEffect(() => {
-    const companyId = user[0]?.company?.find(
-      (item) => item?.companyName === company
-    )?.id;
+    const companyId = user[0]?.company?.find((c) => c?.companyName === company)?.id;
     if (companyId) {
       dispatch(
         setupGetAllInternalAuditReports({
@@ -118,18 +128,15 @@ const InternalAuditReport = () => {
         })
       );
     }
-  }, [dispatch, page]);
+  }, [dispatch, user, company, page, itemsPerPage, year]);
 
+  // ---- Fetch again when year changes (skip first render) ----
   React.useEffect(() => {
     if (isInitialRender.current) {
       isInitialRender.current = false;
-      return; // Skip the initial render
+      return;
     }
-
-    const companyId = user[0]?.company?.find(
-      (item) => item?.companyName === company
-    )?.id;
-
+    const companyId = user[0]?.company?.find((c) => c?.companyName === company)?.id;
     if (companyId) {
       setPage(1);
       setItemsPerPage(5);
@@ -142,24 +149,24 @@ const InternalAuditReport = () => {
         })
       );
     }
-  }, [year]);
+  }, [year, dispatch, user, company]);
 
   return (
     <div>
+      {/* ---- Dialogs ---- */}
       {showDeleteInternalAuditReportDialog && (
-        <div className="model-parent  d-flex justify-content-between items-center">
+        <div className="model-parent d-flex justify-content-between items-center">
           <div className="model-wrap">
             <DeleteDialog
-              setShowDeleteInternalAuditReportDialog={
-                setShowDeleteInternalAuditReportDialog
-              }
+              setShowDeleteInternalAuditReportDialog={setShowDeleteInternalAuditReportDialog}
               deleteInternalAuditReportId={deleteInternalAuditReportId}
             />
           </div>
         </div>
       )}
+
       {showSubmitReportDialog && (
-        <div className="model-parent  d-flex justify-content-between items-center">
+        <div className="model-parent d-flex justify-content-between items-center">
           <div className="model-wrap">
             <SubmitDialog
               currentReportItem={currentReportItem}
@@ -168,8 +175,9 @@ const InternalAuditReport = () => {
           </div>
         </div>
       )}
+
       {showApproveDialog && (
-        <div className="model-parent  d-flex justify-content-between items-center">
+        <div className="model-parent d-flex justify-content-between items-center">
           <div className="model-wrap">
             <ApproveDialog
               currentReportItem={currentReportItem}
@@ -178,6 +186,7 @@ const InternalAuditReport = () => {
           </div>
         </div>
       )}
+
       {showFeedBackDialog && (
         <div className="model-parent">
           <div className="model-wrap">
@@ -188,6 +197,7 @@ const InternalAuditReport = () => {
           </div>
         </div>
       )}
+
       {viewFeedBackDialog && (
         <div className="model-parent">
           <div className="model-wrap">
@@ -198,9 +208,11 @@ const InternalAuditReport = () => {
           </div>
         </div>
       )}
+
+      {/* ---- Header ---- */}
       <header className="section-header my-3 text-start d-flex align-items-center justify-content-between">
         <div className="mb-0 heading">Internal Audit Report</div>
-        <div className="">
+        <div>
           <div
             className="btn btn-labeled btn-primary px-3 shadow"
             onClick={() => navigate("/audit/generate-internal-audit-report")}
@@ -210,11 +222,7 @@ const InternalAuditReport = () => {
           <Tooltip
             title={
               <React.Fragment>
-                <Typography
-                  color="inherit"
-                  className="mb-2"
-                  style={poppinsStyle}
-                >
+                <Typography color="inherit" className="mb-2" style={poppinsStyle}>
                   Click to create a new internal audit report
                 </Typography>
                 <ul
@@ -237,10 +245,11 @@ const InternalAuditReport = () => {
         </div>
       </header>
 
+      {/* ---- Table ---- */}
       <div className="row">
         <div className="col-lg-12">
           <div className="table-responsive">
-            <table className="table table-bordered  table-hover rounded">
+            <table className="table table-bordered table-hover rounded">
               <thead className="bg-secondary text-white">
                 <tr>
                   <th>Sr No.</th>
@@ -252,6 +261,7 @@ const InternalAuditReport = () => {
                   <th>Actions</th>
                 </tr>
               </thead>
+
               <tbody>
                 {loading ? (
                   <tr>
@@ -262,12 +272,15 @@ const InternalAuditReport = () => {
                 ) : allInternalAuditReports?.length === 0 ||
                   allInternalAuditReports[0]?.error === "Not Found" ? (
                   <tr>
-                    <td className="w-300">
-                      No Internal Audit Reports To Show.
-                    </td>
+                    <td className="w-300">No Internal Audit Reports To Show.</td>
                   </tr>
                 ) : (
                   allInternalAuditReports?.map((item, index) => {
+                    const isCreatedByUser =
+                      Number(item?.createdBy) === Number(user[0]?.userId?.id);
+                    const isIAH =
+                      user[0]?.userId?.employeeid?.userHierarchy === "IAH";
+
                     return (
                       <tr key={index}>
                         <td>{(page - 1) * itemsPerPage + index + 1}</td>
@@ -276,94 +289,81 @@ const InternalAuditReport = () => {
                         <td>{moment(item?.reportDate).format("DD-MM-YYYY")}</td>
                         <td>{item?.preparedBy || ""}</td>
                         <td>{item?.status}</td>
+
                         <td>
                           <div className="d-flex flex-wrap gap-4">
+                            {/* View */}
                             <i
                               className="fa-eye fa f-18 cursor-pointer"
                               onClick={() => {
-                                const encryptedId = encryptAndEncode(
-                                  item?.id.toString()
-                                );
-                                navigate(
-                                  `/audit/view-internal-audit-report/${encryptedId}`
-                                );
+                                const encryptedId = encryptAndEncode(item?.id.toString());
+                                navigate(`/audit/view-internal-audit-report/${encryptedId}`);
                               }}
                             ></i>
-                            {(Number(item?.createdBy) ===
-                              Number(user[0]?.userId?.id) &&
-                              item?.submitted === false) ||
-                              user[0]?.userId?.employeeid?.userHierarchy ===
-                              "IAH" ? (
+
+                            {/* Edit */}
+                            {(isCreatedByUser && !item?.submitted) || isIAH ? (
                               <i
                                 className="fa fa-edit f-18 cursor-pointer"
                                 onClick={() => {
-                                  const encryptedId = encryptAndEncode(
-                                    item?.id.toString()
-                                  );
-                                  navigate(
-                                    `/audit/update-internal-audit-report/${encryptedId}`
-                                  );
+                                  const encryptedId = encryptAndEncode(item?.id.toString());
+                                  navigate(`/audit/update-internal-audit-report/${encryptedId}`);
                                 }}
                               ></i>
                             ) : null}
-                            {(Number(item?.createdBy) ===
-                              Number(user[0]?.userId?.id) &&
-                              item?.submitted === false) ||
-                              user[0]?.userId?.employeeid?.userHierarchy ===
-                              "IAH" ? (
+
+                            {/* Delete */}
+                            {(isCreatedByUser && !item?.submitted) || isIAH ? (
                               <i
-                                className={`fa fa-trash text-danger cursor-pointer f-18`}
+                                className="fa fa-trash text-danger cursor-pointer f-18"
                                 onClick={() => {
                                   setDeleteInternalAuditReportId(item?.id);
                                   setShowDeleteInternalAuditReportDialog(true);
                                 }}
                               ></i>
                             ) : null}
+
+                            {/* Submit */}
                             {item?.reportName &&
-                              item?.reportName !== "" &&
                               item?.executiveSummary &&
-                              item?.executiveSummary !== "" &&
                               item?.auditPurpose &&
-                              item?.auditPurpose !== "" &&
-                              item?.submitted === false &&
-                              Number(item?.createdBy) ===
-                              Number(user[0]?.userId?.id) && (
+                              !item?.submitted &&
+                              isCreatedByUser && (
                                 <div
-                                  className={`btn btn-labeled btn-primary shadow h-35`}
+                                  className="btn btn-labeled btn-primary shadow h-35"
                                   onClick={() => handleSubmitReport(item)}
                                 >
                                   Submit
                                 </div>
                               )}
-                            {item?.submitted === true &&
-                              item?.approved === false &&
-                              user[0]?.userId?.employeeid?.userHierarchy ===
-                              "IAH" && (
-                                <div
-                                  className={`btn btn-labeled btn-primary shadow h-35`}
-                                  onClick={() => handleApproveReport(item)}
-                                >
-                                  Approve
-                                </div>
-                              )}
 
-                            {item?.submitted === true &&
-                              item?.approved === false &&
-                              user[0]?.userId?.employeeid?.userHierarchy ===
-                              "IAH" && (
-                                <div
-                                  className={`btn btn-labeled btn-primary shadow h-35`}
-                                  onClick={() => {
-                                    setCurrentReportItem(item);
-                                    setFeedBackDialog(true);
-                                  }}
-                                >
-                                  FeedBack
-                                </div>
-                              )}
-                            {item?.feedback && item?.feedback?.id && (
+                            {/* Approve */}
+                            {item?.submitted && !item?.approved && isIAH && (
                               <div
-                                className={`btn btn-labeled btn-primary shadow  h-35`}
+                                className="btn btn-labeled btn-primary shadow h-35"
+                                onClick={() => handleApproveReport(item)}
+                              >
+                                Approve
+                              </div>
+                            )}
+
+                            {/* Feedback */}
+                            {item?.submitted && !item?.approved && isIAH && (
+                              <div
+                                className="btn btn-labeled btn-primary shadow h-35"
+                                onClick={() => {
+                                  setCurrentReportItem(item);
+                                  setFeedBackDialog(true);
+                                }}
+                              >
+                                FeedBack
+                              </div>
+                            )}
+
+                            {/* View Feedback */}
+                            {item?.feedback?.id && (
+                              <div
+                                className="btn btn-labeled btn-primary shadow h-35"
                                 onClick={() => {
                                   setCurrentReportItem(item);
                                   setViewFeedBackDialog(true);
@@ -372,17 +372,14 @@ const InternalAuditReport = () => {
                                 View FeedBack
                               </div>
                             )}
-                            {item?.submitted === true && (
-                              <Tooltip
-                                title="Link to download pdf"
-                                placement="top"
-                              >
+
+                            {/* Download */}
+                            {item?.submitted && (
+                              <Tooltip title="Link to download pdf" placement="top">
                                 <i
                                   className="fa fa-download f-18 cursor-pointer"
                                   onClick={() => {
-                                    const encryptedId = encryptAndEncode(
-                                      item?.id.toString()
-                                    );
+                                    const encryptedId = encryptAndEncode(item?.id.toString());
                                     navigate(
                                       `/audit/download-internal-audit-report/${encryptedId}`
                                     );
@@ -399,6 +396,8 @@ const InternalAuditReport = () => {
               </tbody>
             </table>
           </div>
+
+          {/* ---- Pagination ---- */}
           {allInternalAuditReports?.length > 0 && (
             <div className="row">
               <div className="col-lg-6 mb-4">
@@ -409,25 +408,21 @@ const InternalAuditReport = () => {
                 />
               </div>
               <div className="col-lg-6 mb-4 d-flex justify-content-end">
-                <div>
-                  <FormControl sx={{ minWidth: 200 }} size="small">
-                    <InputLabel id="demo-select-small-label">
-                      Items Per Page
-                    </InputLabel>
-                    <Select
-                      labelId="demo-select-small-label"
-                      id="demo-select-small"
-                      label="Age"
-                      value={itemsPerPage}
-                      onChange={(event) => handleChangeItemsPerPage(event)}
-                    >
-                      <MenuItem value={5}>5</MenuItem>
-                      <MenuItem value={10}>10</MenuItem>
-                      <MenuItem value={20}>20</MenuItem>
-                      <MenuItem value={30}>30</MenuItem>
-                    </Select>
-                  </FormControl>
-                </div>
+                <FormControl sx={{ minWidth: 200 }} size="small">
+                  <InputLabel id="demo-select-small-label">Items Per Page</InputLabel>
+                  <Select
+                    labelId="demo-select-small-label"
+                    id="demo-select-small"
+                    label="Age"
+                    value={itemsPerPage}
+                    onChange={handleChangeItemsPerPage}
+                  >
+                    <MenuItem value={5}>5</MenuItem>
+                    <MenuItem value={10}>10</MenuItem>
+                    <MenuItem value={20}>20</MenuItem>
+                    <MenuItem value={30}>30</MenuItem>
+                  </Select>
+                </FormControl>
               </div>
             </div>
           )}

@@ -1,68 +1,77 @@
-import React from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
     setupGetAllJobsForSummarizedReport,
     setupCreateSummarizedReport,
     handleResetData,
-    resetSummarizedReportAddSuccess
+    resetSummarizedReportAddSuccess,
 } from "../../../../../global-redux/reducers/reports/summarized-report/slice";
 import {
     changeActiveLink,
     InitialLoadSidebarActiveLink,
 } from "../../../../../global-redux/reducers/common/slice";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import Header from "./Header";
+import { FormControl, InputLabel, Select, MenuItem, Chip, CircularProgress } from "@mui/material";
 import { toast } from "react-toastify";
-import { Chip, CircularProgress } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import Header from "../components/Header";
 
+/**
+ * Allows user to generate a summarized audit report for a selected job.
+ * Displays available jobs and initiates report creation.
+ */
 const GenerateSummarizedReport = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    // Redux states
     const { user } = useSelector((state) => state?.auth);
     const { company, year } = useSelector((state) => state?.common);
-    const {
-        jobsForSummarizedReports,
-        loading,
-        summarizedReportAddSuccess
-    } = useSelector((state) => state?.summarizedReport);
+    const { jobsForSummarizedReports, loading, summarizedReportAddSuccess } =
+        useSelector((state) => state?.summarizedReport);
 
-    const [jobForSummarizedReportId, setJobForSummarizedReportId] =
-        React.useState("");
+    // Local state
+    const [jobForSummarizedReportId, setJobForSummarizedReportId] = useState("");
 
-    const handleChange = (event) => {
+    /** ------------------------------
+     * Handlers
+     * ------------------------------ */
+
+    const handleChange = useCallback((event) => {
         setJobForSummarizedReportId(event.target.value);
-    };
+    }, []);
 
-    function handleGetInternalAuditReportObject() {
-        if (!loading) {
-            if (jobForSummarizedReportId === "") {
-                toast.error("Please Select Report");
-            }
-            if (jobForSummarizedReportId !== "") {
-                dispatch(
-                    setupCreateSummarizedReport(
-                        `?reportingAndFollowUpId=${Number(jobForSummarizedReportId)}`
-                    )
-                );
-            }
+    const handleGenerateReport = useCallback(() => {
+        if (loading) return;
+        if (!jobForSummarizedReportId) {
+            toast.error("Please select a report.");
+            return;
         }
-    }
 
-    React.useEffect(() => {
+        dispatch(
+            setupCreateSummarizedReport(
+                `?reportingAndFollowUpId=${Number(jobForSummarizedReportId)}`
+            )
+        );
+    }, [dispatch, jobForSummarizedReportId, loading]);
+
+    /** ------------------------------
+     * Effects
+     * ------------------------------ */
+
+    // Navigate after report is successfully created
+    useEffect(() => {
         if (summarizedReportAddSuccess) {
             dispatch(resetSummarizedReportAddSuccess());
             navigate("/audit/summarized-report");
         }
-    }, [summarizedReportAddSuccess]);
+    }, [summarizedReportAddSuccess, dispatch, navigate]);
 
-    React.useEffect(() => {
-        const companyId = user[0]?.company?.find(
+    // Fetch available jobs for summarized report
+    useEffect(() => {
+        const companyId = user?.[0]?.company?.find(
             (item) => item?.companyName === company
         )?.id;
+
         if (companyId) {
             dispatch(
                 setupGetAllJobsForSummarizedReport(
@@ -70,60 +79,70 @@ const GenerateSummarizedReport = () => {
                 )
             );
         }
-    }, [dispatch, year]);
+    }, [dispatch, user, company, year]);
 
-    React.useEffect(() => {
+    // Manage sidebar and cleanup on unmount
+    useEffect(() => {
         dispatch(changeActiveLink("li-summarized-report"));
         dispatch(InitialLoadSidebarActiveLink("li-reports"));
-        return () => {
-            dispatch(handleResetData());
-        };
-    }, []);
+        return () => dispatch(handleResetData());
+    }, [dispatch]);
+
+    /** ------------------------------
+     * Render
+     * ------------------------------ */
 
     return (
         <div className="overflow-y-hidden">
-            <Header />
-            {
-                <div className="row pt-4">
-                    <div className="col-lg-10">
-                        <FormControl fullWidth>
-                            <InputLabel id="demo-simple-select-label">
-                                Summarized Report
-                            </InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                value={jobForSummarizedReportId}
-                                label="Reporting And Follow Up"
-                                onChange={handleChange}
-                            >
-                                <MenuItem value="">Select One</MenuItem>
-                                {jobsForSummarizedReports?.map((item, index) => {
-                                    return (
-                                        <MenuItem value={item?.id} key={index} sx={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
-                                            {item?.title} {item.subLocationList.map((location, index) => <Chip key={index} label={location.description} sx={{ marginLeft: "20px" }} />)}
-                                        </MenuItem>
-                                    );
-                                })}
-                            </Select>
-                        </FormControl>
-                    </div>
-                    <div className="col-lg-2">
-                        <div
-                            className={`btn btn-labeled btn-primary px-3 shadow  my-4 ${loading && "disabled"
-                                }`}
-                            onClick={handleGetInternalAuditReportObject}
+            <Header title="Generate Summarized Report" />
+
+            <div className="row pt-4">
+                {/* Report Selection Dropdown */}
+                <div className="col-lg-10">
+                    <FormControl fullWidth>
+                        <InputLabel id="summarized-report-label">Summarized Report</InputLabel>
+                        <Select
+                            labelId="summarized-report-label"
+                            id="summarized-report-select"
+                            value={jobForSummarizedReportId}
+                            label="Summarized Report"
+                            onChange={handleChange}
                         >
-                            {loading ? "Loading.." : "Create Report"}
-                        </div>
+                            <MenuItem value="">Select One</MenuItem>
+                            {jobsForSummarizedReports?.map((job, index) => (
+                                <MenuItem
+                                    key={index}
+                                    value={job?.id}
+                                    sx={{ display: "flex", flexWrap: "wrap", gap: "10px" }}
+                                >
+                                    {job?.title}
+                                    {job?.subLocationList?.map((location, idx) => (
+                                        <Chip
+                                            key={idx}
+                                            label={location?.description}
+                                            sx={{ marginLeft: "20px" }}
+                                        />
+                                    ))}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </div>
+
+                {/* Create Report Button */}
+                <div className="col-lg-2">
+                    <div
+                        className={`btn btn-labeled btn-primary px-3 shadow my-4 ${loading ? "disabled" : ""
+                            }`}
+                        onClick={handleGenerateReport}
+                    >
+                        {loading ? "Loading.." : "Create Report"}
                     </div>
                 </div>
-            }
+            </div>
 
-            {
-                loading && <CircularProgress />
-            }
-
+            {/* Loading Indicator */}
+            {loading && <CircularProgress />}
         </div>
     );
 };

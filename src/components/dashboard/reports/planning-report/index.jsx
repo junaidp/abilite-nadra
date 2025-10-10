@@ -1,36 +1,50 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
+import {
+  CircularProgress,
+  Tooltip,
+  Typography,
+  Pagination,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@mui/material";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+
 import {
   setupGetAllReports,
   resetReportAddSuccess,
   setupGetAllUsers,
 } from "../../../../global-redux/reducers/reports/planing-report/slice";
-import { useSelector, useDispatch } from "react-redux";
-import { CircularProgress, Tooltip, Typography } from "@mui/material";
-import moment from "moment";
-import Pagination from "@mui/material/Pagination";
-import ReportDeleteDailog from "./components/report-delete-dialog";
+import ReportDeleteDialog from "./components/report-delete-dialog";
 import ReportPublishDialog from "./components/report-publish-dialog";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
+import PDFGenerator from "./components/pdf-generator";
 import { encryptAndEncode } from "../../../../config/helper";
-import { PDFDownloadLink } from "@react-pdf/renderer";
-import PDFGenerator from "./components/pdf-generator"
+
+/** Font style for tooltips */
 const poppinsStyle = {
   fontFamily: '"Poppins", sans-serif',
   fontWeight: "normal",
 };
 
-
+/**
+ * Displays the main Planning Report listing.
+ * Supports pagination, deletion, publishing, and PDF download.
+ */
 const PlanningReport = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // Redux state
   const { loading, allReports, reportAddSuccess, users, totalNoOfRecords } =
     useSelector((state) => state?.planningReport);
   const { user } = useSelector((state) => state?.auth);
   const { company } = useSelector((state) => state?.common);
+
+  // Local state
   const [page, setPage] = React.useState(1);
   const [itemsPerPage, setItemsPerPage] = React.useState(10);
   const [selectedReportId, setSelectedReportId] = React.useState("");
@@ -38,39 +52,34 @@ const PlanningReport = () => {
     React.useState(false);
   const [showReportPublishDialog, setShowReportPublishDialog] =
     React.useState(false);
-  const [reportNameValue, setReportNameValue] = React.useState("");
 
-  const handleChange = (_, value) => {
-    setPage(value);
-  };
+  // Pagination handlers
+  const handlePageChange = (_, value) => setPage(value);
 
-  function handlePublish(id) {
-    setSelectedReportId(id);
-    setShowReportPublishDialog(true);
-  }
-
-  function handleDelete(id) {
-    setSelectedReportId(id);
-    setShowReportDeleteDialog(true);
-  }
-
-  function handleChangeItemsPerPage(event) {
+  const handleChangeItemsPerPage = (event) => {
     const companyId = user[0]?.company?.find(
       (item) => item?.companyName === company
     )?.id;
     if (companyId) {
+      const newLimit = Number(event.target.value);
       setPage(1);
-      setItemsPerPage(Number(event.target.value));
-      dispatch(
-        setupGetAllReports({
-          companyId,
-          page: 1,
-          itemsPerPage: Number(event.target.value),
-        })
-      );
+      setItemsPerPage(newLimit);
+      dispatch(setupGetAllReports({ companyId, page: 1, itemsPerPage: newLimit }));
     }
-  }
+  };
 
+  // Dialog actions
+  const handlePublish = (id) => {
+    setSelectedReportId(id);
+    setShowReportPublishDialog(true);
+  };
+
+  const handleDelete = (id) => {
+    setSelectedReportId(id);
+    setShowReportDeleteDialog(true);
+  };
+
+  // Reload after successful add/update/delete
   React.useEffect(() => {
     if (reportAddSuccess) {
       const companyId = user[0]?.company?.find(
@@ -79,43 +88,41 @@ const PlanningReport = () => {
       if (companyId) {
         setPage(1);
         setItemsPerPage(10);
-        dispatch(
-          setupGetAllReports({
-            companyId,
-            page: 1,
-            itemsPerPage: 10,
-          })
-        );
+        dispatch(setupGetAllReports({ companyId, page: 1, itemsPerPage: 10 }));
         dispatch(resetReportAddSuccess());
       }
     }
-  }, [reportAddSuccess]);
+  }, [reportAddSuccess, user, company, dispatch]);
 
+  // Fetch reports
   React.useEffect(() => {
     const companyId = user[0]?.company?.find(
       (item) => item?.companyName === company
     )?.id;
     if (companyId) {
-      dispatch(
-        setupGetAllReports({
-          companyId,
-          page,
-          itemsPerPage,
-        })
-      );
+      dispatch(setupGetAllReports({ companyId, page, itemsPerPage }));
     }
-  }, [dispatch, page]);
+  }, [dispatch, user, company, page, itemsPerPage]);
 
+  // Fetch users for “Created By”
   React.useEffect(() => {
-    if (user[0]?.token) {
-      dispatch(setupGetAllUsers());
-    }
-  }, [dispatch]);
+    if (user[0]?.token) dispatch(setupGetAllUsers());
+  }, [dispatch, user]);
+
+
+  // Helper to check if a report is ready for publish/download
+  const isReportComplete = (report) =>
+    report?.summary &&
+    report?.methodology &&
+    report?.riskAssessmentSummary &&
+    report?.organizationStrategy &&
+    report?.summaryRisk;
 
   return (
     <div>
+      {/* Publish Dialog */}
       {showReportPublishDialog && (
-        <div className="model-parent  d-flex justify-content-between items-center">
+        <div className="model-parent d-flex justify-content-between items-center">
           <div className="model-wrap">
             <ReportPublishDialog
               setShowReportPublishDialog={setShowReportPublishDialog}
@@ -124,36 +131,34 @@ const PlanningReport = () => {
           </div>
         </div>
       )}
+
+      {/* Delete Dialog */}
       {showReportDeleteDialog && (
-        <div className="model-parent  d-flex justify-content-between items-center">
+        <div className="model-parent d-flex justify-content-between items-center">
           <div className="model-wrap">
-            <ReportDeleteDailog
+            <ReportDeleteDialog
               setShowReportDeleteDialog={setShowReportDeleteDialog}
               selectedReportId={selectedReportId}
             />
           </div>
         </div>
       )}
+
+      {/* ---- Header ---- */}
       <header className="section-header my-3 text-start d-flex align-items-center justify-content-between">
         <div className="mb-0 heading">Planning Report</div>
-        <div className="">
+        <div>
           <div
             className="btn btn-labeled btn-primary px-3 shadow"
             onClick={() => navigate("/audit/generate-planning-report")}
           >
-            <span className="btn-label me-2">
-              <i className="fa fa-eye"></i>
-            </span>
             Generate Report
           </div>
+
           <Tooltip
             title={
               <React.Fragment>
-                <Typography
-                  color="inherit"
-                  className="mb-2"
-                  style={poppinsStyle}
-                >
+                <Typography color="inherit" style={poppinsStyle}>
                   Click to create a new planning report
                 </Typography>
               </React.Fragment>
@@ -165,197 +170,163 @@ const PlanningReport = () => {
         </div>
       </header>
 
-      <div className="row">
-        <div className="col-lg-12">
-          <div className="example-header">
-            <div className="mb-2 w-100">
-              <input
-                placeholder="Filter With Created By"
-                id="inputField"
-                className="border-bottom-black"
-                value={reportNameValue}
-                onChange={(event) => setReportNameValue(event?.target?.value)}
-              />
-            </div>
-          </div>
-          <div className="table-responsive">
-            <table className="table table-bordered  table-hover rounded">
-              <thead className="bg-secondary text-white">
-                <tr>
-                  <th className="w-80">Sr. #</th>
-                  <th className="w-80">Year</th>
-                  <th>Report Name</th>
-                  <th>Report Date</th>
-                  <th>Created By</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {loading ? (
-                  <tr>
-                    <td className="w-300">
-                      <CircularProgress />
+      {/* ---- Table ---- */}
+      <div className="table-responsive">
+        <table className="table table-bordered table-hover rounded">
+          <thead className="bg-secondary text-white">
+            <tr>
+              <th>Sr. #</th>
+              <th>Year</th>
+              <th>Report Name</th>
+              <th>Report Date</th>
+              <th>Created By</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {loading ? (
+              <tr>
+                <td colSpan="7" className="text-center">
+                  <CircularProgress />
+                </td>
+              </tr>
+            ) : allReports?.length === 0 ? (
+              <tr>
+                <td colSpan="7" className="text-center">
+                  No Planning Reports To Show.
+                </td>
+              </tr>
+            ) : (
+              allReports?.map((item, index) => {
+                const canEditOrDelete =
+                  item?.reportStatus === "Draft" &&
+                  (item?.createdBy === user[0]?.userId?.id ||
+                    user[0]?.userId?.employeeid?.userHierarchy === "IAH");
+
+                const canPublish =
+                  canEditOrDelete &&
+                  user[0]?.userId?.employeeid?.userHierarchy === "IAH" &&
+                  isReportComplete(item);
+
+                return (
+                  <tr key={index} className="h-40">
+                    <td>{(page - 1) * itemsPerPage + index + 1}</td>
+                    <td>{item?.year}</td>
+                    <td>{item?.reportTitle}</td>
+                    <td>{moment.utc(item?.createdTime).format("DD-MM-YY")}</td>
+                    <td>
+                      {users?.find((u) => u?.id === item?.createdBy)?.name || ""}
                     </td>
-                  </tr>
-                ) : allReports?.length === 0 ? (
-                  <tr>
-                    <td className="w-300">
-                      No Planning Summary Reports To Show.
-                    </td>
-                  </tr>
-                ) : (
-                  allReports
-                    ?.filter((all) =>
-                      all?.reportTitle
-                        ?.toLowerCase()
-                        .includes(reportNameValue?.toLowerCase())
-                    )
-                    ?.map((item, index) => {
-                      return (
-                        <tr className="h-40" key={index}>
-                          <td>{(page - 1) * itemsPerPage + index + 1}</td>
-                          <td>{item?.year}</td>
-                          <td>{item?.reportTitle}</td>
-                          <td>
-                            {moment.utc(item?.createdTime).format("DD-MM-YY")}
-                          </td>
-                          <td>
-                            {
-                              users?.find(
-                                (user) => user?.id === item?.createdBy
-                              )?.name
-                            }
-                          </td>
-                          <td>{item?.reportStatus}</td>
-                          <td>
-                            <div className="d-flex flex-wrap gap-4">
-                              <i
-                                className="fa fa-eye text-primary f-18 cursor-pointer"
-                                onClick={() => {
-                                  const encryptedId = encryptAndEncode(
-                                    item?.id.toString()
-                                  );
-                                  navigate(
-                                    `/audit/view-planning-report/${encryptedId}`
-                                  );
-                                }}
-                              ></i>
-                              {item?.reportStatus === "Draft" &&
-                                (item?.createdBy === user[0]?.userId?.id ||
-                                  user[0]?.userId?.employeeid?.userHierarchy ===
-                                  "IAH") && (
-                                  <i
-                                    className="fa fa-edit text-secondary f-18 cursor-pointer"
-                                    onClick={() => {
-                                      const encryptedId = encryptAndEncode(
-                                        item?.id.toString()
-                                      );
-                                      navigate(
-                                        `/audit/update-planning-report/${encryptedId}`
-                                      );
-                                    }}
-                                  ></i>
-                                )}
-                              {item?.reportStatus === "Draft" &&
-                                (item?.createdBy === user[0]?.userId?.id ||
-                                  user[0]?.userId?.employeeid?.userHierarchy ===
-                                  "IAH") && (
-                                  <i
-                                    className="fa fa-trash text-danger f-18 cursor-pointer"
-                                    onClick={() => handleDelete(item?.id)}
-                                  ></i>
-                                )}
-                              {item?.reportStatus === "Draft" &&
-                                user[0]?.userId?.employeeid?.userHierarchy ===
-                                "IAH" &&
-                                item?.summary &&
-                                item?.summary !== "" &&
-                                item?.methodology &&
-                                item?.methodology !== "" &&
-                                item?.riskAssessmentSummary &&
-                                item?.riskAssessmentSummary !== "" &&
-                                item?.organizationStrategy &&
-                                item?.organizationStrategy !== "" &&
-                                item?.summaryRisk &&
-                                item?.summaryRisk !== "" && (
-                                  <div
-                                    className={`btn btn-labeled btn-primary shadow fitContent`}
-                                    onClick={() => handlePublish(item?.id)}
-                                  >
-                                    Publish
-                                  </div>
-                                )}
-                              {
-                                item?.summary &&
-                                item?.summary !== "" &&
-                                item?.methodology &&
-                                item?.methodology !== "" &&
-                                item?.riskAssessmentSummary &&
-                                item?.riskAssessmentSummary !== "" &&
-                                item?.organizationStrategy &&
-                                item?.organizationStrategy !== "" &&
-                                item?.summaryRisk &&
-                                item?.summaryRisk !== "" && (
-                                  <Tooltip title="Download PDF" placement="top">
-                                    <PDFDownloadLink
-                                      document={<PDFGenerator reportObject={item} />}
-                                      fileName={`${item.reportTitle}_${moment.utc(item.date).format("YYYY-MM-DD")}.pdf`}
-                                      style={{ textDecoration: "none", color: "inherit" }}
-                                    >
-                                      {({ loading }) =>
-                                        loading ? (
-                                          <i className="fa fa-spinner fa-spin f-18 cursor-pointer"></i>
-                                        ) : (
-                                          <i className="fa fa-download f-18 cursor-pointer"></i>
-                                        )
-                                      }
-                                    </PDFDownloadLink>
-                                  </Tooltip>
+                    <td>{item?.reportStatus}</td>
+                    <td>
+                      <div className="d-flex flex-wrap gap-4">
+                        {/* View */}
+                        <i
+                          className="fa fa-eye text-primary f-18 cursor-pointer"
+                          onClick={() => {
+                            const encryptedId = encryptAndEncode(
+                              item?.id.toString()
+                            );
+                            navigate(
+                              `/audit/view-planning-report/${encryptedId}`
+                            );
+                          }}
+                        ></i>
+
+                        {/* Edit */}
+                        {canEditOrDelete && (
+                          <i
+                            className="fa fa-edit text-secondary f-18 cursor-pointer"
+                            onClick={() => {
+                              const encryptedId = encryptAndEncode(
+                                item?.id.toString()
+                              );
+                              navigate(
+                                `/audit/update-planning-report/${encryptedId}`
+                              );
+                            }}
+                          ></i>
+                        )}
+
+                        {/* Delete */}
+                        {canEditOrDelete && (
+                          <i
+                            className="fa fa-trash text-danger f-18 cursor-pointer"
+                            onClick={() => handleDelete(item?.id)}
+                          ></i>
+                        )}
+
+                        {/* Publish */}
+                        {canPublish && (
+                          <div
+                            className="btn btn-labeled btn-primary shadow fitContent"
+                            onClick={() => handlePublish(item?.id)}
+                          >
+                            Publish
+                          </div>
+                        )}
+
+                        {/* PDF Download */}
+                        {isReportComplete(item) && (
+                          <Tooltip title="Download PDF" placement="top">
+                            <PDFDownloadLink
+                              document={<PDFGenerator reportObject={item} />}
+                              fileName={`${item.reportTitle}_${moment
+                                .utc(item.date)
+                                .format("YYYY-MM-DD")}.pdf`}
+                              style={{
+                                textDecoration: "none",
+                                color: "inherit",
+                              }}
+                            >
+                              {({ loading }) =>
+                                loading ? (
+                                  <i className="fa fa-spinner fa-spin f-18 cursor-pointer"></i>
+                                ) : (
+                                  <i className="fa fa-download f-18 cursor-pointer"></i>
                                 )
                               }
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    })
-                )}
-              </tbody>
-            </table>
+                            </PDFDownloadLink>
+                          </Tooltip>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* ---- Pagination ---- */}
+      {allReports?.length > 0 && (
+        <div className="row p-0 m-0">
+          <div className="col-lg-6 mb-4">
+            <Pagination
+              count={Math.ceil(totalNoOfRecords / itemsPerPage)}
+              page={page}
+              onChange={handlePageChange}
+            />
+          </div>
+          <div className="col-lg-6 mb-4 d-flex justify-content-end">
+            <FormControl sx={{ minWidth: 200 }} size="small">
+              <InputLabel id="items-per-page-label">Items Per Page</InputLabel>
+              <Select
+                labelId="items-per-page-label"
+                value={itemsPerPage}
+                onChange={handleChangeItemsPerPage}
+              >
+                <MenuItem value={10}>10</MenuItem>
+                <MenuItem value={20}>20</MenuItem>
+                <MenuItem value={30}>30</MenuItem>
+              </Select>
+            </FormControl>
           </div>
         </div>
-        {allReports?.length > 0 && (
-          <div className="row p-0 m-0">
-            <div className="col-lg-6 mb-4">
-              <Pagination
-                count={Math.ceil(totalNoOfRecords / itemsPerPage)}
-                page={page}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="col-lg-6 mb-4 d-flex justify-content-end">
-              <div>
-                <FormControl sx={{ minWidth: 200 }} size="small">
-                  <InputLabel id="demo-select-small-label">
-                    Items Per Page
-                  </InputLabel>
-                  <Select
-                    labelId="demo-select-small-label"
-                    id="demo-select-small"
-                    label="Age"
-                    value={itemsPerPage}
-                    onChange={(event) => handleChangeItemsPerPage(event)}
-                  >
-                    <MenuItem value={10}>10</MenuItem>
-                    <MenuItem value={20}>20</MenuItem>
-                    <MenuItem value={30}>30</MenuItem>
-                  </Select>
-                </FormControl>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
+      )}
     </div>
   );
 };

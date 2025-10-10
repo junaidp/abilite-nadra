@@ -1,82 +1,60 @@
-import React from "react";
-import RichTextEditor from "./RichText";
+import UpdateRichTextEditor from "../../../../../common/update-rich-text-editor/UpdateRichTextEditor";
 
+/**
+ * Renders editable rich text sections for a summarized audit report.
+ * Each section uses UpdateRichTextEditor for consistent rich-text editing experience.
+ */
 const RichTextElements = ({ editableSummarizedReport, onContentChange }) => {
+    // Reusable renderer for each editor field
+    const renderEditorField = (label, name, value, keyFindings = false) => (
+        <div className="row mb-3">
+            <div className="col-lg-12">
+                <label>{label}</label>
+                <UpdateRichTextEditor
+                    initialValue={value}
+                    onContentChange={onContentChange}
+                    name={name}
+                    keyFindings={keyFindings}
+                />
+            </div>
+        </div>
+    );
+
     return (
         <div className="border px-3 py-2 mt-3 rounded">
-            <div className="row mb-3">
-                <div className="col-lg-12">
-                    <label>Identification</label>
-                    <RichTextEditor
-                        initialValue={editableSummarizedReport?.overView}
-                        onContentChange={onContentChange}
-                        name="overView"
-                        keyFindings={false}
-                    />
-                </div>
-            </div>
-
-            <div className="row mb-3">
-                <div className="col-lg-12">
-                    <label>Executive summary</label>
-                    <RichTextEditor
-                        initialValue={editableSummarizedReport?.executiveSummary}
-                        onContentChange={onContentChange}
-                        name="executiveSummary"
-                        keyFindings={false}
-                    />
-                </div>
-            </div>
-
-            <div className="row mb-3">
-                <div className="col-lg-12">
-                    <label>Financial & Operational Key Figures</label>
-                    <RichTextEditor
-                        initialValue={editableSummarizedReport?.auditPurpose}
-                        onContentChange={onContentChange}
-                        name="auditPurpose"
-                        keyFindings={false}
-                    />
-                </div>
-            </div>
-
-            <div className="row mb-3">
-                <div className="col-lg-12">
-                    <label>Previous Audit Follow Up</label>
-                    <RichTextEditor
-                        initialValue={editableSummarizedReport?.previousAuditFollowUp}
-                        onContentChange={onContentChange}
-                        name="previousAuditFollowUp"
-                        keyFindings={false}
-                    />
-                </div>
-            </div>
-
-            <div className="row mb-3">
-                <div className="col-lg-12">
-                    <label>Operational Highlights</label>
-                    <RichTextEditor
-                        initialValue={editableSummarizedReport?.operationalHighlight}
-                        onContentChange={onContentChange}
-                        name="operationalHighlight"
-                        keyFindings={false}
-                    />
-                </div>
-            </div>
-
-            <div className="row mb-3">
-                <div className="col-lg-12">
-                    <label>Annexure</label>
-                    <RichTextEditor
-                        initialValue={editableSummarizedReport?.annexure}
-                        onContentChange={onContentChange}
-                        name="annexure"
-                        keyFindings={false}
-                    />
-                </div>
-            </div>
+            {renderEditorField(
+                "Identification",
+                "overView",
+                editableSummarizedReport?.overView
+            )}
+            {renderEditorField(
+                "Executive Summary",
+                "executiveSummary",
+                editableSummarizedReport?.executiveSummary
+            )}
+            {renderEditorField(
+                "Financial & Operational Key Figures",
+                "auditPurpose",
+                editableSummarizedReport?.auditPurpose,
+                false
+            )}
+            {renderEditorField(
+                "Previous Audit Follow Up",
+                "previousAuditFollowUp",
+                editableSummarizedReport?.previousAuditFollowUp
+            )}
+            {renderEditorField(
+                "Operational Highlights",
+                "operationalHighlight",
+                editableSummarizedReport?.operationalHighlight
+            )}
+            {renderEditorField(
+                "Annexure",
+                "annexure",
+                editableSummarizedReport?.annexure
+            )}
         </div>
     );
 };
 
-export default React.memo(RichTextElements);
+export default RichTextElements;

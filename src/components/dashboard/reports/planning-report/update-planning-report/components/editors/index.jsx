@@ -1,76 +1,56 @@
-import React from "react";
-import Editor from "../../../../../../common/rich-text/index";
+import UpdateRichTextEditor from "../../../../../../common/update-rich-text-editor/UpdateRichTextEditor";
 
-const Editors = ({ handleEditorContentChange, data }) => {
+/**
+ * Renders a collection of editable rich text sections for the planning report.
+ * Each section includes a label, editor, and word-limit note.
+ */
+const Editors = ({ onContentChange, data }) => {
+  const sections = [
+    {
+      label: "Executive Summary",
+      name: "summary",
+      value: data?.summary,
+    },
+    {
+      label: "Audit Planning Methodology",
+      name: "methodology",
+      value: data?.methodology,
+    },
+    {
+      label: "Risk Assessment Summary",
+      name: "riskAssessmentSummary",
+      value: data?.riskAssessmentSummary,
+    },
+    {
+      label:
+        "Organizational strategy, key areas of focus, key risks, and associated assurance strategies in the audit plan.",
+      name: "organizationStrategy",
+      value: data?.organizationStrategy,
+    },
+    {
+      label: "Summary of Risks",
+      name: "summaryRisk",
+      value: data?.summaryRisk,
+    },
+  ];
+
   return (
     <div>
-      <div className="row mb-3">
-        <div className="col-lg-12">
-          <label htmlFor="exampleFormControlTextarea1" className="form-label">
-            Executive Summary
-          </label>
-          <Editor
-            onContentChange={handleEditorContentChange}
-            initialValue={data?.summary}
-            name="summary"
-          />
-          <p className="word-limit-info mb-0">Maximum 1500 words</p>
+      {sections.map(({ label, name, value }, index) => (
+        <div className="row mb-3" key={index}>
+          <div className="col-lg-12">
+            <label htmlFor={name} className="form-label">
+              {label}
+            </label>
+            <UpdateRichTextEditor
+              onContentChange={onContentChange}
+              initialValue={value}
+              name={name}
+            />
+            <p className="word-limit-info mb-0">Maximum 1500 words</p>
+          </div>
         </div>
-      </div>
-      <div className="row mb-3">
-        <div className="col-lg-12">
-          <label htmlFor="exampleFormControlTextarea1" className="form-label">
-            Audit Planning Methodology
-          </label>
-          <Editor
-            onContentChange={handleEditorContentChange}
-            initialValue={data?.methodology}
-            name="methodology"
-          />
-          <p className="word-limit-info mb-0">Maximum 1500 words</p>
-        </div>
-      </div>
-      <div className="row mb-3">
-        <div className="col-lg-12">
-          <label htmlFor="exampleFormControlTextarea1" className="form-label">
-            Risk assessment summary
-          </label>
-          <Editor
-            onContentChange={handleEditorContentChange}
-            initialValue={data?.riskAssessmentSummary}
-            name="riskAssessmentSummary"
-          />
-          <p className="word-limit-info mb-0">Maximum 1500 words</p>
-        </div>
-      </div>
-      <div className="row mb-3">
-        <div className="col-lg-12">
-          <label htmlFor="exampleFormControlTextarea1" className="form-label">
-            Organizational strategy, key areas of focus, key risks, and
-            associated assurance strategies in the audit plan.
-          </label>
-          <Editor
-            onContentChange={handleEditorContentChange}
-            initialValue={data?.organizationStrategy}
-            name="organizationStrategy"
-          />
-          <p className="word-limit-info mb-0">Maximum 1500 words</p>
-        </div>
-      </div>
-
-      <div className="row mb-3">
-        <div className="col-lg-12">
-          <label htmlFor="exampleFormControlTextarea1" className="form-label">
-            Summary of risks.
-          </label>
-          <Editor
-            onContentChange={handleEditorContentChange}
-            initialValue={data?.summaryRisk}
-            name="summaryRisk"
-          />
-          <p className="word-limit-info mb-0">Maximum 1500 words</p>
-        </div>
-      </div>
+      ))}
     </div>
   );
 };

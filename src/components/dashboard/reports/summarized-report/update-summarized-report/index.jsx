@@ -1,4 +1,3 @@
-import React from "react";
 import {
     changeActiveLink,
     InitialLoadSidebarActiveLink,
@@ -6,18 +5,22 @@ import {
 import {
     setupGetSingleSummarizedReport,
     handleResetData,
-    setupUpdateSummarizedReport
+    setupUpdateSummarizedReport,
 } from "../../../../../global-redux/reducers/reports/summarized-report/slice";
 import { useDispatch, useSelector } from "react-redux";
 import { CircularProgress } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import ReportFirstLayout from "./components/FirstLayout";
 import RichTextFields from "./components/RichTextElements";
-import AuditExtraFields from "./components/AuditExtraFields";
-import Header from "./components/Header";
+import Header from "../components/Header";
 import ConsolidatedObservations from "./components/ConsolidatedObservataion";
 import { decryptString } from "../../../../../config/helper";
+import { useEffect, useCallback, useState } from "react";
 
+/**
+ * Allows editing and updating of an existing summarized audit report.
+ * Handles report data fetching, state updates, and save operations.
+ */
 const UpdateSummarizedReport = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -25,72 +28,79 @@ const UpdateSummarizedReport = () => {
     const reportId = decryptString(id);
 
     const { user } = useSelector((state) => state?.auth);
-    const { loading, allLocations, singleSummarizedReport, addReportLoading } = useSelector(
-        (state) => state?.summarizedReport
-    );
+    const { loading, allLocations, singleSummarizedReport, addReportLoading } =
+        useSelector((state) => state?.summarizedReport);
 
-    const [editableSummarizedReport, setEditableSummarizedReport] = React.useState({});
+    const [editableSummarizedReport, setEditableSummarizedReport] = useState({});
 
-    // ✅ memoized callbacks so children don’t re-render unnecessarily
-    const handleSaveSummarizedReport = React.useCallback(() => {
+    /** Save handler — triggers report update */
+    const handleSaveSummarizedReport = useCallback(() => {
         if (!addReportLoading) {
             dispatch(setupUpdateSummarizedReport(editableSummarizedReport));
         }
     }, [addReportLoading, dispatch, editableSummarizedReport]);
 
-    const handleChangeReportObject = React.useCallback((event) => {
+    /** Handles simple input/text field updates */
+    const handleChangeReportObject = useCallback((event) => {
         const { name, value } = event?.target || {};
-        setEditableSummarizedReport((pre) => ({
-            ...pre,
+        setEditableSummarizedReport((prev) => ({
+            ...prev,
             [name]: value,
         }));
     }, []);
 
-    const onContentChange = React.useCallback((content, name) => {
-        setEditableSummarizedReport((pre) => ({
-            ...pre,
+    /** Handles rich text field updates */
+    const onContentChange = useCallback((content, name) => {
+        setEditableSummarizedReport((prev) => ({
+            ...prev,
             [name]: content,
         }));
     }, []);
 
-    const onKeyFindingChangeChange = React.useCallback((content, consolidatedItemId, consolidatedObservationId) => {
-        setEditableSummarizedReport((pre) => ({
-            ...pre,
-            consolidationItemsList: pre?.consolidationItemsList?.map((item) =>
-                item.id === consolidatedItemId
-                    ? {
-                        ...item,
-                        consolidatedObservations: item?.consolidatedObservations?.map((observation) =>
-                            observation.id === consolidatedObservationId
-                                ? { ...observation, summaryOfKeyFinding: content }
-                                : observation
-                        ),
-                    }
-                    : item
-            ),
-        }));
-    }, []);
+    /** Updates nested key findings within consolidation items */
+    const onKeyFindingChange = useCallback(
+        (content, consolidatedItemId, consolidatedObservationId) => {
+            setEditableSummarizedReport((prev) => ({
+                ...prev,
+                consolidationItemsList: prev?.consolidationItemsList?.map((item) =>
+                    item.id === consolidatedItemId
+                        ? {
+                            ...item,
+                            consolidatedObservations: item?.consolidatedObservations?.map(
+                                (observation) =>
+                                    observation.id === consolidatedObservationId
+                                        ? { ...observation, summaryOfKeyFinding: content }
+                                        : observation
+                            ),
+                        }
+                        : item
+                ),
+            }));
+        },
+        []
+    );
 
-    // Effects
-    React.useEffect(() => {
-        if (!reportId) {
-            navigate("/audit/summarized-report");
-        }
+    /** Redirect if reportId is missing */
+    useEffect(() => {
+        if (!reportId) navigate("/audit/summarized-report");
     }, [reportId, navigate]);
 
-    React.useEffect(() => {
+    /** Fetch report data */
+    useEffect(() => {
         if (user[0]?.token && reportId) {
             dispatch(setupGetSingleSummarizedReport(`?reportId=${Number(reportId)}`));
         }
     }, [dispatch, user, reportId]);
 
-    React.useEffect(() => {
-        if (singleSummarizedReport && Object.keys(singleSummarizedReport).length !== 0) {
+    /** Initialize editable report state */
+    useEffect(() => {
+        if (singleSummarizedReport && Object.keys(singleSummarizedReport).length > 0) {
             setEditableSummarizedReport(singleSummarizedReport);
         }
     }, [singleSummarizedReport]);
 
-    React.useEffect(() => {
+    /** Sidebar and cleanup */
+    useEffect(() => {
         dispatch(changeActiveLink("li-summarized-report"));
         dispatch(InitialLoadSidebarActiveLink("li-reports"));
         return () => {
@@ -98,43 +108,43 @@ const UpdateSummarizedReport = () => {
         };
     }, [dispatch]);
 
+    const isReportEmpty =
+        !editableSummarizedReport ||
+        (Object.keys(editableSummarizedReport).length === 0 &&
+            editableSummarizedReport.constructor === Object);
+
     return (
         <div className="overflow-y-hidden">
             {loading ? (
                 <CircularProgress />
-            ) : !editableSummarizedReport ||
-                (Object.keys(editableSummarizedReport).length === 0 &&
-                    editableSummarizedReport.constructor === Object) ? (
+            ) : isReportEmpty ? (
                 "Summarized Report Not Found"
             ) : (
                 <div className="mb-4">
-                    <Header />
+                    <Header title="Update Summarized Report" />
+
+                    {/* Basic Info */}
                     <ReportFirstLayout
                         editableSummarizedReport={editableSummarizedReport}
                         handleChangeReportObject={handleChangeReportObject}
                     />
 
+                    {/* Text Sections */}
                     <RichTextFields
                         editableSummarizedReport={editableSummarizedReport}
                         onContentChange={onContentChange}
                     />
 
-                    {editableSummarizedReport &&
-                        editableSummarizedReport?.length !== 0 && (
-                            <ConsolidatedObservations
-                                editableSummarizedReport={editableSummarizedReport}
-                                allLocations={allLocations}
-                                onKeyFindingChangeChange={onKeyFindingChangeChange}
-                            />
-                        )}
+                    {/* Consolidated Observations */}
+                    {editableSummarizedReport?.length !== 0 && (
+                        <ConsolidatedObservations
+                            editableSummarizedReport={editableSummarizedReport}
+                            allLocations={allLocations}
+                            onKeyFindingChange={onKeyFindingChange}
+                        />
+                    )}
 
-                    {editableSummarizedReport?.intAuditExtraFieldsList &&
-                        editableSummarizedReport?.intAuditExtraFieldsList?.length !== 0 && (
-                            <AuditExtraFields
-                                editableSummarizedReport={editableSummarizedReport}
-                            />
-                        )}
-
+                    {/* Save Button */}
                     <div className="row my-3">
                         <div className="col-lg-12 d-flex justify-content-between">
                             <div
@@ -143,7 +153,7 @@ const UpdateSummarizedReport = () => {
                                 onClick={handleSaveSummarizedReport}
                             >
                                 <span className="btn-label me-2">
-                                    <i className="fa fa-check-circle f-18"></i>
+                                    <i className="fa fa-check-circle f-18" />
                                 </span>
                                 {addReportLoading ? "Loading..." : "Save"}
                             </div>
@@ -155,4 +165,4 @@ const UpdateSummarizedReport = () => {
     );
 };
 
-export default React.memo(UpdateSummarizedReport);
+export default UpdateSummarizedReport;

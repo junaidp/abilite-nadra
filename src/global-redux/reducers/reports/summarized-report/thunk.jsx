@@ -200,3 +200,21 @@ export const getAllLocations = async (data, thunkAPI) => {
         return thunkAPI.rejectWithValue(error);
     }
 };
+
+export const downloadSummarizedReport = async (data, thunkAPI) => {
+    try {
+        const { user } = thunkAPI.getState().auth;
+        let props = await axios.get(
+            `${baseUrl}/summarizedReport/report/detail/pdf?reportId=${data.reportId}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${user[0]?.token}`,
+                },
+            }
+        );
+        return props.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error);
+    }
+};
+

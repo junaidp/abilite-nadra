@@ -5,8 +5,9 @@ const UpdateRichTextEditor = ({
     initialValue,
     name,
     onContentChange,
-    handleChangeSummaryOfKeyFinding,
-    keyFindingId,
+    onKeyFindingChange,
+    consolidatedItemId,
+    consolidatedObservationId
 }) => {
     const editor = useRef(null);
     const [content, setContent] = useState("");
@@ -101,16 +102,17 @@ const UpdateRichTextEditor = ({
     const handleEditorChange = useCallback(
         (newContent) => {
             setContent(newContent);
-            if (!keyFindingId) {
+            if (!consolidatedItemId) {
                 onContentChange?.(newContent, name);
             } else {
-                handleChangeSummaryOfKeyFinding?.(
+                onKeyFindingChange?.(
                     newContent,
-                    keyFindingId
+                    consolidatedItemId,
+                    consolidatedObservationId
                 );
             }
         },
-        [keyFindingId, name, onContentChange, handleChangeSummaryOfKeyFinding]
+        [consolidatedItemId, name, onContentChange, onKeyFindingChange]
     );
 
     return (

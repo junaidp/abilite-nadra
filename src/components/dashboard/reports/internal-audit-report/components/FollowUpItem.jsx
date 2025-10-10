@@ -1,31 +1,28 @@
 import moment from "moment";
-import ViewRichTextEditor from "../../../../common/view-rich-text-editor/ViewRichTextEditor";
+import ViewRichTextEditor from "../../../../../components/common/view-rich-text-editor/ViewRichTextEditor";
 
 /**
- * Displays detailed follow-up information for a specific audit observation.
- * Includes observation details, implications, management comments, and follow-up status.
+ * FollowUpItem Component
+ * -----------------------
+ * Displays detailed information for a follow-up observation.
+ * Includes observation details, implications, management comments,
+ * implementation date, and follow-up status.
+ *
  */
-const FollowUpItem = ({ item }) => {
-    const followUp = item?.followUp || {};
-    const formattedDate = item?.implementationDate
-        ? moment(item?.implementationDate).format("YYYY-MM-DD")
-        : "";
-
+const FollowUpItem = ({ item, consolidatedObservationsItem }) => {
     return (
         <div>
-            {/* Observation Title */}
-            <div className="mb-3">
-                <label>Observation Title:</label>
-                <p>{item?.observationTitle || "N/A"}</p>
-            </div>
+            {/* Observation Title (only if not consolidated) */}
+            {!consolidatedObservationsItem && (
+                <div className="row mb-3">
+                    <div className="col-lg-12">
+                        <label>Observation Title:</label>
+                        <p>{item?.observationTitle}</p>
+                    </div>
+                </div>
+            )}
 
-            {/* Area */}
-            <div className="mb-3">
-                <label>Area:</label>
-                <p>{item?.area || "N/A"}</p>
-            </div>
-
-            {/* Observation */}
+            {/* Observation Description */}
             <div className="mb-3">
                 <label>Observation:</label>
                 <ViewRichTextEditor initialValue={item?.observationName} />
@@ -37,7 +34,7 @@ const FollowUpItem = ({ item }) => {
                 <select
                     className="form-select"
                     aria-label="Implication Rating"
-                    value={item?.implicationRating || ""}
+                    value={item?.implicationRating}
                     disabled
                 >
                     <option value="">Select One</option>
@@ -47,30 +44,28 @@ const FollowUpItem = ({ item }) => {
                 </select>
             </div>
 
-            {/* Implication */}
+            {/* Implication Description */}
             <div className="mb-3">
                 <label>Implication:</label>
                 <textarea
                     className="form-control"
+                    placeholder="Enter Reason"
                     rows="3"
                     value={item?.implication || ""}
-                    placeholder="No implication provided"
                     disabled
-                    readOnly
                 />
             </div>
 
-            {/* Auditee */}
+            {/* Auditee Information */}
             <div className="row mb-3">
                 <div className="col-lg-12">
                     <label>Auditee:</label>
                     <input
-                        type="text"
                         className="form-control w-100"
+                        type="text"
                         value={item?.auditee?.name || ""}
-                        placeholder="No auditee assigned"
+                        placeholder="Enter Observation Title here"
                         disabled
-                        readOnly
                     />
                 </div>
             </div>
@@ -87,9 +82,9 @@ const FollowUpItem = ({ item }) => {
                 <input
                     type="date"
                     className="form-control"
-                    value={formattedDate}
+                    value={moment(item?.implementationDate).format("YYYY-MM-DD")}
+                    name="implementationDate"
                     disabled
-                    readOnly
                 />
             </div>
 
@@ -99,7 +94,8 @@ const FollowUpItem = ({ item }) => {
                 <select
                     className="form-select"
                     aria-label="Recommendations Implemented"
-                    value={followUp?.recommendationsImplemented?.toString() || ""}
+                    value={item?.followUp?.recommendationsImplemented?.toString() || ""}
+                    name="recommendationsImplemented"
                     disabled
                 >
                     <option value="">Select One</option>
@@ -108,21 +104,22 @@ const FollowUpItem = ({ item }) => {
                 </select>
             </div>
 
-            {/* Final Comments (Conditional) */}
-            {followUp?.recommendationsImplemented?.toString() === "true" && (
+            {/* Final Comments (visible only if recommendations are implemented) */}
+            {item?.followUp?.recommendationsImplemented?.toString() === "true" && (
                 <div className="mb-3">
                     <label>Final Comments:</label>
-                    <ViewRichTextEditor initialValue={followUp?.finalComments} />
+                    <ViewRichTextEditor initialValue={item?.followUp?.finalComments} />
                 </div>
             )}
 
-            {/* Test In Next Year */}
+            {/* Test in Next Year */}
             <div className="mb-3 align-items-center">
                 <label className="pe-4">Test In Next Year:</label>
                 <select
                     className="form-select"
                     aria-label="Test In Next Year"
-                    value={followUp?.testInNextYear?.toString() || ""}
+                    value={item?.followUp?.testInNextYear?.toString() || ""}
+                    name="testInNextYear"
                     disabled
                 >
                     <option value="">Select One</option>

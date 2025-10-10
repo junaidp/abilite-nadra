@@ -1,34 +1,48 @@
 import React from "react";
-import Headers from "./components/header/index";
+import { useParams, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { CircularProgress } from "@mui/material";
+
+import Header from "../components/header";
+import Editors from "./components/editors";
+import ResourcesTables from "../components/resources";
+import PlanningReportFileUpload from "./components/file-upload";
+
 import {
   handleCleanUp,
   setupGetSingleReport,
   resetReportAddSuccess,
   setupUpdateSingleReport,
   setupGetSingleUpdatedReport,
-  setupGetResourceDetails
+  setupGetResourceDetails,
 } from "../../../../../global-redux/reducers/reports/planing-report/slice";
 import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
 } from "../../../../../global-redux/reducers/common/slice";
-import { useSelector, useDispatch } from "react-redux";
-import { CircularProgress } from "@mui/material";
-import Editors from "./components/editors/index";
-import HeadingTable from "./components/heading-table";
-import ResourcesTables from "../components/resources";
-import PlanningReportFileUpload from "./components/file-upload";
 import { decryptString } from "../../../../../config/helper";
-import { useParams } from "react-router-dom";
 
+/**
+ * Page component for updating an existing Internal Audit Planning Report.
+ * Handles fetching report details, updating report data, and managing attached resources/files.
+ */
 const UpdatePlanningReport = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { id } = useParams();
   const reportId = decryptString(id);
-  const { user } = useSelector((state) => state?.auth);
-  const { loading, updateLoading, singleReportObject, reportAddSuccess, resources } =
-    useSelector((state) => state?.planningReport);
 
+  // Global state
+  const { user } = useSelector((state) => state?.auth);
+  const {
+    loading,
+    updateLoading,
+    singleReportObject,
+    reportAddSuccess,
+    resources,
+  } = useSelector((state) => state?.planningReport);
+
+  // Local editable values
   const [values, setValues] = React.useState({
     summary: "",
     methodology: "",
@@ -37,26 +51,19 @@ const UpdatePlanningReport = () => {
     summaryRisk: "",
   });
 
-  function handleEditorContentChange(name, value) {
-    setValues((pre) => {
-      return {
-        ...pre,
-        [name]: value,
-      };
-    });
-  }
+  /** Handle editor content changes */
+  const onContentChange = React.useCallback((name, value) => {
+    setValues((prev) => ({ ...prev, [name]: value }));
+  }, []);
 
-  function handleUpdate() {
-    if (!updateLoading) {
-      dispatch(
-        setupUpdateSingleReport({
-          ...singleReportObject,
-          ...values,
-        })
-      );
+  /** Save updated report */
+  const handleUpdate = React.useCallback(() => {
+    if (!updateLoading && singleReportObject) {
+      dispatch(setupUpdateSingleReport({ ...singleReportObject, ...values }));
     }
-  }
+  }, [dispatch, updateLoading, singleReportObject, values]);
 
+  /** Sync local state when report data changes */
   React.useEffect(() => {
     if (singleReportObject) {
       setValues({
@@ -69,36 +76,36 @@ const UpdatePlanningReport = () => {
     }
   }, [singleReportObject]);
 
+  /** Refetch report when update succeeds */
   React.useEffect(() => {
     if (reportAddSuccess) {
       dispatch(resetReportAddSuccess());
       dispatch(setupGetSingleUpdatedReport(Number(reportId)));
     }
-  }, [reportAddSuccess]);
+  }, [dispatch, reportAddSuccess, reportId]);
 
+  /** Redirect if reportId is invalid */
   React.useEffect(() => {
-    if (!reportId) {
-      navigate("/audit/planning-report");
-    }
-  }, [reportId]);
+    if (!reportId) navigate("/audit/planning-report");
+  }, [reportId, navigate]);
 
+  /** Fetch report + resource data when mounted */
   React.useEffect(() => {
     if (user[0]?.token && reportId) {
-      const fetchDataSequentially = async () => {
+      const fetchData = async () => {
         await dispatch(setupGetSingleReport(Number(reportId)));
         await dispatch(setupGetResourceDetails({ reportId: Number(reportId) }));
       };
-      fetchDataSequentially();
+      fetchData();
     }
-  }, [dispatch]);
+  }, [dispatch, user, reportId]);
 
+  /** Sidebar state + cleanup */
   React.useEffect(() => {
     dispatch(changeActiveLink("li-internal-audit-planing-report"));
     dispatch(InitialLoadSidebarActiveLink("li-reports"));
-    return () => {
-      dispatch(handleCleanUp());
-    };
-  }, []);
+    return () => dispatch(handleCleanUp());
+  }, [dispatch]);
 
   return (
     <div>
@@ -106,31 +113,34 @@ const UpdatePlanningReport = () => {
         <CircularProgress />
       ) : (
         <>
-          <Headers data={singleReportObject} />
-          <Editors
-            handleEditorContentChange={handleEditorContentChange}
-            data={singleReportObject}
-          />
+          {/* ---- Header ---- */}
+          <Header data={singleReportObject} title="Update Planning Report" />
+
+          {/* ---- Editable Rich Text Sections ---- */}
+          <Editors onContentChange={onContentChange} data={singleReportObject} />
+
+          {/* ---- Save Button ---- */}
           <div className="d-flex justify-end">
             <button
-              className={`btn btn-labeled btn-primary px-3 shadow me-3 fitContent ${updateLoading && "disabled"
+              className={`btn btn-labeled btn-primary px-3 shadow me-3 fitContent ${updateLoading ? "disabled" : ""
                 }`}
               onClick={handleUpdate}
             >
-              <span className="btn-label me-2">
-                <i className="fa fa-check-circle f-18"></i>
-              </span>
               {updateLoading ? "Loading..." : "Save Report"}
             </button>
           </div>
+
           <hr />
-          {resources && resources.length > 0 &&
+
+          {/* ---- Resource Tables ---- */}
+          {resources?.length > 0 && (
             <>
               <ResourcesTables resources={resources} />
               <hr />
             </>
-          }
-          {/* <HeadingTable data={singleReportObject} reportId={reportId} /> */}
+          )}
+
+          {/* ---- File Upload Section ---- */}
           <PlanningReportFileUpload
             reportId={reportId}
             item={singleReportObject}

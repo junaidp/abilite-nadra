@@ -1,33 +1,33 @@
+import React from "react";
 
+/**
+ * Displays assigned resources in two views:
+ * 1. Monthly assignment overview.
+ * 2. Audit job assignment overview.
+ */
 const ResourcesTables = ({ resources }) => {
-    // Get all unique job names from resources
-    const jobColumns = Array.from(
-        new Set(
-            resources.flatMap((res) => Object.keys(res.jobs || {}))
-        )
+    // Extract all unique job names across all resources
+    const jobColumns = React.useMemo(
+        () =>
+            Array.from(
+                new Set(resources.flatMap((res) => Object.keys(res.jobs || {})))
+            ),
+        [resources]
     );
 
+    // Static month columns
     const monthColumns = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
     ];
 
     return (
         <div>
             <div className="row">
-                {/* Months Table */}
+                {/* ===== Monthly Resource Assignment ===== */}
                 <div className="col-lg-12 col-md-12 mb-4">
                     <h5 className="mb-3">Assigned Resources as per Months</h5>
+
                     <table className="table table-bordered table-hover rounded equal-columns">
                         <thead>
                             <tr>
@@ -52,9 +52,10 @@ const ResourcesTables = ({ resources }) => {
                     </table>
                 </div>
 
-                {/* Jobs Table */}
+                {/* ===== Audit Job Resource Assignment ===== */}
                 <div className="col-lg-12 col-md-12 mb-4">
                     <h5 className="mb-3">Assigned Resources as per Audit Jobs</h5>
+
                     <table className="table table-bordered table-hover rounded equal-columns">
                         <thead>
                             <tr>
@@ -76,7 +77,6 @@ const ResourcesTables = ({ resources }) => {
                         </tbody>
                     </table>
                 </div>
-
             </div>
         </div>
     );

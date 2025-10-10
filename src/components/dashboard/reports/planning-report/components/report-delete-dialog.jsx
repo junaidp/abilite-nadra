@@ -2,38 +2,44 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setupDeleteReport } from "../../../../../global-redux/reducers/reports/planing-report/slice";
 
-const PlanningReportDeleteDialog = ({
-  setShowReportDeleteDialog,
-  selectedReportId,
-}) => {
+/**
+ * Confirmation dialog for deleting a planning report.
+ * Dispatches delete action and closes automatically on success.
+ */
+const PlanningReportDeleteDialog = ({ setShowReportDeleteDialog, selectedReportId }) => {
   const dispatch = useDispatch();
   const { loading, reportAddSuccess } = useSelector(
     (state) => state?.planningReport
   );
 
-  function handleReportDelete() {
-    if (!loading) {
+  /** Handle report deletion */
+  const handleReportDelete = React.useCallback(() => {
+    if (!loading && selectedReportId) {
       dispatch(setupDeleteReport(Number(selectedReportId)));
     }
-  }
+  }, [dispatch, loading, selectedReportId]);
 
+  /** Close dialog after successful deletion */
   React.useEffect(() => {
     if (reportAddSuccess) {
       setShowReportDeleteDialog(false);
     }
-  }, [reportAddSuccess]);
+  }, [reportAddSuccess, setShowReportDeleteDialog]);
+
   return (
-    <div class="p-4">
-      <p>Are You Sure You Want To Delete Report?</p>
+    <div className="p-4">
+      <p>Are you sure you want to delete this report?</p>
+
       <div className="d-flex justify-content-between">
         <button
-          class={`btn btn-danger ${loading && "disabled"}`}
+          className={`btn btn-danger ${loading ? "disabled" : ""}`}
           onClick={handleReportDelete}
         >
           {loading ? "Loading..." : "Delete"}
         </button>
+
         <button
-          class="btn btn-primary"
+          className="btn btn-primary"
           onClick={() => setShowReportDeleteDialog(false)}
         >
           Close

@@ -1,37 +1,43 @@
-import React from "react";
-import RichTextEditor from "./RichText";
+import ViewRichTextEditor from "../../../../../common/view-rich-text-editor/ViewRichTextEditor";
 
+/**
+ * Displays all rich-text sections of an internal audit report in read-only mode.
+ * Includes executive summary, key figures, main findings, and annexure.
+ */
 const RichTextElements = ({ singleInternalAuditReport }) => {
+  const report = singleInternalAuditReport || {};
+
   return (
-    <div className="border px-3 py-2  mt-3 rounded">
+    <div className="border px-3 py-2 mt-3 rounded">
+      {/* Executive Summary */}
       <div className="row mb-3">
         <div className="col-lg-12">
-          <label>Executive summary</label>
-          <RichTextEditor
-            initialValue={singleInternalAuditReport?.executiveSummary}
-          />
+          <label>Executive Summary</label>
+          <ViewRichTextEditor initialValue={report?.executiveSummary} />
         </div>
       </div>
+
+      {/* Financial & Operational Key Figures */}
       <div className="row mb-3">
         <div className="col-lg-12">
           <label>Financial & Operational Key Figures</label>
-          <RichTextEditor
-            initialValue={singleInternalAuditReport?.auditPurpose}
-          />
+          <ViewRichTextEditor initialValue={report?.auditPurpose} />
         </div>
       </div>
+
+      {/* Summary Of Main Findings */}
       <div className="row mb-3">
         <div className="col-lg-12">
-          <label>Summary Of Main Findings</label>
-          <RichTextEditor
-            initialValue={singleInternalAuditReport?.keyFindings}
-          />
+          <label>Summary of Main Findings</label>
+          <ViewRichTextEditor initialValue={report?.keyFindings} />
         </div>
       </div>
+
+      {/* Annexure */}
       <div className="row mb-3">
         <div className="col-lg-12">
           <label>Annexure</label>
-          <RichTextEditor initialValue={singleInternalAuditReport?.annexure} />
+          <ViewRichTextEditor initialValue={report?.annexure} />
         </div>
       </div>
     </div>
