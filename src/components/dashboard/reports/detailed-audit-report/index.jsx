@@ -17,6 +17,7 @@ import {
 import {
   setupGetAllInternalAuditReports,
   resetInternalAuditReportAddSuccess,
+  handleChangeReport
 } from "../../../../global-redux/reducers/reports/consolidation-report/slice";
 
 import DeleteInternalAuditConsolidationReportDialog from "../../../modals/delete-internal-audit-consolidation-report-dialog";
@@ -385,6 +386,7 @@ const DetailedAuditReport = () => {
                                 <i
                                   className="fa fa-download f-18 cursor-pointer"
                                   onClick={() => {
+                                    dispatch(handleChangeReport(item))
                                     const encryptedId = encryptAndEncode(
                                       item?.id.toString()
                                     );

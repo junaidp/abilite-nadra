@@ -122,6 +122,9 @@ export const slice = createSlice({
         resetsummarizedReportExtraFieldsAddSuccess: (state) => {
             state.summarizedReportExtraFieldsAddSuccess = false;
         },
+        handleChangeReport: (state, { payload }) => {
+            state.singleSummarizedReport = payload
+        },
         handleResetData: (state) => {
             state.loading = false,
                 state.allSummarizedReports = [],
@@ -384,7 +387,8 @@ export const slice = createSlice({
 export const {
     resetSummarizedReportAddSuccess,
     handleResetData,
-    resetsummarizedReportExtraFieldsAddSuccess
+    resetsummarizedReportExtraFieldsAddSuccess,
+    handleChangeReport
 } = slice.actions;
 
 export default slice.reducer;

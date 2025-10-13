@@ -11,27 +11,26 @@ import "react-toastify/dist/ReactToastify.css";
 import Home from "./pages/Home";
 import Login from "./pages/auth/login/Login";
 import DashboardHome from "./pages/dashboard/home/DashboardHome";
-import BusinessObjective from "./pages/dashboard/planning/business-objective/BusinessObjective";
-import RiskAssessments from "./pages/dashboard/planning/risk-assessments/RiskAssessments";
-import AuditableUnits from "./pages/dashboard/planning/auditable-units/AuditableUnits";
-import JobPrioritization from "./pages/dashboard/planning/job-prioritization/JobPrioritization";
-import JobSecheduling from "./pages/dashboard/planning/job-scheduling/JobSeheduling";
-import AuditPlanSummary from "./pages/dashboard/planning/audit-plan-summary/AuditPlanSummary";
+import AuditUniverse from "./pages/dashboard/audit-planning/audit-universe/AuditUniverse";
+import RiskAssessments from "./pages/dashboard/audit-planning/risk-assessments/RiskAssessments";
+import AuditableUnits from "./pages/dashboard/audit-planning/auditable-units/AuditableUnits";
+import JobPrioritization from "./pages/dashboard/audit-planning/job-prioritization/JobPrioritization";
+import JobSecheduling from "./pages/dashboard/audit-planning/job-scheduling/JobSeheduling";
+import AuditPlanSummary from "./pages/dashboard/audit-planning/audit-plan-summary/AuditPlanSummary";
 import AuditEngagement from "./pages/dashboard/audit-engagement/AuditEngagement";
 import PlanningReport from "./pages/dashboard/reports/planning-report/PlanningReport";
-import ViewJobschedule from "./pages/dashboard/planning/job-scheduling/view-job-schedule/ViewJobschedule";
+import ViewJobschedule from "./pages/dashboard/audit-planning/job-scheduling/view-job-schedule/ViewJobschedule";
 import GeneratePlanningReport from "./pages/dashboard/reports/planning-report/generate-planning-report/GeneratePlanningReport";
 import UpdatePlanningReport from "./pages/dashboard/reports/planning-report/update-planning-report/UpdatePlanningReport";
 import ViewPlanningReport from "./pages/dashboard/reports/planning-report/view-planning-report/ViewPlanningReport";
-import StartScheduling from "./pages/dashboard/planning/job-scheduling/start-scheduling/StartScheduling";
-import BusinessObjectiveRedirect from "./pages/dashboard/planning/business-objective/business-objectives-redirect/BusinessObjectiveRedirect";
+import StartScheduling from "./pages/dashboard/audit-planning/job-scheduling/start-scheduling/StartScheduling";
+import BusinessObjective from "./pages/dashboard/audit-planning/audit-universe/business-objective/BusinessObjective";
 import InformationRequest from "./pages/dashboard/tasks/information-request/InformationRequest";
 import TaskManagement from "./pages/dashboard/tasks/task-management/TaskManagement";
-import SpecialProjectAudit from "./pages/dashboard/planning/business-objective/special-project-audit/SpecialProjectAudit";
-import ComplianceCheckListCard from "./pages/dashboard/planning/business-objective/compliance-checklist-card/ComplianceCheckListCard";
+import ComplianceCheckList from "./pages/dashboard/audit-planning/audit-universe/compliance-checklist/ComplianceCheckList";
 import UserProfile from "./components/user/user-profile/UserProfile";
 import KickOff from "./pages/dashboard/audit-engagement/kick-off/KickOff";
-import RiskFactorApproach from "./pages/dashboard/planning/risk-assessments/risk-factor-approach/RiskFactorApproach";
+import RiskFactorApproach from "./pages/dashboard/audit-planning/risk-assessments/risk-factor-approach/RiskFactorApproach";
 import Reporting from "./pages/dashboard/reporting-follow-up/reporting/Reporting";
 import FollowUp from "./pages/dashboard/reporting-follow-up/follow-up/FollowUp";
 import AuditParticulars from "./pages/dashboard/reporting-follow-up/reporting/reporting-particulars/ReportingParticulars";
@@ -104,7 +103,7 @@ const App = () => {
             }
           >
             <Route path="dashboard" element={<DashboardHome />} />
-            <Route path="business-objective" element={<BusinessObjective />} />
+            <Route path="business-objective" element={<AuditUniverse />} />
             <Route path="risk-assessment" element={<RiskAssessments />} />
             <Route path="auditable-unit" element={<AuditableUnits />} />
             <Route path="user/profile" element={<UserProfile />} />
@@ -137,16 +136,12 @@ const App = () => {
             <Route path="start-scheduling/:id" element={<StartScheduling />} />
             <Route
               path="business-objectives-redirect/:id"
-              element={<BusinessObjectiveRedirect />}
+              element={<BusinessObjective />}
             />
 
             <Route
-              path="special-project-audit/:id"
-              element={<SpecialProjectAudit />}
-            />
-            <Route
               path="compliance-checklist/:id"
-              element={<ComplianceCheckListCard />}
+              element={<ComplianceCheckList />}
             />
             <Route path="kick-off/:id" element={<KickOff />} />
 

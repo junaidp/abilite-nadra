@@ -16,6 +16,7 @@ import {
   consolidationFileUpload,
   consolidationFileDelete,
   consolidationFileUpdate,
+  downloadDetailedAuditReport
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -141,6 +142,13 @@ export const setupConsolidationFileUpdate = createAsyncThunk(
   }
 );
 
+export const setupDownloadDetailedAuditReport = createAsyncThunk(
+  "internalAuditConsolidationReport/downloadDetailedAuditReport",
+  async (data, thunkAPI) => {
+    return downloadDetailedAuditReport(data, thunkAPI);
+  }
+);
+
 export const slice = createSlice({
   name: "internalAuditConsolidationReport",
   initialState,
@@ -172,6 +180,9 @@ export const slice = createSlice({
       state.totalNoOfRecords = 0;
       state.selectedReport = {}
       sessionStorage.removeItem("selectedReport")
+    },
+    handleChangeReport: (state, { payload }) => {
+      state.singleInternalAuditReport = payload
     },
   },
   extraReducers: (builder) => {
@@ -494,6 +505,22 @@ export const slice = createSlice({
           toast.error("An Error has occurred");
         }
       });
+    // File Download
+    builder
+      .addCase(setupDownloadDetailedAuditReport.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupDownloadDetailedAuditReport.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(setupDownloadDetailedAuditReport.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
   },
 });
 
@@ -502,7 +529,8 @@ export const {
   handleResetData,
   resetInternalAuditReportExtraFieldsAddSuccess,
   resetFileUploadAddSuccess,
-  changeSelectedReport
+  changeSelectedReport,
+  handleChangeReport
 } = slice.actions;
 
 export default slice.reducer;

@@ -11,6 +11,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
+import moment from "moment";
 
 
 const DownloadSummarizedReport = () => {
@@ -18,11 +19,16 @@ const DownloadSummarizedReport = () => {
     const navigate = useNavigate()
     const { id } = useParams();
     const reportId = decryptString(id);
-    const { loading } = useSelector((state) => state.summarizedReport);
+    const { loading, singleSummarizedReport } = useSelector((state) => state.summarizedReport);
 
     function handleDownload() {
         if (loading) return
-        dispatch(setupDownloadSummarizedReport({ reportId }))
+
+        const fileName = singleSummarizedReport?.reportName + "_" + moment
+            .utc(singleSummarizedReport?.reportDate)
+            .format("YYYY-MM-DD") + ".pdf"
+
+        dispatch(setupDownloadSummarizedReport({ reportId, fileName }))
     }
 
 

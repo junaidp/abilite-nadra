@@ -204,17 +204,31 @@ export const getAllLocations = async (data, thunkAPI) => {
 export const downloadSummarizedReport = async (data, thunkAPI) => {
     try {
         const { user } = thunkAPI.getState().auth;
-        let props = await axios.get(
+        const response = await axios.get(
             `${baseUrl}/summarizedReport/report/detail/pdf?reportId=${data.reportId}`,
             {
                 headers: {
                     Authorization: `Bearer ${user[0]?.token}`,
                 },
+                responseType: "blob",
             }
         );
-        return props.data;
+
+        // Trigger download
+        const blob = new Blob([response.data], { type: "application/pdf" });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", data.fileName);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(url);
+
+        return true;
     } catch (error) {
         return thunkAPI.rejectWithValue(error);
     }
 };
+
 

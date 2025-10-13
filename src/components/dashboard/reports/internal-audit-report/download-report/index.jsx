@@ -1,82 +1,33 @@
 import React from "react";
-import { PDFDownloadLink } from "@react-pdf/renderer";
-import MyDocument from "./pdf";
 import {
     changeActiveLink,
     InitialLoadSidebarActiveLink
 } from "../../../../../global-redux/reducers/common/slice"
+import { decryptString } from "../../../../../config/helper";
 import {
     handleResetData,
-    setupGetSingleInternalAuditReport
+    setupDownloadInternalAuditReport,
 } from "../../../../../global-redux/reducers/reports/internal-audit-report/slice"
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { decryptString, groupByArea, convertObservationsToImagesForInternalAuditReport, htmlToPagedImages } from "../../../../../config/helper";
 import { useParams } from "react-router-dom";
 import moment from "moment";
-import { CircularProgress } from "@mui/material";
+
 
 const DownloadInternalAuditReport = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
-
-    const [groupedObservations, setGroupedObservations] = React.useState([]);
-    const [loadingImages, setLoadingImages] = React.useState(true);
-    const [data, setData] = React.useState({
-        executiveSummary: "",
-        auditPurpose: "",
-        keyFindings: "",
-        annexure: ""
-    })
-
-    const { user } = useSelector((state) => state.auth);
     const { id } = useParams();
     const reportId = decryptString(id);
-    const { singleInternalAuditReport, loading: reportLoading } = useSelector((state) => state.internalAuditReport);
-    const defaultLogoBase64 = user?.[0]?.company?.[0]?.logo?.fileData || "";
-    const logoPreview =
-        `data:image/jpeg;base64,${defaultLogoBase64}` || ""
+    const { loading, singleInternalAuditReport } = useSelector((state) => state.internalAuditReport);
 
-
-
-
-
-    React.useEffect(() => {
-        if (user[0]?.token && reportId) {
-            dispatch(
-                setupGetSingleInternalAuditReport(`?reportId=${Number(reportId)}`)
-            );
-        }
-    }, [dispatch]);
-
-    React.useEffect(() => {
-        const run = async () => {
-            if (singleInternalAuditReport?.reportingList) {
-                const grouped = groupByArea(singleInternalAuditReport?.reportingList);
-
-                // convert observations into images
-                const withImages = await convertObservationsToImagesForInternalAuditReport(grouped);
-
-                // convert executiveSummary etc. into images
-                const executiveSummaryImage = await htmlToPagedImages(singleInternalAuditReport.executiveSummary);
-                const auditPurposeImage = await htmlToPagedImages(singleInternalAuditReport.auditPurpose);
-                const keyFindingsImage = await htmlToPagedImages(singleInternalAuditReport.keyFindings);
-                const annexureImage = await htmlToPagedImages(singleInternalAuditReport.annexure);
-
-                setData({
-                    executiveSummary: executiveSummaryImage,
-                    auditPurpose: auditPurposeImage,
-                    keyFindings: keyFindingsImage,
-                    annexure: annexureImage,
-                });
-
-                setGroupedObservations(withImages);
-                setLoadingImages(false);
-            }
-        };
-        run();
-    }, [singleInternalAuditReport]);
-
+    function handleDownload() {
+        if (loading) return
+        const fileName = singleInternalAuditReport?.reportName + "_" + moment
+            .utc(singleInternalAuditReport?.reportDate)
+            .format("YYYY-MM-DD") + ".pdf"
+        dispatch(setupDownloadInternalAuditReport({ reportId, fileName }))
+    }
 
     React.useEffect(() => {
         dispatch(changeActiveLink("li-internal-audit-report"));
@@ -88,52 +39,26 @@ const DownloadInternalAuditReport = () => {
 
     return (
         <div>
-            {
-                reportLoading || loadingImages ? <CircularProgress /> : <>
-                    <header className="section-header my-3 text-start d-flex align-items-center justify-content-between mb-4">
-                        <div className="mb-0 heading">
-                            <a
-                                className="text-primary"
-                                onClick={() => navigate("/audit/internal-audit-report")}
-                            >
-                                <i className="fa fa-arrow-left text-primary fs-5 pe-3"></i>
-                            </a>
-                            Internal Audit Report
-                        </div>
-                    </header>
-                    <PDFDownloadLink
-                        document={<MyDocument reportObject={singleInternalAuditReport} logoPreview={logoPreview} groupedObservations={groupedObservations} data={data} />}
-                        fileName={`${singleInternalAuditReport?.reportName}_${moment
-                            .utc(singleInternalAuditReport?.reportDate)
-                            .format("YYYY-MM-DD")}.pdf`}
+
+            <header className="section-header my-3 text-start d-flex align-items-center justify-content-between mb-4">
+                <div className="mb-0 heading">
+                    <a
+                        className="text-primary"
+                        onClick={() => navigate("/audit/internal-audit-report")}
                     >
-                        {({ loading }) =>
-                            loading ? (
-                                <div className="d-flex flex-column align-items-start">
-                                    <button className="btn btn-labeled btn-primary px-3 shadow me-3 fitContent" disabled>
-                                        Generating PDF...
-                                    </button>
-                                    <small className="text-muted mt-2">
-                                        If the observations are large, the PDF file may take up to 3 minutes to generate.
-                                        During this time, your screen may appear frozen — please do not refresh the page.
-                                        Once the <strong>Download PDF</strong> button becomes active
-                                        (visible on hover), you will be able to download your PDF.
-                                        <br />
-                                        <strong>Note:</strong> The company logo must be added by an admin
-                                        in order to generate the PDF correctly.
-                                    </small>
-                                </div>
-                            ) : (
-                                <button className="btn btn-labeled btn-primary px-3 shadow me-3 fitContent cursor-pointer">
-                                    Download PDF
-                                </button>
-                            )
-                        }
-                    </PDFDownloadLink>
-                </>
-            }
+                        <i className="fa fa-arrow-left text-primary fs-5 pe-3"></i>
+                    </a>
+                    Internal Audit Report
+                </div>
+            </header>
+
+            <button className={`btn btn-labeled btn-primary px-3 shadow me-3 fitContent cursor-pointer ${loading && "disabled"}`} onClick={handleDownload}>
+                {loading ? "Downloading..." : "Download PDF"}
+            </button>
         </div>
     );
 };
 
 export default DownloadInternalAuditReport;
+
+

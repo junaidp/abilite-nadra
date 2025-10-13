@@ -5,6 +5,7 @@ import {
     setupGetAllSummarizedReports,
     resetSummarizedReportAddSuccess,
     setupGetAllLocations,
+    handleChangeReport
 } from "../../../../global-redux/reducers/reports/summarized-report/slice";
 import {
     CircularProgress,
@@ -269,8 +270,10 @@ const SummarizedReport = () => {
                                                         <Tooltip title="Download PDF" placement="top">
                                                             <i
                                                                 className="fa fa-download f-18 cursor-pointer"
-                                                                onClick={() =>
+                                                                onClick={() => {
+                                                                    dispatch(handleChangeReport(item))
                                                                     navigate(`/audit/download-summarized-report/${encryptedId}`)
+                                                                }
                                                                 }
                                                             ></i>
                                                         </Tooltip>

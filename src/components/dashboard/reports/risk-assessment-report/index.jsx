@@ -24,12 +24,32 @@ const poppinsStyle = {
     fontWeight: "normal",
 };
 
+// ---------- Risk Score Calculator ----------
+const handleCalculateRiskScore = (item) => {
+    let num = 0;
+
+    if (Array.isArray(item?.riskFactorValues) && item.riskFactorValues.length > 0) {
+        item.riskFactorValues.forEach((element) => {
+            const v1 = Number(element?.value1 ?? 0);
+            const v2 = Number(element?.value2 ?? 0);
+            if (!isNaN(v1) && !isNaN(v2)) {
+                num += (v1 / 100) * v2;
+            }
+        });
+    }
+
+    const likelihood = Number(item?.likelihood ?? 0);
+    const impact = Number(item?.impact ?? 0);
+    const result = num * (impact / 100) * likelihood;
+
+    return Number(result.toFixed(2));
+};
+
 const RiskAssessmentReport = () => {
     const dispatch = useDispatch();
     const mountedRef = React.useRef(false);
 
-
-    // ---- Redux state (adjust the property name if your slice differs) ----
+    // ---- Redux state ----
     const { riskAssessmentReport, loading } = useSelector(
         (state) => state?.extraReport || {}
     );
@@ -53,7 +73,7 @@ const RiskAssessmentReport = () => {
     // ---- Local pagination ----
     const [page, setPage] = React.useState(1);
 
-    // ---- Local filters (frontend-only) ----
+    // ---- Local filters ----
     const [filters, setFilters] = React.useState({
         location: [],
         subLocation: [],
@@ -72,8 +92,8 @@ const RiskAssessmentReport = () => {
             })
         );
 
-        // Reset filters only when year changes (not on mount)
         if (mountedRef.current) {
+            // reset filters on year change
             setFilters({
                 location: [],
                 subLocation: [],
@@ -90,20 +110,14 @@ const RiskAssessmentReport = () => {
         };
     }, [dispatch, companyId, selectedYear]);
 
-    // ---- Flatten API response into table rows ----
-    // API item shape:
-    // {
-    //   objective, year, auditableJobs: [{ auditJob, riskAssessments: [{ risk, likelihood, impact, riskScore }] }],
-    //   departments: [{ description }], subDepartments: [{ description }],
-    //   locations: [{ description }], subLocations: [{ description }]
-    // }
+    // ---- Flatten API response: 1 row per risk ----
     const rawData = Array.isArray(riskAssessmentReport)
         ? riskAssessmentReport
         : [];
 
     const rows = React.useMemo(() => {
         const out = [];
-        for (const item of rawData) {
+        rawData.forEach((item) => {
             const objective = item?.objective ?? "";
 
             const locations =
@@ -113,42 +127,61 @@ const RiskAssessmentReport = () => {
             const departments =
                 item?.departments?.map((d) => d?.description).filter(Boolean) ?? [];
             const subDepartments =
-                item?.subDepartments?.map((sd) => sd?.description).filter(Boolean) ??
-                [];
+                item?.subDepartments?.map((sd) => sd?.description).filter(Boolean) ?? [];
 
             const jobs = Array.isArray(item?.auditableJobs)
                 ? item.auditableJobs
                 : [];
 
             if (jobs.length === 0) {
-                // still render a row for the objective with empty audit/risk
                 out.push({
                     objective,
                     auditJob: "",
-                    risksText: "",
+                    risk: "",
+                    riskScore: 0,
                     _locations: locations,
                     _subLocations: subLocations,
                     _departments: departments,
                     _subDepartments: subDepartments,
                 });
-                continue;
+                return;
             }
 
-            for (const j of jobs) {
-                const auditJob = j?.auditJob ?? "";
-                const risks =
-                    j?.riskAssessments?.map((r) => r?.risk).filter(Boolean) ?? [];
-                out.push({
-                    objective,
-                    auditJob,
-                    risksText: risks.join(", "),
-                    _locations: locations,
-                    _subLocations: subLocations,
-                    _departments: departments,
-                    _subDepartments: subDepartments,
-                });
-            }
-        }
+            jobs.forEach((job) => {
+                const auditJob = job?.auditJob ?? "";
+                const risks = Array.isArray(job?.riskAssessments)
+                    ? job.riskAssessments
+                    : [];
+
+                if (risks.length === 0) {
+                    out.push({
+                        objective,
+                        auditJob,
+                        risk: "",
+                        riskScore: 0,
+                        _locations: locations,
+                        _subLocations: subLocations,
+                        _departments: departments,
+                        _subDepartments: subDepartments,
+                    });
+                } else {
+                    risks.forEach((riskItem) => {
+                        const risk = riskItem?.risk ?? "";
+                        const riskScore = handleCalculateRiskScore(riskItem);
+                        out.push({
+                            objective,
+                            auditJob,
+                            risk,
+                            riskScore,
+                            _locations: locations,
+                            _subLocations: subLocations,
+                            _departments: departments,
+                            _subDepartments: subDepartments,
+                        });
+                    });
+                }
+            });
+        });
         return out;
     }, [rawData]);
 
@@ -182,34 +215,29 @@ const RiskAssessmentReport = () => {
         });
     }, [rows, filters]);
 
-    // ---- Reset page when filtered data or filters change ----
     React.useEffect(() => {
         setPage(1);
     }, [filteredData, filters]);
 
     const handleChangePage = (_, value) => setPage(value);
-
-    // ---- Filter handlers ----
     const handleFilterChange = (event) => {
         const { name, value } = event.target;
         setFilters((prev) => ({ ...prev, [name]: value }));
     };
-
-    const handleYearChange = (event) => {
-        setSelectedYear(event.target.value);
-    };
+    const handleYearChange = (event) => setSelectedYear(event.target.value);
 
     // ---- Export to Excel ----
     const handleExportExcel = () => {
         const rowsForXlsx = filteredData.map((r, idx) => ({
             "Sr No.": idx + 1,
-            Objective: r.objective,
+            Risk: r.risk,
+            "Risk Score": r.riskScore,
             "Audit Job": r.auditJob,
-            Risk: r.risksText, // riskScore intentionally ignored
-            Location: (r._locations || []).join(", "),
-            "Sub Location": (r._subLocations || []).join(", "),
+            Objective: r.objective,
             Department: (r._departments || []).join(", "),
             "Sub Department": (r._subDepartments || []).join(", "),
+            Location: (r._locations || []).join(", "),
+            "Sub Location": (r._subLocations || []).join(", "),
         }));
 
         const worksheet = XLSX.utils.json_to_sheet(rowsForXlsx);
@@ -224,10 +252,9 @@ const RiskAssessmentReport = () => {
         return filteredData.slice(start, start + 10);
     }, [filteredData, page]);
 
-
     return (
         <div>
-            {/* Header + Export button (keep classnames) */}
+            {/* Header + Export button */}
             <header className="section-header my-3 text-start d-flex align-items-center justify-content-between">
                 <div className="mb-0 heading">Risk Assessment Report</div>
                 <Button variant="contained" onClick={handleExportExcel}>
@@ -235,9 +262,9 @@ const RiskAssessmentReport = () => {
                 </Button>
             </header>
 
-            {/* Filters row (keep layout/classes) */}
+            {/* Filters */}
             <div className="row mb-3">
-                {/* Year (single-select, API-trigger) */}
+                {/* Year Filter */}
                 <div className="col-lg-3">
                     <FormControl fullWidth style={poppinsStyle}>
                         <InputLabel sx={{ fontSize: 12 }} style={poppinsStyle}>
@@ -260,7 +287,7 @@ const RiskAssessmentReport = () => {
                     </FormControl>
                 </div>
 
-                {/* Local multi-select filters (frontend only) */}
+                {/* Local Filters */}
                 {[
                     { key: "location", label: "Location" },
                     { key: "subLocation", label: "Sub Location" },
@@ -296,7 +323,7 @@ const RiskAssessmentReport = () => {
                 ))}
             </div>
 
-            {/* Table (keep same classes) */}
+            {/* Table */}
             <div className="row">
                 <div className="col-lg-12">
                     <div className="table-responsive">
@@ -304,74 +331,79 @@ const RiskAssessmentReport = () => {
                             <thead className="bg-secondary text-white">
                                 <tr>
                                     <th className="min-w-80">Sr No.</th>
-                                    <th>Objective</th>
-                                    <th>Audit Job</th>
                                     <th>Risk</th>
-                                    <th>Location</th>
-                                    <th>Sub Location</th>
+                                    <th>Risk Score</th>
+                                    <th>Audit Job</th>
+                                    <th>Objective</th>
                                     <th>Department</th>
                                     <th>Sub Department</th>
+                                    <th>Location</th>
+                                    <th>Sub Location</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {loading ? (
                                     <tr>
-                                        <td colSpan={8} className="text-center">
+                                        <td colSpan={9} className="text-center">
                                             <CircularProgress />
                                         </td>
                                     </tr>
                                 ) : paginatedData.length === 0 ? (
                                     <tr>
-                                        <td colSpan={8} className="text-center">
+                                        <td colSpan={9} className="text-center">
                                             No Risk Assessment Reports To Show.
                                         </td>
                                     </tr>
                                 ) : (
                                     paginatedData.map((r, index) => (
-                                        <tr key={`${r.objective}-${r.auditJob}-${index}`}>
+                                        <tr key={`${r.objective}-${r.auditJob}-${r.risk}-${index}`}>
                                             <td>{(page - 1) * 10 + index + 1}</td>
-                                            <td>{r.objective || "-"}</td>
+                                            <td>{r.risk || "-"}</td>
+                                            <td>{r.riskScore ?? 0}</td>
                                             <td>{r.auditJob || "-"}</td>
-                                            <td>{r.risksText || "-"}</td>
+                                            <td>{r.objective || "-"}</td>
+
+                                            {/* Departments */}
                                             <td>
                                                 <div className="d-flex gap-2 flex-wrap">
-                                                    {(r._locations && r._locations.length
-                                                        ? r._locations.map((item, idx) => {
-                                                            return <Chip label={item} index={idx} />
-                                                        })
-                                                        : ["-"]
-                                                    )}
+                                                    {(r._departments?.length
+                                                        ? r._departments.map((item, idx) => (
+                                                            <Chip key={idx} label={item} />
+                                                        ))
+                                                        : ["-"])}
                                                 </div>
                                             </td>
-                                            <td >
-                                                <div className="d-flex gap-2 flex-wrap">
-                                                    {(r._subLocations && r._subLocations.length
-                                                        ? r._subLocations.map((item, idx) => {
-                                                            return <Chip label={item} index={idx} />
-                                                        })
-                                                        : ["-"]
-                                                    )}
-                                                </div>
-                                            </td>
-                                            <td >
-                                                <div className="d-flex gap-2 flex-wrap">
-                                                    {(r._departments && r._departments.length
-                                                        ? r._departments.map((item, idx) => {
-                                                            return <Chip label={item} index={idx} />
-                                                        })
-                                                        : ["-"]
-                                                    )}
-                                                </div>
-                                            </td>
-                                            <td >
-                                                <div className="d-flex gap-2 flex-wrap">
 
-                                                    {(r._subDepartments && r._subDepartments.length
-                                                        ? r._subDepartments.map((item, idx) => {
-                                                            return <Chip label={item} index={idx} />
-                                                        })
-                                                        : ["-"]
-                                                    )}
+                                            {/* Sub Departments */}
+                                            <td>
+                                                <div className="d-flex gap-2 flex-wrap">
+                                                    {(r._subDepartments?.length
+                                                        ? r._subDepartments.map((item, idx) => (
+                                                            <Chip key={idx} label={item} />
+                                                        ))
+                                                        : ["-"])}
+                                                </div>
+                                            </td>
+
+                                            {/* Locations */}
+                                            <td>
+                                                <div className="d-flex gap-2 flex-wrap">
+                                                    {(r._locations?.length
+                                                        ? r._locations.map((item, idx) => (
+                                                            <Chip key={idx} label={item} />
+                                                        ))
+                                                        : ["-"])}
+                                                </div>
+                                            </td>
+
+                                            {/* Sub Locations */}
+                                            <td>
+                                                <div className="d-flex gap-2 flex-wrap">
+                                                    {(r._subLocations?.length
+                                                        ? r._subLocations.map((item, idx) => (
+                                                            <Chip key={idx} label={item} />
+                                                        ))
+                                                        : ["-"])}
                                                 </div>
                                             </td>
                                         </tr>

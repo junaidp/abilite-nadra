@@ -106,11 +106,11 @@ const ObservationSection = ({
                     name="implication"
                     onChange={(event) => handleChange(event, item?.id)}
                     disabled={!isEditable}
-                    maxLength="1500"
-                    className={`form-control ${item?.implication?.length >= 1500 && "error-border"}`}
+                    maxLength="5000"
+                    className={`form-control ${item?.implication?.length >= 5000 && "error-border"}`}
                 ></textarea>
                 <p className="word-limit-info label-text">
-                    Maximum 1500 characters
+                    Maximum 5000 characters
                 </p>
             </div>
 
@@ -124,11 +124,11 @@ const ObservationSection = ({
                     name="recommendedActionStep"
                     onChange={(event) => handleChange(event, item?.id)}
                     disabled={!isEditable}
-                    maxLength="1500"
-                    className={`form-control ${item?.recommendedActionStep?.length >= 1500 && "error-border"}`}
+                    maxLength="5000"
+                    className={`form-control ${item?.recommendedActionStep?.length >= 5000 && "error-border"}`}
                 ></textarea>
                 <p className="word-limit-info label-text">
-                    Maximum 1500 characters
+                    Maximum 5000 characters
                 </p>
             </div>
 

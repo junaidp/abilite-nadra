@@ -17,6 +17,7 @@ import {
 import {
   setupGetAllInternalAuditReports,
   resetInternalAuditReportAddSuccess,
+  handleChangeReport
 } from "../../../../global-redux/reducers/reports/internal-audit-report/slice";
 
 import DeleteDialog from "./dialogs/DeleteDialog";
@@ -379,6 +380,7 @@ const InternalAuditReport = () => {
                                 <i
                                   className="fa fa-download f-18 cursor-pointer"
                                   onClick={() => {
+                                    dispatch(handleChangeReport(item))
                                     const encryptedId = encryptAndEncode(item?.id.toString());
                                     navigate(
                                       `/audit/download-internal-audit-report/${encryptedId}`
