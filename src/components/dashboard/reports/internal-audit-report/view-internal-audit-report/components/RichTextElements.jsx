@@ -9,6 +9,14 @@ const RichTextElements = ({ singleInternalAuditReport }) => {
 
   return (
     <div className="border px-3 py-2 mt-3 rounded">
+
+      {/* Annexure */}
+      <div className="row mb-3">
+        <div className="col-lg-12">
+          <label>Identification</label>
+          <ViewRichTextEditor initialValue={report?.annexure} />
+        </div>
+      </div>
       {/* Executive Summary */}
       <div className="row mb-3">
         <div className="col-lg-12">
@@ -30,14 +38,6 @@ const RichTextElements = ({ singleInternalAuditReport }) => {
         <div className="col-lg-12">
           <label>Summary of Main Findings</label>
           <ViewRichTextEditor initialValue={report?.keyFindings} />
-        </div>
-      </div>
-
-      {/* Annexure */}
-      <div className="row mb-3">
-        <div className="col-lg-12">
-          <label>Annexure</label>
-          <ViewRichTextEditor initialValue={report?.annexure} />
         </div>
       </div>
     </div>

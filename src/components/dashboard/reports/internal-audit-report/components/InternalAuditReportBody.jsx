@@ -182,6 +182,11 @@ const InternalAuditReportBody = ({
             {/* Main Editor Sections */}
             <div className="border px-3 py-2 mt-3 rounded">
                 {renderRichTextSection(
+                    "Identification",
+                    "annexure",
+                    reportObject?.annexure
+                )}
+                {renderRichTextSection(
                     "Executive summary",
                     "executiveSummary",
                     reportObject?.executiveSummary
@@ -216,18 +221,6 @@ const InternalAuditReportBody = ({
                 handleChangeExtraField={handleChangeExtraField}
                 handleAddExtraField={handleAddExtraField}
             />
-
-            {/* Annexure Section */}
-            <div className="row mb-3">
-                <div className="col-lg-12">
-                    <label>Annexure</label>
-                    <UpdateRichTextEditor
-                        initialValue={reportObject?.annexure}
-                        name="annexure"
-                        onContentChange={onContentChange}
-                    />
-                </div>
-            </div>
 
             {/* File Upload Section */}
             <div className="mt-4">

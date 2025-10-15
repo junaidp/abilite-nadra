@@ -104,7 +104,7 @@ const DetailedAuditReportLayout = ({
       <div className="border px-3 py-2 mt-3 rounded">
         <div className="row mb-3">
           <div className="col-lg-12">
-            <label>Executive summary</label>
+            <label>Table of Content</label>
             <UpdateRichTextEditor
               initialValue={reportObject?.executiveSummary}
               name="executiveSummary"
