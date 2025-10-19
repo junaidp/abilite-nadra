@@ -15,8 +15,9 @@ const ApproveDetailedAuditReportDialog = ({ currentReportItem, setShowApproveDia
     if (!addReportLoading) {
       dispatch(
         setupApproveInternalAuditReport({
-          ...currentReportItem,
+          submitted: true,
           approved: true,
+          internalAuditReportId: currentReportItem?.id,
         })
       );
     }

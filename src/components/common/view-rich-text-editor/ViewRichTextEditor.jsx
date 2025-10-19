@@ -47,7 +47,9 @@ const ViewRichTextEditor = ({ initialValue }) => {
         "|",
         "align",
         "|",
-        "fullsize"
+        "fullsize",
+        "|",
+        "brush"
       ],
 
       buttonsXS: [
@@ -75,7 +77,9 @@ const ViewRichTextEditor = ({ initialValue }) => {
         "|",
         "align",
         "|",
-        "fullsize"
+        "fullsize",
+        "|",
+        "brush"
       ],
       removeButtons: ['about'],
       events: {},

@@ -16,8 +16,9 @@ const DetailedAuditReportSubmitDialog = ({
     if (addReportLoading) return; // prevent double submission
     dispatch(
       setupSubmitInternalAuditReport({
-        ...currentReportItem,
         submitted: true,
+        approved: false,
+        internalAuditReportId: currentReportItem?.id,
       })
     );
   }, [dispatch, currentReportItem, addReportLoading]);

@@ -56,7 +56,9 @@ const RichTextEditor = ({
         "|",
         "align",
         "|",
-        "fullsize"
+        "fullsize",
+        "|",
+        "brush"
       ],
 
       buttonsXS: [
@@ -84,7 +86,9 @@ const RichTextEditor = ({
         "|",
         "align",
         "|",
-        "fullsize"
+        "fullsize",
+        "|",
+        "brush"
       ],
 
 

@@ -5,7 +5,7 @@ export const getAllInternalAuditReports = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.get(
-      `${baseUrl}/consolidatedReports/report/getAll?companyId=${data?.companyId}&pageNo=${data?.page}&pageSize=${data?.itemsPerPage}&Year=${data?.year}`,
+      `${baseUrl}/consolidatedReports/report/getAll/light?companyId=${data?.companyId}&pageNo=${data?.page}&pageSize=${data?.itemsPerPage}&Year=${data?.year}`,
       {
         headers: {
           Authorization: `Bearer ${user[0]?.token}`,
@@ -40,8 +40,8 @@ export const submitInternalAuditReport = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
-      `${baseUrl}/consolidatedReports/update`,
-      data,
+      `${baseUrl}/consolidatedReports/report/updateStatus?submitted=${data.submitted}&approved=${data.approved}&internalAuditReportId=${data?.internalAuditReportId}`,
+      null,
       {
         headers: {
           Authorization: `Bearer ${user[0]?.token}`,
@@ -57,8 +57,8 @@ export const approveInternalAuditReport = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
-      `${baseUrl}/consolidatedReports/update`,
-      data,
+      `${baseUrl}/consolidatedReports/report/updateStatus?submitted=${data.submitted}&approved=${data.approved}&internalAuditReportId=${data?.internalAuditReportId}`,
+      null,
       {
         headers: {
           Authorization: `Bearer ${user[0]?.token}`,

@@ -54,7 +54,7 @@ const InternalAuditReport = () => {
 
   // Local states
   const [page, setPage] = React.useState(1);
-  const [itemsPerPage, setItemsPerPage] = React.useState(5);
+  const [itemsPerPage, setItemsPerPage] = React.useState(10);
   const [currentReportItem, setCurrentReportItem] = React.useState({});
   const [showSubmitReportDialog, setShowSubmitReportDialog] = React.useState(false);
   const [showApproveDialog, setShowApproveDialog] = React.useState(false);
@@ -102,12 +102,12 @@ const InternalAuditReport = () => {
       const companyId = user[0]?.company?.find((c) => c?.companyName === company)?.id;
       if (companyId) {
         setPage(1);
-        setItemsPerPage(5);
+        setItemsPerPage(10);
         dispatch(
           setupGetAllInternalAuditReports({
             companyId,
             page: 1,
-            itemsPerPage: 5,
+            itemsPerPage: 10,
             year,
           })
         );
@@ -140,12 +140,12 @@ const InternalAuditReport = () => {
     const companyId = user[0]?.company?.find((c) => c?.companyName === company)?.id;
     if (companyId) {
       setPage(1);
-      setItemsPerPage(5);
+      setItemsPerPage(10);
       dispatch(
         setupGetAllInternalAuditReports({
           companyId,
           page: 1,
-          itemsPerPage: 5,
+          itemsPerPage: 10,
           year,
         })
       );
@@ -278,7 +278,7 @@ const InternalAuditReport = () => {
                 ) : (
                   allInternalAuditReports?.map((item, index) => {
                     const isCreatedByUser =
-                      Number(item?.createdBy) === Number(user[0]?.userId?.id);
+                      item?.preparedBy === user[0]?.userId?.name
                     const isIAH =
                       user[0]?.userId?.employeeid?.userHierarchy === "IAH";
 
@@ -326,8 +326,6 @@ const InternalAuditReport = () => {
 
                             {/* Submit */}
                             {item?.reportName &&
-                              item?.executiveSummary &&
-                              item?.auditPurpose &&
                               !item?.submitted &&
                               isCreatedByUser && (
                                 <div
@@ -345,32 +343,6 @@ const InternalAuditReport = () => {
                                 onClick={() => handleApproveReport(item)}
                               >
                                 Approve
-                              </div>
-                            )}
-
-                            {/* Feedback */}
-                            {item?.submitted && !item?.approved && isIAH && (
-                              <div
-                                className="btn btn-labeled btn-primary shadow h-35"
-                                onClick={() => {
-                                  setCurrentReportItem(item);
-                                  setFeedBackDialog(true);
-                                }}
-                              >
-                                FeedBack
-                              </div>
-                            )}
-
-                            {/* View Feedback */}
-                            {item?.feedback?.id && (
-                              <div
-                                className="btn btn-labeled btn-primary shadow h-35"
-                                onClick={() => {
-                                  setCurrentReportItem(item);
-                                  setViewFeedBackDialog(true);
-                                }}
-                              >
-                                View FeedBack
                               </div>
                             )}
 
@@ -419,7 +391,6 @@ const InternalAuditReport = () => {
                     value={itemsPerPage}
                     onChange={handleChangeItemsPerPage}
                   >
-                    <MenuItem value={5}>5</MenuItem>
                     <MenuItem value={10}>10</MenuItem>
                     <MenuItem value={20}>20</MenuItem>
                     <MenuItem value={30}>30</MenuItem>

@@ -56,6 +56,8 @@ const UpdateRichTextEditor = ({
                 "align",
                 "|",
                 "fullsize",
+                "|",
+                "brush"
             ],
             buttonsXS: [
                 "bold",
@@ -83,6 +85,8 @@ const UpdateRichTextEditor = ({
                 "align",
                 "|",
                 "fullsize",
+                "|",
+                "brush"
             ],
             removeButtons: ["about"],
             events: {},

@@ -52,7 +52,9 @@ const RichTextEditor = ({ onContentChange, initialValue, name, editable }) => {
         "|",
         "align",
         "|",
-        "fullsize"
+        "fullsize",
+        "|",
+        "brush"
       ],
 
       buttonsXS: [
@@ -80,7 +82,9 @@ const RichTextEditor = ({ onContentChange, initialValue, name, editable }) => {
         "|",
         "align",
         "|",
-        "fullsize"
+        "fullsize",
+        "|",
+        "brush"
       ],
       removeButtons: ['about'],
       events: {},

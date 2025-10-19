@@ -11,6 +11,7 @@ const AccordianItem = ({
   index,
   item,
   handleChange,
+  handleChangeImplementationDate,
   handleSave,
   handleSaveToStep7,
   loading,
@@ -21,6 +22,7 @@ const AccordianItem = ({
   setViewThirdFeedBackDialog,
   setViewFeedBackItem,
   handleShowTestInNextYear,
+  handleShowImplementationDate,
   setShowSubmitDialog,
   setShowCurrentSubmittedItem,
   handleFinalCommentsChange,
@@ -54,6 +56,8 @@ const AccordianItem = ({
             handleFinalCommentsChange={handleFinalCommentsChange}
             singleReport={singleReport}
             handleShowTestInNextYear={handleShowTestInNextYear}
+            handleShowImplementationDate={handleShowImplementationDate}
+            handleChangeImplementationDate={handleChangeImplementationDate}
           />
 
           <ActionButtons

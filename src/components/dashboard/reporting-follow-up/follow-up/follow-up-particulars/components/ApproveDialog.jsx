@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setupApproveReporting } from "../../../../../../global-redux/reducers/reporting/slice";
+import { setupApproveReporting, setupUpdateFollowUp } from "../../../../../../global-redux/reducers/reporting/slice";
 
 const ApproveDialog = ({ setApproveDialog, currentApproveItem }) => {
   const dispatch = useDispatch();
@@ -8,11 +8,30 @@ const ApproveDialog = ({ setApproveDialog, currentApproveItem }) => {
     (state) => state?.reporting
   );
 
-  function handleApproveFollowUp() {
-    if (!loading) {
-      dispatch(setupApproveReporting({ ...currentApproveItem, stepNo: 7 }));
+  const handleApproveFollowUp = async () => {
+    if (loading) return;
+
+    try {
+      await dispatch(
+        setupUpdateFollowUp({
+          ...currentApproveItem?.followUp,
+          testInNextYear:
+            currentApproveItem?.followUp?.testInNextYear.toString() === "true",
+        })
+      ).unwrap();
+
+      await dispatch(
+        setupApproveReporting({
+          ...currentApproveItem,
+          stepNo: 7,
+        })
+      ).unwrap();
+
+    } catch (error) {
+      console.error("Error approving follow-up:", error);
     }
-  }
+  };
+
 
   React.useEffect(() => {
     if (approveAddSuccess) {

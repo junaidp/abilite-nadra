@@ -167,7 +167,7 @@ const AditSteps = ({
                         currentAuditEngagement.auditStep.stepList.map(
                           (item, index) => (
                             <tr key={index}>
-                              <td>{item?.id}</td>
+                              <td>{index + 1}</td>
                               <td>
                                 <div
                                   onClick={() => {

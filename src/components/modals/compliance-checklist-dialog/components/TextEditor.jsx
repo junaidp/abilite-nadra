@@ -57,7 +57,9 @@ const RichTextEditor = ({
         "|",
         "paragraph",
         "|",
-        "image"
+        "image",
+        "|",
+        "brush"
       ],
 
       buttonsXS: [
@@ -81,7 +83,9 @@ const RichTextEditor = ({
         "|",
         "paragraph",
         "|",
-        "image"
+        "image",
+        "|",
+        "brush"
       ],
     }),
     [singleItem?.remarks]
