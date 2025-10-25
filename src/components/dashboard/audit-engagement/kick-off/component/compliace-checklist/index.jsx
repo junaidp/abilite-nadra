@@ -92,9 +92,10 @@ const ComplianceCheckList = ({
         >
           <div className="d-flex w-100 me-3 align-items-center justify-content-between">
             <div className=" d-flex align-items-center">
-              {singleAuditEngagementObject?.auditStepChecklistList?.find(
-                (singleItem) => singleItem?.approved === true
-              ) && (
+              {singleAuditEngagementObject?.auditStepChecklistList?.length > 0 &&
+                singleAuditEngagementObject?.auditStepChecklistList?.every(
+                  (item) => item?.approved === true
+                ) && (
                   <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
                 )}
               Compliance Checklist

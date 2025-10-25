@@ -80,21 +80,6 @@ const FollowUpParticulars = () => {
     }));
   }, []);
 
-  // Generic input handler
-  const handleChangeImplementationDate = useCallback((event, id) => {
-    setReport((prev) => ({
-      ...prev,
-      reportingList: prev?.reportingList?.map((singleItem) =>
-        Number(singleItem?.id) === Number(id)
-          ? {
-            ...singleItem,
-            implementationDate: event?.target?.value,
-          }
-          : singleItem
-      ),
-    }));
-  }, []);
-
   // RichText final comments handler
   const handleFinalCommentsChange = useCallback((id, content) => {
     setReport((prev) => ({
@@ -169,20 +154,6 @@ const FollowUpParticulars = () => {
         singleReport?.resourceAllocation?.resourcesList?.some(
           (res) => Number(res?.id) === userId
         )
-      );
-    },
-    [user, singleReport]
-  );
-
-  // Show "Implementation Date"
-  const handleShowImplementationDate = useCallback(
-    (item) => {
-      if (item?.stepNo > 6) return false;
-
-      const hierarchy = user[0]?.userId?.employeeid?.userHierarchy;
-
-      return (
-        hierarchy === "IAH"
       );
     },
     [user, singleReport]
@@ -358,7 +329,6 @@ const FollowUpParticulars = () => {
                               handleFinalCommentsChange={handleFinalCommentsChange}
                               item={item}
                               handleChange={handleChange}
-                              handleChangeImplementationDate={handleChangeImplementationDate}
                               handleSave={handleSave}
                               handleSaveToStep7={handleSaveToStep7}
                               loading={loading}
@@ -378,7 +348,6 @@ const FollowUpParticulars = () => {
                               handleShowTestInNextYear={
                                 handleShowTestInNextYear
                               }
-                              handleShowImplementationDate={handleShowImplementationDate}
                               setShowSubmitDialog={setShowSubmitDialog}
                               setShowCurrentSubmittedItem={
                                 setShowCurrentSubmittedItem

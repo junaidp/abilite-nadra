@@ -82,8 +82,8 @@ const ResourceAllocation = ({
           aria-controls="flush-collapseThree"
         >
           {singleJobSchedulingObject?.resourceAllocation?.resourcesList &&
-          singleJobSchedulingObject?.resourceAllocation?.resourcesList
-            ?.length ? (
+            singleJobSchedulingObject?.resourceAllocation?.resourcesList
+              ?.length && singleJobSchedulingObject?.resourceAllocation?.proposedJobApprover && singleJobSchedulingObject?.resourceAllocation?.backupHeadOfInternalAudit ? (
             <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
           ) : null}
           Resource Allocation
@@ -124,14 +124,14 @@ const ResourceAllocation = ({
                     ?.filter(
                       (singleItem) =>
                         singleItem?.employeeid?.userHierarchy !==
-                          "Management_Auditee" &&
+                        "Management_Auditee" &&
                         singleItem?.employeeid?.userHierarchy !== "IAH"
                     )
                     ?.map((all) => all?.name)}
                   allUsers={allUsers?.filter(
                     (singleItem) =>
                       singleItem?.employeeid?.userHierarchy !==
-                        "Management_Auditee" &&
+                      "Management_Auditee" &&
                       singleItem?.employeeid?.userHierarchy !== "IAH"
                   )}
                 />
@@ -151,14 +151,14 @@ const ResourceAllocation = ({
                     ?.filter(
                       (singleItem) =>
                         singleItem?.employeeid?.userHierarchy !==
-                          "Management_Auditee" &&
+                        "Management_Auditee" &&
                         singleItem?.employeeid?.userHierarchy !== "IAH"
                     )
                     ?.map((all) => all?.name)}
                   allUsers={allUsers?.filter(
                     (singleItem) =>
                       singleItem?.employeeid?.userHierarchy !==
-                        "Management_Auditee" &&
+                      "Management_Auditee" &&
                       singleItem?.employeeid?.userHierarchy !== "IAH"
                   )}
                   singleJobSchedulingObject={singleJobSchedulingObject}
@@ -187,22 +187,21 @@ const ResourceAllocation = ({
               (singleJobSchedulingObject?.complete === true &&
                 singleJobSchedulingObject?.locked === false &&
                 user[0]?.userId?.employeeid?.userHierarchy === "IAH")) && (
-              <div className="row mt-3">
-                <div className="col-lg-12 justify-content-end text-end">
-                  <div
-                    className={`btn btn-labeled btn-primary px-3 shadow ${
-                      loading && "disabled"
-                    }`}
-                    onClick={handleSave}
-                  >
-                    <span className="btn-label me-2">
-                      <i className="fa fa-check-circle"></i>
-                    </span>
-                    {loading ? "Loading..." : "Save"}
+                <div className="row mt-3">
+                  <div className="col-lg-12 justify-content-end text-end">
+                    <div
+                      className={`btn btn-labeled btn-primary px-3 shadow ${loading && "disabled"
+                        }`}
+                      onClick={handleSave}
+                    >
+                      <span className="btn-label me-2">
+                        <i className="fa fa-check-circle"></i>
+                      </span>
+                      {loading ? "Loading..." : "Save"}
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
           </div>
         </div>
       </div>

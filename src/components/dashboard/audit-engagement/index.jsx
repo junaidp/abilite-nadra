@@ -51,6 +51,24 @@ const AuditEngagement = () => {
     }
   }
 
+  function handleCheckStatus(item) {
+    if (item?.jobType !== "Compliance Checklist" || item?.status === "Kick Off") {
+      return item.status;
+    } else {
+      const allApproved = item?.auditStepChecklistList?.every(
+        (step) => step?.approved === true
+      );
+
+      let status = "";
+      if (allApproved) {
+        status = "Complete";
+      } else {
+        status = "In Progress";
+      }
+      return status;
+    }
+  }
+
   React.useEffect(() => {
     if (kickOffRequest === "Kick-Off") {
       navigate("/audit/kick-off");
@@ -158,15 +176,15 @@ const AuditEngagement = () => {
                               <td>
                                 {item?.plannedStartDate
                                   ? moment
-                                      .utc(item?.plannedStartDate)
-                                      .format("DD-MM-YYYY")
+                                    .utc(item?.plannedStartDate)
+                                    .format("DD-MM-YYYY")
                                   : "null"}
                               </td>
                               <td>
                                 {item?.plannedEndDate
                                   ? moment
-                                      .utc(item?.plannedEndDate)
-                                      .format("DD-MM-YYYY")
+                                    .utc(item?.plannedEndDate)
+                                    .format("DD-MM-YYYY")
                                   : "null"}
                               </td>
                               <td>{item?.jobType ? item?.jobType : "null"}</td>
@@ -208,7 +226,9 @@ const AuditEngagement = () => {
                                   }}
                                   className="kink-off"
                                 >
-                                  {item?.status}
+                                  {
+                                    handleCheckStatus(item)
+                                  }
                                 </div>
                               </td>
                               <td>

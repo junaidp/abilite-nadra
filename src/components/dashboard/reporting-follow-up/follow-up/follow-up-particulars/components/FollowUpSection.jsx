@@ -15,8 +15,6 @@ import FollowUpFileUpload from "./FileUpload";
  * - handleFinalCommentsChange (id, content)
  * - singleReport
  * - handleShowTestInNextYear (item) => boolean
- * - handleShowImplementationDate (item) => boolean
- * - handleChangeImplementationDate (item,id) => boolean
  */
 const FollowUpSection = ({
     item,
@@ -24,9 +22,7 @@ const FollowUpSection = ({
     handleAllowEditLastSection,
     handleFinalCommentsChange,
     singleReport,
-    handleShowTestInNextYear,
-    handleShowImplementationDate,
-    handleChangeImplementationDate
+    handleShowTestInNextYear
 }) => {
     const recommendationsValue = item?.followUp?.recommendationsImplemented?.toString();
 
@@ -40,9 +36,7 @@ const FollowUpSection = ({
                     type="date"
                     className="form-control"
                     value={moment(item?.implementationDate).format("YYYY-MM-DD")}
-                    onChange={(event) => handleChangeImplementationDate(event, item?.id)}
-                    disabled={!handleShowImplementationDate(item)}
-                    name="implementationDate"
+                    disabled
                 />
             </div>
 

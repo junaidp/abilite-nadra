@@ -546,6 +546,8 @@ const StartScheduling = () => {
                 ) &&
                 singleJobSchedulingObject?.complete === false &&
                 singleJobSchedulingObject?.resourceAllocation?.resourcesList &&
+                singleJobSchedulingObject?.resourceAllocation?.proposedJobApprover &&
+                singleJobSchedulingObject?.resourceAllocation?.backupHeadOfInternalAudit &&
                 singleJobSchedulingObject?.resourceAllocation?.resourcesList
                   ?.length !== 0 &&
                 currentJobSchedulingObject?.locationList &&
