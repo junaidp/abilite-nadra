@@ -17,6 +17,7 @@ import { CircularProgress } from "@mui/material";
 
 import AccordianItem from "./components/AccordianItem";
 import ApproveDialog from "./components/ApproveDialog";
+import NewDateApproveDialog from "./components/NewDateApproveDialog";
 import FeedBackDialog from "../../components/FeedBackDialog";
 import ViewThirdFeedBackDialog from "../../components/ThirdFeedBack";
 import SubmitDialog from "./components/SubmitDialog";
@@ -50,6 +51,7 @@ const FollowUpParticulars = () => {
   const [report, setReport] = useState([]);
   const [currentApproveItem, setCurrentApproveItem] = useState({});
   const [approveDialog, setApproveDialog] = useState(false);
+  const [newDateApproveDialog, setNewDateApproveDialog] = useState(false);
   const [feedBackDialog, setFeedBackDialog] = useState(false);
   const [currentReportingAndFollowUpId, setCurrentReportingAndFollowUpId] =
     useState("");
@@ -108,9 +110,8 @@ const FollowUpParticulars = () => {
             recommendationsImplemented:
               item?.followUp?.recommendationsImplemented.toString() === "true",
             finalComments:
-              item?.followUp?.recommendationsImplemented.toString() === "true"
-                ? item?.followUp?.finalComments
-                : "",
+              item?.followUp?.finalComments,
+            nextImplementationDate: item?.followUp?.recommendationsImplemented.toString() === "false" ? item?.followUp?.nextImplementationDate : null
           })
         );
       }
@@ -123,6 +124,15 @@ const FollowUpParticulars = () => {
     (item) => {
       setCurrentApproveItem(item);
       setApproveDialog(true);
+    },
+    [dispatch, loading]
+  );
+
+  // Save and proceed to Step 5
+  const handleSaveToStep5 = useCallback(
+    (item) => {
+      setCurrentApproveItem(item);
+      setNewDateApproveDialog(true);
     },
     [dispatch, loading]
   );
@@ -262,6 +272,14 @@ const FollowUpParticulars = () => {
           />
         </ModalWrapper>
       )}
+      {newDateApproveDialog && (
+        <ModalWrapper>
+          <NewDateApproveDialog
+            setNewDateApproveDialog={setNewDateApproveDialog}
+            currentApproveItem={currentApproveItem}
+          />
+        </ModalWrapper>
+      )}
       {feedBackDialog && (
         <div className="model-parent">
           <div className="model-wrap">
@@ -331,6 +349,7 @@ const FollowUpParticulars = () => {
                               handleChange={handleChange}
                               handleSave={handleSave}
                               handleSaveToStep7={handleSaveToStep7}
+                              handleSaveToStep5={handleSaveToStep5}
                               loading={loading}
                               singleReport={singleReport}
                               followUpId={followUpId}

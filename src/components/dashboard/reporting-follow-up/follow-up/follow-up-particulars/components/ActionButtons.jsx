@@ -13,6 +13,7 @@ const ActionButtons = ({
     loading,
     handleSave,
     handleSaveToStep7,
+    handleSaveToStep5,
     setCurrentReportingAndFollowUpId,
     setFeedBackDialog,
     setShowCurrentSubmittedItem,
@@ -29,12 +30,12 @@ const ActionButtons = ({
     const isStep6Approver = useMemo(() => {
         const userId = Number(user?.[0]?.userId?.id);
         const hierarchy = user?.[0]?.userId?.employeeid?.userHierarchy;
-        const allocation = singleReport?.resourceAllocation;
+        const allResources = singleReport?.resourceAllocation;
         return (
             hierarchy === "IAH" ||
-            userId === Number(allocation?.backupHeadOfInternalAudit?.id) ||
-            userId === Number(allocation?.proposedJobApprover?.id) ||
-            allocation?.resourcesList?.some((r) => Number(r?.id) === userId)
+            userId === Number(allResources?.backupHeadOfInternalAudit?.id) ||
+            userId === Number(allResources?.proposedJobApprover?.id) ||
+            allResources?.resourcesList?.some((r) => Number(r?.id) === userId)
         );
     }, [user, singleReport]);
 
@@ -69,12 +70,21 @@ const ActionButtons = ({
                     {/* Step 6: Approve + Feedback for approvers/resources */}
                     {item?.stepNo === 6 && isStep6Approver && (
                         <>
-                            <button
-                                className={`btn btn-labeled btn-primary mx-4 mt-3 shadow ${disabledClass}`}
-                                onClick={() => handleSaveToStep7(item)}
-                            >
-                                {loading ? "Loading..." : "Approve"}
-                            </button>
+                            {
+                                item.followUp.recommendationsImplemented ?
+                                    <button
+                                        className={`btn btn-labeled btn-primary mx-4 mt-3 shadow ${disabledClass}`}
+                                        onClick={() => handleSaveToStep7(item)}
+                                    >
+                                        {loading ? "Loading..." : "Approve"}
+                                    </button> :
+                                    <button
+                                        className={`btn btn-labeled btn-primary mx-4 mt-3 shadow ${disabledClass}`}
+                                        onClick={() => handleSaveToStep5(item)}
+                                    >
+                                        {loading ? "Loading..." : "Approve"}
+                                    </button>
+                            }
 
                             <button
                                 className={`btn btn-labeled btn-primary  mx-4 mt-3 shadow ${disabledClass}`}

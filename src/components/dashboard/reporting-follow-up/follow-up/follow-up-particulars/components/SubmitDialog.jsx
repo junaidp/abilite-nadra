@@ -18,12 +18,25 @@ const SubmitDialog = ({ item, setShowSubmitDialog }) => {
     }
 
     if (
-      item?.followUp?.recommendationsImplemented.toString() === "true" &&
+      (
+        item?.followUp?.recommendationsImplemented.toString() === "true" ||
+        item?.followUp?.recommendationsImplemented.toString() === "false"
+      ) &&
       (!item?.followUp?.finalComments ||
         item?.followUp?.finalComments.trim() === "")
     ) {
       toast.error(
         "Final Comments missing. Please provide them first and then submit the observation"
+      );
+      return;
+    }
+
+    if (
+      item?.followUp?.recommendationsImplemented.toString() === "false" &&
+      !item?.followUp?.nextImplementationDate
+    ) {
+      toast.error(
+        "Next Implementation date missing. Please provide them first and then submit the observation"
       );
       return;
     }
@@ -35,9 +48,8 @@ const SubmitDialog = ({ item, setShowSubmitDialog }) => {
           recommendationsImplemented:
             item?.followUp?.recommendationsImplemented.toString() === "true",
           finalComments:
-            item?.followUp?.recommendationsImplemented.toString() === "true"
-              ? item?.followUp?.finalComments
-              : "",
+            item?.followUp?.finalComments,
+          nextImplementationDate: item?.followUp?.recommendationsImplemented.toString() === "false" ? item?.followUp?.nextImplementationDate : null
         })
       ).unwrap();
 

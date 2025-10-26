@@ -26,6 +26,7 @@ const FollowUpSection = ({
 }) => {
     const recommendationsValue = item?.followUp?.recommendationsImplemented?.toString();
 
+
     return (
         <>
             <FollowUpFileUpload item={item} />
@@ -55,21 +56,37 @@ const FollowUpSection = ({
                 </select>
             </div>
 
-            {recommendationsValue === "true" && (
+            <div className="mb-4">
+                <label>Final Comments:</label>
+                <RichTextEditor
+                    onContentChange={handleFinalCommentsChange}
+                    initialValue={item?.followUp?.finalComments}
+                    id={item?.id}
+                    editable={handleAllowEditLastSection(item) ? "true" : "false"}
+                    singleReport={singleReport}
+                    item={item}
+                />
+            </div>
+
+            {recommendationsValue === "false" && (
                 <div className="mb-4">
-                    <label>Final Comments:</label>
-                    <RichTextEditor
-                        onContentChange={handleFinalCommentsChange}
-                        initialValue={item?.followUp?.finalComments}
-                        id={item?.id}
-                        editable={handleAllowEditLastSection(item) ? "true" : "false"}
-                        singleReport={singleReport}
-                        item={item}
+                    <label className="py-1">Next Implementation Date:</label>
+                    <input
+                        type="date"
+                        className="form-control"
+                        value={
+                            item?.followUp.nextImplementationDate
+                                ? moment(item.followUp.nextImplementationDate).format("YYYY-MM-DD")
+                                : ""
+                        }
+                        name="nextImplementationDate"
+                        onChange={(event) => handleChange(event, item?.id)}
+                        disabled={!handleAllowEditLastSection(item)}
                     />
                 </div>
             )}
 
-            {item?.stepNo >= 6 && (
+            {item?.stepNo >= 6 && item.followUp.recommendationsImplemented && (
                 <div className="mb-4 align-items-center">
                     <label className="pe-4">Test In Next Year:</label>
                     <select

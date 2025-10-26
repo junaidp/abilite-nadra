@@ -7,7 +7,8 @@ import React from "react";
 const AccordionHeader = ({ index, item }) => {
   const statusLabel = (() => {
     if (Number(item?.stepNo) === 5) return "Exception To Be  Implemented";
-    if (Number(item?.stepNo) === 6) return "Exceptions Implemented";
+    if (Number(item?.stepNo) === 6 && item.followUp.recommendationsImplemented) return "Exceptions Implemented";
+    if (Number(item?.stepNo) === 6 && !item.followUp.recommendationsImplemented) return "Exception To Be  Implemented";
     if (Number(item?.stepNo) >= 7) return "Observation Completed";
     return "";
   })();

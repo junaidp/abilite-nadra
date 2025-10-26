@@ -13,6 +13,7 @@ const AccordianItem = ({
   handleChange,
   handleSave,
   handleSaveToStep7,
+  handleSaveToStep5,
   loading,
   singleReport,
   setCurrentReportingAndFollowUpId,
@@ -63,6 +64,7 @@ const AccordianItem = ({
             loading={loading}
             handleSave={handleSave}
             handleSaveToStep7={handleSaveToStep7}
+            handleSaveToStep5={handleSaveToStep5}
             setShowCurrentSubmittedItem={setShowCurrentSubmittedItem}
             setShowSubmitDialog={setShowSubmitDialog}
             setCurrentReportingAndFollowUpId={setCurrentReportingAndFollowUpId}
