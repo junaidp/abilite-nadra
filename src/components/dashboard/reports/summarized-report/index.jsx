@@ -267,16 +267,19 @@ const SummarizedReport = () => {
                                                         )}
 
                                                         {/* Download */}
-                                                        <Tooltip title="Download PDF" placement="top">
-                                                            <i
-                                                                className="fa fa-download f-18 cursor-pointer"
-                                                                onClick={() => {
-                                                                    dispatch(handleChangeReport(item))
-                                                                    navigate(`/audit/download-summarized-report/${encryptedId}`)
-                                                                }
-                                                                }
-                                                            ></i>
-                                                        </Tooltip>
+                                                        {
+                                                            item?.reportName &&
+                                                            <Tooltip title="Download PDF" placement="top">
+                                                                <i
+                                                                    className="fa fa-download f-18 cursor-pointer"
+                                                                    onClick={() => {
+                                                                        dispatch(handleChangeReport(item))
+                                                                        navigate(`/audit/download-summarized-report/${encryptedId}`)
+                                                                    }
+                                                                    }
+                                                                ></i>
+                                                            </Tooltip>
+                                                        }
                                                     </div>
                                                 </td>
                                             </tr>
