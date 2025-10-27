@@ -57,7 +57,7 @@ const FollowUpSection = ({
             </div>
 
             <div className="mb-4">
-                <label>Final Comments:</label>
+                <label>{recommendationsValue === "false" ? "Comments:" : "Final Comments:"}</label>
                 <RichTextEditor
                     onContentChange={handleFinalCommentsChange}
                     initialValue={item?.followUp?.finalComments}
@@ -68,23 +68,24 @@ const FollowUpSection = ({
                 />
             </div>
 
-            {recommendationsValue === "false" && (
-                <div className="mb-4">
-                    <label className="py-1">Next Implementation Date:</label>
-                    <input
-                        type="date"
-                        className="form-control"
-                        value={
-                            item?.followUp.nextImplementationDate
-                                ? moment(item.followUp.nextImplementationDate).format("YYYY-MM-DD")
-                                : ""
-                        }
-                        name="nextImplementationDate"
-                        onChange={(event) => handleChange(event, item?.id)}
-                        disabled={!handleAllowEditLastSection(item)}
-                    />
-                </div>
-            )}
+            {(recommendationsValue === "false" || item?.followUp.nextImplementationDate)
+                && (
+                    <div className="mb-4">
+                        <label className="py-1">Next Implementation Date:</label>
+                        <input
+                            type="date"
+                            className="form-control"
+                            value={
+                                item?.followUp.nextImplementationDate
+                                    ? moment(item.followUp.nextImplementationDate).format("YYYY-MM-DD")
+                                    : ""
+                            }
+                            name="nextImplementationDate"
+                            onChange={(event) => handleChange(event, item?.id)}
+                            disabled={!handleAllowEditLastSection(item) || recommendationsValue === "true"}
+                        />
+                    </div>
+                )}
 
             {item?.stepNo >= 6 && item.followUp.recommendationsImplemented && (
                 <div className="mb-4 align-items-center">

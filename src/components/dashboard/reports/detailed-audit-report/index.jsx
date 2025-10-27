@@ -364,7 +364,8 @@ const DetailedAuditReport = () => {
                               )}
 
                             {/* Download */}
-                            {item?.submitted && (
+                            {
+                              item?.reportName &&
                               <Tooltip title="Link to download pdf" placement="top">
                                 <i
                                   className="fa fa-download f-18 cursor-pointer"
@@ -379,8 +380,7 @@ const DetailedAuditReport = () => {
                                   }}
                                 ></i>
                               </Tooltip>
-                            )}
-
+                            }
                           </div>
                         </td>
                       </tr>

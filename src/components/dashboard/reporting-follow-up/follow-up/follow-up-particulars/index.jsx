@@ -111,7 +111,7 @@ const FollowUpParticulars = () => {
               item?.followUp?.recommendationsImplemented.toString() === "true",
             finalComments:
               item?.followUp?.finalComments,
-            nextImplementationDate: item?.followUp?.recommendationsImplemented.toString() === "false" ? item?.followUp?.nextImplementationDate : null
+            nextImplementationDate: item?.followUp?.nextImplementationDate
           })
         );
       }

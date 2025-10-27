@@ -26,7 +26,7 @@ const SubmitDialog = ({ item, setShowSubmitDialog }) => {
         item?.followUp?.finalComments.trim() === "")
     ) {
       toast.error(
-        "Final Comments missing. Please provide them first and then submit the observation"
+        item?.followUp?.recommendationsImplemented.toString() === "false" ? "Comments missing. Please provide them first and then submit the observation" : "Final Comments missing. Please provide them first and then submit the observation"
       );
       return;
     }
@@ -49,7 +49,7 @@ const SubmitDialog = ({ item, setShowSubmitDialog }) => {
             item?.followUp?.recommendationsImplemented.toString() === "true",
           finalComments:
             item?.followUp?.finalComments,
-          nextImplementationDate: item?.followUp?.recommendationsImplemented.toString() === "false" ? item?.followUp?.nextImplementationDate : null
+          nextImplementationDate: item?.followUp?.nextImplementationDate
         })
       ).unwrap();
 
