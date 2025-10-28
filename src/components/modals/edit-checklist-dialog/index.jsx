@@ -6,7 +6,7 @@ import { setupUpdateCheckListName } from "../../../global-redux/reducers/setting
 const EditCheckListDialog = ({ setShowEditCheckListDialog }) => {
   const { user } = useSelector((state) => state.auth);
   const [checkListName, setCheckListName] = React.useState("");
-  const { checkListAddSuccess, editLoading, checkList, checkListId } =
+  const { checklistItemAfterSaveSuccess, editLoading, checkList, checkListId } =
     useSelector((state) => state.settingsCheckList);
   const dispatch = useDispatch();
   function handleSubmit() {
@@ -26,11 +26,11 @@ const EditCheckListDialog = ({ setShowEditCheckListDialog }) => {
   }
 
   React.useEffect(() => {
-    if (checkListAddSuccess) {
+    if (checklistItemAfterSaveSuccess) {
       setCheckListName("");
       setShowEditCheckListDialog(false);
     }
-  }, [checkListAddSuccess]);
+  }, [checklistItemAfterSaveSuccess]);
   React.useEffect(() => {
     const { description } = checkList.find((item) => item?.id === checkListId);
     setCheckListName(description);

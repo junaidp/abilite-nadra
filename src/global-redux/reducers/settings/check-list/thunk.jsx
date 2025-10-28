@@ -1,5 +1,7 @@
 import axios from "axios";
 import { baseUrl } from "../../../../config/constants";
+import { setupGetAllCheckListItemsAfterSave, setupGetAllCheckListsAfterSave } from "./slice"
+
 export const AddCheckList = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
@@ -37,6 +39,25 @@ export const getAllCheckLists = async (data, thunkAPI) => {
   }
 };
 
+export const getAllCheckListsAfterSave = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.get(
+      `${baseUrl}/configurations/checklist/getAllByUserEmail?userEmailId=${data.userEmailId
+      }&companyId=${data.companyId}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
 export const updateCheckListName = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
@@ -50,6 +71,9 @@ export const updateCheckListName = async (data, thunkAPI) => {
         },
       }
     );
+    thunkAPI.dispatch(setupGetAllCheckListsAfterSave({
+      userEmailId: user[0]?.email, companyId: user[0]?.company[0].id
+    }));
     return props.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
@@ -69,6 +93,10 @@ export const updateCheckListRemarks = async (data, thunkAPI) => {
         },
       }
     );
+
+    thunkAPI.dispatch(setupGetAllCheckListsAfterSave({
+      userEmailId: user[0]?.email, companyId: user[0]?.company[0].id
+    }));
     return props.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
@@ -78,6 +106,8 @@ export const updateCheckListRemarks = async (data, thunkAPI) => {
 export const addCheckListItem = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
+    const { checkListId } = thunkAPI.getState().settingsCheckList;
+    const email = user[0]?.email;
     let props = await axios.post(
       `${baseUrl}/configurations/checklist/checklistitems/addNewChecklistItems`,
       data,
@@ -88,6 +118,7 @@ export const addCheckListItem = async (data, thunkAPI) => {
         },
       }
     );
+    thunkAPI.dispatch(setupGetAllCheckListItemsAfterSave({ userEmailId: email, checklistId: checkListId }));
     return props.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
@@ -112,9 +143,30 @@ export const getAllCheckListItems = async (data, thunkAPI) => {
   }
 };
 
+export const getAllCheckListItemsAfterSave = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.get(
+      `${baseUrl}/configurations/checklist/checklistitems/getAllChecklistItems?userEmailId=${user[0]?.email
+      }&checklistId=${data.checklistId}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
 export const editCheckListItem = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
+    const { checkListId } = thunkAPI.getState().settingsCheckList;
+    const email = user[0]?.email;
     let props = await axios.post(
       `${baseUrl}/configurations/checklist/checklistitems/updateChecklistItems`,
       data,
@@ -125,6 +177,7 @@ export const editCheckListItem = async (data, thunkAPI) => {
         },
       }
     );
+    thunkAPI.dispatch(setupGetAllCheckListItemsAfterSave({ userEmailId: email, checklistId: checkListId }));
     return props.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
@@ -151,6 +204,8 @@ export const deleteCheckList = async (data, thunkAPI) => {
 export const deleteSubCheckList = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
+    const { checkListId } = thunkAPI.getState().settingsCheckList;
+    const email = user[0]?.email;
     let props = await axios.delete(
       `${baseUrl}/configurations/checklist/checklistitems/deleteChecklistItem/${data}`,
       {
@@ -160,6 +215,7 @@ export const deleteSubCheckList = async (data, thunkAPI) => {
         },
       }
     );
+    thunkAPI.dispatch(setupGetAllCheckListItemsAfterSave({ userEmailId: email, checklistId: checkListId }));
     return props.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);

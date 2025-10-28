@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import {
   setupAddCheckList,
   resetAddCheckListSuccess,
+  resetChecklistItemAfterSaveSuccess,
   setupGetAllCheckLists,
   setupUpdateCheckListRemarks,
   setupGetAllCheckListItems,
@@ -29,6 +30,7 @@ const CheckList = ({
     loading,
     subLoading,
     checkListAddSuccess,
+    checklistItemAfterSaveSuccess,
     checkList,
     checkListId,
     checkListItems,
@@ -83,8 +85,7 @@ const CheckList = ({
     if (defaultRemarks && defaultRemarks !== "") {
       dispatch(
         setupUpdateCheckListRemarks(
-          `?userEmailId=${
-            user[0]?.email
+          `?userEmailId=${user[0]?.email
           }&checklistid=${checkListId}&checklistName=${Number(defaultRemarks)}`
         )
       );
@@ -106,6 +107,12 @@ const CheckList = ({
       );
     }
   }, [checkListAddSuccess]);
+
+  React.useEffect(() => {
+    if (checklistItemAfterSaveSuccess) {
+      dispatch(resetChecklistItemAfterSaveSuccess());
+    }
+  }, [checklistItemAfterSaveSuccess])
 
   React.useEffect(() => {
     if (checkListId && checkListId !== "") {
@@ -191,9 +198,8 @@ const CheckList = ({
           </div>
           <div className="col-lg-6 text-end float-end align-self-end">
             <div
-              className={`btn btn-labeled btn-primary px-3 shadow ${
-                loading && "disabled"
-              }`}
+              className={`btn btn-labeled btn-primary px-3 shadow ${loading && "disabled"
+                }`}
               onClick={handleSave}
             >
               <span className="btn-label me-2">

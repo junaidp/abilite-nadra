@@ -3,8 +3,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
   setupAddCheckListItem,
-  resetAddCheckListSuccess,
-  resetCheckListId,
+  resetAddCheckListSuccess
 } from "../../../global-redux/reducers/settings/check-list/slice";
 import { useSelector, useDispatch } from "react-redux";
 import RichTextEditor from "../../../components/common/rich-text/index";
@@ -14,7 +13,7 @@ const AddCheckListManagementDialog = ({ setCheckListManagementDialog }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const { resetRichTextFieldState } = useSelector((state) => state.common);
-  const { checkListAddSuccess, editLoading, checkListId } = useSelector(
+  const { checklistItemAfterSaveSuccess, editLoading, checkListId } = useSelector(
     (state) => state.settingsCheckList
   );
   const initialState = {
@@ -51,17 +50,16 @@ const AddCheckListManagementDialog = ({ setCheckListManagementDialog }) => {
 
   function handleClose() {
     setCheckListManagementDialog(false);
-    dispatch(resetCheckListId());
     formik.resetForm({ values: initialState });
   }
 
   React.useEffect(() => {
-    if (checkListAddSuccess) {
+    if (checklistItemAfterSaveSuccess) {
       formik.resetForm({ values: initialState });
       dispatch(resetAddCheckListSuccess());
       dispatch(changeCommonRichTextFieldState(true));
     }
-  }, [checkListAddSuccess]);
+  }, [checklistItemAfterSaveSuccess]);
 
   React.useEffect(() => {
     if (resetRichTextFieldState === true) {

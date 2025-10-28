@@ -10,7 +10,7 @@ import RichTextEditor from "../../../components/common/rich-text/index";
 
 const EditSubCheckListDialog = ({ setShowEditCheckListItemDialog }) => {
   const dispatch = useDispatch();
-  const { checkListAddSuccess, editLoading, currentSubCheckListItem } =
+  const { checklistItemAfterSaveSuccess, editLoading, currentSubCheckListItem } =
     useSelector((state) => state.settingsCheckList);
   const initialState = {
     area: currentSubCheckListItem?.area,
@@ -52,12 +52,12 @@ const EditSubCheckListDialog = ({ setShowEditCheckListItemDialog }) => {
   }
 
   React.useEffect(() => {
-    if (checkListAddSuccess) {
+    if (checklistItemAfterSaveSuccess) {
       dispatch(resetAddCheckListSuccess());
       formik.resetForm({ values: initialState });
       setShowEditCheckListItemDialog(false);
     }
-  }, [checkListAddSuccess]);
+  }, [checklistItemAfterSaveSuccess]);
   return (
     <div className="px-4 py-4">
       <header className="section-header my-3    text-start d-flex align-items-center justify-content-between">
