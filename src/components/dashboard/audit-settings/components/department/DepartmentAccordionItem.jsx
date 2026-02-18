@@ -1,4 +1,5 @@
 import { useDispatch } from "react-redux";
+import { sanitizeSimpleName } from "../../../../../config/helper"
 
 const DepartmentAccordionItem = ({
   index,
@@ -78,7 +79,7 @@ const DepartmentAccordionItem = ({
                     type="text"
                     value={subDepartmentText}
                     onChange={(event) =>
-                      setSubDepartmentText(event?.target?.value)
+                      setSubDepartmentText(sanitizeSimpleName(event?.target?.value))
                     }
                   />
                 </div>

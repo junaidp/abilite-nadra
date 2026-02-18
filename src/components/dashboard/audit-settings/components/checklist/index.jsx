@@ -18,6 +18,7 @@ import Pagination from "@mui/material/Pagination";
 import { CircularProgress } from "@mui/material";
 import AccordionItem from "./components/AccordionItem";
 import DeleteCheckListDialog from "./components/DeleteDialog";
+import { sanitizeSimpleName } from "../../../../../config/helper"
 
 const CheckList = ({
   setCheckListManagementDialog,
@@ -193,7 +194,7 @@ const CheckList = ({
               placeholder="Enter"
               type="text"
               value={description}
-              onChange={(event) => setDescription(event?.target?.value)}
+              onChange={(event) => setDescription(sanitizeSimpleName(event?.target?.value))}
             />
           </div>
           <div className="col-lg-6 text-end float-end align-self-end">

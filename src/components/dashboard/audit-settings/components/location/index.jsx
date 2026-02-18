@@ -15,6 +15,7 @@ import EditLocationDialog from "../../../../modals/edit-location-dialog";
 import EditSubLocationDialog from "../../../../modals/edit-sub-location-dialog";
 import AccordionItem from "./AccordionItem";
 import DeleteLocationDialog from "./DeleteDialog";
+import { sanitizeSimpleName } from "../../../../../config/helper";
 
 const Location = ({ userHierarchy, userRole, currentSettingOption }) => {
   const dispatch = useDispatch();
@@ -244,7 +245,7 @@ const Location = ({ userHierarchy, userRole, currentSettingOption }) => {
               type="text"
               name="locationDescription"
               value={locationDescription}
-              onChange={(e) => setLocationDescription(e?.target?.value)}
+              onChange={(e) => setLocationDescription(sanitizeSimpleName(e?.target?.value))}
             />
           </div>
           <div

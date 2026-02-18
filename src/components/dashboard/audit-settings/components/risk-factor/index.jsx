@@ -10,6 +10,7 @@ import {
   resetRiskFactorAddSuccess,
 } from "../../../../../global-redux/reducers/settings/risk-factor/slice";
 import DeleteRiskFactorDialog from "./DeleteDialog";
+import { sanitizeSimpleName } from "../../../../../config/helper"
 
 const RiskFactor = ({ userHierarchy, userRole, currentSettingOption }) => {
   const dispatch = useDispatch();
@@ -61,7 +62,7 @@ const RiskFactor = ({ userHierarchy, userRole, currentSettingOption }) => {
   function handleChangeDescription(event, id) {
     setRiskFactorList((pre) =>
       pre?.map((item) =>
-        item?.id === id ? { ...item, description: event?.target?.value } : item
+        item?.id === id ? { ...item, description: sanitizeSimpleName(event?.target?.value) } : item
       )
     );
   }
@@ -126,7 +127,7 @@ const RiskFactor = ({ userHierarchy, userRole, currentSettingOption }) => {
               placeholder="Enter"
               type="text"
               value={description}
-              onChange={(event) => setDescription(event?.target?.value)}
+              onChange={(event) => setDescription(sanitizeSimpleName(event?.target?.value))}
             />
           </div>
           <div className="col-lg-6 text-end float-end align-self-end">

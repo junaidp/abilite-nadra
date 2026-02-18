@@ -2,6 +2,7 @@ import React from "react";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { setupUpdateSubDepartment } from "../../../../../global-redux/reducers/settings/department/slice";
+import { sanitizeSimpleName } from "../../../../../config/helper"
 
 const EditSubDepartmentDialog = ({
   setShowEditSubDepartmentDialog,
@@ -62,7 +63,7 @@ const EditSubDepartmentDialog = ({
               name="description"
               className="form-control"
               value={DepartmentName}
-              onChange={(e) => setSubDepartmentName(e?.target?.value)}
+              onChange={(e) => setSubDepartmentName(sanitizeSimpleName(e?.target?.value))}
             />
           </div>
         </div>

@@ -24,10 +24,10 @@ const ResetUserPasswordDialog = ({ setUpdateUserPasswordDialog, userId }) => {
       }
 
       const passwordRegex =
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=])(?=\S+$).{8,}$/;
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=])(?=\S+$).{12,}$/;
       if (!passwordRegex.test(password)) {
         toast.error(
-          "Password must contain at least one uppercase letter, one lowercase letter, one numeric digit, one special character, and must be at least 8 characters long"
+          "Password must contain at least one uppercase letter, one lowercase letter, one numeric digit, one special character, and must be at least 12 characters long"
         );
         return;
       }

@@ -16,6 +16,7 @@ import DepartmentAccordionItem from "./DepartmentAccordionItem";
 import DeleteDepartmentDialog from "./DeleteDepartmentDialog";
 import EditDepartmentDialog from "./EditDepartmentDialog";
 import EditSubDepartmentDialog from "./EditSubDepartmentDialog";
+import { sanitizeSimpleName } from "../../../../../config/helper"
 
 const Department = ({ userHierarchy, userRole, currentSettingOption }) => {
   const fileInputRef = React.useRef(null);
@@ -267,7 +268,7 @@ const Department = ({ userHierarchy, userRole, currentSettingOption }) => {
               type="text"
               name="departmentDescription"
               value={departmentDescription}
-              onChange={(e) => setDepartmentDescription(e?.target?.value)}
+              onChange={(e) => setDepartmentDescription(sanitizeSimpleName(e?.target?.value))}
             />
           </div>
           <div

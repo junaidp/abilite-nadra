@@ -2,6 +2,7 @@ import React from "react";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { setupEditSubProcess } from "../../../../../global-redux/reducers/settings/process/slice";
+import { sanitizeSimpleName } from "../../../../../config/helper"
 
 const EditSubProcessDialog = ({ setShowSubProcessDialog, subProcessId }) => {
   const [subProcessName, setSubProcessName] = React.useState("");
@@ -47,7 +48,7 @@ const EditSubProcessDialog = ({ setShowSubProcessDialog, subProcessId }) => {
               name="description"
               className="form-control"
               value={subProcessName}
-              onChange={(e) => setSubProcessName(e?.target?.value)}
+              onChange={(e) => setSubProcessName(sanitizeSimpleName(e?.target?.value))}
             />
           </div>
         </div>

@@ -39,7 +39,6 @@ const UserProfileDialog = ({ setUpdateUserDialog }) => {
       [name]: value,
     });
 
-    // Clear the specific field error when the user starts typing
     setErrors({
       ...errors,
       [name]: "",
@@ -48,8 +47,12 @@ const UserProfileDialog = ({ setUpdateUserDialog }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!loading) {
+      // NOTE: Do NOT validate oldPassword complexity/length here because
+      // some users may have legacy passwords shorter than 12 characters.
+      // Only validate newPassword + confirmNewPassword.
       const passwordRegex =
-        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=])(?=\S+$).{12,}$/;
+
       const newErrors = {};
 
       if (formData.oldPassword === "") {
@@ -59,7 +62,7 @@ const UserProfileDialog = ({ setUpdateUserDialog }) => {
         newErrors.newPassword = "New Password is required";
       } else if (!passwordRegex.test(formData.newPassword)) {
         newErrors.newPassword =
-          "Password must be at least 8 characters long and include at least one letter, one number, and one special character.";
+          "Password must contain at least one uppercase letter, one lowercase letter, one numeric digit, one special character, and must be at least 12 characters long";
       }
       if (formData.confirmNewPassword === "") {
         newErrors.confirmNewPassword = "Confirm New Password is required";

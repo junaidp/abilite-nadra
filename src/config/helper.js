@@ -507,6 +507,11 @@ const getStepStatusLabel = (stepNo, user) => {
 };
 
 
+// Allows letters, numbers, spaces, hyphen, underscore
+const sanitizeSimpleName = (value = "") => {
+  return value.replace(/[^a-zA-Z0-9 _-]/g, "");
+};
+
 
 export {
   handleDownload,
@@ -529,5 +534,6 @@ export {
   htmlToImage,
   convertObservationsToImagesForInternalAuditReport,
   convertObservationsToImagesForSummarizedReport,
-  htmlToPagedImages
+  htmlToPagedImages,
+  sanitizeSimpleName 
 };

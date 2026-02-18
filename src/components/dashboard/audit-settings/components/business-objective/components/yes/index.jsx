@@ -10,6 +10,7 @@ import {
   resetYesAddSuccess,
 } from "../../../../../../../global-redux/reducers/settings/business-objective/slice";
 import DeleteDialog from "./DeleteDailog";
+import { sanitizeSimpleName } from "../../../../../../../config/helper"
 
 const FinanciallyQuantifiableYes = ({
   userHierarchy,
@@ -120,14 +121,13 @@ const FinanciallyQuantifiableYes = ({
               placeholder="Enter"
               type="text"
               value={description}
-              onChange={(event) => setDescription(event?.target?.value)}
+              onChange={(event) => setDescription(sanitizeSimpleName(event?.target?.value))}
             />
           </div>
           <div className="col-lg-6 text-end float-end align-self-end">
             <div
-              className={`btn btn-labeled btn-primary px-3 shadow ${
-                yesLoading && "disabled"
-              }`}
+              className={`btn btn-labeled btn-primary px-3 shadow ${yesLoading && "disabled"
+                }`}
               onClick={handleSave}
             >
               <span className="btn-label me-2">
@@ -175,9 +175,8 @@ const FinanciallyQuantifiableYes = ({
                                 handleChangeValue(event, item?.id)
                               }
                               maxLength="500"
-                              className={`form-control ${
-                                item?.name?.length >= 500 && "error-border"
-                              }`}
+                              className={`form-control ${item?.name?.length >= 500 && "error-border"
+                                }`}
                             ></textarea>
                             <label className="word-limit-info label-text">
                               Maximum 500 characters
@@ -197,33 +196,33 @@ const FinanciallyQuantifiableYes = ({
                           </td>
                           {(userRole === "ADMIN" ||
                             userHierarchy === "IAH") && (
-                            <td>
-                              <div className="d-flex flex-wrap gap-4">
-                                <div
-                                  className={`btn btn-labeled btn-primary `}
-                                  onClick={() => handleUpdate(item?.id)}
-                                >
-                                  <span className="btn-label me-2">
-                                    <i className="fa fa-check-circle"></i>
-                                  </span>
-                                  Save
-                                </div>
+                              <td>
+                                <div className="d-flex flex-wrap gap-4">
+                                  <div
+                                    className={`btn btn-labeled btn-primary `}
+                                    onClick={() => handleUpdate(item?.id)}
+                                  >
+                                    <span className="btn-label me-2">
+                                      <i className="fa fa-check-circle"></i>
+                                    </span>
+                                    Save
+                                  </div>
 
-                                <div
-                                  className={`btn btn-labeled btn-danger`}
-                                  onClick={() => {
-                                    setCurrentObjectiveId(item?.id);
-                                    setShowDeleteObjectiveDialog(true);
-                                  }}
-                                >
-                                  <span className="btn-label me-2">
-                                    <i className="fa fa-check-circle f-18"></i>
-                                  </span>
-                                  Delete
+                                  <div
+                                    className={`btn btn-labeled btn-danger`}
+                                    onClick={() => {
+                                      setCurrentObjectiveId(item?.id);
+                                      setShowDeleteObjectiveDialog(true);
+                                    }}
+                                  >
+                                    <span className="btn-label me-2">
+                                      <i className="fa fa-check-circle f-18"></i>
+                                    </span>
+                                    Delete
+                                  </div>
                                 </div>
-                              </div>
-                            </td>
-                          )}
+                              </td>
+                            )}
                         </tr>
                       );
                     })}

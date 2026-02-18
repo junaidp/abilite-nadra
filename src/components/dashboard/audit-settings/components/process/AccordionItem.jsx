@@ -2,6 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
 import { setupDeleteSubProcess } from "../../../../../global-redux/reducers/settings/process/slice";
+import { sanitizeSimpleName } from "../../../../../config/helper"
 
 const AccordionItem = ({
   index,
@@ -81,15 +82,14 @@ const AccordionItem = ({
                       type="text"
                       value={subProcessText}
                       onChange={(event) =>
-                        setSubProcessText(event?.target?.value)
+                        setSubProcessText(sanitizeSimpleName(event?.target?.value))
                       }
                     />
                   </div>
                   <div className="col-lg-6 text-end float-end align-self-end">
                     <div
-                      className={`btn btn-labeled btn-primary px-3 shadow ${
-                        loading && "disabled"
-                      }`}
+                      className={`btn btn-labeled btn-primary px-3 shadow ${loading && "disabled"
+                        }`}
                       onClick={handleAddSubProcess}
                     >
                       <span className="btn-label me-2">
@@ -132,28 +132,28 @@ const AccordionItem = ({
                               <td>{subItem?.description}</td>
                               {(userRole === "ADMIN" ||
                                 userHierarchy === "IAH") && (
-                                <td>
-                                  <div className="d-flex flex-wrap gap-4">
-                                    <i
-                                      className="fa fa-edit f-18 cursor-pointer"
-                                      onClick={() => {
-                                        setSubProcessId(subItem?.id);
-                                        setShowSubProcessDialog(true);
-                                      }}
-                                    ></i>
-                                    <i
-                                      className="fa fa-trash text-danger f-18 cursor-pointer"
-                                      onClick={() => {
-                                        if (!subLoading) {
-                                          dispatch(
-                                            setupDeleteSubProcess(subItem?.id)
-                                          );
-                                        }
-                                      }}
-                                    ></i>
-                                  </div>
-                                </td>
-                              )}
+                                  <td>
+                                    <div className="d-flex flex-wrap gap-4">
+                                      <i
+                                        className="fa fa-edit f-18 cursor-pointer"
+                                        onClick={() => {
+                                          setSubProcessId(subItem?.id);
+                                          setShowSubProcessDialog(true);
+                                        }}
+                                      ></i>
+                                      <i
+                                        className="fa fa-trash text-danger f-18 cursor-pointer"
+                                        onClick={() => {
+                                          if (!subLoading) {
+                                            dispatch(
+                                              setupDeleteSubProcess(subItem?.id)
+                                            );
+                                          }
+                                        }}
+                                      ></i>
+                                    </div>
+                                  </td>
+                                )}
                             </tr>
                           );
                         })

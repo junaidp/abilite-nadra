@@ -15,6 +15,7 @@ import AccordionItem from "./AccordionItem";
 import EditSubProcessDialog from "./EditSubProcessDialog";
 import ProcessDeleteDialog from "./DeleteDialog";
 import EditProcessDialog from "./EditProcessDialog";
+import { sanitizeSimpleName } from "../../../../../config/helper"
 
 const Process = ({ userHierarchy, userRole, currentSettingOption }) => {
   const dispatch = useDispatch();
@@ -175,14 +176,13 @@ const Process = ({ userHierarchy, userRole, currentSettingOption }) => {
               placeholder="Enter Text here"
               type="text"
               value={processText}
-              onChange={(event) => setProcessText(event?.target?.value)}
+              onChange={(event) => setProcessText(sanitizeSimpleName(event?.target?.value))}
             />
           </div>
           <div className="col-lg-6 text-end float-end align-self-end">
             <div
-              className={`btn btn-labeled btn-primary px-3 shadow ${
-                loading && "disabled"
-              }`}
+              className={`btn btn-labeled btn-primary px-3 shadow ${loading && "disabled"
+                }`}
               onClick={handleSaveProcess}
             >
               <span className="btn-label me-2">

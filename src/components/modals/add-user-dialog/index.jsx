@@ -20,7 +20,7 @@ const AddUserDialog = ({ setUserManagementDialog }) => {
   const initialState = {
     name: "",
     email: "",
-    erp:"",
+    erp: "",
     password: "",
     confirmPassword: "",
     designation: "",
@@ -41,9 +41,10 @@ const AddUserDialog = ({ setUserManagementDialog }) => {
       password: Yup.string()
         .required("Password is required")
         .matches(
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=])(?=\S+$).{8,}$/,
-          "Password must contain at least one uppercase letter, one lowercase letter, one numeric digit, one special character, and must be at least 8 characters long"
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=])(?=\S+$).{12,}$/,
+          "Password must contain at least one uppercase letter, one lowercase letter, one numeric digit, one special character, and must be at least 12 characters long"
         ),
+
       confirmPassword: Yup.string()
         .required("Confirm Password is required")
         .oneOf([Yup.ref("password"), null], "Passwords must match"),
@@ -66,7 +67,7 @@ const AddUserDialog = ({ setUserManagementDialog }) => {
             userDto: {
               userName: values?.name,
               companyId: currentCompany?.id,
-              erp:values?.erp
+              erp: values?.erp
             },
             email: values?.email,
             password: values?.password,

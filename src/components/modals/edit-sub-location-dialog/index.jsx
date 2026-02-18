@@ -2,6 +2,7 @@ import React from "react";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { setupUpdateSubLocation } from "../../../global-redux/reducers/settings/location/slice";
+import { sanitizeSimpleName } from "../../../config/helper"
 
 const EditSubLocationDialog = ({
   setShowEditSubLocationDialog,
@@ -57,7 +58,7 @@ const EditSubLocationDialog = ({
               name="description"
               className="form-control"
               value={SubLocationName}
-              onChange={(e) => setSubLocationName(e?.target?.value)}
+              onChange={(e) => setSubLocationName(sanitizeSimpleName(e?.target?.value))}
             />
           </div>
         </div>

@@ -1,5 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+import { sanitizeSimpleName } from "../../../../../config/helper"
 
 const AccordionItem = ({
   index,
@@ -79,15 +80,14 @@ const AccordionItem = ({
                     type="text"
                     value={subLocationText}
                     onChange={(event) =>
-                      setSubLocationText(event?.target?.value)
+                      setSubLocationText(sanitizeSimpleName(event?.target?.value))
                     }
                   />
                 </div>
                 <div className="col-lg-6 text-end float-end align-self-end p-0 m-0">
                   <div
-                    className={`btn btn-labeled btn-primary  shadow ${
-                      loading && "disabled"
-                    }`}
+                    className={`btn btn-labeled btn-primary  shadow ${loading && "disabled"
+                      }`}
                     onClick={handleAddSubLocation}
                   >
                     <span className="btn-label me-2">
@@ -126,28 +126,28 @@ const AccordionItem = ({
                             <td>{subItem?.description}</td>
                             {(userRole === "ADMIN" ||
                               userHierarchy === "IAH") && (
-                              <td>
-                                <div className="d-flex flex-wrap gap-4">
-                                  <i
-                                    className="fa fa-edit f-18 cursor-pointer"
-                                    onClick={() => {
-                                      setSubLocationId(subItem?.id);
-                                      setShowEditSubLocationDialog(true);
-                                    }}
-                                  ></i>
-                                  <i
-                                    className="fa fa-trash text-danger f-18 cusrsor-pointer"
-                                    onClick={() => {
-                                      dispatch(
-                                        setupDeleteSubLocation(
-                                          `?deleteId=${subItem?.id}`
-                                        )
-                                      );
-                                    }}
-                                  ></i>
-                                </div>
-                              </td>
-                            )}
+                                <td>
+                                  <div className="d-flex flex-wrap gap-4">
+                                    <i
+                                      className="fa fa-edit f-18 cursor-pointer"
+                                      onClick={() => {
+                                        setSubLocationId(subItem?.id);
+                                        setShowEditSubLocationDialog(true);
+                                      }}
+                                    ></i>
+                                    <i
+                                      className="fa fa-trash text-danger f-18 cusrsor-pointer"
+                                      onClick={() => {
+                                        dispatch(
+                                          setupDeleteSubLocation(
+                                            `?deleteId=${subItem?.id}`
+                                          )
+                                        );
+                                      }}
+                                    ></i>
+                                  </div>
+                                </td>
+                              )}
                           </tr>
                         );
                       })
