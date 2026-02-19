@@ -2,6 +2,7 @@ import React from "react";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { setupUpdateLocation } from "../../../global-redux/reducers/settings/location/slice";
+import { sanitizeSimpleName } from "../../../config/helper"
 
 const EditLocationDialog = ({ setShowEditLocationDialog, LocationId }) => {
   const { user } = useSelector((state) => state.auth);
@@ -57,7 +58,7 @@ const EditLocationDialog = ({ setShowEditLocationDialog, LocationId }) => {
               name="description"
               className="form-control"
               value={LocationName}
-              onChange={(e) => setLocationName(e?.target?.value)}
+              onChange={(e) => setLocationName(sanitizeSimpleName(e?.target?.value))}
             />
           </div>
         </div>

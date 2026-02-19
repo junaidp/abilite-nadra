@@ -2,6 +2,7 @@ import React from "react";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { setupEditProcess } from "../../../../../global-redux/reducers/settings/process/slice";
+import { sanitizeSimpleName } from "../../../../../config/helper"
 
 const EditProcessDialog = ({ setEditProcessDialog, processId }) => {
   const [processName, setProcessName] = React.useState("");
@@ -31,7 +32,7 @@ const EditProcessDialog = ({ setEditProcessDialog, processId }) => {
     setProcessName(description);
   }, []);
 
-  
+
   return (
     <div className="p-4 min-h-170">
       <h4 className="mb-4 heading">Update Process</h4>
@@ -44,7 +45,7 @@ const EditProcessDialog = ({ setEditProcessDialog, processId }) => {
               name="description"
               className="form-control"
               value={processName}
-              onChange={(e) => setProcessName(e?.target?.value)}
+              onChange={(e) => setProcessName(sanitizeSimpleName(e?.target?.value))}
             />
           </div>
         </div>
