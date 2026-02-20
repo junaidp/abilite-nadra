@@ -130,7 +130,7 @@ export const slice = createSlice({
         state.currentSubCheckListItem = {};
         toast.success("Check List Added Successfully");
       })
-      .addCase(setupAddCheckList.rejected, (_, { payload }) => {
+      .addCase(setupAddCheckList.rejected, (state, { payload }) => {
         state.loading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);

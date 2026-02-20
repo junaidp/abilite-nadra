@@ -149,7 +149,7 @@ export const slice = createSlice({
         state.subProcessAddSuccess = true;
         toast.success("Sub Process Added Successfully");
       })
-      .addCase(setupSaveSubProcess.rejected, (_, action) => {
+      .addCase(setupSaveSubProcess.rejected, (state, action) => {
         state.subLoading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);
@@ -192,7 +192,7 @@ export const slice = createSlice({
         state.subProcessAddSuccess = true;
         toast.success("Sub Process Updated Successfully");
       })
-      .addCase(setupEditSubProcess.rejected, (_, action) => {
+      .addCase(setupEditSubProcess.rejected, (state, action) => {
         state.subLoading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);
@@ -210,7 +210,7 @@ export const slice = createSlice({
         state.subProcessAddSuccess = true;
         toast.success("Sub Process Deleted Successfully");
       })
-      .addCase(setupDeleteSubProcess.rejected, (_, action) => {
+      .addCase(setupDeleteSubProcess.rejected, (state, action) => {
         state.subLoading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);
@@ -228,7 +228,7 @@ export const slice = createSlice({
         state.processAddSuccess = true;
         toast.success("Process Deleted Successfully");
       })
-      .addCase(setupDeleteProcess.rejected, (_, action) => {
+      .addCase(setupDeleteProcess.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);
