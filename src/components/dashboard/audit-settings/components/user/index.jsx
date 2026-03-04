@@ -9,6 +9,7 @@ import Pagination from "@mui/material/Pagination";
 import DeleteUserDialog from "./DeleteDialog";
 import ResetUserPasswordDialog from "./UpdatePassword";
 import UserAccountStatusDialog from "./UserStatus";
+import { sanitizeSimpleName } from "../../../../../config/helper"
 
 const UserManagement = ({
   setUserManagementDialog,
@@ -114,7 +115,7 @@ const UserManagement = ({
             className="form-control w-100"
             placeholder="Enter Text here"
             value={nameVal}
-            onChange={(event) => setNameVal(event?.target?.value)}
+            onChange={(event) => setNameVal(sanitizeSimpleName(event?.target?.value))}
           />
         </div>
 

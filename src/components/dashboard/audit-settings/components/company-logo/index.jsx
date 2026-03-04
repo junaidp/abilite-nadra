@@ -21,22 +21,100 @@ const CompanyLogo = () => {
         }
     }, [defaultLogoBase64]);
 
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
+    // --- Frontend signature validation (magic-bytes) ---
+    const readHeaderBytes = async (file, length = 16) => {
+        const buffer = await file.slice(0, length).arrayBuffer();
+        return new Uint8Array(buffer);
+    };
+
+    const isJpeg = (bytes) =>
+        bytes?.length >= 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
+
+    const isPng = (bytes) =>
+        bytes?.length >= 8 &&
+        bytes[0] === 0x89 &&
+        bytes[1] === 0x50 &&
+        bytes[2] === 0x4e &&
+        bytes[3] === 0x47 &&
+        bytes[4] === 0x0d &&
+        bytes[5] === 0x0a &&
+        bytes[6] === 0x1a &&
+        bytes[7] === 0x0a;
+
+    const getFileExtension = (fileName = "") => {
+        const lower = fileName.toLowerCase().trim();
+        const lastDotIndex = lower.lastIndexOf(".");
+        if (lastDotIndex === -1) return "";
+        return lower.slice(lastDotIndex);
+    };
+
+    const hasSuspiciousDoubleExtension = (fileName = "") => {
+        // Example: logo.jpg.bat => suspicious
+        const lower = fileName.toLowerCase().trim();
+        const parts = lower.split(".");
+        return parts.length > 2; // for logo upload we keep it strict
+    };
+
+    const validateImageBySignature = async (file) => {
+        const bytes = await readHeaderBytes(file, 16);
+
+        // Prefer signature over mimetype (mimetype can be spoofed)
+        if (isPng(bytes)) return true;
+        if (isJpeg(bytes)) return true;
+
+        return false;
+    };
+
+    const handleFileChange = async (e) => {
+        const file = e.target.files?.[0];
         if (!file) return;
 
-        // Validation rules
-        const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
+        // Validation rules (frontend UX only)
+        const allowedExtensions = [".png", ".jpg", ".jpeg"];
+        const allowedMimeTypes = ["image/png", "image/jpeg", "image/jpg"];
         const maxSizeMB = 2;
 
-        if (!allowedTypes.includes(file.type)) {
+        const fileName = file?.name || "";
+        const ext = getFileExtension(fileName);
+
+        // 1) Extension allowlist
+        if (!allowedExtensions.includes(ext)) {
             setError("Only PNG, JPG, or JPEG files are allowed.");
             setLogoFile(null);
             return;
         }
 
+        // 2) Extra strict: block double extensions like .jpg.bat
+        if (hasSuspiciousDoubleExtension(fileName)) {
+            setError("Invalid file name. Multiple extensions are not allowed.");
+            setLogoFile(null);
+            return;
+        }
+
+        // 3) MIME allowlist (best-effort; still spoofable)
+        if (!allowedMimeTypes.includes(file.type)) {
+            setError("Invalid file type. Only PNG, JPG, or JPEG files are allowed.");
+            setLogoFile(null);
+            return;
+        }
+
+        // 4) Size limit
         if (file.size / 1024 / 1024 > maxSizeMB) {
             setError(`File size should not exceed ${maxSizeMB}MB.`);
+            setLogoFile(null);
+            return;
+        }
+
+        // 5) Signature / magic-bytes check (prevents obvious rename tricks)
+        try {
+            const signatureOk = await validateImageBySignature(file);
+            if (!signatureOk) {
+                setError("File content does not match a valid PNG/JPEG image.");
+                setLogoFile(null);
+                return;
+            }
+        } catch (err) {
+            setError("Unable to validate image. Please try another file.");
             setLogoFile(null);
             return;
         }

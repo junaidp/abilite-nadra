@@ -7,6 +7,7 @@ import {
 } from "../../../../../global-redux/reducers/settings/supporting-docs/slice";
 import { toast } from "react-toastify";
 import Table from "./components/Table";
+import { sanitizeSimpleName } from "../../../../../config/helper"
 
 const SupportingDocs = ({ userHierarchy, userRole, currentSettingOption }) => {
   const dispatch = useDispatch();
@@ -288,7 +289,7 @@ const SupportingDocs = ({ userHierarchy, userRole, currentSettingOption }) => {
             placeholder="Enter"
             type="text"
             value={searchValue}
-            onChange={(e) => setSearchValue(e?.target?.value)}
+            onChange={(e) => setSearchValue(sanitizeSimpleName(e?.target?.value))}
           />
         </div>
       </div>

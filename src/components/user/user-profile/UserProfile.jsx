@@ -5,9 +5,10 @@ import {
   resetUpdateUserNameSuccess,
   setupUpdateUserName,
   updateUserState,
-  setupSaveUserLogo
+  setupSaveUserLogo,
 } from "../../../global-redux/reducers/auth/slice";
 import { toast } from "react-toastify";
+import { sanitizeSimpleName } from "../../../config/helper";
 
 const UserProfile = () => {
   let { user, userNameUpdateSuccess, loading } = useSelector(
@@ -18,14 +19,12 @@ const UserProfile = () => {
   const dispatch = useDispatch();
 
   // User Logo States
-  const defaultLogoBase64 = user?.[0]?.userId?.
-    imgFileData || "";
+  const defaultLogoBase64 = user?.[0]?.userId?.imgFileData || "";
   const [logoFile, setLogoFile] = React.useState(null);
   const [logoPreview, setLogoPreview] = React.useState(
     defaultLogoBase64 ? `data:image/jpeg;base64,${defaultLogoBase64}` : ""
   );
   const [error, setError] = React.useState("");
-
 
   React.useEffect(() => {
     if (userNameUpdateSuccess) {
@@ -58,22 +57,100 @@ const UserProfile = () => {
     }
   }, [defaultLogoBase64]);
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
+  // --- Frontend signature validation (magic-bytes) ---
+  const readHeaderBytes = async (file, length = 16) => {
+    const buffer = await file.slice(0, length).arrayBuffer();
+    return new Uint8Array(buffer);
+  };
+
+  const isJpeg = (bytes) =>
+    bytes?.length >= 3 &&
+    bytes[0] === 0xff &&
+    bytes[1] === 0xd8 &&
+    bytes[2] === 0xff;
+
+  const isPng = (bytes) =>
+    bytes?.length >= 8 &&
+    bytes[0] === 0x89 &&
+    bytes[1] === 0x50 &&
+    bytes[2] === 0x4e &&
+    bytes[3] === 0x47 &&
+    bytes[4] === 0x0d &&
+    bytes[5] === 0x0a &&
+    bytes[6] === 0x1a &&
+    bytes[7] === 0x0a;
+
+  const getFileExtension = (fileName = "") => {
+    const lower = fileName.toLowerCase().trim();
+    const lastDotIndex = lower.lastIndexOf(".");
+    if (lastDotIndex === -1) return "";
+    return lower.slice(lastDotIndex);
+  };
+
+  const hasSuspiciousDoubleExtension = (fileName = "") => {
+    // Example: avatar.jpg.bat => suspicious
+    const lower = fileName.toLowerCase().trim();
+    const parts = lower.split(".");
+    return parts.length > 2; // keep strict for profile picture
+  };
+
+  const validateImageBySignature = async (file) => {
+    const bytes = await readHeaderBytes(file, 16);
+    if (isPng(bytes)) return true;
+    if (isJpeg(bytes)) return true;
+    return false;
+  };
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files?.[0];
     if (!file) return;
 
-    // Validation rules
-    const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
+    // Validation rules (frontend UX only)
+    const allowedExtensions = [".png", ".jpg", ".jpeg"];
+    const allowedMimeTypes = ["image/png", "image/jpeg", "image/jpg"];
     const maxSizeMB = 2;
 
-    if (!allowedTypes.includes(file.type)) {
+    const fileName = file?.name || "";
+    const ext = getFileExtension(fileName);
+
+    // 1) Extension allowlist
+    if (!allowedExtensions.includes(ext)) {
       setError("Only PNG, JPG, or JPEG files are allowed.");
       setLogoFile(null);
       return;
     }
 
+    // 2) Block double extensions like .jpg.bat
+    if (hasSuspiciousDoubleExtension(fileName)) {
+      setError("Invalid file name. Multiple extensions are not allowed.");
+      setLogoFile(null);
+      return;
+    }
+
+    // 3) MIME allowlist (best-effort; spoofable)
+    if (!allowedMimeTypes.includes(file.type)) {
+      setError("Invalid file type. Only PNG, JPG, or JPEG files are allowed.");
+      setLogoFile(null);
+      return;
+    }
+
+    // 4) Size limit
     if (file.size / 1024 / 1024 > maxSizeMB) {
       setError(`File size should not exceed ${maxSizeMB}MB.`);
+      setLogoFile(null);
+      return;
+    }
+
+    // 5) Signature / magic-bytes check
+    try {
+      const signatureOk = await validateImageBySignature(file);
+      if (!signatureOk) {
+        setError("File content does not match a valid PNG/JPEG image.");
+        setLogoFile(null);
+        return;
+      }
+    } catch (err) {
+      setError("Unable to validate image. Please try another file.");
       setLogoFile(null);
       return;
     }
@@ -133,6 +210,7 @@ const UserProfile = () => {
           </div>
         </div>
       </div>
+
       <div className="row mb-4 mt-4">
         <div className="col-lg-2 label-text">Name:</div>
         <div className="col-lg-10">
@@ -145,11 +223,12 @@ const UserProfile = () => {
               placeholder="john@gmail.com"
               required="required"
               value={name}
-              onChange={(e) => setName(e?.target?.value)}
+              onChange={(e) => setName(sanitizeSimpleName(e?.target?.value))}
             />
           </div>
         </div>
       </div>
+
       <div className="rows">
         <button
           className="btn btn-labeled btn-primary px-3  shadow col-lg-2 mr-2"
@@ -172,8 +251,10 @@ const UserProfile = () => {
           <div className="col-lg-12">
             <div className="sub-heading fw-bold">Profile Picture</div>
             <label className="fw-light">
-              Upload your profile picture. Accepted formats: PNG, JPG, JPEG. Max size: 2MB.
+              Upload your profile picture. Accepted formats: PNG, JPG, JPEG. Max
+              size: 2MB.
             </label>
+
             <div className="mt-2 mb-2">
               {logoPreview && (
                 <img
@@ -199,6 +280,7 @@ const UserProfile = () => {
             {error && <div className="text-danger mt-1">{error}</div>}
           </div>
         </div>
+
         <div>
           <button
             className={`btn btn-primary mt-4 ${loading ? "disabled" : ""}`}

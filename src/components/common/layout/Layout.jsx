@@ -103,7 +103,7 @@ const Layout = () => {
           "Management_Auditee" && <Sidebar />}
         {user[0]?.userId?.role[0]?.name === "ADMIN" && (
           <div className="p-4 w-100">
-            <h2 className="text-center main-color">Welcome {user[0]?.name}</h2>
+            <h2 className="text-center main-color">Welcome Admin</h2>
             <Settings />
           </div>
         )}

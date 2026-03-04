@@ -2,6 +2,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setupAddRiskAssessment } from "../../../global-redux/reducers/planing/risk-assessment/slice";
 import { toast } from "react-toastify";
+import { sanitizeSimpleName } from "../../../config/helper"
 
 const AddRiskFactorDialog = ({ setShowAddRiskFactorDialog }) => {
   const dispatch = useDispatch();
@@ -54,7 +55,7 @@ const AddRiskFactorDialog = ({ setShowAddRiskFactorDialog }) => {
             id="labeltext"
             placeholder="Enter Risk Factor"
             value={description}
-            onChange={(e) => setDescription(e?.target?.value)}
+            onChange={(e) => setDescription(sanitizeSimpleName(e?.target?.value))}
             maxLength="100"
             className={`form-control  ${description?.length >= 100 && "error-border"
               }`}

@@ -39,13 +39,38 @@ const EmailConfigurations = () => {
     fetchEmailConfigurations();
   }, []);
 
+
   const validationSchema = Yup.object().shape({
-    userName: Yup.string().required("User Name is required"),
-    password: Yup.string().required("Password is required"),
-    hostAddress: Yup.string().required("Host Address is required"),
+    userName: Yup.string()
+      .trim()
+      .min(2, "Too short")
+      .max(100, "Too long")
+      .matches(/^[a-zA-Z0-9@._\-\s]+$/, "Special characters are not allowed")
+      .required("User Name is required"),
+
+    password: Yup.string()
+      .min(8, "Password must be at least 8 characters")
+      .max(128, "Password too long")
+      .required("Password is required"),
+
+    hostAddress: Yup.string()
+      .trim()
+      .max(255, "Too long")
+      .matches(
+        /^[a-zA-Z0-9._-]+$/,
+        "Only letters, numbers, dot (.), underscore (_) and dash (-) are allowed"
+      )
+      .required("Host Address is required"),
+
     port: Yup.number()
-      .required("Port is required")
-      .integer("Port must be an integer"),
+      .transform((value, originalValue) =>
+        originalValue === "" ? undefined : Number(originalValue)
+      )
+      .typeError("Port must be a number")
+      .integer("Port must be an integer")
+      .min(1, "Port must be between 1 and 65535")
+      .max(65535, "Port must be between 1 and 65535")
+      .required("Port is required"),
   });
 
   const handleAddConfiguration = async (values, { resetForm }) => {
@@ -99,14 +124,21 @@ const EmailConfigurations = () => {
         validationSchema={validationSchema}
         onSubmit={handleAddConfiguration}
       >
-        {({ errors, touched }) => (
+        {({ errors, touched, setFieldValue }) => (
           <Form className="space-y-4">
+
             <div>
               <label className="block font-medium">User Name</label>
               <Field
                 name="userName"
                 className="border p-2 w-full form-control"
                 placeholder="Enter User Name"
+                onChange={(e) =>
+                  setFieldValue(
+                    "userName",
+                    (e.target.value || "").replace(/[^a-zA-Z0-9@._\-\s]/g, "")
+                  )
+                }
               />
               {errors.userName && touched.userName && (
                 <p className="text-red-500 text-sm error">{errors.userName}</p>
@@ -132,6 +164,12 @@ const EmailConfigurations = () => {
                 name="hostAddress"
                 className="border p-2 w-full form-control"
                 placeholder="Enter Host Address"
+                onChange={(e) =>
+                  setFieldValue(
+                    "hostAddress",
+                    (e.target.value || "").replace(/[^a-zA-Z0-9._-]/g, "")
+                  )
+                }
               />
               {errors.hostAddress && touched.hostAddress && (
                 <p className="text-red-500 text-sm error">
@@ -144,9 +182,16 @@ const EmailConfigurations = () => {
               <label className="block font-medium">Port</label>
               <Field
                 name="port"
-                type="number"
+                type="text"
+                inputMode="numeric"
                 className="border p-2 w-full form-control"
                 placeholder="Enter Port"
+                onChange={(e) =>
+                  setFieldValue(
+                    "port",
+                    (e.target.value || "").replace(/\D/g, "").slice(0, 5)
+                  )
+                }
               />
               {errors.port && touched.port && (
                 <p className="text-red-500 text-sm error">{errors.port}</p>
