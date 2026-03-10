@@ -5,7 +5,7 @@ import {
   setupPlanningReportFileUpload,
   setupPlanningReportFileDelete,
 } from "../../../../../../../global-redux/reducers/reports/planing-report/slice";
-import { handleDownload } from "../../../../../../../config/helper";
+import { handleDownload, validateFile } from "../../../../../../../config/helper";
 
 /**
  * Handles uploading, listing, downloading, and deleting files
@@ -20,23 +20,23 @@ const PlanningReportFileUpload = ({ reportId, item }) => {
   const fileInputRef = React.useRef(null);
   const [selectedFile, setSelectedFile] = React.useState(null);
 
+  const clearSelectedFile = React.useCallback(() => {
+    setSelectedFile(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  }, []);
+
   /** Validate and set selected file */
-  const handleFileChange = React.useCallback((event) => {
+  const handleFileChange = React.useCallback(async (event) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    const validTypes = [
-      "application/pdf",
-      "application/vnd.ms-excel",
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    ];
-
-    if (validTypes.includes(file.type)) {
+    const isValid = await validateFile(file, toast);
+    if (isValid) {
       setSelectedFile(file);
     } else {
-      toast.error("Invalid file type. Only PDF and Excel files are acceptable.");
+      clearSelectedFile();
     }
-  }, []);
+  }, [clearSelectedFile]);
 
   /** Dispatch API call to upload file */
   const uploadFileToServer = React.useCallback(
@@ -57,13 +57,20 @@ const PlanningReportFileUpload = ({ reportId, item }) => {
   );
 
   /** Trigger upload handler */
-  const handleFileUpload = React.useCallback(() => {
+  const handleFileUpload = React.useCallback(async () => {
     if (!selectedFile) {
       toast.error("No file selected.");
       return;
     }
+
+    const isValid = await validateFile(selectedFile, toast);
+    if (!isValid) {
+      clearSelectedFile();
+      return;
+    }
+
     uploadFileToServer(selectedFile);
-  }, [selectedFile, uploadFileToServer]);
+  }, [selectedFile, uploadFileToServer, clearSelectedFile]);
 
   /** Reset file input after successful upload */
   React.useEffect(() => {
@@ -88,6 +95,7 @@ const PlanningReportFileUpload = ({ reportId, item }) => {
                 className="f-10"
                 ref={fileInputRef}
                 onChange={handleFileChange}
+                accept=".xlsx, .xls, .pdf, .txt"
               />
             </div>
             <div className="col-lg-6">

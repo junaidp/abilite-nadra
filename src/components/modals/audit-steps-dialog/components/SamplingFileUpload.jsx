@@ -6,7 +6,7 @@ import {
   setupAuditStepSamplingFileUpdate,
 } from "../../../../global-redux/reducers/audit-engagement/slice";
 import { useSelector, useDispatch } from "react-redux";
-import { handleDownload } from "../../../../config/helper"
+import { handleDownload, validateFile } from "../../../../config/helper"
 
 const SamplingFileUpload = ({
   currentAuditStep,
@@ -23,17 +23,41 @@ const SamplingFileUpload = ({
   const [selectedFile, setSelectedFile] = React.useState(null);
   const [selectedUpdateFile, setSelectedUpdateFile] = React.useState(null);
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setSelectedFile(file);
+  const clearSelectedFile = () => {
+    setSelectedFile(null);
+    if (fileInputRef?.current) {
+      fileInputRef.current.value = "";
     }
   };
 
-  const handleUpdateFileChange = (event) => {
+  const clearSelectedUpdateFile = () => {
+    setSelectedUpdateFile(null);
+    if (updatedFileInputRef?.current) {
+      updatedFileInputRef.current.value = "";
+    }
+  };
+
+  const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
-      setSelectedUpdateFile(file);
+      const isValid = await validateFile(file, toast);
+      if (isValid) {
+        setSelectedFile(file);
+      } else {
+        clearSelectedFile();
+      }
+    }
+  };
+
+  const handleUpdateFileChange = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const isValid = await validateFile(file, toast);
+      if (isValid) {
+        setSelectedUpdateFile(file);
+      } else {
+        clearSelectedUpdateFile();
+      }
     }
   };
 
@@ -50,8 +74,13 @@ const SamplingFileUpload = ({
     }
   };
 
-  const handleFileUpload = () => {
+  const handleFileUpload = async () => {
     if (selectedFile) {
+      const isValid = await validateFile(selectedFile, toast);
+      if (!isValid) {
+        clearSelectedFile();
+        return;
+      }
       onApiCall(selectedFile);
     } else {
       toast.error("No file selected.");
@@ -68,8 +97,13 @@ const SamplingFileUpload = ({
     }
   };
 
-  const handleFileUpdate = (id) => {
+  const handleFileUpdate = async (id) => {
     if (selectedUpdateFile) {
+      const isValid = await validateFile(selectedUpdateFile, toast);
+      if (!isValid) {
+        clearSelectedUpdateFile();
+        return;
+      }
       updateFileApiCal(selectedUpdateFile, id);
     } else {
       toast.error("No file selected.");

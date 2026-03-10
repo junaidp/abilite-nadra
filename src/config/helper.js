@@ -513,6 +513,123 @@ const sanitizeSimpleName = (value = "") => {
 };
 
 
+const allowedExtensions = [".xlsx", ".xls", ".pdf", ".txt"];
+
+const getFileExtension = (fileName = "") => {
+  const lower = fileName.toLowerCase();
+  const lastDotIndex = lower.lastIndexOf(".");
+  if (lastDotIndex === -1) return "";
+  return lower.slice(lastDotIndex);
+};
+
+const hasSuspiciousDoubleExtension = (fileName = "") => {
+  const lower = fileName.toLowerCase().trim();
+  const parts = lower.split(".");
+  if (parts.length <= 2) return false;
+
+  const lastExt = "." + parts[parts.length - 1];
+  if (!allowedExtensions.includes(lastExt)) {
+    return true;
+  }
+
+  return false;
+};
+
+const isProbablyText = (uint8Array) => {
+  let suspiciousCount = 0;
+  const sampleSize = Math.min(uint8Array.length, 512);
+
+  for (let i = 0; i < sampleSize; i++) {
+    const byte = uint8Array[i];
+
+    if (byte === 0) {
+      suspiciousCount++;
+      continue;
+    }
+
+    const isAllowed =
+      byte === 9 ||
+      byte === 10 ||
+      byte === 13 ||
+      (byte >= 32 && byte <= 126);
+
+    if (!isAllowed) suspiciousCount++;
+  }
+
+  return suspiciousCount / sampleSize <= 0.1;
+};
+
+const validateFileContentBySignature = async (file, extension) => {
+  const buffer = await file.slice(0, 16).arrayBuffer();
+  const bytes = new Uint8Array(buffer);
+
+  if (extension === ".pdf") {
+    return (
+      bytes[0] === 0x25 &&
+      bytes[1] === 0x50 &&
+      bytes[2] === 0x44 &&
+      bytes[3] === 0x46 &&
+      bytes[4] === 0x2d
+    );
+  }
+
+  if (extension === ".xlsx") {
+    return bytes[0] === 0x50 && bytes[1] === 0x4b;
+  }
+
+  if (extension === ".xls") {
+    return (
+      bytes[0] === 0xd0 &&
+      bytes[1] === 0xcf &&
+      bytes[2] === 0x11 &&
+      bytes[3] === 0xe0 &&
+      bytes[4] === 0xa1 &&
+      bytes[5] === 0xb1 &&
+      bytes[6] === 0x1a &&
+      bytes[7] === 0xe1
+    );
+  }
+
+  if (extension === ".txt") {
+    const textBuffer = await file.slice(0, 1024).arrayBuffer();
+    const textBytes = new Uint8Array(textBuffer);
+    return isProbablyText(textBytes);
+  }
+
+  return false;
+};
+
+const validateFile = async (file, toast) => {
+  if (!file) return false;
+
+  const fileName = file?.name || "";
+  const extension = getFileExtension(fileName);
+
+  if (!allowedExtensions.includes(extension)) {
+    toast.error("Invalid file type. Allowed: .xlsx, .xls, .pdf, .txt");
+    return false;
+  }
+
+  if (hasSuspiciousDoubleExtension(fileName)) {
+    toast.error("Invalid file name. Multiple extensions are not allowed.");
+    return false;
+  }
+
+  try {
+    const signatureOk = await validateFileContentBySignature(file, extension);
+    if (!signatureOk) {
+      toast.error("File content does not match the selected file type.");
+      return false;
+    }
+  } catch {
+    toast.error("Unable to validate file. Please try another file.");
+    return false;
+  }
+
+  return true;
+};
+
+
 export {
   handleDownload,
   groupObservationsByTitle,
@@ -535,5 +652,11 @@ export {
   convertObservationsToImagesForInternalAuditReport,
   convertObservationsToImagesForSummarizedReport,
   htmlToPagedImages,
-  sanitizeSimpleName
+  sanitizeSimpleName,
+  allowedExtensions,
+  getFileExtension,
+  hasSuspiciousDoubleExtension,
+  isProbablyText,
+  validateFileContentBySignature,
+  validateFile
 };

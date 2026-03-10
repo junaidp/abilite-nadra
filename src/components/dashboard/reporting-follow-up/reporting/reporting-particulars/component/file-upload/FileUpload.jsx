@@ -7,7 +7,7 @@ import {
   setupReportingFileDelete,
   setupReportingFileUpdate,
 } from "../../../../../../../global-redux/reducers/reporting/slice";
-import { handleDownload } from "../../../../../../../config/helper";
+import { handleDownload, validateFile } from "../../../../../../../config/helper";
 
 /**
  * ReportingFileUpload
@@ -35,14 +35,40 @@ const ReportingFileUpload = ({ item, setDeleteFileId }) => {
   const isHeadOfInternalAudit =
     user?.[0]?.userId?.employeeid?.userHierarchy === "IAH";
 
-  // 🔹 File Handlers
-  const handleFileChange = useCallback((e) => {
-    setSelectedFile(e.target.files?.[0] || null);
+  const clearSelectedFile = useCallback(() => {
+    setSelectedFile(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
   }, []);
 
-  const handleUpdateFileChange = useCallback((e) => {
-    setSelectedUpdateFile(e.target.files?.[0] || null);
+  const clearSelectedUpdateFile = useCallback(() => {
+    setSelectedUpdateFile(null);
+    if (updatedFileInputRef.current) updatedFileInputRef.current.value = "";
   }, []);
+
+  // 🔹 File Handlers
+  const handleFileChange = useCallback(async (e) => {
+    const file = e.target.files?.[0] || null;
+    if (file) {
+      const isValid = await validateFile(file, toast);
+      if (isValid) {
+        setSelectedFile(file);
+      } else {
+        clearSelectedFile();
+      }
+    }
+  }, [clearSelectedFile]);
+
+  const handleUpdateFileChange = useCallback(async (e) => {
+    const file = e.target.files?.[0] || null;
+    if (file) {
+      const isValid = await validateFile(file, toast);
+      if (isValid) {
+        setSelectedUpdateFile(file);
+      } else {
+        clearSelectedUpdateFile();
+      }
+    }
+  }, [clearSelectedUpdateFile]);
 
   const uploadFile = useCallback(
     (file) => {
@@ -66,17 +92,33 @@ const ReportingFileUpload = ({ item, setDeleteFileId }) => {
     [dispatch, loading]
   );
 
-  const handleFileUpload = useCallback(() => {
-    selectedFile ? uploadFile(selectedFile) : toast.error("No file selected.");
-  }, [selectedFile, uploadFile]);
+  const handleFileUpload = useCallback(async () => {
+    if (selectedFile) {
+      const isValid = await validateFile(selectedFile, toast);
+      if (!isValid) {
+        clearSelectedFile();
+        return;
+      }
+      uploadFile(selectedFile);
+    } else {
+      toast.error("No file selected.");
+    }
+  }, [selectedFile, uploadFile, clearSelectedFile]);
 
   const handleFileUpdate = useCallback(
-    (id) => {
-      selectedUpdateFile
-        ? updateFile(selectedUpdateFile, id)
-        : toast.error("Please select update file first.");
+    async (id) => {
+      if (selectedUpdateFile) {
+        const isValid = await validateFile(selectedUpdateFile, toast);
+        if (!isValid) {
+          clearSelectedUpdateFile();
+          return;
+        }
+        updateFile(selectedUpdateFile, id);
+      } else {
+        toast.error("Please select update file first.");
+      }
     },
-    [selectedUpdateFile, updateFile]
+    [selectedUpdateFile, updateFile, clearSelectedUpdateFile]
   );
 
   const handleFileDelete = useCallback(
@@ -128,9 +170,8 @@ const ReportingFileUpload = ({ item, setDeleteFileId }) => {
               </div>
               <div className="col-lg-5">
                 <button
-                  className={`btn btn-labeled btn-primary shadow ${
-                    loading ? "disabled" : ""
-                  }`}
+                  className={`btn btn-labeled btn-primary shadow ${loading ? "disabled" : ""
+                    }`}
                   onClick={handleFileUpload}
                 >
                   {loading ? "Loading..." : "Upload"}

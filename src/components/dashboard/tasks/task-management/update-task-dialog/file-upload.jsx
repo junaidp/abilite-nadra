@@ -5,7 +5,7 @@ import {
   setupTaskFileDelete,
 } from "../../../../../global-redux/reducers/tasks-management/slice";
 import { useSelector, useDispatch } from "react-redux";
-import { handleDownload } from "../../../../../config/helper";
+import { handleDownload, validateFile } from "../../../../../config/helper";
 
 const InformationRequestFileUpload = ({ updateTaskId }) => {
   const dispatch = useDispatch();
@@ -16,21 +16,27 @@ const InformationRequestFileUpload = ({ updateTaskId }) => {
     (state) => state?.tasksManagement
   );
 
-  const handleFileChange = (event) => {
+  const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
-      const fileType = file.type;
-      const validTypes = [
-        "application/pdf",
-        "application/vnd.ms-excel",
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      ];
-      if (validTypes.includes(fileType)) {
-        setSelectedFile(file);
+      const isValid = await validateFile(file, toast);
+      if (isValid) {
+        const fileType = file.type;
+        const validTypes = [
+          "application/pdf",
+          "application/vnd.ms-excel",
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        ];
+        if (validTypes.includes(fileType)) {
+          setSelectedFile(file);
+        } else {
+          toast.error(
+            "Invalid file type. Only Pdf and Excel files are acceptable"
+          );
+          fileInputRef.current.value = "";
+        }
       } else {
-        toast.error(
-          "Invalid file type. Only Pdf and Excel files are acceptable"
-        );
+        fileInputRef.current.value = "";
       }
     }
   };
@@ -48,8 +54,14 @@ const InformationRequestFileUpload = ({ updateTaskId }) => {
     }
   };
 
-  const handleFileUpload = () => {
+  const handleFileUpload = async () => {
     if (selectedFile) {
+      const isValid = await validateFile(selectedFile, toast);
+      if (!isValid) {
+        setSelectedFile(null);
+        fileInputRef.current.value = "";
+        return;
+      }
       onApiCall(selectedFile);
     } else {
       toast.error("No file selected.");
@@ -81,13 +93,13 @@ const InformationRequestFileUpload = ({ updateTaskId }) => {
                 className="f-10"
                 ref={fileInputRef}
                 onChange={handleFileChange}
+                accept=".xlsx, .xls, .pdf, .txt"
               />
             </div>
             <div className="col-lg-6">
               <button
-                className={`btn btn-labeled btn-primary  shadow ${
-                  loading && "disabled"
-                }`}
+                className={`btn btn-labeled btn-primary  shadow ${loading && "disabled"
+                  }`}
                 onClick={handleFileUpload}
               >
                 <span className="btn-label me-2">

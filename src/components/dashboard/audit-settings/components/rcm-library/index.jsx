@@ -20,6 +20,7 @@ import AddSettingsControlRCMDialog from "../../../../modals/add-settings-rcm-con
 import AddSettingsProgramRCMDialog from "../../../../modals/add-settings-rcm-program-dialog";
 import AddButtons from "./components/AddButtons";
 import DeleteRCMDialog from "./components/DeleteRCMDialog";
+import { validateFile } from "../../../../../config/helper";
 
 const RCMLibraray = ({ userHierarchy, userRole, currentSettingOption }) => {
   const dispatch = useDispatch();
@@ -60,11 +61,22 @@ const RCMLibraray = ({ userHierarchy, userRole, currentSettingOption }) => {
     document.body.removeChild(link);
   };
 
+  const clearSelectedFile = () => {
+    setSelectedFile(null);
+    if (fileInputRef?.current) {
+      fileInputRef.current.value = "";
+    }
+  };
 
-  const handleFileChange = (event) => {
+  const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
-      setSelectedFile(file);
+      const isValid = await validateFile(file, toast);
+      if (isValid) {
+        setSelectedFile(file);
+      } else {
+        clearSelectedFile();
+      }
     }
   };
 
@@ -80,8 +92,13 @@ const RCMLibraray = ({ userHierarchy, userRole, currentSettingOption }) => {
     }
   };
 
-  const handleFileUpload = () => {
+  const handleFileUpload = async () => {
     if (selectedFile) {
+      const isValid = await validateFile(selectedFile, toast);
+      if (!isValid) {
+        clearSelectedFile();
+        return;
+      }
       onApiCall(selectedFile);
     } else {
       toast.error("No file selected.");

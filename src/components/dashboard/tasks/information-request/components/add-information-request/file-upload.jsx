@@ -1,6 +1,7 @@
 import React from "react";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
+import { validateFile } from "../../../../../../config/helper";
 
 const InformationRequestFileUpload = ({ uploads, setUploads }) => {
   const fileInputRef = React.useRef(null);
@@ -10,27 +11,33 @@ const InformationRequestFileUpload = ({ uploads, setUploads }) => {
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   ];
 
-  const handleFileChange = (event) => {
+  const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
-      const fileType = file.type;
-      if (validTypes.includes(fileType)) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          const fileData = reader.result.split(",")[1];
-          const newFile = {
-            id: uuidv4(),
-            fileName: file.name,
-            fileData: fileData,
+      const isValid = await validateFile(file, toast);
+      if (isValid) {
+        const fileType = file.type;
+        if (validTypes.includes(fileType)) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            const fileData = reader.result.split(",")[1];
+            const newFile = {
+              id: uuidv4(),
+              fileName: file.name,
+              fileData: fileData,
+            };
+            setUploads((prevUploads) => [...prevUploads, newFile]);
+            fileInputRef.current.value = "";
           };
-          setUploads((prevUploads) => [...prevUploads, newFile]);
+          reader.readAsDataURL(file);
+        } else {
+          toast.error(
+            "Invalid file type. Only Pdf and Excel files are acceptable"
+          );
           fileInputRef.current.value = "";
-        };
-        reader.readAsDataURL(file);
+        }
       } else {
-        toast.error(
-          "Invalid file type. Only Pdf and Excel files are acceptable"
-        );
+        fileInputRef.current.value = "";
       }
     }
   };
@@ -60,6 +67,7 @@ const InformationRequestFileUpload = ({ uploads, setUploads }) => {
                 className="f-10"
                 ref={fileInputRef}
                 onChange={handleFileChange}
+                accept=".xlsx, .xls, .pdf, .txt"
               />
             </div>
           </div>

@@ -6,7 +6,7 @@ import {
   setupConsolidationFileUpdate,
 } from "../../../../../global-redux/reducers/reports/consolidation-report/slice";
 import { useSelector, useDispatch } from "react-redux";
-import { handleDownload } from "../../../../../config/helper";
+import { handleDownload, validateFile } from "../../../../../config/helper";
 
 /**
  * ConsolidationFileUpload
@@ -72,16 +72,40 @@ const ConsolidationFileUpload = ({ item, setDeleteFileId }) => {
   const [selectedUpdateFile, setSelectedUpdateFile] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
 
-  // File select handlers
-  const handleFileChange = useCallback((event) => {
-    const file = event.target.files[0];
-    if (file) setSelectedFile(file);
+  const clearSelectedFile = useCallback(() => {
+    setSelectedFile(null);
+    if (fileInputRef?.current) fileInputRef.current.value = "";
   }, []);
 
-  const handleUpdateFileChange = useCallback((event) => {
-    const file = event.target.files[0];
-    if (file) setSelectedUpdateFile(file);
+  const clearSelectedUpdateFile = useCallback(() => {
+    setSelectedUpdateFile(null);
+    if (updatedFileInputRef?.current) updatedFileInputRef.current.value = "";
   }, []);
+
+  // File select handlers
+  const handleFileChange = useCallback(async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const isValid = await validateFile(file, toast);
+      if (isValid) {
+        setSelectedFile(file);
+      } else {
+        clearSelectedFile();
+      }
+    }
+  }, [clearSelectedFile]);
+
+  const handleUpdateFileChange = useCallback(async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const isValid = await validateFile(file, toast);
+      if (isValid) {
+        setSelectedUpdateFile(file);
+      } else {
+        clearSelectedUpdateFile();
+      }
+    }
+  }, [clearSelectedUpdateFile]);
 
   // Upload API
   const onApiCall = useCallback(
@@ -95,13 +119,18 @@ const ConsolidationFileUpload = ({ item, setDeleteFileId }) => {
     [dispatch, item?.id, subLoading]
   );
 
-  const handleFileUpload = useCallback(() => {
+  const handleFileUpload = useCallback(async () => {
     if (selectedFile) {
+      const isValid = await validateFile(selectedFile, toast);
+      if (!isValid) {
+        clearSelectedFile();
+        return;
+      }
       onApiCall(selectedFile);
     } else {
       toast.error("No file selected.");
     }
-  }, [onApiCall, selectedFile]);
+  }, [onApiCall, selectedFile, clearSelectedFile]);
 
   // Update API
   const updateFileApiCal = useCallback(
@@ -116,14 +145,19 @@ const ConsolidationFileUpload = ({ item, setDeleteFileId }) => {
   );
 
   const handleFileUpdate = useCallback(
-    (id) => {
+    async (id) => {
       if (selectedUpdateFile) {
+        const isValid = await validateFile(selectedUpdateFile, toast);
+        if (!isValid) {
+          clearSelectedUpdateFile();
+          return;
+        }
         updateFileApiCal(selectedUpdateFile, id);
       } else {
         toast.error("Please select update file first.");
       }
     },
-    [selectedUpdateFile, updateFileApiCal]
+    [selectedUpdateFile, updateFileApiCal, clearSelectedUpdateFile]
   );
 
   // Delete handler

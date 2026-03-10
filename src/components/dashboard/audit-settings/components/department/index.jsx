@@ -16,7 +16,7 @@ import DepartmentAccordionItem from "./DepartmentAccordionItem";
 import DeleteDepartmentDialog from "./DeleteDepartmentDialog";
 import EditDepartmentDialog from "./EditDepartmentDialog";
 import EditSubDepartmentDialog from "./EditSubDepartmentDialog";
-import { sanitizeSimpleName } from "../../../../../config/helper"
+import { sanitizeSimpleName, validateFile } from "../../../../../config/helper"
 
 const Department = ({ userHierarchy, userRole, currentSettingOption }) => {
   const fileInputRef = React.useRef(null);
@@ -59,11 +59,22 @@ const Department = ({ userHierarchy, userRole, currentSettingOption }) => {
     document.body.removeChild(link);
   };
 
+  const clearSelectedFile = () => {
+    setSelectedFile(null);
+    if (fileInputRef?.current) {
+      fileInputRef.current.value = "";
+    }
+  };
 
-  const handleFileChange = (event) => {
+  const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
-      setSelectedFile(file);
+      const isValid = await validateFile(file, toast);
+      if (isValid) {
+        setSelectedFile(file);
+      } else {
+        clearSelectedFile();
+      }
     }
   };
 
@@ -79,8 +90,13 @@ const Department = ({ userHierarchy, userRole, currentSettingOption }) => {
     }
   };
 
-  const handleFileUpload = () => {
+  const handleFileUpload = async () => {
     if (selectedFile) {
+      const isValid = await validateFile(selectedFile, toast);
+      if (!isValid) {
+        clearSelectedFile();
+        return;
+      }
       onApiCall(selectedFile);
     } else {
       toast.error("No file selected.");

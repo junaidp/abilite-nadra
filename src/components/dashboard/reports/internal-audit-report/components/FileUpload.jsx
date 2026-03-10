@@ -6,7 +6,7 @@ import {
     setupIahFileDelete,
     setupIahFileUpdate,
 } from "../../../../../global-redux/reducers/reports/internal-audit-report/slice";
-import { handleDownload } from "../../../../../config/helper";
+import { handleDownload, validateFile } from "../../../../../config/helper";
 
 /**
  * FileUpload Component
@@ -35,21 +35,45 @@ const FileUpload = ({ item, setDeleteFileId }) => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [selectedUpdateFile, setSelectedUpdateFile] = useState(null);
 
+    const clearSelectedFile = useCallback(() => {
+        setSelectedFile(null);
+        if (fileInputRef.current) fileInputRef.current.value = "";
+    }, []);
+
+    const clearSelectedUpdateFile = useCallback(() => {
+        setSelectedUpdateFile(null);
+        if (updatedFileInputRef.current) updatedFileInputRef.current.value = "";
+    }, []);
+
     /** 
      * Handle selecting new file for upload 
      */
-    const handleFileChange = useCallback((event) => {
+    const handleFileChange = useCallback(async (event) => {
         const file = event.target.files[0];
-        if (file) setSelectedFile(file);
-    }, []);
+        if (file) {
+            const isValid = await validateFile(file, toast);
+            if (isValid) {
+                setSelectedFile(file);
+            } else {
+                clearSelectedFile();
+            }
+        }
+    }, [clearSelectedFile]);
 
     /** 
      * Handle selecting file for update 
      */
-    const handleUpdateFileChange = useCallback((event) => {
+    const handleUpdateFileChange = useCallback(async (event) => {
         const file = event.target.files[0];
-        if (file) setSelectedUpdateFile(file);
-    }, []);
+        if (file) {
+            const isValid = await validateFile(file, toast);
+            if (isValid) {
+                setSelectedUpdateFile(file);
+            } else {
+                clearSelectedUpdateFile();
+            }
+        }
+    }, [clearSelectedUpdateFile]);
 
     /**
      * Upload selected file via API
@@ -68,10 +92,16 @@ const FileUpload = ({ item, setDeleteFileId }) => {
     /**
      * Trigger upload for selected file
      */
-    const handleFileUpload = useCallback(() => {
-        if (selectedFile) onApiCall(selectedFile);
-        else toast.error("No file selected.");
-    }, [selectedFile, onApiCall]);
+    const handleFileUpload = useCallback(async () => {
+        if (selectedFile) {
+            const isValid = await validateFile(selectedFile, toast);
+            if (!isValid) {
+                clearSelectedFile();
+                return;
+            }
+            onApiCall(selectedFile);
+        } else toast.error("No file selected.");
+    }, [selectedFile, onApiCall, clearSelectedFile]);
 
     /**
      * Update existing uploaded file
@@ -88,14 +118,19 @@ const FileUpload = ({ item, setDeleteFileId }) => {
     );
 
     const handleFileUpdate = useCallback(
-        (id) => {
+        async (id) => {
             if (selectedUpdateFile) {
+                const isValid = await validateFile(selectedUpdateFile, toast);
+                if (!isValid) {
+                    clearSelectedUpdateFile();
+                    return;
+                }
                 updateFileApiCall(selectedUpdateFile, id);
             } else {
                 toast.error("Please select an update file before proceeding.");
             }
         },
-        [selectedUpdateFile, updateFileApiCall]
+        [selectedUpdateFile, updateFileApiCall, clearSelectedUpdateFile]
     );
 
     /**
