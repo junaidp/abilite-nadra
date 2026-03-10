@@ -221,3 +221,26 @@ export const deleteSubCheckList = async (data, thunkAPI) => {
     return thunkAPI.rejectWithValue(error);
   }
 };
+
+export const updateVendorChecklist = async (_, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    const email = user[0]?.email;
+    let props = await axios.put(
+      `${baseUrl}/vendor/updateChecklist?companyId=123&userId=123`,
+      null,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    thunkAPI.dispatch(setupGetAllCheckListsAfterSave({
+      userEmailId: email, companyId: user[0]?.company[0].id
+    }));
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};

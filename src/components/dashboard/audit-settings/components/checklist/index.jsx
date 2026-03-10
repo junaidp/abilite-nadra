@@ -9,6 +9,7 @@ import {
   setupGetAllCheckListItems,
   addCheckListId,
   changeCurrentSubListItem,
+  setupUpdateVendorChecklist
 } from "../../../../../global-redux/reducers/settings/check-list/slice";
 import { useSelector, useDispatch } from "react-redux";
 import EditCheckListDialog from "../../../../modals/edit-checklist-dialog";
@@ -187,7 +188,7 @@ const CheckList = ({
       </div>
       {(userRole === "ADMIN" || userHierarchy === "IAH") && (
         <div className="mt-3 d-flex flex-wrap gap-4">
-          <div className="flex-1 w-100">
+          <div className="flex-1 w-100 col-lg-6">
             <label className="w-100">Add CheckList:</label>
             <input
               className="form-control w-100"
@@ -197,17 +198,28 @@ const CheckList = ({
               onChange={(event) => setDescription(sanitizeSimpleName(event?.target?.value))}
             />
           </div>
-          <div className="col-lg-6 text-end float-end align-self-end">
-            <div
-              className={`btn btn-labeled btn-primary px-3 shadow ${loading && "disabled"
-                }`}
-              onClick={handleSave}
-            >
-              <span className="btn-label me-2">
-                <i className="fa fa-plus"></i>
-              </span>
-              {loading ? "Loading..." : "Add"}
+          <div className="col-lg-6  d-flex  justify-content-end gap-3 align-items-end">
+            <div>
+              <div
+                className={`btn btn-labeled btn-primary px-3 shadow ${loading && "disabled"
+                  }`}
+                onClick={handleSave}
+              >
+                {loading ? "Loading..." : "Add Checklist"}
+              </div>
             </div>
+            {
+              userRole === "ADMIN" &&
+              <div>
+                <div
+                  className={`btn btn-labeled btn-primary px-3 shadow ${loading && "disabled"
+                    }`}
+                  onClick={() => dispatch(setupUpdateVendorChecklist())}
+                >
+                  {loading ? "Loading..." : "Configure CheckList"}
+                </div>
+              </div>
+            }
           </div>
         </div>
       )}

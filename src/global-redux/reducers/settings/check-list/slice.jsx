@@ -10,6 +10,7 @@ import {
   editCheckListItem,
   deleteCheckList,
   deleteSubCheckList,
+  updateVendorChecklist
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
@@ -97,6 +98,13 @@ export const setupDeleteSubCheckList = createAsyncThunk(
   "settingsCheckList/deleteSubCheckList",
   async (data, thunkAPI) => {
     return deleteSubCheckList(data, thunkAPI);
+  }
+);
+
+export const setupUpdateVendorChecklist = createAsyncThunk(
+  "settingsCheckList/updateVendorChecklist",
+  async (data, thunkAPI) => {
+    return updateVendorChecklist(data, thunkAPI);
   }
 );
 
@@ -298,6 +306,23 @@ export const slice = createSlice({
         toast.success("Check List Item  Deleted Successfully");
       })
       .addCase(setupDeleteSubCheckList.rejected, (_, { payload }) => {
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Update Vendor CheckList
+    builder
+      .addCase(setupUpdateVendorChecklist.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupUpdateVendorChecklist.fulfilled, (state) => {
+        state.loading = false;
+        toast.success("Vendor Check List  Updated Successfully");
+      })
+      .addCase(setupUpdateVendorChecklist.rejected, (state, { payload }) => {
+        state.loading = false
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
         } else {
