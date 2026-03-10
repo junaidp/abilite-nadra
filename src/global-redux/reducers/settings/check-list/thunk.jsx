@@ -227,7 +227,7 @@ export const updateVendorChecklist = async (_, thunkAPI) => {
     const { user } = thunkAPI.getState().auth;
     const email = user[0]?.email;
     let props = await axios.put(
-      `${baseUrl}/vendor/updateChecklist?companyId=123&userId=123`,
+      `${baseUrl}/vendor/updateChecklist?companyId=${user[0]?.company[0].id}&userId=${user[0]?.id}`,
       null,
       {
         headers: {
