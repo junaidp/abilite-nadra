@@ -26,16 +26,13 @@ const RichTextEditor = ({
       toolbarAdaptive: false,
       readonly:
         singleItem?.remarks === "1" ||
-          singleItem?.remarks === "3" ||
-          allowEdit === false
-          ? true
-          : false,
+        singleItem?.remarks === "3" ||
+        allowEdit === false,
       spellCheck: true,
       askBeforePasteHTML: true,
-      removeButtons: ['about'],
+      removeButtons: ["about"],
       events: {},
       textIcons: false,
-
       buttons: [
         "bold",
         "|",
@@ -59,9 +56,8 @@ const RichTextEditor = ({
         "|",
         "image",
         "|",
-        "brush"
+        "brush",
       ],
-
       buttonsXS: [
         "bold",
         "|",
@@ -85,10 +81,10 @@ const RichTextEditor = ({
         "|",
         "image",
         "|",
-        "brush"
+        "brush",
       ],
     }),
-    [singleItem?.remarks]
+    [singleItem?.remarks, allowEdit]
   );
 
   React.useEffect(() => {
