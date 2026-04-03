@@ -117,10 +117,7 @@ const JobTimeAllocationReport = () => {
 
     const fetchInitialSequential = async () => {
       try {
-        // 1) fetch locations
-        await dispatch(setupGetAllLocations({ companyId }));
-
-        // 2) once locations are fetched, fetch time allocations with the current filters
+        // 1) once locations are fetched, fetch time allocations with the current filters
         // we map `Both` -> null to preserve old filter logic.
         await dispatch(
           setupGetAllTimeAllocation({
@@ -132,7 +129,11 @@ const JobTimeAllocationReport = () => {
             location: data?.location !== "" ? data?.location : null,
             subLocation: data?.subLocation !== "" ? data?.subLocation : null,
           })
-        );
+        ).unwrap();
+
+        // 2) fetch locations
+        await dispatch(setupGetAllLocations({ companyId })).unwrap();
+
       } catch (err) {
         console.error("Error during initial data fetch:", err);
       } finally {
@@ -160,7 +161,7 @@ const JobTimeAllocationReport = () => {
     let cancelled = false;
     const fetchFiltered = async () => {
       try {
-        await dispatch(
+        dispatch(
           setupGetAllTimeAllocation({
             companyId,
             natureThrough:
@@ -170,7 +171,7 @@ const JobTimeAllocationReport = () => {
             location: data?.location !== "" ? data?.location : null,
             subLocation: data?.subLocation !== "" ? data?.subLocation : null,
           })
-        );
+        )
 
         // When new results arrive, original code resets page to 1 — we keep that behavior.
         if (!cancelled) setPage(1);
