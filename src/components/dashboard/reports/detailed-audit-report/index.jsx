@@ -17,33 +17,24 @@ import {
 import {
   setupGetAllInternalAuditReports,
   resetInternalAuditReportAddSuccess,
-  handleChangeReport
+  handleChangeReport,
 } from "../../../../global-redux/reducers/reports/consolidation-report/slice";
 
 import DeleteInternalAuditConsolidationReportDialog from "../../../modals/delete-internal-audit-consolidation-report-dialog";
 import SubmitDialog from "./dialogs/SubmitDialog";
 import ApproveDialog from "./dialogs/ApproveDialog";
-import FeedBackDialog from "./dialogs/FeedBackDialog";
-import ViewFeedBackDialog from "./dialogs/ViewFeedBackDialog";
 
 import { encryptAndEncode } from "../../../../config/helper";
 
-// Tooltip font styling
 const poppinsStyle = {
   fontFamily: '"Poppins", sans-serif',
   fontWeight: "normal",
 };
 
-/**
- * DetailedAuditReport
- * Displays the list of internal audit consolidation reports with actions
- * for viewing, editing, submitting, approving, and feedback.
- */
 const DetailedAuditReport = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Redux selectors
   const { company, year } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
   const {
@@ -53,24 +44,19 @@ const DetailedAuditReport = () => {
     totalNoOfRecords,
   } = useSelector((state) => state?.consolidationReport);
 
-  // Local states
   const [page, setPage] = React.useState(1);
   const [itemsPerPage, setItemsPerPage] = React.useState(10);
   const [currentReportItem, setCurrentReportItem] = React.useState({});
   const [showSubmitReportDialog, setShowSubmitReportDialog] = React.useState(false);
   const [showApproveDialog, setShowApproveDialog] = React.useState(false);
-  const [showFeedBackDialog, setFeedBackDialog] = React.useState(false);
-  const [viewFeedBackDialog, setViewFeedBackDialog] = React.useState(false);
   const [showDeleteInternalAuditReportDialog, setShowDeleteInternalAuditReportDialog] =
     React.useState(false);
   const [deleteInternalAuditReportId, setDeleteInternalAuditReportId] = React.useState("");
 
   const isInitialRender = React.useRef(true);
 
-  // ---- Pagination handler ----
   const handleChange = (_, value) => setPage(value);
 
-  // ---- Items per page change ----
   const handleChangeItemsPerPage = (event) => {
     const companyId = user[0]?.company?.find((item) => item?.companyName === company)?.id;
     if (companyId) {
@@ -88,7 +74,6 @@ const DetailedAuditReport = () => {
     }
   };
 
-  // ---- Dialog handlers ----
   const handleSubmitReport = (item) => {
     setCurrentReportItem(item);
     setShowSubmitReportDialog(true);
@@ -99,7 +84,6 @@ const DetailedAuditReport = () => {
     setShowApproveDialog(true);
   };
 
-  // ---- Re-fetch data after successful add/update/delete ----
   React.useEffect(() => {
     if (internalAuditReportAddSuccess) {
       const companyId = user[0]?.company?.find((item) => item?.companyName === company)?.id;
@@ -119,7 +103,6 @@ const DetailedAuditReport = () => {
     }
   }, [internalAuditReportAddSuccess, dispatch, user, company, year]);
 
-  // ---- Initial and page change fetch ----
   React.useEffect(() => {
     const companyId = user[0]?.company?.find((item) => item?.companyName === company)?.id;
     if (companyId) {
@@ -134,7 +117,6 @@ const DetailedAuditReport = () => {
     }
   }, [dispatch, user, company, page, itemsPerPage, year]);
 
-  // ---- Fetch data when year changes (after initial mount) ----
   React.useEffect(() => {
     if (isInitialRender.current) {
       isInitialRender.current = false;
@@ -155,9 +137,11 @@ const DetailedAuditReport = () => {
     }
   }, [year, dispatch, user, company]);
 
+  const currentUserId = Number(user?.[0]?.id);
+  const currentUserName = user?.[0]?.name;
+
   return (
     <div>
-      {/* ---- Modals ---- */}
       {showDeleteInternalAuditReportDialog && (
         <div className="model-parent d-flex justify-content-between items-center">
           <div className="model-wrap">
@@ -191,29 +175,6 @@ const DetailedAuditReport = () => {
         </div>
       )}
 
-      {showFeedBackDialog && (
-        <div className="model-parent">
-          <div className="model-wrap">
-            <FeedBackDialog
-              Id={currentReportItem?.id}
-              setFeedBackDialog={setFeedBackDialog}
-            />
-          </div>
-        </div>
-      )}
-
-      {viewFeedBackDialog && (
-        <div className="model-parent">
-          <div className="model-wrap">
-            <ViewFeedBackDialog
-              currentReportItem={currentReportItem}
-              setViewFeedBackDialog={setViewFeedBackDialog}
-            />
-          </div>
-        </div>
-      )}
-
-      {/* ---- Header ---- */}
       <header className="section-header my-3 text-start d-flex align-items-center justify-content-between">
         <div className="mb-0 heading">Detailed Audit Report</div>
         <div>
@@ -251,7 +212,6 @@ const DetailedAuditReport = () => {
         </div>
       </header>
 
-      {/* ---- Table ---- */}
       <div className="row">
         <div className="col-lg-12">
           <div className="table-responsive">
@@ -284,10 +244,63 @@ const DetailedAuditReport = () => {
                   </tr>
                 ) : (
                   allInternalAuditReports?.map((item, index) => {
-                    const isCreatedByUser =
-                      item?.preparedBy === user[0]?.userId?.name
-                    const isIAH =
-                      user[0]?.userId?.employeeid?.userHierarchy === "IAH";
+                    const isReportCreator = item?.preparedBy === currentUserName;
+
+                    const isResourceUser =
+                      item?.resourceAllocation?.resourcesList?.some(
+                        (singleUser) => Number(singleUser?.id) === currentUserId
+                      ) || false;
+
+                    const isHeadOfInternalAudit =
+                      Number(item?.resourceAllocation?.headOfInternalAudit?.id) ===
+                      currentUserId;
+
+                    const isBackupHeadOfInternalAudit =
+                      Number(item?.resourceAllocation?.backupHeadOfInternalAudit?.id) ===
+                      currentUserId;
+
+                    const isProposedJobApprover =
+                      Number(item?.resourceAllocation?.proposedJobApprover?.id) ===
+                      currentUserId;
+
+                    const canEditBeforeSubmission =
+                      !item?.submitted &&
+                      (isReportCreator ||
+                        isResourceUser ||
+                        isHeadOfInternalAudit ||
+                        isBackupHeadOfInternalAudit ||
+                        isProposedJobApprover);
+
+                    const canEditAfterSubmission =
+                      item?.submitted &&
+                      (isHeadOfInternalAudit || isBackupHeadOfInternalAudit);
+
+                    const canEdit = canEditBeforeSubmission || canEditAfterSubmission;
+
+                    const canDeleteBeforeSubmission =
+                      !item?.submitted &&
+                      (isReportCreator ||
+                        isHeadOfInternalAudit ||
+                        isBackupHeadOfInternalAudit);
+
+                    const canDeleteAfterSubmission =
+                      item?.submitted &&
+                      !item?.approved &&
+                      (isHeadOfInternalAudit || isBackupHeadOfInternalAudit);
+
+                    const canDeleteAfterApproval =
+                      item?.approved &&
+                      (isHeadOfInternalAudit || isBackupHeadOfInternalAudit);
+
+                    const canDelete =
+                      canDeleteBeforeSubmission ||
+                      canDeleteAfterSubmission ||
+                      canDeleteAfterApproval;
+
+                    const canApprove =
+                      item?.submitted &&
+                      !item?.approved &&
+                      (isHeadOfInternalAudit || isBackupHeadOfInternalAudit);
 
                     return (
                       <tr key={index}>
@@ -300,7 +313,6 @@ const DetailedAuditReport = () => {
 
                         <td>
                           <div className="d-flex flex-wrap gap-4">
-                            {/* View */}
                             <i
                               className="fa-eye fa f-18 cursor-pointer"
                               onClick={() => {
@@ -313,8 +325,7 @@ const DetailedAuditReport = () => {
                               }}
                             ></i>
 
-                            {/* Edit */}
-                            {(isCreatedByUser && !item?.submitted) || isIAH ? (
+                            {canEdit ? (
                               <i
                                 className="fa fa-edit f-18 cursor-pointer"
                                 onClick={() => {
@@ -328,8 +339,7 @@ const DetailedAuditReport = () => {
                               ></i>
                             ) : null}
 
-                            {/* Delete */}
-                            {(isCreatedByUser && !item?.submitted) || isIAH ? (
+                            {canDelete ? (
                               <i
                                 className="fa fa-trash text-danger cursor-pointer f-18"
                                 onClick={() => {
@@ -339,10 +349,9 @@ const DetailedAuditReport = () => {
                               ></i>
                             ) : null}
 
-                            {/* Submit */}
                             {item?.reportName &&
                               !item?.submitted &&
-                              isCreatedByUser && (
+                              isReportCreator && (
                                 <div
                                   className="btn btn-labeled btn-primary shadow h-40"
                                   onClick={() => handleSubmitReport(item)}
@@ -351,26 +360,21 @@ const DetailedAuditReport = () => {
                                 </div>
                               )}
 
-                            {/* Approve */}
-                            {item?.submitted &&
-                              !item?.approved &&
-                              isIAH && (
-                                <div
-                                  className="btn btn-labeled btn-primary shadow h-35"
-                                  onClick={() => handleApproveReport(item)}
-                                >
-                                  Approve
-                                </div>
-                              )}
+                            {canApprove && (
+                              <div
+                                className="btn btn-labeled btn-primary shadow h-35"
+                                onClick={() => handleApproveReport(item)}
+                              >
+                                Approve
+                              </div>
+                            )}
 
-                            {/* Download */}
-                            {
-                              item?.reportName &&
+                            {item?.reportName && (
                               <Tooltip title="Link to download pdf" placement="top">
                                 <i
                                   className="fa fa-download f-18 cursor-pointer"
                                   onClick={() => {
-                                    dispatch(handleChangeReport(item))
+                                    dispatch(handleChangeReport(item));
                                     const encryptedId = encryptAndEncode(
                                       item?.id.toString()
                                     );
@@ -380,7 +384,7 @@ const DetailedAuditReport = () => {
                                   }}
                                 ></i>
                               </Tooltip>
-                            }
+                            )}
                           </div>
                         </td>
                       </tr>
@@ -391,7 +395,6 @@ const DetailedAuditReport = () => {
             </table>
           </div>
 
-          {/* Pagination */}
           {allInternalAuditReports?.length > 0 && (
             <div className="row">
               <div className="col-lg-6 mb-4">
