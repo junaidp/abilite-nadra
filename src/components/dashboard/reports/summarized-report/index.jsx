@@ -26,10 +26,6 @@ const poppinsStyle = {
     fontWeight: "normal",
 };
 
-/**
- * Displays all summarized reports with pagination, CRUD actions, and role-based access.
- * Also handles refreshing data on page change, year change, or new report creation.
- */
 const SummarizedReport = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -49,15 +45,12 @@ const SummarizedReport = () => {
     const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
     const [deleteReportId, setDeleteReportId] = React.useState("");
 
-    /** 🔹 Utility: Extracts selected company ID from user */
     const getCompanyId = React.useCallback(() => {
         return user?.[0]?.company?.find((item) => item?.companyName === company)?.id;
     }, [user, company]);
 
-    /** 🔹 Handle pagination change */
     const handlePageChange = (_, value) => setPage(value);
 
-    /** 🔹 Handle items per page selection */
     const handleItemsPerPageChange = (event) => {
         const companyId = getCompanyId();
         if (!companyId) return;
@@ -74,7 +67,6 @@ const SummarizedReport = () => {
         );
     };
 
-    /** 🔹 Fetch reports after successful creation */
     React.useEffect(() => {
         if (!summarizedReportAddSuccess) return;
         const companyId = getCompanyId();
@@ -93,7 +85,6 @@ const SummarizedReport = () => {
         }
     }, [summarizedReportAddSuccess, dispatch, getCompanyId, year]);
 
-    /** 🔹 Fetch reports on page change */
     React.useEffect(() => {
         const companyId = getCompanyId();
         if (companyId) {
@@ -108,7 +99,6 @@ const SummarizedReport = () => {
         }
     }, [dispatch, getCompanyId, page, itemsPerPage, year]);
 
-    /** 🔹 Load company locations */
     React.useEffect(() => {
         const companyId = getCompanyId();
         if (companyId) {
@@ -116,7 +106,6 @@ const SummarizedReport = () => {
         }
     }, [dispatch, getCompanyId]);
 
-    /** 🔹 Refresh on year change (skip initial mount) */
     React.useEffect(() => {
         if (isInitialRender.current) {
             isInitialRender.current = false;
@@ -137,9 +126,11 @@ const SummarizedReport = () => {
         }
     }, [year, dispatch, getCompanyId]);
 
+    const currentUserId = Number(user?.[0]?.id);
+    const currentUserName = user?.[0]?.name;
+
     return (
         <div>
-            {/* 🔹 Delete Confirmation Dialog */}
             {showDeleteDialog && (
                 <div className="model-parent d-flex justify-content-center align-items-center">
                     <div className="model-wrap">
@@ -151,7 +142,6 @@ const SummarizedReport = () => {
                 </div>
             )}
 
-            {/* 🔹 Header */}
             <header className="section-header my-3 text-start d-flex align-items-center justify-content-between">
                 <div className="mb-0 heading">Summarized Report</div>
 
@@ -189,7 +179,6 @@ const SummarizedReport = () => {
                 </div>
             </header>
 
-            {/* 🔹 Report Table */}
             <div className="row">
                 <div className="col-lg-12">
                     <div className="table-responsive">
@@ -222,10 +211,59 @@ const SummarizedReport = () => {
                                 ) : (
                                     allSummarizedReports.map((item, index) => {
                                         const encryptedId = encryptAndEncode(item?.id.toString());
-                                        const canEditOrDelete =
-                                            (item.preparedBy === user?.[0]?.userId?.employeeid?.name &&
-                                                !item?.submitted) ||
-                                            user?.[0]?.userId?.employeeid?.userHierarchy === "IAH";
+
+                                        const isReportCreator = item?.preparedBy === currentUserName;
+
+                                        const isResourceUser =
+                                            item?.resourceAllocation?.resourcesList?.some(
+                                                (singleUser) => Number(singleUser?.id) === currentUserId
+                                            ) || false;
+
+                                        const isHeadOfInternalAudit =
+                                            Number(item?.resourceAllocation?.headOfInternalAudit?.id) ===
+                                            currentUserId;
+
+                                        const isBackupHeadOfInternalAudit =
+                                            Number(item?.resourceAllocation?.backupHeadOfInternalAudit?.id) ===
+                                            currentUserId;
+
+                                        const isProposedJobApprover =
+                                            Number(item?.resourceAllocation?.proposedJobApprover?.id) ===
+                                            currentUserId;
+
+                                        const canEditBeforeSubmission =
+                                            !item?.submitted &&
+                                            (isReportCreator ||
+                                                isResourceUser ||
+                                                isHeadOfInternalAudit ||
+                                                isBackupHeadOfInternalAudit ||
+                                                isProposedJobApprover);
+
+                                        const canEditAfterSubmission =
+                                            item?.submitted &&
+                                            (isHeadOfInternalAudit || isBackupHeadOfInternalAudit);
+
+                                        const canEdit = canEditBeforeSubmission || canEditAfterSubmission;
+
+                                        const canDeleteBeforeSubmission =
+                                            !item?.submitted &&
+                                            (isReportCreator ||
+                                                isHeadOfInternalAudit ||
+                                                isBackupHeadOfInternalAudit);
+
+                                        const canDeleteAfterSubmission =
+                                            item?.submitted &&
+                                            !item?.approved &&
+                                            (isHeadOfInternalAudit || isBackupHeadOfInternalAudit);
+
+                                        const canDeleteAfterApproval =
+                                            item?.approved &&
+                                            (isHeadOfInternalAudit || isBackupHeadOfInternalAudit);
+
+                                        const canDelete =
+                                            canDeleteBeforeSubmission ||
+                                            canDeleteAfterSubmission ||
+                                            canDeleteAfterApproval;
 
                                         return (
                                             <tr key={item?.id || index}>
@@ -237,7 +275,6 @@ const SummarizedReport = () => {
                                                 <td>{item?.status || "-"}</td>
                                                 <td>
                                                     <div className="d-flex flex-wrap gap-3">
-                                                        {/* View */}
                                                         <i
                                                             className="fa fa-eye f-18 cursor-pointer"
                                                             onClick={() =>
@@ -245,8 +282,7 @@ const SummarizedReport = () => {
                                                             }
                                                         ></i>
 
-                                                        {/* Edit */}
-                                                        {canEditOrDelete && (
+                                                        {canEdit && (
                                                             <i
                                                                 className="fa fa-edit f-18 cursor-pointer"
                                                                 onClick={() =>
@@ -255,8 +291,7 @@ const SummarizedReport = () => {
                                                             ></i>
                                                         )}
 
-                                                        {/* Delete */}
-                                                        {canEditOrDelete && (
+                                                        {canDelete && (
                                                             <i
                                                                 className="fa fa-trash text-danger cursor-pointer f-18"
                                                                 onClick={() => {
@@ -266,20 +301,17 @@ const SummarizedReport = () => {
                                                             ></i>
                                                         )}
 
-                                                        {/* Download */}
-                                                        {
-                                                            item?.reportName &&
+                                                        {item?.reportName && (
                                                             <Tooltip title="Download PDF" placement="top">
                                                                 <i
                                                                     className="fa fa-download f-18 cursor-pointer"
                                                                     onClick={() => {
-                                                                        dispatch(handleChangeReport(item))
-                                                                        navigate(`/audit/download-summarized-report/${encryptedId}`)
-                                                                    }
-                                                                    }
+                                                                        dispatch(handleChangeReport(item));
+                                                                        navigate(`/audit/download-summarized-report/${encryptedId}`);
+                                                                    }}
                                                                 ></i>
                                                             </Tooltip>
-                                                        }
+                                                        )}
                                                     </div>
                                                 </td>
                                             </tr>
@@ -290,7 +322,6 @@ const SummarizedReport = () => {
                         </table>
                     </div>
 
-                    {/* 🔹 Pagination */}
                     {allSummarizedReports?.length > 0 && (
                         <div className="row">
                             <div className="col-lg-6 mb-4">
