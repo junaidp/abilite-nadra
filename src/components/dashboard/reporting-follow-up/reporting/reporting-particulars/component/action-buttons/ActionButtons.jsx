@@ -114,15 +114,9 @@ const ActionButtons = ({
             {item?.stepNo === 3 &&
                 (user?.userId?.employeeid?.userHierarchy === "IAH" ||
                     Number(user?.userId?.id) ===
-                    Number(
-                        singleReport?.resourceAllocation?.backupHeadOfInternalAudit?.id
-                    ) ||
+                    Number(singleReport?.resourceAllocation?.backupHeadOfInternalAudit?.id) ||
                     Number(user?.userId?.id) ===
-                    Number(singleReport?.resourceAllocation?.proposedJobApprover?.id) ||
-                    singleReport?.resourceAllocation?.resourcesList?.find(
-                        (singleResource) =>
-                            Number(singleResource?.id) === Number(user?.userId?.id)
-                    )) && (
+                    Number(singleReport?.resourceAllocation?.proposedJobApprover?.id)) && (
                     <>
                         <button
                             className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${loading && "disabled"

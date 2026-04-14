@@ -384,7 +384,7 @@ const AuditPlanSummary = () => {
 
                     <thead>
                       <tr className="bg-white">
-                        <th className="bg-white">Rank</th>
+                        <th className="bg-white">Sr. #</th>
                         <th className="bg-white">Audit Jobs</th>
                         {/* <th className="bg-white ">Residual Risk Rating</th> */}
                         <th className="bg-white">Priority</th>
@@ -423,6 +423,8 @@ const AuditPlanSummary = () => {
                           setCurrentPlanSummaryId={setCurrentPlanSummaryId}
                           setFeedBackDialog={setFeedBackDialog}
                           setViewFeedBackDialog={setViewFeedBackDialog}
+                          page={page}
+                          itemsPerPage={itemsPerPage}
                         />
                       );
                     })}

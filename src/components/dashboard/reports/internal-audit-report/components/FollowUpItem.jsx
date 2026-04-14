@@ -87,46 +87,6 @@ const FollowUpItem = ({ item, consolidatedObservationsItem }) => {
                     disabled
                 />
             </div>
-
-            {/* Recommendations Implemented */}
-            <div className="mb-3 align-items-center">
-                <label className="pe-4">Recommendations Implemented:</label>
-                <select
-                    className="form-select"
-                    aria-label="Recommendations Implemented"
-                    value={item?.followUp?.recommendationsImplemented?.toString() || ""}
-                    name="recommendationsImplemented"
-                    disabled
-                >
-                    <option value="">Select One</option>
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
-                </select>
-            </div>
-
-            {/* Final Comments (visible only if recommendations are implemented) */}
-            {item?.followUp?.recommendationsImplemented?.toString() === "true" && (
-                <div className="mb-3">
-                    <label>Final Comments:</label>
-                    <ViewRichTextEditor initialValue={item?.followUp?.finalComments} />
-                </div>
-            )}
-
-            {/* Test in Next Year */}
-            <div className="mb-3 align-items-center">
-                <label className="pe-4">Test In Next Year:</label>
-                <select
-                    className="form-select"
-                    aria-label="Test In Next Year"
-                    value={item?.followUp?.testInNextYear?.toString() || ""}
-                    name="testInNextYear"
-                    disabled
-                >
-                    <option value="">Select One</option>
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
-                </select>
-            </div>
         </div>
     );
 };

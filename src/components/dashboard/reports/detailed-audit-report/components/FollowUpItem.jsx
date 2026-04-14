@@ -1,6 +1,5 @@
 import moment from "moment";
 import ViewRichTextEditor from "../../../../../components/common/view-rich-text-editor/ViewRichTextEditor";
-import FileAttachement from "./Attachments";
 
 const FollowUpItem = ({ item, consolidatedObservationsItem }) => {
   // Format implementation date safely (fallback empty string if null/invalid)
@@ -85,45 +84,6 @@ const FollowUpItem = ({ item, consolidatedObservationsItem }) => {
           disabled
         />
       </div>
-
-      {/* Recommendations implemented dropdown */}
-      <div className="mb-3 align-items-center">
-        <label className="pe-4">Recommendations Implemented:</label>
-        <select
-          className="form-select"
-          value={item?.followUp?.recommendationsImplemented?.toString()}
-          disabled
-        >
-          <option value="">Select One</option>
-          <option value="true">Yes</option>
-          <option value="false">No</option>
-        </select>
-      </div>
-
-      {/* Final comments (only if recommendations implemented) */}
-      {item?.followUp?.recommendationsImplemented?.toString() === "true" && (
-        <div className="mb-3">
-          <label>Final Comments:</label>
-          <ViewRichTextEditor initialValue={item?.followUp?.finalComments} />
-        </div>
-      )}
-
-      {/* Test in next year dropdown */}
-      <div className="mb-3 align-items-center">
-        <label className="pe-4">Test In Next Year:</label>
-        <select
-          className="form-select"
-          value={item?.followUp?.testInNextYear?.toString()}
-          disabled
-        >
-          <option value="">Select One</option>
-          <option value="true">Yes</option>
-          <option value="false">No</option>
-        </select>
-      </div>
-
-      {/* File attachments (if any) */}
-      <FileAttachement item={item} />
     </div>
   );
 };

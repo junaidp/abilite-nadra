@@ -17,11 +17,13 @@ const Table = ({
   setCurrentPlanSummaryId,
   setFeedBackDialog,
   setViewFeedBackDialog,
+  page,
+  itemsPerPage
 }) => {
   return (
     <tbody>
       <tr>
-        <td>{item?.id}</td>
+        <td>{(page - 1) * itemsPerPage + index + 1}</td>
         <td className="min-w-300">{item?.title}</td>
         {/* <td className="normal-text">Low</td> */}
         <td>

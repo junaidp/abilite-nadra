@@ -27,15 +27,17 @@ const ActionButtons = ({
         [user, item]
     );
 
+    const isSameUser = (a, b) => Number(a) === Number(b);
+
     const isStep6Approver = useMemo(() => {
-        const userId = Number(user?.[0]?.userId?.id);
+        const userId = user?.[0]?.userId?.id;
         const hierarchy = user?.[0]?.userId?.employeeid?.userHierarchy;
-        const allResources = singleReport?.resourceAllocation;
+        const allocation = singleReport?.resourceAllocation;
+
         return (
             hierarchy === "IAH" ||
-            userId === Number(allResources?.backupHeadOfInternalAudit?.id) ||
-            userId === Number(allResources?.proposedJobApprover?.id) ||
-            allResources?.resourcesList?.some((r) => Number(r?.id) === userId)
+            isSameUser(userId, allocation?.backupHeadOfInternalAudit?.id) ||
+            isSameUser(userId, allocation?.proposedJobApprover?.id)
         );
     }, [user, singleReport]);
 

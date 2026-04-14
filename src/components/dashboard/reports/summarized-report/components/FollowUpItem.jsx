@@ -92,44 +92,6 @@ const FollowUpItem = ({ item }) => {
                     readOnly
                 />
             </div>
-
-            {/* Recommendations Implemented */}
-            <div className="mb-3 align-items-center">
-                <label className="pe-4">Recommendations Implemented:</label>
-                <select
-                    className="form-select"
-                    aria-label="Recommendations Implemented"
-                    value={followUp?.recommendationsImplemented?.toString() || ""}
-                    disabled
-                >
-                    <option value="">Select One</option>
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
-                </select>
-            </div>
-
-            {/* Final Comments (Conditional) */}
-            {followUp?.recommendationsImplemented?.toString() === "true" && (
-                <div className="mb-3">
-                    <label>Final Comments:</label>
-                    <ViewRichTextEditor initialValue={followUp?.finalComments} />
-                </div>
-            )}
-
-            {/* Test In Next Year */}
-            <div className="mb-3 align-items-center">
-                <label className="pe-4">Test In Next Year:</label>
-                <select
-                    className="form-select"
-                    aria-label="Test In Next Year"
-                    value={followUp?.testInNextYear?.toString() || ""}
-                    disabled
-                >
-                    <option value="">Select One</option>
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
-                </select>
-            </div>
         </div>
     );
 };
