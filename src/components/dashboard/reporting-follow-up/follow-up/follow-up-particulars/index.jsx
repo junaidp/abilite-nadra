@@ -1,6 +1,7 @@
+import { useSelector } from "react-redux";
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   resetReportingAddSuccess,
   setupGetInitialSingleReport,
@@ -22,7 +23,7 @@ import FeedBackDialog from "../../components/FeedBackDialog";
 import ViewThirdFeedBackDialog from "../../components/ThirdFeedBack";
 import SubmitDialog from "./components/SubmitDialog";
 
-import ModalWrapper from "../../../../../components/common/model-wrap/index"
+import ModalWrapper from "../../../../../components/common/model-wrap/index";
 
 import { decryptString } from "../../../../../config/helper";
 import "./index.css";
@@ -59,6 +60,7 @@ const FollowUpParticulars = () => {
   const [viewThirdFeedBackDialog, setViewThirdFeedBackDialog] = useState(false);
   const [showSubmitDialog, setShowSubmitDialog] = useState(false);
   const [currentSubmittedItem, setShowCurrentSubmittedItem] = useState({});
+  const [openAccordionId, setOpenAccordionId] = useState(null);
 
   /** ===============================
    * Handlers
@@ -252,7 +254,6 @@ const FollowUpParticulars = () => {
    * Render
    * =============================== */
 
-
   return (
     <div>
       {showSubmitDialog && (
@@ -342,7 +343,7 @@ const FollowUpParticulars = () => {
                         ?.map((item, index) => {
                           return (
                             <AccordianItem
-                              key={index}
+                              key={item?.id || index}
                               index={index}
                               handleFinalCommentsChange={handleFinalCommentsChange}
                               item={item}
@@ -371,6 +372,12 @@ const FollowUpParticulars = () => {
                               setShowCurrentSubmittedItem={
                                 setShowCurrentSubmittedItem
                               }
+                              isOpen={Number(openAccordionId) === Number(item?.id)}
+                              onToggle={() => {
+                                setOpenAccordionId((prev) =>
+                                  Number(prev) === Number(item?.id) ? null : item?.id
+                                );
+                              }}
                             />
                           );
                         })}

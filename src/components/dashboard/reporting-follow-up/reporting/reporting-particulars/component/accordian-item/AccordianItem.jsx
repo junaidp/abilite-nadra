@@ -38,6 +38,8 @@ const AccordianItem = ({
   setDeleteFileId,
   setShowSubmitDialog,
   setShowCurrentSubmittedItem,
+  isOpen,
+  onToggle,
 }) => {
   const { user } = useSelector((state) => state?.auth);
 
@@ -48,26 +50,24 @@ const AccordianItem = ({
    * This ensures the component always reflects the latest reporting data.
    */
   useEffect(() => {
-    if (singleReport && reportingId) {
+    if (singleReport && reportingId && isOpen) {
       const foundItem = singleReport?.reportingList?.find(
         (report) => Number(report?.id) === Number(item?.id)
       );
       setCurrentItem(foundItem || {});
     }
-  }, [singleReport, reportingId, item?.id]);
+  }, [singleReport, reportingId, item?.id, isOpen]);
 
   return (
 
     <div className="accordion-item">
       <h2 className="accordion-header">
         <button
-          className="accordion-button collapsed"
+          className={`accordion-button ${isOpen ? "" : "collapsed"}`}
           type="button"
-          data-bs-toggle="collapse"
-          data-bs-target={`#flush-collapse${item?.id}`}
-          aria-expanded="false"
+          onClick={onToggle}
+          aria-expanded={isOpen}
           aria-controls={`flush-collapse${item?.id}`}
-          onClick={() => setCurrentOpenItem(item)}
         >
           <div className="d-flex w-100 me-3 align-items-center justify-content-between">
             <div className="d-flex align-items-center">
@@ -80,51 +80,53 @@ const AccordianItem = ({
         </button>
       </h2>
 
-      <div
-        id={`flush-collapse${item?.id}`}
-        className="accordion-collapse collapse"
-        data-bs-parent="#accordionFlushExample"
-      >
-        <div className="accordion-body">
-          <ObservationSection
-            item={item}
-            user={user}
-            currentItem={currentItem}
-            singleReport={singleReport}
-            allUsers={allUsers}
-            setReport={setReport}
-            handleChange={handleChange}
-            handleObservationChange={handleObservationChange}
-            handleManagementCommentsChange={handleManagementCommentsChange}
-            handleAllowEditSection1={handleAllowEditSection1}
-          />
+      {isOpen && (
+        <div
+          id={`flush-collapse${item?.id}`}
+          className="accordion-collapse collapse show"
+          data-bs-parent="#accordionFlushExample"
+        >
+          <div className="accordion-body">
+            <ObservationSection
+              item={item}
+              user={user}
+              currentItem={currentItem}
+              singleReport={singleReport}
+              allUsers={allUsers}
+              setReport={setReport}
+              handleChange={handleChange}
+              handleObservationChange={handleObservationChange}
+              handleManagementCommentsChange={handleManagementCommentsChange}
+              handleAllowEditSection1={handleAllowEditSection1}
+            />
 
 
-          <ReportingFileUpload item={item} setDeleteFileId={setDeleteFileId} />
+            <ReportingFileUpload item={item} setDeleteFileId={setDeleteFileId} />
 
-          {/* Action Buttons */}
-          <ActionButtons
-            item={item}
-            user={user[0]}
-            loading={loading}
-            singleReport={singleReport}
-            currentItem={currentItem}
-            handleSaveStep1={handleSaveStep1}
-            handleSaveToStep1={handleSaveToStep1}
-            handleSaveStep2={handleSaveStep2}
-            handleSaveToStep2={handleSaveToStep2}
-            handleSaveToStep4={handleSaveToStep4}
-            setCurrentReportingAndFollowUpId={setCurrentReportingAndFollowUpId}
-            setFeedBackDialog={setFeedBackDialog}
-            setShowCurrentSubmittedItem={setShowCurrentSubmittedItem}
-            setShowSubmitDialog={setShowSubmitDialog}
-            setViewFeedBackItem={setViewFeedBackItem}
-            setViewFirstFeedBackDialog={setViewFirstFeedBackDialog}
-            setViewSecondFeedBackDialog={setViewSecondFeedBackDialog}
-            handleAllowEditSection1={handleAllowEditSection1}
-          />
+            {/* Action Buttons */}
+            <ActionButtons
+              item={item}
+              user={user[0]}
+              loading={loading}
+              singleReport={singleReport}
+              currentItem={currentItem}
+              handleSaveStep1={handleSaveStep1}
+              handleSaveToStep1={handleSaveToStep1}
+              handleSaveStep2={handleSaveStep2}
+              handleSaveToStep2={handleSaveToStep2}
+              handleSaveToStep4={handleSaveToStep4}
+              setCurrentReportingAndFollowUpId={setCurrentReportingAndFollowUpId}
+              setFeedBackDialog={setFeedBackDialog}
+              setShowCurrentSubmittedItem={setShowCurrentSubmittedItem}
+              setShowSubmitDialog={setShowSubmitDialog}
+              setViewFeedBackItem={setViewFeedBackItem}
+              setViewFirstFeedBackDialog={setViewFirstFeedBackDialog}
+              setViewSecondFeedBackDialog={setViewSecondFeedBackDialog}
+              handleAllowEditSection1={handleAllowEditSection1}
+            />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

@@ -58,6 +58,7 @@ const ReportingParticulars = () => {
   const [report, setReport] = React.useState([]);
   const [deleteFileId, setDeleteFileId] = React.useState("");
   const [currentOpenItem, setCurrentOpenItem] = React.useState({});
+  const [openAccordionId, setOpenAccordionId] = React.useState(null);
   const [viewFeedBackItem, setViewFeedBackItem] = React.useState({});
   const [viewFirstFeedBackDialog, setViewFirstFeedBackDialog] =
     React.useState(false);
@@ -459,7 +460,7 @@ const ReportingParticulars = () => {
                       ? "No Reporting List Found"
                       : report?.reportingList?.map((item, index) => (
                         <AccordianItem
-                          key={index}
+                          key={item?.id || index}
                           item={item}
                           handleChange={handleChange}
                           loading={loading}
@@ -494,6 +495,13 @@ const ReportingParticulars = () => {
                           setShowCurrentSubmittedItem={
                             setShowCurrentSubmittedItem
                           }
+                          isOpen={Number(openAccordionId) === Number(item?.id)}
+                          onToggle={() => {
+                            setCurrentOpenItem(item);
+                            setOpenAccordionId((prev) =>
+                              Number(prev) === Number(item?.id) ? null : item?.id
+                            );
+                          }}
                         />
                       ))}
                   </div>

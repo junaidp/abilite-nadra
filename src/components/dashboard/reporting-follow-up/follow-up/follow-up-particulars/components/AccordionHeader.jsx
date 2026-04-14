@@ -4,7 +4,7 @@ import React from "react";
  * AccordionHeader
  * Renders the accordion button/header with icon and status label.
  */
-const AccordionHeader = ({ index, item }) => {
+const AccordionHeader = ({ index, item, isOpen, onToggle }) => {
   const statusLabel = (() => {
     if (Number(item?.stepNo) === 5) return "Exception To Be  Implemented";
     if (Number(item?.stepNo) === 6 && item.followUp.recommendationsImplemented) return "Exceptions Implemented";
@@ -15,11 +15,10 @@ const AccordionHeader = ({ index, item }) => {
 
   return (
     <button
-      className="accordion-button collapsed"
+      className={`accordion-button ${isOpen ? "" : "collapsed"}`}
       type="button"
-      data-bs-toggle="collapse"
-      data-bs-target={`#flush-collapse${index}`}
-      aria-expanded="false"
+      onClick={onToggle}
+      aria-expanded={isOpen}
       aria-controls={`flush-collapse${index}`}
     >
       <div className="d-flex w-100 me-3 align-items-center justify-content-between">

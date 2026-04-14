@@ -5,7 +5,7 @@ export const getAllSummarizedReports = async (data, thunkAPI) => {
     try {
         const { user } = thunkAPI.getState().auth;
         let props = await axios.get(
-            `${baseUrl}/summarizedReport/report/getAll?companyId=${data?.companyId}&pageNo=${data?.page}&pageSize=${data?.itemsPerPage}&Year=${data?.year}`,
+            `${baseUrl}/summarizedReport/report/getAllLight?companyId=${data?.companyId}&pageNo=${data?.page}&pageSize=${data?.itemsPerPage}&Year=${data?.year}`,
             {
                 headers: {
                     Authorization: `Bearer ${user[0]?.token}`,

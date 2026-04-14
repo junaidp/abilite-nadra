@@ -1,3 +1,4 @@
+import React from "react";
 import { useSelector } from "react-redux";
 import AccordionHeader from "./AccordionHeader";
 import ObservationDetails from "./ObservationDetails";
@@ -25,57 +26,66 @@ const AccordianItem = ({
   setShowSubmitDialog,
   setShowCurrentSubmittedItem,
   handleFinalCommentsChange,
+  isOpen,
+  onToggle,
 }) => {
   const { user } = useSelector((state) => state?.auth);
 
   return (
     <div className="accordion-item">
       <h2 className="accordion-header" id="headingeightt">
-        <AccordionHeader index={index} item={item} />
+        <AccordionHeader
+          index={index}
+          item={item}
+          isOpen={isOpen}
+          onToggle={onToggle}
+        />
       </h2>
 
-      <div
-        id={`flush-collapse${index}`}
-        className="accordion-collapse collapse"
-        data-bs-parent="#accordionFlushExample"
-      >
-        <div className="accordion-body">
-          <ObservationDetails item={item} singleReport={singleReport} />
+      {isOpen && (
+        <div
+          id={`flush-collapse${index}`}
+          className="accordion-collapse collapse show"
+          data-bs-parent="#accordionFlushExample"
+        >
+          <div className="accordion-body">
+            <ObservationDetails item={item} singleReport={singleReport} />
 
-          <ImplicationSection item={item} />
+            <ImplicationSection item={item} />
 
-          <AuditeeSection item={item} />
+            <AuditeeSection item={item} />
 
-          <ManagementCommentsSection item={item} />
+            <ManagementCommentsSection item={item} />
 
-          <FollowUpSection
-            item={item}
-            handleChange={handleChange}
-            handleAllowEditLastSection={handleAllowEditLastSection}
-            handleFinalCommentsChange={handleFinalCommentsChange}
-            singleReport={singleReport}
-            handleShowTestInNextYear={handleShowTestInNextYear}
-          />
+            <FollowUpSection
+              item={item}
+              handleChange={handleChange}
+              handleAllowEditLastSection={handleAllowEditLastSection}
+              handleFinalCommentsChange={handleFinalCommentsChange}
+              singleReport={singleReport}
+              handleShowTestInNextYear={handleShowTestInNextYear}
+            />
 
-          <ActionButtons
-            item={item}
-            user={user}
-            singleReport={singleReport}
-            loading={loading}
-            handleSave={handleSave}
-            handleSaveToStep7={handleSaveToStep7}
-            handleSaveToStep5={handleSaveToStep5}
-            setShowCurrentSubmittedItem={setShowCurrentSubmittedItem}
-            setShowSubmitDialog={setShowSubmitDialog}
-            setCurrentReportingAndFollowUpId={setCurrentReportingAndFollowUpId}
-            setFeedBackDialog={setFeedBackDialog}
-            setViewFeedBackItem={setViewFeedBackItem}
-            setViewThirdFeedBackDialog={setViewThirdFeedBackDialog}
-          />
+            <ActionButtons
+              item={item}
+              user={user}
+              singleReport={singleReport}
+              loading={loading}
+              handleSave={handleSave}
+              handleSaveToStep7={handleSaveToStep7}
+              handleSaveToStep5={handleSaveToStep5}
+              setShowCurrentSubmittedItem={setShowCurrentSubmittedItem}
+              setShowSubmitDialog={setShowSubmitDialog}
+              setCurrentReportingAndFollowUpId={setCurrentReportingAndFollowUpId}
+              setFeedBackDialog={setFeedBackDialog}
+              setViewFeedBackItem={setViewFeedBackItem}
+              setViewThirdFeedBackDialog={setViewThirdFeedBackDialog}
+            />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
 
-export default AccordianItem;
+export default React.memo(AccordianItem);
