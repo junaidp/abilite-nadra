@@ -236,7 +236,7 @@ export const downloadSummarizedReport = async (data, thunkAPI) => {
 export const submitSummarizedReport = async (data, thunkAPI) => {
     try {
         const { user } = thunkAPI.getState().auth;
-        let props = await axios.post(`${baseUrl}/summarized-report/updateStatus?submitted=${data.submitted}&approved=${data.approved}&summarizedReportId=${data?.summarizedReportId}`, null, {
+        let props = await axios.post(`${baseUrl}/summarizedReport/report/updateStatus?submitted=${data.submitted}&approved=${data.approved}&summarizedReportId=${data?.summarizedReportId}`, null, {
             headers: {
                 Authorization: `Bearer ${user[0]?.token}`,
             },
@@ -250,7 +250,7 @@ export const submitSummarizedReport = async (data, thunkAPI) => {
 export const approveSummarizedReport = async (data, thunkAPI) => {
     try {
         const { user } = thunkAPI.getState().auth;
-        let props = await axios.post(`${baseUrl}/summarized-report/updateStatus?submitted=${data.submitted}&approved=${data.approved}&summarizedReportId=${data?.summarizedReportId}`, null, {
+        let props = await axios.post(`${baseUrl}/summarizedReport/report/updateStatus?submitted=${data.submitted}&approved=${data.approved}&summarizedReportId=${data?.summarizedReportId}`, null, {
             headers: {
                 Authorization: `Bearer ${user[0]?.token}`,
             },
