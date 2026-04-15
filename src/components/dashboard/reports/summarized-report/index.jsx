@@ -5,7 +5,7 @@ import {
     setupGetAllSummarizedReports,
     resetSummarizedReportAddSuccess,
     setupGetAllLocations,
-    handleChangeReport
+    handleChangeReport,
 } from "../../../../global-redux/reducers/reports/summarized-report/slice";
 import {
     CircularProgress,
@@ -19,6 +19,8 @@ import {
 } from "@mui/material";
 import moment from "moment";
 import DeleteDialog from "./dialogs/DeleteDialog";
+import SubmitDialog from "./dialogs/SubmitDialog";
+import ApproveDialog from "./dialogs/ApproveDialog";
 import { encryptAndEncode } from "../../../../config/helper";
 
 const poppinsStyle = {
@@ -44,6 +46,9 @@ const SummarizedReport = () => {
     const [itemsPerPage, setItemsPerPage] = React.useState(10);
     const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
     const [deleteReportId, setDeleteReportId] = React.useState("");
+    const [currentReportItem, setCurrentReportItem] = React.useState({});
+    const [showSubmitDialog, setShowSubmitDialog] = React.useState(false);
+    const [showApproveDialog, setShowApproveDialog] = React.useState(false);
 
     const getCompanyId = React.useCallback(() => {
         return user?.[0]?.company?.find((item) => item?.companyName === company)?.id;
@@ -54,9 +59,11 @@ const SummarizedReport = () => {
     const handleItemsPerPageChange = (event) => {
         const companyId = getCompanyId();
         if (!companyId) return;
+
         const value = Number(event.target.value);
         setPage(1);
         setItemsPerPage(value);
+
         dispatch(
             setupGetAllSummarizedReports({
                 companyId,
@@ -67,12 +74,24 @@ const SummarizedReport = () => {
         );
     };
 
+    const handleSubmitReport = (item) => {
+        setCurrentReportItem(item);
+        setShowSubmitDialog(true);
+    };
+
+    const handleApproveReport = (item) => {
+        setCurrentReportItem(item);
+        setShowApproveDialog(true);
+    };
+
     React.useEffect(() => {
         if (!summarizedReportAddSuccess) return;
+
         const companyId = getCompanyId();
         if (companyId) {
             setPage(1);
             setItemsPerPage(10);
+
             dispatch(
                 setupGetAllSummarizedReports({
                     companyId,
@@ -81,6 +100,7 @@ const SummarizedReport = () => {
                     year,
                 })
             );
+
             dispatch(resetSummarizedReportAddSuccess());
         }
     }, [summarizedReportAddSuccess, dispatch, getCompanyId, year]);
@@ -111,10 +131,12 @@ const SummarizedReport = () => {
             isInitialRender.current = false;
             return;
         }
+
         const companyId = getCompanyId();
         if (companyId) {
             setPage(1);
             setItemsPerPage(10);
+
             dispatch(
                 setupGetAllSummarizedReports({
                     companyId,
@@ -137,6 +159,28 @@ const SummarizedReport = () => {
                         <DeleteDialog
                             setShowDeleteSummarizedReportDialog={setShowDeleteDialog}
                             deleteSummarizedReportId={deleteReportId}
+                        />
+                    </div>
+                </div>
+            )}
+
+            {showSubmitDialog && (
+                <div className="model-parent d-flex justify-content-center align-items-center">
+                    <div className="model-wrap">
+                        <SubmitDialog
+                            currentReportItem={currentReportItem}
+                            setShowSubmitDialog={setShowSubmitDialog}
+                        />
+                    </div>
+                </div>
+            )}
+
+            {showApproveDialog && (
+                <div className="model-parent d-flex justify-content-center align-items-center">
+                    <div className="model-wrap">
+                        <ApproveDialog
+                            currentReportItem={currentReportItem}
+                            setShowApproveDialog={setShowApproveDialog}
                         />
                     </div>
                 </div>
@@ -202,7 +246,8 @@ const SummarizedReport = () => {
                                             <CircularProgress size={24} />
                                         </td>
                                     </tr>
-                                ) : !allSummarizedReports?.length ? (
+                                ) : !allSummarizedReports?.length ||
+                                    allSummarizedReports?.[0]?.error === "Not Found" ? (
                                     <tr>
                                         <td colSpan="7" className="text-center">
                                             No Summarized Reports To Show.
@@ -265,6 +310,11 @@ const SummarizedReport = () => {
                                             canDeleteAfterSubmission ||
                                             canDeleteAfterApproval;
 
+                                        const canApprove =
+                                            item?.submitted &&
+                                            !item?.approved &&
+                                            (isHeadOfInternalAudit || isBackupHeadOfInternalAudit);
+
                                         return (
                                             <tr key={item?.id || index}>
                                                 <td>{(page - 1) * itemsPerPage + index + 1}</td>
@@ -301,6 +351,26 @@ const SummarizedReport = () => {
                                                             ></i>
                                                         )}
 
+                                                        {item?.reportName &&
+                                                            !item?.submitted &&
+                                                            isReportCreator && (
+                                                                <div
+                                                                    className="btn btn-labeled btn-primary shadow h-40"
+                                                                    onClick={() => handleSubmitReport(item)}
+                                                                >
+                                                                    Submit
+                                                                </div>
+                                                            )}
+
+                                                        {canApprove && (
+                                                            <div
+                                                                className="btn btn-labeled btn-primary shadow h-35"
+                                                                onClick={() => handleApproveReport(item)}
+                                                            >
+                                                                Approve
+                                                            </div>
+                                                        )}
+
                                                         {item?.reportName && (
                                                             <Tooltip title="Download PDF" placement="top">
                                                                 <i
@@ -331,6 +401,7 @@ const SummarizedReport = () => {
                                     onChange={handlePageChange}
                                 />
                             </div>
+
                             <div className="col-lg-6 mb-4 d-flex justify-content-end">
                                 <FormControl sx={{ minWidth: 200 }} size="small">
                                     <InputLabel id="items-per-page-label">Items Per Page</InputLabel>

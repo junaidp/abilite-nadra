@@ -1,6 +1,5 @@
 import React from "react";
 import moment from "moment";
-import { Chip } from "@mui/material";
 import RichTextEditor from "../rich-text/RichText";
 import Select from "../select/Select";
 
@@ -37,15 +36,6 @@ const ObservationSection = ({
                         name="observationTitle"
                         onChange={(event) => handleChange(event, item?.id)}
                         disabled={!isEditable}
-                    />
-                </div>
-                <div className="flex-1 d-flex flex-end">
-                    <Chip
-                        label={
-                            singleReport?.subLocationList?.find(
-                                (subLocation) => subLocation?.id === item?.subLocation
-                            )?.description
-                        }
                     />
                 </div>
             </div>

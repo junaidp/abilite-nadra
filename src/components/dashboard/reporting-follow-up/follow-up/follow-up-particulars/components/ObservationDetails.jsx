@@ -1,5 +1,4 @@
 import React from "react";
-import { Chip } from "@mui/material";
 import RichTextEditor from "./RichText";
 
 /**
@@ -7,9 +6,6 @@ import RichTextEditor from "./RichText";
  * Title, (optional) Area, and Observation rich text (readonly).
  */
 const ObservationDetails = ({ item, singleReport }) => {
-  const subLocationLabel = singleReport?.subLocationList?.find(
-    (s) => s?.id === item?.subLocation
-  )?.description;
 
   return (
     <>
@@ -24,9 +20,6 @@ const ObservationDetails = ({ item, singleReport }) => {
           />
         </div>
 
-        <div className="flex-1 d-flex flex-end">
-          <Chip label={subLocationLabel} />
-        </div>
       </div>
 
       {singleReport?.riskApproach === "Checklist" && (

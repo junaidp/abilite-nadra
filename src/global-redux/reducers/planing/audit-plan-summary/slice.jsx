@@ -2,6 +2,7 @@ import {
   getAllAuditPlanSummary,
   updateAuditPlanSummary,
   getInitialAllAuditPlanSummary,
+  getAllUsers,
   deletePlanSummary,
   auditPlanSummaryFeedback,
   approveAuditPlanSummary,
@@ -14,6 +15,7 @@ const initialState = {
   loading: false,
   initialLoading: false,
   allAuditPlanSummary: [],
+  users: [],
   auditPlanSummaryAddSuccess: false,
   totalNoOfRecords: 0,
 };
@@ -29,6 +31,13 @@ export const setupGetInitialAllAuditPlanSummary = createAsyncThunk(
   "auditPlanSummary/getInitialAllAuditPlanSummary",
   async (data, thunkAPI) => {
     return getInitialAllAuditPlanSummary(data, thunkAPI);
+  }
+);
+
+export const setupGetAllUsers = createAsyncThunk(
+  "auditPlanSummary/getAllUsers",
+  async (data, thunkAPI) => {
+    return getAllUsers(data, thunkAPI);
   }
 );
 
@@ -204,6 +213,22 @@ export const slice = createSlice({
         toast.success("Audit Plan Summary FeedBack Provided Successfully");
       })
       .addCase(setupAuditPlanSummaryFeedback.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    builder
+      .addCase(setupGetAllUsers.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetAllUsers.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.users = payload.data || [];
+      })
+      .addCase(setupGetAllUsers.rejected, (state, { payload }) => {
         state.loading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);

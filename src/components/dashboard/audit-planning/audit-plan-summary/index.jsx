@@ -5,6 +5,7 @@ import {
   setupUpdateAuditPlanSummary,
   resetAuditPlanSummarySuccess,
   setupGetInitialAllAuditPlanSummary,
+  setupGetAllUsers
 } from "../../../../global-redux/reducers/planing/audit-plan-summary/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
@@ -24,18 +25,21 @@ import moment from "moment";
 const AuditPlanSummary = () => {
   const dispatch = useDispatch();
   const isInitialRender = React.useRef(true);
+
   const {
     loading,
     allAuditPlanSummary,
     auditPlanSummaryAddSuccess,
     initialLoading,
     totalNoOfRecords,
+    users
   } = useSelector((state) => state?.planningAuditPlanSummary);
+
   const [selectedItem, setSelectedItem] = React.useState({});
   const [feedBackDialog, setFeedBackDialog] = React.useState(false);
   const [showSubmitDialog, setShowSubmitDialog] = React.useState(false);
   const [viewFeedBackDialog, setViewFeedBackDialog] = React.useState(false);
-  const { user,userCompany } = useSelector((state) => state?.auth);
+  const { user, userCompany } = useSelector((state) => state?.auth);
   const [currentId, setCurrentId] = React.useState("");
   const { company, year } = useSelector((state) => state?.common);
   const [showApproveDialog, setShowApproveDialog] = React.useState(false);
@@ -119,6 +123,7 @@ const AuditPlanSummary = () => {
     const companyId = user[0]?.company?.find(
       (item) => item?.companyName === company
     )?.id;
+
     if (companyId) {
       setPage(1);
       setItemsPerPage(Number(event.target.value));
@@ -139,24 +144,25 @@ const AuditPlanSummary = () => {
         allAuditPlanSummary.map((item) => {
           const startDateStr = item.jobScheduleList?.[0]?.plannedJobStartDate;
 
-          // Getting the original value and clear others
           let originalValue = 0;
           if (item.q1) originalValue = item.q1;
           else if (item.q2) originalValue = item.q2;
           else if (item.q3) originalValue = item.q3;
           else if (item.q4) originalValue = item.q4;
 
-          // all quarters 0
-          let q1 = 0, q2 = 0, q3 = 0, q4 = 0;
+          let q1 = 0,
+            q2 = 0,
+            q3 = 0,
+            q4 = 0;
 
           if (startDateStr) {
-            const selectedMonth = moment(startDateStr).month() + 1; // 1–12
-            const fiscalStartMonth = moment(userCompany.fiscalYearForm).month() + 1;
+            const selectedMonth = moment(startDateStr).month() + 1;
+            const fiscalStartMonth =
+              moment(userCompany.fiscalYearForm).month() + 1;
 
             const offset = (selectedMonth - fiscalStartMonth + 12) % 12;
-            const quarterIndex = Math.floor(offset / 3); // 0 = Q1, ..., 3 = Q4
+            const quarterIndex = Math.floor(offset / 3);
 
-            // Assign the original value to the correct quarter
             if (quarterIndex === 0) q1 = originalValue;
             else if (quarterIndex === 1) q2 = originalValue;
             else if (quarterIndex === 2) q3 = originalValue;
@@ -173,11 +179,10 @@ const AuditPlanSummary = () => {
           };
         })
       );
-    }
-    else {
+    } else {
       setData([]);
     }
-  }, [allAuditPlanSummary]);
+  }, [allAuditPlanSummary, userCompany]);
 
   React.useEffect(() => {
     if (allAuditPlanSummary?.length !== 0) {
@@ -190,33 +195,34 @@ const AuditPlanSummary = () => {
         q3: 0,
         q4: 0,
       };
+
       allAuditPlanSummary?.forEach((element) => {
         const startDateStr = element.jobScheduleList?.[0]?.plannedJobStartDate;
 
-        // Getting the original value and clear others
         let originalValue = 0;
         if (element.q1) originalValue = element.q1;
         else if (element.q2) originalValue = element.q2;
         else if (element.q3) originalValue = element.q3;
         else if (element.q4) originalValue = element.q4;
 
-        // all quarters 0
-        let q1 = 0, q2 = 0, q3 = 0, q4 = 0;
+        let q1 = 0,
+          q2 = 0,
+          q3 = 0,
+          q4 = 0;
 
         if (startDateStr) {
-          const selectedMonth = moment(startDateStr).month() + 1; // 1–12
-          const fiscalStartMonth = moment(userCompany.fiscalYearForm).month() + 1;
+          const selectedMonth = moment(startDateStr).month() + 1;
+          const fiscalStartMonth =
+            moment(userCompany.fiscalYearForm).month() + 1;
 
           const offset = (selectedMonth - fiscalStartMonth + 12) % 12;
-          const quarterIndex = Math.floor(offset / 3); // 0 = Q1, ..., 3 = Q4
+          const quarterIndex = Math.floor(offset / 3);
 
-          // Assign the original value to the correct quarter
           if (quarterIndex === 0) q1 = originalValue;
           else if (quarterIndex === 1) q2 = originalValue;
           else if (quarterIndex === 2) q3 = originalValue;
           else if (quarterIndex === 3) q4 = originalValue;
         }
-
 
         dummyData = {
           serviceProvider:
@@ -229,15 +235,17 @@ const AuditPlanSummary = () => {
           q4: Number(dummyData.q4) + Number(q4),
         };
       });
+
       setTotals(dummyData);
     }
-  }, [allAuditPlanSummary]);
+  }, [allAuditPlanSummary, userCompany]);
 
   React.useEffect(() => {
     if (auditPlanSummaryAddSuccess) {
       const companyId = user[0]?.company?.find(
         (item) => item?.companyName === company
       )?.id;
+
       if (companyId) {
         setPage(1);
         setItemsPerPage(10);
@@ -250,14 +258,51 @@ const AuditPlanSummary = () => {
           })
         );
       }
+
       dispatch(resetAuditPlanSummarySuccess());
     }
-  }, [auditPlanSummaryAddSuccess]);
+  }, [auditPlanSummaryAddSuccess, dispatch, user, company, year]);
 
   React.useEffect(() => {
+    const fetchInitialData = async () => {
+      const companyId = user[0]?.company?.find(
+        (item) => item?.companyName === company
+      )?.id;
+
+      if (companyId) {
+        setPage(1);
+        setItemsPerPage(10);
+
+        try {
+          await dispatch(
+            setupGetInitialAllAuditPlanSummary({
+              companyId,
+              page: 1,
+              itemsPerPage: 10,
+              year,
+            })
+          ).unwrap();
+
+          await dispatch(setupGetAllUsers()).unwrap();
+        } catch (error) {
+          console.error("Error in initial calls:", error);
+        }
+      }
+    };
+
+    fetchInitialData();
+  }, [dispatch]);
+
+  React.useEffect(() => {
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+      return;
+    }
+
     const companyId = user[0]?.company?.find(
       (item) => item?.companyName === company
     )?.id;
+
     if (companyId) {
       dispatch(
         setupGetInitialAllAuditPlanSummary({
@@ -268,31 +313,7 @@ const AuditPlanSummary = () => {
         })
       );
     }
-  }, [dispatch, page]);
-
-  React.useEffect(() => {
-    if (isInitialRender.current) {
-      isInitialRender.current = false;
-      return; // Skip the initial render
-    }
-
-    const companyId = user[0]?.company?.find(
-      (item) => item?.companyName === company
-    )?.id;
-
-    if (companyId) {
-      setPage(1);
-      setItemsPerPage(10);
-      dispatch(
-        setupGetInitialAllAuditPlanSummary({
-          companyId,
-          page: 1,
-          itemsPerPage: 10,
-          year,
-        })
-      );
-    }
-  }, [year]);
+  }, [dispatch, page, year]);
 
   return (
     <div>
@@ -312,6 +333,7 @@ const AuditPlanSummary = () => {
               </div>
             </div>
           )}
+
           {deletePlanSummaryDialog && (
             <div className="model-parent  d-flex justify-content-between items-center">
               <div className="model-wrap">
@@ -322,6 +344,7 @@ const AuditPlanSummary = () => {
               </div>
             </div>
           )}
+
           {feedBackDialog && (
             <div className="model-parent">
               <div className="model-wrap">
@@ -332,6 +355,7 @@ const AuditPlanSummary = () => {
               </div>
             </div>
           )}
+
           {viewFeedBackDialog && (
             <div className="model-parent">
               <div className="model-wrap">
@@ -342,6 +366,7 @@ const AuditPlanSummary = () => {
               </div>
             </div>
           )}
+
           {showApproveDialog && (
             <div className="model-parent d-flex justify-content-between items-center">
               <div className="model-wrap">
@@ -352,6 +377,7 @@ const AuditPlanSummary = () => {
               </div>
             </div>
           )}
+
           <header className="section-header my-3  text-start d-flex align-items-center justify-content-between">
             <div className="mb-0 heading">Audit Plan Summary</div>
           </header>
@@ -365,7 +391,7 @@ const AuditPlanSummary = () => {
                   <table className="table table-bordered table-hover rounded equal-columns">
                     <thead>
                       <tr>
-                        <th className="text-center" colSpan="3">
+                        <th className="text-center" colSpan="5">
                           Current Risk Assessment
                         </th>
                         <th className="text-center" colSpan="3">
@@ -386,8 +412,9 @@ const AuditPlanSummary = () => {
                       <tr className="bg-white">
                         <th className="bg-white">Sr. #</th>
                         <th className="bg-white">Audit Jobs</th>
-                        {/* <th className="bg-white ">Residual Risk Rating</th> */}
                         <th className="bg-white">Priority</th>
+                        <th className="bg-white">Submitted By</th>
+                        <th className="bg-white">Date</th>
                         <th className="bg-white">Three Years Ago</th>
                         <th className="bg-white">Two Years Ago</th>
                         <th className="bg-white">Last Year</th>
@@ -401,6 +428,7 @@ const AuditPlanSummary = () => {
                         <th className="bg-white"></th>
                       </tr>
                     </thead>
+
                     {data?.map((item, index) => {
                       return (
                         <Table
@@ -415,6 +443,7 @@ const AuditPlanSummary = () => {
                           handleApprove={handleApprove}
                           allAuditPlanSummary={allAuditPlanSummary}
                           user={user}
+                          usersList={users}
                           currentId={currentId}
                           loading={loading}
                           setDeletePlanSummaryDialog={
@@ -428,9 +457,10 @@ const AuditPlanSummary = () => {
                         />
                       );
                     })}
+
                     <tbody>
                       <tr>
-                        <td colSpan="6"></td>
+                        <td colSpan="8"></td>
                         <td className="fw-bold">{totals?.serviceProvider}</td>
                         <td className="fw-bold">{totals?.iaa}</td>
                         <td className="fw-bold">{totals?.total}</td>
@@ -445,6 +475,7 @@ const AuditPlanSummary = () => {
                     </tbody>
                   </table>
                 )}
+
                 <div className="mb-4">
                   {allAuditPlanSummary?.length > 0 && (
                     <div className="row">
@@ -455,6 +486,7 @@ const AuditPlanSummary = () => {
                           onChange={handleChange}
                         />
                       </div>
+
                       <div className="col-lg-6 mb-4 d-flex justify-content-end">
                         <div>
                           <FormControl sx={{ minWidth: 200 }} size="small">

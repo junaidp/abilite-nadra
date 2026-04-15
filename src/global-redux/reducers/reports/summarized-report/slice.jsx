@@ -11,7 +11,9 @@ import {
     updateSummarizedReportExtraField,
     summarizedReportFeedBack,
     getAllLocations,
-    downloadSummarizedReport
+    downloadSummarizedReport,
+    submitSummarizedReport,
+    approveSummarizedReport
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -108,6 +110,20 @@ export const setupDownloadSummarizedReport = createAsyncThunk(
     "summarizedReport/downloadSummarizedReport",
     async (data, thunkAPI) => {
         return downloadSummarizedReport(data, thunkAPI);
+    }
+);
+
+export const setupSubmitSummarizedReport = createAsyncThunk(
+    "summarizedReport/submitSummarizedReport",
+    async (data, thunkAPI) => {
+        return submitSummarizedReport(data, thunkAPI);
+    }
+);
+
+export const setupApproveSummarizedReport = createAsyncThunk(
+    "summarizedReport/approveSummarizedReport",
+    async (data, thunkAPI) => {
+        return approveSummarizedReport(data, thunkAPI);
     }
 );
 
@@ -373,6 +389,43 @@ export const slice = createSlice({
                 sessionStorage.setItem("allLocations", JSON.stringify(payload?.data || []));
             })
             .addCase(setupGetAllLocations.rejected, (state, { payload }) => {
+                state.loading = false;
+                if (payload?.response?.data?.message) {
+                    toast.error(payload?.response?.data?.message);
+                } else {
+                    toast.error("An Error has occurred");
+                }
+            });
+
+        // Submit Summarized Report
+        builder
+            .addCase(setupSubmitSummarizedReport.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(setupSubmitSummarizedReport.fulfilled, (state) => {
+                state.loading = false;
+                state.summarizedReportAddSuccess = true
+                toast.success("Summarized Report Submitted Successfully");
+            })
+            .addCase(setupSubmitSummarizedReport.rejected, (state, { payload }) => {
+                state.loading = false;
+                if (payload?.response?.data?.message) {
+                    toast.error(payload?.response?.data?.message);
+                } else {
+                    toast.error("An Error has occurred");
+                }
+            });
+        // Approve Summarized Report
+        builder
+            .addCase(setupApproveSummarizedReport.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(setupApproveSummarizedReport.fulfilled, (state) => {
+                state.loading = false;
+                state.summarizedReportAddSuccess = true
+                toast.success("Summarized Report Approved Successfully");
+            })
+            .addCase(setupApproveSummarizedReport.rejected, (state, { payload }) => {
                 state.loading = false;
                 if (payload?.response?.data?.message) {
                     toast.error(payload?.response?.data?.message);

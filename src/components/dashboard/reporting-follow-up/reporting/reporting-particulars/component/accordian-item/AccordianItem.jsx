@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useSelector } from "react-redux";
-import moment from "moment";
+import { Chip } from "@mui/material";
 
 import { getStepStatusLabel } from "../../../../../../../config/helper";
 
@@ -58,8 +58,15 @@ const AccordianItem = ({
     }
   }, [singleReport, reportingId, item?.id, isOpen]);
 
-  return (
+  const subLocationLabel = useMemo(() => {
+    return (
+      singleReport?.subLocationList?.find(
+        (subLocation) => subLocation?.id === item?.subLocation
+      )?.description || ""
+    );
+  }, [singleReport, item?.subLocation]);
 
+  return (
     <div className="accordion-item">
       <h2 className="accordion-header">
         <button
@@ -74,8 +81,15 @@ const AccordianItem = ({
               {Number(item?.stepNo) >= 4 && (
                 <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
               )}
-              {item?.observationTitle} ----- {getStepStatusLabel(Number(item?.stepNo), user[0])}
+              {item?.observationTitle} -----{" "}
+              {getStepStatusLabel(Number(item?.stepNo), user[0])}
             </div>
+
+            {subLocationLabel && (
+              <div className="d-flex align-items-center ms-3">
+                <Chip label={subLocationLabel} />
+              </div>
+            )}
           </div>
         </button>
       </h2>
@@ -99,7 +113,6 @@ const AccordianItem = ({
               handleManagementCommentsChange={handleManagementCommentsChange}
               handleAllowEditSection1={handleAllowEditSection1}
             />
-
 
             <ReportingFileUpload item={item} setDeleteFileId={setDeleteFileId} />
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 import AccordionHeader from "./AccordionHeader";
 import ObservationDetails from "./ObservationDetails";
@@ -31,6 +31,14 @@ const AccordianItem = ({
 }) => {
   const { user } = useSelector((state) => state?.auth);
 
+  const subLocationLabel = useMemo(() => {
+    return (
+      singleReport?.subLocationList?.find(
+        (subLocation) => subLocation?.id === item?.subLocation
+      )?.description || ""
+    );
+  }, [singleReport, item?.subLocation]);
+
   return (
     <div className="accordion-item">
       <h2 className="accordion-header" id="headingeightt">
@@ -39,6 +47,7 @@ const AccordianItem = ({
           item={item}
           isOpen={isOpen}
           onToggle={onToggle}
+          subLocationLabel={subLocationLabel}
         />
       </h2>
 

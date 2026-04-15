@@ -37,7 +37,7 @@ const consolidatedObservations = ({ singleSummarizedReport, allLocations }) => {
                             {/* Key Findings */}
                             <div className="row mb-3">
                                 <div className="col-lg-12">
-                                    <label>Key Findings</label>
+                                    <label>Key Findings/ Recommendation/ Management Comments/ Auditor's Comments</label>
                                     <ViewRichTextEditor initialValue={observation?.summaryOfKeyFinding} />
                                 </div>
                             </div>

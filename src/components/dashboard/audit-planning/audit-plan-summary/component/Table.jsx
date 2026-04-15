@@ -1,4 +1,5 @@
 import React from "react";
+import moment from "moment";
 
 const Table = ({
   index,
@@ -11,6 +12,7 @@ const Table = ({
   handleApprove,
   allAuditPlanSummary,
   user,
+  usersList,
   currentId,
   loading,
   setDeletePlanSummaryDialog,
@@ -20,12 +22,20 @@ const Table = ({
   page,
   itemsPerPage
 }) => {
+  const submittedBy =
+    usersList?.find(
+      (singleUser) => Number(singleUser?.id) === Number(item?.initiatorUB)
+    )?.name || "-";
+
+  const plannedJobStartDate = item?.jobScheduleList?.[0]?.plannedJobStartDate;
+  const plannedJobEndDate = item?.jobScheduleList?.[0]?.plannedJobEndDate;
+
   return (
     <tbody>
       <tr>
         <td>{(page - 1) * itemsPerPage + index + 1}</td>
         <td className="min-w-300">{item?.title}</td>
-        {/* <td className="normal-text">Low</td> */}
+
         <td>
           <select
             className="form-select w-80"
@@ -41,6 +51,14 @@ const Table = ({
             <option value="Low">Low</option>
           </select>
         </td>
+
+        <td className="normal-text">{submittedBy}</td>
+
+        <td className="normal-text" style={{ whiteSpace: "nowrap" }}>
+          <div>{moment(plannedJobStartDate).format("DD MMM YYYY")}</div>
+          <div>{moment(plannedJobEndDate).format("DD MMM YYYY")}</div>
+        </td>
+
         <td className="normal-text">
           <div className="form-check">
             <input
@@ -59,6 +77,7 @@ const Table = ({
             ></label>
           </div>
         </td>
+
         <td className="normal-text">
           <div className="form-check">
             <input
@@ -77,6 +96,7 @@ const Table = ({
             ></label>
           </div>
         </td>
+
         <td className="normal-text">
           <div className="form-check">
             <input
@@ -95,6 +115,7 @@ const Table = ({
             ></label>
           </div>
         </td>
+
         <td className="normal-text">{item?.serviceProvider}</td>
         <td className="normal-text">{item?.iaa}</td>
         <td className="normal-text">{item?.total}</td>
@@ -103,6 +124,7 @@ const Table = ({
         <td className="normal-text">{item?.q3}</td>
         <td className="normal-text">{item?.q4}</td>
         <td className="normal-text"></td>
+
         <td className="w-300">
           <div className={`d-flex flex-wrap gap-2`}>
             {(allAuditPlanSummary[index]?.completed === false ||
@@ -118,6 +140,7 @@ const Table = ({
                       onClick={() => handleEditEditable(item)}
                     ></i>
                   )}
+
                   {item?.editable === true && (
                     <div
                       className={`btn btn-labeled btn-primary shadow ${loading &&
@@ -133,6 +156,7 @@ const Table = ({
                   )}
                 </div>
               )}
+
             {item?.approved === false && (
               <i
                 className="fa fa-trash text-danger f-18 cursor-pointer"
@@ -142,6 +166,7 @@ const Table = ({
                 }}
               ></i>
             )}
+
             {(allAuditPlanSummary[index]?.submitted === false ||
               allAuditPlanSummary[index]?.completed === false) &&
               allAuditPlanSummary[index]?.priority &&
@@ -158,6 +183,7 @@ const Table = ({
                     : "Submit"}
                 </div>
               )}
+
             {allAuditPlanSummary[index]?.submitted === true &&
               allAuditPlanSummary[index]?.completed === true &&
               allAuditPlanSummary[index]?.approved === false &&
@@ -199,6 +225,7 @@ const Table = ({
                   FeedBack
                 </div>
               )}
+
             {item?.feedback && item?.feedback?.id && (
               <div
                 className={`btn btn-labeled btn-primary shadow `}
@@ -210,11 +237,13 @@ const Table = ({
                 View FeedBack
               </div>
             )}
+
             {item?.approved === true && item?.locked === true && (
               <button className={`btn btn-labeled btn-primary shadow disabled`}>
                 Approved
               </button>
             )}
+
             {item?.approved === false &&
               item?.locked === false &&
               item?.submitted === true &&

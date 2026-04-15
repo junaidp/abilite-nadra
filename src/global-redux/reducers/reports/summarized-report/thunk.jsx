@@ -232,3 +232,34 @@ export const downloadSummarizedReport = async (data, thunkAPI) => {
 };
 
 
+
+export const submitSummarizedReport = async (data, thunkAPI) => {
+    try {
+        const { user } = thunkAPI.getState().auth;
+        let props = await axios.post(`${baseUrl}/summarized-report/updateStatus?submitted=${data.submitted}&approved=${data.approved}&summarizedReportId=${data?.summarizedReportId}`, null, {
+            headers: {
+                Authorization: `Bearer ${user[0]?.token}`,
+            },
+        });
+        return props.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error);
+    }
+};
+
+export const approveSummarizedReport = async (data, thunkAPI) => {
+    try {
+        const { user } = thunkAPI.getState().auth;
+        let props = await axios.post(`${baseUrl}/summarized-report/updateStatus?submitted=${data.submitted}&approved=${data.approved}&summarizedReportId=${data?.summarizedReportId}`, null, {
+            headers: {
+                Authorization: `Bearer ${user[0]?.token}`,
+            },
+        });
+        return props.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error);
+    }
+};
+
+
+

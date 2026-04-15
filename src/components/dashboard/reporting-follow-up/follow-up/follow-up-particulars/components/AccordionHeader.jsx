@@ -1,14 +1,29 @@
 import React from "react";
+import { Chip } from "@mui/material";
 
 /**
  * AccordionHeader
  * Renders the accordion button/header with icon and status label.
  */
-const AccordionHeader = ({ index, item, isOpen, onToggle }) => {
+const AccordionHeader = ({
+  index,
+  item,
+  isOpen,
+  onToggle,
+  subLocationLabel,
+}) => {
   const statusLabel = (() => {
     if (Number(item?.stepNo) === 5) return "Exception To Be  Implemented";
-    if (Number(item?.stepNo) === 6 && item.followUp.recommendationsImplemented) return "Exceptions Implemented";
-    if (Number(item?.stepNo) === 6 && !item.followUp.recommendationsImplemented) return "Exception To Be  Implemented";
+    if (
+      Number(item?.stepNo) === 6 &&
+      item.followUp.recommendationsImplemented
+    )
+      return "Exceptions Implemented";
+    if (
+      Number(item?.stepNo) === 6 &&
+      !item.followUp.recommendationsImplemented
+    )
+      return "Exception To Be  Implemented";
     if (Number(item?.stepNo) >= 7) return "Observation Completed";
     return "";
   })();
@@ -28,6 +43,12 @@ const AccordionHeader = ({ index, item, isOpen, onToggle }) => {
           )}
           {item?.observationTitle} ----- {statusLabel}
         </div>
+
+        {subLocationLabel && (
+          <div className="d-flex align-items-center ms-3">
+            <Chip label={subLocationLabel} />
+          </div>
+        )}
       </div>
     </button>
   );
