@@ -11,6 +11,7 @@ import {
   setupGetInitialSingleReport,
   resetReports,
   resetReportingFileUploadAddSuccess,
+  setupReportingPDFDownload
 } from "../../../../../global-redux/reducers/reporting/slice";
 
 import {
@@ -224,6 +225,11 @@ const ReportingParticulars = () => {
     [singleReport, user]
   );
 
+  function handleGeneratePDF() {
+    if (loading) return;
+    dispatch(setupReportingPDFDownload({ reportingAndFollowUpId: reportingId }));
+  }
+
   /**
    * -----------------------------
    * Effects
@@ -427,19 +433,27 @@ const ReportingParticulars = () => {
           {/* ---------------------------
             Page Header
             --------------------------- */}
-          <header className="section-header my-3 align-items-center text-start d-flex">
-            <a
-              className="text-primary"
-              onClick={() =>
-                user[0]?.userId?.employeeid?.userHierarchy ===
-                  "Management_Auditee"
-                  ? navigate("/audit/dashboard")
-                  : navigate("/audit/reportings")
-              }
-            >
-              <i className="fa fa-arrow-left text-primary fs-5 pe-3"></i>
-            </a>
-            <div className="mb-0 heading">Reporting</div>
+          <header className="section-header my-3 align-items-center text-start d-flex justify-content-between">
+            <div className="align-items-center text-start d-flex">
+              <a
+                className="text-primary"
+                onClick={() =>
+                  user[0]?.userId?.employeeid?.userHierarchy ===
+                    "Management_Auditee"
+                    ? navigate("/audit/dashboard")
+                    : navigate("/audit/reportings")
+                }
+              >
+                <i className="fa fa-arrow-left text-primary fs-5 pe-3"></i>
+              </a>
+              <div className="mb-0 heading">Reporting</div>
+            </div>
+
+            <div>
+              <button className={`btn btn-primary ${loading && "disabled"}`} onClick={handleGeneratePDF}>
+                {loading ? "Downloading..." : "Generate PDF"}
+              </button>
+            </div>
           </header>
 
           {/* ---------------------------
