@@ -108,7 +108,7 @@ const AuditExceptionReport = () => {
       natureIndex === 6 && typeof job[5] === "string" ? job[5] : "";
 
     // job name tends to be at index 1 (fallback to index 2 if missing)
-    const jobName = (job[5] === "Compliance Checklist" || job[6] === "Compliance Checklist"  || job[6] === "Previous Observation" || job[5] === "Previous Observation") ? job[1] : job[2] || "";
+    const jobName = (job[5] === "Compliance Checklist" || job[6] === "Compliance Checklist" || job[6] === "Previous Observation" || job[5] === "Previous Observation") ? job[1] : job[2] || "";
 
     // the short/truncated observation remains at index 4 in both shapes
     const shortObservation = job[4] || "";
@@ -124,6 +124,9 @@ const AuditExceptionReport = () => {
     const subLocation = job[natureIndex + 3] ?? "";
     const stepNo = job[natureIndex + 4] ?? "";
     const auditee = job[natureIndex + 5] ?? "";
+    const implicationRating = job[natureIndex + 6] ?? "";
+    const implication = job[natureIndex + 7] ?? "";
+    const recommendedActionSteps = job[natureIndex + 8] ?? "";
 
     return {
       raw: job,
@@ -136,6 +139,9 @@ const AuditExceptionReport = () => {
       subLocation,
       stepNo,
       auditee,
+      implication,
+      implicationRating,
+      recommendedActionSteps
     };
   }, []);
 
@@ -158,6 +164,9 @@ const AuditExceptionReport = () => {
       year: uniq(parsedJobs.map((p) => p.year)),
       auditee: uniq(parsedJobs.map((p) => p.auditee)),
       exceptionStatus: uniq(parsedJobs.map((p) => handleCalculateStatus(p.stepNo))),
+      implication: uniq(parsedJobs.map((p) => p.implication)),
+      implicationRating: uniq(parsedJobs.map((p) => p.implicationRating)),
+      recommendedActionSteps: uniq(parsedJobs.map((p) => p.recommendedActionSteps))
     };
   }, [parsedJobs]);
 
@@ -220,6 +229,9 @@ const AuditExceptionReport = () => {
         Year: p.year,
         Auditee: p.auditee,
         "Exception Status": handleCalculateStatus(p.stepNo),
+        "Implication": p.implication,
+        "Implication Rating": p.implicationRating === 1 ? "High" : p.implicationRating === 2 ? "Medium" : p.implicationRating === 3 ? "Low" : "",
+        "Recommended Action Steps": p.recommendedActionSteps
       };
     });
 
