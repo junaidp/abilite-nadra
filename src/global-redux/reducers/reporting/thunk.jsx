@@ -268,12 +268,22 @@ export const reportingPDFDownload = async (data, thunkAPI) => {
         responseType: "blob",
       }
     );
+    // Get current date
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // months are 0-based
+    const day = String(today.getDate()).padStart(2, '0');
+
+    // Create filename
+    const fileName = `default_pdf_${year}_${month}_${day}.pdf`;
+
     // Trigger download
     const blob = new Blob([response.data], { type: "application/pdf" });
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.setAttribute("download", data.fileName);
+    link.setAttribute("download", fileName);
+
     document.body.appendChild(link);
     link.click();
     link.remove();
