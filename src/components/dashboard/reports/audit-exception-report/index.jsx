@@ -127,6 +127,7 @@ const AuditExceptionReport = () => {
     const implicationRating = job[natureIndex + 6] ?? "";
     const implication = job[natureIndex + 7] ?? "";
     const recommendedActionSteps = job[natureIndex + 8] ?? "";
+    const implementationDate = job[natureIndex + 9] ?? "";
 
     return {
       raw: job,
@@ -141,7 +142,8 @@ const AuditExceptionReport = () => {
       auditee,
       implication,
       implicationRating,
-      recommendedActionSteps
+      recommendedActionSteps,
+      implementationDate
     };
   }, []);
 
@@ -166,7 +168,8 @@ const AuditExceptionReport = () => {
       exceptionStatus: uniq(parsedJobs.map((p) => handleCalculateStatus(p.stepNo))),
       implication: uniq(parsedJobs.map((p) => p.implication)),
       implicationRating: uniq(parsedJobs.map((p) => p.implicationRating)),
-      recommendedActionSteps: uniq(parsedJobs.map((p) => p.recommendedActionSteps))
+      recommendedActionSteps: uniq(parsedJobs.map((p) => p.recommendedActionSteps)),
+      implementationDate: uniq(parsedJobs.map((p) => p.implementationDate)),
     };
   }, [parsedJobs]);
 
@@ -231,7 +234,8 @@ const AuditExceptionReport = () => {
         "Exception Status": handleCalculateStatus(p.stepNo),
         "Implication": p.implication,
         "Implication Rating": p.implicationRating === 1 ? "High" : p.implicationRating === 2 ? "Medium" : p.implicationRating === 3 ? "Low" : "",
-        "Recommended Action Steps": p.recommendedActionSteps
+        "Recommended Action Steps": p.recommendedActionSteps,
+        "Implementation Date": p.implementationDate,
       };
     });
 
