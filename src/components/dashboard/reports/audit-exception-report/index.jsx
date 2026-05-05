@@ -31,6 +31,30 @@ const KNOWN_NATURES = new Set([
   "Business Objective",
 ]);
 
+const PAGE_SIZE = 10;
+
+const FILTER_CONFIG = [
+  { key: "natureThrough", label: "Nature Through" },
+  { key: "location", label: "Location" },
+  { key: "subLocation", label: "Sub-Location" },
+  { key: "year", label: "Year" },
+  { key: "auditee", label: "Auditee" },
+  { key: "exceptionStatus", label: "Exception Status" },
+];
+
+// helper: determine exception status label from step number
+function handleCalculateStatus(step) {
+  if (Number(step) === 0 || Number(step) === 1) {
+    return "Exceptions To Be Sent To Management For Comments";
+  }
+  if (Number(step) === 2) return "Awaiting Management Comments";
+  if (Number(step) === 3) return "Management Comments Received";
+  if (Number(step) === 4 || Number(step) === 5)
+    return "Exception To Be Implemented";
+  if (Number(step) === 6) return "Exceptions Implemented";
+  return "Observation Completed";
+}
+
 const AuditExceptionReport = () => {
   const dispatch = useDispatch();
 
@@ -52,23 +76,12 @@ const AuditExceptionReport = () => {
     exceptionStatus: [],
   });
 
-  // helper: determine exception status label from step number
-  function handleCalculateStatus(step) {
-    if (Number(step) === 0 || Number(step) === 1) {
-      return "Exceptions To Be Sent To Management For Comments";
-    }
-    if (Number(step) === 2) return "Awaiting Management Comments";
-    if (Number(step) === 3) return "Management Comments Received";
-    if (Number(step) === 4 || Number(step) === 5)
-      return "Exception To Be Implemented";
-    if (Number(step) === 6) return "Exceptions Implemented";
-    return "Observation Completed";
-  }
-
   // fetch all audit exceptions once (on mount or when user/company become available)
   React.useEffect(() => {
     const companyId = user?.[0]?.company?.find((c) => c?.companyName === company)
       ?.id;
+
+    if (!companyId) return;
 
     dispatch(
       setupGetAllAuditExceptions({
@@ -153,59 +166,86 @@ const AuditExceptionReport = () => {
     return auditExceptionJobs.map(parseJob);
   }, [auditExceptionJobs, parseJob]);
 
-  // helper to remove falsy/empty values and keep unique items
-  const uniq = (arr = []) =>
-    Array.from(new Set(arr.filter((v) => v !== null && v !== undefined && v !== "")));
+  const getFilterValue = React.useCallback((job, key) => {
+    if (key === "natureThrough") return job.nature;
+    if (key === "exceptionStatus") return handleCalculateStatus(job.stepNo);
+    return job[key];
+  }, []);
 
-  // unique values used to populate multi-select options (derived from parsed jobs)
+  // helper to remove falsy/empty values and keep unique items
+  const uniq = React.useCallback((arr = []) => {
+    return Array.from(
+      new Set(arr.filter((v) => v !== null && v !== undefined && v !== ""))
+    );
+  }, []);
+
+  const doesJobMatchFilters = React.useCallback(
+    (job, activeFilters, exceptKey = null) => {
+      return FILTER_CONFIG.every(({ key }) => {
+        if (key === exceptKey) return true;
+
+        const selectedValues = activeFilters[key] || [];
+        if (selectedValues.length === 0) return true;
+
+        return selectedValues.includes(getFilterValue(job, key));
+      });
+    },
+    [getFilterValue]
+  );
+
+  // Each filter's options are derived from rows matching every other filter.
+  // This keeps dropdowns cascading without hiding alternate values for the field being edited.
   const uniqueValues = React.useMemo(() => {
-    return {
-      natureThrough: uniq(parsedJobs.map((p) => p.nature)),
-      location: uniq(parsedJobs.map((p) => p.location)),
-      subLocation: uniq(parsedJobs.map((p) => p.subLocation)),
-      year: uniq(parsedJobs.map((p) => p.year)),
-      auditee: uniq(parsedJobs.map((p) => p.auditee)),
-      exceptionStatus: uniq(parsedJobs.map((p) => handleCalculateStatus(p.stepNo))),
-      implication: uniq(parsedJobs.map((p) => p.implication)),
-      implicationRating: uniq(parsedJobs.map((p) => p.implicationRating)),
-      recommendedActionSteps: uniq(parsedJobs.map((p) => p.recommendedActionSteps)),
-      implementationDate: uniq(parsedJobs.map((p) => p.implementationDate)),
-    };
-  }, [parsedJobs]);
+    return FILTER_CONFIG.reduce((acc, { key }) => {
+      const jobsMatchingOtherFilters = parsedJobs.filter((job) =>
+        doesJobMatchFilters(job, filters, key)
+      );
+
+      acc[key] = uniq(jobsMatchingOtherFilters.map((job) => getFilterValue(job, key)));
+      return acc;
+    }, {});
+  }, [doesJobMatchFilters, filters, getFilterValue, parsedJobs, uniq]);
 
   // ---------- filtering ----------
   // compute filtered data from parsedJobs & filters (frontend-only filtering)
   const filteredData = React.useMemo(() => {
-    if (!parsedJobs) return [];
-
-    const result = parsedJobs.filter((p) => {
-      return (
-        (filters.natureThrough.length === 0 ||
-          filters.natureThrough.includes(p.nature)) &&
-        (filters.location.length === 0 ||
-          filters.location.includes(p.location)) &&
-        (filters.subLocation.length === 0 ||
-          filters.subLocation.includes(p.subLocation)) &&
-        (filters.year.length === 0 || filters.year.includes(p.year)) &&
-        (filters.auditee.length === 0 ||
-          filters.auditee.includes(p.auditee)) &&
-        (filters.exceptionStatus.length === 0 ||
-          filters.exceptionStatus.includes(handleCalculateStatus(p.stepNo)))
-      );
-    });
-
-    return result;
-  }, [parsedJobs, filters]);
+    return parsedJobs.filter((job) => doesJobMatchFilters(job, filters));
+  }, [doesJobMatchFilters, parsedJobs, filters]);
 
   // keep page reset to 1 whenever filteredData changes (UX convenience)
   React.useEffect(() => {
     setPage(1);
   }, [filteredData]);
 
+  // Remove selections that no longer exist under the other active filters.
+  React.useEffect(() => {
+    setFilters((currentFilters) => {
+      let hasChanged = false;
+
+      const nextFilters = FILTER_CONFIG.reduce((acc, { key }) => {
+        const validValues = new Set(uniqueValues[key] || []);
+        const selectedValues = currentFilters[key] || [];
+        const prunedValues = selectedValues.filter((value) => validValues.has(value));
+
+        if (prunedValues.length !== selectedValues.length) {
+          hasChanged = true;
+        }
+
+        acc[key] = prunedValues;
+        return acc;
+      }, {});
+
+      return hasChanged ? nextFilters : currentFilters;
+    });
+  }, [uniqueValues]);
+
   // handle multi-select value changes
   const handleFilterChange = (event) => {
     const { name, value } = event.target;
-    setFilters((prev) => ({ ...prev, [name]: value }));
+    setFilters((prev) => ({
+      ...prev,
+      [name]: Array.isArray(value) ? value : value.split(","),
+    }));
   };
 
   // Export current filtered data to Excel
@@ -263,14 +303,7 @@ const AuditExceptionReport = () => {
       {/* Filters (Material UI multi-selects) */}
       <div className="row mb-3">
         {/* Render filters in a fixed order */}
-        {[
-          { key: "natureThrough", label: "Nature Through" },
-          { key: "location", label: "Location" },
-          { key: "subLocation", label: "Sub-Location" },
-          { key: "year", label: "Year" },
-          { key: "auditee", label: "Auditee" },
-          { key: "exceptionStatus", label: "Exception Status" },
-        ].map(({ key, label }) => (
+        {FILTER_CONFIG.map(({ key, label }) => (
           <div className="col-lg-2" key={key}>
             <FormControl fullWidth>
               <InputLabel sx={{ fontSize: 12 }} style={poppinsStyle}>
@@ -331,10 +364,10 @@ const AuditExceptionReport = () => {
                   </tr>
                 ) : (
                   filteredData
-                    .slice((page - 1) * 10, page * 10)
+                    .slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
                     .map((p, idx) => (
                       <tr key={idx}>
-                        <td>{(page - 1) * 10 + idx + 1}</td>
+                        <td>{(page - 1) * PAGE_SIZE + idx + 1}</td>
                         <td>{p.jobName}</td>
                         {/* For table view we show the short/truncated observation (keeps table compact).
                             Full/long observation is exported to Excel for Previous Observation rows. */}
@@ -353,7 +386,7 @@ const AuditExceptionReport = () => {
 
             {/* Pagination */}
             <Pagination
-              count={Math.ceil(filteredData.length / 10) || 1}
+              count={Math.ceil(filteredData.length / PAGE_SIZE) || 1}
               page={page}
               onChange={handleChangePage}
             />
