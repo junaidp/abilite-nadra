@@ -14,7 +14,7 @@ import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
 } from "../../../../../global-redux/reducers/common/slice";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Pagination } from "@mui/material";
 
 import AccordianItem from "./components/AccordianItem";
 import ApproveDialog from "./components/ApproveDialog";
@@ -61,6 +61,21 @@ const FollowUpParticulars = () => {
   const [showSubmitDialog, setShowSubmitDialog] = useState(false);
   const [currentSubmittedItem, setShowCurrentSubmittedItem] = useState({});
   const [openAccordionId, setOpenAccordionId] = useState(null);
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 10;
+
+  const currentFollowUpList = report?.reportingList?.filter(
+    (singleItem) => singleItem?.stepNo >= 5
+  ) || [];
+
+  const paginatedFollowUpList = React.useMemo(
+    () =>
+      currentFollowUpList.slice(
+        (page - 1) * itemsPerPage,
+        page * itemsPerPage
+      ),
+    [currentFollowUpList, page]
+  );
 
   /** ===============================
    * Handlers
@@ -234,6 +249,10 @@ const FollowUpParticulars = () => {
     if (!followUpId) navigate("/audit/follow-up");
   }, [followUpId, navigate]);
 
+  useEffect(() => {
+    setPage(1);
+  }, [followUpId]);
+
   React.useEffect(() => {
     if (approveAddSuccess) {
       dispatch(resetReportingAddSuccess());
@@ -334,13 +353,9 @@ const FollowUpParticulars = () => {
               <div className="row mt-3">
                 <div className="col-lg-12">
                   <div className="accordion" id="accordionFlushExample">
-                    {report?.reportingList?.filter(
-                      (singleItem) => singleItem?.stepNo >= 5
-                    )?.length === 0
+                    {currentFollowUpList?.length === 0
                       ? "No Reporting List Found"
-                      : report?.reportingList
-                        ?.filter((singleItem) => singleItem?.stepNo >= 5)
-                        ?.map((item, index) => {
+                      : paginatedFollowUpList?.map((item, index) => {
                           return (
                             <AccordianItem
                               key={item?.id || index}
@@ -382,6 +397,17 @@ const FollowUpParticulars = () => {
                           );
                         })}
                   </div>
+                  {currentFollowUpList?.length > itemsPerPage && (
+                    <div className="row mt-3">
+                      <div className="col-lg-6 mb-4">
+                        <Pagination
+                          count={Math.ceil(currentFollowUpList.length / itemsPerPage)}
+                          page={page}
+                          onChange={(_, value) => setPage(value)}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Pagination } from "@mui/material";
 import { toast } from "react-toastify";
 
 import {
@@ -75,12 +75,28 @@ const ReportingParticulars = () => {
   const [currentSubmittedItem, setShowCurrentSubmittedItem] = React.useState(
     {}
   );
+  const [page, setPage] = React.useState(1);
+  const itemsPerPage = 10;
 
 
   const managementAuditees = React.useMemo(
     () => allUsers?.filter(u => u?.employeeid?.userHierarchy === "Management_Auditee"),
     [allUsers]
   );
+
+  const currentReportingList = report?.reportingList || [];
+  const paginatedReportingList = React.useMemo(
+    () =>
+      currentReportingList.slice(
+        (page - 1) * itemsPerPage,
+        page * itemsPerPage
+      ),
+    [currentReportingList, page]
+  );
+
+  React.useEffect(() => {
+    setPage(1);
+  }, [reportingId]);
 
 
   /**
@@ -470,9 +486,9 @@ const ReportingParticulars = () => {
               <div className="row mt-3">
                 <div className="col-lg-12">
                   <div className="accordion" id="accordionFlushExample">
-                    {report?.reportingList?.length === 0
+                    {currentReportingList?.length === 0
                       ? "No Reporting List Found"
-                      : report?.reportingList?.map((item, index) => (
+                      : paginatedReportingList?.map((item, index) => (
                         <AccordianItem
                           key={item?.id || index}
                           item={item}
@@ -519,6 +535,17 @@ const ReportingParticulars = () => {
                         />
                       ))}
                   </div>
+                  {currentReportingList?.length > itemsPerPage && (
+                    <div className="row mt-3">
+                      <div className="col-lg-6 mb-4">
+                        <Pagination
+                          count={Math.ceil(currentReportingList.length / itemsPerPage)}
+                          page={page}
+                          onChange={(_, value) => setPage(value)}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
