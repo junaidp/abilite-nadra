@@ -1,6 +1,15 @@
 import React from "react";
 import { Chip } from "@mui/material";
 
+const getStatusColor = (item) => {
+  const stepNo = Number(item?.stepNo);
+  if (stepNo === 5) return "#b76e00";
+  if (stepNo === 6 && item.followUp.recommendationsImplemented) return "#198754";
+  if (stepNo === 6 && !item.followUp.recommendationsImplemented) return "#b76e00";
+  if (stepNo >= 7) return "#6f42c1";
+  return "#2A3547";
+};
+
 /**
  * AccordionHeader
  * Renders the accordion button/header with icon and status label.
@@ -41,7 +50,13 @@ const AccordionHeader = ({
           {Number(item?.stepNo) >= 7 && (
             <i className="fa fa-check-circle fs-3 text-success pe-3" />
           )}
-          {item?.observationTitle} ----- {statusLabel}
+          {item?.observationTitle} -----{" "}
+          <span
+            className="fw-semibold"
+            style={{ color: getStatusColor(item) }}
+          >
+            {statusLabel}
+          </span>
         </div>
 
         {subLocationLabel && (

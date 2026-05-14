@@ -22,9 +22,19 @@ const consolidatedObservation = ({ editableSummarizedReport, allLocations, onKey
     const getSubLocationDescription = (id) =>
         subLocationMap[id] || "Unknown Sub-location";
 
+    const sortedConsolidationItems = useMemo(
+        () =>
+            [...(editableSummarizedReport?.consolidationItemsList || [])].sort((a, b) =>
+                (a?.area || "").localeCompare(b?.area || "", undefined, {
+                    sensitivity: "base",
+                })
+            ),
+        [editableSummarizedReport?.consolidationItemsList]
+    );
+
     return (
         <div className="mt-3 mb-3">
-            {editableSummarizedReport?.consolidationItemsList?.map(
+            {sortedConsolidationItems.map(
                 (consolidatedItem, idx) => (
                     <div key={idx}>
                         {/* Area Header */}

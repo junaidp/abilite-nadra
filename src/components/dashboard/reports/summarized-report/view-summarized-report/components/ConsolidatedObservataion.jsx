@@ -21,9 +21,19 @@ const consolidatedObservations = ({ singleSummarizedReport, allLocations }) => {
     // Helper to find sub-location description safely
     const findSubLocationDescription = (id) => subLocationMap[id] || "Unknown Sub-location";
 
+    const sortedConsolidationItems = useMemo(
+        () =>
+            [...(singleSummarizedReport?.consolidationItemsList || [])].sort((a, b) =>
+                (a?.area || "").localeCompare(b?.area || "", undefined, {
+                    sensitivity: "base",
+                })
+            ),
+        [singleSummarizedReport?.consolidationItemsList]
+    );
+
     return (
         <div className="mt-3 mb-3">
-            {singleSummarizedReport?.consolidationItemsList?.map((consolidatedItem, idx) => (
+            {sortedConsolidationItems.map((consolidatedItem, idx) => (
                 <div key={idx}>
                     {/* Area Title */}
                     <p className="mb-3 heading fw-bold">Area ({consolidatedItem?.area})</p>

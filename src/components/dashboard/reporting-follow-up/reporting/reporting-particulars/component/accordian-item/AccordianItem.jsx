@@ -8,6 +8,14 @@ import ReportingFileUpload from "../file-upload/FileUpload";
 import ActionButtons from "../action-buttons/ActionButtons";
 import ObservationSection from "../observation/Observation";
 
+const getStatusColor = (stepNo) => {
+  if (stepNo === 0 || stepNo === 1) return "#b76e00";
+  if (stepNo === 2) return "#0b6bcb";
+  if (stepNo === 3) return "#1b7f3a";
+  if (stepNo >= 4) return "#198754";
+  return "#2A3547";
+};
+
 /**
  * AccordianItem
  * Represents a single reporting item inside the accordion.
@@ -66,6 +74,9 @@ const AccordianItem = ({
     );
   }, [singleReport, item?.subLocation]);
 
+  const stepNo = Number(item?.stepNo);
+  const statusLabel = getStepStatusLabel(stepNo, user[0]);
+
   return (
     <div className="accordion-item">
       <h2 className="accordion-header">
@@ -82,7 +93,12 @@ const AccordianItem = ({
                 <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
               )}
               {item?.observationTitle} -----{" "}
-              {getStepStatusLabel(Number(item?.stepNo), user[0])}
+              <span
+                className="fw-semibold"
+                style={{ color: getStatusColor(stepNo) }}
+              >
+                {statusLabel}
+              </span>
             </div>
 
             {subLocationLabel && (

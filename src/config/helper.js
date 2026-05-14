@@ -81,7 +81,11 @@ function groupObservationsBySubLocationAndArea(array) {
   // Convert nested objects into arrays
   const result = Object.values(groupedBySubLocation).map((subLocGroup) => ({
     subLocation: subLocGroup.subLocation,
-    areas: Object.values(subLocGroup.areas),
+    areas: Object.values(subLocGroup.areas).sort((a, b) =>
+      (a.area || "").localeCompare(b.area || "", undefined, {
+        sensitivity: "base",
+      })
+    ),
   }));
 
   return result;
@@ -486,10 +490,16 @@ const groupByArea = (list) => {
     return acc;
   }, {});
 
-  const result = Object.values(grouped).map(({ originalArea, items }) => ({
-    area: originalArea === "__MISSING_AREA__" ? null : originalArea,
-    items,
-  }));
+  const result = Object.values(grouped)
+    .map(({ originalArea, items }) => ({
+      area: originalArea === "__MISSING_AREA__" ? null : originalArea,
+      items,
+    }))
+    .sort((a, b) =>
+      (a.area || "").localeCompare(b.area || "", undefined, {
+        sensitivity: "base",
+      })
+    );
 
   return result;
 };
