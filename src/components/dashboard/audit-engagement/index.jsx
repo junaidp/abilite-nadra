@@ -25,7 +25,7 @@ const AuditEngagement = () => {
   );
   const { user } = useSelector((state) => state.auth);
   const [page, setPage] = React.useState(1);
-  const [itemsPerPage, setItemsPerPage] = React.useState(5);
+  const [itemsPerPage, setItemsPerPage] = React.useState(10);
   const [showJobStatusDialog, setShowJobStatusDialog] = React.useState(false);
   const [selectedJobId, setSelectedJobId] = React.useState({});
 
@@ -105,12 +105,12 @@ const AuditEngagement = () => {
 
     if (companyId) {
       setPage(1);
-      setItemsPerPage(5);
+      setItemsPerPage(10);
       dispatch(
         setupGetAllAuditEngagement({
           companyId,
           page: 1,
-          itemsPerPage: 5,
+          itemsPerPage: 10,
           year,
         })
       );
@@ -172,7 +172,7 @@ const AuditEngagement = () => {
                           return (
                             <tr key={index}>
                               <td>{(page - 1) * itemsPerPage + index + 1}</td>
-                              <td>{item?.aetitle}</td>
+                              <td>{item?.aeTitle}</td>
                               <td>
                                 {item?.plannedStartDate
                                   ? moment
@@ -284,7 +284,6 @@ const AuditEngagement = () => {
                     value={itemsPerPage}
                     onChange={(event) => handleChangeItemsPerPage(event)}
                   >
-                    <MenuItem value={5}>5</MenuItem>
                     <MenuItem value={10}>10</MenuItem>
                     <MenuItem value={20}>20</MenuItem>
                     <MenuItem value={30}>30</MenuItem>

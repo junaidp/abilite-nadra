@@ -1,7 +1,7 @@
 import axios from "axios";
 import { baseUrl } from "../../../../config/constants";
 
-export const getAllInternalAuditReports = async (data, thunkAPI) => {
+export const getAllConsolidatedReports = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.get(
@@ -142,11 +142,11 @@ export const getSingleInternalAuditReportAfterSave = async (data, thunkAPI) => {
   }
 };
 
-export const getAllJobsForInternalAuditReport = async (data, thunkAPI) => {
+export const getAllJobsForConsolidatedReport = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.get(
-      `${baseUrl}/reportingAndFollowUp/reporting/getJobForConsolidatedReports${data}`,
+      `${baseUrl}/reportingAndFollowUp/reporting/getJobForConsolidatedReports/light${data}`,
       {
         headers: {
           Authorization: `Bearer ${user[0]?.token}`,

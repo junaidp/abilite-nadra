@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 
 import {
-  setupGetAllInternalAuditReports,
+  setupGetAllConsolidatedReports,
   resetInternalAuditReportAddSuccess,
   handleChangeReport,
 } from "../../../../global-redux/reducers/reports/consolidation-report/slice";
@@ -38,7 +38,7 @@ const DetailedAuditReport = () => {
   const { company, year } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
   const {
-    allInternalAuditReports,
+    allConsolidatedReports,
     loading,
     internalAuditReportAddSuccess,
     totalNoOfRecords,
@@ -64,7 +64,7 @@ const DetailedAuditReport = () => {
       setPage(1);
       setItemsPerPage(newLimit);
       dispatch(
-        setupGetAllInternalAuditReports({
+        setupGetAllConsolidatedReports({
           companyId,
           page: 1,
           itemsPerPage: newLimit,
@@ -91,7 +91,7 @@ const DetailedAuditReport = () => {
         setPage(1);
         setItemsPerPage(10);
         dispatch(
-          setupGetAllInternalAuditReports({
+          setupGetAllConsolidatedReports({
             companyId,
             page: 1,
             itemsPerPage: 10,
@@ -107,7 +107,7 @@ const DetailedAuditReport = () => {
     const companyId = user[0]?.company?.find((item) => item?.companyName === company)?.id;
     if (companyId) {
       dispatch(
-        setupGetAllInternalAuditReports({
+        setupGetAllConsolidatedReports({
           companyId,
           page,
           itemsPerPage,
@@ -127,7 +127,7 @@ const DetailedAuditReport = () => {
       setPage(1);
       setItemsPerPage(10);
       dispatch(
-        setupGetAllInternalAuditReports({
+        setupGetAllConsolidatedReports({
           companyId,
           page: 1,
           itemsPerPage: 10,
@@ -235,15 +235,15 @@ const DetailedAuditReport = () => {
                       <CircularProgress />
                     </td>
                   </tr>
-                ) : allInternalAuditReports?.length === 0 ||
-                  allInternalAuditReports[0]?.error === "Not Found" ? (
+                ) : allConsolidatedReports?.length === 0 ||
+                  allConsolidatedReports[0]?.error === "Not Found" ? (
                   <tr>
                     <td className="w-300">
                       No Internal Audit Consolidation Reports To Show.
                     </td>
                   </tr>
                 ) : (
-                  allInternalAuditReports?.map((item, index) => {
+                  allConsolidatedReports?.map((item, index) => {
                     const isReportCreator = item?.preparedBy === currentUserName;
 
                     const isResourceUser =
@@ -395,7 +395,7 @@ const DetailedAuditReport = () => {
             </table>
           </div>
 
-          {allInternalAuditReports?.length > 0 && (
+          {allConsolidatedReports?.length > 0 && (
             <div className="row">
               <div className="col-lg-6 mb-4">
                 <Pagination

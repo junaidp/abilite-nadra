@@ -33,7 +33,7 @@ import InternalAuditReportBody from "../components/InternalAuditReportBody";
 const GenerateInternalAuditReport = () => {
   const dispatch = useDispatch();
 
-  // ✅ Redux State
+  // Redux State
   const { user } = useSelector((state) => state?.auth);
   const { company, year } = useSelector((state) => state?.common);
   const {
@@ -46,7 +46,7 @@ const GenerateInternalAuditReport = () => {
     iahFileUploadSuccess,
   } = useSelector((state) => state?.internalAuditReport);
 
-  // ✅ Local State
+  // Local State
   const [reportObject, setReportObject] = useState({});
   const [jobForInternalAuditReportId, setJobForInternalAuditReportId] = useState("");
   const [deleteFileId, setDeleteFileId] = useState("");

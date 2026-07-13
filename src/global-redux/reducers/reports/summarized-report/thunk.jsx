@@ -97,7 +97,7 @@ export const getAllJobsForSummarizedReport = async (data, thunkAPI) => {
     try {
         const { user } = thunkAPI.getState().auth;
         let props = await axios.get(
-            `${baseUrl}/reportingAndFollowUp/reporting/getJobForConsolidatedReports${data}`,
+            `${baseUrl}/reportingAndFollowUp/reporting/getJobForConsolidatedReports/light${data}`,
             {
                 headers: {
                     Authorization: `Bearer ${user[0]?.token}`,

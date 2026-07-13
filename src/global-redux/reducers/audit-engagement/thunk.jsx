@@ -6,7 +6,7 @@ export const getAllAuditEngagement = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.get(
-      `${baseUrl}/auditEngagement/getAll?companyId=${data?.companyId}&pageNo=${data?.page}&noOfRecords=${data?.itemsPerPage}&currentYear=${data?.year}&userId=${user[0]?.id}`,
+      `${baseUrl}/auditEngagement/getAll/light?companyId=${data?.companyId}&pageNo=${data?.page}&noOfRecords=${data?.itemsPerPage}&currentYear=${data?.year}&userId=${user[0]?.id}`,
       {
         headers: {
           "Content-Type": "application/json",

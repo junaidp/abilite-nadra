@@ -110,7 +110,7 @@ export const getAllJobsForInternalAuditReport = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.get(
-      `${baseUrl}/reportingAndFollowUp/reporting/getJobForReports${data}`,
+      `${baseUrl}/reportingAndFollowUp/reporting/getJobForReports/light${data}`,
       {
         headers: {
           Authorization: `Bearer ${user[0]?.token}`,

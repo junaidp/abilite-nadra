@@ -1,12 +1,12 @@
 import { toast } from "react-toastify";
 import {
-  getAllInternalAuditReports,
+  getAllConsolidatedReports,
   saveInternalAuditReport,
   updateInternalAuditReport,
   deleteInternalAuditReport,
   getSingleInternalAuditReport,
   getSingleInternalAuditReportAfterSave,
-  getAllJobsForInternalAuditReport,
+  getAllJobsForConsolidatedReport,
   createInternalAuditReportObject,
   createExtraFields,
   updateExtraField,
@@ -23,8 +23,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 const initialState = {
   loading: false,
   subLoading: false,
-  allInternalAuditReports: [],
-  jobsForInternalAuditReports: [],
+  allConsolidatedReports: [],
+  jobsForConsolidatedReports: [],
   internalAuditReportObject: {},
   singleInternalAuditReport: {},
   internalAuditReportAddSuccess: false,
@@ -37,10 +37,10 @@ const initialState = {
   selectedReport: JSON.parse(sessionStorage.getItem("selectedReport")) || {}
 };
 
-export const setupGetAllInternalAuditReports = createAsyncThunk(
-  "internalAuditConsolidationReport/getAllInternalAuditReports",
+export const setupGetAllConsolidatedReports = createAsyncThunk(
+  "internalAuditConsolidationReport/getAllConsolidatedReports",
   async (data, thunkAPI) => {
-    return getAllInternalAuditReports(data, thunkAPI);
+    return getAllConsolidatedReports(data, thunkAPI);
   }
 );
 
@@ -90,10 +90,10 @@ export const setupGetSingleInternalAuditReportAfterSave = createAsyncThunk(
   }
 );
 
-export const setupGetAllJobsForInternalAuditReport = createAsyncThunk(
-  "internalAuditConsolidationReport/getAllJobsForInternalAuditReport",
+export const setupGetAllJobsForConsolidatedReport = createAsyncThunk(
+  "internalAuditConsolidationReport/getAllJobsForConsolidatedReport",
   async (data, thunkAPI) => {
-    return getAllJobsForInternalAuditReport(data, thunkAPI);
+    return getAllJobsForConsolidatedReport(data, thunkAPI);
   }
 );
 
@@ -168,8 +168,8 @@ export const slice = createSlice({
     },
     handleResetData: (state) => {
       state.loading = false;
-      state.allInternalAuditReports = [];
-      state.jobsForInternalAuditReports = [];
+      state.allConsolidatedReports = [];
+      state.jobsForConsolidatedReports = [];
       state.internalAuditReportObject = {};
       state.singleInternalAuditReport = {};
       state.internalAuditReportAddSuccess = false;
@@ -188,18 +188,18 @@ export const slice = createSlice({
   extraReducers: (builder) => {
     // Get All Internal Audit Reports
     builder
-      .addCase(setupGetAllInternalAuditReports.pending, (state) => {
+      .addCase(setupGetAllConsolidatedReports.pending, (state) => {
         state.loading = true;
       })
       .addCase(
-        setupGetAllInternalAuditReports.fulfilled,
+        setupGetAllConsolidatedReports.fulfilled,
         (state, { payload }) => {
           state.totalNoOfRecords = payload?.message;
           state.loading = false;
-          state.allInternalAuditReports = payload?.data || [];
+          state.allConsolidatedReports = payload?.data || [];
         }
       )
-      .addCase(setupGetAllInternalAuditReports.rejected, (state, action) => {
+      .addCase(setupGetAllConsolidatedReports.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);
@@ -351,18 +351,18 @@ export const slice = createSlice({
       );
     // Get Jobs  Audit Report
     builder
-      .addCase(setupGetAllJobsForInternalAuditReport.pending, (state) => {
+      .addCase(setupGetAllJobsForConsolidatedReport.pending, (state) => {
         state.loading = true;
       })
       .addCase(
-        setupGetAllJobsForInternalAuditReport.fulfilled,
+        setupGetAllJobsForConsolidatedReport.fulfilled,
         (state, { payload }) => {
           state.loading = false;
-          state.jobsForInternalAuditReports = payload?.data || [];
+          state.jobsForConsolidatedReports = payload?.data || [];
         }
       )
       .addCase(
-        setupGetAllJobsForInternalAuditReport.rejected,
+        setupGetAllJobsForConsolidatedReport.rejected,
         (state, action) => {
           state.loading = false;
           if (action.payload?.response?.data?.message) {

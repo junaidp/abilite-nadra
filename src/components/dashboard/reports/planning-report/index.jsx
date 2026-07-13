@@ -109,15 +109,6 @@ const PlanningReport = () => {
     if (user[0]?.token) dispatch(setupGetAllUsers());
   }, [dispatch, user]);
 
-
-  // Helper to check if a report is ready for publish/download
-  const isReportComplete = (report) =>
-    report?.summary &&
-    report?.methodology &&
-    report?.riskAssessmentSummary &&
-    report?.organizationStrategy &&
-    report?.summaryRisk;
-
   return (
     <div>
       {/* Publish Dialog */}
@@ -205,10 +196,10 @@ const PlanningReport = () => {
                   (item?.createdBy === user[0]?.userId?.id ||
                     user[0]?.userId?.employeeid?.userHierarchy === "IAH");
 
+
                 const canPublish =
                   canEditOrDelete &&
-                  user[0]?.userId?.employeeid?.userHierarchy === "IAH" &&
-                  isReportComplete(item);
+                  user[0]?.userId?.employeeid?.userHierarchy === "IAH"
 
                 return (
                   <tr key={index} className="h-40">
@@ -268,29 +259,31 @@ const PlanningReport = () => {
                           </div>
                         )}
 
+
+
+
                         {/* PDF Download */}
-                        {isReportComplete(item) && (
-                          <Tooltip title="Download PDF" placement="top">
-                            <PDFDownloadLink
-                              document={<PDFGenerator reportObject={item} />}
-                              fileName={`${item.reportTitle}_${moment
-                                .utc(item.date)
-                                .format("YYYY-MM-DD")}.pdf`}
-                              style={{
-                                textDecoration: "none",
-                                color: "inherit",
-                              }}
-                            >
-                              {({ loading }) =>
-                                loading ? (
-                                  <i className="fa fa-spinner fa-spin f-18 cursor-pointer"></i>
-                                ) : (
-                                  <i className="fa fa-download f-18 cursor-pointer"></i>
-                                )
-                              }
-                            </PDFDownloadLink>
-                          </Tooltip>
-                        )}
+                        <Tooltip title="Download PDF" placement="top">
+                          <PDFDownloadLink
+                            document={<PDFGenerator reportObject={item} />}
+                            fileName={`${item.reportTitle}_${moment
+                              .utc(item.date)
+                              .format("YYYY-MM-DD")}.pdf`}
+                            style={{
+                              textDecoration: "none",
+                              color: "inherit",
+                            }}
+                          >
+                            {({ loading }) =>
+                              loading ? (
+                                <i className="fa fa-spinner fa-spin f-18 cursor-pointer"></i>
+                              ) : (
+                                <i className="fa fa-download f-18 cursor-pointer"></i>
+                              )
+                            }
+                          </PDFDownloadLink>
+                        </Tooltip>
+
                       </div>
                     </td>
                   </tr>

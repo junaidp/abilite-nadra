@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  setupGetAllJobsForInternalAuditReport,
+  setupGetAllJobsForConsolidatedReport,
   setupCreateInternalAuditReportObject,
   handleResetData,
   setupSaveInternalAuditReport,
@@ -30,7 +30,7 @@ const GenerateDetailedAuditReport = () => {
   const { user } = useSelector((state) => state?.auth);
   const { company, year } = useSelector((state) => state?.common);
   const {
-    jobsForInternalAuditReports,
+    jobsForConsolidatedReports,
     internalAuditReportObject,
     loading,
     internalAuditReportAddSuccess,
@@ -138,7 +138,7 @@ const GenerateDetailedAuditReport = () => {
 
     if (companyId && isEmpty) {
       dispatch(
-        setupGetAllJobsForInternalAuditReport(
+        setupGetAllJobsForConsolidatedReport(
           `?companyId=${companyId}&currentYear=${Number(year)}`
         )
       );
@@ -210,7 +210,7 @@ const GenerateDetailedAuditReport = () => {
                 onChange={handleChange}
               >
                 <MenuItem value="">Select One</MenuItem>
-                {jobsForInternalAuditReports?.map((item, index) => (
+                {jobsForConsolidatedReports?.map((item, index) => (
                   <MenuItem
                     value={item?.id}
                     key={index}
