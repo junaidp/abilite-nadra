@@ -2,9 +2,8 @@ import React from "react";
 import UpdateTaskDialog from "./update-task-dialog/index";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  resetTaskAddSuccess,
   setupGetAllTasks,
-  resetFileUploadSuccess,
+  setupGetSingleTask,
 } from "../../../../global-redux/reducers/tasks-management/slice";
 import { CircularProgress } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
@@ -20,11 +19,9 @@ const TaskManagement = () => {
   const [showUpdateTaskDialog, setShowUpdateTaskDailog] = React.useState(false);
   const [showViewTaskDialog, setShowViewTasktDialog] = React.useState(false);
   const {
-    taskAddSuccess,
     allTasks,
     initialLoading,
     totalNoOfRecords,
-    fileUploadSuccess,
   } = useSelector((state) => state?.tasksManagement);
   const { company } = useSelector((state) => state?.common);
   const { user } = useSelector((state) => state?.auth);
@@ -58,25 +55,6 @@ const TaskManagement = () => {
     const companyId = user[0]?.company?.find(
       (item) => item?.companyName === company
     )?.id;
-    if (companyId && taskAddSuccess === true) {
-      setPage(1);
-      setItemsPerPage(10);
-      dispatch(
-        setupGetAllTasks({
-          companyId,
-          page: 1,
-          itemsPerPage: 10,
-          isTask: true,
-        })
-      );
-      dispatch(resetTaskAddSuccess());
-    }
-  }, [taskAddSuccess]);
-
-  React.useEffect(() => {
-    const companyId = user[0]?.company?.find(
-      (item) => item?.companyName === company
-    )?.id;
     if (companyId) {
       dispatch(
         setupGetAllTasks({
@@ -88,23 +66,6 @@ const TaskManagement = () => {
       );
     }
   }, [dispatch, page]);
-
-  React.useEffect(() => {
-    const companyId = user[0]?.company?.find(
-      (item) => item?.companyName === company
-    )?.id;
-    if (companyId && fileUploadSuccess === true) {
-      dispatch(
-        setupGetAllTasks({
-          companyId,
-          page,
-          itemsPerPage,
-          isTask: true,
-        })
-      );
-      dispatch(resetFileUploadSuccess());
-    }
-  }, [fileUploadSuccess]);
 
   return (
     <div>
@@ -172,6 +133,7 @@ const TaskManagement = () => {
                             className="fa fa-edit text-secondary f-18 cursor-pointer"
                             onClick={() => {
                               setUpdateTaskId(task?.id);
+                              dispatch(setupGetSingleTask({ id: task?.id }));
                               setShowUpdateTaskDailog(true);
                             }}
                           ></i>
@@ -179,6 +141,7 @@ const TaskManagement = () => {
                             className="fa-eye fa f-18 cursor-pointer"
                             onClick={() => {
                               setUpdateTaskId(task?.id);
+                              dispatch(setupGetSingleTask({ id: task?.id }));
                               setShowViewTasktDialog(true);
                             }}
                           ></i>

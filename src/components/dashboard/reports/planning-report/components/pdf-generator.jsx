@@ -252,6 +252,17 @@ const styles = StyleSheet.create({
 });
 
 const PDFGenerator = ({ reportObject }) => {
+    const htmlValue = (value) => value || "";
+    const textValue = (value) => value || "";
+    const renderHtml = (value) =>
+        htmlValue(value) ? (
+            <Html style={styles.singleFindSummaryPara}>
+                {htmlValue(value)}
+            </Html>
+        ) : (
+            <Text style={styles.singleFindSummaryPara}></Text>
+        );
+
     return (
         <Document>
             <Page style={styles.firstPage} size="A4">
@@ -310,7 +321,7 @@ const PDFGenerator = ({ reportObject }) => {
                                     ?.map((singleItem, index) => {
                                         return (
                                             <Text style={styles.h4} key={index}>
-                                                {singleItem?.heading.slice(0, 40)}...
+                                                {textValue(singleItem?.heading).slice(0, 40)}...
                                             </Text>
                                         );
                                     })
@@ -339,37 +350,27 @@ const PDFGenerator = ({ reportObject }) => {
                 {/* Page 3 */}
                 <View style={styles.page2} break>
                     <Text style={styles.contents}>Executive Summary  </Text>
-                    <Html style={styles.singleFindSummaryPara}>
-                        {reportObject?.summary}
-                    </Html>
+                    {renderHtml(reportObject?.summary)}
                 </View>
                 {/* Page 4 */}
                 <View style={styles.page2} break>
                     <Text style={styles.contents}>Audit Planning Methodology </Text>
-                    <Html style={styles.singleFindSummaryPara}>
-                        {reportObject?.methodology}
-                    </Html>
+                    {renderHtml(reportObject?.methodology)}
                 </View>
                 {/* Page 5 */}
                 <View style={styles.page2} break>
                     <Text style={styles.contents}>Risk Assessment Summary</Text>
-                    <Html style={styles.singleFindSummaryPara}>
-                        {reportObject?.riskAssessmentSummary}
-                    </Html>
+                    {renderHtml(reportObject?.riskAssessmentSummary)}
                 </View>
                 {/* Page 6 */}
                 <View style={styles.page2} break>
                     <Text style={styles.contents}>Organizational Strategy</Text>
-                    <Html style={styles.singleFindSummaryPara}>
-                        {reportObject?.organizationStrategy}
-                    </Html>
+                    {renderHtml(reportObject?.organizationStrategy)}
                 </View>
                 {/* Page 7 */}
                 <View style={styles.page2} break>
                     <Text style={styles.contents}>Summary Of Risks</Text>
-                    <Html style={styles.singleFindSummaryPara}>
-                        {reportObject?.summaryRisk}
-                    </Html>
+                    {renderHtml(reportObject?.summaryRisk)}
                 </View>
 
                 {/* Page 8 */}
@@ -385,13 +386,13 @@ const PDFGenerator = ({ reportObject }) => {
                                                     Heading
                                                 </Text>
                                                 <Text style={styles.singleFindSummaryPara}>
-                                                    {item?.heading.trim()}
+                                                    {textValue(item?.heading).trim()}
                                                 </Text>
                                             </View>
                                             <View style={styles.singleFindSummaryWrap}>
                                                 <Text style={styles.singleFindSummaryHeader}>Description</Text>
                                                 <Text style={styles.singleFindSummaryPara}>
-                                                    {item?.description.trim()}
+                                                    {textValue(item?.description).trim()}
                                                 </Text>
                                             </View>
                                         </View>

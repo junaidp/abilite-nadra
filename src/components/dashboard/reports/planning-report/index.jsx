@@ -12,7 +12,9 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
-import { PDFDownloadLink } from "@react-pdf/renderer";
+import { pdf } from "@react-pdf/renderer";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 import {
   setupGetAllReports,
@@ -23,6 +25,7 @@ import ReportDeleteDialog from "./components/report-delete-dialog";
 import ReportPublishDialog from "./components/report-publish-dialog";
 import PDFGenerator from "./components/pdf-generator";
 import { encryptAndEncode } from "../../../../config/helper";
+import { baseUrl } from "../../../../config/constants";
 
 /** Font style for tooltips */
 const poppinsStyle = {
@@ -52,6 +55,7 @@ const PlanningReport = () => {
     React.useState(false);
   const [showReportPublishDialog, setShowReportPublishDialog] =
     React.useState(false);
+  const [downloadingReportId, setDownloadingReportId] = React.useState(null);
 
   // Pagination handlers
   const handlePageChange = (_, value) => setPage(value);
@@ -77,6 +81,50 @@ const PlanningReport = () => {
   const handleDelete = (id) => {
     setSelectedReportId(id);
     setShowReportDeleteDialog(true);
+  };
+
+  const handleDownloadPdf = async (item) => {
+    if (!item?.id || downloadingReportId) return;
+
+    try {
+      setDownloadingReportId(item.id);
+      const response = await axios.get(
+        `${baseUrl}/planningreport/report/detail?reportId=${item.id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user[0]?.token}`,
+          },
+        }
+      );
+
+      const fullReport = response?.data?.data;
+      if (!fullReport) {
+        toast.error("Unable to download report");
+        return;
+      }
+
+      const blob = await pdf(
+        <PDFGenerator reportObject={fullReport} />
+      ).toBlob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      const reportDate = moment
+        .utc(fullReport?.date || fullReport?.createdTime || item?.date)
+        .format("YYYY-MM-DD");
+
+      link.href = url;
+      link.download = `${fullReport?.reportTitle || item?.reportTitle}_${reportDate}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Planning report PDF download failed:", error);
+      toast.error("Unable to download report");
+    } finally {
+      setDownloadingReportId(null);
+    }
   };
 
   // Reload after successful add/update/delete
@@ -264,24 +312,16 @@ const PlanningReport = () => {
 
                         {/* PDF Download */}
                         <Tooltip title="Download PDF" placement="top">
-                          <PDFDownloadLink
-                            document={<PDFGenerator reportObject={item} />}
-                            fileName={`${item.reportTitle}_${moment
-                              .utc(item.date)
-                              .format("YYYY-MM-DD")}.pdf`}
-                            style={{
-                              textDecoration: "none",
-                              color: "inherit",
-                            }}
+                          <i
+                            className={`fa ${
+                              downloadingReportId === item?.id
+                                ? "fa-spinner fa-spin"
+                                : "fa-download"
+                            } f-18 cursor-pointer`}
+                            onClick={() => handleDownloadPdf(item)}
+                            aria-hidden="true"
                           >
-                            {({ loading }) =>
-                              loading ? (
-                                <i className="fa fa-spinner fa-spin f-18 cursor-pointer"></i>
-                              ) : (
-                                <i className="fa fa-download f-18 cursor-pointer"></i>
-                              )
-                            }
-                          </PDFDownloadLink>
+                          </i>
                         </Tooltip>
 
                       </div>

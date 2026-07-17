@@ -39,13 +39,13 @@ const FollowUp = () => {
 
   // ---- Determine Follow-up Status ----
   const handleCalculateStatus = (item) => {
-    const list = item?.reportingList || [];
+    const stepNo = Number(item?.stepNo);
 
-    if (list.some((r) => Number(r?.stepNo) === 5)) {
+    if (stepNo === 5) {
       return "Exception To Be Implemented";
     }
 
-    if (list.some((r) => Number(r?.stepNo) === 6)) {
+    if (stepNo === 6) {
       return "Exceptions Implemented";
     }
 
@@ -175,7 +175,7 @@ const FollowUp = () => {
                       <td>{handleCalculateStatus(item)}</td>
 
                       {/* Observation count */}
-                      <td>{item?.reportingList?.length}</td>
+                      <td>{item?.noOfObservations}</td>
 
                       {/* Location */}
                       <td>

@@ -2,12 +2,13 @@ import React from "react";
 import { useSelector } from "react-redux";
 import moment from "moment";
 import FileUpload from "./file-upload";
+import { CircularProgress } from "@mui/material";
 
 const ViewInformationRequest = ({
   setShowViewInformationRequestDialog,
   updateTaskId,
 }) => {
-  const { allTasks } = useSelector((state) => state?.tasksManagement);
+  const { singleTask, singleTaskLoading } = useSelector((state) => state?.tasksManagement);
 
   // Initial form initialValues
   const defaultinitialValues = {
@@ -21,7 +22,7 @@ const ViewInformationRequest = ({
   let [initialValues, setInitialValues] = React.useState(defaultinitialValues);
 
   React.useEffect(() => {
-    let task = allTasks.find((singleTask) => singleTask?.id === updateTaskId);
+    const task = Number(singleTask?.id) === Number(updateTaskId) ? singleTask : {};
     setInitialValues({
       dueDate: task ? moment.utc(task?.dueDate).format("YYYY-MM-DD") : "",
       userAssigned: task?.assignee?.name,
@@ -29,7 +30,7 @@ const ViewInformationRequest = ({
       detailedRequirement: task?.detailedRequirement,
       response: task?.yourResponse,
     });
-  }, [updateTaskId]);
+  }, [updateTaskId, singleTask]);
 
   return (
     <div className="px-4 py-4 information-request-dialog-main-wrap">
@@ -45,6 +46,12 @@ const ViewInformationRequest = ({
           ></button>
         </div>
       </header>
+      {(singleTaskLoading || Number(singleTask?.id) !== Number(updateTaskId)) ? (
+        <div className="d-flex justify-content-center py-4">
+          <CircularProgress />
+        </div>
+      ) : (
+        <>
       <div className="row">
         <div className=" mb-3 col-lg-12">
           <label>Due Date</label>
@@ -102,7 +109,9 @@ const ViewInformationRequest = ({
         </div>
       </div>
 
-      <FileUpload updateTaskId={updateTaskId} allTasks={allTasks} />
+      <FileUpload updateTaskId={updateTaskId} />
+        </>
+      )}
 
 
     </div>

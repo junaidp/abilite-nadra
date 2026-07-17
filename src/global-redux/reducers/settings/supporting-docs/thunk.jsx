@@ -39,7 +39,7 @@ export const getAllFiles = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
-      `${baseUrl}/abiliteconfig/supporting/doc/getall${data}`,
+      `${baseUrl}/abiliteconfig/supporting/doc/getall/light${data}`,
       null,
       {
         headers: {

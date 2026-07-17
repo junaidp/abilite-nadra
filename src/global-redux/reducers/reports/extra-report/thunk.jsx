@@ -18,6 +18,78 @@ export const getAllAuditExceptions = async (data, thunkAPI) => {
   }
 };
 
+export const getAllAuditExceptionsLight = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    const params = new URLSearchParams({
+      companyId: data?.companyId,
+      natureThrough: data?.natureThrough || "null",
+      location: data?.location || "null",
+      subLocation: data?.subLocation || "null",
+      year: data?.year || "null",
+      auditee: data?.auditee || "null",
+      exceptionStatus: data?.exceptionStatus || "null",
+      pageNo: data?.page || 1,
+      noOfRecords: data?.itemsPerPage || 10,
+    });
+    let props = await axios.get(
+      `${baseUrl}/auditExceptionReports/reports/getAll/light?${params.toString()}`,
+      {
+        headers: {
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
+export const getAuditExceptionFilterOptions = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.get(
+      `${baseUrl}/auditExceptionReports/reports/filter-options?companyId=${data?.companyId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
+export const exportAuditExceptions = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    const params = new URLSearchParams({
+      companyId: data?.companyId,
+      natureThrough: data?.natureThrough || "null",
+      location: data?.location || "null",
+      subLocation: data?.subLocation || "null",
+      year: data?.year || "null",
+      auditee: data?.auditee || "null",
+      exceptionStatus: data?.exceptionStatus || "null",
+    });
+    let props = await axios.get(
+      `${baseUrl}/auditExceptionReports/reports/export?${params.toString()}`,
+      {
+        responseType: "blob",
+        headers: {
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
 export const getAllLocations = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;

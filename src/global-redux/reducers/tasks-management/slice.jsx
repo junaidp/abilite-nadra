@@ -8,11 +8,13 @@ import {
   getAllAuditEngagement,
   taskFileUpload,
   taskFileDelete,
+  taskFileDownload,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
   loading: false,
+  singleTaskLoading: false,
   initialLoading: false,
   users: [],
   auditEngagements: [],
@@ -22,6 +24,8 @@ const initialState = {
   fileUploadSuccess: false,
   totalNoOfRecords: 0,
 };
+
+const getResponseData = (payload) => payload?.data || payload;
 
 export const setupAddTask = createAsyncThunk(
   "tasks/addTask",
@@ -71,6 +75,12 @@ export const setupTaskFileDelete = createAsyncThunk(
     return taskFileDelete(data, thunkAPI);
   }
 );
+export const setupTaskFileDownload = createAsyncThunk(
+  "tasks/taskFileDownload",
+  async (data, thunkAPI) => {
+    return taskFileDownload(data, thunkAPI);
+  }
+);
 
 export const slice = createSlice({
   name: "tasks",
@@ -89,9 +99,15 @@ export const slice = createSlice({
       .addCase(setupAddTask.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupAddTask.fulfilled, (state) => {
+      .addCase(setupAddTask.fulfilled, (state, { payload }) => {
         state.loading = false;
         state.taskAddSuccess = true;
+        const createdTask = getResponseData(payload);
+        state.singleTask = createdTask || {};
+        if (createdTask?.id) {
+          state.allTasks = [createdTask, ...state.allTasks];
+          state.totalNoOfRecords = Number(state.totalNoOfRecords || 0) + 1;
+        }
         toast.success("Information Request Added Successfully");
       })
       .addCase(setupAddTask.rejected, (state, { payload }) => {
@@ -107,9 +123,15 @@ export const slice = createSlice({
       .addCase(setupUpdateTask.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupUpdateTask.fulfilled, (state) => {
+      .addCase(setupUpdateTask.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.taskAddSuccess = true;
+        const updatedTask = getResponseData(payload);
+        state.singleTask = updatedTask || {};
+        if (updatedTask?.id) {
+          state.allTasks = state.allTasks.map((task) =>
+            task?.id === updatedTask.id ? { ...task, ...updatedTask } : task
+          );
+        }
         toast.success("Information Request Updated Successfully");
       })
       .addCase(setupUpdateTask.rejected, (state, { payload }) => {
@@ -124,13 +146,16 @@ export const slice = createSlice({
     builder
       .addCase(setupGetSingleTask.pending, (state) => {
         state.loading = true;
+        state.singleTaskLoading = true;
       })
       .addCase(setupGetSingleTask.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.singleTask = payload;
+        state.singleTaskLoading = false;
+        state.singleTask = getResponseData(payload) || {};
       })
       .addCase(setupGetSingleTask.rejected, (state, { payload }) => {
         state.loading = false;
+        state.singleTaskLoading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
         } else {

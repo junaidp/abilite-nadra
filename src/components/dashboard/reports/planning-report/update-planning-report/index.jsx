@@ -46,13 +46,13 @@ const UpdatePlanningReport = () => {
   const [values, setValues] = React.useState({
     summary: "",
     methodology: "",
-    riskAssesmentSummary: "",
-    orgnizationStrategy: "",
+    riskAssessmentSummary: "",
+    organizationStrategy: "",
     summaryRisk: "",
   });
 
   /** Handle editor content changes */
-  const onContentChange = React.useCallback((name, value) => {
+  const onContentChange = React.useCallback((value, name) => {
     setValues((prev) => ({ ...prev, [name]: value }));
   }, []);
 
@@ -69,8 +69,8 @@ const UpdatePlanningReport = () => {
       setValues({
         summary: singleReportObject?.summary || "",
         methodology: singleReportObject?.methodology || "",
-        riskAssesmentSummary: singleReportObject?.riskAssesmentSummary || "",
-        orgnizationStrategy: singleReportObject?.orgnizationStrategy || "",
+        riskAssessmentSummary: singleReportObject?.riskAssessmentSummary || "",
+        organizationStrategy: singleReportObject?.organizationStrategy || "",
         summaryRisk: singleReportObject?.summaryRisk || "",
       });
     }

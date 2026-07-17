@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setupAddTask } from "../../../../../../global-redux/reducers/tasks-management/slice";
+import { resetTaskAddSuccess, setupAddTask } from "../../../../../../global-redux/reducers/tasks-management/slice";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import moment from "moment";
 import FileUpload from "./file-upload";
@@ -41,6 +41,30 @@ const AddInformationRequest = ({ setShowAddInformationRequestDialog }) => {
     detailedRequirement: "",
   };
 
+  const isUserAssignedToJob = (job, userId) => {
+    const selectedUserId = Number(userId);
+    if (!selectedUserId) {
+      return false;
+    }
+
+    const resourceAllocation = job?.resourceAllocation;
+    return (
+      Number(resourceAllocation?.headOfInternalAudit) === selectedUserId ||
+      Number(resourceAllocation?.backupHeadOfInternalAudit) === selectedUserId ||
+      Number(resourceAllocation?.proposedJobApprover) === selectedUserId ||
+      resourceAllocation?.resourcesList?.some(
+        (resourceId) => Number(resourceId) === selectedUserId
+      )
+    );
+  };
+
+  const getAvailableJobs = (userAssigned) =>
+    auditEngagements?.filter(
+      (job) =>
+        job?.jobType !== "Compliance Checklist" &&
+        isUserAssignedToJob(job, userAssigned)
+    ) || [];
+
   const handleSubmit = (values) => {
     if (!loading) {
       dispatch(
@@ -70,8 +94,9 @@ const AddInformationRequest = ({ setShowAddInformationRequestDialog }) => {
   React.useEffect(() => {
     if (taskAddSuccess) {
       setShowAddInformationRequestDialog(false);
+      dispatch(resetTaskAddSuccess());
     }
-  }, [taskAddSuccess]);
+  }, [taskAddSuccess, dispatch, setShowAddInformationRequestDialog]);
 
   return (
     <div className="px-4 py-4">
@@ -93,7 +118,7 @@ const AddInformationRequest = ({ setShowAddInformationRequestDialog }) => {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ isSubmitting, values }) => (
+        {({ isSubmitting, values, setFieldValue }) => (
           <Form>
             <div className="row">
               <div className="mb-3 col-lg-12">
@@ -120,6 +145,10 @@ const AddInformationRequest = ({ setShowAddInformationRequestDialog }) => {
                   name="userAssigned"
                   className="form-select"
                   aria-label="Default select example"
+                  onChange={(event) => {
+                    setFieldValue("userAssigned", event.target.value);
+                    setFieldValue("engagementId", "");
+                  }}
                 >
                   <option value="">Select User</option>
                   {users?.map((user, index) => (
@@ -141,10 +170,12 @@ const AddInformationRequest = ({ setShowAddInformationRequestDialog }) => {
                   name="engagementId"
                   className="form-select"
                   aria-label="Default select example"
+                  disabled={!values?.userAssigned}
                 >
-                  <option value="">Select Job</option>
-                  {auditEngagements
-                    ?.filter((item) => item?.jobType !== "Compliance Checklist")
+                  <option value="">
+                    {values?.userAssigned ? "Select Job" : "Select Assignee First"}
+                  </option>
+                  {getAvailableJobs(values?.userAssigned)
                     ?.map((job, index) => (
                       <option key={index} value={job?.id}>
                         {job?.aetitle}

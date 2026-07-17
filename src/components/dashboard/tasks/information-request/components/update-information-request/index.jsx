@@ -1,7 +1,11 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setupUpdateTask } from "../../../../../../global-redux/reducers/tasks-management/slice";
+import {
+  setupGetSingleTask,
+  setupUpdateTask,
+} from "../../../../../../global-redux/reducers/tasks-management/slice";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import { CircularProgress } from "@mui/material";
 import FileUpload from "./file-upload";
 import moment from "moment";
 import * as Yup from "yup";
@@ -29,7 +33,7 @@ const UpdateInformationRequest = ({
   updateTaskId,
 }) => {
   const dispatch = useDispatch();
-  const { users, auditEngagements, loading, allTasks } = useSelector(
+  const { users, auditEngagements, loading, singleTask, singleTaskLoading } = useSelector(
     (state) => state?.tasksManagement
   );
 
@@ -44,9 +48,33 @@ const UpdateInformationRequest = ({
 
   let [initialValues, setInitialValues] = React.useState(defaultValues);
 
+  const isUserAssignedToJob = (job, userId) => {
+    const selectedUserId = Number(userId);
+    if (!selectedUserId) {
+      return false;
+    }
+
+    const resourceAllocation = job?.resourceAllocation;
+    return (
+      Number(resourceAllocation?.headOfInternalAudit) === selectedUserId ||
+      Number(resourceAllocation?.backupHeadOfInternalAudit) === selectedUserId ||
+      Number(resourceAllocation?.proposedJobApprover) === selectedUserId ||
+      resourceAllocation?.resourcesList?.some(
+        (resourceId) => Number(resourceId) === selectedUserId
+      )
+    );
+  };
+
+  const getAvailableJobs = (userAssigned) =>
+    auditEngagements?.filter(
+      (job) =>
+        job?.jobType !== "Compliance Checklist" &&
+        isUserAssignedToJob(job, userAssigned)
+    ) || [];
+
   const handleSubmit = (values) => {
     if (!loading) {
-      let task = allTasks.find((singleTask) => singleTask?.id === updateTaskId);
+      const task = Number(singleTask?.id) === Number(updateTaskId) ? singleTask : {};
       dispatch(
         setupUpdateTask({
           informationRequestAndTaskManagement: {
@@ -63,12 +91,16 @@ const UpdateInformationRequest = ({
           },
           files: task?.fileAttachments,
         })
-      );
+      ).then((result) => {
+        if (setupUpdateTask.fulfilled.match(result)) {
+          dispatch(setupGetSingleTask({ id: updateTaskId }));
+        }
+      });
     }
   };
 
   React.useEffect(() => {
-    let task = allTasks.find((singleTask) => singleTask?.id === updateTaskId);
+    const task = Number(singleTask?.id) === Number(updateTaskId) ? singleTask : {};
     setInitialValues({
       dueDate: task ? moment.utc(task?.dueDate).format("YYYY-MM-DD") : "",
       engagementId: task?.auditEngagementId,
@@ -76,7 +108,7 @@ const UpdateInformationRequest = ({
       detailedRequirement: task?.detailedRequirement,
       response: task?.yourResponse
     });
-  }, [updateTaskId]);
+  }, [updateTaskId, singleTask]);
 
   return (
     <div className="px-4 py-4 information-request-dialog-main-wrap">
@@ -92,13 +124,19 @@ const UpdateInformationRequest = ({
           ></button>
         </div>
       </header>
+      {(singleTaskLoading || Number(singleTask?.id) !== Number(updateTaskId)) ? (
+        <div className="d-flex justify-content-center py-4">
+          <CircularProgress />
+        </div>
+      ) : (
+        <>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
         enableReinitialize
       >
-        {({ isSubmitting, values }) => (
+        {({ isSubmitting, values, setFieldValue }) => (
           <Form>
             <div className="row">
               <div className="mb-3 col-lg-12">
@@ -125,6 +163,10 @@ const UpdateInformationRequest = ({
                   name="userAssigned"
                   className="form-select"
                   aria-label="Default select example"
+                  onChange={(event) => {
+                    setFieldValue("userAssigned", event.target.value);
+                    setFieldValue("engagementId", "");
+                  }}
                 >
                   <option value="">Select User</option>
                   {users?.map((user, index) => (
@@ -146,10 +188,12 @@ const UpdateInformationRequest = ({
                   name="engagementId"
                   className="form-select"
                   aria-label="Default select example"
+                  disabled={!values?.userAssigned}
                 >
-                  <option value="">Select Job</option>
-                  {auditEngagements
-                    ?.filter((item) => item?.jobType !== "Compliance Checklist")
+                  <option value="">
+                    {values?.userAssigned ? "Select Job" : "Select Assignee First"}
+                  </option>
+                  {getAvailableJobs(values?.userAssigned)
                     ?.map((job, index) => (
                       <option key={index} value={job?.id}>
                         {job?.aetitle}
@@ -214,6 +258,8 @@ const UpdateInformationRequest = ({
       </Formik>
 
       <FileUpload updateTaskId={updateTaskId} />
+        </>
+      )}
     </div>
   );
 };

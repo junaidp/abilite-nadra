@@ -1,12 +1,40 @@
 import React from "react";
-import { handleDownload } from "../../../../../config/helper";
+import { toast } from "react-toastify";
+import { useSelector, useDispatch } from "react-redux";
+import { setupTaskFileDownload } from "../../../../../global-redux/reducers/tasks-management/slice";
 
-const InformationRequestFileUpload = ({ updateTaskId, allTasks }) => {
+const InformationRequestFileUpload = ({ updateTaskId }) => {
+  const dispatch = useDispatch();
   const [files, setFiles] = React.useState([]);
+  const { singleTask } = useSelector((state) => state?.tasksManagement);
+
+  const handleFileDownload = (fileItem) => {
+    dispatch(
+      setupTaskFileDownload({
+        fileId: Number(fileItem?.id),
+        fileName: fileItem?.fileName,
+      })
+    )
+      .unwrap()
+      .then(({ blob, fileName }) => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(url);
+      })
+      .catch(() => {
+        toast.error("Unable to download file.");
+      });
+  };
+
   React.useEffect(() => {
-    let task = allTasks.find((singleTask) => singleTask?.id === updateTaskId);
+    const task = Number(singleTask?.id) === Number(updateTaskId) ? singleTask : {};
     setFiles(task?.fileAttachments);
-  }, [updateTaskId]);
+  }, [updateTaskId, singleTask]);
 
   return (
     <div className="row mb-3">
@@ -36,12 +64,7 @@ const InformationRequestFileUpload = ({ updateTaskId, allTasks }) => {
                       <td className="w-130">
                         <i
                           className="fa fa-download f-18 mx-2 cursor-pointer"
-                          onClick={() =>
-                            handleDownload({
-                              base64String: fileItem?.fileData,
-                              fileName: fileItem?.fileName,
-                            })
-                          }
+                          onClick={() => handleFileDownload(fileItem)}
                         ></i>
                       </td>
                     </tr>

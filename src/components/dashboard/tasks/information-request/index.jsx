@@ -6,9 +6,8 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   setupGetAllUsers,
   setupGetAllAuditEngagement,
-  resetTaskAddSuccess,
   setupGetAllTasks,
-  resetFileUploadSuccess,
+  setupGetSingleTask,
 } from "../../../../global-redux/reducers/tasks-management/slice";
 import { CircularProgress } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
@@ -21,11 +20,9 @@ import Select from "@mui/material/Select";
 const InformationRequest = () => {
   const dispatch = useDispatch();
   const {
-    taskAddSuccess,
     allTasks,
     initialLoading,
     totalNoOfRecords,
-    fileUploadSuccess,
     loading
   } = useSelector((state) => state?.tasksManagement);
   const { company } = useSelector((state) => state?.common);
@@ -71,25 +68,6 @@ const InformationRequest = () => {
     const companyId = user[0]?.company?.find(
       (item) => item?.companyName === company
     )?.id;
-    if (companyId && taskAddSuccess === true) {
-      setPage(1);
-      setItemsPerPage(10);
-      dispatch(
-        setupGetAllTasks({
-          companyId,
-          page: 1,
-          itemsPerPage: 10,
-          isTask: false,
-        })
-      );
-      dispatch(resetTaskAddSuccess());
-    }
-  }, [taskAddSuccess]);
-
-  React.useEffect(() => {
-    const companyId = user[0]?.company?.find(
-      (item) => item?.companyName === company
-    )?.id;
     if (companyId) {
       dispatch(
         setupGetAllTasks({
@@ -101,23 +79,6 @@ const InformationRequest = () => {
       );
     }
   }, [dispatch, page]);
-
-  React.useEffect(() => {
-    const companyId = user[0]?.company?.find(
-      (item) => item?.companyName === company
-    )?.id;
-    if (companyId && fileUploadSuccess === true) {
-      dispatch(
-        setupGetAllTasks({
-          companyId,
-          page,
-          itemsPerPage,
-          isTask: false,
-        })
-      );
-      dispatch(resetFileUploadSuccess());
-    }
-  }, [fileUploadSuccess]);
 
   React.useEffect(() => {
     const companyId = user[0]?.company?.find(
@@ -231,6 +192,7 @@ const InformationRequest = () => {
                             className="fa fa-edit text-secondary f-18 cursor-pointer"
                             onClick={() => {
                               setUpdateTaskId(task?.id);
+                              dispatch(setupGetSingleTask({ id: task?.id }));
                               setShowUpdateInformationRequestDialog(true);
                             }}
                           ></i>
@@ -238,6 +200,7 @@ const InformationRequest = () => {
                             className="fa-eye fa f-18 cursor-pointer"
                             onClick={() => {
                               setUpdateTaskId(task?.id);
+                              dispatch(setupGetSingleTask({ id: task?.id }));
                               setShowViewInformationRequestDialog(true);
                             }}
                           ></i>

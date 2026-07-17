@@ -3,16 +3,19 @@ import { toast } from "react-toastify";
 import {
   setupTaskFileUpload,
   setupTaskFileDelete,
+  setupTaskFileDownload,
+  setupGetSingleTask,
+  resetFileUploadSuccess,
 } from "../../../../../global-redux/reducers/tasks-management/slice";
 import { useSelector, useDispatch } from "react-redux";
-import { handleDownload, validateFile } from "../../../../../config/helper";
+import { validateFile } from "../../../../../config/helper";
 
 const InformationRequestFileUpload = ({ updateTaskId }) => {
   const dispatch = useDispatch();
   const fileInputRef = React.useRef(null);
   const [files, setFiles] = React.useState([]);
   const [selectedFile, setSelectedFile] = React.useState(null);
-  const { loading, fileUploadSuccess, allTasks } = useSelector(
+  const { loading, fileUploadSuccess, singleTask } = useSelector(
     (state) => state?.tasksManagement
   );
 
@@ -68,17 +71,42 @@ const InformationRequestFileUpload = ({ updateTaskId }) => {
     }
   };
 
+  const handleFileDownload = (fileItem) => {
+    dispatch(
+      setupTaskFileDownload({
+        fileId: Number(fileItem?.id),
+        fileName: fileItem?.fileName,
+      })
+    )
+      .unwrap()
+      .then(({ blob, fileName }) => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(url);
+      })
+      .catch(() => {
+        toast.error("Unable to download file.");
+      });
+  };
+
   React.useEffect(() => {
     if (fileUploadSuccess) {
       setSelectedFile(null);
       fileInputRef.current.value = "";
+      dispatch(setupGetSingleTask({ id: updateTaskId }));
+      dispatch(resetFileUploadSuccess());
     }
-  }, [fileUploadSuccess]);
+  }, [fileUploadSuccess, dispatch, updateTaskId]);
 
   React.useEffect(() => {
-    let task = allTasks.find((singleTask) => singleTask?.id === updateTaskId);
+    const task = Number(singleTask?.id) === Number(updateTaskId) ? singleTask : {};
     setFiles(task?.fileAttachments);
-  }, [updateTaskId, allTasks]);
+  }, [updateTaskId, singleTask]);
 
   return (
     <div className="row mb-3">
@@ -134,12 +162,7 @@ const InformationRequestFileUpload = ({ updateTaskId }) => {
                       <td className="w-130">
                         <i
                           className="fa fa-download f-18 mx-2 cursor-pointer"
-                          onClick={() =>
-                            handleDownload({
-                              base64String: fileItem?.fileData,
-                              fileName: fileItem?.fileName,
-                            })
-                          }
+                          onClick={() => handleFileDownload(fileItem)}
                         ></i>
                         <i
                           className="fa fa-trash text-danger f-18 cursor-pointer px-2"

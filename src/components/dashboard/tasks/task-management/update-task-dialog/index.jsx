@@ -1,13 +1,17 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setupUpdateTask } from "../../../../../global-redux/reducers/tasks-management/slice";
+import {
+  setupGetSingleTask,
+  setupUpdateTask,
+} from "../../../../../global-redux/reducers/tasks-management/slice";
+import { CircularProgress } from "@mui/material";
 import FileUpload from "./file-upload";
 import moment from "moment";
 import { toast } from "react-toastify";
 
 const UpdateTaskManagement = ({ setShowUpdateTaskDailog, updateTaskId }) => {
   const dispatch = useDispatch();
-  const { loading, allTasks } = useSelector((state) => state?.tasksManagement);
+  const { loading, singleTask, singleTaskLoading } = useSelector((state) => state?.tasksManagement);
   const [response, setResponse] = React.useState("");
 
   // Initial form initialValues
@@ -25,9 +29,7 @@ const UpdateTaskManagement = ({ setShowUpdateTaskDailog, updateTaskId }) => {
       if (response?.trim() === "") {
         toast.error("Provide the Response");
       } else {
-        let task = allTasks.find(
-          (singleTask) => singleTask?.id === updateTaskId
-        );
+        const task = Number(singleTask?.id) === Number(updateTaskId) ? singleTask : {};
         dispatch(
           setupUpdateTask({
             informationRequestAndTaskManagement: {
@@ -44,13 +46,17 @@ const UpdateTaskManagement = ({ setShowUpdateTaskDailog, updateTaskId }) => {
             },
             files: task?.fileAttachments,
           })
-        );
+        ).then((result) => {
+          if (setupUpdateTask.fulfilled.match(result)) {
+            dispatch(setupGetSingleTask({ id: updateTaskId }));
+          }
+        });
       }
     }
   };
 
   React.useEffect(() => {
-    let task = allTasks.find((singleTask) => singleTask?.id === updateTaskId);
+    const task = Number(singleTask?.id) === Number(updateTaskId) ? singleTask : {};
     setInitialValues({
       dueDate: task ? moment.utc(task?.dueDate).format("YYYY-MM-DD") : "",
       auditEngagement: task?.aeTitle || "",
@@ -58,7 +64,7 @@ const UpdateTaskManagement = ({ setShowUpdateTaskDailog, updateTaskId }) => {
       detailedRequirement: task?.detailedRequirement,
     });
     setResponse(task?.yourResponse);
-  }, [updateTaskId]);
+  }, [updateTaskId, singleTask]);
 
   return (
     <div className="px-4 py-4 information-request-dialog-main-wrap">
@@ -74,6 +80,12 @@ const UpdateTaskManagement = ({ setShowUpdateTaskDailog, updateTaskId }) => {
           ></button>
         </div>
       </header>
+      {(singleTaskLoading || Number(singleTask?.id) !== Number(updateTaskId)) ? (
+        <div className="d-flex justify-content-center py-4">
+          <CircularProgress />
+        </div>
+      ) : (
+        <>
       <div className="row">
         <div className=" mb-3 col-lg-12">
           <label>Due Date</label>
@@ -145,6 +157,8 @@ const UpdateTaskManagement = ({ setShowUpdateTaskDailog, updateTaskId }) => {
         </button>
       </div>
       <FileUpload updateTaskId={updateTaskId} />
+        </>
+      )}
     </div>
   );
 };

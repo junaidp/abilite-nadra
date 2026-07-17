@@ -1,6 +1,9 @@
 import { toast } from "react-toastify";
 import {
   getAllAuditExceptions,
+  getAllAuditExceptionsLight,
+  getAuditExceptionFilterOptions,
+  exportAuditExceptions,
   getAllLocations,
   getAllTimeAllocation,
   getAllPlanSummaryReport,
@@ -12,7 +15,10 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 const initialState = {
   loading: false,
   subLoading: false,
+  exportLoading: false,
   auditExceptionJobs: [],
+  auditExceptionFilterOptions: {},
+  auditExceptionTotalNoOfRecords: 0,
   resourceTimeAllocationJobs: [],
   locations: [],
   planSummaryReports: [],
@@ -24,6 +30,27 @@ export const setupGetAllAuditExceptions = createAsyncThunk(
   "extraReport/getAllAuditExceptions",
   async (data, thunkAPI) => {
     return getAllAuditExceptions(data, thunkAPI);
+  }
+);
+
+export const setupGetAllAuditExceptionsLight = createAsyncThunk(
+  "extraReport/getAllAuditExceptionsLight",
+  async (data, thunkAPI) => {
+    return getAllAuditExceptionsLight(data, thunkAPI);
+  }
+);
+
+export const setupGetAuditExceptionFilterOptions = createAsyncThunk(
+  "extraReport/getAuditExceptionFilterOptions",
+  async (data, thunkAPI) => {
+    return getAuditExceptionFilterOptions(data, thunkAPI);
+  }
+);
+
+export const setupExportAuditExceptions = createAsyncThunk(
+  "extraReport/exportAuditExceptions",
+  async (data, thunkAPI) => {
+    return exportAuditExceptions(data, thunkAPI);
   }
 );
 
@@ -69,7 +96,10 @@ export const slice = createSlice({
     handleReset: (state) => {
       (state.loading = false),
         (state.subLoading = false),
+        (state.exportLoading = false),
         (state.auditExceptionJobs = []),
+        (state.auditExceptionFilterOptions = {}),
+        (state.auditExceptionTotalNoOfRecords = 0),
         (state.resourceTimeAllocationJobs = []),
         (state.locations = []),
         (state.planSummaryReports = []),
@@ -85,9 +115,61 @@ export const slice = createSlice({
       .addCase(setupGetAllAuditExceptions.fulfilled, (state, { payload }) => {
         state.loading = false;
         state.auditExceptionJobs = payload?.data || [];
+        state.auditExceptionTotalNoOfRecords = Number(payload?.message || 0);
       })
       .addCase(setupGetAllAuditExceptions.rejected, (state, action) => {
         state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Get All Audit Exception Light
+    builder
+      .addCase(setupGetAllAuditExceptionsLight.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetAllAuditExceptionsLight.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.auditExceptionJobs = payload?.data || [];
+        state.auditExceptionTotalNoOfRecords = Number(payload?.message || 0);
+      })
+      .addCase(setupGetAllAuditExceptionsLight.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Get Audit Exception Filter Options
+    builder
+      .addCase(setupGetAuditExceptionFilterOptions.pending, (state) => {
+        state.subLoading = true;
+      })
+      .addCase(setupGetAuditExceptionFilterOptions.fulfilled, (state, { payload }) => {
+        state.subLoading = false;
+        state.auditExceptionFilterOptions = payload?.data || {};
+      })
+      .addCase(setupGetAuditExceptionFilterOptions.rejected, (state, action) => {
+        state.subLoading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Export Audit Exception
+    builder
+      .addCase(setupExportAuditExceptions.pending, (state) => {
+        state.exportLoading = true;
+      })
+      .addCase(setupExportAuditExceptions.fulfilled, (state) => {
+        state.exportLoading = false;
+      })
+      .addCase(setupExportAuditExceptions.rejected, (state, action) => {
+        state.exportLoading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);
         } else {

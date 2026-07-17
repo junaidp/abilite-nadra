@@ -57,7 +57,7 @@ export const getAllTasks = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.get(
-      `${baseUrl}/IRTMC/getAllInformationRequestOrTasks?companyId=${data?.companyId}&pageNo=${data?.page}&noOfRecords=${data?.itemsPerPage}&isTask=${data?.isTask}`,
+      `${baseUrl}/IRTMC/getAllInformationRequestOrTasks/light?companyId=${data?.companyId}&pageNo=${data?.page}&noOfRecords=${data?.itemsPerPage}&isTask=${data?.isTask}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -101,7 +101,7 @@ export const getAllAuditEngagement = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.get(
-      `${baseUrl}/auditEngagement/getAllWithoutPagination?companyId=${data?.companyId}`,
+      `${baseUrl}/auditEngagement/getAllWithoutPagination/light?companyId=${data?.companyId}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -147,6 +147,27 @@ export const taskFileDelete = async (data, thunkAPI) => {
       }
     );
     return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
+export const taskFileDownload = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.get(
+      `${baseUrl}/IRTMC/file/download?fileId=${data?.fileId}`,
+      {
+        responseType: "blob",
+        headers: {
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return {
+      blob: props.data,
+      fileName: data?.fileName,
+    };
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
   }

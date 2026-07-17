@@ -39,17 +39,17 @@ const Reporting = () => {
 
   // ---- Determine reporting status ----
   const handleCalculateStatus = (item) => {
-    const list = item?.reportingList || [];
+    const stepNo = Number(item?.stepNo);
 
-    if (list.some((r) => Number(r?.stepNo) === 0 || Number(r?.stepNo) === 1)) {
+    if (stepNo === 0 || stepNo === 1) {
       return "Exceptions To Be Sent To Management For Comments";
     }
 
-    if (list.some((r) => Number(r?.stepNo) === 2)) {
+    if (stepNo === 2) {
       return "Awaiting Management Comments";
     }
 
-    if (list.some((r) => Number(r?.stepNo) === 3)) {
+    if (stepNo === 3) {
       return user[0]?.userId?.employeeid?.userHierarchy === "Management_Auditee"
         ? "Management Comments Sent"
         : "Management Comments Received";
@@ -180,7 +180,7 @@ const Reporting = () => {
                       <td>{handleCalculateStatus(item)}</td>
 
                       {/* No. of Observations */}
-                      <td>{item?.reportingList?.length}</td>
+                      <td>{item?.noOfObservations}</td>
 
                       {/* Location */}
                       <td>

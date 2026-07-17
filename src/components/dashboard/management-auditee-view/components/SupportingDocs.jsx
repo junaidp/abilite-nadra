@@ -2,8 +2,10 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setupGetAllFiles } from "../../../../global-redux/reducers/settings/supporting-docs/slice";
 import { Pagination } from "@mui/material";
-import { handleDownload } from "../../../../config/helper";
 import { CircularProgress } from "@mui/material";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { baseUrl } from "../../../../config/constants";
 
 const SupportingDocs = ({ tab }) => {
   const dispatch = useDispatch();
@@ -12,8 +14,39 @@ const SupportingDocs = ({ tab }) => {
   const { company } = useSelector((state) => state.common);
   const [searchValue, setSearchValue] = React.useState("");
   const [page, setPage] = React.useState(1);
+  const [downloadingFileId, setDownloadingFileId] = React.useState(null);
   const handleChangePage = (_, value) => {
     setPage(value);
+  };
+
+  const handleDownloadFile = async (file) => {
+    if (!file?.id || downloadingFileId) return;
+
+    try {
+      setDownloadingFileId(file.id);
+      const response = await axios.get(
+        `${baseUrl}/abiliteconfig/supporting/doc/download?id=${file?.id}`,
+        {
+          responseType: "blob",
+          headers: {
+            Authorization: `Bearer ${user[0]?.token}`,
+          },
+        }
+      );
+
+      const blobUrl = URL.createObjectURL(response.data);
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = file?.fileName || "supporting-document";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      toast.error("Unable to download file");
+    } finally {
+      setDownloadingFileId(null);
+    }
   };
 
   React.useEffect(() => {
@@ -83,13 +116,12 @@ const SupportingDocs = ({ tab }) => {
                           <td>{file?.fileName}</td>
                           <td>
                             <i
-                              className="fa fa-download f-18 mx-2 cursor-pointer"
-                              onClick={() =>
-                                handleDownload({
-                                  base64String: file?.fileBufferblob,
-                                  fileName: file?.fileName,
-                                })
-                              }
+                              className={`fa ${
+                                downloadingFileId === file?.id
+                                  ? "fa-spinner fa-spin"
+                                  : "fa-download"
+                              } f-18 mx-2 cursor-pointer`}
+                              onClick={() => handleDownloadFile(file)}
                             ></i>
                           </td>
                         </tr>
