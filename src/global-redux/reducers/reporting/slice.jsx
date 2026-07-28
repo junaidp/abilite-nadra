@@ -1,7 +1,10 @@
 import { toast } from "react-toastify";
 import {
   getSingleReport,
+  getSingleReportLite,
   getInitialSingleReport,
+  getInitialSingleReportLite,
+  getSingleObservation,
   getAllReporting,
   updateReporting,
   submitReportingInFollowUp,
@@ -45,10 +48,31 @@ export const setupGetInitialSingleReport = createAsyncThunk(
   }
 );
 
+export const setupGetInitialSingleReportLite = createAsyncThunk(
+  "reporting/getInitialSingleReportLite",
+  async (data, thunkAPI) => {
+    return getInitialSingleReportLite(data, thunkAPI);
+  }
+);
+
 export const setupGetSingleReport = createAsyncThunk(
   "reporting/getSingleReport",
   async (data, thunkAPI) => {
     return getSingleReport(data, thunkAPI);
+  }
+);
+
+export const setupGetSingleReportLite = createAsyncThunk(
+  "reporting/getSingleReportLite",
+  async (data, thunkAPI) => {
+    return getSingleReportLite(data, thunkAPI);
+  }
+);
+
+export const setupGetSingleObservation = createAsyncThunk(
+  "reporting/getSingleObservation",
+  async (data, thunkAPI) => {
+    return getSingleObservation(data, thunkAPI);
   }
 );
 
@@ -194,6 +218,22 @@ export const slice = createSlice({
           toast.error("An Error has occurred");
         }
       });
+    builder
+      .addCase(setupGetSingleReportLite.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetSingleReportLite.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.singleReport = payload?.data || {};
+      })
+      .addCase(setupGetSingleReportLite.rejected, (state, { payload }) => {
+        state.loading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
     // Get Initial Single Report
     builder
       .addCase(setupGetInitialSingleReport.pending, (state) => {
@@ -206,6 +246,45 @@ export const slice = createSlice({
       })
       .addCase(setupGetInitialSingleReport.rejected, (state, { payload }) => {
         state.initialLoading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    builder
+      .addCase(setupGetInitialSingleReportLite.pending, (state) => {
+        state.initialLoading = true;
+      })
+      .addCase(setupGetInitialSingleReportLite.fulfilled, (state, { payload }) => {
+        state.initialLoading = false;
+        state.singleReport = payload?.data || {};
+      })
+      .addCase(setupGetInitialSingleReportLite.rejected, (state, { payload }) => {
+        state.initialLoading = false;
+        if (payload?.response?.data?.message) {
+          toast.error(payload?.response?.data?.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+
+    // Get Single Observation
+    builder
+      .addCase(setupGetSingleObservation.fulfilled, (state, { payload }) => {
+        const observation =
+          payload?.data?.value || payload?.data?.data || payload?.data;
+
+        if (observation?.id) {
+          state.singleReport = {
+            ...state.singleReport,
+            reportingList: state.singleReport?.reportingList?.map((item) =>
+              Number(item.id) === Number(observation.id) ? observation : item
+            ),
+          };
+        }
+      })
+      .addCase(setupGetSingleObservation.rejected, (state, { payload }) => {
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
         } else {
@@ -300,7 +379,7 @@ export const slice = createSlice({
       })
       .addCase(setupUpdateFollowUp.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.singleReport = { ...state.singleReport, reportingList: state.singleReport?.reportingList?.map((item) => (item.followUp.id === payload?.data?.id ? { ...item, followUp: payload.data } : item)) }
+        state.singleReport = { ...state.singleReport, reportingList: state.singleReport?.reportingList?.map((item) => (item.followUp?.id === payload?.data?.id ? { ...item, followUp: payload.data } : item)) }
         toast.success("Follow-up updated successfully");
       })
       .addCase(setupUpdateFollowUp.rejected, (state, { payload }) => {
@@ -318,7 +397,7 @@ export const slice = createSlice({
       })
       .addCase(setupUpdateFollowUpByManagement.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.singleReport = { ...state.singleReport, reportingList: state.singleReport?.reportingList?.map((item) => (item.followUp.id === payload?.data?.id ? { ...item, followUp: payload.data } : item)) }
+        state.singleReport = { ...state.singleReport, reportingList: state.singleReport?.reportingList?.map((item) => (item.followUp?.id === payload?.data?.id ? { ...item, followUp: payload.data } : item)) }
       })
       .addCase(
         setupUpdateFollowUpByManagement.rejected,

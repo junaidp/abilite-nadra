@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useSelector } from "react-redux";
-import { Chip } from "@mui/material";
+import { Chip, Skeleton } from "@mui/material";
 
 import { getStepStatusLabel } from "../../../../../../../config/helper";
 
@@ -47,6 +47,8 @@ const AccordianItem = ({
   setShowSubmitDialog,
   setShowCurrentSubmittedItem,
   isOpen,
+  detailsLoading,
+  detailsLoaded,
   onToggle,
 }) => {
   const { user } = useSelector((state) => state?.auth);
@@ -117,42 +119,54 @@ const AccordianItem = ({
           data-bs-parent="#accordionFlushExample"
         >
           <div className="accordion-body">
-            <ObservationSection
-              item={item}
-              user={user}
-              currentItem={currentItem}
-              singleReport={singleReport}
-              allUsers={allUsers}
-              setReport={setReport}
-              handleChange={handleChange}
-              handleObservationChange={handleObservationChange}
-              handleManagementCommentsChange={handleManagementCommentsChange}
-              handleAllowEditSection1={handleAllowEditSection1}
-            />
+            {detailsLoading || !detailsLoaded ? (
+              <div>
+                <Skeleton variant="rounded" height={32} className="mb-4" />
+                <Skeleton variant="rounded" height={32} className="mb-4" />
+                <Skeleton variant="rounded" height={180} className="mb-4" />
+                <Skeleton variant="rounded" height={32} className="mb-4" />
+                <Skeleton variant="rounded" height={96} className="mb-4" />
+              </div>
+            ) : (
+              <>
+                <ObservationSection
+                  item={item}
+                  user={user}
+                  currentItem={currentItem}
+                  singleReport={singleReport}
+                  allUsers={allUsers}
+                  setReport={setReport}
+                  handleChange={handleChange}
+                  handleObservationChange={handleObservationChange}
+                  handleManagementCommentsChange={handleManagementCommentsChange}
+                  handleAllowEditSection1={handleAllowEditSection1}
+                />
 
-            <ReportingFileUpload item={item} setDeleteFileId={setDeleteFileId} />
+                <ReportingFileUpload item={item} setDeleteFileId={setDeleteFileId} />
 
-            {/* Action Buttons */}
-            <ActionButtons
-              item={item}
-              user={user[0]}
-              loading={loading}
-              singleReport={singleReport}
-              currentItem={currentItem}
-              handleSaveStep1={handleSaveStep1}
-              handleSaveToStep1={handleSaveToStep1}
-              handleSaveStep2={handleSaveStep2}
-              handleSaveToStep2={handleSaveToStep2}
-              handleSaveToStep4={handleSaveToStep4}
-              setCurrentReportingAndFollowUpId={setCurrentReportingAndFollowUpId}
-              setFeedBackDialog={setFeedBackDialog}
-              setShowCurrentSubmittedItem={setShowCurrentSubmittedItem}
-              setShowSubmitDialog={setShowSubmitDialog}
-              setViewFeedBackItem={setViewFeedBackItem}
-              setViewFirstFeedBackDialog={setViewFirstFeedBackDialog}
-              setViewSecondFeedBackDialog={setViewSecondFeedBackDialog}
-              handleAllowEditSection1={handleAllowEditSection1}
-            />
+                {/* Action Buttons */}
+                <ActionButtons
+                  item={item}
+                  user={user[0]}
+                  loading={loading}
+                  singleReport={singleReport}
+                  currentItem={currentItem}
+                  handleSaveStep1={handleSaveStep1}
+                  handleSaveToStep1={handleSaveToStep1}
+                  handleSaveStep2={handleSaveStep2}
+                  handleSaveToStep2={handleSaveToStep2}
+                  handleSaveToStep4={handleSaveToStep4}
+                  setCurrentReportingAndFollowUpId={setCurrentReportingAndFollowUpId}
+                  setFeedBackDialog={setFeedBackDialog}
+                  setShowCurrentSubmittedItem={setShowCurrentSubmittedItem}
+                  setShowSubmitDialog={setShowSubmitDialog}
+                  setViewFeedBackItem={setViewFeedBackItem}
+                  setViewFirstFeedBackDialog={setViewFirstFeedBackDialog}
+                  setViewSecondFeedBackDialog={setViewSecondFeedBackDialog}
+                  handleAllowEditSection1={handleAllowEditSection1}
+                />
+              </>
+            )}
           </div>
         </div>
       )}

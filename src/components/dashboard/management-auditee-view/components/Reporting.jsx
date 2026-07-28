@@ -4,7 +4,7 @@ import ReportingPage from "../../reporting-follow-up/reporting/index";
 const Reporting = ({ tab }) => {
   return (
     <div
-      className="tab-pane fade"
+      className={`tab-pane fade ${tab === "reporting" ? "active show" : ""}`}
       id="nav-reporting"
       role="tabpanel"
       aria-labelledby="nav-reporting-tab"

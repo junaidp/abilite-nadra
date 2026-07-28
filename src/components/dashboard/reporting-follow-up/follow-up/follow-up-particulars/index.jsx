@@ -4,8 +4,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import {
   resetReportingAddSuccess,
-  setupGetInitialSingleReport,
-  setupGetSingleReport,
+  setupGetInitialSingleReportLite,
+  setupGetSingleReportLite,
+  setupGetSingleObservation,
   setupUpdateFollowUp,
   resetReports,
   resetFollowUpSubmittedAddSuccess,
@@ -14,7 +15,14 @@ import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
 } from "../../../../../global-redux/reducers/common/slice";
-import { CircularProgress, Pagination } from "@mui/material";
+import {
+  CircularProgress,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Pagination,
+  Select,
+} from "@mui/material";
 
 import AccordianItem from "./components/AccordianItem";
 import ApproveDialog from "./components/ApproveDialog";
@@ -61,8 +69,20 @@ const FollowUpParticulars = () => {
   const [showSubmitDialog, setShowSubmitDialog] = useState(false);
   const [currentSubmittedItem, setShowCurrentSubmittedItem] = useState({});
   const [openAccordionId, setOpenAccordionId] = useState(null);
+  const [loadingObservationIds, setLoadingObservationIds] = useState({});
+  const [loadedObservationIds, setLoadedObservationIds] = useState({});
   const [page, setPage] = useState(1);
-  const itemsPerPage = 10;
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+
+  const isManagementAuditee =
+    user[0]?.userId?.employeeid?.userHierarchy === "Management_Auditee";
+
+  const currentUserId = user[0]?.userId?.id || user[0]?.id;
+
+  const getReportingAuditeeId = useCallback(
+    (item) => item?.auditeeId ?? item?.auditee?.id,
+    []
+  );
 
   const currentFollowUpList = report?.reportingList?.filter(
     (singleItem) => singleItem?.stepNo >= 5
@@ -74,7 +94,7 @@ const FollowUpParticulars = () => {
         (page - 1) * itemsPerPage,
         page * itemsPerPage
       ),
-    [currentFollowUpList, page]
+    [currentFollowUpList, page, itemsPerPage]
   );
 
   /** ===============================
@@ -115,6 +135,49 @@ const FollowUpParticulars = () => {
           : singleItem
       ),
     }));
+  }, []);
+
+  const hasObservationDetails = useCallback(
+    (item) =>
+      item &&
+      Object.prototype.hasOwnProperty.call(item, "followUp"),
+    []
+  );
+
+  const fetchObservationDetails = useCallback(
+    async (item) => {
+      const itemId = item?.id;
+
+      if (
+        !itemId ||
+        loadingObservationIds[itemId] ||
+        (loadedObservationIds[itemId] && hasObservationDetails(item))
+      ) {
+        return;
+      }
+
+      setLoadingObservationIds((prev) => ({ ...prev, [itemId]: true }));
+
+      try {
+        await dispatch(setupGetSingleObservation({ reportingId: itemId })).unwrap();
+        setLoadedObservationIds((prev) => ({ ...prev, [itemId]: true }));
+      } catch {
+        setLoadedObservationIds((prev) => ({ ...prev, [itemId]: false }));
+      } finally {
+        setLoadingObservationIds((prev) => ({ ...prev, [itemId]: false }));
+      }
+    },
+    [
+      dispatch,
+      hasObservationDetails,
+      loadedObservationIds,
+      loadingObservationIds,
+    ]
+  );
+
+  const handleChangeItemsPerPage = useCallback((event) => {
+    setPage(1);
+    setItemsPerPage(Number(event.target.value));
   }, []);
 
   // Save follow-up
@@ -198,7 +261,7 @@ const FollowUpParticulars = () => {
       )?.id;
       if (companyId) {
         dispatch(
-          setupGetSingleReport(`?reportingAndFollowUpId=${Number(followUpId)}`)
+          setupGetSingleReportLite(`?reportingAndFollowUpId=${Number(followUpId)}`)
         );
       }
       dispatch(resetReportingAddSuccess());
@@ -222,13 +285,19 @@ const FollowUpParticulars = () => {
           ? {
             ...singleReport,
             reportingList: singleReport?.reportingList?.filter(
-              (all) => Number(all?.auditee?.id) === user[0]?.id
+              (all) => Number(getReportingAuditeeId(all)) === Number(currentUserId)
             ),
           }
           : singleReport
       );
     }
-  }, [singleReport, followUpId, user]);
+  }, [
+    currentUserId,
+    getReportingAuditeeId,
+    singleReport,
+    followUpId,
+    user,
+  ]);
 
   // Initial fetch
   useEffect(() => {
@@ -237,7 +306,7 @@ const FollowUpParticulars = () => {
     )?.id;
     if (companyId) {
       dispatch(
-        setupGetInitialSingleReport(
+        setupGetInitialSingleReportLite(
           `?reportingAndFollowUpId=${Number(followUpId)}`
         )
       );
@@ -251,6 +320,8 @@ const FollowUpParticulars = () => {
 
   useEffect(() => {
     setPage(1);
+    setLoadingObservationIds({});
+    setLoadedObservationIds({});
   }, [followUpId]);
 
   React.useEffect(() => {
@@ -334,7 +405,7 @@ const FollowUpParticulars = () => {
               onClick={() =>
                 user[0]?.userId?.employeeid?.userHierarchy ===
                   "Management_Auditee"
-                  ? navigate("/audit/dashboard")
+                  ? navigate("/audit/dashboard?tab=followUp")
                   : navigate("/audit/follow-up")
               }
             >
@@ -388,16 +459,26 @@ const FollowUpParticulars = () => {
                                 setShowCurrentSubmittedItem
                               }
                               isOpen={Number(openAccordionId) === Number(item?.id)}
+                              detailsLoading={Boolean(loadingObservationIds[item?.id])}
+                              detailsLoaded={
+                                (Boolean(loadedObservationIds[item?.id]) &&
+                                  hasObservationDetails(item))
+                              }
                               onToggle={() => {
+                                const willOpen =
+                                  Number(openAccordionId) !== Number(item?.id);
                                 setOpenAccordionId((prev) =>
                                   Number(prev) === Number(item?.id) ? null : item?.id
                                 );
+                                if (willOpen) {
+                                  fetchObservationDetails(item);
+                                }
                               }}
                             />
                           );
                         })}
                   </div>
-                  {currentFollowUpList?.length > itemsPerPage && (
+                  {currentFollowUpList?.length > 0 && (
                     <div className="row mt-3">
                       <div className="col-lg-6 mb-4">
                         <Pagination
@@ -405,6 +486,26 @@ const FollowUpParticulars = () => {
                           page={page}
                           onChange={(_, value) => setPage(value)}
                         />
+                      </div>
+
+                      <div className="col-lg-6 mb-4 d-flex justify-content-end">
+                        <FormControl sx={{ minWidth: 200 }} size="small">
+                          <InputLabel id="follow-up-particulars-items-per-page-label">
+                            Items Per Page
+                          </InputLabel>
+                          <Select
+                            labelId="follow-up-particulars-items-per-page-label"
+                            id="follow-up-particulars-items-per-page"
+                            label="Items Per Page"
+                            value={itemsPerPage}
+                            onChange={handleChangeItemsPerPage}
+                          >
+                            <MenuItem value={10}>10</MenuItem>
+                            <MenuItem value={20}>20</MenuItem>
+                            <MenuItem value={50}>50</MenuItem>
+                            <MenuItem value={100}>100</MenuItem>
+                          </Select>
+                        </FormControl>
                       </div>
                     </div>
                   )}

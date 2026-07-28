@@ -4,7 +4,7 @@ import InformationRequestPage from "../../tasks/information-request";
 const InformationRequest = ({ tab }) => {
   return (
     <div
-      className="tab-pane fade"
+      className={`tab-pane fade ${tab === "information-request" ? "active show" : ""}`}
       id="nav-info"
       role="tabpanel"
       aria-labelledby="nav-info-tab"

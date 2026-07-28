@@ -7,10 +7,42 @@ import TFA from "./components/TFA";
 import SupportingDocs from "./components/SupportingDocs";
 import { useDispatch } from "react-redux";
 import { resetAuthValues } from "../../../global-redux/reducers/auth/slice";
+import { useSearchParams } from "react-router-dom";
+
+const dashboardTabs = [
+  "doc",
+  "reporting",
+  "followUp",
+  "user",
+  "tfa",
+  "information-request",
+];
+
+const getValidDashboardTab = (tab) =>
+  dashboardTabs.includes(tab) ? tab : "doc";
 
 const ManagementAuditeeView = () => {
-  const [tab, setTab] = React.useState("doc");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [tab, setTab] = React.useState(() =>
+    getValidDashboardTab(searchParams.get("tab"))
+  );
   const dispatch = useDispatch();
+
+  const handleChangeTab = React.useCallback(
+    (nextTab) => {
+      setTab(nextTab);
+      setSearchParams(nextTab === "doc" ? {} : { tab: nextTab }, {
+        replace: true,
+      });
+    },
+    [setSearchParams]
+  );
+
+  React.useEffect(() => {
+    const nextTab = getValidDashboardTab(searchParams.get("tab"));
+    setTab((prev) => (prev === nextTab ? prev : nextTab));
+  }, [searchParams]);
+
   React.useEffect(() => {
     dispatch(resetAuthValues());
   }, []);
@@ -31,74 +63,80 @@ const ManagementAuditeeView = () => {
                 role="tablist"
               >
                 <button
-                  className="nav-link active  border-0 shadow-sm mb-3  rounded-0 me-3 "
+                  className={`nav-link ${tab === "doc" ? "active" : ""
+                    }  border-0 shadow-sm mb-3  rounded-0 me-3 `}
                   id="nav-home-tab"
                   data-bs-toggle="tab"
                   data-bs-target="#nav-home"
                   type="button"
                   role="tab"
                   aria-controls="nav-home"
-                  onClick={() => setTab("doc")}
+                  onClick={() => handleChangeTab("doc")}
                 >
                   Supporting Docs
                 </button>
                 <button
-                  className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
+                  className={`nav-link ${tab === "reporting" ? "active" : ""
+                    } shadow-sm  border-0 mb-3  rounded-0 me-3 `}
                   id="nav-reporting-tab"
                   data-bs-toggle="tab"
                   data-bs-target="#nav-reporting"
                   type="button"
                   role="tab"
                   aria-controls="nav-reporting"
-                  onClick={() => setTab("reporting")}
+                  onClick={() => handleChangeTab("reporting")}
                 >
                   Reporting
                 </button>
                 <button
-                  className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
+                  className={`nav-link ${tab === "followUp" ? "active" : ""
+                    } shadow-sm  border-0 mb-3  rounded-0 me-3 `}
                   id="nav-follow-up-tab"
                   data-bs-toggle="tab"
                   data-bs-target="#nav-follow-up"
                   type="button"
                   role="tab"
                   aria-controls="nav-follow-up"
-                  onClick={() => setTab("followUp")}
+                  onClick={() => handleChangeTab("followUp")}
                 >
                   Follow Up
                 </button>
                 <button
-                  className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
+                  className={`nav-link ${tab === "user" ? "active" : ""
+                    } shadow-sm  border-0 mb-3  rounded-0 me-3 `}
                   id="nav-task-management-tab"
                   data-bs-toggle="tab"
                   data-bs-target="#nav-user"
                   type="button"
                   role="tab"
                   aria-controls="nav-user"
-                  onClick={() => setTab("user")}
+                  onClick={() => handleChangeTab("user")}
                 >
                   User Details
                 </button>
                 <button
-                  className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
+                  className={`nav-link ${tab === "tfa" ? "active" : ""
+                    } shadow-sm  border-0 mb-3  rounded-0 me-3 `}
                   id="nav-tfa-tab"
                   data-bs-toggle="tab"
                   data-bs-target="#nav-tfa"
                   type="button"
                   role="tab"
                   aria-controls="nav-tfa"
-                  onClick={() => setTab("tfa")}
+                  onClick={() => handleChangeTab("tfa")}
                 >
                   Two Factor Authentication
                 </button>
                 <button
-                  className="nav-link shadow-sm  border-0 mb-3  rounded-0 me-3 "
+                  className={`nav-link ${tab === "information-request" ? "active" : ""
+                    } shadow-sm  border-0 mb-3  rounded-0 me-3 `}
                   id="nav-info-tab"
                   data-bs-toggle="tab"
                   data-bs-target="#nav-info"
                   type="button"
                   role="tab"
                   aria-controls="nav-info"
-                  onClick={() => setTab("information-request")}
+                  onClick={() => handleChangeTab("information-request")}
                 >
                   Information Request
                 </button>

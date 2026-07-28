@@ -60,7 +60,7 @@ const SupportingDocs = ({ tab }) => {
 
   return (
     <div
-      className="tab-pane fade active show"
+      className={`tab-pane fade ${tab === "doc" ? "active show" : ""}`}
       id="nav-home"
       role="tabpanel"
       aria-labelledby="nav-home-tab"

@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
+import { Skeleton } from "@mui/material";
 import AccordionHeader from "./AccordionHeader";
 import ObservationDetails from "./ObservationDetails";
 import ImplicationSection from "./ImplicationSection";
@@ -27,6 +28,8 @@ const AccordianItem = ({
   setShowCurrentSubmittedItem,
   handleFinalCommentsChange,
   isOpen,
+  detailsLoading,
+  detailsLoaded,
   onToggle,
 }) => {
   const { user } = useSelector((state) => state?.auth);
@@ -58,38 +61,50 @@ const AccordianItem = ({
           data-bs-parent="#accordionFlushExample"
         >
           <div className="accordion-body">
-            <ObservationDetails item={item} singleReport={singleReport} />
+            {detailsLoading || !detailsLoaded ? (
+              <div>
+                <Skeleton variant="rounded" height={32} className="mb-4" />
+                <Skeleton variant="rounded" height={32} className="mb-4" />
+                <Skeleton variant="rounded" height={180} className="mb-4" />
+                <Skeleton variant="rounded" height={32} className="mb-4" />
+                <Skeleton variant="rounded" height={180} className="mb-4" />
+              </div>
+            ) : (
+              <>
+                <ObservationDetails item={item} singleReport={singleReport} />
 
-            <ImplicationSection item={item} />
+                <ImplicationSection item={item} />
 
-            <AuditeeSection item={item} />
+                <AuditeeSection item={item} />
 
-            <ManagementCommentsSection item={item} />
+                <ManagementCommentsSection item={item} />
 
-            <FollowUpSection
-              item={item}
-              handleChange={handleChange}
-              handleAllowEditLastSection={handleAllowEditLastSection}
-              handleFinalCommentsChange={handleFinalCommentsChange}
-              singleReport={singleReport}
-              handleShowTestInNextYear={handleShowTestInNextYear}
-            />
+                <FollowUpSection
+                  item={item}
+                  handleChange={handleChange}
+                  handleAllowEditLastSection={handleAllowEditLastSection}
+                  handleFinalCommentsChange={handleFinalCommentsChange}
+                  singleReport={singleReport}
+                  handleShowTestInNextYear={handleShowTestInNextYear}
+                />
 
-            <ActionButtons
-              item={item}
-              user={user}
-              singleReport={singleReport}
-              loading={loading}
-              handleSave={handleSave}
-              handleSaveToStep7={handleSaveToStep7}
-              handleSaveToStep5={handleSaveToStep5}
-              setShowCurrentSubmittedItem={setShowCurrentSubmittedItem}
-              setShowSubmitDialog={setShowSubmitDialog}
-              setCurrentReportingAndFollowUpId={setCurrentReportingAndFollowUpId}
-              setFeedBackDialog={setFeedBackDialog}
-              setViewFeedBackItem={setViewFeedBackItem}
-              setViewThirdFeedBackDialog={setViewThirdFeedBackDialog}
-            />
+                <ActionButtons
+                  item={item}
+                  user={user}
+                  singleReport={singleReport}
+                  loading={loading}
+                  handleSave={handleSave}
+                  handleSaveToStep7={handleSaveToStep7}
+                  handleSaveToStep5={handleSaveToStep5}
+                  setShowCurrentSubmittedItem={setShowCurrentSubmittedItem}
+                  setShowSubmitDialog={setShowSubmitDialog}
+                  setCurrentReportingAndFollowUpId={setCurrentReportingAndFollowUpId}
+                  setFeedBackDialog={setFeedBackDialog}
+                  setViewFeedBackItem={setViewFeedBackItem}
+                  setViewThirdFeedBackDialog={setViewThirdFeedBackDialog}
+                />
+              </>
+            )}
           </div>
         </div>
       )}

@@ -15,6 +15,7 @@ const InformationRequestFileUpload = ({ updateTaskId }) => {
   const fileInputRef = React.useRef(null);
   const [files, setFiles] = React.useState([]);
   const [selectedFile, setSelectedFile] = React.useState(null);
+  const [downloadingFileId, setDownloadingFileId] = React.useState(null);
   const { loading, fileUploadSuccess, singleTask } = useSelector(
     (state) => state?.tasksManagement
   );
@@ -72,6 +73,9 @@ const InformationRequestFileUpload = ({ updateTaskId }) => {
   };
 
   const handleFileDownload = (fileItem) => {
+    if (!fileItem?.id || downloadingFileId) return;
+
+    setDownloadingFileId(fileItem.id);
     dispatch(
       setupTaskFileDownload({
         fileId: Number(fileItem?.id),
@@ -91,6 +95,9 @@ const InformationRequestFileUpload = ({ updateTaskId }) => {
       })
       .catch(() => {
         toast.error("Unable to download file.");
+      })
+      .finally(() => {
+        setDownloadingFileId(null);
       });
   };
 
@@ -161,7 +168,11 @@ const InformationRequestFileUpload = ({ updateTaskId }) => {
                       </td>
                       <td className="w-130">
                         <i
-                          className="fa fa-download f-18 mx-2 cursor-pointer"
+                          className={`fa ${
+                            downloadingFileId === fileItem?.id
+                              ? "fa-spinner fa-spin"
+                              : "fa-download"
+                          } f-18 mx-2 cursor-pointer`}
                           onClick={() => handleFileDownload(fileItem)}
                         ></i>
                         <i

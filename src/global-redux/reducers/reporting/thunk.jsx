@@ -34,6 +34,21 @@ export const getSingleReport = async (data, thunkAPI) => {
   }
 };
 
+export const getSingleReportLite = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.get(`${baseUrl}/reportingAndFollowUp/getLite${data}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user[0]?.token}`,
+      },
+    });
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
 export const getInitialSingleReport = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
@@ -43,6 +58,39 @@ export const getInitialSingleReport = async (data, thunkAPI) => {
         Authorization: `Bearer ${user[0]?.token}`,
       },
     });
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
+export const getInitialSingleReportLite = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.get(`${baseUrl}/reportingAndFollowUp/getLite${data}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user[0]?.token}`,
+      },
+    });
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
+export const getSingleObservation = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.get(
+      `${baseUrl}/reportingAndFollowUp/singleObservation?reportingId=${data?.reportingId}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
     return props.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);

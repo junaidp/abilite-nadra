@@ -8,7 +8,7 @@ import {
   resetTfaDisableAddSucess,
 } from "../../../../global-redux/reducers/auth/slice";
 
-const TwoFactorAuthentication = () => {
+const TwoFactorAuthentication = ({ tab }) => {
   const dispatch = useDispatch();
   const { user, disableTfaSuccess, loading } = useSelector(
     (state) => state?.auth
@@ -37,7 +37,7 @@ const TwoFactorAuthentication = () => {
 
   return (
     <div
-      className="tab-pane fade"
+      className={`tab-pane fade ${tab === "tfa" ? "active show" : ""}`}
       id="nav-tfa"
       role="tabpanel"
       aria-labelledby="nav-tfa-tab"
