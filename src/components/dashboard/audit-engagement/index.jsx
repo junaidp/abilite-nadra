@@ -222,7 +222,9 @@ const AuditEngagement = () => {
                                     const encryptedId = encryptAndEncode(
                                       item?.id.toString()
                                     );
-                                    navigate(`/audit/kick-off/${encryptedId}`);
+                                    navigate(`/audit/kick-off/${encryptedId}`, {
+                                      state: { jobType: item?.jobType },
+                                    });
                                   }}
                                   className="kink-off"
                                 >
@@ -247,7 +249,9 @@ const AuditEngagement = () => {
                                     const encryptedId = encryptAndEncode(
                                       item?.id.toString()
                                     );
-                                    navigate(`/audit/kick-off/${encryptedId}`);
+                                    navigate(`/audit/kick-off/${encryptedId}`, {
+                                      state: { jobType: item?.jobType },
+                                    });
                                   }}
                                 ></i>
                               </td>
@@ -299,3 +303,5 @@ const AuditEngagement = () => {
 };
 
 export default AuditEngagement;
+
+

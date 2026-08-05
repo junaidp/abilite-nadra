@@ -73,7 +73,7 @@ const ActionButtons = ({
                     {item?.stepNo === 6 && isStep6Approver && (
                         <>
                             {
-                                item.followUp.recommendationsImplemented ?
+                                item?.followUp?.recommendationsImplemented ?
                                     <button
                                         className={`btn btn-labeled btn-primary mx-4 mt-3 shadow ${disabledClass}`}
                                         onClick={() => handleSaveToStep7(item)}
@@ -119,3 +119,4 @@ const ActionButtons = ({
 };
 
 export default React.memo(ActionButtons);
+

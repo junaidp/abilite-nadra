@@ -1,7 +1,9 @@
 import {
   getAllAuditEngagement,
   getSingleAuditEngagement,
+  getSingleAuditEngagementLite,
   updateSingleAuditEngagement,
+  updateAuditEngagementStatus,
   getInitialSingleAuditEngagement,
   saveAuditNotification,
   saveRiskControlMatrixObjective,
@@ -18,6 +20,9 @@ import {
   updateComplianceCheckList,
   submitComplianceCheckList,
   approveComplianceCheckList,
+  getAuditStepChecklistObservations,
+  updateAuditStepChecklistObservations,
+  updateAuditStepChecklistStatus,
   updateRiskControlMatrixApproval,
   submitRiskControlMatrix,
   approveRiskControlMatrixObjective,
@@ -75,6 +80,13 @@ export const setupGetSingleAuditEngagement = createAsyncThunk(
   }
 );
 
+
+export const setupGetSingleAuditEngagementLite = createAsyncThunk(
+  "auditEngagement/getSingleAuditEngagementLite",
+  async (data, thunkAPI) => {
+    return getSingleAuditEngagementLite(data, thunkAPI);
+  }
+);
 export const setupUpdateSingleAuditEngagement = createAsyncThunk(
   "auditEngagement/updateSingleAuditEngagement",
   async (data, thunkAPI) => {
@@ -82,6 +94,12 @@ export const setupUpdateSingleAuditEngagement = createAsyncThunk(
   }
 );
 
+export const setupUpdateAuditEngagementStatus = createAsyncThunk(
+  "auditEngagement/updateAuditEngagementStatus",
+  async (data, thunkAPI) => {
+    return updateAuditEngagementStatus(data, thunkAPI);
+  }
+);
 export const setupGetInitialSingleAuditEngagement = createAsyncThunk(
   "auditEngagement/getInitialSingleAuditEngagement",
   async (data, thunkAPI) => {
@@ -190,6 +208,27 @@ export const setupApproveComplianceCheckList = createAsyncThunk(
   }
 );
 
+
+export const setupGetAuditStepChecklistObservations = createAsyncThunk(
+  "auditEngagement/getAuditStepChecklistObservations",
+  async (data, thunkAPI) => {
+    return getAuditStepChecklistObservations(data, thunkAPI);
+  }
+);
+
+export const setupUpdateAuditStepChecklistObservations = createAsyncThunk(
+  "auditEngagement/updateAuditStepChecklistObservations",
+  async (data, thunkAPI) => {
+    return updateAuditStepChecklistObservations(data, thunkAPI);
+  }
+);
+
+export const setupUpdateAuditStepChecklistStatus = createAsyncThunk(
+  "auditEngagement/updateAuditStepChecklistStatus",
+  async (data, thunkAPI) => {
+    return updateAuditStepChecklistStatus(data, thunkAPI);
+  }
+);
 export const setupUpdateRiskControlMatrixApproval = createAsyncThunk(
   "auditEngagement/updateRiskControlMatrixApproval",
   async (data, thunkAPI) => {
@@ -428,6 +467,28 @@ export const slice = createSlice({
           toast.error("An Error has occurred");
         }
       });
+    // Get Single Audit Engagement Lite
+    builder
+      .addCase(setupGetSingleAuditEngagementLite.pending, (state) => {
+        state.initialLoading = true;
+      })
+      .addCase(
+        setupGetSingleAuditEngagementLite.fulfilled,
+        (state, { payload }) => {
+          state.initialLoading = false;
+          state.singleAuditEngagementObject = payload?.data || [
+            { error: "Not Found" },
+          ];
+        }
+      )
+      .addCase(setupGetSingleAuditEngagementLite.rejected, (state, action) => {
+        state.initialLoading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
     // Update Single Audit Engagements
     builder
       .addCase(setupUpdateSingleAuditEngagement.pending, (state) => {
@@ -438,6 +499,13 @@ export const slice = createSlice({
       })
       .addCase(setupUpdateSingleAuditEngagement.rejected, (state) => {
         state.loading = false;
+      });
+    // Update Audit Engagement Status
+    builder
+      .addCase(setupUpdateAuditEngagementStatus.fulfilled, (state, { meta }) => {
+        if (String(state.singleAuditEngagementObject?.id) === String(meta.arg?.auditEngagementId)) {
+          state.singleAuditEngagementObject.status = meta.arg?.status;
+        }
       });
     // Get Initial Single Audit Engagements
     builder
@@ -1245,3 +1313,4 @@ export const {
 } = slice.actions;
 
 export default slice.reducer;
+

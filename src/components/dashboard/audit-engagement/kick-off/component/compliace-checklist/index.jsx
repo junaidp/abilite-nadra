@@ -10,6 +10,7 @@ const ComplianceCheckList = ({
   currentAuditEngagement,
   setComplianceCheckListMainId,
   singleAuditEngagementObject,
+  onChecklistStatusUpdated,
 }) => {
   const { loading } = useSelector((state) => state?.auditEngagement);
   const { user } = useSelector((state) => state?.auth);
@@ -19,27 +20,8 @@ const ComplianceCheckList = ({
   const [currentApproveItem, setCurrentApproveItem] = React.useState({});
   const [currentSubmittedItem, setCurrentSubmittedItem] = React.useState({});
 
-  const hasContent = (htmlString) => {
-    const div = document.createElement('div');
-    div.innerHTML = htmlString;
-    const text = div.textContent || div.innerText || '';
-    return text.trim().length > 0;
-  };
-
-
   function checkStaus(item) {
-    let submit = true;
-    item?.checklistObservationsList?.forEach((all) => {
-      if (
-        all?.remarks === "" ||
-        !all?.remarks ||
-        all?.remarks === "0" ||
-        ((Number(all?.remarks) === 2 || Number(all?.remarks) === 4) && !hasContent(all?.observation))
-      ) {
-        submit = false;
-      }
-    });
-    return submit;
+    return item?.checklistCompleted === true;
   }
 
   function handleSubmit(item) {
@@ -67,6 +49,7 @@ const ComplianceCheckList = ({
             <SubmitDialog
               object={currentSubmittedItem}
               setShowSubmitDialog={setShowSubmitDialog}
+              onChecklistStatusUpdated={onChecklistStatusUpdated}
             />
           </div>
         </div>
@@ -77,6 +60,7 @@ const ComplianceCheckList = ({
             <ApproveDialog
               setShowApproveDialog={setShowApproveDialog}
               currentApproveItem={currentApproveItem}
+              onChecklistStatusUpdated={onChecklistStatusUpdated}
             />
           </div>
         </div>
@@ -92,8 +76,8 @@ const ComplianceCheckList = ({
         >
           <div className="d-flex w-100 me-3 align-items-center justify-content-between">
             <div className=" d-flex align-items-center">
-              {singleAuditEngagementObject?.auditStepChecklistList?.length > 0 &&
-                singleAuditEngagementObject?.auditStepChecklistList?.every(
+              {currentAuditEngagement?.auditStepChecklistList?.length > 0 &&
+                currentAuditEngagement?.auditStepChecklistList?.every(
                   (item) => item?.approved === true
                 ) && (
                   <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
@@ -170,3 +154,8 @@ const ComplianceCheckList = ({
 };
 
 export default ComplianceCheckList;
+
+
+
+
+

@@ -68,7 +68,7 @@ const FollowUpSection = ({
                 />
             </div>
 
-            {(recommendationsValue === "false" || item?.followUp.nextImplementationDate)
+            {(recommendationsValue === "false" || item?.followUp?.nextImplementationDate)
                 && (
                     <div className="mb-4">
                         <label className="py-1">Next Implementation Date:</label>
@@ -76,8 +76,8 @@ const FollowUpSection = ({
                             type="date"
                             className="form-control"
                             value={
-                                item?.followUp.nextImplementationDate
-                                    ? moment(item.followUp.nextImplementationDate).format("YYYY-MM-DD")
+                                item?.followUp?.nextImplementationDate
+                                    ? moment(item?.followUp?.nextImplementationDate).format("YYYY-MM-DD")
                                     : ""
                             }
                             name="nextImplementationDate"
@@ -87,7 +87,7 @@ const FollowUpSection = ({
                     </div>
                 )}
 
-            {item?.stepNo >= 6 && item.followUp.recommendationsImplemented && (
+            {item?.stepNo >= 6 && item?.followUp?.recommendationsImplemented && (
                 <div className="mb-4 align-items-center">
                     <label className="pe-4">Test In Next Year:</label>
                     <select
@@ -108,3 +108,4 @@ const FollowUpSection = ({
 };
 
 export default React.memo(FollowUpSection);
+

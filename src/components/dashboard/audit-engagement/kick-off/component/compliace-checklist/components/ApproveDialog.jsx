@@ -1,32 +1,39 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { setupApproveComplianceCheckList } from "../../../../../../../global-redux/reducers/audit-engagement/slice";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { setupUpdateAuditStepChecklistStatus } from "../../../../../../../global-redux/reducers/audit-engagement/slice";
 
 const ApproveComplianceCheckListDialog = ({
   setShowApproveDialog,
   currentApproveItem,
+  onChecklistStatusUpdated,
 }) => {
   const dispatch = useDispatch();
-  const { loading, auditEngagementAddSuccess } = useSelector(
-    (state) => state?.auditEngagement
-  );
+  const [approving, setApproving] = React.useState(false);
 
-  function handleApproveAuditCheckList() {
-    if (!loading) {
-      dispatch(
-        setupApproveComplianceCheckList({
-          ...currentApproveItem,
+  async function handleApproveAuditCheckList() {
+    if (approving) return;
+
+    try {
+      setApproving(true);
+      await dispatch(
+        setupUpdateAuditStepChecklistStatus({
+          id: currentApproveItem?.id,
           approved: true,
         })
+      ).unwrap();
+      onChecklistStatusUpdated?.(currentApproveItem?.id, { approved: true });
+      setShowApproveDialog(false);
+      toast.success("Compliance checklist approved successfully");
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message || "An Error has occurred"
       );
+    } finally {
+      setApproving(false);
     }
   }
 
-  React.useEffect(() => {
-    if (auditEngagementAddSuccess) {
-      setShowApproveDialog(false);
-    }
-  }, [auditEngagementAddSuccess]);
   return (
     <div className="px-4 py-4">
       <div>
@@ -35,10 +42,10 @@ const ApproveComplianceCheckListDialog = ({
       <div className="d-flex justify-content-between">
         <button
           type="submit"
-          className={`btn btn-secondary ${loading && "disabled"} `}
+          className={`btn btn-secondary ${approving && "disabled"} `}
           onClick={handleApproveAuditCheckList}
         >
-          {loading ? "Loading..." : "Approve"}
+          {approving ? "Loading..." : "Approve"}
         </button>
         <button
           type="button"

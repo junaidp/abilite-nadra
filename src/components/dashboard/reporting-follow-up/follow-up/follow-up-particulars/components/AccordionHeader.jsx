@@ -4,8 +4,8 @@ import { Chip } from "@mui/material";
 const getStatusColor = (item) => {
   const stepNo = Number(item?.stepNo);
   if (stepNo === 5) return "#b76e00";
-  if (stepNo === 6 && item.followUp.recommendationsImplemented) return "#198754";
-  if (stepNo === 6 && !item.followUp.recommendationsImplemented) return "#b76e00";
+  if (stepNo === 6 && item?.followUp?.recommendationsImplemented) return "#198754";
+  if (stepNo === 6 && !item?.followUp?.recommendationsImplemented) return "#b76e00";
   if (stepNo >= 7) return "#6f42c1";
   return "#2A3547";
 };
@@ -25,12 +25,12 @@ const AccordionHeader = ({
     if (Number(item?.stepNo) === 5) return "Exception To Be  Implemented";
     if (
       Number(item?.stepNo) === 6 &&
-      item.followUp.recommendationsImplemented
+      item?.followUp?.recommendationsImplemented
     )
       return "Exceptions Implemented";
     if (
       Number(item?.stepNo) === 6 &&
-      !item.followUp.recommendationsImplemented
+      !item?.followUp?.recommendationsImplemented
     )
       return "Exception To Be  Implemented";
     if (Number(item?.stepNo) >= 7) return "Observation Completed";
@@ -70,3 +70,4 @@ const AccordionHeader = ({
 };
 
 export default React.memo(AccordionHeader);
+

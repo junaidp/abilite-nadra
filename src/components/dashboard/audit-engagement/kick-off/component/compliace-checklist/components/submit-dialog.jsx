@@ -1,24 +1,34 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { setupSubmitComplianceCheckList } from "../../../../../../../global-redux/reducers/audit-engagement/slice";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { setupUpdateAuditStepChecklistStatus } from "../../../../../../../global-redux/reducers/audit-engagement/slice";
 
-const SubmitDialog = ({ object, setShowSubmitDialog }) => {
+const SubmitDialog = ({ object, setShowSubmitDialog, onChecklistStatusUpdated }) => {
   const dispatch = useDispatch();
-  const { auditEngagementAddSuccess, loading } = useSelector(
-    (state) => state?.auditEngagement
-  );
+  const [submitting, setSubmitting] = React.useState(false);
 
-  function handleSubmit() {
-    if (!loading) {
-      dispatch(setupSubmitComplianceCheckList({ ...object, submitted: true }));
+  async function handleSubmit() {
+    if (submitting) return;
+
+    try {
+      setSubmitting(true);
+      await dispatch(
+        setupUpdateAuditStepChecklistStatus({
+          id: object?.id,
+          submitted: true,
+        })
+      ).unwrap();
+      onChecklistStatusUpdated?.(object?.id, { submitted: true });
+      setShowSubmitDialog(false);
+      toast.success("Compliance checklist submitted successfully");
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message || "An Error has occurred"
+      );
+    } finally {
+      setSubmitting(false);
     }
   }
-
-  React.useEffect(() => {
-    if (auditEngagementAddSuccess) {
-      setShowSubmitDialog(false);
-    }
-  }, [auditEngagementAddSuccess]);
 
   return (
     <div className="p-4">
@@ -30,10 +40,10 @@ const SubmitDialog = ({ object, setShowSubmitDialog }) => {
 
       <div className="d-flex justify-content-between">
         <button
-          className={`btn btn-secondary  ${loading && "disabled"}`}
+          className={`btn btn-secondary  ${submitting && "disabled"}`}
           onClick={handleSubmit}
         >
-          {loading ? "Loading..." : "Submit"}
+          {submitting ? "Loading..." : "Submit"}
         </button>
         <button
           className={`btn btn-danger  float-end mx-2`}

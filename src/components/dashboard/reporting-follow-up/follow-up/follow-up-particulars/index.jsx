@@ -188,7 +188,7 @@ const FollowUpParticulars = () => {
           setupUpdateFollowUp({
             ...item?.followUp,
             recommendationsImplemented:
-              item?.followUp?.recommendationsImplemented.toString() === "true",
+              item?.followUp?.recommendationsImplemented?.toString() === "true",
             finalComments:
               item?.followUp?.finalComments,
             nextImplementationDate: item?.followUp?.nextImplementationDate
@@ -520,3 +520,4 @@ const FollowUpParticulars = () => {
 };
 
 export default FollowUpParticulars;
+

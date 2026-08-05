@@ -3,7 +3,6 @@ import { toast } from "react-toastify";
 import {
   setupUploadAuditStepCheckListFile,
   setupDeleteAuditStepCheckListFile,
-  setupUpdateAuditStepCheckListFile,
 } from "../../../../global-redux/reducers/audit-engagement/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { handleDownload, validateFile } from "../../../../config/helper"
@@ -19,22 +18,13 @@ const ObservationFileUpload = ({
     (state) => state?.auditEngagement
   );
   const { user } = useSelector((state) => state?.auth);
-  const updatedFileInputRef = React.useRef(null);
   const fileInputRef = React.useRef(null);
-  const [selectedUpdateFile, setSelectedUpdateFile] = React.useState(null);
   const [selectedFile, setSelectedFile] = React.useState(null);
 
   const clearSelectedFile = () => {
     setSelectedFile(null);
     if (fileInputRef?.current) {
       fileInputRef.current.value = null;
-    }
-  };
-
-  const clearSelectedUpdateFile = () => {
-    setSelectedUpdateFile(null);
-    if (updatedFileInputRef?.current) {
-      updatedFileInputRef.current.value = null;
     }
   };
 
@@ -46,18 +36,6 @@ const ObservationFileUpload = ({
         setSelectedFile(file);
       } else {
         clearSelectedFile();
-      }
-    }
-  };
-
-  const handleUpdateFileChange = async (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const isValid = await validateFile(file, toast);
-      if (isValid) {
-        setSelectedUpdateFile(file);
-      } else {
-        clearSelectedUpdateFile();
       }
     }
   };
@@ -85,46 +63,15 @@ const ObservationFileUpload = ({
     }
   };
 
-  const updateFileApiCal = async (file, id) => {
-    if (!loading) {
-      const formData = new FormData();
-      formData.append("file", file);
-      dispatch(
-        setupUpdateAuditStepCheckListFile({
-          formData: formData,
-          id: Number(id),
-        })
-      );
-    }
-  };
-
-  const handleFileUpdate = async (id) => {
-    if (selectedUpdateFile) {
-      const isValid = await validateFile(selectedUpdateFile, toast);
-      if (!isValid) {
-        clearSelectedUpdateFile();
-        return;
-      }
-      updateFileApiCal(selectedUpdateFile, id);
-    } else {
-      toast.error(
-        "Please select update file from above in order to change the file."
-      );
-    }
-  };
-
   React.useEffect(() => {
     if (auditEngagementObservationAddSuccess) {
       setSelectedFile(null);
-      setSelectedUpdateFile(null);
       if (fileInputRef?.current) {
         fileInputRef.current.value = null;
       }
-      if (updatedFileInputRef?.current) {
-        updatedFileInputRef.current.value = null;
-      }
     }
   }, [auditEngagementObservationAddSuccess]);
+
   return (
     <td className="fileObservationCol fileSubObservationColItem">
       <div className="row mb-3 fileSubObservationColItem">
@@ -156,20 +103,6 @@ const ObservationFileUpload = ({
                   </button>
                 </div>
               </div>
-
-              <div className="col-lg-8 row flex flex-end">
-                <div className="col-lg-8">
-                  <label>Updated File here:</label>
-                  <input
-                    type="file"
-                    id="fileInpu"
-                    className="f-10"
-                    ref={updatedFileInputRef}
-                    onChange={handleUpdateFileChange}
-                    accept=".xlsx, .xls, .pdf, .txt"
-                  />
-                </div>
-              </div>
             </div>
           )}
 
@@ -197,7 +130,7 @@ const ObservationFileUpload = ({
                           </td>
                           <td className="w-130">
                             <i
-                              class="fa fa-download f-18 mx-2 cursor-pointer"
+                              className="fa fa-download f-18 mx-2 cursor-pointer"
                               onClick={() =>
                                 handleDownload({
                                   base64String: fileItem?.fileData,
@@ -236,10 +169,6 @@ const ObservationFileUpload = ({
                                 }}
                               ></i>
                             )}
-                            <i
-                              className="fa fa-edit px-2 f-18 cursor-pointer"
-                              onClick={() => handleFileUpdate(fileItem?.id)}
-                            ></i>
                           </td>
                         </tr>
                       );

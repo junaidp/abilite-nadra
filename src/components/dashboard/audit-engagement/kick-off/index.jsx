@@ -1,7 +1,7 @@
 import React from "react";
 import "./index.css";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   changeKickOffRequest,
   changeActiveLink,
@@ -12,7 +12,8 @@ import {
   resetAuditEngagementObservationAddSuccess,
   handleCleanUp,
   setupGetInitialSingleAuditEngagement,
-  setupUpdateSingleAuditEngagement,
+  setupGetSingleAuditEngagementLite,
+  setupUpdateAuditEngagementStatus,
 } from "../../../../global-redux/reducers/audit-engagement/slice";
 import AddKickOffObjectiveDialog from "../../../modals/add-kickoff-objective-dialog";
 import AddKickOffRatingDialog from "../../../modals/add-kickoff-rating-dialog";
@@ -35,8 +36,11 @@ import { useParams } from "react-router-dom";
 const KickOff = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const { id } = useParams();
   const auditEngagementId = decryptString(id);
+  const isComplianceChecklistRoute =
+    location.state?.jobType === "Compliance Checklist";
   const { user } = useSelector((state) => state?.auth);
   const {
     auditEngagementAddSuccess,
@@ -64,6 +68,7 @@ const KickOff = () => {
   const [auditStepId, setAuditStepId] = React.useState("");
   const [complianceCheckListMainId, setComplianceCheckListMainId] =
     React.useState("");
+  const statusUpdateRequestedRef = React.useRef(false);
 
   React.useEffect(() => {
     const isEmptyObject =
@@ -126,10 +131,23 @@ const KickOff = () => {
 
   React.useEffect(() => {
     if (auditEngagementAddSuccess) {
-      dispatch(setupGetSingleAuditEngagement(auditEngagementId));
+      if (
+        isComplianceChecklistRoute ||
+        currentAuditEngagement?.jobType === "Compliance Checklist"
+      ) {
+        dispatch(setupGetSingleAuditEngagementLite(auditEngagementId));
+      } else {
+        dispatch(setupGetSingleAuditEngagement(auditEngagementId));
+      }
       dispatch(resetAuditEngagementAddSuccess());
     }
-  }, [auditEngagementAddSuccess]);
+  }, [
+    auditEngagementAddSuccess,
+    auditEngagementId,
+    currentAuditEngagement?.jobType,
+    dispatch,
+    isComplianceChecklistRoute,
+  ]);
 
   React.useEffect(() => {
     if (auditEngagementObservationAddSuccess) {
@@ -139,22 +157,37 @@ const KickOff = () => {
 
   React.useEffect(() => {
     if (user[0]?.token && auditEngagementId) {
-      dispatch(setupGetInitialSingleAuditEngagement(auditEngagementId));
+      if (isComplianceChecklistRoute) {
+        dispatch(setupGetSingleAuditEngagementLite(auditEngagementId));
+      } else {
+        dispatch(setupGetInitialSingleAuditEngagement(auditEngagementId));
+      }
     }
-  }, [dispatch]);
+  }, [auditEngagementId, dispatch, isComplianceChecklistRoute, user]);
 
   React.useEffect(() => {
-    if (singleAuditEngagementObject?.status === "Kick Off") {
+    if (
+      singleAuditEngagementObject?.status === "Kick Off" &&
+      !statusUpdateRequestedRef.current
+    ) {
+      statusUpdateRequestedRef.current = true;
       dispatch(
-        setupUpdateSingleAuditEngagement({
-          ...singleAuditEngagementObject,
-          processIds: singleAuditEngagementObject?.processList?.map((item) => item.id),
-          subProcessIds: singleAuditEngagementObject?.subProcessList?.map((item) => item.id),
+        setupUpdateAuditEngagementStatus({
+          auditEngagementId: auditEngagementId,
           status: "In Progress",
         })
       );
     }
-  }, [singleAuditEngagementObject]);
+  }, [auditEngagementId, dispatch, singleAuditEngagementObject]);
+
+  const handleChecklistStatusUpdated = React.useCallback((checklistId, changes) => {
+    setCurrentAuditEngagement((prev) => ({
+      ...prev,
+      auditStepChecklistList: prev?.auditStepChecklistList?.map((item) =>
+        Number(item?.id) === Number(checklistId) ? { ...item, ...changes } : item
+      ),
+    }));
+  }, []);
 
   React.useEffect(() => {
     dispatch(changeKickOffRequest(""));
@@ -214,6 +247,7 @@ const KickOff = () => {
                   }
                   currentAuditEngagement={currentAuditEngagement}
                   complianceCheckListMainId={complianceCheckListMainId}
+                  onChecklistStatusUpdated={handleChecklistStatusUpdated}
                 />
               </div>
             </div>
@@ -326,6 +360,7 @@ const KickOff = () => {
                     currentAuditEngagement={currentAuditEngagement}
                     setComplianceCheckListMainId={setComplianceCheckListMainId}
                     singleAuditEngagementObject={singleAuditEngagementObject}
+                    onChecklistStatusUpdated={handleChecklistStatusUpdated}
                   />
                 )}
               </div>
@@ -338,3 +373,4 @@ const KickOff = () => {
 };
 
 export default KickOff;
+

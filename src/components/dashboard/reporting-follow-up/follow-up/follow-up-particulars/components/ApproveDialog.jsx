@@ -16,7 +16,7 @@ const ApproveDialog = ({ setApproveDialog, currentApproveItem }) => {
         setupUpdateFollowUp({
           ...currentApproveItem?.followUp,
           testInNextYear:
-            currentApproveItem?.followUp?.testInNextYear.toString() === "true",
+            currentApproveItem?.followUp?.testInNextYear?.toString() === "true",
         })
       ).unwrap();
 
@@ -64,3 +64,4 @@ const ApproveDialog = ({ setApproveDialog, currentApproveItem }) => {
 };
 
 export default ApproveDialog;
+

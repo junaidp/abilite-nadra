@@ -19,20 +19,20 @@ const SubmitDialog = ({ item, setShowSubmitDialog }) => {
 
     if (
       (
-        item?.followUp?.recommendationsImplemented.toString() === "true" ||
-        item?.followUp?.recommendationsImplemented.toString() === "false"
+        item?.followUp?.recommendationsImplemented?.toString() === "true" ||
+        item?.followUp?.recommendationsImplemented?.toString() === "false"
       ) &&
       (!item?.followUp?.finalComments ||
         item?.followUp?.finalComments.trim() === "")
     ) {
       toast.error(
-        item?.followUp?.recommendationsImplemented.toString() === "false" ? "Comments missing. Please provide them first and then submit the observation" : "Final Comments missing. Please provide them first and then submit the observation"
+        item?.followUp?.recommendationsImplemented?.toString() === "false" ? "Comments missing. Please provide them first and then submit the observation" : "Final Comments missing. Please provide them first and then submit the observation"
       );
       return;
     }
 
     if (
-      item?.followUp?.recommendationsImplemented.toString() === "false" &&
+      item?.followUp?.recommendationsImplemented?.toString() === "false" &&
       !item?.followUp?.nextImplementationDate
     ) {
       toast.error(
@@ -46,7 +46,7 @@ const SubmitDialog = ({ item, setShowSubmitDialog }) => {
         setupUpdateFollowUpByManagement({
           ...item?.followUp,
           recommendationsImplemented:
-            item?.followUp?.recommendationsImplemented.toString() === "true",
+            item?.followUp?.recommendationsImplemented?.toString() === "true",
           finalComments:
             item?.followUp?.finalComments,
           nextImplementationDate: item?.followUp?.nextImplementationDate
@@ -97,3 +97,4 @@ const SubmitDialog = ({ item, setShowSubmitDialog }) => {
 };
 
 export default SubmitDialog;
+
