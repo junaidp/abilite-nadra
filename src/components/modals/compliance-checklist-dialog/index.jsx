@@ -2,6 +2,7 @@ import React from "react";
 import {
   setupGetAuditStepChecklistObservations,
   setupUpdateAuditStepChecklistObservations,
+  setupGetAuditStepChecklistLite,
 } from "../../../global-redux/reducers/audit-engagement/slice";
 import { useDispatch, useSelector } from "react-redux";
 import { Chip, CircularProgress } from "@mui/material";
@@ -17,6 +18,7 @@ const ComplianceCheckListDialog = ({
   setShowComplianceCheckListDialog,
   currentAuditEngagement,
   complianceCheckListMainId,
+  onChecklistStatusUpdated,
 }) => {
   const dispatch = useDispatch();
   const { singleAuditEngagementObject } = useSelector(
@@ -130,6 +132,39 @@ const ComplianceCheckListDialog = ({
     );
   }, [buildChangedRow]);
 
+  const handleObservationFileUploaded = React.useCallback((observationId, file) => {
+    if (!file?.id) return;
+
+    setObservations((prev) =>
+      prev.map((item) => {
+        if (Number(item?.id) !== Number(observationId)) return item;
+
+        return {
+          ...item,
+          observationsDataAttachmentsList: [
+            ...(item?.observationsDataAttachmentsList || []),
+            file,
+          ],
+        };
+      })
+    );
+  }, []);
+
+  const handleObservationFileDeleted = React.useCallback((observationId, deletedFileId) => {
+    setObservations((prev) =>
+      prev.map((item) => {
+        if (Number(item?.id) !== Number(observationId)) return item;
+
+        return {
+          ...item,
+          observationsDataAttachmentsList: (
+            item?.observationsDataAttachmentsList || []
+          ).filter((file) => Number(file?.id) !== Number(deletedFileId)),
+        };
+      })
+    );
+  }, []);
+
   const onContentChange = React.useCallback((id, value) => {
     setObservations((prev) =>
       prev.map((item) => {
@@ -173,6 +208,34 @@ const ComplianceCheckListDialog = ({
     return allowEdit;
   }, [complianceItem, user, singleAuditEngagementObject]);
 
+  const handleClose = React.useCallback(async () => {
+    setShowComplianceCheckListDialog(false);
+
+    if (!complianceCheckListMainId) return;
+    if (complianceItem?.approved === true) return;
+
+    try {
+      const response = await dispatch(
+        setupGetAuditStepChecklistLite(complianceCheckListMainId)
+      ).unwrap();
+      const checklistLite = response?.data || response;
+
+      if (checklistLite?.id) {
+        onChecklistStatusUpdated?.(checklistLite.id, checklistLite);
+      }
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message || "Unable to refresh checklist status"
+      );
+    }
+  }, [
+    complianceCheckListMainId,
+    complianceItem?.approved,
+    dispatch,
+    onChecklistStatusUpdated,
+    setShowComplianceCheckListDialog,
+  ]);
+
   const handlePaginationChange = (event, value) => {
     setPage(value);
   };
@@ -197,7 +260,7 @@ const ComplianceCheckListDialog = ({
                 <button
                   type="button"
                   className="btn-close f-22"
-                  onClick={() => setShowComplianceCheckListDialog(false)}
+                  onClick={handleClose}
                 ></button>
               </div>
             </div>
@@ -239,6 +302,8 @@ const ComplianceCheckListDialog = ({
                           onContentChange={onContentChange}
                           allowEdit={allowEdit}
                           setCurrentDeleteFileId={setCurrentDeleteFileId}
+                          onFileUploaded={handleObservationFileUploaded}
+                          onFileDeleted={handleObservationFileDeleted}
                         />
                       ))
                     )}
@@ -292,7 +357,7 @@ const ComplianceCheckListDialog = ({
         )}
         <button
           className="btn btn-danger"
-          onClick={() => setShowComplianceCheckListDialog(false)}
+          onClick={handleClose}
         >
           Close
         </button>

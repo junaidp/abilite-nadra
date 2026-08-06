@@ -10,6 +10,8 @@ const ComplianceRow = ({
   onContentChange,
   allowEdit,
   setCurrentDeleteFileId,
+  onFileUploaded,
+  onFileDeleted,
 }) => {
   return (
     <tr>
@@ -48,6 +50,8 @@ const ComplianceRow = ({
           item={singleItem}
           allowEdit={allowEdit}
           setCurrentDeleteFileId={setCurrentDeleteFileId}
+          onFileUploaded={onFileUploaded}
+          onFileDeleted={onFileDeleted}
         />
       </td>
     </tr>

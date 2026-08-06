@@ -2,6 +2,7 @@ import {
   getAllAuditEngagement,
   getSingleAuditEngagement,
   getSingleAuditEngagementLite,
+  getAuditStepChecklistLite,
   updateSingleAuditEngagement,
   updateAuditEngagementStatus,
   getInitialSingleAuditEngagement,
@@ -85,6 +86,12 @@ export const setupGetSingleAuditEngagementLite = createAsyncThunk(
   "auditEngagement/getSingleAuditEngagementLite",
   async (data, thunkAPI) => {
     return getSingleAuditEngagementLite(data, thunkAPI);
+  }
+);
+export const setupGetAuditStepChecklistLite = createAsyncThunk(
+  "auditEngagement/getAuditStepChecklistLite",
+  async (data, thunkAPI) => {
+    return getAuditStepChecklistLite(data, thunkAPI);
   }
 );
 export const setupUpdateSingleAuditEngagement = createAsyncThunk(
@@ -1165,8 +1172,12 @@ export const slice = createSlice({
       .addCase(setupUploadAuditStepCheckListFile.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupUploadAuditStepCheckListFile.fulfilled, (state) => {
+      .addCase(setupUploadAuditStepCheckListFile.fulfilled, (state, { payload }) => {
         state.loading = false;
+        if (payload?.status === false) {
+          toast.error(payload?.message || "An Error has occurred");
+          return;
+        }
         state.auditEngagementObservationAddSuccess = true;
         toast.success("File Uploaded Successfully");
       })
@@ -1183,8 +1194,12 @@ export const slice = createSlice({
       .addCase(setupDeleteAuditStepCheckListFile.pending, (state) => {
         state.loading = true;
       })
-      .addCase(setupDeleteAuditStepCheckListFile.fulfilled, (state) => {
+      .addCase(setupDeleteAuditStepCheckListFile.fulfilled, (state, { payload }) => {
         state.loading = false;
+        if (payload?.status === false) {
+          toast.error(payload?.message || "An Error has occurred");
+          return;
+        }
         state.auditEngagementObservationAddSuccess = true;
         toast.success("File Deleted Successfully");
       })
@@ -1313,4 +1328,3 @@ export const {
 } = slice.actions;
 
 export default slice.reducer;
-

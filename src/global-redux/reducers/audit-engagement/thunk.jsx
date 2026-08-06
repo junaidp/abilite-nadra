@@ -55,6 +55,23 @@ export const getSingleAuditEngagementLite = async (data, thunkAPI) => {
     return thunkAPI.rejectWithValue(error);
   }
 };
+export const getAuditStepChecklistLite = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.get(
+      `${baseUrl}/auditEngagement/auditStepChecklist/getSingleLite?auditStepChecklistId=${data}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
 export const updateSingleAuditEngagement = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
@@ -716,7 +733,7 @@ export const uploadAuditStepCheckListFile = async (data, thunkAPI) => {
       data?.formData,
       {
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${user[0]?.token}`,
         },
       }
@@ -968,4 +985,3 @@ export const addObjectiveRiskControl = async (data, thunkAPI) => {
     return thunkAPI.rejectWithValue(error);
   }
 };
-
