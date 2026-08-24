@@ -26,6 +26,7 @@ import settingsRiskFactorReducer from "../reducers/settings/risk-factor/slice";
 import settingsDocsReducer from "../reducers/settings/supporting-docs/slice";
 import consolidationReportReducer from "../reducers/reports/consolidation-report/slice";
 import tasksManagementReducer from "../reducers/tasks-management/slice";
+import dashboardReducer from "../reducers/dashboard/slice";
 export const store = configureStore({
   reducer: {
     common: commonReducer,
@@ -60,5 +61,7 @@ export const store = configureStore({
     auditEngagement: auditEngagementReducer,
     // Task Management & Information Request
     tasksManagement: tasksManagementReducer,
+    dashboard: dashboardReducer,
   },
 });
+

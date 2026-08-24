@@ -1,0 +1,162 @@
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { encryptAndEncode } from '../../../../config/helper';
+import { buildObservationRows, summarizeImplementation, uniqueFilterOptions } from './dashboardHelpers';
+import { ChartSkeleton } from './Skeletons';
+
+const statusColors = {
+  Open: '#ffb000',
+  Closed: '#0d6efd',
+};
+
+const emptyFilters = { locationId: '', auditeeId: '' };
+
+const SelectFilter = ({ value, label, options, onChange }) => (
+  <select className='form-select' value={value} onChange={(event) => onChange(event.target.value)}>
+    <option value=''>{label}</option>
+    {options.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}
+  </select>
+);
+
+const filterRows = (rows, filters) => rows.filter((item) => {
+  if (filters.locationId && String(item.locationId) !== String(filters.locationId)) return false;
+  if (filters.auditeeId && String(item.auditeeId) !== String(filters.auditeeId)) return false;
+  return true;
+});
+
+const buildJobChartData = (rows) => {
+  const map = new Map();
+  rows.forEach((item) => {
+    const key = item.jobName;
+    const current = map.get(key) || { jobName: key, Open: 0, Closed: 0 };
+    if (item.status === 'Implemented') current.Closed += 1;
+    else current.Open += 1;
+    map.set(key, current);
+  });
+  return Array.from(map.values());
+};
+
+const OverallStatusTooltip = ({ active, payload, label }) => {
+  if (!active || !payload?.length) return null;
+  return (
+    <div className='dashboard-tooltip-box'>
+      <div className='dashboard-tooltip-title'>{label}</div>
+      {payload.map((item) => (
+        <div key={item.dataKey} className='dashboard-tooltip-line' style={{ color: item.color }}>
+          {item.dataKey}: {item.value}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const OverallStatusRows = ({ rows, activeJobName, onRowClick }) => {
+  const visibleRows = rows.filter((item) => item.jobName === activeJobName);
+
+  if (!activeJobName || visibleRows.length === 0) return null;
+
+  return (
+    <div className='dashboard-overall-records mt-3'>
+      <div className='dashboard-overall-records-header'>
+        <span>{activeJobName}</span>
+        <span className='badge bg-light text-dark border'>{visibleRows.length}</span>
+      </div>
+      <div className='dashboard-overall-records-body'>
+        {visibleRows.map((row) => (
+          <button
+            key={row.jobId + '-' + row.id}
+            type='button'
+            className='dashboard-small-row dashboard-clickable-row'
+            onClick={() => onRowClick(row)}
+          >
+            <div className='dashboard-row-title text-truncate'>{row.observationName}</div>
+            <div className='dashboard-row-subtitle text-truncate'>{row.status} - {row.locationName}</div>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const OverallStatusModal = ({ open, onClose, loading, dashboardReporting, users, locations }) => {
+  const navigate = useNavigate();
+  const [filters, setFilters] = React.useState(emptyFilters);
+  const rows = React.useMemo(() => buildObservationRows(dashboardReporting, users, locations), [dashboardReporting, users, locations]);
+  const filteredRows = React.useMemo(() => filterRows(rows, filters), [rows, filters]);
+  const chartData = React.useMemo(() => buildJobChartData(filteredRows), [filteredRows]);
+  const summary = React.useMemo(() => summarizeImplementation(filteredRows), [filteredRows]);
+  const [activeJobName, setActiveJobName] = React.useState('');
+  const closed = summary.find((item) => item.name === 'Implemented')?.count || 0;
+  const openCount = filteredRows.length - closed;
+  const hasFilters = Object.values(filters).some(Boolean);
+  const chartWidth = Math.max(980, chartData.length * 78);
+
+  React.useEffect(() => {
+    if (!open) {
+      setFilters(emptyFilters);
+      setActiveJobName('');
+      return;
+    }
+    setActiveJobName((previous) => previous && chartData.some((item) => item.jobName === previous) ? previous : chartData[0]?.jobName || '');
+  }, [chartData, open]);
+
+  const handleChartHover = (state) => {
+    const jobName = state?.activeLabel;
+    if (jobName) setActiveJobName(jobName);
+  };
+
+  const handleRowClick = (row) => {
+    if (!row?.jobId) return;
+    navigate('/audit/follow-up-particulars/' + encryptAndEncode(row.jobId.toString()));
+  };
+
+  if (!open) return null;
+
+  return (
+    <div className='model-parent dashboard-modal-parent'>
+      <div className='model-wrap dashboard-overall-modal'>
+        <div className='d-flex justify-content-between align-items-center mb-3'>
+          <h5 className='mb-0 fw-semibold'>Overall Status</h5>
+          <button type='button' className='dashboard-modal-close' onClick={onClose} aria-label='Close'><i className='bi bi-x-lg'></i></button>
+        </div>
+        {loading ? <ChartSkeleton height={420} /> : (
+          <>
+            <div className='row g-3 mb-4'>
+              <div className='col-md-3'>
+                <div className='dashboard-modal-stat'><div className='dashboard-stat-open'>{openCount}</div><div className='text-muted'>Open</div></div>
+              </div>
+              <div className='col-md-3'>
+                <div className='dashboard-modal-stat'><div className='dashboard-stat-closed'>{closed}</div><div className='text-muted'>Closed</div></div>
+              </div>
+            </div>
+            <div className='row g-2 mb-3'>
+              <div className='col-md-5'><SelectFilter label='Location' value={filters.locationId} options={uniqueFilterOptions(rows, 'locationId', 'locationName')} onChange={(value) => setFilters((previous) => ({ ...previous, locationId: value }))} /></div>
+              <div className='col-md-5'><SelectFilter label='Auditees' value={filters.auditeeId} options={uniqueFilterOptions(rows, 'auditeeId', 'auditeeName')} onChange={(value) => setFilters((previous) => ({ ...previous, auditeeId: value }))} /></div>
+              <div className='col-md-2'><button className='btn btn-outline-secondary w-100' disabled={!hasFilters} onClick={() => setFilters(emptyFilters)}>Reset</button></div>
+            </div>
+            <div className='dashboard-overall-chart'>
+              <div className='dashboard-overall-chart-canvas' style={{ width: chartWidth }}>
+                <ResponsiveContainer width='100%' height='100%'>
+                  <BarChart data={chartData} margin={{ top: 22, right: 28, left: 6, bottom: 74 }} barCategoryGap='30%' onMouseMove={handleChartHover}>
+                    <CartesianGrid strokeDasharray='3 3' vertical={false} />
+                    <XAxis dataKey='jobName' interval={0} angle={-45} textAnchor='end' tick={{ fontSize: 11 }} height={88} />
+                    <YAxis allowDecimals={false} tick={{ fontSize: 12 }} />
+                    <Tooltip cursor={{ fill: 'rgba(15, 23, 42, 0.12)' }} content={<OverallStatusTooltip />} />
+                    <Legend verticalAlign='bottom' height={30} />
+                    <Bar dataKey='Open' fill={statusColors.Open} radius={[5, 5, 0, 0]} maxBarSize={34} />
+                    <Bar dataKey='Closed' fill={statusColors.Closed} radius={[5, 5, 0, 0]} maxBarSize={34} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+            <OverallStatusRows rows={filteredRows} activeJobName={activeJobName} onRowClick={handleRowClick} />
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default OverallStatusModal;
+
