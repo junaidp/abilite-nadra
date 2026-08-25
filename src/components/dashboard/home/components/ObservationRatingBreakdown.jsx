@@ -1,5 +1,7 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
+import { encryptAndEncode } from '../../../../config/helper';
 import { buildObservationRows, summarizeRatings } from './dashboardHelpers';
 
 const colors = {
@@ -9,6 +11,7 @@ const colors = {
 };
 
 const ObservationRatingBreakdown = ({ dashboardReporting, users, locations }) => {
+  const navigate = useNavigate();
   const [openRating, setOpenRating] = React.useState('Medium');
   const [isRatingOpen, setIsRatingOpen] = React.useState(false);
   const rows = React.useMemo(() => buildObservationRows(dashboardReporting, users, locations), [dashboardReporting, users, locations]);
@@ -23,6 +26,10 @@ const ObservationRatingBreakdown = ({ dashboardReporting, users, locations }) =>
   }, [openRating, ratingData]);
 
   const setActiveFromHover = (rating) => setOpenRating(rating);
+  const handleRowClick = (row) => {
+    if (!row?.jobId) return;
+    navigate('/audit/follow-up-particulars/' + encryptAndEncode(row.jobId.toString()));
+  };
 
   return (
     <div className='card border-0 shadow-sm h-100'>
@@ -68,10 +75,10 @@ const ObservationRatingBreakdown = ({ dashboardReporting, users, locations }) =>
             </button>
             <div className={'dashboard-accordion-body dashboard-accordion-collapse ' + (isRatingOpen ? 'dashboard-accordion-collapse-open' : '')}>
               {selectedRows.length ? selectedRows.map((row) => (
-                <div key={row.jobId + '-' + row.id} className='dashboard-small-row'>
+                <button key={row.jobId + '-' + row.id} type='button' className='dashboard-small-row dashboard-clickable-row' onClick={() => handleRowClick(row)}>
                   <div className='dashboard-row-title text-truncate'>{row.observationName}</div>
                   <div className='dashboard-row-subtitle text-truncate'>{row.jobName} - {row.locationName}</div>
-                </div>
+                </button>
               )) : <div className='text-muted small p-2'>No observations found.</div>}
             </div>
           </div>
@@ -82,6 +89,8 @@ const ObservationRatingBreakdown = ({ dashboardReporting, users, locations }) =>
 };
 
 export default ObservationRatingBreakdown;
+
+
 
 
 

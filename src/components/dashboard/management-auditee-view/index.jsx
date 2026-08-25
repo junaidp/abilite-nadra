@@ -5,11 +5,13 @@ import InformationRequest from "./components/InformationRequest";
 import UserInfo from "./components/UserInfo";
 import TFA from "./components/TFA";
 import SupportingDocs from "./components/SupportingDocs";
+import ManagementDashboard from "./components/dashboard/ManagementDashboard";
 import { useDispatch } from "react-redux";
 import { resetAuthValues } from "../../../global-redux/reducers/auth/slice";
 import { useSearchParams } from "react-router-dom";
 
 const dashboardTabs = [
+  "dashboard",
   "doc",
   "reporting",
   "followUp",
@@ -19,7 +21,7 @@ const dashboardTabs = [
 ];
 
 const getValidDashboardTab = (tab) =>
-  dashboardTabs.includes(tab) ? tab : "doc";
+  dashboardTabs.includes(tab) ? tab : "dashboard";
 
 const ManagementAuditeeView = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -31,7 +33,7 @@ const ManagementAuditeeView = () => {
   const handleChangeTab = React.useCallback(
     (nextTab) => {
       setTab(nextTab);
-      setSearchParams(nextTab === "doc" ? {} : { tab: nextTab }, {
+      setSearchParams(nextTab === "dashboard" ? {} : { tab: nextTab }, {
         replace: true,
       });
     },
@@ -62,6 +64,19 @@ const ManagementAuditeeView = () => {
                 id="nav-tab"
                 role="tablist"
               >
+                <button
+                  className={`nav-link ${tab === "dashboard" ? "active" : ""
+                    }  border-0 shadow-sm mb-3  rounded-0 me-3 `}
+                  id="nav-management-dashboard-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#nav-management-dashboard"
+                  type="button"
+                  role="tab"
+                  aria-controls="nav-management-dashboard"
+                  onClick={() => handleChangeTab("dashboard")}
+                >
+                  Dashboard
+                </button>
                 <button
                   className={`nav-link ${tab === "doc" ? "active" : ""
                     }  border-0 shadow-sm mb-3  rounded-0 me-3 `}
@@ -149,6 +164,7 @@ const ManagementAuditeeView = () => {
               className="tab-content p-3 mt-4 border bg-light"
               id="nav-tabContent"
             >
+              <ManagementDashboard tab={tab} />
               <SupportingDocs tab={tab} />
               <Reporting tab={tab} />
               <FollowUp tab={tab} />

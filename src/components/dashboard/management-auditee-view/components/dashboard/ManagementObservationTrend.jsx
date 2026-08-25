@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Bar, BarChart, CartesianGrid, Cell, LabelList, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import { encryptAndEncode } from '../../../../config/helper';
-import { buildObservationRows, summarizeImplementation, uniqueFilterOptions } from './dashboardHelpers';
+import { encryptAndEncode } from '../../../../../config/helper';
+import { buildObservationRows, summarizeImplementation, uniqueFilterOptions } from '../../../home/components/dashboardHelpers';
 
 const colors = {
   Implemented: '#0d6efd',
@@ -14,7 +14,6 @@ const emptyFilters = {
   jobName: [],
   observationName: [],
   locationId: [],
-  auditeeId: [],
 };
 
 const filterMatches = (selectedValues, value) => {
@@ -26,7 +25,6 @@ const applyFilters = (rows, filters) => rows.filter((item) => {
   if (!filterMatches(filters.jobName, item.jobName)) return false;
   if (!filterMatches(filters.observationName, item.observationName)) return false;
   if (!filterMatches(filters.locationId, item.locationId)) return false;
-  if (!filterMatches(filters.auditeeId, item.auditeeId)) return false;
   return true;
 });
 
@@ -105,12 +103,12 @@ const TrendRows = ({ rows, activeStatus, isOpen, setIsOpen, onRowClick }) => {
   );
 };
 
-const ObservationImplementationTrend = ({ dashboardReporting, users, locations }) => {
+const ManagementObservationTrend = ({ dashboardReporting, locations, onOverallStatus }) => {
   const navigate = useNavigate();
   const [filters, setFilters] = React.useState(emptyFilters);
   const [activeStatus, setActiveStatus] = React.useState('Implemented');
   const [isStatusOpen, setIsStatusOpen] = React.useState(false);
-  const rows = React.useMemo(() => buildObservationRows(dashboardReporting, users, locations), [dashboardReporting, users, locations]);
+  const rows = React.useMemo(() => buildObservationRows(dashboardReporting, [], locations), [dashboardReporting, locations]);
   const filteredRows = React.useMemo(() => applyFilters(rows, filters), [rows, filters]);
   const chartData = React.useMemo(() => summarizeImplementation(filteredRows), [filteredRows]);
   const hasFilters = Object.values(filters).some((value) => value.length);
@@ -139,8 +137,8 @@ const ObservationImplementationTrend = ({ dashboardReporting, users, locations }
           <div className='col-md-6'><MultiSelectFilter label='Job Name' value={filters.jobName} options={uniqueFilterOptions(rows, 'jobName', 'jobName')} onChange={(value) => updateFilter('jobName', value)} /></div>
           <div className='col-md-6'><MultiSelectFilter label='Observation Name' value={filters.observationName} options={uniqueFilterOptions(rows, 'observationName', 'observationName')} onChange={(value) => updateFilter('observationName', value)} /></div>
           <div className='col-md-6'><MultiSelectFilter label='Location' value={filters.locationId} options={uniqueFilterOptions(rows, 'locationId', 'locationName')} onChange={(value) => updateFilter('locationId', value)} /></div>
-          <div className='col-md-6'><MultiSelectFilter label='Auditees' value={filters.auditeeId} options={uniqueFilterOptions(rows, 'auditeeId', 'auditeeName')} onChange={(value) => updateFilter('auditeeId', value)} /></div>
-          <div className='col-12'><button className='btn btn-outline-secondary w-100' disabled={!hasFilters} onClick={() => setFilters(emptyFilters)}>Reset</button></div>
+          <div className='col-md-3'><button className='btn btn-outline-secondary w-100' disabled={!hasFilters} onClick={() => setFilters(emptyFilters)}>Reset</button></div>
+          <div className='col-md-3'><button className='btn btn-primary dashboard-management-overall-button w-100' type='button' onClick={onOverallStatus}>Overall Status</button></div>
         </div>
         <div className='dashboard-trend-chart'>
           <ResponsiveContainer width='100%' height='100%'>
@@ -149,21 +147,10 @@ const ObservationImplementationTrend = ({ dashboardReporting, users, locations }
               <XAxis dataKey='name' tick={{ fontSize: 11, fill: '#4b5563', fontFamily: 'Poppins' }} />
               <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: '#4b5563', fontFamily: 'Poppins' }} />
               <Tooltip cursor={{ fill: 'rgba(15, 23, 42, 0.08)' }} formatter={(value, name, item) => [value + ' observations (' + item.payload.percentage + '%)', item.payload.name]} />
-              <Bar
-                dataKey='count'
-                radius={[6, 6, 0, 0]}
-                maxBarSize={86}
-                onMouseEnter={(data) => (data?.name || data?.payload?.name) && setActiveFromHover(data.name || data.payload.name)}
-                onMouseMove={(data) => (data?.name || data?.payload?.name) && setActiveFromHover(data.name || data.payload.name)}
-              >
+              <Bar dataKey='count' radius={[6, 6, 0, 0]} maxBarSize={86} onMouseEnter={(data) => (data?.name || data?.payload?.name) && setActiveFromHover(data.name || data.payload.name)}>
                 <LabelList dataKey='percentage' position='top' formatter={(value) => value ? value + '%' : ''} />
                 {chartData.map((entry) => (
-                  <Cell
-                    key={entry.name}
-                    fill={colors[entry.name]}
-                    cursor='pointer'
-                    onMouseEnter={() => setActiveFromHover(entry.name)}
-                  />
+                  <Cell key={entry.name} fill={colors[entry.name]} cursor='pointer' onMouseEnter={() => setActiveFromHover(entry.name)} />
                 ))}
               </Bar>
             </BarChart>
@@ -171,13 +158,7 @@ const ObservationImplementationTrend = ({ dashboardReporting, users, locations }
         </div>
         <div className='dashboard-chart-legend'>
           {chartData.map((item) => (
-            <button
-              key={item.name}
-              type='button'
-              className={'dashboard-legend-button ' + (activeStatus === item.name ? 'dashboard-legend-button-active' : '')}
-              onMouseEnter={() => setActiveFromHover(item.name)}
-              onClick={() => setActiveStatus(item.name)}
-            >
+            <button key={item.name} type='button' className={'dashboard-legend-button ' + (activeStatus === item.name ? 'dashboard-legend-button-active' : '')} onMouseEnter={() => setActiveFromHover(item.name)} onClick={() => setActiveStatus(item.name)}>
               <span className='dashboard-legend-dot' style={{ background: colors[item.name] }} />
               {item.name} ({item.percentage}%)
             </button>
@@ -189,4 +170,4 @@ const ObservationImplementationTrend = ({ dashboardReporting, users, locations }
   );
 };
 
-export default ObservationImplementationTrend;
+export default ManagementObservationTrend;

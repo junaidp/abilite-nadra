@@ -1,16 +1,16 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import { encryptAndEncode } from '../../../../config/helper';
-import { buildObservationRows, summarizeImplementation, uniqueFilterOptions } from './dashboardHelpers';
-import { ChartSkeleton } from './Skeletons';
+import { encryptAndEncode } from '../../../../../config/helper';
+import { buildObservationRows, summarizeImplementation, uniqueFilterOptions } from '../../../home/components/dashboardHelpers';
+import { ChartSkeleton } from '../../../home/components/Skeletons';
 
 const statusColors = {
   Open: '#ffb000',
   Closed: '#0d6efd',
 };
 
-const emptyFilters = { locationId: [], auditeeId: [] };
+const emptyFilters = { locationId: [] };
 
 const filterMatches = (selectedValues, value) => {
   if (!selectedValues?.length) return true;
@@ -68,11 +68,7 @@ const MultiSelectFilter = ({ value, label, options, onChange }) => {
   );
 };
 
-const filterRows = (rows, filters) => rows.filter((item) => {
-  if (!filterMatches(filters.locationId, item.locationId)) return false;
-  if (!filterMatches(filters.auditeeId, item.auditeeId)) return false;
-  return true;
-});
+const filterRows = (rows, filters) => rows.filter((item) => filterMatches(filters.locationId, item.locationId));
 
 const buildJobChartData = (rows) => {
   const map = new Map();
@@ -102,7 +98,6 @@ const OverallStatusTooltip = ({ active, payload, label }) => {
 
 const OverallStatusRows = ({ rows, activeJobName, onRowClick }) => {
   const visibleRows = rows.filter((item) => item.jobName === activeJobName);
-
   if (!activeJobName || visibleRows.length === 0) return null;
 
   return (
@@ -113,12 +108,7 @@ const OverallStatusRows = ({ rows, activeJobName, onRowClick }) => {
       </div>
       <div className='dashboard-overall-records-body'>
         {visibleRows.map((row) => (
-          <button
-            key={row.jobId + '-' + row.id}
-            type='button'
-            className='dashboard-small-row dashboard-clickable-row'
-            onClick={() => onRowClick(row)}
-          >
+          <button key={row.jobId + '-' + row.id} type='button' className='dashboard-small-row dashboard-clickable-row' onClick={() => onRowClick(row)}>
             <div className='dashboard-row-title text-truncate'>{row.observationName}</div>
             <div className='dashboard-row-subtitle text-truncate'>{row.status} - {row.locationName}</div>
           </button>
@@ -128,10 +118,10 @@ const OverallStatusRows = ({ rows, activeJobName, onRowClick }) => {
   );
 };
 
-const OverallStatusModal = ({ open, onClose, loading, dashboardReporting, users, locations }) => {
+const ManagementOverallStatusModal = ({ open, onClose, loading, dashboardReporting, locations }) => {
   const navigate = useNavigate();
   const [filters, setFilters] = React.useState(emptyFilters);
-  const rows = React.useMemo(() => buildObservationRows(dashboardReporting, users, locations), [dashboardReporting, users, locations]);
+  const rows = React.useMemo(() => buildObservationRows(dashboardReporting, [], locations), [dashboardReporting, locations]);
   const filteredRows = React.useMemo(() => filterRows(rows, filters), [rows, filters]);
   const chartData = React.useMemo(() => buildJobChartData(filteredRows), [filteredRows]);
   const summary = React.useMemo(() => summarizeImplementation(filteredRows), [filteredRows]);
@@ -172,16 +162,11 @@ const OverallStatusModal = ({ open, onClose, loading, dashboardReporting, users,
         {loading ? <ChartSkeleton height={420} /> : (
           <>
             <div className='row g-3 mb-4'>
-              <div className='col-md-3'>
-                <div className='dashboard-modal-stat'><div className='dashboard-stat-open'>{openCount}</div><div className='text-muted'>Open</div></div>
-              </div>
-              <div className='col-md-3'>
-                <div className='dashboard-modal-stat'><div className='dashboard-stat-closed'>{closed}</div><div className='text-muted'>Closed</div></div>
-              </div>
+              <div className='col-md-3'><div className='dashboard-modal-stat'><div className='dashboard-stat-open'>{openCount}</div><div className='text-muted'>Open</div></div></div>
+              <div className='col-md-3'><div className='dashboard-modal-stat'><div className='dashboard-stat-closed'>{closed}</div><div className='text-muted'>Closed</div></div></div>
             </div>
             <div className='row g-2 mb-3'>
-              <div className='col-md-5'><MultiSelectFilter label='Location' value={filters.locationId} options={uniqueFilterOptions(rows, 'locationId', 'locationName')} onChange={(value) => setFilters((previous) => ({ ...previous, locationId: value }))} /></div>
-              <div className='col-md-5'><MultiSelectFilter label='Auditees' value={filters.auditeeId} options={uniqueFilterOptions(rows, 'auditeeId', 'auditeeName')} onChange={(value) => setFilters((previous) => ({ ...previous, auditeeId: value }))} /></div>
+              <div className='col-md-10'><MultiSelectFilter label='Location' value={filters.locationId} options={uniqueFilterOptions(rows, 'locationId', 'locationName')} onChange={(value) => setFilters({ locationId: value })} /></div>
               <div className='col-md-2'><button className='btn btn-outline-secondary w-100' disabled={!hasFilters} onClick={() => setFilters(emptyFilters)}>Reset</button></div>
             </div>
             <div className='dashboard-overall-chart'>
@@ -207,4 +192,4 @@ const OverallStatusModal = ({ open, onClose, loading, dashboardReporting, users,
   );
 };
 
-export default OverallStatusModal;
+export default ManagementOverallStatusModal;
