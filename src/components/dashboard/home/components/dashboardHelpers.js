@@ -190,6 +190,7 @@ export const buildReportingApprovalRows = ({ dashboardReporting, auditEngagement
         id: 'reporting-' + job?.id + '-' + item?.id + '-' + stepNo,
         reportingId: job?.id,
         jobName: job?.title || '-',
+        year: job?.year || '',
         observationName: item?.observationTitle || '-',
         locationName: resolveLocationName(item, locationMap),
         actionLabel,
@@ -212,6 +213,7 @@ export const buildFollowUpApprovalRows = ({ dashboardReporting, auditEngagements
         id: 'follow-up-' + job?.id + '-' + item?.id,
         reportingId: job?.id,
         jobName: job?.title || '-',
+        year: job?.year || '',
         observationName: item?.observationTitle || '-',
         locationName: resolveLocationName(item, locationMap),
         actionLabel: 'Approve',
@@ -257,6 +259,7 @@ export const buildObservationRows = (dashboardReporting, users, locations) => {
         id: item?.id,
         jobId: job?.id,
         jobName: job?.title || '-',
+        year: job?.year || '',
         observationName: item?.observationTitle || '-',
         locationId: getNumberId(item?.subLocation),
         locationName: resolveLocationName(item, locationMap),
@@ -307,6 +310,8 @@ export const uniqueFilterOptions = (rows, field, labelField) => {
   });
   return Array.from(map.entries()).map(([value, label]) => ({ value, label }));
 };
+
+
 
 
 
