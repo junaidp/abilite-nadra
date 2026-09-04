@@ -1,8 +1,11 @@
 import React from "react";
+import { createPortal } from "react-dom";
 import {
   setupGetAuditStepChecklistObservations,
   setupUpdateAuditStepChecklistObservations,
   setupGetAuditStepChecklistLite,
+  setupGetAuditStepChecklistObservation,
+  setupUpdateAuditStepChecklistObservation,
 } from "../../../global-redux/reducers/audit-engagement/slice";
 import { useDispatch, useSelector } from "react-redux";
 import { Chip, CircularProgress } from "@mui/material";
@@ -13,6 +16,11 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { toast } from "react-toastify";
 import ComplianceRow from "./components/compliance-row";
+import RichTextEditor from "./components/TextEditor";
+
+const hasOwn = (object, key) => Object.prototype.hasOwnProperty.call(object, key);
+
+const getObservationValue = (response) => response?.data?.observation ?? "";
 
 const ComplianceCheckListDialog = ({
   setShowComplianceCheckListDialog,
@@ -34,6 +42,11 @@ const ComplianceCheckListDialog = ({
   const [totalNoOfRecords, setTotalNoOfRecords] = React.useState(0);
   const [observationsLoading, setObservationsLoading] = React.useState(false);
   const [saving, setSaving] = React.useState(false);
+  const [observationCache, setObservationCache] = React.useState({});
+  const [activeObservation, setActiveObservation] = React.useState(null);
+  const [activeObservationContent, setActiveObservationContent] = React.useState("");
+  const [observationLoadingId, setObservationLoadingId] = React.useState(null);
+  const [observationSaving, setObservationSaving] = React.useState(false);
 
   const complianceItem = React.useMemo(
     () =>
@@ -46,8 +59,6 @@ const ComplianceCheckListDialog = ({
   const buildChangedRow = React.useCallback((row) => ({
     id: row?.id,
     remarks: row?.remarks,
-    observation: row?.observation,
-    completed: row?.completed === true,
   }), []);
 
   const fetchObservations = React.useCallback(async () => {
@@ -77,31 +88,159 @@ const ComplianceCheckListDialog = ({
   React.useEffect(() => {
     setChangedRows({});
     setCurrentDeleteFileId("");
+    setObservationCache({});
+    setActiveObservation(null);
+    setActiveObservationContent("");
+    setObservationLoadingId(null);
   }, [complianceCheckListMainId]);
 
   React.useEffect(() => {
     fetchObservations();
   }, [fetchObservations]);
 
+  const fetchObservationContent = React.useCallback(async (observationId) => {
+    if (!observationId) return "";
+
+    if (hasOwn(observationCache, observationId)) {
+      return observationCache[observationId];
+    }
+
+    const response = await dispatch(
+      setupGetAuditStepChecklistObservation(observationId)
+    ).unwrap();
+    const observation = getObservationValue(response);
+
+    setObservationCache((prev) => ({
+      ...prev,
+      [observationId]: observation,
+    }));
+    setObservations((prev) =>
+      prev.map((row) =>
+        Number(row?.id) === Number(observationId)
+          ? { ...row, observation }
+          : row
+      )
+    );
+
+    return observation;
+  }, [dispatch, observationCache]);
+
+  const handleOpenObservation = React.useCallback(async (row) => {
+    if (!row?.id) return;
+
+    setActiveObservation(row);
+    setActiveObservationContent("");
+
+    if (hasOwn(observationCache, row.id)) {
+      setActiveObservationContent(observationCache[row.id]);
+      return;
+    }
+
+    try {
+      setObservationLoadingId(row.id);
+      const observation = await fetchObservationContent(row.id);
+      setActiveObservationContent(observation);
+    } catch (error) {
+      setActiveObservation(null);
+      toast.error(
+        error?.response?.data?.message || "Unable to load observation"
+      );
+    } finally {
+      setObservationLoadingId(null);
+    }
+  }, [fetchObservationContent, observationCache]);
+
+  const handleCloseObservation = React.useCallback(() => {
+    setActiveObservation(null);
+    setActiveObservationContent("");
+    setObservationLoadingId(null);
+  }, []);
+
+  const handleObservationContentChange = React.useCallback((id, value) => {
+    setActiveObservationContent(value);
+  }, []);
+
+
+  const allowEdit = React.useMemo(() => {
+    let allowEdit = false;
+
+    if (complianceItem?.submitted === false) {
+      allowEdit = true;
+    }
+
+    const resourceAllocation = singleAuditEngagementObject?.resourceAllocation;
+    const backupHeadId =
+      resourceAllocation?.backupHeadOfInternalAudit?.id ??
+      resourceAllocation?.backupHeadOfInternalAudit;
+    const proposedApproverId =
+      resourceAllocation?.proposedJobApprover?.id ??
+      resourceAllocation?.proposedJobApprover;
+
+    if (
+      complianceItem?.submitted === true &&
+      complianceItem?.approved === false &&
+      (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
+        Number(user[0]?.userId?.id) === Number(backupHeadId) ||
+        Number(user[0]?.userId?.id) === Number(proposedApproverId))
+    ) {
+      allowEdit = true;
+    }
+
+    return allowEdit;
+  }, [complianceItem, user, singleAuditEngagementObject]);
+
+  const canEditActiveObservation = React.useMemo(
+    () =>
+      allowEdit === true &&
+      activeObservation?.remarks !== "1" &&
+      activeObservation?.remarks !== "3",
+    [activeObservation?.remarks, allowEdit]
+  );
+
+  const handleSaveObservation = React.useCallback(async () => {
+    if (!activeObservation?.id || observationSaving || !canEditActiveObservation) return;
+
+    try {
+      setObservationSaving(true);
+      const response = await dispatch(
+        setupUpdateAuditStepChecklistObservation({
+          observationId: activeObservation.id,
+          observation: activeObservationContent,
+        })
+      ).unwrap();
+      const savedObservation = getObservationValue(response) || activeObservationContent;
+
+      setObservationCache((prev) => ({
+        ...prev,
+        [activeObservation.id]: savedObservation,
+      }));
+      setObservations((prev) =>
+        prev.map((row) =>
+          Number(row?.id) === Number(activeObservation.id)
+            ? { ...row, observation: savedObservation }
+            : row
+        )
+      );
+      toast.success("Observation saved successfully");
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message || "Unable to save observation"
+      );
+    } finally {
+      setObservationSaving(false);
+    }
+  }, [activeObservation, activeObservationContent, canEditActiveObservation, dispatch, observationSaving]);
+
   const handleUpdate = React.useCallback(async () => {
-    const rowsToSave = Object.values(changedRows);
-    if (rowsToSave.length === 0 || saving) return;
+    const changedRowsList = Object.values(changedRows);
+    if (changedRowsList.length === 0 || saving) return;
 
     try {
       setSaving(true);
-      const response = await dispatch(
-        setupUpdateAuditStepChecklistObservations(rowsToSave)
+      await dispatch(
+        setupUpdateAuditStepChecklistObservations(changedRowsList)
       ).unwrap();
-      const savedRows = response?.data || [];
 
-      setObservations((prev) =>
-        prev.map((row) => {
-          const savedRow = savedRows.find(
-            (savedItem) => Number(savedItem?.id) === Number(row?.id)
-          );
-          return savedRow || row;
-        })
-      );
       setChangedRows({});
       toast.success("Compliance checklist saved successfully");
     } catch (error) {
@@ -165,48 +304,6 @@ const ComplianceCheckListDialog = ({
     );
   }, []);
 
-  const onContentChange = React.useCallback((id, value) => {
-    setObservations((prev) =>
-      prev.map((item) => {
-        if (Number(item?.id) !== Number(id)) return item;
-
-        const updatedRow = { ...item, observation: value };
-        setChangedRows((changed) => ({
-          ...changed,
-          [id]: buildChangedRow(updatedRow),
-        }));
-        return updatedRow;
-      })
-    );
-  }, [buildChangedRow]);
-
-  const allowEdit = React.useMemo(() => {
-    let allowEdit = false;
-
-    if (complianceItem?.submitted === false) {
-      allowEdit = true;
-    }
-
-    const resourceAllocation = singleAuditEngagementObject?.resourceAllocation;
-    const backupHeadId =
-      resourceAllocation?.backupHeadOfInternalAudit?.id ??
-      resourceAllocation?.backupHeadOfInternalAudit;
-    const proposedApproverId =
-      resourceAllocation?.proposedJobApprover?.id ??
-      resourceAllocation?.proposedJobApprover;
-
-    if (
-      complianceItem?.submitted === true &&
-      complianceItem?.approved === false &&
-      (user[0]?.userId?.employeeid?.userHierarchy === "IAH" ||
-        Number(user[0]?.userId?.id) === Number(backupHeadId) ||
-        Number(user[0]?.userId?.id) === Number(proposedApproverId))
-    ) {
-      allowEdit = true;
-    }
-
-    return allowEdit;
-  }, [complianceItem, user, singleAuditEngagementObject]);
 
   const handleClose = React.useCallback(async () => {
     setShowComplianceCheckListDialog(false);
@@ -268,8 +365,17 @@ const ComplianceCheckListDialog = ({
 
           <div className="row">
             <div className="col-lg-12">
-              <div className="table-responsive" style={{ overflowX: "hidden" }}>
-                <table className="table table-bordered table-hover rounded equal-columns mb-0">
+              <div className="table-responsive">
+                <table className="table table-bordered table-hover rounded compliance-checklist-table mb-0">
+                  <colgroup>
+                    <col style={{ width: "48px" }} />
+                    <col style={{ width: "115px" }} />
+                    <col style={{ width: "92px" }} />
+                    <col style={{ width: "260px" }} />
+                    <col style={{ width: "150px" }} />
+                    <col style={{ width: "140px" }} />
+                    <col style={{ width: "230px" }} />
+                  </colgroup>
                   <thead>
                     <tr>
                       <th className="sr-col">Sr. #</th>
@@ -299,7 +405,8 @@ const ComplianceCheckListDialog = ({
                           index={(page - 1) * itemsPerPage + index}
                           singleItem={singleItem}
                           handleChange={handleChange}
-                          onContentChange={onContentChange}
+                          onViewObservation={handleOpenObservation}
+                          observationLoadingId={observationLoadingId}
                           allowEdit={allowEdit}
                           setCurrentDeleteFileId={setCurrentDeleteFileId}
                           onFileUploaded={handleObservationFileUploaded}
@@ -362,6 +469,68 @@ const ComplianceCheckListDialog = ({
           Close
         </button>
       </div>
+
+      {activeObservation && createPortal(
+        <div
+          className="model-parent d-flex justify-content-center align-items-start"
+          style={{ zIndex: 110, paddingTop: 24, paddingBottom: 24 }}
+        >
+          <div className="model-wrap compliance-observation-editor-modal">
+            <div className="p-3 compliance-observation-editor-layout">
+              <div className="d-flex items-center justify-content-between mb-3 compliance-observation-editor-header">
+                <div className="pe-3">
+                  <div className="heading">Observation</div>
+                  <div className="text-muted f-12 text-truncate compliance-observation-editor-title">
+                    {activeObservation?.particulars || activeObservation?.subject || activeObservation?.area}
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  className="btn-close f-22 flex-shrink-0"
+                  onClick={handleCloseObservation}
+                  disabled={observationSaving}
+                ></button>
+              </div>
+
+              <div className="compliance-observation-editor-shell">
+                {observationLoadingId === activeObservation?.id ? (
+                  <div className="d-flex justify-content-center align-items-center py-5">
+                    <CircularProgress />
+                  </div>
+                ) : (
+                  <RichTextEditor
+                    key={activeObservation?.id}
+                    initialValue={activeObservationContent}
+                    onContentChange={handleObservationContentChange}
+                    singleItem={activeObservation}
+                    allowEdit={allowEdit}
+                  />
+                )}
+              </div>
+
+              <div className="d-flex justify-content-between mt-3 compliance-observation-editor-footer">
+                {allowEdit === true && (
+                  <button
+                    className={`btn btn-primary ${observationSaving ? "disabled" : ""}`}
+                    onClick={handleSaveObservation}
+                    disabled={!canEditActiveObservation || observationLoadingId === activeObservation?.id || observationSaving}
+                  >
+                    {observationSaving ? "Loading..." : "Save Observation"}
+                  </button>
+                )}
+                <button
+                  className="btn btn-danger"
+                  onClick={handleCloseObservation}
+                  disabled={observationSaving}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
     </div>
   );
 };

@@ -1141,3 +1141,78 @@ span[aria-label="Insert Ordered List"] .jodit-toolbar-button__trigger {
     height: 120px !important;
   }
 }
+
+.compliance-checklist-table {
+  table-layout: fixed;
+  min-width: 1035px;
+}
+
+.compliance-checklist-table th,
+.compliance-checklist-table td {
+  vertical-align: top;
+  word-break: break-word;
+}
+
+.compliance-checklist-table th:nth-child(6),
+.compliance-checklist-table td:nth-child(6) {
+  width: 140px;
+  white-space: nowrap;
+}
+
+.compliance-checklist-table td:nth-child(6) .btn {
+  white-space: nowrap;
+}
+
+.compliance-observation-editor-modal {
+  width: 70vw !important;
+  max-width: none;
+  top: 0 !important;
+  overflow: visible;
+}
+
+.compliance-observation-editor-layout {
+  display: flex;
+  flex-direction: column;
+}
+
+.compliance-observation-editor-header,
+.compliance-observation-editor-footer {
+  flex: 0 0 auto;
+}
+
+.compliance-observation-editor-title {
+  max-width: min(760px, 58vw);
+}
+
+.compliance-observation-editor-shell {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+}
+
+.compliance-observation-editor-shell .jodit-container {
+  max-width: 100%;
+  overflow: visible !important;
+}
+
+.compliance-observation-editor-shell .jodit-workplace,
+.compliance-observation-editor-shell .jodit-wysiwyg {
+  height: auto !important;
+  max-height: none !important;
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+}
+
+.compliance-observation-editor-shell .jodit-wysiwyg table {
+  max-width: none;
+}
+
+@media (max-width: 991px) {
+  .compliance-observation-editor-modal {
+    width: 92vw !important;
+  }
+
+  .compliance-observation-editor-title {
+    max-width: 72vw;
+  }
+}

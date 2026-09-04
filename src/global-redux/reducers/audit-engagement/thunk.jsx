@@ -480,6 +480,43 @@ export const updateAuditStepChecklistObservations = async (data, thunkAPI) => {
   }
 };
 
+export const getAuditStepChecklistObservation = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.get(
+      `${baseUrl}/auditEngagement/auditStepChecklist/getObservation?observationId=${data}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
+export const updateAuditStepChecklistObservation = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.post(
+      `${baseUrl}/auditEngagement/auditStepChecklist/updateObservation?observationId=${data?.observationId}`,
+      { observation: data?.observation },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
 export const updateAuditStepChecklistStatus = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;

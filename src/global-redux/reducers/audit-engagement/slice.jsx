@@ -23,6 +23,8 @@ import {
   approveComplianceCheckList,
   getAuditStepChecklistObservations,
   updateAuditStepChecklistObservations,
+  getAuditStepChecklistObservation,
+  updateAuditStepChecklistObservation,
   updateAuditStepChecklistStatus,
   updateRiskControlMatrixApproval,
   submitRiskControlMatrix,
@@ -227,6 +229,20 @@ export const setupUpdateAuditStepChecklistObservations = createAsyncThunk(
   "auditEngagement/updateAuditStepChecklistObservations",
   async (data, thunkAPI) => {
     return updateAuditStepChecklistObservations(data, thunkAPI);
+  }
+);
+
+export const setupGetAuditStepChecklistObservation = createAsyncThunk(
+  "auditEngagement/getAuditStepChecklistObservation",
+  async (data, thunkAPI) => {
+    return getAuditStepChecklistObservation(data, thunkAPI);
+  }
+);
+
+export const setupUpdateAuditStepChecklistObservation = createAsyncThunk(
+  "auditEngagement/updateAuditStepChecklistObservation",
+  async (data, thunkAPI) => {
+    return updateAuditStepChecklistObservation(data, thunkAPI);
   }
 );
 

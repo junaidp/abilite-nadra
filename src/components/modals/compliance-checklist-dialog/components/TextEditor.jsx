@@ -6,6 +6,7 @@ const RichTextEditor = ({
   initialValue,
   singleItem,
   allowEdit,
+  editorHeight,
 }) => {
   const editor = useRef(null);
   const [content, setContent] = React.useState(initialValue || "");
@@ -24,6 +25,8 @@ const RichTextEditor = ({
         },
       },
       toolbarAdaptive: false,
+      height: editorHeight || "auto",
+      minHeight: editorHeight || "30vh",
       readonly:
         singleItem?.remarks === "1" ||
         singleItem?.remarks === "3" ||
@@ -84,7 +87,7 @@ const RichTextEditor = ({
         "brush",
       ],
     }),
-    [singleItem?.remarks, allowEdit]
+    [singleItem?.remarks, allowEdit, editorHeight]
   );
 
   React.useEffect(() => {

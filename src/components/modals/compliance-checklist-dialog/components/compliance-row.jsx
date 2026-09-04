@@ -1,5 +1,4 @@
 import React from "react";
-import RichTextEditor from "./TextEditor";
 import ObservationFileUpload from "./ObservationFileUpload";
 import { CircularProgress } from "@mui/material";
 
@@ -7,12 +6,15 @@ const ComplianceRow = ({
   index,
   singleItem,
   handleChange,
-  onContentChange,
+  onViewObservation,
+  observationLoadingId,
   allowEdit,
   setCurrentDeleteFileId,
   onFileUploaded,
   onFileDeleted,
 }) => {
+  const isObservationLoading = Number(observationLoadingId) === Number(singleItem?.id);
+
   return (
     <tr>
       <td>{index + 1}</td>
@@ -37,12 +39,20 @@ const ComplianceRow = ({
       </td>
 
       <td>
-        <RichTextEditor
-          initialValue={singleItem?.observation}
-          onContentChange={onContentChange}
-          singleItem={singleItem}
-          allowEdit={allowEdit}
-        />
+        <button
+          type="button"
+          className="btn btn-primary btn-sm"
+          onClick={() => onViewObservation(singleItem)}
+          disabled={isObservationLoading}
+        >
+          {isObservationLoading ? (
+            <span className="d-flex align-items-center gap-2">
+              <CircularProgress size={14} color="inherit" /> Loading...
+            </span>
+          ) : (
+            "View Observation"
+          )}
+        </button>
       </td>
 
       <td>
