@@ -8,6 +8,7 @@ import AuditeeSection from "./AuditeeSection";
 import ManagementCommentsSection from "./ManagementCommentsSection";
 import FollowUpSection from "./FollowUpSection";
 import ActionButtons from "./ActionButtons";
+import AuditEngagementAttachments from "../../../reporting/reporting-particulars/component/audit-engagement-attachments/AuditEngagementAttachments";
 
 const AccordianItem = ({
   index,
@@ -76,6 +77,8 @@ const AccordianItem = ({
                 <ImplicationSection item={item} />
 
                 <AuditeeSection item={item} />
+
+                <AuditEngagementAttachments item={item} user={user} />
 
                 <ManagementCommentsSection item={item} />
 

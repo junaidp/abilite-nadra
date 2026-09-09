@@ -1,8 +1,8 @@
 .fileObservationCol {
-  width: 40vw !important;
-  overflow-x: scroll;
+  width: auto !important;
+  overflow-x: visible;
 }
 
 .fileSubObservationColItem {
-  width: 40vw !important;
+  width: auto !important;
 }

@@ -19,9 +19,11 @@ const DetailedAuditReportLayout = ({
   handleSaveInternalAuditReport,
   addReportLoading,
   handleChangeExtraFields,
-  setDeleteFileId,
   consolidatedObservations,
+  observationsLoading,
   onContentChange,
+  onLoadObservation,
+  loadingObservationId,
 }) => {
   const dispatch = useDispatch();
   const [extraFieldsArray, setExtraFieldsArray] = useState([]);
@@ -126,10 +128,13 @@ const DetailedAuditReportLayout = ({
       </div>
 
       {/* Consolidated Observations Section */}
-      {consolidatedObservations && consolidatedObservations?.length !== 0 && (
+      {(observationsLoading || consolidatedObservations?.length > 0) && (
         <ConsolidatedObservations
           consolidatedObservations={consolidatedObservations}
+          loading={observationsLoading}
           reportObject={reportObject}
+          onLoadObservation={onLoadObservation}
+          loadingObservationId={loadingObservationId}
         />
       )}
 
@@ -160,7 +165,7 @@ const DetailedAuditReportLayout = ({
 
       {/* File upload section */}
       <div className="mt-4">
-        <FileUpload item={reportObject} setDeleteFileId={setDeleteFileId} />
+        <FileUpload item={reportObject} />
       </div>
 
       {/* Save button */}

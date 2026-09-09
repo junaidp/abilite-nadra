@@ -369,12 +369,12 @@ const ComplianceCheckListDialog = ({
                 <table className="table table-bordered table-hover rounded compliance-checklist-table mb-0">
                   <colgroup>
                     <col style={{ width: "48px" }} />
-                    <col style={{ width: "115px" }} />
-                    <col style={{ width: "92px" }} />
+                    <col style={{ width: "120px" }} />
+                    <col style={{ width: "100px" }} />
+                    <col style={{ width: "300px" }} />
+                    <col style={{ width: "170px" }} />
+                    <col style={{ width: "145px" }} />
                     <col style={{ width: "260px" }} />
-                    <col style={{ width: "150px" }} />
-                    <col style={{ width: "140px" }} />
-                    <col style={{ width: "230px" }} />
                   </colgroup>
                   <thead>
                     <tr>

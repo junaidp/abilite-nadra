@@ -144,13 +144,11 @@ const ObservationFileUpload = ({
 
   return (
     <td className="fileObservationCol fileSubObservationColItem">
-      <div className="row mb-3 fileSubObservationColItem">
-        <div className="col-lg-12">
+      <div className="compliance-attachment-cell">
           <label className="form-label me-3 mb-3">Attach files</label>
           {allowEdit === true && (
-            <div className="row mb-3">
-              <div className="col-lg-4 row">
-                <div className="col-lg-12">
+            <div className="compliance-attachment-upload mb-3">
+                <div>
                   <input
                     type="file"
                     id="fileInpu"
@@ -160,7 +158,7 @@ const ObservationFileUpload = ({
                     accept=".xlsx, .xls, .pdf, .txt"
                   />
                 </div>
-                <div className="col-lg-12 mt-4">
+                <div className="mt-3">
                   <button
                     className={`btn btn-labeled btn-primary  shadow ${uploading && "disabled"
                       }`}
@@ -172,12 +170,11 @@ const ObservationFileUpload = ({
                     {uploading ? "Loading..." : "Upload"}
                   </button>
                 </div>
-              </div>
             </div>
           )}
 
-          <div className="table-responsive">
-            <table className="table table-bordered  table-hover rounded">
+          <div className="compliance-attachment-table-wrap">
+            <table className="table table-bordered table-hover rounded mb-0 compliance-attachment-table">
               <thead className="bg-secondary text-white">
                 <tr>
                   <th>Attach Files </th>
@@ -188,7 +185,7 @@ const ObservationFileUpload = ({
                 {!item?.observationsDataAttachmentsList ||
                   item?.observationsDataAttachmentsList?.length == 0 ? (
                   <tr>
-                    <td className="w-300">No Files Added Yet!</td>
+                    <td colSpan="2">No Files Added Yet!</td>
                   </tr>
                 ) : (
                   item?.observationsDataAttachmentsList?.map(
@@ -198,7 +195,7 @@ const ObservationFileUpload = ({
                           <td>
                             <a>{fileItem?.fileName}</a>
                           </td>
-                          <td className="w-130">
+                          <td className="compliance-attachment-actions">
                             <i
                               className={`fa ${downloadingFileId === fileItem?.id
                                 ? "fa-spinner fa-spin"
@@ -224,7 +221,6 @@ const ObservationFileUpload = ({
               </tbody>
             </table>
           </div>
-        </div>
       </div>
     </td>
   );

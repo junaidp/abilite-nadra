@@ -1,79 +1,198 @@
-import React, { useCallback } from "react";
-import Chip from "@mui/material/Chip";
-import FollowUpItem from "./FollowUpItem";
-import LazyLoad from "react-lazyload";
+import React, { useCallback, useRef, useState } from "react";
+import { Skeleton } from "@mui/material";
+import { useSelector } from "react-redux";
+import ObservationSection from "../../../reporting-follow-up/reporting/reporting-particulars/component/observation/Observation";
+import "./ConsolidatedObservations.css";
 
-const ConsolidatedObservataions = ({ consolidatedObservations, reportObject }) => {
-  // Safely find and return sub-location description by ID
+const hasObservationDetails = (observation) =>
+  Boolean(
+    observation?.observationName ||
+      observation?.implication ||
+      observation?.recommendedActionStep ||
+      observation?.managementComments ||
+      observation?.implementationDate ||
+      observation?.implicationRating ||
+      observation?.auditee ||
+      observation?.checklistObservations ||
+      observation?.reportingFileAttachmentsList?.length
+  );
+
+const ObservationListSkeleton = () => (
+  <section className="dar-observations mt-4" aria-busy="true">
+    <Skeleton variant="text" width={150} height={34} />
+    <div className="dar-observation-skeleton-list">
+      {[0, 1, 2].map((item) => (
+        <div className="dar-observation-skeleton" key={item}>
+          <Skeleton variant="text" width="28%" height={22} />
+          <Skeleton variant="rounded" width="100%" height={54} />
+        </div>
+      ))}
+    </div>
+  </section>
+);
+
+const ObservationDetailsSkeleton = () => (
+  <div className="dar-observation-details-skeleton" aria-busy="true">
+    <Skeleton variant="rounded" width="100%" height={42} />
+    <Skeleton variant="rounded" width="100%" height={42} />
+    <Skeleton variant="rounded" width="100%" height={150} />
+    <Skeleton variant="rounded" width="38%" height={42} />
+    <Skeleton variant="rounded" width="100%" height={82} />
+  </div>
+);
+const ConsolidatedObservataions = ({
+  consolidatedObservations,
+  reportObject,
+  onLoadObservation,
+  loadingObservationId,
+  loading = false,
+}) => {
+  const [expandedObservationId, setExpandedObservationId] = useState(null);
+  const loadedObservationIds = useRef(new Set());
+  const loadingObservationIds = useRef(new Set());
+  const [pendingObservationIds, setPendingObservationIds] = useState(new Set());
+  const { user } = useSelector((state) => state?.auth);
+
   const getSubLocationDescription = useCallback(
     (subLocationId) =>
-      reportObject?.subLocationList?.find((s) => s?.id === subLocationId)
-        ?.description || "Unknown Sub-Location",
+      reportObject?.subLocationList?.find(
+        (subLocation) => Number(subLocation?.id) === Number(subLocationId)
+      )?.description || "Unknown Sub-Location",
     [reportObject?.subLocationList]
   );
 
+  const handleToggleObservation = async (observation) => {
+    const observationId = observation?.id;
+    const isCurrentlyExpanded =
+      Number(expandedObservationId) === Number(observationId);
+
+    setExpandedObservationId(isCurrentlyExpanded ? null : observationId);
+
+    if (
+      isCurrentlyExpanded ||
+      hasObservationDetails(observation) ||
+      loadedObservationIds.current.has(observationId) ||
+      loadingObservationIds.current.has(observationId)
+    ) {
+      return;
+    }
+
+    loadingObservationIds.current.add(observationId);
+    setPendingObservationIds((current) => {
+      const next = new Set(current);
+      next.add(observationId);
+      return next;
+    });
+
+    try {
+      await onLoadObservation?.(observationId);
+      loadedObservationIds.current.add(observationId);
+    } catch {
+      // A failed request can be retried the next time this item is opened.
+    } finally {
+      loadingObservationIds.current.delete(observationId);
+      setPendingObservationIds((current) => {
+        const next = new Set(current);
+        next.delete(observationId);
+        return next;
+      });
+    }
+  };
+
+  if (loading) {
+    return <ObservationListSkeleton />;
+  }
+
   return (
-    <div>
-      {/* Section heading */}
-      <div className="col-lg-12 mt-4">
-        <div className="heading fw-bold">Observations</div>
-      </div>
+    <section className="dar-observations mt-4">
+      <h3 className="heading fw-bold mb-3">Observations</h3>
 
-      <div className="mt-3 mb-3">
-        {/* Group by sub-location */}
-        {consolidatedObservations.map((subLocationGroup, idx) => (
-          <div key={idx}>
-            {/* Sub-location title */}
-            <p className="mb-3 consolidatedTitle">
-              {getSubLocationDescription(subLocationGroup.subLocation)}
-            </p>
-
-            {/* Loop through areas in the current sub-location */}
-            {subLocationGroup?.areas?.map((areaGroup, aIdx) => (
-              <div key={aIdx} className="mb-3">
-                {/* Area title */}
-                <p className="mb-3 consolidatedTitle">{areaGroup?.area}</p>
-
-                {/* Observations list */}
-                <div className="border rounded px-3 py-2 mb-3">
-                  {areaGroup.observations.map((observation, oIdx) => (
-                    <LazyLoad
-                      key={oIdx}
-                      height={window.innerHeight * 2}
-                      offset={300}
-                    >
-                      <div>
-                        {/* Chip shows sub-location reference for observation */}
-                        <div className="d-flex items-center justify-content-between">
-                          <div></div>
-                          <Chip
-                            label={
-                              reportObject?.subLocationList?.find(
-                                (subLocation) =>
-                                  subLocation?.id === observation?.subLocation
-                              )?.description
-                            }
-                          />
-                        </div>
-
-                        {/* Observation details with follow-up info */}
-                        <FollowUpItem
-                          item={observation}
-                          consolidatedObservationsItem={true}
-                        />
-
-                        <hr />
-                      </div>
-                    </LazyLoad>
-                  ))}
-                </div>
-                <hr />
+      <div className="dar-observation-groups">
+        {consolidatedObservations.map((subLocationGroup) =>
+          subLocationGroup?.areas?.map((areaGroup) => (
+            <section
+              className="dar-observation-group"
+              key={`${subLocationGroup.subLocation}-${areaGroup?.area}`}
+            >
+              <div className="dar-observation-group-heading">
+                <span>{areaGroup?.area || "General"}</span>
+                <span className="dar-observation-count">
+                  {areaGroup?.observations?.length || 0} observation
+                  {areaGroup?.observations?.length === 1 ? "" : "s"}
+                </span>
               </div>
-            ))}
-          </div>
-        ))}
+
+              <div className="dar-observation-list">
+                {areaGroup?.observations?.map((observation) => {
+                  const isExpanded =
+                    Number(expandedObservationId) === Number(observation?.id);
+                  const isLoading =
+                    pendingObservationIds.has(observation?.id) ||
+                    Number(loadingObservationId) === Number(observation?.id);
+                  const panelId = `dar-observation-panel-${observation?.id}`;
+
+                  return (
+                    <article
+                      className={`dar-observation-accordion${
+                        isExpanded ? " is-expanded" : ""
+                      }`}
+                      key={observation?.id || observation?.observationTitle}
+                    >
+                      <button
+                        type="button"
+                        className="dar-observation-trigger"
+                        onClick={() => handleToggleObservation(observation)}
+                        aria-expanded={isExpanded}
+                        aria-controls={panelId}
+                      >
+                        <span className="dar-observation-title">
+                          {observation?.observationTitle || "Observation"}
+                        </span>
+
+                        <span className="dar-observation-trigger-meta">
+                          <span className="dar-observation-location">
+                            {getSubLocationDescription(observation?.subLocation)}
+                          </span>
+                          <i
+                            className="fa fa-chevron-down dar-observation-chevron"
+                            aria-hidden="true"
+                          />
+                        </span>
+                      </button>
+
+                      <div
+                        id={panelId}
+                        className="dar-observation-panel"
+                        aria-hidden={!isExpanded}
+                      >
+                        <div className="dar-observation-panel-inner">
+                          <div className="dar-observation-body">
+                            {isLoading ? (
+                              <ObservationDetailsSkeleton />
+                            ) : hasObservationDetails(observation) ? (
+                              <ObservationSection
+                                item={observation}
+                                user={user}
+                                currentItem={observation}
+                                readOnly
+                              />
+                            ) : (
+                              <p className="text-muted mb-0">
+                                No observation details found.
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+            </section>
+          ))
+        )}
       </div>
-    </div>
+    </section>
   );
 };
 

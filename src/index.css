@@ -1216,3 +1216,40 @@ span[aria-label="Insert Ordered List"] .jodit-toolbar-button__trigger {
     max-width: 72vw;
   }
 }
+.compliance-checklist-table th:nth-child(7),
+.compliance-checklist-table td:nth-child(7) {
+  width: 260px;
+}
+
+.compliance-attachment-cell {
+  width: 100%;
+  min-width: 0;
+}
+
+.compliance-attachment-upload,
+.compliance-attachment-table-wrap {
+  width: 100%;
+}
+
+.compliance-attachment-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.compliance-attachment-table th:first-child,
+.compliance-attachment-table td:first-child {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.compliance-attachment-table th:last-child,
+.compliance-attachment-table td:last-child {
+  width: 68px;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.compliance-attachment-table a {
+  display: block;
+  overflow-wrap: anywhere;
+}

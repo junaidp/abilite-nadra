@@ -5,6 +5,8 @@ import {
 } from "../../../../../global-redux/reducers/common/slice";
 import {
   setupGetSingleInternalAuditReport,
+  setupGetDetailedReportSourceLite,
+  setupGetDetailedReportSingleObservation,
   handleResetData,
 } from "../../../../../global-redux/reducers/reports/consolidation-report/slice";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,7 +16,7 @@ import ReportFirstLayout from "../components/ReportFirstLayout";
 import RichTextFields from "./components/RichTextElements";
 import AuditExtraFields from "./components/AuditExtraFields";
 import Header from "../components/Header";
-import FileUpload from "./components/FileUpload";
+import FileUpload from "../components/FileUpload";
 import ConsolidatedObservations from "../components/ConsolidatedObservataions";
 import { groupObservationsBySubLocationAndArea, decryptString } from "../../../../../config/helper";
 
@@ -24,13 +26,18 @@ const ViewDetailedAuditReport = () => {
   const { id } = useParams();
   const reportId = useMemo(() => decryptString(id), [id]); // ✅ memoize decryption
 
-  const [consolidatedObservations, setConsolidatedObservations] = useState([]);
+
+  const [loadingObservationId, setLoadingObservationId] = useState(null);
 
   // Redux state selectors
   const { user } = useSelector((state) => state?.auth);
-  const { loading, singleInternalAuditReport } = useSelector(
-    (state) => state?.consolidationReport
-  );
+  const {
+    loading,
+    singleInternalAuditReport,
+    detailedReportSource,
+    detailedReportSourceLoading,
+    detailedReportObservationLoading,
+  } = useSelector((state) => state?.consolidationReport);
 
   // ✅ Redirect if reportId is missing
   useEffect(() => {
@@ -57,14 +64,49 @@ const ViewDetailedAuditReport = () => {
     }
   }, [dispatch, user, reportId]);
 
-  // ✅ Recompute grouped observations when report data changes
   useEffect(() => {
-    if (singleInternalAuditReport?.reportingsList) {
-      setConsolidatedObservations(
-        groupObservationsBySubLocationAndArea(singleInternalAuditReport.reportingsList)
+    if (singleInternalAuditReport?.reportingAndFollowUpId) {
+      dispatch(
+        setupGetDetailedReportSourceLite({
+          reportingAndFollowUpId: Number(singleInternalAuditReport.reportingAndFollowUpId),
+        })
       );
     }
-  }, [singleInternalAuditReport]);
+  }, [dispatch, singleInternalAuditReport?.reportingAndFollowUpId]);
+
+  const handleLoadObservation = React.useCallback(
+    async (reportingId) => {
+      const existingObservation = detailedReportSource?.reportingList?.find(
+        (item) => Number(item?.id) === Number(reportingId)
+      );
+
+      if (existingObservation?.observationName || existingObservation?.implication) {
+        return;
+      }
+
+      setLoadingObservationId(reportingId);
+      try {
+        const response = await dispatch(
+          setupGetDetailedReportSingleObservation({ reportingId })
+        ).unwrap();
+        if (!response?.status) {
+          throw new Error(response?.message || "Failed to load observation");
+        }
+        return response;
+      } finally {
+        setLoadingObservationId(null);
+      }
+    },
+    [dispatch, detailedReportSource?.reportingList]
+  );
+
+  const consolidatedObservations = useMemo(
+    () =>
+      detailedReportSource?.reportingList?.length
+        ? groupObservationsBySubLocationAndArea(detailedReportSource.reportingList)
+        : [],
+    [detailedReportSource?.reportingList]
+  );
 
   // ✅ Memoize error state to avoid recalculating in render
   const isNotFound = useMemo(() => {
@@ -96,10 +138,13 @@ const ViewDetailedAuditReport = () => {
           <RichTextFields singleInternalAuditReport={singleInternalAuditReport} />
 
           {/* Consolidated Observations */}
-          {consolidatedObservations?.length > 0 && (
+          {(detailedReportSourceLoading || consolidatedObservations.length > 0) && (
             <ConsolidatedObservations
               consolidatedObservations={consolidatedObservations}
+              loading={detailedReportSourceLoading}
               reportObject={singleInternalAuditReport}
+              onLoadObservation={handleLoadObservation}
+              loadingObservationId={detailedReportObservationLoading ? loadingObservationId : null}
             />
           )}
 
@@ -110,7 +155,7 @@ const ViewDetailedAuditReport = () => {
 
           {/* File Upload Section */}
           <div className="mt-4">
-            <FileUpload item={singleInternalAuditReport} />
+            <FileUpload item={singleInternalAuditReport} readOnly />
           </div>
         </div>
       )}

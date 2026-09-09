@@ -35,7 +35,39 @@ export const saveInternalAuditReport = async (data, thunkAPI) => {
     return thunkAPI.rejectWithValue(error);
   }
 };
+export const getDetailedReportSourceLite = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.get(
+      `${baseUrl}/reportingAndFollowUp/getLite?reportingAndFollowUpId=${data?.reportingAndFollowUpId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
 
+export const getDetailedReportSingleObservation = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    let props = await axios.get(
+      `${baseUrl}/reportingAndFollowUp/singleObservation?reportingId=${data?.reportingId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
 export const submitInternalAuditReport = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
@@ -270,24 +302,6 @@ export const consolidationFileDelete = async (data, thunkAPI) => {
   }
 };
 
-export const consolidationFileUpdate = async (data, thunkAPI) => {
-  try {
-    const { user } = thunkAPI.getState().auth;
-    let props = await axios.post(
-      `${baseUrl}/consolidatedReports/ConsolidatedIARAnnexureUploads/update?fileId=${data?.id}`,
-      data?.formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${user[0]?.token}`,
-        },
-      }
-    );
-    return props.data;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
-  }
-};
 
 export const downloadDetailedAuditReport = async (data, thunkAPI) => {
   try {
@@ -318,4 +332,3 @@ export const downloadDetailedAuditReport = async (data, thunkAPI) => {
     return thunkAPI.rejectWithValue(error);
   }
 };
-

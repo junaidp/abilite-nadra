@@ -1,0 +1,215 @@
+.dar-report-attachments {
+  overflow: hidden;
+  margin-bottom: 20px;
+  border: 1px solid #d8e0e3;
+  border-radius: 6px;
+  background: #ffffff;
+  box-shadow: 0 3px 10px rgba(28, 45, 53, 0.06);
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.dar-report-attachments:hover,
+.dar-report-attachments.is-open {
+  border-color: #b7c8ce;
+  box-shadow: 0 5px 14px rgba(28, 45, 53, 0.1);
+}
+
+.dar-report-attachments__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  width: 100%;
+  min-height: 54px;
+  padding: 12px 16px;
+  border: 0;
+  background: #f7f9fa;
+  color: #20272b;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 180ms ease;
+}
+
+.dar-report-attachments__trigger:hover,
+.dar-report-attachments__trigger:focus-visible,
+.dar-report-attachments.is-open .dar-report-attachments__trigger {
+  background: #f0f5f6;
+}
+
+.dar-report-attachments__trigger:focus-visible {
+  outline: 2px solid #0a7386;
+  outline-offset: -2px;
+}
+
+.dar-report-attachments__title,
+.dar-report-attachments__summary {
+  display: inline-flex;
+  align-items: center;
+}
+
+.dar-report-attachments__title {
+  min-width: 0;
+  color: #000000;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.dar-report-attachments__summary {
+  flex: 0 0 auto;
+  gap: 14px;
+}
+
+.dar-report-attachments__count {
+  min-width: 25px;
+  padding: 3px 7px;
+  border: 1px solid #d6dde0;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #424b50;
+  font-size: 11px;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.dar-report-attachments__chevron {
+  font-size: 13px;
+  transition: transform 260ms ease;
+}
+
+.dar-report-attachments.is-open .dar-report-attachments__chevron {
+  transform: rotate(180deg);
+}
+
+.dar-report-attachments__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 280ms ease, opacity 180ms ease;
+}
+
+.dar-report-attachments.is-open .dar-report-attachments__panel {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.dar-report-attachments__panel-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.dar-report-attachments__body {
+  padding: 16px;
+  border-top: 1px solid #e1e6e8;
+}
+
+.dar-report-attachments__upload {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-bottom: 16px;
+}
+
+.dar-report-attachments__upload input {
+  min-width: 220px;
+  max-width: 100%;
+}
+
+.dar-report-attachments__list {
+  border: 1px solid #e1e6e8;
+  border-radius: 4px;
+}
+
+.dar-report-attachments__file {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 50px;
+  padding: 9px 12px;
+}
+
+.dar-report-attachments__file + .dar-report-attachments__file {
+  border-top: 1px solid #edf0f1;
+}
+
+.dar-report-attachments__filename {
+  min-width: 0;
+  color: #30383d;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.dar-report-attachments__actions {
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 8px;
+}
+
+.dar-report-attachments__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid #bed0d5;
+  border-radius: 4px;
+  background: #ffffff;
+  color: #0a7386;
+  cursor: pointer;
+  transition: background-color 160ms ease, color 160ms ease;
+}
+
+.dar-report-attachments__action:hover,
+.dar-report-attachments__action:focus-visible {
+  background: #0a7386;
+  color: #ffffff;
+}
+
+.dar-report-attachments__action.is-delete {
+  border-color: #efc6ca;
+  color: #dc3545;
+}
+
+.dar-report-attachments__action.is-delete:hover,
+.dar-report-attachments__action.is-delete:focus-visible {
+  background: #dc3545;
+  color: #ffffff;
+}
+
+.dar-report-attachments__action:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.dar-report-attachments__action:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.dar-report-attachments__empty {
+  padding: 12px;
+  border: 1px dashed #d8e0e3;
+  border-radius: 4px;
+  color: #60696e;
+  font-size: 12px;
+}
+
+@media (max-width: 575px) {
+  .dar-report-attachments__trigger,
+  .dar-report-attachments__body {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .dar-report-attachments__upload {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .dar-report-attachments__upload input,
+  .dar-report-attachments__upload .btn {
+    width: 100%;
+  }
+}

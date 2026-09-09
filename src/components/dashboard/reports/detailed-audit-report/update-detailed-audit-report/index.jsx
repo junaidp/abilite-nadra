@@ -10,13 +10,14 @@ import {
   handleResetData,
   setupSaveInternalAuditReport,
   resetInternalAuditReportAddSuccess,
-  resetFileUploadAddSuccess,
-  setupGetSingleInternalAuditReportAfterSave,
+  setupGetDetailedReportSourceLite,
+  setupGetDetailedReportSingleObservation,
 } from "../../../../../global-redux/reducers/reports/consolidation-report/slice";
 import { CircularProgress } from "@mui/material";
 import DetailedAuditReportLayout from "../components/DetailedAuditReportLayout";
 import Header from "../components/Header";
 import { groupObservationsBySubLocationAndArea, decryptString } from "../../../../../config/helper";
+import { buildDetailedAuditReportSavePayload } from "../components/reportPayload";
 
 const UpdateDetailedAuditReport = () => {
   const dispatch = useDispatch();
@@ -28,8 +29,8 @@ const UpdateDetailedAuditReport = () => {
 
   // Local state
   const [reportObject, setReportObject] = React.useState({});
-  const [deleteFileId, setDeleteFileId] = React.useState("");
-  const [consolidatedObservations, setConsolidatedObservations] = React.useState([]);
+
+  const [loadingObservationId, setLoadingObservationId] = React.useState(null);
 
   // Redux state
   const { user } = useSelector((state) => state?.auth);
@@ -39,8 +40,17 @@ const UpdateDetailedAuditReport = () => {
     addReportLoading,
     internalAuditReportExtraFieldsObject,
     singleInternalAuditReport,
-    consolidationFileUploadAddSuccess,
+    detailedReportSource,
+    detailedReportSourceLoading,
+    detailedReportObservationLoading,
   } = useSelector((state) => state?.consolidationReport);
+  const consolidatedObservations = React.useMemo(
+    () =>
+      detailedReportSource?.reportingList?.length
+        ? groupObservationsBySubLocationAndArea(detailedReportSource.reportingList)
+        : [],
+    [detailedReportSource?.reportingList]
+  );
 
   /** -------------------------------
    * Handlers
@@ -72,7 +82,7 @@ const UpdateDetailedAuditReport = () => {
 
   const handleSaveInternalAuditReport = () => {
     if (!addReportLoading) {
-      dispatch(setupSaveInternalAuditReport(reportObject));
+      dispatch(setupSaveInternalAuditReport(buildDetailedAuditReportSavePayload(reportObject)));
     }
   };
 
@@ -80,31 +90,12 @@ const UpdateDetailedAuditReport = () => {
    * Effects
    * ------------------------------- */
 
-  // When report is approved/added, refetch updated object
   React.useEffect(() => {
     if (internalAuditReportAddSuccess) {
       dispatch(resetInternalAuditReportAddSuccess());
-      dispatch(
-        setupGetSingleInternalAuditReportAfterSave(`?reportId=${Number(reportId)}`)
-      );
     }
-  }, [internalAuditReportAddSuccess]);
+  }, [dispatch, internalAuditReportAddSuccess]);
 
-  // Handle annexure file deletion
-  React.useEffect(() => {
-    if (consolidationFileUploadAddSuccess) {
-      dispatch(resetFileUploadAddSuccess());
-      dispatch(
-        setupSaveInternalAuditReport({
-          ...reportObject,
-          annexureUploads: reportObject?.annexureUploads?.filter(
-            (file) => file?.id !== deleteFileId
-          ),
-        })
-      );
-      setDeleteFileId("");
-    }
-  }, [consolidationFileUploadAddSuccess]);
 
   // Sync main report into local state
   React.useEffect(() => {
@@ -114,21 +105,16 @@ const UpdateDetailedAuditReport = () => {
     }
   }, [singleInternalAuditReport]);
 
-  // Sync extra fields into local state
+  // Merge the lightweight extra-field response without dropping report data.
   React.useEffect(() => {
-    const hasExtraFields = Object.keys(internalAuditReportExtraFieldsObject).length !== 0;
-    if (hasExtraFields) {
+    const extraFields =
+      internalAuditReportExtraFieldsObject?.intAuditExtraFieldsList;
+
+    if (Array.isArray(extraFields)) {
       setReportObject((prev) => ({
-        ...internalAuditReportExtraFieldsObject,
-        // Keep some values from previous state
-        reportName: prev?.reportName,
-        reportDate: prev?.reportDate,
-        executiveSummary: prev?.executiveSummary,
-        auditPurpose: prev?.auditPurpose,
-        annexure: prev?.annexure,
-        consolidatedIARKeyFindingsList: prev?.consolidatedIARKeyFindingsList,
-        annexureUploads: prev?.annexureUploads,
-        summaryOfKeyFindingsList: prev?.summaryOfKeyFindingsList,
+        ...prev,
+        id: internalAuditReportExtraFieldsObject?.id || prev?.id,
+        intAuditExtraFieldsList: extraFields,
       }));
     }
   }, [internalAuditReportExtraFieldsObject]);
@@ -156,14 +142,42 @@ const UpdateDetailedAuditReport = () => {
     }
   }, [dispatch]);
 
-  // Build consolidated observations
+
   React.useEffect(() => {
-    if (singleInternalAuditReport?.reportingsList) {
-      setConsolidatedObservations(
-        groupObservationsBySubLocationAndArea(singleInternalAuditReport?.reportingsList)
+    if (singleInternalAuditReport?.reportingAndFollowUpId) {
+      dispatch(
+        setupGetDetailedReportSourceLite({
+          reportingAndFollowUpId: Number(singleInternalAuditReport.reportingAndFollowUpId),
+        })
       );
     }
-  }, [singleInternalAuditReport]);
+  }, [dispatch, singleInternalAuditReport?.reportingAndFollowUpId]);
+
+  const handleLoadObservation = React.useCallback(
+    async (reportingId) => {
+      const existingObservation = detailedReportSource?.reportingList?.find(
+        (item) => Number(item?.id) === Number(reportingId)
+      );
+
+      if (existingObservation?.observationName || existingObservation?.implication) {
+        return;
+      }
+
+      setLoadingObservationId(reportingId);
+      try {
+        const response = await dispatch(
+          setupGetDetailedReportSingleObservation({ reportingId })
+        ).unwrap();
+        if (!response?.status) {
+          throw new Error(response?.message || "Failed to load observation");
+        }
+        return response;
+      } finally {
+        setLoadingObservationId(null);
+      }
+    },
+    [dispatch, detailedReportSource?.reportingList]
+  );
 
   /** -------------------------------
    * Render
@@ -184,9 +198,11 @@ const UpdateDetailedAuditReport = () => {
             handleSaveInternalAuditReport={handleSaveInternalAuditReport}
             addReportLoading={addReportLoading}
             handleChangeExtraFields={handleChangeExtraFields}
-            setDeleteFileId={setDeleteFileId}
             consolidatedObservations={consolidatedObservations}
+            observationsLoading={detailedReportSourceLoading}
             onContentChange={onContentChange}
+            onLoadObservation={handleLoadObservation}
+            loadingObservationId={detailedReportObservationLoading ? loadingObservationId : null}
           />
         </div>
       )}

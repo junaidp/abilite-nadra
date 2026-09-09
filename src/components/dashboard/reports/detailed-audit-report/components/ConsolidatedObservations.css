@@ -1,0 +1,175 @@
+.dar-observation-groups {
+  display: grid;
+  gap: 22px;
+}
+
+.dar-observation-group {
+  min-width: 0;
+}
+
+.dar-observation-group-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 10px;
+  color: #252a2e;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.dar-observation-count {
+  color: #6c747a;
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.dar-observation-list {
+  display: grid;
+  gap: 10px;
+}
+
+.dar-observation-accordion {
+  overflow: hidden;
+  border: 1px solid #d9dfe3;
+  border-radius: 6px;
+  background: #ffffff;
+  box-shadow: 0 3px 10px rgba(28, 45, 53, 0.06);
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.dar-observation-accordion:hover,
+.dar-observation-accordion.is-expanded {
+  border-color: #b9c8ce;
+  box-shadow: 0 5px 14px rgba(28, 45, 53, 0.1);
+}
+
+.dar-observation-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  min-height: 54px;
+  padding: 13px 16px;
+  border: 0;
+  background: #ffffff;
+  color: #171b1e;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 180ms ease;
+}
+
+.dar-observation-trigger:hover,
+.dar-observation-trigger:focus-visible,
+.dar-observation-accordion.is-expanded .dar-observation-trigger {
+  background: #f6f8f9;
+}
+
+.dar-observation-trigger:focus-visible {
+  outline: 2px solid #0a7386;
+  outline-offset: -2px;
+}
+
+.dar-observation-title {
+  min-width: 0;
+  color: #0a7386;
+  font-size: 13px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.dar-observation-trigger-meta {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 14px;
+}
+
+.dar-observation-location {
+  max-width: 220px;
+  padding: 5px 11px;
+  overflow: hidden;
+  border-radius: 16px;
+  background: #eef0f1;
+  color: #2e3438;
+  font-size: 11px;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dar-observation-chevron {
+  color: #20272b;
+  font-size: 14px;
+  transition: transform 260ms ease;
+}
+
+.dar-observation-accordion.is-expanded .dar-observation-chevron {
+  transform: rotate(180deg);
+}
+
+.dar-observation-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 280ms ease, opacity 180ms ease;
+}
+
+.dar-observation-accordion.is-expanded .dar-observation-panel {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.dar-observation-panel-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.dar-observation-body {
+  padding: 18px 16px;
+  border-top: 1px solid #e2e6e8;
+}
+
+.dar-observation-loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 50px;
+  color: #60696e;
+  font-size: 12px;
+}
+
+@media (max-width: 767px) {
+  .dar-observation-trigger {
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .dar-observation-trigger-meta {
+    gap: 9px;
+  }
+
+  .dar-observation-location {
+    max-width: 110px;
+  }
+
+  .dar-observation-body {
+    padding: 14px 12px;
+  }
+}
+.dar-observation-skeleton-list,
+.dar-observation-details-skeleton {
+  display: grid;
+  gap: 14px;
+}
+
+.dar-observation-skeleton {
+  display: grid;
+  gap: 8px;
+}
+
+.dar-observation-details-skeleton {
+  padding: 2px 0;
+}
