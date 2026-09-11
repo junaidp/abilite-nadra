@@ -46,6 +46,7 @@ const ConsolidatedObservataions = ({
   onLoadObservation,
   loadingObservationId,
   loading = false,
+  heading = "Observations",
 }) => {
   const [expandedObservationId, setExpandedObservationId] = useState(null);
   const loadedObservationIds = useRef(new Set());
@@ -105,7 +106,7 @@ const ConsolidatedObservataions = ({
 
   return (
     <section className="dar-observations mt-4">
-      <h3 className="heading fw-bold mb-3">Observations</h3>
+      <h3 className="heading fw-bold mb-3">{heading}</h3>
 
       <div className="dar-observation-groups">
         {consolidatedObservations.map((subLocationGroup) =>

@@ -32,6 +32,39 @@ export const saveInternalAuditReport = async (data, thunkAPI) => {
   }
 };
 
+export const getInternalReportSourceLite = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    const props = await axios.get(
+      `${baseUrl}/reportingAndFollowUp/getLite?reportingAndFollowUpId=${data?.reportingAndFollowUpId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
+export const getInternalReportSingleObservation = async (data, thunkAPI) => {
+  try {
+    const { user } = thunkAPI.getState().auth;
+    const props = await axios.get(
+      `${baseUrl}/reportingAndFollowUp/singleObservation?reportingId=${data?.reportingId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${user[0]?.token}`,
+        },
+      }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
 export const updateInternalAuditReport = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
@@ -68,27 +101,6 @@ export const deleteInternalAuditReport = async (data, thunkAPI) => {
 };
 
 export const getSingleInternalAuditReport = async (data, thunkAPI) => {
-  try {
-    const { user } = thunkAPI.getState().auth;
-    let props = await axios.post(
-      `${baseUrl}/internalauditreport/report/detail${data}`,
-      null,
-      {
-        headers: {
-          Authorization: `Bearer ${user[0]?.token}`,
-        },
-      }
-    );
-    return props.data;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
-  }
-};
-
-export const getSingleInternalAuditReportAfterReportSave = async (
-  data,
-  thunkAPI
-) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
@@ -205,25 +217,6 @@ export const iahFileDelete = async (data, thunkAPI) => {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.delete(
       `${baseUrl}/internalauditreport/IARAnnexureUploads/delete?fileId=${data?.fileId}&internalauditreportId=${data?.id}`,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${user[0]?.token}`,
-        },
-      }
-    );
-    return props.data;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
-  }
-};
-
-export const iahFileUpdate = async (data, thunkAPI) => {
-  try {
-    const { user } = thunkAPI.getState().auth;
-    let props = await axios.post(
-      `${baseUrl}/internalauditreport/IARAnnexureUploads/update?fileId=${data?.id}`,
-      data?.formData,
       {
         headers: {
           "Content-Type": "multipart/form-data",

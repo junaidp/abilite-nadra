@@ -1,274 +1,238 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { useSelector, useDispatch } from "react-redux";
 import {
-    setupIahFileUpload,
-    setupIahFileDelete,
-    setupIahFileUpdate,
+  setupIahFileDelete,
+  setupIahFileUpload,
 } from "../../../../../global-redux/reducers/reports/internal-audit-report/slice";
 import { handleDownload, validateFile } from "../../../../../config/helper";
+import "../../detailed-audit-report/components/ReportFileAttachments.css";
 
-/**
- * FileUpload Component
- * ---------------------
- * Handles uploading, updating, downloading, and deleting files
- * associated with an internal audit report.
- * 
- * - Uses Redux actions for API calls.
- * - Prevents duplicate actions while loading.
- * - Restricts file deletion to IAH (Head of Internal Audit) users only.
- */
-const FileUpload = ({ item, setDeleteFileId }) => {
-    const dispatch = useDispatch();
+const FileInput = React.memo(({ onChange, inputRef }) => (
+  <input
+    type="file"
+    className="f-10"
+    ref={inputRef}
+    onChange={onChange}
+    accept=".xlsx, .xls, .pdf, .txt"
+  />
+));
 
-    // ✅ Redux states
-    const { addReportLoading, iahFileUploadSuccess } = useSelector(
-        (state) => state?.internalAuditReport
-    );
-    const { user } = useSelector((state) => state?.auth);
+const FileUpload = ({
+  item,
+  readOnly = false,
+  onAttachmentsChange,
+}) => {
+  const dispatch = useDispatch();
+  const { fileActionLoading } = useSelector(
+    (state) => state?.internalAuditReport
+  );
+  const { user } = useSelector((state) => state?.auth);
+  const fileInputRef = useRef(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const uploads = item?.annexureUploads || [];
+  const panelId = `iar-report-attachments-${item?.id || "report"}`;
 
-    // ✅ Refs for clearing file inputs after success
-    const fileInputRef = useRef(null);
-    const updatedFileInputRef = useRef(null);
+  const clearSelectedFile = useCallback(() => {
+    setSelectedFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  }, []);
 
-    // ✅ Local state
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [selectedUpdateFile, setSelectedUpdateFile] = useState(null);
+  const handleFileChange = useCallback(
+    async (event) => {
+      const file = event.target.files?.[0];
+      if (!file) return;
 
-    const clearSelectedFile = useCallback(() => {
-        setSelectedFile(null);
-        if (fileInputRef.current) fileInputRef.current.value = "";
-    }, []);
+      const isValid = await validateFile(file, toast);
+      if (isValid) {
+        setSelectedFile(file);
+      } else {
+        clearSelectedFile();
+      }
+    },
+    [clearSelectedFile]
+  );
 
-    const clearSelectedUpdateFile = useCallback(() => {
-        setSelectedUpdateFile(null);
-        if (updatedFileInputRef.current) updatedFileInputRef.current.value = "";
-    }, []);
+  const handleFileUpload = useCallback(async () => {
+    if (!selectedFile) {
+      toast.error("No file selected.");
+      return;
+    }
 
-    /** 
-     * Handle selecting new file for upload 
-     */
-    const handleFileChange = useCallback(async (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const isValid = await validateFile(file, toast);
-            if (isValid) {
-                setSelectedFile(file);
-            } else {
-                clearSelectedFile();
-            }
+    const isValid = await validateFile(selectedFile, toast);
+    if (!isValid) {
+      clearSelectedFile();
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+
+    try {
+      const response = await dispatch(
+        setupIahFileUpload({ formData, id: item?.id })
+      ).unwrap();
+
+      if (
+        response?.status &&
+        Array.isArray(response?.data?.annexureUploads)
+      ) {
+        onAttachmentsChange?.(response.data.annexureUploads);
+        clearSelectedFile();
+      }
+    } catch {
+      // The rejected thunk displays the API error.
+    }
+  }, [
+    clearSelectedFile,
+    dispatch,
+    item?.id,
+    onAttachmentsChange,
+    selectedFile,
+  ]);
+
+  const handleDelete = useCallback(
+    async (fileId) => {
+      if (fileActionLoading) return;
+
+      if (user?.[0]?.userId?.employeeid?.userHierarchy !== "IAH") {
+        toast.error("Only the Head of Internal Audit can delete a file.");
+        return;
+      }
+
+      try {
+        const response = await dispatch(
+          setupIahFileDelete({
+            fileId: Number(fileId),
+            id: Number(item?.id),
+          })
+        ).unwrap();
+
+        if (response?.status) {
+          onAttachmentsChange?.(
+            uploads.filter((file) => Number(file?.id) !== Number(fileId))
+          );
         }
-    }, [clearSelectedFile]);
+      } catch {
+        // The rejected thunk displays the API error.
+      }
+    },
+    [
+      dispatch,
+      fileActionLoading,
+      item?.id,
+      onAttachmentsChange,
+      uploads,
+      user,
+    ]
+  );
 
-    /** 
-     * Handle selecting file for update 
-     */
-    const handleUpdateFileChange = useCallback(async (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const isValid = await validateFile(file, toast);
-            if (isValid) {
-                setSelectedUpdateFile(file);
-            } else {
-                clearSelectedUpdateFile();
-            }
-        }
-    }, [clearSelectedUpdateFile]);
+  return (
+    <section className={`dar-report-attachments${isOpen ? " is-open" : ""}`}>
+      <button
+        type="button"
+        className="dar-report-attachments__trigger"
+        onClick={() => setIsOpen((current) => !current)}
+        aria-expanded={isOpen}
+        aria-controls={panelId}
+      >
+        <span className="dar-report-attachments__title">
+          Report File Attachments
+        </span>
+        <span className="dar-report-attachments__summary">
+          <span className="dar-report-attachments__count">{uploads.length}</span>
+          <i
+            className="fa fa-chevron-down dar-report-attachments__chevron"
+            aria-hidden="true"
+          />
+        </span>
+      </button>
 
-    /**
-     * Upload selected file via API
-     */
-    const onApiCall = useCallback(
-        async (file) => {
-            if (!addReportLoading && file) {
-                const formData = new FormData();
-                formData.append("file", file);
-                dispatch(setupIahFileUpload({ formData, id: item?.id }));
-            }
-        },
-        [dispatch, addReportLoading, item?.id]
-    );
+      <div
+        id={panelId}
+        className="dar-report-attachments__panel"
+        aria-hidden={!isOpen}
+      >
+        <div className="dar-report-attachments__panel-inner">
+          <div className="dar-report-attachments__body">
+            {!readOnly && (
+              <div className="dar-report-attachments__upload">
+                <FileInput
+                  inputRef={fileInputRef}
+                  onChange={handleFileChange}
+                />
+                <button
+                  type="button"
+                  className="btn btn-labeled btn-primary shadow"
+                  disabled={fileActionLoading}
+                  onClick={handleFileUpload}
+                >
+                  <span className="btn-label me-2">
+                    <i className="fa fa-save" aria-hidden="true" />
+                  </span>
+                  {fileActionLoading ? "Loading..." : "Upload"}
+                </button>
+              </div>
+            )}
 
-    /**
-     * Trigger upload for selected file
-     */
-    const handleFileUpload = useCallback(async () => {
-        if (selectedFile) {
-            const isValid = await validateFile(selectedFile, toast);
-            if (!isValid) {
-                clearSelectedFile();
-                return;
-            }
-            onApiCall(selectedFile);
-        } else toast.error("No file selected.");
-    }, [selectedFile, onApiCall, clearSelectedFile]);
-
-    /**
-     * Update existing uploaded file
-     */
-    const updateFileApiCall = useCallback(
-        async (file, id) => {
-            if (!addReportLoading && file) {
-                const formData = new FormData();
-                formData.append("file", file);
-                dispatch(setupIahFileUpdate({ formData, id: Number(id) }));
-            }
-        },
-        [dispatch, addReportLoading]
-    );
-
-    const handleFileUpdate = useCallback(
-        async (id) => {
-            if (selectedUpdateFile) {
-                const isValid = await validateFile(selectedUpdateFile, toast);
-                if (!isValid) {
-                    clearSelectedUpdateFile();
-                    return;
-                }
-                updateFileApiCall(selectedUpdateFile, id);
-            } else {
-                toast.error("Please select an update file before proceeding.");
-            }
-        },
-        [selectedUpdateFile, updateFileApiCall, clearSelectedUpdateFile]
-    );
-
-    /**
-     * Reset inputs after successful upload
-     */
-    useEffect(() => {
-        if (iahFileUploadSuccess) {
-            setSelectedFile(null);
-            setSelectedUpdateFile(null);
-            if (fileInputRef.current) fileInputRef.current.value = "";
-            if (updatedFileInputRef.current) updatedFileInputRef.current.value = "";
-        }
-    }, [iahFileUploadSuccess]);
-
-    /**
-     * Render table rows for attached files
-     */
-    const renderFileRows = useCallback(() => {
-        if (!item?.annexureUploads || item?.annexureUploads.length === 0) {
-            return (
-                <tr>
-                    <td className="w-300">No Files Added Yet!</td>
-                </tr>
-            );
-        }
-
-        return item.annexureUploads.map((fileItem, index) => (
-            <tr key={index}>
-                <td>
-                    <a>{fileItem?.fileName}</a>
-                </td>
-                <td className="w-130">
-                    {/* Download */}
-                    <i
-                        className="fa fa-download f-18 mx-2 cursor-pointer"
+            {uploads.length === 0 ? (
+              <div className="dar-report-attachments__empty">
+                No Files Added Yet!
+              </div>
+            ) : (
+              <div className="dar-report-attachments__list">
+                {uploads.map((fileItem) => (
+                  <div
+                    className="dar-report-attachments__file"
+                    key={fileItem?.id}
+                  >
+                    <span
+                      className="dar-report-attachments__filename"
+                      title={fileItem?.fileName}
+                    >
+                      {fileItem?.fileName}
+                    </span>
+                    <div className="dar-report-attachments__actions">
+                      <button
+                        type="button"
+                        className="dar-report-attachments__action"
                         onClick={() =>
-                            handleDownload({
-                                base64String: fileItem?.fileData,
-                                fileName: fileItem?.fileName,
-                            })
+                          handleDownload({
+                            base64String: fileItem?.fileData,
+                            fileName: fileItem?.fileName,
+                          })
                         }
-                    ></i>
+                        aria-label={`Download ${fileItem?.fileName}`}
+                        title="Download"
+                      >
+                        <i className="fa fa-download" aria-hidden="true" />
+                      </button>
 
-                    {/* Delete */}
-                    <i
-                        className="fa fa-trash text-danger f-18 cursor-pointer px-2"
-                        onClick={() => {
-                            if (addReportLoading) return;
-                            const isIAH =
-                                user?.[0]?.userId?.employeeid?.userHierarchy === "IAH";
-
-                            if (!isIAH) {
-                                toast.error("Only the Head of Internal Audit can delete a file.");
-                                return;
-                            }
-
-                            setDeleteFileId(fileItem?.id);
-                            dispatch(
-                                setupIahFileDelete({
-                                    fileId: Number(fileItem?.id),
-                                    id: Number(item?.id),
-                                })
-                            );
-                        }}
-                    ></i>
-
-                    {/* Edit / Update */}
-                    <i
-                        className="fa fa-edit px-2 f-18 cursor-pointer"
-                        onClick={() => handleFileUpdate(fileItem?.id)}
-                    ></i>
-                </td>
-            </tr>
-        ));
-    }, [item?.annexureUploads, handleFileUpdate, addReportLoading, dispatch, setDeleteFileId, user]);
-
-    return (
-        <div className="row mb-3">
-            <div className="col-lg-12">
-                <label className="form-label me-3 mb-3">Attach files</label>
-
-                {/* Upload and Update Inputs */}
-                <div className="row mb-3">
-                    {/* Upload New File */}
-                    <div className="col-lg-4 row">
-                        <div className="col-lg-6">
-                            <input
-                                type="file"
-                                className="f-10"
-                                ref={fileInputRef}
-                                onChange={handleFileChange}
-                                accept=".xlsx, .xls, .pdf, .txt"
-                            />
-                        </div>
-                        <div className="col-lg-6">
-                            <button
-                                className={`btn btn-labeled btn-primary shadow ${addReportLoading ? "disabled" : ""
-                                    }`}
-                                onClick={handleFileUpload}
-                            >
-                                <span className="btn-label me-2">
-                                    <i className="fa fa-save"></i>
-                                </span>
-                                {addReportLoading ? "Loading..." : "Upload"}
-                            </button>
-                        </div>
+                      {!readOnly && (
+                        <button
+                          type="button"
+                          className="dar-report-attachments__action is-delete"
+                          disabled={fileActionLoading}
+                          onClick={() => handleDelete(fileItem?.id)}
+                          aria-label={`Delete ${fileItem?.fileName}`}
+                          title="Delete"
+                        >
+                          <i className="fa fa-trash" aria-hidden="true" />
+                        </button>
+                      )}
                     </div>
-
-                    {/* Select File for Update */}
-                    <div className="col-lg-8 row flex flex-end">
-                        <div className="col-lg-3">
-                            <label>Updated File here:</label>
-                            <input
-                                type="file"
-                                className="f-10"
-                                ref={updatedFileInputRef}
-                                onChange={handleUpdateFileChange}
-                                accept=".xlsx, .xls, .pdf, .txt"
-                            />
-                        </div>
-                    </div>
-                </div>
-
-                {/* File List Table */}
-                <div className="table-responsive">
-                    <table className="table table-bordered table-hover rounded">
-                        <thead className="bg-secondary text-white">
-                            <tr>
-                                <th>Attach Files</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>{renderFileRows()}</tbody>
-                    </table>
-                </div>
-            </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
-    );
+      </div>
+    </section>
+  );
 };
 
 export default FileUpload;

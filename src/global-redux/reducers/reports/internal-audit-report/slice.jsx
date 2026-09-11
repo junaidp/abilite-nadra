@@ -2,17 +2,17 @@ import { toast } from "react-toastify";
 import {
   getAllInternalAuditReports,
   saveInternalAuditReport,
+  getInternalReportSourceLite,
+  getInternalReportSingleObservation,
   updateInternalAuditReport,
   deleteInternalAuditReport,
   getSingleInternalAuditReport,
-  getSingleInternalAuditReportAfterReportSave,
   getAllJobsForInternalAuditReport,
   createInternalAuditReportObject,
   createExtraFields,
   updateExtraField,
   iahFileUpload,
   iahFileDelete,
-  iahFileUpdate,
   reportFeedBack,
   submitInternalAuditReport,
   approveInternalAuditReport,
@@ -30,7 +30,10 @@ const initialState = {
   internalAuditReportExtraFieldsAddSuccess: false,
   addReportLoading: false,
   createExtraFieldsLoading: false,
-  iahFileUploadSuccess: false,
+  fileActionLoading: false,
+  internalReportSource: {},
+  internalReportSourceLoading: false,
+  internalReportObservationLoading: false,
   internalAuditReportExtraFieldsObject: {},
   totalNoOfRecords: 0,
   selectedInternalAuditReport: JSON.parse(sessionStorage.getItem("selectedInternalAuditReport")) || {}
@@ -50,6 +53,15 @@ export const setupSaveInternalAuditReport = createAsyncThunk(
   }
 );
 
+export const setupGetInternalReportSourceLite = createAsyncThunk(
+  "internalAuditReport/getInternalReportSourceLite",
+  async (data, thunkAPI) => getInternalReportSourceLite(data, thunkAPI)
+);
+
+export const setupGetInternalReportSingleObservation = createAsyncThunk(
+  "internalAuditReport/getInternalReportSingleObservation",
+  async (data, thunkAPI) => getInternalReportSingleObservation(data, thunkAPI)
+);
 export const setupUpdateInternalAuditReport = createAsyncThunk(
   "internalAuditReport/updateInternalAuditReport",
   async (data, thunkAPI) => {
@@ -69,14 +81,6 @@ export const setupGetSingleInternalAuditReport = createAsyncThunk(
     return getSingleInternalAuditReport(data, thunkAPI);
   }
 );
-export const setupGetSingleInternalAuditReportAfterReportSave =
-  createAsyncThunk(
-    "internalAuditReport/getSingleInternalAuditReportAfterReportSave",
-    async (data, thunkAPI) => {
-      return getSingleInternalAuditReportAfterReportSave(data, thunkAPI);
-    }
-  );
-
 export const setupGetAllJobsForInternalAuditReport = createAsyncThunk(
   "internalAuditReport/getAllJobsForInternalAuditReport",
   async (data, thunkAPI) => {
@@ -116,12 +120,6 @@ export const setupIahFileDelete = createAsyncThunk(
     return iahFileDelete(data, thunkAPI);
   }
 );
-export const setupIahFileUpdate = createAsyncThunk(
-  "internalAuditReport/iahFileUpdate",
-  async (data, thunkAPI) => {
-    return iahFileUpdate(data, thunkAPI);
-  }
-);
 export const setupReportFeedBack = createAsyncThunk(
   "internalAuditReport/reportFeedBack",
   async (data, thunkAPI) => {
@@ -155,12 +153,7 @@ export const slice = createSlice({
     resetInternalAuditReportAddSuccess: (state) => {
       state.internalAuditReportAddSuccess = false;
     },
-    resetIahReportAddSuccess: (state) => {
-      state.iahFileUploadSuccess = false;
-    },
-    resetFileUploadAddSuccess: (state) => {
-      state.iahFileUploadSuccess = false;
-    },
+
     changeSelectedInternalAuditReport: (state, { payload }) => {
       state.selectedInternalAuditReport = payload
       sessionStorage.setItem("selectedInternalAuditReport", JSON.stringify(payload))
@@ -178,7 +171,10 @@ export const slice = createSlice({
       state.internalAuditReportExtraFieldsAddSuccess = false;
       state.addReportLoading = false;
       state.createExtraFieldsLoading = false;
-      state.iahFileUploadSuccess = false;
+      state.fileActionLoading = false;
+      state.internalReportSource = {};
+      state.internalReportSourceLoading = false;
+      state.internalReportObservationLoading = false;
       state.internalAuditReportExtraFieldsObject = {};
       state.totalNoOfRecords = 0;
       state.selectedInternalAuditReport = {}
@@ -215,10 +211,13 @@ export const slice = createSlice({
       .addCase(setupSaveInternalAuditReport.pending, (state) => {
         state.addReportLoading = true;
       })
-      .addCase(setupSaveInternalAuditReport.fulfilled, (state) => {
+      .addCase(setupSaveInternalAuditReport.fulfilled, (state, { payload }) => {
         state.addReportLoading = false;
-        state.internalAuditReportAddSuccess = true;
-        toast.success("Internal Audit Report Saved Successfully");
+        if (payload?.status && payload?.data?.id) {
+          toast.success("Internal Audit Report Saved Successfully");
+        } else {
+          toast.error(payload?.message || "Failed to save the report");
+        }
       })
       .addCase(setupSaveInternalAuditReport.rejected, (state, action) => {
         state.addReportLoading = false;
@@ -286,37 +285,6 @@ export const slice = createSlice({
           toast.error("An Error has occurred");
         }
       });
-    // Get Single Internal  Audit Report After Save
-    builder
-      .addCase(
-        setupGetSingleInternalAuditReportAfterReportSave.pending,
-        (state) => {
-          state.addReportLoading = true;
-        }
-      )
-      .addCase(
-        setupGetSingleInternalAuditReportAfterReportSave.fulfilled,
-        (state, { payload }) => {
-          state.addReportLoading = false;
-          state.singleInternalAuditReport = payload?.data || [
-            { error: "Not Found" },
-          ];
-          state.internalAuditReportObject = payload?.data || [
-            { error: "Not Found" },
-          ];
-        }
-      )
-      .addCase(
-        setupGetSingleInternalAuditReportAfterReportSave.rejected,
-        (state, action) => {
-          state.addReportLoading = false;
-          if (action.payload?.response?.data?.message) {
-            toast.error(action.payload.response.data.message);
-          } else {
-            toast.error("An Error has occurred");
-          }
-        }
-      );
     // Get Jobs  Audit Report
     builder
       .addCase(setupGetAllJobsForInternalAuditReport.pending, (state) => {
@@ -372,9 +340,18 @@ export const slice = createSlice({
       })
       .addCase(setupCreateExtraFields.fulfilled, (state, { payload }) => {
         state.createExtraFieldsLoading = false;
-        state.internalAuditReportExtraFieldsAddSuccess = true;
-        state.internalAuditReportExtraFieldsObject = payload?.data;
-        toast.success("Extra Field Added Successfully");
+        const updatedReport = payload?.data;
+        if (
+          payload?.status &&
+          updatedReport?.id &&
+          Array.isArray(updatedReport?.intAuditExtraFieldsList)
+        ) {
+          state.internalAuditReportExtraFieldsAddSuccess = true;
+          state.internalAuditReportExtraFieldsObject = updatedReport;
+          toast.success("Extra Field Added Successfully");
+        } else {
+          toast.error(payload?.message || "Failed to add the extra field");
+        }
       })
       .addCase(setupCreateExtraFields.rejected, (state, action) => {
         state.createExtraFieldsLoading = false;
@@ -404,15 +381,18 @@ export const slice = createSlice({
     // IAH File Upload
     builder
       .addCase(setupIahFileUpload.pending, (state) => {
-        state.addReportLoading = true;
+        state.fileActionLoading = true;
       })
-      .addCase(setupIahFileUpload.fulfilled, (state) => {
-        state.addReportLoading = false;
-        state.iahFileUploadSuccess = true;
-        toast.success("File Uploaded Successfully");
+      .addCase(setupIahFileUpload.fulfilled, (state, { payload }) => {
+        state.fileActionLoading = false;
+        if (payload?.status && Array.isArray(payload?.data?.annexureUploads)) {
+          toast.success("File Uploaded Successfully");
+        } else {
+          toast.error(payload?.message || "Failed to upload the file");
+        }
       })
       .addCase(setupIahFileUpload.rejected, (state, action) => {
-        state.addReportLoading = false;
+        state.fileActionLoading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);
         } else {
@@ -422,39 +402,80 @@ export const slice = createSlice({
     // IAH File Delete
     builder
       .addCase(setupIahFileDelete.pending, (state) => {
-        state.addReportLoading = true;
+        state.fileActionLoading = true;
       })
-      .addCase(setupIahFileDelete.fulfilled, (state) => {
-        state.addReportLoading = false;
-        state.iahFileUploadSuccess = true;
-        toast.success("File Deleted Successfully");
+      .addCase(setupIahFileDelete.fulfilled, (state, { payload }) => {
+        state.fileActionLoading = false;
+        if (payload?.status) {
+          toast.success("File Deleted Successfully");
+        } else {
+          toast.error(payload?.message || "Failed to delete the file");
+        }
       })
       .addCase(setupIahFileDelete.rejected, (state, action) => {
-        state.addReportLoading = false;
+        state.fileActionLoading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);
         } else {
           toast.error("An Error has occurred");
         }
       });
-    // IAH File Update
+    // Lightweight reporting source
     builder
-      .addCase(setupIahFileUpdate.pending, (state) => {
-        state.addReportLoading = true;
+      .addCase(setupGetInternalReportSourceLite.pending, (state) => {
+        state.internalReportSourceLoading = true;
+        state.internalReportSource = {};
       })
-      .addCase(setupIahFileUpdate.fulfilled, (state) => {
-        state.addReportLoading = false;
-        state.iahFileUploadSuccess = true;
-        toast.success("File Updated Successfully");
+      .addCase(setupGetInternalReportSourceLite.fulfilled, (state, { payload }) => {
+        state.internalReportSourceLoading = false;
+        state.internalReportSource = payload?.data || {};
       })
-      .addCase(setupIahFileUpdate.rejected, (state, action) => {
-        state.addReportLoading = false;
+      .addCase(setupGetInternalReportSourceLite.rejected, (state, action) => {
+        state.internalReportSourceLoading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);
         } else {
           toast.error("An Error has occurred");
         }
       });
+    // One reporting observation loaded on demand
+    builder
+      .addCase(setupGetInternalReportSingleObservation.pending, (state) => {
+        state.internalReportObservationLoading = true;
+      })
+      .addCase(
+        setupGetInternalReportSingleObservation.fulfilled,
+        (state, { payload }) => {
+          state.internalReportObservationLoading = false;
+          const observation =
+            payload?.data?.value || payload?.data?.data || payload?.data;
+
+          if (
+            observation?.id &&
+            Array.isArray(state.internalReportSource?.reportingList)
+          ) {
+            state.internalReportSource = {
+              ...state.internalReportSource,
+              reportingList: state.internalReportSource.reportingList.map((item) =>
+                Number(item?.id) === Number(observation.id)
+                  ? { ...item, ...observation }
+                  : item
+              ),
+            };
+          }
+        }
+      )
+      .addCase(
+        setupGetInternalReportSingleObservation.rejected,
+        (state, action) => {
+          state.internalReportObservationLoading = false;
+          if (action.payload?.response?.data?.message) {
+            toast.error(action.payload.response.data.message);
+          } else {
+            toast.error("An Error has occurred");
+          }
+        }
+      );
     // IAH Feedback
     builder
       .addCase(setupReportFeedBack.pending, (state) => {
@@ -531,9 +552,7 @@ export const slice = createSlice({
 export const {
   resetInternalAuditReportAddSuccess,
   handleResetData,
-  resetIahReportAddSuccess,
   resetInternalAuditReportExtraFieldsAddSuccess,
-  resetFileUploadAddSuccess,
   changeSelectedInternalAuditReport,
   handleChangeReport
 } = slice.actions;

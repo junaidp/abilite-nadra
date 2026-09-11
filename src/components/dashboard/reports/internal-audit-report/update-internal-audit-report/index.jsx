@@ -1,181 +1,121 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { CircularProgress } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 
 import {
   changeActiveLink,
   InitialLoadSidebarActiveLink,
 } from "../../../../../global-redux/reducers/common/slice";
 import {
-  setupGetSingleInternalAuditReport,
-  setupGetSingleInternalAuditReportAfterReportSave,
-  setupSaveInternalAuditReport,
   handleResetData,
-  resetInternalAuditReportAddSuccess,
-  resetFileUploadAddSuccess,
+  setupGetSingleInternalAuditReport,
+  setupSaveInternalAuditReport,
 } from "../../../../../global-redux/reducers/reports/internal-audit-report/slice";
 import { decryptString } from "../../../../../config/helper";
-import InternalAuditReportBody from "../components/InternalAuditReportBody";
 import Header from "../components/Header";
+import InternalAuditReportBody from "../components/InternalAuditReportBody";
+import { buildInternalAuditReportSavePayload } from "../components/reportPayload";
 
-/**
- * UpdateInternalAuditReport Component
- * -----------------------------------
- * Allows viewing and updating an existing internal audit report.
- * Handles:
- * - Fetching the report by ID
- * - Managing local updates and syncing with Redux
- * - Saving report changes and reloading after update
- * - Handling file uploads and extra fields updates
- */
 const UpdateInternalAuditReport = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const navigate = useNavigate();
-  const reportId = decryptString(id);
-
-  // ✅ Redux State
+  const reportId = useMemo(() => decryptString(id), [id]);
   const { user } = useSelector((state) => state?.auth);
   const {
     loading,
-    internalAuditReportAddSuccess,
     addReportLoading,
     internalAuditReportExtraFieldsObject,
     singleInternalAuditReport,
-    iahFileUploadSuccess,
   } = useSelector((state) => state?.internalAuditReport);
-
-  // ✅ Local State
   const [reportObject, setReportObject] = useState({});
-  const [deleteFileId, setDeleteFileId] = useState("");
 
-  /** -----------------------------
-   *  Handlers
-   * ----------------------------- */
-
-  // Handle text input changes
   const handleChangeReportObject = useCallback((event) => {
     const { name, value } = event.target;
-    setReportObject((prev) => ({ ...prev, [name]: value }));
+    setReportObject((current) => ({ ...current, [name]: value }));
   }, []);
 
-  // Handle extra fields text changes
-  const handleChangeExtraFields = useCallback((event, id) => {
+  const handleChangeExtraFields = useCallback((event, fieldId) => {
     const { name, value } = event.target;
-    setReportObject((prev) => ({
-      ...prev,
-      intAuditExtraFieldsList: prev?.intAuditExtraFieldsList?.map((field) =>
-        Number(field?.id) === Number(id) ? { ...field, [name]: value } : field
+    setReportObject((current) => ({
+      ...current,
+      intAuditExtraFieldsList: current?.intAuditExtraFieldsList?.map((field) =>
+        Number(field?.id) === Number(fieldId)
+          ? { ...field, [name]: value }
+          : field
       ),
     }));
   }, []);
 
-  // Handle rich text content changes
   const onContentChange = useCallback((value, name) => {
-    setReportObject((prev) => ({ ...prev, [name]: value }));
+    setReportObject((current) => ({ ...current, [name]: value }));
   }, []);
 
-  // Save updated report
-  const handleSaveInternalAuditReport = useCallback(() => {
-    if (!addReportLoading) {
-      dispatch(setupSaveInternalAuditReport(reportObject));
-    }
-  }, [dispatch, addReportLoading, reportObject]);
+  const handleSaveInternalAuditReport = useCallback(async () => {
+    if (addReportLoading) return;
 
-  /** -----------------------------
-   *  Effects
-   * ----------------------------- */
-
-  // Reload report after successful save
-  useEffect(() => {
-    if (internalAuditReportAddSuccess && reportId) {
-      dispatch(resetInternalAuditReportAddSuccess());
-      dispatch(
-        setupGetSingleInternalAuditReportAfterReportSave(
-          `?reportId=${Number(reportId)}`
+    try {
+      const response = await dispatch(
+        setupSaveInternalAuditReport(
+          buildInternalAuditReportSavePayload(reportObject)
         )
-      );
-    }
-  }, [internalAuditReportAddSuccess, dispatch, reportId]);
+      ).unwrap();
 
-  // Populate report object after fetching
+      if (response?.status && response?.data?.id) {
+        setReportObject((current) => ({ ...current, ...response.data }));
+      }
+    } catch {
+      // The rejected thunk displays the API error.
+    }
+  }, [addReportLoading, dispatch, reportObject]);
+
+  const handleAttachmentsChange = useCallback((annexureUploads) => {
+    setReportObject((current) => ({ ...current, annexureUploads }));
+  }, []);
+
   useEffect(() => {
-    const hasReport =
-      Object.keys(singleInternalAuditReport).length !== 0 &&
-      singleInternalAuditReport.constructor === Object;
-    if (hasReport) {
+    if (Object.keys(singleInternalAuditReport).length > 0) {
       setReportObject(singleInternalAuditReport);
     }
   }, [singleInternalAuditReport]);
 
-  // Handle file upload success — refresh report and remove deleted file
   useEffect(() => {
-    if (iahFileUploadSuccess) {
-      dispatch(resetFileUploadAddSuccess());
-      dispatch(
-        setupSaveInternalAuditReport({
-          ...reportObject,
-          annexureUploads: reportObject?.annexureUploads?.filter(
-            (file) => file?.id !== deleteFileId
-          ),
-        })
-      );
-      setDeleteFileId("");
-    }
-  }, [iahFileUploadSuccess, dispatch, reportObject, deleteFileId]);
+    const extraFields =
+      internalAuditReportExtraFieldsObject?.intAuditExtraFieldsList;
 
-  // Merge extra fields into current report when updated
-  useEffect(() => {
-    const hasExtraFields =
-      Object.keys(internalAuditReportExtraFieldsObject).length !== 0 &&
-      internalAuditReportExtraFieldsObject.constructor === Object;
-
-    if (hasExtraFields) {
-      setReportObject((prev) => ({
-        ...internalAuditReportExtraFieldsObject,
-        reportName: prev?.reportName,
-        reportDate: prev?.reportDate,
-        executiveSummary: prev?.executiveSummary,
-        auditPurpose: prev?.auditPurpose,
-        keyFindings: prev?.keyFindings,
-        annexure: prev?.annexure,
-        keyFindingsList: prev?.keyFindingsList,
-        reportingAndFollowUp: prev?.reportingAndFollowUp,
-        annexureUploads: prev?.annexureUploads,
+    if (Array.isArray(extraFields)) {
+      setReportObject((current) => ({
+        ...current,
+        id: internalAuditReportExtraFieldsObject?.id || current?.id,
+        intAuditExtraFieldsList: extraFields,
       }));
     }
   }, [internalAuditReportExtraFieldsObject]);
 
-  // Redirect if no report ID found
   useEffect(() => {
     if (!reportId) {
       navigate("/audit/internal-audit-report");
     }
-  }, [reportId, navigate]);
+  }, [navigate, reportId]);
 
-  // Fetch report by ID when token and ID exist
   useEffect(() => {
     if (user?.[0]?.token && reportId) {
-      dispatch(setupGetSingleInternalAuditReport(`?reportId=${Number(reportId)}`));
+      dispatch(
+        setupGetSingleInternalAuditReport(`?reportId=${Number(reportId)}`)
+      );
     }
-  }, [dispatch, user, reportId]);
+  }, [dispatch, reportId, user]);
 
-  // Activate sidebar links and reset data on unmount
   useEffect(() => {
     dispatch(changeActiveLink("li-internal-audit-report"));
     dispatch(InitialLoadSidebarActiveLink("li-reports"));
     return () => dispatch(handleResetData());
   }, [dispatch]);
 
-  /** -----------------------------
-   *  Render
-   * ----------------------------- */
-
   const reportNotFound =
-    singleInternalAuditReport[0]?.error === "Not Found" ||
-    (Object.keys(singleInternalAuditReport).length === 0 &&
-      singleInternalAuditReport.constructor === Object);
+    singleInternalAuditReport?.[0]?.error === "Not Found" ||
+    (Object.keys(singleInternalAuditReport).length === 0 && !loading);
 
   return (
     <div className="overflow-y-hidden">
@@ -192,8 +132,8 @@ const UpdateInternalAuditReport = () => {
             handleSaveInternalAuditReport={handleSaveInternalAuditReport}
             addReportLoading={addReportLoading}
             handleChangeExtraFields={handleChangeExtraFields}
-            setDeleteFileId={setDeleteFileId}
             onContentChange={onContentChange}
+            onAttachmentsChange={handleAttachmentsChange}
           />
         </div>
       )}
