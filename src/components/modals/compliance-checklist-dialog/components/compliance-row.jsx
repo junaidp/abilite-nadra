@@ -41,7 +41,9 @@ const ComplianceRow = ({
       <td>
         <button
           type="button"
-          className="btn btn-primary btn-sm"
+          className={`btn ${
+            singleItem?.observationComplete ? "btn-success" : "btn-primary"
+          } btn-sm`}
           onClick={() => onViewObservation(singleItem)}
           disabled={isObservationLoading}
         >

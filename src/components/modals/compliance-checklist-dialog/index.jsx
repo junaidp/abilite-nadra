@@ -15,12 +15,27 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { toast } from "react-toastify";
+import { isHtmlEmpty } from "../../../config/helper";
 import ComplianceRow from "./components/compliance-row";
 import RichTextEditor from "./components/TextEditor";
 
 const hasOwn = (object, key) => Object.prototype.hasOwnProperty.call(object, key);
 
 const getObservationValue = (response) => response?.data?.observation ?? "";
+
+const calculateObservationComplete = (remarks, observation) => {
+  const normalizedRemarks = String(remarks ?? "").trim();
+
+  if (normalizedRemarks === "1" || normalizedRemarks === "3") {
+    return true;
+  }
+
+  if (normalizedRemarks === "2" || normalizedRemarks === "4") {
+    return !isHtmlEmpty(observation);
+  }
+
+  return false;
+};
 
 const ComplianceCheckListDialog = ({
   setShowComplianceCheckListDialog,
@@ -208,23 +223,43 @@ const ComplianceCheckListDialog = ({
           observation: activeObservationContent,
         })
       ).unwrap();
+
+      if (!response?.status) {
+        throw new Error(response?.message || "Unable to save observation");
+      }
+
       const savedObservation = getObservationValue(response) || activeObservationContent;
+      const observationComplete = calculateObservationComplete(
+        activeObservation?.remarks,
+        savedObservation
+      );
 
       setObservationCache((prev) => ({
         ...prev,
         [activeObservation.id]: savedObservation,
       }));
+      setActiveObservation((current) => ({
+        ...current,
+        observation: savedObservation,
+        observationComplete,
+      }));
       setObservations((prev) =>
         prev.map((row) =>
           Number(row?.id) === Number(activeObservation.id)
-            ? { ...row, observation: savedObservation }
+            ? {
+                ...row,
+                observation: savedObservation,
+                observationComplete,
+              }
             : row
         )
       );
       toast.success("Observation saved successfully");
     } catch (error) {
       toast.error(
-        error?.response?.data?.message || "Unable to save observation"
+        error?.response?.data?.message ||
+          error?.message ||
+          "Unable to save observation"
       );
     } finally {
       setObservationSaving(false);
@@ -237,15 +272,43 @@ const ComplianceCheckListDialog = ({
 
     try {
       setSaving(true);
-      await dispatch(
+      const response = await dispatch(
         setupUpdateAuditStepChecklistObservations(changedRowsList)
       ).unwrap();
 
+      if (!response?.status) {
+        throw new Error(
+          response?.message || "Unable to save compliance checklist"
+        );
+      }
+
+      const savedRows = Array.isArray(response?.data) ? response.data : [];
+      const savedRowsById = new Map(
+        savedRows.map((row) => [Number(row?.id), row])
+      );
+
+      setObservations((prev) =>
+        prev.map((row) => {
+          const savedRow = savedRowsById.get(Number(row?.id));
+          if (!savedRow) return row;
+
+          return {
+            ...row,
+            remarks: savedRow?.remarks,
+            observationComplete:
+              typeof savedRow?.observationComplete === "boolean"
+                ? savedRow.observationComplete
+                : row?.observationComplete,
+          };
+        })
+      );
       setChangedRows({});
       toast.success("Compliance checklist saved successfully");
     } catch (error) {
       toast.error(
-        error?.response?.data?.message || "An Error has occurred"
+        error?.response?.data?.message ||
+          error?.message ||
+          "An Error has occurred"
       );
     } finally {
       setSaving(false);
