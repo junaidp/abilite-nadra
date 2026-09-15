@@ -168,7 +168,7 @@ const ManagementOverallStatusModal = ({ open, onClose, loading, dashboardReporti
               <div className='col-md-3'><div className='dashboard-modal-stat'><div className='dashboard-stat-closed'>{closed}</div><div className='text-muted'>Closed</div></div></div>
             </div>
             <div className='row g-2 mb-3'>
-              <div className='col-md-10'><MultiSelectFilter label='Location' value={filters.locationId} options={uniqueFilterOptions(rows, 'locationId', 'locationName')} onChange={(value) => setFilters({ locationId: value })} /></div>
+              <div className='col-md-10'><MultiSelectFilter label='Sub Location' value={filters.locationId} options={uniqueFilterOptions(rows, 'locationId', 'locationName')} onChange={(value) => setFilters({ locationId: value })} /></div>
               <div className='col-md-2'><button className='btn btn-outline-secondary w-100' disabled={!hasFilters} onClick={() => setFilters(emptyFilters)}>Reset</button></div>
             </div>
             <div className='dashboard-overall-chart'>

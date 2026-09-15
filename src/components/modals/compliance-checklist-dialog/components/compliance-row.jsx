@@ -2,6 +2,20 @@ import React from "react";
 import ObservationFileUpload from "./ObservationFileUpload";
 import { CircularProgress } from "@mui/material";
 
+const getObservationButtonClass = (remarks, observationComplete) => {
+  const normalizedRemarks = String(remarks ?? "").trim();
+
+  if (normalizedRemarks === "1" || normalizedRemarks === "3") {
+    return "btn-secondary";
+  }
+
+  if (normalizedRemarks === "2" || normalizedRemarks === "4") {
+    return observationComplete ? "btn-success" : "btn-primary";
+  }
+
+  return "btn-danger";
+};
+
 const ComplianceRow = ({
   index,
   singleItem,
@@ -41,9 +55,10 @@ const ComplianceRow = ({
       <td>
         <button
           type="button"
-          className={`btn ${
-            singleItem?.observationComplete ? "btn-success" : "btn-primary"
-          } btn-sm`}
+          className={`btn ${getObservationButtonClass(
+            singleItem?.remarks,
+            singleItem?.observationComplete
+          )} btn-sm`}
           onClick={() => onViewObservation(singleItem)}
           disabled={isObservationLoading}
         >

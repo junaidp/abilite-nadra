@@ -12,8 +12,8 @@ const statusItems = [
 const getChecklistPending = (job, canApprove, canSubmit) => {
   const list = job?.auditStepChecklistList || [];
   if (!list.length) return [];
-  const hasSubmit = canSubmit && list.some((item) => item && !item.submitted);
-  const hasApprove = canApprove && list.some((item) => item?.submitted && !item?.approved);
+  const hasSubmit = canSubmit && list.some((item) => item && !item.submitted && item.checklistCompleted === true);
+  const hasApprove = canApprove && list.some((item) => item?.submitted && !item?.approved && item?.checklistCompleted === true);
   if (!hasSubmit && !hasApprove) return [];
   return [{ label: 'Checklist', actionLabel: hasApprove ? 'Approve' : 'Submit' }];
 };
@@ -27,7 +27,7 @@ const getPendingActions = (job, userInfo) => {
   statusItems.forEach((item) => {
     const value = job?.[item.key];
     if (!value) return;
-    if (!value.submitted && canSubmit) rows.push({ label: item.label, actionLabel: 'Submit' });
+    if (!value.submitted && value.submissionReady === true && canSubmit) rows.push({ label: item.label, actionLabel: 'Submit' });
     if (value.submitted && !value.approved && canApprove) rows.push({ label: item.label, actionLabel: 'Approve' });
   });
 
@@ -52,6 +52,7 @@ const AuditEngagementApprovals = ({ auditEngagements, user }) => {
           <tr>
             <th className='px-4 py-3'>Job Name</th>
             <th className='px-4 py-3'>Job Type</th>
+            <th className='px-4 py-3'>Sub Location</th>
             <th className='px-4 py-3'>Approval Of</th>
             <th className='px-4 py-3 text-end'>Action</th>
           </tr>
@@ -61,16 +62,36 @@ const AuditEngagementApprovals = ({ auditEngagements, user }) => {
             <tr key={job?.id}>
               <td className='px-4 py-3 fw-medium'>{job?.aetitle || '-'}</td>
               <td className='px-4 py-3'>{job?.jobType || '-'}</td>
+              <td className='px-4 py-3'>
+                <div className='d-flex flex-wrap gap-2'>
+                  {(job?.subLocations || []).length ? (
+                    job.subLocations.map((subLocation) => (
+                      <span key={subLocation?.id || subLocation?.description} className='badge rounded-pill bg-light text-dark border'>
+                        {subLocation?.description || '-'}
+                      </span>
+                    ))
+                  ) : (
+                    '-'
+                  )}
+                </div>
+              </td>
               <td className='px-4 py-3'>{actions.map((item) => item.label).join(', ')}</td>
               <td className='px-4 py-3 text-end'>
-                <button className='btn btn-sm btn-primary' onClick={() => navigate('/audit/kick-off/' + encryptAndEncode(job?.id?.toString()))}>
+                <button
+                  className='btn btn-sm btn-primary'
+                  onClick={() =>
+                    navigate('/audit/kick-off/' + encryptAndEncode(job?.id?.toString()), {
+                      state: { jobType: job?.jobType },
+                    })
+                  }
+                >
                   {actions.some((item) => item.actionLabel === 'Approve') ? 'Approve' : 'Submit'}
                 </button>
               </td>
             </tr>
           ))}
           {!rows.length && (
-            <tr><td colSpan={4} className='text-center py-4 text-muted'>No tasks pending approval.</td></tr>
+            <tr><td colSpan={5} className='text-center py-4 text-muted'>No tasks pending approval.</td></tr>
           )}
         </tbody>
       </table>

@@ -182,7 +182,7 @@ const OverallStatusModal = ({ open, onClose, loading, dashboardReporting, users,
               </div>
             </div>
             <div className='row g-2 mb-3'>
-              <div className='col-md-5'><MultiSelectFilter label='Location' value={filters.locationId} options={uniqueFilterOptions(rows, 'locationId', 'locationName')} onChange={(value) => setFilters((previous) => ({ ...previous, locationId: value }))} /></div>
+              <div className='col-md-5'><MultiSelectFilter label='Sub Location' value={filters.locationId} options={uniqueFilterOptions(rows, 'locationId', 'locationName')} onChange={(value) => setFilters((previous) => ({ ...previous, locationId: value }))} /></div>
               <div className='col-md-5'><MultiSelectFilter label='Auditees' value={filters.auditeeId} options={uniqueFilterOptions(rows, 'auditeeId', 'auditeeName')} onChange={(value) => setFilters((previous) => ({ ...previous, auditeeId: value }))} /></div>
               <div className='col-md-2'><button className='btn btn-outline-secondary w-100' disabled={!hasFilters} onClick={() => setFilters(emptyFilters)}>Reset</button></div>
             </div>

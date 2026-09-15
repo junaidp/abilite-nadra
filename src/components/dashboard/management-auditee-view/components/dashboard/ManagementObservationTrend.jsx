@@ -136,7 +136,7 @@ const ManagementObservationTrend = ({ dashboardReporting, locations, onOverallSt
         <div className='row g-2 mb-3'>
           <div className='col-md-6'><MultiSelectFilter label='Job Name' value={filters.jobName} options={uniqueFilterOptions(rows, 'jobName', 'jobName')} onChange={(value) => updateFilter('jobName', value)} /></div>
           <div className='col-md-6'><MultiSelectFilter label='Observation Name' value={filters.observationName} options={uniqueFilterOptions(rows, 'observationName', 'observationName')} onChange={(value) => updateFilter('observationName', value)} /></div>
-          <div className='col-md-6'><MultiSelectFilter label='Location' value={filters.locationId} options={uniqueFilterOptions(rows, 'locationId', 'locationName')} onChange={(value) => updateFilter('locationId', value)} /></div>
+          <div className='col-md-6'><MultiSelectFilter label='Sub Location' value={filters.locationId} options={uniqueFilterOptions(rows, 'locationId', 'locationName')} onChange={(value) => updateFilter('locationId', value)} /></div>
           <div className='col-md-3'><button className='btn btn-outline-secondary w-100' disabled={!hasFilters} onClick={() => setFilters(emptyFilters)}>Reset</button></div>
           <div className='col-md-3'><button className='btn btn-primary dashboard-management-overall-button w-100' type='button' onClick={onOverallStatus}>Overall Status</button></div>
         </div>

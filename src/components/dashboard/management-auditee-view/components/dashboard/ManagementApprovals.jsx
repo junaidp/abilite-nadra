@@ -43,7 +43,7 @@ const ApprovalTable = ({ rows }) => {
           <tr>
             <th className='px-4 py-3'>Job Name</th>
             <th className='px-4 py-3'>Observation Name</th>
-            <th className='px-4 py-3'>Location</th>
+            <th className='px-4 py-3'>Sub Location</th>
             <th className='px-4 py-3 text-end'>Action</th>
           </tr>
         </thead>

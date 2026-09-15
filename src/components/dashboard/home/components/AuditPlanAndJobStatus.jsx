@@ -63,7 +63,15 @@ export const JobStatus = ({ auditEngagements, users }) => {
           {rows.map((job) => {
             const names = getResourceIds(job?.resourceAllocation).map((id) => userMap.get(id) || '').filter(Boolean).join(', ');
             return (
-              <tr key={job?.id} className='cursor-pointer' onClick={() => navigate('/audit/kick-off/' + encryptAndEncode(job?.id?.toString()))}>
+              <tr
+                key={job?.id}
+                className='cursor-pointer'
+                onClick={() =>
+                  navigate('/audit/kick-off/' + encryptAndEncode(job?.id?.toString()), {
+                    state: { jobType: job?.jobType },
+                  })
+                }
+              >
                 <td className='px-4 py-3 fw-medium'>{job?.aetitle || '-'}</td>
                 <td className='px-4 py-3'>{job?.jobType || '-'}</td>
                 <td className='px-4 py-3'>{names}</td>

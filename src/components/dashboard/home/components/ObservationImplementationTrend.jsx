@@ -138,7 +138,7 @@ const ObservationImplementationTrend = ({ dashboardReporting, users, locations }
         <div className='row g-2 mb-3'>
           <div className='col-md-6'><MultiSelectFilter label='Job Name' value={filters.jobName} options={uniqueFilterOptions(rows, 'jobName', 'jobName')} onChange={(value) => updateFilter('jobName', value)} /></div>
           <div className='col-md-6'><MultiSelectFilter label='Observation Name' value={filters.observationName} options={uniqueFilterOptions(rows, 'observationName', 'observationName')} onChange={(value) => updateFilter('observationName', value)} /></div>
-          <div className='col-md-6'><MultiSelectFilter label='Location' value={filters.locationId} options={uniqueFilterOptions(rows, 'locationId', 'locationName')} onChange={(value) => updateFilter('locationId', value)} /></div>
+          <div className='col-md-6'><MultiSelectFilter label='Sub Location' value={filters.locationId} options={uniqueFilterOptions(rows, 'locationId', 'locationName')} onChange={(value) => updateFilter('locationId', value)} /></div>
           <div className='col-md-6'><MultiSelectFilter label='Auditees' value={filters.auditeeId} options={uniqueFilterOptions(rows, 'auditeeId', 'auditeeName')} onChange={(value) => updateFilter('auditeeId', value)} /></div>
           <div className='col-12'><button className='btn btn-outline-secondary w-100' disabled={!hasFilters} onClick={() => setFilters(emptyFilters)}>Reset</button></div>
         </div>

@@ -132,9 +132,28 @@ const ComplianceCheckListDialog = ({
     setObservations((prev) =>
       prev.map((row) =>
         Number(row?.id) === Number(observationId)
-          ? { ...row, observation }
+          ? {
+              ...row,
+              observation,
+              observationComplete: calculateObservationComplete(
+                row?.remarks,
+                observation
+              ),
+            }
           : row
       )
+    );
+    setActiveObservation((current) =>
+      Number(current?.id) === Number(observationId)
+        ? {
+            ...current,
+            observation,
+            observationComplete: calculateObservationComplete(
+              current?.remarks,
+              observation
+            ),
+          }
+        : current
     );
 
     return observation;
@@ -324,7 +343,32 @@ const ComplianceCheckListDialog = ({
       prev.map((item) => {
         if (Number(item?.id) !== Number(id)) return item;
 
-        const updatedRow = { ...item, [name]: value };
+        const previousRemarks = String(item?.remarks ?? "").trim();
+        const nextRemarks = String(value ?? "").trim();
+        const requiresObservation =
+          nextRemarks === "2" || nextRemarks === "4";
+        const previouslyRequiredObservation =
+          previousRemarks === "2" || previousRemarks === "4";
+        const cachedObservation = observationCache[id];
+        const hasCachedObservation = hasOwn(observationCache, id);
+
+        let observationComplete = item?.observationComplete;
+        if (nextRemarks === "1" || nextRemarks === "3") {
+          observationComplete = true;
+        } else if (requiresObservation && hasCachedObservation) {
+          observationComplete = calculateObservationComplete(
+            nextRemarks,
+            cachedObservation
+          );
+        } else if (requiresObservation && !previouslyRequiredObservation) {
+          observationComplete = false;
+        }
+
+        const updatedRow = {
+          ...item,
+          [name]: value,
+          observationComplete,
+        };
         setChangedRows((changed) => ({
           ...changed,
           [id]: buildChangedRow(updatedRow),
@@ -332,7 +376,7 @@ const ComplianceCheckListDialog = ({
         return updatedRow;
       })
     );
-  }, [buildChangedRow]);
+  }, [buildChangedRow, observationCache]);
 
   const handleObservationFileUploaded = React.useCallback((observationId, file) => {
     if (!file?.id) return;
