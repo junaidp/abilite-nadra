@@ -11,11 +11,16 @@ const statusItems = [
 
 const getChecklistPending = (job, canApprove, canSubmit) => {
   const list = job?.auditStepChecklistList || [];
-  if (!list.length) return [];
-  const hasSubmit = canSubmit && list.some((item) => item && !item.submitted && item.checklistCompleted === true);
-  const hasApprove = canApprove && list.some((item) => item?.submitted && !item?.approved && item?.checklistCompleted === true);
-  if (!hasSubmit && !hasApprove) return [];
-  return [{ label: 'Checklist', actionLabel: hasApprove ? 'Approve' : 'Submit' }];
+  return list.flatMap((item) => {
+    if (!item || item.checklistCompleted !== true) return [];
+    if (!item.submitted && canSubmit) {
+      return [{ id: item.id, label: 'Checklist', actionLabel: 'Submit', subLocationDescription: item.subLocationDescription }];
+    }
+    if (item.submitted && !item.approved && canApprove) {
+      return [{ id: item.id, label: 'Checklist', actionLabel: 'Approve', subLocationDescription: item.subLocationDescription }];
+    }
+    return [];
+  });
 };
 
 const getPendingActions = (job, userInfo) => {
@@ -27,8 +32,8 @@ const getPendingActions = (job, userInfo) => {
   statusItems.forEach((item) => {
     const value = job?.[item.key];
     if (!value) return;
-    if (!value.submitted && value.submissionReady === true && canSubmit) rows.push({ label: item.label, actionLabel: 'Submit' });
-    if (value.submitted && !value.approved && canApprove) rows.push({ label: item.label, actionLabel: 'Approve' });
+    if (!value.submitted && value.submissionReady === true && canSubmit) rows.push({ id: value.id, label: item.label, actionLabel: 'Submit' });
+    if (value.submitted && !value.approved && canApprove) rows.push({ id: value.id, label: item.label, actionLabel: 'Approve' });
   });
 
   return rows.concat(getChecklistPending(job, canApprove, canSubmit));
@@ -39,9 +44,9 @@ const AuditEngagementApprovals = ({ auditEngagements, user }) => {
   const userInfo = React.useMemo(() => getCurrentUserInfo(user), [user]);
   const rows = React.useMemo(
     () =>
-      (auditEngagements || [])
-        .map((job) => ({ job, actions: getPendingActions(job, userInfo) }))
-        .filter((item) => item.actions.length),
+      (auditEngagements || []).flatMap((job) =>
+        getPendingActions(job, userInfo).map((action) => ({ job, action }))
+      ),
     [auditEngagements, userInfo]
   );
 
@@ -58,13 +63,17 @@ const AuditEngagementApprovals = ({ auditEngagements, user }) => {
           </tr>
         </thead>
         <tbody>
-          {rows.map(({ job, actions }) => (
-            <tr key={job?.id}>
+          {rows.map(({ job, action }) => (
+            <tr key={`${job?.id}-${action.label}-${action.id}`}>
               <td className='px-4 py-3 fw-medium'>{job?.aetitle || '-'}</td>
               <td className='px-4 py-3'>{job?.jobType || '-'}</td>
               <td className='px-4 py-3'>
                 <div className='d-flex flex-wrap gap-2'>
-                  {(job?.subLocations || []).length ? (
+                  {action.subLocationDescription ? (
+                    <span className='badge rounded-pill bg-light text-dark border'>
+                      {action.subLocationDescription}
+                    </span>
+                  ) : (job?.subLocations || []).length ? (
                     job.subLocations.map((subLocation) => (
                       <span key={subLocation?.id || subLocation?.description} className='badge rounded-pill bg-light text-dark border'>
                         {subLocation?.description || '-'}
@@ -75,7 +84,7 @@ const AuditEngagementApprovals = ({ auditEngagements, user }) => {
                   )}
                 </div>
               </td>
-              <td className='px-4 py-3'>{actions.map((item) => item.label).join(', ')}</td>
+              <td className='px-4 py-3'>{action.label}</td>
               <td className='px-4 py-3 text-end'>
                 <button
                   className='btn btn-sm btn-primary'
@@ -85,7 +94,7 @@ const AuditEngagementApprovals = ({ auditEngagements, user }) => {
                     })
                   }
                 >
-                  {actions.some((item) => item.actionLabel === 'Approve') ? 'Approve' : 'Submit'}
+                  {action.actionLabel}
                 </button>
               </td>
             </tr>
