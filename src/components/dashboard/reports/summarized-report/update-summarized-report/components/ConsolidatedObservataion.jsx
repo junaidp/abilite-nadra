@@ -69,11 +69,14 @@ const consolidatedObservation = ({ editableSummarizedReport, allLocations, onKey
                                     <div className="col-lg-12 mb-3">
                                         <label>Locations</label>
                                         <div className="d-flex flex-wrap gap-2">
-                                            {observation?.reportingList?.length ? (
-                                                observation.reportingList.map((reportObj, rIdx) => (
+                                            {observation?.subLocationList?.length ? (
+                                                observation.subLocationList.map((subLocation) => (
                                                     <Chip
-                                                        key={rIdx}
-                                                        label={getSubLocationDescription(reportObj?.subLocation)}
+                                                        key={subLocation?.id}
+                                                        label={
+                                                            subLocation?.description ||
+                                                            getSubLocationDescription(subLocation?.id)
+                                                        }
                                                     />
                                                 ))
                                             ) : (

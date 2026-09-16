@@ -19,6 +19,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
     loading: false,
+    summarizedReportsListLoading: true,
     allSummarizedReports: [],
     jobsForSummarizedReports: [],
     singleSummarizedReport: {},
@@ -143,6 +144,7 @@ export const slice = createSlice({
         },
         handleResetData: (state) => {
             state.loading = false,
+                state.summarizedReportsListLoading = true,
                 state.allSummarizedReports = [],
                 state.jobsForSummarizedReports = [],
                 state.singleSummarizedReport = {},
@@ -159,17 +161,20 @@ export const slice = createSlice({
         builder
             .addCase(setupGetAllSummarizedReports.pending, (state) => {
                 state.loading = true;
+                state.summarizedReportsListLoading = true;
             })
             .addCase(
                 setupGetAllSummarizedReports.fulfilled,
                 (state, { payload }) => {
                     state.totalNoOfRecords = payload?.message;
                     state.loading = false;
+                    state.summarizedReportsListLoading = false;
                     state.allSummarizedReports = payload?.data || [];
                 }
             )
             .addCase(setupGetAllSummarizedReports.rejected, (state, action) => {
                 state.loading = false;
+                state.summarizedReportsListLoading = false;
                 if (action.payload?.response?.data?.message) {
                     toast.error(action.payload.response.data.message);
                 } else {

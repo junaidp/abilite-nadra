@@ -56,12 +56,19 @@ const consolidatedObservations = ({ singleSummarizedReport, allLocations }) => {
                             <div className="col-lg-12 mb-3">
                                 <label>Locations</label>
                                 <div className="d-flex flex-wrap gap-2">
-                                    {observation?.reportingList?.map((reportObject, rIdx) => (
-                                        <Chip
-                                            key={rIdx}
-                                            label={findSubLocationDescription(reportObject?.subLocation)}
-                                        />
-                                    ))}
+                                    {observation?.subLocationList?.length ? (
+                                        observation.subLocationList.map((subLocation) => (
+                                            <Chip
+                                                key={subLocation?.id}
+                                                label={
+                                                    subLocation?.description ||
+                                                    findSubLocationDescription(subLocation?.id)
+                                                }
+                                            />
+                                        ))
+                                    ) : (
+                                        <span>No locations available</span>
+                                    )}
                                 </div>
                             </div>
 

@@ -37,7 +37,7 @@ const SummarizedReport = () => {
     const { user } = useSelector((state) => state?.auth);
     const {
         allSummarizedReports,
-        loading,
+        summarizedReportsListLoading,
         summarizedReportAddSuccess,
         totalNoOfRecords,
     } = useSelector((state) => state?.summarizedReport);
@@ -240,7 +240,7 @@ const SummarizedReport = () => {
                             </thead>
 
                             <tbody>
-                                {loading ? (
+                                {summarizedReportsListLoading ? (
                                     <tr>
                                         <td colSpan="7" className="text-center">
                                             <CircularProgress size={24} />

@@ -16,6 +16,7 @@ import Header from "../components/Header";
 import ConsolidatedObservations from "./components/ConsolidatedObservataion";
 import { decryptString } from "../../../../../config/helper";
 import { useEffect, useCallback, useState } from "react";
+import { buildSummarizedReportSavePayload } from "../components/reportPayload";
 
 /**
  * Allows editing and updating of an existing summarized audit report.
@@ -36,7 +37,7 @@ const UpdateSummarizedReport = () => {
     /** Save handler — triggers report update */
     const handleSaveSummarizedReport = useCallback(() => {
         if (!addReportLoading) {
-            dispatch(setupUpdateSummarizedReport(editableSummarizedReport));
+            dispatch(setupUpdateSummarizedReport(buildSummarizedReportSavePayload(editableSummarizedReport)));
         }
     }, [addReportLoading, dispatch, editableSummarizedReport]);
 
