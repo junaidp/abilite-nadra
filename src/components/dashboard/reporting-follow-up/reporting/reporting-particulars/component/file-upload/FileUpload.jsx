@@ -7,16 +7,16 @@ import {
   setupReportingFileDelete,
   setupReportingFileUpdate,
 } from "../../../../../../../global-redux/reducers/reporting/slice";
-import { handleDownload, validateFile } from "../../../../../../../config/helper";
+import { validateFile } from "../../../../../../../config/helper";
+import { downloadReportingAttachment } from "../../../../attachmentDownload";
 
 /**
  * ReportingFileUpload
  * Handles file upload, update, and delete for a given reporting item.
  *
  * @param {Object} item - Reporting item containing file attachments.
- * @param {Function} setDeleteFileId - Setter for tracking file deletion.
  */
-const ReportingFileUpload = ({ item, setDeleteFileId }) => {
+const ReportingFileUpload = ({ item }) => {
   const dispatch = useDispatch();
 
   const { loading, reportingFileUploadSuccess } = useSelector(
@@ -29,6 +29,7 @@ const ReportingFileUpload = ({ item, setDeleteFileId }) => {
 
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedUpdateFile, setSelectedUpdateFile] = useState(null);
+  const [downloadingFileId, setDownloadingFileId] = useState(null);
 
   // 🔹 Helpers
   const canEdit = Number(item?.stepNo) <= 1;
@@ -127,7 +128,6 @@ const ReportingFileUpload = ({ item, setDeleteFileId }) => {
         if (!isHeadOfInternalAudit) {
           return toast.error("Only the Head of Internal Audit can delete a file.");
         }
-        setDeleteFileId(fileId);
         dispatch(
           setupReportingFileDelete({
             fileId: Number(fileId),
@@ -136,7 +136,27 @@ const ReportingFileUpload = ({ item, setDeleteFileId }) => {
         );
       }
     },
-    [dispatch, item?.id, isHeadOfInternalAudit, loading, setDeleteFileId]
+    [dispatch, item?.id, isHeadOfInternalAudit, loading]
+  );
+
+  const handleFileDownload = useCallback(
+    async (fileItem) => {
+      if (!fileItem?.id || downloadingFileId) return;
+
+      try {
+        setDownloadingFileId(fileItem.id);
+        await downloadReportingAttachment({
+          attachment: fileItem,
+          token: user?.[0]?.token,
+          fallbackSource: "REPORTING_ATTACHMENT",
+        });
+      } catch {
+        toast.error("Unable to download the file.");
+      } finally {
+        setDownloadingFileId(null);
+      }
+    },
+    [downloadingFileId, user]
   );
 
   // 🔹 Reset inputs on successful upload
@@ -218,12 +238,16 @@ const ReportingFileUpload = ({ item, setDeleteFileId }) => {
                     <td className="w-130">
                       {/* Download */}
                       <i
-                        className="fa fa-download f-18 mx-2 cursor-pointer"
-                        onClick={() =>
-                          handleDownload({
-                            base64String: fileItem?.fileData,
-                            fileName: fileItem?.fileName,
-                          })
+                        className={`fa ${
+                          downloadingFileId === fileItem?.id
+                            ? "fa-spinner fa-spin"
+                            : "fa-download"
+                        } f-18 mx-2 cursor-pointer`}
+                        onClick={() => handleFileDownload(fileItem)}
+                        title={
+                          downloadingFileId === fileItem?.id
+                            ? "Downloading"
+                            : "Download"
                         }
                       ></i>
 

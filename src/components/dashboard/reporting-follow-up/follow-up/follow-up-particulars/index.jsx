@@ -5,7 +5,6 @@ import { useDispatch } from "react-redux";
 import {
   resetReportingAddSuccess,
   setupGetInitialSingleReportLite,
-  setupGetSingleReportLite,
   setupGetSingleObservation,
   setupUpdateFollowUp,
   resetReports,
@@ -253,20 +252,23 @@ const FollowUpParticulars = () => {
    * Effects
    * =============================== */
 
-  // When follow-up report is updated
+  // Refresh only the item changed by feedback.
   useEffect(() => {
     if (reportingAddSuccess) {
-      const companyId = user[0]?.company?.find(
-        (item) => item?.companyName === company
-      )?.id;
-      if (companyId) {
+      if (currentReportingAndFollowUpId) {
         dispatch(
-          setupGetSingleReportLite(`?reportingAndFollowUpId=${Number(followUpId)}`)
+          setupGetSingleObservation({
+            reportingId: Number(currentReportingAndFollowUpId),
+          })
         );
       }
       dispatch(resetReportingAddSuccess());
     }
-  }, [reportingAddSuccess, dispatch, company, followUpId, user]);
+  }, [
+    currentReportingAndFollowUpId,
+    dispatch,
+    reportingAddSuccess,
+  ]);
 
   // Reset success flag
   useEffect(() => {
@@ -520,4 +522,3 @@ const FollowUpParticulars = () => {
 };
 
 export default FollowUpParticulars;
-

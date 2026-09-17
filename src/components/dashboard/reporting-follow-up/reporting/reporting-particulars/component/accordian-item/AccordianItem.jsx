@@ -37,13 +37,11 @@ const AccordianItem = ({
   handleManagementCommentsChange,
   setCurrentReportingAndFollowUpId,
   setFeedBackDialog,
-  setCurrentOpenItem,
   handleAllowEditSection1,
   setViewFirstFeedBackDialog,
   setViewSecondFeedBackDialog,
   setViewFeedBackItem,
   handleSaveStep1,
-  setDeleteFileId,
   setShowSubmitDialog,
   setShowCurrentSubmittedItem,
   isOpen,
@@ -142,7 +140,7 @@ const AccordianItem = ({
                   handleAllowEditSection1={handleAllowEditSection1}
                 />
 
-                <ReportingFileUpload item={item} setDeleteFileId={setDeleteFileId} />
+                <ReportingFileUpload item={item} />
 
                 {/* Action Buttons */}
                 <ActionButtons

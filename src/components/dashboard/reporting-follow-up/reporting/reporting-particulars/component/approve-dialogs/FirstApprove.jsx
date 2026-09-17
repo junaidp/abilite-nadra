@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setupApproveReporting } from "../../../../../../../global-redux/reducers/reporting/slice";
+import { buildReportingDetailsUpdate } from "../../../../reportingUpdatePayload";
 
 const FirstApproveReportingDialog = ({
   setFirstApproveDialog,
@@ -14,10 +15,7 @@ const FirstApproveReportingDialog = ({
   function handleFirstApproveReportingDialog() {
     if (!loading) {
       dispatch(
-        setupApproveReporting({
-          ...currentApproveItem,
-          stepNo: 2,
-        })
+        setupApproveReporting(buildReportingDetailsUpdate(currentApproveItem, 2))
       );
     }
   }

@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
 import { setupUpdateReportingByManagementAuditee } from "../../../../../../../global-redux/reducers/reporting/slice";
 import { toast } from "react-toastify";
+import { buildManagementResponseUpdate } from "../../../../reportingUpdatePayload";
 
 const SubmitDialog = ({ item, setShowSubmitDialog }) => {
   const dispatch = useDispatch();
@@ -44,10 +45,7 @@ const SubmitDialog = ({ item, setShowSubmitDialog }) => {
       }
 
       dispatch(
-        setupUpdateReportingByManagementAuditee({
-          ...item,
-          stepNo: 3,
-        })
+        setupUpdateReportingByManagementAuditee(buildManagementResponseUpdate(item, 3))
       );
     }
   }

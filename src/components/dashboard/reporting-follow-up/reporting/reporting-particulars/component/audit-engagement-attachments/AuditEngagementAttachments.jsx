@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
-import { handleDownload } from "../../../../../../../config/helper";
+import { toast } from "react-toastify";
+import { downloadReportingAttachment } from "../../../../attachmentDownload";
 import "./AuditEngagementAttachments.css";
 
 const AuditEngagementAttachments = ({
@@ -11,10 +12,12 @@ const AuditEngagementAttachments = ({
   hideForManagementAuditee = true,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [downloadingFileId, setDownloadingFileId] = useState(null);
 
   const attachments = useMemo(() => {
     const source =
       suppliedAttachments ??
+      item?.auditEngagementAttachmentsList ??
       item?.checklistObservations?.observationsDataAttachmentsList ??
       [];
 
@@ -22,6 +25,7 @@ const AuditEngagementAttachments = ({
       (attachment) => attachment?.id && attachment?.fileName
     );
   }, [
+    item?.auditEngagementAttachmentsList,
     item?.checklistObservations?.observationsDataAttachmentsList,
     suppliedAttachments,
   ]);
@@ -29,6 +33,26 @@ const AuditEngagementAttachments = ({
   const isManagementAuditee =
     user?.[0]?.userId?.employeeid?.userHierarchy === "Management_Auditee";
   const panelId = `${groupName}-attachments-${item?.id}`;
+
+  const handleDownload = async (attachment) => {
+    if (!attachment?.id || downloadingFileId) return;
+
+    try {
+      setDownloadingFileId(attachment.id);
+      await downloadReportingAttachment({
+        attachment,
+        token: user?.[0]?.token,
+        fallbackSource:
+          groupName === "reporting"
+            ? "REPORTING_ATTACHMENT"
+            : "CHECKLIST_OBSERVATION",
+      });
+    } catch {
+      toast.error("Unable to download the file.");
+    } finally {
+      setDownloadingFileId(null);
+    }
+  };
 
   if (
     (hideForManagementAuditee && isManagementAuditee) ||
@@ -83,16 +107,23 @@ const AuditEngagementAttachments = ({
                 <button
                   type="button"
                   className="audit-engagement-attachments__download"
-                  onClick={() =>
-                    handleDownload({
-                      base64String: attachment.fileData,
-                      fileName: attachment.fileName,
-                    })
-                  }
+                  onClick={() => handleDownload(attachment)}
+                  disabled={downloadingFileId !== null}
                   aria-label={`Download ${attachment.fileName}`}
-                  title="Download"
+                  title={
+                    downloadingFileId === attachment.id
+                      ? "Downloading"
+                      : "Download"
+                  }
                 >
-                  <i className="fa fa-download" aria-hidden="true" />
+                  <i
+                    className={`fa ${
+                      downloadingFileId === attachment.id
+                        ? "fa-spinner fa-spin"
+                        : "fa-download"
+                    }`}
+                    aria-hidden="true"
+                  />
                 </button>
               </div>
             ))}

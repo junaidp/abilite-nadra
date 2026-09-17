@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setupApproveReporting } from "../../../../../../global-redux/reducers/reporting/slice";
+import { buildReportingTransition } from "../../../reportingUpdatePayload";
 
 const NewDateApproveDialog = ({ setNewDateApproveDialog, currentApproveItem }) => {
     const dispatch = useDispatch();
@@ -13,10 +14,7 @@ const NewDateApproveDialog = ({ setNewDateApproveDialog, currentApproveItem }) =
 
         try {
             dispatch(
-                setupApproveReporting({
-                    ...currentApproveItem,
-                    stepNo: 5,
-                })
+                setupApproveReporting(buildReportingTransition(currentApproveItem, 5))
             )
         } catch (error) {
             console.error("Error approving follow-up:", error);

@@ -14,6 +14,7 @@ const hasObservationDetails = (observation) =>
       observation?.implicationRating ||
       observation?.auditee ||
       observation?.checklistObservations ||
+      observation?.auditEngagementAttachmentsList?.length ||
       observation?.reportingFileAttachmentsList?.length
   );
 

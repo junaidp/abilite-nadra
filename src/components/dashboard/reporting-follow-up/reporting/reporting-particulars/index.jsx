@@ -13,12 +13,10 @@ import { toast } from "react-toastify";
 
 import {
   resetReportingAddSuccess,
-  setupGetSingleReportLite,
   setupUpdateReporting,
   setupGetInitialSingleReportLite,
   setupGetSingleObservation,
   resetReports,
-  resetReportingFileUploadAddSuccess,
   setupReportingPDFDownload
 } from "../../../../../global-redux/reducers/reporting/slice";
 
@@ -41,6 +39,10 @@ import ViewFirstFeedBackDialog from "../../components/FirstFeedBack";
 import ViewSecondFeedBackDialog from "../../components/SecondFeedBack";
 
 import { decryptString } from "../../../../../config/helper";
+import {
+  buildManagementResponseUpdate,
+  buildReportingDetailsUpdate,
+} from "../../reportingUpdatePayload";
 
 const ReportingParticulars = () => {
   const navigate = useNavigate();
@@ -58,15 +60,12 @@ const ReportingParticulars = () => {
     loading,
     reportingAddSuccess,
     initialLoading,
-    reportingFileUploadSuccess,
     approveAddSuccess
   } = useSelector((state) => state?.reporting);
   const { allUsers } = useSelector((state) => state?.settingsUserManagement);
 
   // --- Local state ---
   const [report, setReport] = React.useState([]);
-  const [deleteFileId, setDeleteFileId] = React.useState("");
-  const [currentOpenItem, setCurrentOpenItem] = React.useState({});
   const [openAccordionId, setOpenAccordionId] = React.useState(null);
   const [viewFeedBackItem, setViewFeedBackItem] = React.useState({});
   const [viewFirstFeedBackDialog, setViewFirstFeedBackDialog] =
@@ -213,36 +212,34 @@ const ReportingParticulars = () => {
   const handleSaveToStep1 = React.useCallback(
     (item) => {
       if (!loading) {
+        const nextStep =
+          item?.observationTitle &&
+          item?.area &&
+          item?.observationName &&
+          item?.implicationRating &&
+          Number(item?.implicationRating) !== 0 &&
+          item?.implication &&
+          item?.recommendedActionStep &&
+          item?.auditee?.name
+            ? 1
+            : 0;
         dispatch(
-          setupUpdateReporting({
-            ...item,
-            stepNo:
-              item?.observationTitle &&
-                item?.area &&
-                item?.observationName &&
-                item?.implicationRating &&
-                Number(item?.implicationRating) !== 0 &&
-                item?.implication &&
-                item?.recommendedActionStep &&
-                item?.auditee?.name
-                ? 1
-                : 0,
-          })
+          setupUpdateReporting(buildReportingDetailsUpdate(item, nextStep))
         );
       }
     },
     [dispatch, loading]
   );
-
   const handleSaveStep1 = React.useCallback(
     (item) => {
       if (!loading) {
-        dispatch(setupUpdateReporting(item));
+        dispatch(
+          setupUpdateReporting(buildReportingDetailsUpdate(item))
+        );
       }
     },
     [dispatch, loading]
   );
-
   const handleSaveToStep2 = React.useCallback((item) => {
     if (
       !item?.observationTitle ||
@@ -265,12 +262,17 @@ const ReportingParticulars = () => {
   const handleSaveStep2 = React.useCallback(
     (item) => {
       if (!loading) {
-        dispatch(setupUpdateReporting(item));
+        dispatch(
+          setupUpdateReporting(
+            Number(item?.stepNo) === 2
+              ? buildManagementResponseUpdate(item)
+              : buildReportingDetailsUpdate(item)
+          )
+        );
       }
     },
     [dispatch, loading]
   );
-
   const handleSaveToStep4 = React.useCallback((item) => {
     setCurrentApproveItem(item);
     setSecondApproveDialog(true);
@@ -319,60 +321,29 @@ const ReportingParticulars = () => {
    * and resetting redux slices.
    */
 
-  // Refresh report when a new reporting is added
+  // Refresh only the item changed by feedback.
   React.useEffect(() => {
     if (reportingAddSuccess) {
-      const companyId = user[0]?.company?.find(
-        (item) => item?.companyName === company
-      )?.id;
-
-      if (companyId) {
+      if (currentReportingAndFollowUpId) {
         dispatch(
-          setupGetSingleReportLite(`?reportingAndFollowUpId=${Number(reportingId)}`)
+          setupGetSingleObservation({
+            reportingId: Number(currentReportingAndFollowUpId),
+          })
         );
       }
       dispatch(resetReportingAddSuccess());
     }
-  }, [reportingAddSuccess, company, dispatch, reportingId, user]);
+  }, [
+    currentReportingAndFollowUpId,
+    dispatch,
+    reportingAddSuccess,
+  ]);
 
   React.useEffect(() => {
     if (approveAddSuccess) {
       dispatch(resetReportingAddSuccess());
     }
   }, [approveAddSuccess, company, dispatch, reportingId, user]);
-
-  // Handle file upload success -> update reporting list
-  React.useEffect(() => {
-    if (reportingFileUploadSuccess === true) {
-      if (currentOpenItem && Object.keys(currentOpenItem).length > 0) {
-        setTimeout(() => {
-          const updatedItem = report?.reportingList?.find(
-            (item) => Number(item?.id) === Number(currentOpenItem?.id)
-          );
-          if (updatedItem) {
-            dispatch(
-              setupUpdateReporting({
-                ...updatedItem,
-                reportingFileAttachmentsList:
-                  updatedItem?.reportingFileAttachmentsList?.filter(
-                    (singleFileItem) => singleFileItem?.id !== deleteFileId
-                  ),
-              })
-            );
-          }
-        }, 1500);
-      }
-      setDeleteFileId("");
-      dispatch(resetReportingFileUploadAddSuccess());
-    }
-  }, [
-    reportingFileUploadSuccess,
-    currentOpenItem,
-    deleteFileId,
-    dispatch,
-    report?.reportingList,
-  ]);
-
 
   // Sync local state when report data changes
   React.useEffect(() => {
@@ -581,7 +552,6 @@ const ReportingParticulars = () => {
                             setCurrentReportingAndFollowUpId
                           }
                           setFeedBackDialog={setFeedBackDialog}
-                          setCurrentOpenItem={setCurrentOpenItem}
                           handleAllowEditSection1={handleAllowEditSection1}
                           setViewFirstFeedBackDialog={
                             setViewFirstFeedBackDialog
@@ -591,7 +561,6 @@ const ReportingParticulars = () => {
                           }
                           setViewFeedBackItem={setViewFeedBackItem}
                           handleSaveStep1={handleSaveStep1}
-                          setDeleteFileId={setDeleteFileId}
                           setShowSubmitDialog={setShowSubmitDialog}
                           setShowCurrentSubmittedItem={
                             setShowCurrentSubmittedItem
@@ -603,7 +572,6 @@ const ReportingParticulars = () => {
                               hasObservationDetails(item))
                           }
                           onToggle={() => {
-                            setCurrentOpenItem(item);
                             const willOpen =
                               Number(openAccordionId) !== Number(item?.id);
                             setOpenAccordionId((prev) =>

@@ -5,6 +5,7 @@ import {
   setupSubmitReportingInFollowUp,
 } from "../../../../../../global-redux/reducers/reporting/slice";
 import { toast } from "react-toastify";
+import { buildReportingTransition } from "../../../reportingUpdatePayload";
 
 const SubmitDialog = ({ item, setShowSubmitDialog }) => {
   const dispatch = useDispatch();
@@ -54,10 +55,7 @@ const SubmitDialog = ({ item, setShowSubmitDialog }) => {
       ).unwrap();
 
       await dispatch(
-        setupSubmitReportingInFollowUp({
-          ...item,
-          stepNo: 6,
-        })
+        setupSubmitReportingInFollowUp(buildReportingTransition(item, 6))
       ).unwrap();
     } catch (error) {
       toast.error("An error occurred while submitting. Please try again.");
@@ -97,4 +95,3 @@ const SubmitDialog = ({ item, setShowSubmitDialog }) => {
 };
 
 export default SubmitDialog;
-

@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setupApproveReporting, setupUpdateFollowUp } from "../../../../../../global-redux/reducers/reporting/slice";
+import { buildReportingTransition } from "../../../reportingUpdatePayload";
 
 const ApproveDialog = ({ setApproveDialog, currentApproveItem }) => {
   const dispatch = useDispatch();
@@ -21,10 +22,7 @@ const ApproveDialog = ({ setApproveDialog, currentApproveItem }) => {
       ).unwrap();
 
       await dispatch(
-        setupApproveReporting({
-          ...currentApproveItem,
-          stepNo: 7,
-        })
+        setupApproveReporting(buildReportingTransition(currentApproveItem, 7))
       ).unwrap();
 
     } catch (error) {
@@ -64,4 +62,3 @@ const ApproveDialog = ({ setApproveDialog, currentApproveItem }) => {
 };
 
 export default ApproveDialog;
-

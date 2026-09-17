@@ -279,7 +279,7 @@ export const slice = createSlice({
           state.singleReport = {
             ...state.singleReport,
             reportingList: state.singleReport?.reportingList?.map((item) =>
-              Number(item.id) === Number(observation.id) ? observation : item
+              Number(item.id) === Number(observation.id) ? { ...item, ...observation } : item
             ),
           };
         }
@@ -299,7 +299,7 @@ export const slice = createSlice({
       })
       .addCase(setupUpdateReporting.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.singleReport = { ...state.singleReport, reportingList: state.singleReport?.reportingList?.map((item) => (item.id === payload?.data?.id ? payload?.data : item)) }
+        state.singleReport = { ...state.singleReport, reportingList: state.singleReport?.reportingList?.map((item) => (item.id === payload?.data?.id ? { ...item, ...payload?.data } : item)) }
         toast.success("Reporting updated successfully");
       })
       .addCase(setupUpdateReporting.rejected, (state, { payload }) => {
@@ -318,7 +318,7 @@ export const slice = createSlice({
       })
       .addCase(setupSubmitReportingInFollowUp.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.singleReport = { ...state.singleReport, reportingList: state.singleReport?.reportingList?.map((item) => (item.id === payload?.data?.id ? payload?.data : item)) }
+        state.singleReport = { ...state.singleReport, reportingList: state.singleReport?.reportingList?.map((item) => (item.id === payload?.data?.id ? { ...item, ...payload?.data } : item)) }
         state.followUpSubmittedAddSuccess = true;
         toast.success("Follow Up Submitted Successfully");
       })
@@ -341,7 +341,7 @@ export const slice = createSlice({
       .addCase(setupApproveReporting.fulfilled, (state, { payload }) => {
         state.loading = false;
         state.approveAddSuccess = true;
-        state.singleReport = { ...state.singleReport, reportingList: state.singleReport?.reportingList?.map((item) => (item.id === payload?.data?.id ? payload?.data : item)) }
+        state.singleReport = { ...state.singleReport, reportingList: state.singleReport?.reportingList?.map((item) => (item.id === payload?.data?.id ? { ...item, ...payload?.data } : item)) }
         toast.success("Reporting Approved Successfully");
       })
       .addCase(setupApproveReporting.rejected, (state, { payload }) => {
@@ -418,7 +418,7 @@ export const slice = createSlice({
       .addCase(setupUpdateReportingByManagementAuditee.fulfilled, (state, { payload }) => {
         state.loading = false;
         state.approveAddSuccess = true;
-        state.singleReport = { ...state.singleReport, reportingList: state.singleReport?.reportingList?.map((item) => (item.id === payload?.data?.id ? payload?.data : item)) }
+        state.singleReport = { ...state.singleReport, reportingList: state.singleReport?.reportingList?.map((item) => (item.id === payload?.data?.id ? { ...item, ...payload?.data } : item)) }
         toast.success("Reporting submitted successfully");
       })
       .addCase(
@@ -436,10 +436,26 @@ export const slice = createSlice({
     builder
       .addCase(setupReportingFileUpload.pending, (state) => {
         state.loading = true;
+        state.reportingFileUploadSuccess = false;
       })
-      .addCase(setupReportingFileUpload.fulfilled, (state) => {
+      .addCase(setupReportingFileUpload.fulfilled, (state, { payload }) => {
         state.loading = false;
         state.reportingFileUploadSuccess = true;
+        const attachmentUpdate = payload?.data;
+        if (attachmentUpdate?.reportingId) {
+          state.singleReport = {
+            ...state.singleReport,
+            reportingList: state.singleReport?.reportingList?.map((item) =>
+              Number(item?.id) === Number(attachmentUpdate.reportingId)
+                ? {
+                    ...item,
+                    reportingFileAttachmentsList:
+                      attachmentUpdate.reportingFileAttachmentsList || [],
+                  }
+                : item
+            ),
+          };
+        }
         toast.success("Reporting file uploaded successfully");
       })
       .addCase(setupReportingFileUpload.rejected, (state, { payload }) => {
@@ -454,10 +470,26 @@ export const slice = createSlice({
     builder
       .addCase(setupReportingFileDelete.pending, (state) => {
         state.loading = true;
+        state.reportingFileUploadSuccess = false;
       })
-      .addCase(setupReportingFileDelete.fulfilled, (state) => {
+      .addCase(setupReportingFileDelete.fulfilled, (state, { payload }) => {
         state.loading = false;
         state.reportingFileUploadSuccess = true;
+        const attachmentUpdate = payload?.data;
+        if (attachmentUpdate?.reportingId) {
+          state.singleReport = {
+            ...state.singleReport,
+            reportingList: state.singleReport?.reportingList?.map((item) =>
+              Number(item?.id) === Number(attachmentUpdate.reportingId)
+                ? {
+                    ...item,
+                    reportingFileAttachmentsList:
+                      attachmentUpdate.reportingFileAttachmentsList || [],
+                  }
+                : item
+            ),
+          };
+        }
         toast.success("Reporting file deleted successfully");
       })
       .addCase(setupReportingFileDelete.rejected, (state, { payload }) => {
@@ -472,10 +504,26 @@ export const slice = createSlice({
     builder
       .addCase(setupReportingFileUpdate.pending, (state) => {
         state.loading = true;
+        state.reportingFileUploadSuccess = false;
       })
-      .addCase(setupReportingFileUpdate.fulfilled, (state) => {
+      .addCase(setupReportingFileUpdate.fulfilled, (state, { payload }) => {
         state.loading = false;
         state.reportingFileUploadSuccess = true;
+        const updatedFile = payload?.data;
+        if (updatedFile?.id) {
+          state.singleReport = {
+            ...state.singleReport,
+            reportingList: state.singleReport?.reportingList?.map((item) => ({
+              ...item,
+              reportingFileAttachmentsList:
+                item?.reportingFileAttachmentsList?.map((file) =>
+                  Number(file?.id) === Number(updatedFile.id)
+                    ? { ...file, ...updatedFile, source: file?.source || "REPORTING_ATTACHMENT" }
+                    : file
+                ) || [],
+            })),
+          };
+        }
         toast.success("Reporting file updated successfully");
       })
       .addCase(setupReportingFileUpdate.rejected, (state, { payload }) => {

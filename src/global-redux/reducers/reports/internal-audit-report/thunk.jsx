@@ -53,13 +53,16 @@ export const getInternalReportSingleObservation = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     const props = await axios.get(
-      `${baseUrl}/reportingAndFollowUp/singleObservation?reportingId=${data?.reportingId}`,
+      `${baseUrl}/reportingAndFollowUp/singleObservation/v2?reportingId=${data?.reportingId}`,
       {
         headers: {
           Authorization: `Bearer ${user[0]?.token}`,
         },
       }
     );
+    if (props.data?.status === false) {
+      return thunkAPI.rejectWithValue({ response: { data: props.data } });
+    }
     return props.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);

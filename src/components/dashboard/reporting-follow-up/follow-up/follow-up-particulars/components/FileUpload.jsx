@@ -1,7 +1,29 @@
 import React from "react";
-import { handleDownload } from "../../../../../../config/helper";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { downloadReportingAttachment } from "../../../attachmentDownload";
 
 const FollowUpFileUpload = ({ item }) => {
+  const { user } = useSelector((state) => state?.auth);
+  const [downloadingFileId, setDownloadingFileId] = React.useState(null);
+
+  const handleFileDownload = async (fileItem) => {
+    if (!fileItem?.id || downloadingFileId) return;
+
+    try {
+      setDownloadingFileId(fileItem.id);
+      await downloadReportingAttachment({
+        attachment: fileItem,
+        token: user?.[0]?.token,
+        fallbackSource: "REPORTING_ATTACHMENT",
+      });
+    } catch {
+      toast.error("Unable to download the file.");
+    } finally {
+      setDownloadingFileId(null);
+    }
+  };
+
   return (
     <div className="row mb-3">
       <div className="col-lg-12">
@@ -30,12 +52,16 @@ const FollowUpFileUpload = ({ item }) => {
                       </td>
                       <td className="w-130">
                         <i
-                          className="fa fa-download f-18 mx-2 cursor-pointer"
-                          onClick={() =>
-                            handleDownload({
-                              base64String: fileItem?.fileData,
-                              fileName: fileItem?.fileName,
-                            })
+                          className={`fa ${
+                            downloadingFileId === fileItem?.id
+                              ? "fa-spinner fa-spin"
+                              : "fa-download"
+                          } f-18 mx-2 cursor-pointer`}
+                          onClick={() => handleFileDownload(fileItem)}
+                          title={
+                            downloadingFileId === fileItem?.id
+                              ? "Downloading"
+                              : "Download"
                           }
                         ></i>
                       </td>

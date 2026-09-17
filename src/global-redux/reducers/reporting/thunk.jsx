@@ -83,7 +83,7 @@ export const getSingleObservation = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.get(
-      `${baseUrl}/reportingAndFollowUp/singleObservation?reportingId=${data?.reportingId}`,
+      `${baseUrl}/reportingAndFollowUp/singleObservation/v2?reportingId=${data?.reportingId}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -91,6 +91,9 @@ export const getSingleObservation = async (data, thunkAPI) => {
         },
       }
     );
+    if (props.data?.status === false) {
+      return thunkAPI.rejectWithValue({ response: { data: props.data } });
+    }
     return props.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
@@ -101,7 +104,7 @@ export const updateReporting = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
-      `${baseUrl}/reportingAndFollowUp/reporting/update`,
+      `${baseUrl}/reportingAndFollowUp/reporting/update/v2`,
       data,
       {
         headers: {
@@ -120,7 +123,7 @@ export const submitReportingInFollowUp = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
-      `${baseUrl}/reportingAndFollowUp/reporting/update`,
+      `${baseUrl}/reportingAndFollowUp/reporting/update/v2`,
       data,
       {
         headers: {
@@ -139,7 +142,7 @@ export const approveReporting = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
-      `${baseUrl}/reportingAndFollowUp/reporting/update`,
+      `${baseUrl}/reportingAndFollowUp/reporting/update/v2`,
       data,
       {
         headers: {
@@ -148,6 +151,9 @@ export const approveReporting = async (data, thunkAPI) => {
         },
       }
     );
+    if (props.data?.status === false) {
+      return thunkAPI.rejectWithValue({ response: { data: props.data } });
+    }
     return props.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
@@ -158,7 +164,7 @@ export const updateReportingByManagementAuditee = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
     let props = await axios.post(
-      `${baseUrl}/reportingAndFollowUp/reporting/update`,
+      `${baseUrl}/reportingAndFollowUp/reporting/update/v2`,
       data,
       {
         headers: {
@@ -243,6 +249,9 @@ export const reportingFileUpload = async (data, thunkAPI) => {
         },
       }
     );
+    if (props.data?.status === false) {
+      return thunkAPI.rejectWithValue({ response: { data: props.data } });
+    }
     return props.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
@@ -260,6 +269,9 @@ export const reportingFileDelete = async (data, thunkAPI) => {
         },
       }
     );
+    if (props.data?.status === false) {
+      return thunkAPI.rejectWithValue({ response: { data: props.data } });
+    }
     return props.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
@@ -279,6 +291,9 @@ export const reportingFileUpdate = async (data, thunkAPI) => {
         },
       }
     );
+    if (props.data?.status === false) {
+      return thunkAPI.rejectWithValue({ response: { data: props.data } });
+    }
     return props.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
