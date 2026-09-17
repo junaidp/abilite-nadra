@@ -5,14 +5,13 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   setupReportingFileUpload,
   setupReportingFileDelete,
-  setupReportingFileUpdate,
 } from "../../../../../../../global-redux/reducers/reporting/slice";
 import { validateFile } from "../../../../../../../config/helper";
 import { downloadReportingAttachment } from "../../../../attachmentDownload";
 
 /**
  * ReportingFileUpload
- * Handles file upload, update, and delete for a given reporting item.
+ * Handles file upload and delete for a given reporting item.
  *
  * @param {Object} item - Reporting item containing file attachments.
  */
@@ -25,10 +24,8 @@ const ReportingFileUpload = ({ item }) => {
   const { user } = useSelector((state) => state?.auth);
 
   const fileInputRef = useRef(null);
-  const updatedFileInputRef = useRef(null);
 
   const [selectedFile, setSelectedFile] = useState(null);
-  const [selectedUpdateFile, setSelectedUpdateFile] = useState(null);
   const [downloadingFileId, setDownloadingFileId] = useState(null);
 
   // 🔹 Helpers
@@ -39,11 +36,6 @@ const ReportingFileUpload = ({ item }) => {
   const clearSelectedFile = useCallback(() => {
     setSelectedFile(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
-  }, []);
-
-  const clearSelectedUpdateFile = useCallback(() => {
-    setSelectedUpdateFile(null);
-    if (updatedFileInputRef.current) updatedFileInputRef.current.value = "";
   }, []);
 
   // 🔹 File Handlers
@@ -59,18 +51,6 @@ const ReportingFileUpload = ({ item }) => {
     }
   }, [clearSelectedFile]);
 
-  const handleUpdateFileChange = useCallback(async (e) => {
-    const file = e.target.files?.[0] || null;
-    if (file) {
-      const isValid = await validateFile(file, toast);
-      if (isValid) {
-        setSelectedUpdateFile(file);
-      } else {
-        clearSelectedUpdateFile();
-      }
-    }
-  }, [clearSelectedUpdateFile]);
-
   const uploadFile = useCallback(
     (file) => {
       if (!loading && file) {
@@ -80,17 +60,6 @@ const ReportingFileUpload = ({ item }) => {
       }
     },
     [dispatch, item?.id, loading]
-  );
-
-  const updateFile = useCallback(
-    (file, id) => {
-      if (!loading && file) {
-        const formData = new FormData();
-        formData.append("file", file);
-        dispatch(setupReportingFileUpdate({ formData, id: Number(id) }));
-      }
-    },
-    [dispatch, loading]
   );
 
   const handleFileUpload = useCallback(async () => {
@@ -105,22 +74,6 @@ const ReportingFileUpload = ({ item }) => {
       toast.error("No file selected.");
     }
   }, [selectedFile, uploadFile, clearSelectedFile]);
-
-  const handleFileUpdate = useCallback(
-    async (id) => {
-      if (selectedUpdateFile) {
-        const isValid = await validateFile(selectedUpdateFile, toast);
-        if (!isValid) {
-          clearSelectedUpdateFile();
-          return;
-        }
-        updateFile(selectedUpdateFile, id);
-      } else {
-        toast.error("Please select update file first.");
-      }
-    },
-    [selectedUpdateFile, updateFile, clearSelectedUpdateFile]
-  );
 
   const handleFileDelete = useCallback(
     (fileId) => {
@@ -163,9 +116,7 @@ const ReportingFileUpload = ({ item }) => {
   useEffect(() => {
     if (reportingFileUploadSuccess) {
       setSelectedFile(null);
-      setSelectedUpdateFile(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
-      if (updatedFileInputRef.current) updatedFileInputRef.current.value = "";
     }
   }, [reportingFileUploadSuccess]);
 
@@ -174,7 +125,7 @@ const ReportingFileUpload = ({ item }) => {
       <div className="col-lg-12">
         <label className="form-label me-3 mb-3">Attach files</label>
 
-        {/* Upload & Update Section */}
+        {/* Upload Section */}
         {canEdit && (
           <div className="row mb-3">
             {/* Upload File */}
@@ -196,20 +147,6 @@ const ReportingFileUpload = ({ item }) => {
                 >
                   {loading ? "Loading..." : "Upload"}
                 </button>
-              </div>
-            </div>
-
-            {/* Update File */}
-            <div className="col-lg-8 row flex flex-end">
-              <div className="col-lg-3">
-                <label>Updated File here:</label>
-                <input
-                  type="file"
-                  className="f-10"
-                  ref={updatedFileInputRef}
-                  onChange={handleUpdateFileChange}
-                  accept=".xlsx, .xls, .pdf, .txt"
-                />
               </div>
             </div>
           </div>
@@ -256,14 +193,6 @@ const ReportingFileUpload = ({ item }) => {
                         <i
                           className="fa fa-trash text-danger f-18 cursor-pointer px-2"
                           onClick={() => handleFileDelete(fileItem?.id)}
-                        ></i>
-                      )}
-
-                      {/* Update */}
-                      {canEdit && (
-                        <i
-                          className="fa fa-edit px-2 f-18 cursor-pointer"
-                          onClick={() => handleFileUpdate(fileItem?.id)}
                         ></i>
                       )}
                     </td>

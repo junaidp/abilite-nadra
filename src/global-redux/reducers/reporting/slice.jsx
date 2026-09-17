@@ -15,7 +15,6 @@ import {
   updateReportingByManagementAuditee,
   reportingFileUpload,
   reportingFileDelete,
-  reportingFileUpdate,
   reportingFeedBack,
   reportingPDFDownload
 } from "./thunk";
@@ -134,12 +133,6 @@ export const setupReportingFileDelete = createAsyncThunk(
   "reporting/reportingFileDelete",
   async (data, thunkAPI) => {
     return reportingFileDelete(data, thunkAPI);
-  }
-);
-export const setupReportingFileUpdate = createAsyncThunk(
-  "reporting/reportingFileUpdate",
-  async (data, thunkAPI) => {
-    return reportingFileUpdate(data, thunkAPI);
   }
 );
 export const setupReportingFeedBack = createAsyncThunk(
@@ -493,40 +486,6 @@ export const slice = createSlice({
         toast.success("Reporting file deleted successfully");
       })
       .addCase(setupReportingFileDelete.rejected, (state, { payload }) => {
-        state.loading = false;
-        if (payload?.response?.data?.message) {
-          toast.error(payload?.response?.data?.message);
-        } else {
-          toast.error("An Error has occurred");
-        }
-      });
-    // Reporting File Update
-    builder
-      .addCase(setupReportingFileUpdate.pending, (state) => {
-        state.loading = true;
-        state.reportingFileUploadSuccess = false;
-      })
-      .addCase(setupReportingFileUpdate.fulfilled, (state, { payload }) => {
-        state.loading = false;
-        state.reportingFileUploadSuccess = true;
-        const updatedFile = payload?.data;
-        if (updatedFile?.id) {
-          state.singleReport = {
-            ...state.singleReport,
-            reportingList: state.singleReport?.reportingList?.map((item) => ({
-              ...item,
-              reportingFileAttachmentsList:
-                item?.reportingFileAttachmentsList?.map((file) =>
-                  Number(file?.id) === Number(updatedFile.id)
-                    ? { ...file, ...updatedFile, source: file?.source || "REPORTING_ATTACHMENT" }
-                    : file
-                ) || [],
-            })),
-          };
-        }
-        toast.success("Reporting file updated successfully");
-      })
-      .addCase(setupReportingFileUpdate.rejected, (state, { payload }) => {
         state.loading = false;
         if (payload?.response?.data?.message) {
           toast.error(payload?.response?.data?.message);
