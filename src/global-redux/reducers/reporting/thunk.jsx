@@ -1,6 +1,30 @@
 import axios from "axios";
 import { baseUrl } from "../../../config/constants";
 
+const handleReportingUpdateResponse = (response, thunkAPI) => {
+  if (
+    response?.status &&
+    response?.data?.id &&
+    response?.data?.stepNo != null
+  ) {
+    return response;
+  }
+
+  const responseData =
+    response && typeof response === "object" ? response : {};
+
+  return thunkAPI.rejectWithValue({
+    response: {
+      data: {
+        ...responseData,
+        message:
+          responseData.message ||
+          "The reporting update completed without a valid response.",
+      },
+    },
+  });
+};
+
 export const getAllReporting = async (data, thunkAPI) => {
   try {
     const { user } = thunkAPI.getState().auth;
@@ -113,7 +137,7 @@ export const updateReporting = async (data, thunkAPI) => {
         },
       }
     );
-    return props.data;
+    return handleReportingUpdateResponse(props.data, thunkAPI);
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
   }
@@ -132,7 +156,7 @@ export const submitReportingInFollowUp = async (data, thunkAPI) => {
         },
       }
     );
-    return props.data;
+    return handleReportingUpdateResponse(props.data, thunkAPI);
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
   }
@@ -151,10 +175,7 @@ export const approveReporting = async (data, thunkAPI) => {
         },
       }
     );
-    if (props.data?.status === false) {
-      return thunkAPI.rejectWithValue({ response: { data: props.data } });
-    }
-    return props.data;
+    return handleReportingUpdateResponse(props.data, thunkAPI);
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
   }
@@ -173,7 +194,7 @@ export const updateReportingByManagementAuditee = async (data, thunkAPI) => {
         },
       }
     );
-    return props.data;
+    return handleReportingUpdateResponse(props.data, thunkAPI);
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
   }
