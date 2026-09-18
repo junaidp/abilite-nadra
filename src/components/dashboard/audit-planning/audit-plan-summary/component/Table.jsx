@@ -234,7 +234,7 @@ const Table = ({
                   setViewFeedBackDialog(true);
                 }}
               >
-                View FeedBack
+                View Feedback
               </div>
             )}
 

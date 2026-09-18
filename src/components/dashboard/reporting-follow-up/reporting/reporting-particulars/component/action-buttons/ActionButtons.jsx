@@ -20,6 +20,9 @@ const ActionButtons = ({
     setViewFirstFeedBackDialog,
     setViewSecondFeedBackDialog,
 }) => {
+    const isManagementAuditee =
+        user?.userId?.employeeid?.userHierarchy === "Management_Auditee";
+
     return (
         <div className="d-flex flex-end w-100 gap-4">
             {/* Step 0: Save + Submit */}
@@ -140,7 +143,7 @@ const ActionButtons = ({
                 )}
 
             {/* Feedback View Buttons */}
-            {item?.firstFeedback?.description && (
+            {!isManagementAuditee && item?.firstFeedback?.description && (
                 <button
                     className={`btn btn-labeled btn-primary px-3 mt-3 shadow ${loading && "disabled"
                         }`}
@@ -149,7 +152,7 @@ const ActionButtons = ({
                         setViewFirstFeedBackDialog(true);
                     }}
                 >
-                    View First FeedBack
+                    View Feedback
                 </button>
             )}
 
@@ -162,7 +165,7 @@ const ActionButtons = ({
                         setViewSecondFeedBackDialog(true);
                     }}
                 >
-                    View Second FeedBack
+                    Auditor&apos;s Feedback
                 </button>
             )}
         </div>
