@@ -44,7 +44,7 @@ const AccordianItem = ({
   }, [singleReport, item?.subLocation]);
 
   return (
-    <div className="accordion-item">
+    <div className="accordion-item" id={`follow-up-observation-${item?.id}`}>
       <h2 className="accordion-header" id="headingeightt">
         <AccordionHeader
           index={index}

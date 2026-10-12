@@ -1,8 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Bar, BarChart, CartesianGrid, Cell, LabelList, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import { encryptAndEncode } from '../../../../config/helper';
-import { buildObservationRows, summarizeImplementation, uniqueFilterOptions } from './dashboardHelpers';
+import { buildObservationRows, buildObservationTarget, summarizeImplementation, uniqueFilterOptions } from './dashboardHelpers';
 
 const colors = {
   Implemented: '#0d6efd',
@@ -125,7 +124,7 @@ const ObservationImplementationTrend = ({ dashboardReporting, users, locations }
   const setActiveFromHover = (status) => setActiveStatus(status);
   const handleRowClick = (row) => {
     if (!row?.jobId) return;
-    navigate('/audit/follow-up-particulars/' + encryptAndEncode(row.jobId.toString()));
+    navigate(buildObservationTarget('/audit/follow-up-particulars', row.jobId, row.id));
   };
 
   return (

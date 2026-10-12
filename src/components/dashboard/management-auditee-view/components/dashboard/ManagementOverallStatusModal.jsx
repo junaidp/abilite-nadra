@@ -1,8 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import { encryptAndEncode } from '../../../../../config/helper';
-import { buildObservationRows, summarizeImplementation, uniqueFilterOptions } from '../../../home/components/dashboardHelpers';
+import { buildObservationRows, buildObservationTarget, summarizeImplementation, uniqueFilterOptions } from '../../../home/components/dashboardHelpers';
 import { ChartSkeleton } from '../../../home/components/Skeletons';
 
 const statusColors = {
@@ -149,7 +148,7 @@ const ManagementOverallStatusModal = ({ open, onClose, loading, dashboardReporti
 
   const handleRowClick = (row) => {
     if (!row?.jobId) return;
-    navigate('/audit/follow-up-particulars/' + encryptAndEncode(row.jobId.toString()));
+    navigate(buildObservationTarget('/audit/follow-up-particulars', row.jobId, row.id));
   };
 
   if (!open) return null;

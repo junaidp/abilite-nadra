@@ -1,4 +1,15 @@
+import { encryptAndEncode } from '../../../../config/helper';
+
 export const DASHBOARD_ROLE = 'non-management';
+
+export const buildObservationTarget = (route, jobId, observationId) => {
+  if (!route || !jobId) return route || '';
+
+  const target = route + '/' + encryptAndEncode(jobId.toString());
+  if (!observationId) return target;
+
+  return target + '?observation=' + encryptAndEncode(observationId.toString());
+};
 
 export const getReportingItems = (job) =>
   Array.isArray(job?.reportingList) ? job.reportingList : [];
@@ -189,6 +200,7 @@ export const buildReportingApprovalRows = ({ dashboardReporting, auditEngagement
       rows.push({
         id: 'reporting-' + job?.id + '-' + item?.id + '-' + stepNo,
         reportingId: job?.id,
+        observationId: item?.id,
         jobName: job?.title || '-',
         year: job?.year || '',
         observationName: item?.observationTitle || '-',
@@ -212,6 +224,7 @@ export const buildFollowUpApprovalRows = ({ dashboardReporting, auditEngagements
       rows.push({
         id: 'follow-up-' + job?.id + '-' + item?.id,
         reportingId: job?.id,
+        observationId: item?.id,
         jobName: job?.title || '-',
         year: job?.year || '',
         observationName: item?.observationTitle || '-',

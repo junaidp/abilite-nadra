@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   CircularProgress,
@@ -47,10 +47,17 @@ import {
 const ReportingParticulars = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [searchParams] = useSearchParams();
 
   // --- Extract and decrypt params ---
   const { id } = useParams();
   const reportingId = decryptString(id);
+  const focusedObservationParam = searchParams.get("observation");
+  const focusedObservationId = React.useMemo(() => {
+    if (!focusedObservationParam) return null;
+    const value = Number(decryptString(focusedObservationParam));
+    return Number.isFinite(value) && value > 0 ? value : null;
+  }, [focusedObservationParam]);
 
   // --- Global state ---
   const { user } = useSelector((state) => state?.auth);
@@ -86,6 +93,8 @@ const ReportingParticulars = () => {
   const [loadedObservationIds, setLoadedObservationIds] = React.useState({});
   const [page, setPage] = React.useState(1);
   const [itemsPerPage, setItemsPerPage] = React.useState(10);
+  const focusedObservationHandledRef = React.useRef(null);
+  const focusedObservationScrolledRef = React.useRef(null);
 
 
   const isManagementAuditee =
@@ -103,7 +112,10 @@ const ReportingParticulars = () => {
     [allUsers]
   );
 
-  const currentReportingList = report?.reportingList || [];
+  const currentReportingList = React.useMemo(
+    () => report?.reportingList || [],
+    [report?.reportingList]
+  );
   const paginatedReportingList = React.useMemo(
     () =>
       currentReportingList.slice(
@@ -156,6 +168,47 @@ const ReportingParticulars = () => {
       loadingObservationIds,
     ]
   );
+
+  React.useEffect(() => {
+    if (!focusedObservationId || !currentReportingList.length) return;
+
+    const focusKey = `${reportingId}-${focusedObservationId}`;
+    if (focusedObservationHandledRef.current === focusKey) return;
+
+    const itemIndex = currentReportingList.findIndex(
+      (item) => Number(item?.id) === focusedObservationId
+    );
+    if (itemIndex < 0) return;
+
+    const focusedItem = currentReportingList[itemIndex];
+    focusedObservationHandledRef.current = focusKey;
+    setPage(Math.floor(itemIndex / itemsPerPage) + 1);
+    setOpenAccordionId(focusedItem.id);
+    fetchObservationDetails(focusedItem);
+  }, [
+    currentReportingList,
+    fetchObservationDetails,
+    focusedObservationId,
+    itemsPerPage,
+    reportingId,
+  ]);
+
+  React.useEffect(() => {
+    if (!focusedObservationId || Number(openAccordionId) !== focusedObservationId) return;
+    if (!paginatedReportingList.some((item) => Number(item?.id) === focusedObservationId)) return;
+
+    const focusKey = `${reportingId}-${focusedObservationId}`;
+    if (focusedObservationScrolledRef.current === focusKey) return;
+    focusedObservationScrolledRef.current = focusKey;
+
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        const accordion = document.getElementById(`reporting-observation-${focusedObservationId}`);
+        accordion?.scrollIntoView({ behavior: "smooth", block: "start" });
+        accordion?.querySelector(".accordion-button")?.focus({ preventScroll: true });
+      });
+    });
+  }, [focusedObservationId, openAccordionId, paginatedReportingList, reportingId]);
 
   const handleChangeItemsPerPage = React.useCallback((event) => {
     setPage(1);

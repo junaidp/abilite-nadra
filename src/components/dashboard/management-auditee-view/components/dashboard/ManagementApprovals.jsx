@@ -1,8 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { encryptAndEncode } from '../../../../../config/helper';
 import { DashboardTabs } from '../../../home/components/DashboardTabs';
-import { buildLocationMap, getReportingItems, resolveLocationName } from '../../../home/components/dashboardHelpers';
+import { buildLocationMap, buildObservationTarget, getReportingItems, resolveLocationName } from '../../../home/components/dashboardHelpers';
 
 const APPROVAL_TABS = ['Reporting Approval', 'Follow Up Approval'];
 
@@ -16,6 +15,7 @@ const buildRows = ({ dashboardReporting, locations, stepNo, route, actionLabel }
       rows.push({
         id: route + '-' + job?.id + '-' + item?.id,
         reportingId: job?.id,
+        observationId: item?.id,
         jobName: job?.title || '-',
         observationName: item?.observationTitle || '-',
         locationName: resolveLocationName(item, locationMap),
@@ -33,7 +33,7 @@ const ApprovalTable = ({ rows }) => {
 
   const openRow = (row) => {
     if (!row?.reportingId) return;
-    navigate(row.route + '/' + encryptAndEncode(row.reportingId.toString()));
+    navigate(buildObservationTarget(row.route, row.reportingId, row.observationId));
   };
 
   return (

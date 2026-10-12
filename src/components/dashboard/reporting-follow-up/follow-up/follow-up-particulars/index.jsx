@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import React, { useState, useEffect, useCallback } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import {
   resetReportingAddSuccess,
@@ -39,9 +39,16 @@ const FollowUpParticulars = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
+  const [searchParams] = useSearchParams();
 
   // 🔐 Decrypt route param
   const followUpId = decryptString(id);
+  const focusedObservationParam = searchParams.get("observation");
+  const focusedObservationId = React.useMemo(() => {
+    if (!focusedObservationParam) return null;
+    const value = Number(decryptString(focusedObservationParam));
+    return Number.isFinite(value) && value > 0 ? value : null;
+  }, [focusedObservationParam]);
 
   // Redux State
   const { user } = useSelector((state) => state?.auth);
@@ -72,6 +79,8 @@ const FollowUpParticulars = () => {
   const [loadedObservationIds, setLoadedObservationIds] = useState({});
   const [page, setPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const focusedObservationHandledRef = React.useRef(null);
+  const focusedObservationScrolledRef = React.useRef(null);
 
   const isManagementAuditee =
     user[0]?.userId?.employeeid?.userHierarchy === "Management_Auditee";
@@ -83,9 +92,13 @@ const FollowUpParticulars = () => {
     []
   );
 
-  const currentFollowUpList = report?.reportingList?.filter(
-    (singleItem) => singleItem?.stepNo >= 5
-  ) || [];
+  const currentFollowUpList = React.useMemo(
+    () =>
+      report?.reportingList?.filter(
+        (singleItem) => singleItem?.stepNo >= 5
+      ) || [],
+    [report?.reportingList]
+  );
 
   const paginatedFollowUpList = React.useMemo(
     () =>
@@ -173,6 +186,47 @@ const FollowUpParticulars = () => {
       loadingObservationIds,
     ]
   );
+
+  useEffect(() => {
+    if (!focusedObservationId || !currentFollowUpList.length) return;
+
+    const focusKey = `${followUpId}-${focusedObservationId}`;
+    if (focusedObservationHandledRef.current === focusKey) return;
+
+    const itemIndex = currentFollowUpList.findIndex(
+      (item) => Number(item?.id) === focusedObservationId
+    );
+    if (itemIndex < 0) return;
+
+    const focusedItem = currentFollowUpList[itemIndex];
+    focusedObservationHandledRef.current = focusKey;
+    setPage(Math.floor(itemIndex / itemsPerPage) + 1);
+    setOpenAccordionId(focusedItem.id);
+    fetchObservationDetails(focusedItem);
+  }, [
+    currentFollowUpList,
+    fetchObservationDetails,
+    focusedObservationId,
+    followUpId,
+    itemsPerPage,
+  ]);
+
+  useEffect(() => {
+    if (!focusedObservationId || Number(openAccordionId) !== focusedObservationId) return;
+    if (!paginatedFollowUpList.some((item) => Number(item?.id) === focusedObservationId)) return;
+
+    const focusKey = `${followUpId}-${focusedObservationId}`;
+    if (focusedObservationScrolledRef.current === focusKey) return;
+    focusedObservationScrolledRef.current = focusKey;
+
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        const accordion = document.getElementById(`follow-up-observation-${focusedObservationId}`);
+        accordion?.scrollIntoView({ behavior: "smooth", block: "start" });
+        accordion?.querySelector(".accordion-button")?.focus({ preventScroll: true });
+      });
+    });
+  }, [focusedObservationId, followUpId, openAccordionId, paginatedFollowUpList]);
 
   const handleChangeItemsPerPage = useCallback((event) => {
     setPage(1);

@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { encryptAndEncode } from '../../../../config/helper';
-import { buildFollowUpApprovalRows, buildLocationMap, buildReportingApprovalRows, getCurrentUserInfo } from './dashboardHelpers';
+import { buildFollowUpApprovalRows, buildLocationMap, buildObservationTarget, buildReportingApprovalRows, getCurrentUserInfo } from './dashboardHelpers';
 import { DashboardTabs } from './DashboardTabs';
 
 const ApprovalTable = ({ rows, emptyMessage }) => {
@@ -27,7 +26,7 @@ const ApprovalTable = ({ rows, emptyMessage }) => {
                 <button
                   type='button'
                   className='btn btn-sm btn-primary'
-                  onClick={() => navigate(row.route + '/' + encryptAndEncode(row.reportingId?.toString()))}
+                  onClick={() => navigate(buildObservationTarget(row.route, row.reportingId, row.observationId))}
                 >
                   {row.actionLabel}
                 </button>

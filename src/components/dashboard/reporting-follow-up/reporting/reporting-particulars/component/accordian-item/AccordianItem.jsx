@@ -78,7 +78,7 @@ const AccordianItem = ({
   const statusLabel = getStepStatusLabel(stepNo, user[0]);
 
   return (
-    <div className="accordion-item">
+    <div className="accordion-item" id={`reporting-observation-${item?.id}`}>
       <h2 className="accordion-header">
         <button
           className={`accordion-button ${isOpen ? "" : "collapsed"}`}

@@ -1,8 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
-import { encryptAndEncode } from '../../../../config/helper';
-import { buildObservationRows, summarizeRatings } from './dashboardHelpers';
+import { buildObservationRows, buildObservationTarget, summarizeRatings } from './dashboardHelpers';
 
 const colors = {
   High: '#dc3545',
@@ -28,7 +27,7 @@ const ObservationRatingBreakdown = ({ dashboardReporting, users, locations }) =>
   const setActiveFromHover = (rating) => setOpenRating(rating);
   const handleRowClick = (row) => {
     if (!row?.jobId) return;
-    navigate('/audit/follow-up-particulars/' + encryptAndEncode(row.jobId.toString()));
+    navigate(buildObservationTarget('/audit/follow-up-particulars', row.jobId, row.id));
   };
 
   return (
