@@ -157,7 +157,7 @@ const Table = ({
                 </div>
               )}
 
-            {item?.approved === false && (
+            {item?.canDelete && (
               <i
                 className="fa fa-trash text-danger f-18 cursor-pointer"
                 onClick={() => {
